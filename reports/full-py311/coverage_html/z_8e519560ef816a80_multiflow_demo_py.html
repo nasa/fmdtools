@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for examples/multiflow_demo/multiflow_demo.py: 98%</title>
+    <title>Coverage for examples/multiflow_demo/multiflow_demo.py: 88%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>examples/multiflow_demo/multiflow_demo.py</b>:
-            <span class="pc_cov">98%</span>
+            <span class="pc_cov">88%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">57 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">56<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">1<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">50<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">7<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">16<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_8e519560ef816a80_test_multiflow_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-11-13 17:54 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.9">coverage.py v7.6.9</a>,
+            created at 2024-12-18 18:02 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -149,9 +149,9 @@
     <p class="run"><span class="n"><a id="t67" href="#t67">67</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">p</span><span class="op">.</span><span class="nam">x_up</span> <span class="op">!=</span> <span class="num">0.0</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t68" href="#t68">68</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">internal_info</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">x</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">loc</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">x</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t69" href="#t69">69</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">internal_info</span><span class="op">.</span><span class="nam">send</span><span class="op">(</span><span class="str">"all"</span><span class="op">,</span> <span class="str">"local"</span><span class="op">,</span> <span class="str">"x"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t70" href="#t70">70</a></span><span class="t">        <span class="key">elif</span> <span class="nam">self</span><span class="op">.</span><span class="nam">p</span><span class="op">.</span><span class="nam">y_up</span> <span class="op">!=</span> <span class="num">0.0</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t71" href="#t71">71</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">internal_info</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">y</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">loc</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">y</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t72" href="#t72">72</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">internal_info</span><span class="op">.</span><span class="nam">send</span><span class="op">(</span><span class="str">"all"</span><span class="op">,</span> <span class="str">"local"</span><span class="op">,</span> <span class="str">"y"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t70" href="#t70">70</a></span><span class="t">        <span class="key">elif</span> <span class="nam">self</span><span class="op">.</span><span class="nam">p</span><span class="op">.</span><span class="nam">y_up</span> <span class="op">!=</span> <span class="num">0.0</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t71" href="#t71">71</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">internal_info</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">y</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">loc</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">y</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t72" href="#t72">72</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">internal_info</span><span class="op">.</span><span class="nam">send</span><span class="op">(</span><span class="str">"all"</span><span class="op">,</span> <span class="str">"local"</span><span class="op">,</span> <span class="str">"y"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t73" href="#t73">73</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t74" href="#t74">74</a></span><span class="t">    <span class="key">def</span> <span class="nam">find_classification</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">scen</span><span class="op">,</span> <span class="nam">fxnhist</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t75" href="#t75">75</a></span><span class="t">        <span class="key">return</span> <span class="op">{</span><span class="str">"last_x"</span><span class="op">:</span> <span class="nam">self</span><span class="op">.</span><span class="nam">loc</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">x</span><span class="op">,</span> <span class="str">"min_x"</span><span class="op">:</span> <span class="nam">fxnhist</span><span class="op">.</span><span class="nam">faulty</span><span class="op">.</span><span class="nam">location</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">name</span><span class="op">)</span><span class="op">.</span><span class="nam">x</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
@@ -170,9 +170,9 @@
     <p class="run"><span class="n"><a id="t88" href="#t88">88</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">coord_view</span><span class="op">.</span><span class="nam">clear_inbox</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t89" href="#t89">89</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t90" href="#t90">90</a></span><span class="t">    <span class="key">def</span> <span class="nam">static_behavior</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">time</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t91" href="#t91">91</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">coord_view</span><span class="op">.</span><span class="nam">receive</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t92" href="#t92">92</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">coord_view</span><span class="op">.</span><span class="nam">update</span><span class="op">(</span><span class="str">"local"</span><span class="op">,</span> <span class="str">"mover_1"</span><span class="op">,</span> <span class="str">"y"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t93" href="#t93">93</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">coord_view</span><span class="op">.</span><span class="nam">update</span><span class="op">(</span><span class="str">"local"</span><span class="op">,</span> <span class="str">"mover_2"</span><span class="op">,</span> <span class="str">"x"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t91" href="#t91">91</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">coord_view</span><span class="op">.</span><span class="nam">receive</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t92" href="#t92">92</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">coord_view</span><span class="op">.</span><span class="nam">update</span><span class="op">(</span><span class="str">"local"</span><span class="op">,</span> <span class="str">"mover_1"</span><span class="op">,</span> <span class="str">"y"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t93" href="#t93">93</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">coord_view</span><span class="op">.</span><span class="nam">update</span><span class="op">(</span><span class="str">"local"</span><span class="op">,</span> <span class="str">"mover_2"</span><span class="op">,</span> <span class="str">"x"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t94" href="#t94">94</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t95" href="#t95">95</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t96" href="#t96">96</a></span><span class="t"><span class="key">class</span> <span class="nam">ExModel</span><span class="op">(</span><span class="nam">FunctionArchitecture</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -182,7 +182,7 @@
     <p class="run"><span class="n"><a id="t100" href="#t100">100</a></span><span class="t">    <span class="key">def</span> <span class="nam">init_architecture</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t101" href="#t101">101</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t102" href="#t102">102</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_flow</span><span class="op">(</span><span class="str">"communications"</span><span class="op">,</span> <span class="nam">Communications</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t103" href="#t103">103</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_flow</span><span class="op">(</span><span class="str">"location"</span><span class="op">,</span>  <span class="nam">Location</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t103" href="#t103">103</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_flow</span><span class="op">(</span><span class="str">"location"</span><span class="op">,</span> <span class="nam">Location</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t104" href="#t104">104</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_fxn</span><span class="op">(</span><span class="str">"mover_1"</span><span class="op">,</span> <span class="nam">Mover</span><span class="op">,</span> <span class="str">"communications"</span><span class="op">,</span> <span class="str">"location"</span><span class="op">,</span> <span class="nam">p</span><span class="op">=</span><span class="op">{</span><span class="str">"x_up"</span><span class="op">:</span> <span class="num">1.0</span><span class="op">}</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t105" href="#t105">105</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_fxn</span><span class="op">(</span><span class="str">"mover_2"</span><span class="op">,</span> <span class="nam">Mover</span><span class="op">,</span> <span class="str">"communications"</span><span class="op">,</span> <span class="str">"location"</span><span class="op">,</span> <span class="nam">p</span><span class="op">=</span><span class="op">{</span><span class="str">"y_up"</span><span class="op">:</span> <span class="num">1.0</span><span class="op">}</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t106" href="#t106">106</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -228,8 +228,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_8e519560ef816a80_test_multiflow_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-11-13 17:54 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.9">coverage.py v7.6.9</a>,
+            created at 2024-12-18 18:02 +0000
         </p>
     </div>
 </footer>

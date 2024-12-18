@@ -48,6 +48,15 @@ The following template shows the basic syntax used to define simple flows in a s
 fmdtools.define.flow.multiflow
 --------------------------------
 
+MultiFlow can be used to represent signals and perceptions in which a flow may have independent copies on the side of the source and perceiver. MultiFlow enables the representation of indepdendent flow copies using the structure shown below:
+
+.. figure:: figures/drawio/MultiFlow.svg
+   :width: 800
+   :alt: MultiFlow class strcture.
+   
+   Example MultiFlow class strcture.
+
+
 .. automodule:: fmdtools.define.flow.multiflow
    :members:
    :undoc-members:
@@ -55,6 +64,15 @@ fmdtools.define.flow.multiflow
 
 fmdtools.define.flow.commsflow
 --------------------------------
+
+CommsFlow can be used to represent communication exchanges between agents. CommsFlow enables this passing of exchanges using the structure shown below:
+
+
+.. figure:: figures/drawio/CommsFlow.svg
+   :width: 800
+   :alt: CommsFlow class strcture.
+   
+   Example CommsFlow class structure.
 
 .. automodule:: fmdtools.define.flow.commsflow
    :members:

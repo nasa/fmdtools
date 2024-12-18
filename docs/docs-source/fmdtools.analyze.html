@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-5">Version: 2.0.5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-6">Version: 2.0.6</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -399,8 +399,8 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-commsflow">fmdtools.define.flow.commsflow</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.object.html">fmdtools.define.object</a><ul>
@@ -412,6 +412,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
@@ -519,6 +520,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ObjectiveConnector"><code class="docutils literal notranslate"><span class="pre">ObjectiveConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ParameterSimProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ResponseCoords"><code class="docutils literal notranslate"><span class="pre">ResponseCoords</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ResultConstraint"><code class="docutils literal notranslate"><span class="pre">ResultConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ResultObjective"><code class="docutils literal notranslate"><span class="pre">ResultObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ScenarioProblem"><code class="docutils literal notranslate"><span class="pre">ScenarioProblem</span></code></a></li>
@@ -541,13 +543,20 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.analyze.common">fmdtools.analyze.common</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.add_title_xylabs"><code class="docutils literal notranslate"><span class="pre">add_title_xylabs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.clear_prev_figure"><code class="docutils literal notranslate"><span class="pre">clear_prev_figure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.multiplot_helper"><code class="docutils literal notranslate"><span class="pre">multiplot_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.common.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
@@ -565,27 +574,19 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.analyze.result">fmdtools.analyze.result</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.load_csv"><code class="docutils literal notranslate"><span class="pre">load_csv()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.result.load_json"><code class="docutils literal notranslate"><span class="pre">load_json()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.analyze.history">fmdtools.analyze.history</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.history.History"><code class="docutils literal notranslate"><span class="pre">History</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.history.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.history.init_dicthist"><code class="docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.history.init_hist_iter"><code class="docutils literal notranslate"><span class="pre">init_hist_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.history.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.history.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.history.prep_hists"><code class="docutils literal notranslate"><span class="pre">prep_hists()</span></code></a></li>
 </ul>
 </li>
@@ -604,8 +605,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.phases.PhaseMap"><code class="docutils literal notranslate"><span class="pre">PhaseMap</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.phases.find_interval_overlap"><code class="docutils literal notranslate"><span class="pre">find_interval_overlap()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.phases.from_hist"><code class="docutils literal notranslate"><span class="pre">from_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.phases.gen_interval_times"><code class="docutils literal notranslate"><span class="pre">gen_interval_times()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.phases.get_joint_phase"><code class="docutils literal notranslate"><span class="pre">get_joint_phase()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.phases.join_phasemaps"><code class="docutils literal notranslate"><span class="pre">join_phasemaps()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.phases.phaseplot"><code class="docutils literal notranslate"><span class="pre">phaseplot()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.analyze.phases.samplemetric"><code class="docutils literal notranslate"><span class="pre">samplemetric()</span></code></a></li>
@@ -653,8 +652,7 @@
   <section id="module-fmdtools.analyze">
 <span id="fmdtools-analyze"></span><h1>fmdtools.analyze<a class="headerlink" href="#module-fmdtools.analyze" title="Link to this heading"></a></h1>
 <p>Package for analyzing simulation results.</p>
-<a class="reference internal image-reference" href="../_images/analyze_module_structure.png"><img alt="../_images/analyze_module_structure.png" src="../_images/analyze_module_structure.png" style="width: 800px;" />
-</a>
+<a class="reference internal image-reference" href="../_images/analyze_module_structure.svg"><img alt="../_images/analyze_module_structure.svg" src="../_images/analyze_module_structure.svg" width="800" /></a>
 <p>The analyze package is organized into the modules:</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -691,6 +689,8 @@
 otherwise returns the number</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.common.is_numeric" title="fmdtools.analyze.common.is_numeric"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_numeric()</span></code></a>: Helper function for Result Class, checks if a given value is
 numeric</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.common.diff" title="fmdtools.analyze.common.diff"><code class="xref py py-func docutils literal notranslate"><span class="pre">diff()</span></code></a>: Helper function for finding inconsistent states between val1, val2, with
+the difftype option</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.common.join_key" title="fmdtools.analyze.common.join_key"><code class="xref py py-func docutils literal notranslate"><span class="pre">join_key()</span></code></a>: Helper function for Result Class</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.common.setup_plot" title="fmdtools.analyze.common.setup_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_plot()</span></code></a>: initializes mpl figure</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.common.plot_err_hist" title="fmdtools.analyze.common.plot_err_hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a>: Plots a line with a given range of uncertainty around it</p></li>
@@ -698,11 +698,38 @@ numeric</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.common.multiplot_legend_title" title="fmdtools.analyze.common.multiplot_legend_title"><code class="xref py py-func docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a>: Helper function for multiplot legends and titles</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.common.consolidate_legend" title="fmdtools.analyze.common.consolidate_legend"><code class="xref py py-func docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a>: Creates a single legend for a given multiplot where
 multiple groups are being compared</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.common.load_folder" title="fmdtools.analyze.common.load_folder"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_folder()</span></code></a>: Lists files to load in folder.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.common.file_check" title="fmdtools.analyze.common.file_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_check()</span></code></a>: Check if files exists and whether to overwrite the file</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.common.auto_filetype" title="fmdtools.analyze.common.auto_filetype"><code class="xref py py-func docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a>: Helper function that automatically determines the filetype
+(npz, csv, or json) of a given filename</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.common.create_indiv_filename" title="fmdtools.analyze.common.create_indiv_filename"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a>: Helper function that creates an individualized name for
+a file given the general filename and an individual id</p></li>
 </ul>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.common.add_title_xylabs">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">add_title_xylabs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.add_title_xylabs" title="Link to this definition"></a></dt>
-<dd><p>Add title and x/y labels to the given axis.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">add_title_xylabs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.add_title_xylabs" title="Link to this definition"></a></dt>
+<dd><p>Add/set title, x/y labels, and limits to the given axis.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.analyze.common.auto_filetype">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">auto_filetype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['npz',</span> <span class="pre">'csv',</span> <span class="pre">'json']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.auto_filetype" title="Link to this definition"></a></dt>
+<dd><p>Automatically determine the filetype (npz, csv, or json) of a filename.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">auto_filetype</span><span class="p">(</span><span class="s2">&quot;hi.npz&quot;</span><span class="p">)</span>
+<span class="go">&#39;npz&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">auto_filetype</span><span class="p">(</span><span class="s2">&quot;example.csv&quot;</span><span class="p">)</span>
+<span class="go">&#39;csv&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">auto_filetype</span><span class="p">(</span><span class="s2">&quot;example.json&quot;</span><span class="p">)</span>
+<span class="go">&#39;json&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">auto_filetype</span><span class="p">(</span><span class="s2">&quot;x.pdf&quot;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">  </span><span class="c">...</span>
+<span class="gr">Exception</span>: <span class="n">Invalid filename in x.pdf, ensure extension is in [&#39;npz&#39;, &#39;csv&#39;, &#39;json&#39;].</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">auto_filetype</span><span class="p">(</span><span class="s2">&quot;no_ext&quot;</span><span class="p">,</span> <span class="s2">&quot;csv&quot;</span><span class="p">)</span>
+<span class="go">&#39;csv&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -748,6 +775,40 @@ legend. Default is False.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.analyze.common.create_indiv_filename">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">create_indiv_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">splitchar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.create_indiv_filename" title="Link to this definition"></a></dt>
+<dd><p>Create filename name for a file given general filename and individual id.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_indiv_filename</span><span class="p">(</span><span class="s2">&quot;hi.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">)</span>
+<span class="go">&#39;hi_4.csv&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.analyze.common.diff">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difftype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bool'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.diff" title="Link to this definition"></a></dt>
+<dd><p>Find inconsistent states between val1, val2.</p>
+<dl class="simple">
+<dt>The difftype option (‘diff’ (takes the difference), ‘bool’ (checks if the same),</dt><dd><p>and float (checks if under the provided tolerance))</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="go">array([ True, False, False])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">difftype</span><span class="o">=</span><span class="s2">&quot;diff&quot;</span><span class="p">)</span>
+<span class="go">array([-1,  0,  0])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.analyze.common.file_check">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">file_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.file_check" title="Link to this definition"></a></dt>
+<dd><p>Check if files exists and whether to overwrite the file.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.common.get_sub_include">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">get_sub_include</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">att</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_include</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.get_sub_include" title="Link to this definition"></a></dt>
 <dd><p>Determine attributes of att to include based on provided dict/str/list/set.</p>
@@ -768,6 +829,18 @@ legend. Default is False.</p></li>
 <span class="go">False</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.analyze.common.is_known_immutable">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">is_known_immutable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.is_known_immutable" title="Link to this definition"></a></dt>
+<dd><p>Check if value is known immutable.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.analyze.common.is_known_mutable">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">is_known_mutable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.is_known_mutable" title="Link to this definition"></a></dt>
+<dd><p>Check if value is a known mutable.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -801,8 +874,29 @@ legend. Default is False.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.analyze.common.load_folder">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">load_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.load_folder" title="Link to this definition"></a></dt>
+<dd><p>Create list of files to be read from a folder.</p>
+<p>(e.g., that have been saved from multi-scenario propagate methods with ‘indiv’:True)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<em>str</em>) – Name of the folder. Must be in the current directory</p></li>
+<li><p><strong>filetype</strong> (<em>str</em>) – Type of files in the folder (‘pickle’, ‘csv’, or ‘json’)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>files_to_read</strong> – files to load for endclasses/mdlhists.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.common.mark_times">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">mark_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">plot_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.mark_times" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">mark_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">plot_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rounddec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pretext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'t='</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.mark_times" title="Link to this definition"></a></dt>
 <dd><p>Mark times on an axis at a particular tick interval.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -850,7 +944,7 @@ legend. Default is False.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.common.plot_err_hist">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">plot_err_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">err_hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fill'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gray'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundlinestyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'--'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillalpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.plot_err_hist" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">plot_err_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">err_hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fill'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gray'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundlinestyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'--'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillalpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.plot_err_hist" title="Link to this definition"></a></dt>
 <dd><p>Plot a line with a given range of uncertainty around it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -867,6 +961,7 @@ legend. Default is False.</p></li>
 <li><p><strong>boundcolor</strong> (<em>str</em><em>, </em><em>optional</em>) – Color for bound fill The default is ‘gray’.</p></li>
 <li><p><strong>boundlinestyle</strong> (<em>str</em><em>, </em><em>optional</em>) – linestyle for bound lines (if any). The default is ‘–‘.</p></li>
 <li><p><strong>fillalpha</strong> (<em>float</em><em>, </em><em>optional</em>) – Alpha for fill. The default is 0.3.</p></li>
+<li><p><strong>time</strong> (<em>str</em><em>, </em><em>optional</em>) – history to use as time. The default is ‘time’.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs for the line</p></li>
 </ul>
 </dd>
@@ -976,15 +1071,9 @@ runner.run(suite_for_plots(UnitTests, plottests=False)))</p>
 <p>And functions:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.analyze.result.load" title="fmdtools.analyze.result.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a>: Loads a given file to a Result/History</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.load_folder" title="fmdtools.analyze.result.load_folder"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_folder()</span></code></a>: Loads a given folder to a Result/History</p></li>
 </ul>
 <p>Private Methods:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.file_check" title="fmdtools.analyze.result.file_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_check()</span></code></a>: Check if files exists and whether to overwrite the file</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.auto_filetype" title="fmdtools.analyze.result.auto_filetype"><code class="xref py py-func docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a>: Helper function that automatically determines the filetype
-(npz, csv, or json) of a given filename</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.create_indiv_filename" title="fmdtools.analyze.result.create_indiv_filename"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a>: Helper function that creates an individualized name for
-a file given the general filename and an individual id</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.result.clean_resultdict_keys" title="fmdtools.analyze.result.clean_resultdict_keys"><code class="xref py py-func docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a>: Helper function for recreating results dictionary keys
 (tuples) from a dictionary loaded from a file (where keys are strings)
 (used in csv/json results)</p></li>
@@ -999,7 +1088,7 @@ provided dict/str/list/set to_include</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">Result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">Result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></p>
 <p>Result is a special type of dictionary for simulation results.</p>
 <p>The goal of the Result class is to make it convenient to store, access, and load
@@ -1027,6 +1116,10 @@ e.g.,:</p>
 <span class="go">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rf</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 <span class="go">dict_keys([&#39;y.z&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Result</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="s1">&#39;e&#39;</span><span class="p">}})</span>
+<span class="go">a:                                     b</span>
+<span class="go">c:</span>
+<span class="go">--d:                                   e</span>
 </pre></div>
 </div>
 <p>It also enables saving and loading to files via r.save(), r.load(), and
@@ -1051,7 +1144,7 @@ r.load_folder()</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.average">
 <span class="sig-name descname"><span class="pre">average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nan'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.average" title="Link to this definition"></a></dt>
-<dd><p>Calculates the average value of a given metric in endclasses</p>
+<dd><p>Calculate the average value of a given metric in endclasses</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1126,17 +1219,30 @@ The default is ().</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.fromdict">
-<span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.fromdict" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputdict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.fromdict" title="Link to this definition"></a></dt>
+<dd><p>Set up new Result from dictionary.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Result</span><span class="o">.</span><span class="n">fromdict</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>
+<span class="go">a:                                     2</span>
+<span class="go">b:</span>
+<span class="go">--c:                                   4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">b</span>
+<span class="go">c:                                     4</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">argstr</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">to_include</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.get" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">argstr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">to_include</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.get" title="Link to this definition"></a></dt>
 <dd><p>Provide dict-like access to the history/result across a number of arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>*argstr</strong> (<em>str</em>) – keys to get directly (e.g. ‘fxns.fxnname’)</p></li>
+<li><p><strong>default</strong> (<em>dict</em><em> or </em><em>value</em>) – default(s) to use if not in Result. May be a dict of keys {‘k’: val} or a
+default for all values to get. Default is {}.</p></li>
 <li><p><strong>**to_include</strong> (<em>dict/str/</em>) – to_include dict for arguments to get (e.g., {‘fxns’:{‘fxnname’}})</p></li>
 </ul>
 </dd>
@@ -1147,11 +1253,21 @@ The default is ().</p></li>
 <dd class="field-odd"><p>Result/History</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">=</span><span class="n">Result</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="s1">&#39;e&#39;</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="go">&#39;b&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="go">d:                                     e</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;c.d&#39;</span><span class="p">)</span>
+<span class="go">&#39;e&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.get_comp_groups">
-<span class="sig-name descname"><span class="pre">get_comp_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.get_comp_groups" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_comp_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.get_comp_groups" title="Link to this definition"></a></dt>
 <dd><p>Get comparison groups of <a href="#id3"><span class="problematic" id="id4">*</span></a>values (i.e., aspects of the model) in groups
 <a href="#id5"><span class="problematic" id="id6">**</span></a>groups (sets of scenarios with structure )</p>
 <dl class="field-list simple">
@@ -1230,7 +1346,7 @@ its quantities over the contained scenarios.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.get_memory">
 <span class="sig-name descname"><span class="pre">get_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.get_memory" title="Link to this definition"></a></dt>
-<dd><p>Determines the memory usage of a given history and profiles.</p>
+<dd><p>Determine the memory usage of a given history and profiles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><ul class="simple">
@@ -1319,18 +1435,27 @@ or both (None). The default is None.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.is_flat">
 <span class="sig-name descname"><span class="pre">is_flat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.is_flat" title="Link to this definition"></a></dt>
-<dd><p>Checks if the history is flat.</p>
+<dd><p>Check if the history is flat.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Result</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="s1">&#39;e&#39;</span><span class="p">}})</span><span class="o">.</span><span class="n">is_flat</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Result</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c.d&#39;</span><span class="p">:</span> <span class="s1">&#39;e&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">is_flat</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.items">
-<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">items</span></span></span><a class="headerlink" href="#fmdtools.analyze.result.Result.items" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.items" title="Link to this definition"></a></dt>
+<dd><p>Get items iterator (not nested).</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.keys">
-<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">keys</span></span></span><a class="headerlink" href="#fmdtools.analyze.result.Result.keys" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.keys" title="Link to this definition"></a></dt>
+<dd><p>Get keys iterator (not nested).</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.load">
@@ -1347,7 +1472,7 @@ or both (None). The default is None.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.nest">
 <span class="sig-name descname"><span class="pre">nest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.nest" title="Link to this definition"></a></dt>
-<dd><p>Re-nests a flattened result</p>
+<dd><p>Re-nest a flattened result.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1509,26 +1634,23 @@ file. The default is ‘’.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.values">
-<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">an</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">values</span></span></span><a class="headerlink" href="#fmdtools.analyze.result.Result.values" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.values" title="Link to this definition"></a></dt>
+<dd><p>Get values iterato (not nested)r.</p>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.analyze.result.auto_filetype">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">auto_filetype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.auto_filetype" title="Link to this definition"></a></dt>
-<dd><p>Automatically determines the filetype (pickle, csv, or json) of a filename.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.check_include_error">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">check_include_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_include</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.check_include_error" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Throw error if key not in keys.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.check_include_errors">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">check_include_errors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_include</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.check_include_errors" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Throw error if any keys aren’t in the result.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.clean_resultdict_keys">
@@ -1547,18 +1669,6 @@ loaded from a file (where keys are strings) (used in csv/json results).</p>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.analyze.result.create_indiv_filename">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">create_indiv_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">splitchar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.create_indiv_filename" title="Link to this definition"></a></dt>
-<dd><p>Create filename name for a file given general filename and individual id.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.analyze.result.file_check">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">file_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.file_check" title="Link to this definition"></a></dt>
-<dd><p>Check if files exists and whether to overwrite the file.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1607,27 +1717,6 @@ The default is False.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.analyze.result.load_folder">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">load_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.load_folder" title="Link to this definition"></a></dt>
-<dd><p>Loads endclass/mdlhist results from a given folder
-(e.g., that have been saved from multi-scenario propagate methods with ‘indiv’:True)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>folder</strong> (<em>str</em>) – Name of the folder. Must be in the current directory</p></li>
-<li><p><strong>filetype</strong> (<em>str</em>) – Type of files in the folder (‘pickle’, ‘csv’, or ‘json’)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>files_to_read</strong> – files to load for endclasses/mdlhists.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.load_json">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">load_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.load_json" title="Link to this definition"></a></dt>
 <dd><p>Load json files.</p>
@@ -1643,16 +1732,12 @@ The default is False.</p></li>
 </ul>
 <p>And functions/methods:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.history.diff" title="fmdtools.analyze.history.diff"><code class="xref py py-func docutils literal notranslate"><span class="pre">diff()</span></code></a>: Helper function for finding inconsistent states between val1, val2, with
-the difftype option</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.history.init_hist_iter" title="fmdtools.analyze.history.init_hist_iter"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_hist_iter()</span></code></a>: Initializes the history for a given attribute att with value
-val. Enables the recursive definition of a history as a nested structure.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.history.init_dicthist" title="fmdtools.analyze.history.init_dicthist"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a>: Initializes histories for dictionary attributes (if any)</p></li>
 <li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">def</span> <span class="pre">prep_hists()</span></code>: Prepare the history for plotting.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.history.</span></span><span class="sig-name descname"><span class="pre">History</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.history.</span></span><span class="sig-name descname"><span class="pre">History</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a></p>
 <p>Class for recording and analyzing simulation histories.</p>
 <p>Histories log states of the model over time.</p>
@@ -1750,8 +1835,9 @@ cut or cut the original history variable. Default is False.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.fromdict">
-<span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.fromdict" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputdict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.fromdict" title="Link to this definition"></a></dt>
+<dd><p>Create history from dictionary. Used in initialization.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.get_degraded_hist">
@@ -1784,6 +1870,15 @@ cut or cut the original history variable. Default is False.</p></li>
 <dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s1">&#39;nominal.a&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]),</span> <span class="s1">&#39;nominal.time&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;faulty.a&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span> <span class="s1">&#39;faulty.time&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dh</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">get_degraded_hist</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dh</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">]</span>
+<span class="go">array([0, 1, 1])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dh</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="go">array([False,  True,  True])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1831,7 +1926,7 @@ histories.</p>
 <dd><p>Get the time a fault is present in the system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>metric</strong> (<em>'earliest'</em><em>,</em><em>'latest'</em><em>,</em><em>'total'</em><em>, </em><em>optional</em>) – Earliest, latest, or total time fault(s) are present.
+<dd class="field-odd"><p><strong>metric</strong> (<em>'earliest'</em><em>,</em><em>'latest'</em><em>,</em><em>'total'</em><em>, </em><em>'times'</em><em>, </em><em>optional</em>) – Earliest, latest, or total time fault(s) are present.
 The default is “earliest”.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1841,6 +1936,13 @@ The default is “earliest”.</p>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">History</span><span class="p">({</span><span class="s1">&#39;m.faults.fault1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]})</span><span class="o">.</span><span class="n">get_fault_time</span><span class="p">()</span>
+<span class="go">nan</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">History</span><span class="p">({</span><span class="s1">&#39;m.faults.fault1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]})</span><span class="o">.</span><span class="n">get_fault_time</span><span class="p">()</span>
+<span class="go">2</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1880,11 +1982,27 @@ The default is “earliest”.</p>
 <dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s1">&#39;f1.m.faults&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="s1">&#39;f2.m.faults&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fh</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">get_faulty_hist</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;f2&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fh</span>
+<span class="go">f1:                             array(3)</span>
+<span class="go">f2:                             array(3)</span>
+<span class="go">total:                          array(3)</span>
+<span class="go">time:                           array(3)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fh</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">]</span>
+<span class="go">array([1, 0, 1])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fh</span><span class="o">.</span><span class="n">f1</span>
+<span class="go">array([False, False,  True])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fh</span><span class="o">.</span><span class="n">f2</span>
+<span class="go">array([ True, False, False])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.get_mean_bound_errhist">
-<span class="sig-name descname"><span class="pre">get_mean_bound_errhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_mean_bound_errhist" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_mean_bound_errhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_mean_bound_errhist" title="Link to this definition"></a></dt>
 <dd><p>Get aggregated err_hist of means surrounded by bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1917,7 +2035,7 @@ The default is “earliest”.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.get_mean_ci_errhist">
-<span class="sig-name descname"><span class="pre">get_mean_ci_errhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_ind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_mean_ci_errhist" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_mean_ci_errhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_ind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_mean_ci_errhist" title="Link to this definition"></a></dt>
 <dd><p>Get aggregated err_hist of means surrounded by confidence intervals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1943,7 +2061,7 @@ The default is “earliest”.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.get_mean_std_errhist">
-<span class="sig-name descname"><span class="pre">get_mean_std_errhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_mean_std_errhist" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_mean_std_errhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_mean_std_errhist" title="Link to this definition"></a></dt>
 <dd><p>Get aggregated err_hist of means surrounded by std deviation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1965,7 +2083,7 @@ The default is “earliest”.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.get_percentile_errhist">
-<span class="sig-name descname"><span class="pre">get_percentile_errhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_percentile_errhist" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_percentile_errhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_percentile_errhist" title="Link to this definition"></a></dt>
 <dd><p>Get aggregated err_hist of medians surrounded by percentile range prange.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1991,7 +2109,17 @@ The default is “earliest”.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.get_slice">
 <span class="sig-name descname"><span class="pre">get_slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_ind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_slice" title="Link to this definition"></a></dt>
-<dd><p>Return dict of values from (flattenned) version of the history at t_ind.</p>
+<dd><p>Return Result of values from (flattenned) version of the history at t_ind.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">History</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">a:                                     3</span>
+<span class="go">time:                                  1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">a:                                     5</span>
+<span class="go">time:                                  3</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -2018,7 +2146,8 @@ The default is np.max.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.init_att">
 <span class="sig-name descname"><span class="pre">init_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">att</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;U20'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.init_att" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Add key/hist array for an attribute over a given timerange.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.is_in">
@@ -2056,7 +2185,7 @@ history.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.plot_individual_line">
-<span class="sig-name descname"><span class="pre">plot_individual_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_individual_line" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_individual_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_individual_line" title="Link to this definition"></a></dt>
 <dd><p>Plot value in hist as individual lines.</p>
 </dd></dl>
 
@@ -2130,19 +2259,19 @@ ass multiplot_legend_title.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.plot_mean_bound_line">
-<span class="sig-name descname"><span class="pre">plot_mean_bound_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_mean_bound_line" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_mean_bound_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_mean_bound_line" title="Link to this definition"></a></dt>
 <dd><p>Plot the value in hist aggregated by the mean and variable bounds.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.plot_mean_ci_line">
-<span class="sig-name descname"><span class="pre">plot_mean_ci_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_ind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_mean_ci_line" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_mean_ci_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_ind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_mean_ci_line" title="Link to this definition"></a></dt>
 <dd><p>Plot value in hist aggregated by bootstrap confidence interval for mean.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.plot_mean_std_line">
-<span class="sig-name descname"><span class="pre">plot_mean_std_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_mean_std_line" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_mean_std_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_mean_std_line" title="Link to this definition"></a></dt>
 <dd><p>Plot value in hist aggregated by mean and standard devation.</p>
 </dd></dl>
 
@@ -2172,13 +2301,13 @@ keys from a given fxn/flow/mode/etc.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.plot_percentile_line">
-<span class="sig-name descname"><span class="pre">plot_percentile_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_percentile_line" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_percentile_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_percentile_line" title="Link to this definition"></a></dt>
 <dd><p>Plot the value in hist aggregated by percentiles.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.plot_trajectories">
-<span class="sig-name descname"><span class="pre">plot_trajectories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">plot_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(4,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_trajectories" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_trajectories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">plot_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(4,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_pretext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'t='</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'z'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_trajectories" title="Link to this definition"></a></dt>
 <dd><p>Plot trajectories from the environment in 2d or 3d space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2262,8 +2391,9 @@ at each point in the trajectory. The default is [].</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.plot_trajectory">
-<span class="sig-name descname"><span class="pre">plot_trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xlab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mark_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_trajectory" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xlab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mark_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_pretext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'t='</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_trajectory" title="Link to this definition"></a></dt>
 <dd><p>Plot a single set of trajectories on an existing matplotlib axis.</p>
+<p>Used by History.plot_trajectories (the main interface).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2283,21 +2413,11 @@ The default is False.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.plot_trajectory3">
-<span class="sig-name descname"><span class="pre">plot_trajectory3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xlab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mark_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_trajectory3" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_trajectory3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xlab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mark_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_pretext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'t='</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_trajectory3" title="Link to this definition"></a></dt>
 <dd><p>Plot a single set of trajectories on an existing matplotlib axis (3d).</p>
 <p>See History.plot_trajectory</p>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.analyze.history.diff">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.history.</span></span><span class="sig-name descname"><span class="pre">diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difftype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bool'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.diff" title="Link to this definition"></a></dt>
-<dd><p>Find inconsistent states between val1, val2.</p>
-<dl class="simple">
-<dt>The difftype option (‘diff’ (takes the difference), ‘bool’ (checks if the same),</dt><dd><p>and float (checks if under the provided tolerance))</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -2322,49 +2442,8 @@ The default is False.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.analyze.history.init_hist_iter">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.history.</span></span><span class="sig-name descname"><span class="pre">init_hist_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">att</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;U20'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.init_hist_iter" title="Link to this definition"></a></dt>
-<dd><p>Initialize the history for a given attribute att with value val.</p>
-<p>Enables the recursive definition of a history as a nested structure.</p>
-<p>If a timerange is given, the base fields are initializes as fixed-length numpy
-arrays corresponding to the data type of the field. Otherwise, an empty list
-is initialized.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>att</strong> (<em>str</em>) – Name of the attribute.</p></li>
-<li><p><strong>val</strong> (<em>dict/field</em>) – dict to be initialized as a History or field to be initialized as a list or
-numpy array</p></li>
-<li><p><strong>timerange</strong> (<em>iterable</em><em>, </em><em>optional</em>) – Time-range to initialize the history over. The default is None.</p></li>
-<li><p><strong>track</strong> (<em>list/str/dict</em><em>, </em><em>optional</em>) – argument specifying attributes for :func:<a href="#id29"><span class="problematic" id="id30">`</span></a>get_sub_include’. The default is None.</p></li>
-<li><p><strong>dtype</strong> (<em>str</em><em>, </em><em>optional</em>) – Datatype to initialze the array as (if given). The default is None.</p></li>
-<li><p><strong>str_size</strong> (<em>str</em><em>, </em><em>optional</em>) – Data type for strings. The default is ‘&lt;U20’.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>Hist</strong> – Initialized history structure corresponding to the attribute</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a>, List, or np.array</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.analyze.history.is_known_immutable">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.history.</span></span><span class="sig-name descname"><span class="pre">is_known_immutable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.is_known_immutable" title="Link to this definition"></a></dt>
-<dd><p>Check if value is known immutable.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.analyze.history.is_known_mutable">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.history.</span></span><span class="sig-name descname"><span class="pre">is_known_mutable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.is_known_mutable" title="Link to this definition"></a></dt>
-<dd><p>Check if value is a known mutable.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.prep_hists">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.history.</span></span><span class="sig-name descname"><span class="pre">prep_hists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simhists</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.prep_hists" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.history.</span></span><span class="sig-name descname"><span class="pre">prep_hists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simhists</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.prep_hists" title="Link to this definition"></a></dt>
 <dd><p>Prepare hists for plotting.</p>
 </dd></dl>
 
@@ -2411,13 +2490,17 @@ Default is [].</p></li>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></p>
 <p>Base class for tables that extends Userdict.</p>
 <p>Userdict has structure {metric: {comp_group: value}} which enables plots/tables.</p>
-<p>…</p>
-<section id="attributes">
-<h3>Attributes:<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
-<dl class="simple">
-<dt>factors<span class="classifier">list</span></dt><dd><p>List of factors in the table</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.analyze.tabulate.BaseTab.factors">
+<span class="sig-name descname"><span class="pre">factors</span></span><a class="headerlink" href="#fmdtools.analyze.tabulate.BaseTab.factors" title="Link to this definition"></a></dt>
+<dd><p>List of factors in the table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.BaseTab.all_metrics">
 <span class="sig-name descname"><span class="pre">all_metrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.BaseTab.all_metrics" title="Link to this definition"></a></dt>
@@ -2545,7 +2628,6 @@ Default is [].</p></li>
 </dl>
 </dd></dl>
 
-</section>
 </dd></dl>
 
 <dl class="py class">
@@ -2851,8 +2933,10 @@ Default is lambda x: x == 0.0</p></li>
 <section id="module-fmdtools.analyze.phases">
 <span id="fmdtools-analyze-phases"></span><h2>fmdtools.analyze.phases<a class="headerlink" href="#module-fmdtools.analyze.phases" title="Link to this heading"></a></h2>
 <p>Module for analyzing phases and time-based sampling schemes.</p>
-<p>Has classes:
-- <a class="reference internal" href="#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhaseMap</span></code></a>: A mapping of phases to times.</p>
+<p>Has classes:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhaseMap</span></code></a>: A mapping of phases to times.</p></li>
+</ul>
 <p>And functions:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.analyze.phases.from_hist" title="fmdtools.analyze.phases.from_hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_hist()</span></code></a>: Creates dict of PhaseMaps based on mode progression in history.</p></li>
@@ -2862,7 +2946,6 @@ over time with rates/</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.phases.samplemetrics" title="fmdtools.analyze.phases.samplemetrics"><code class="xref py py-func docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a>: plots a metric for a set of faults sampled by a SampleApproach
 over time with rates on separate plots</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.phases.find_interval_overlap" title="fmdtools.analyze.phases.find_interval_overlap"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_interval_overlap()</span></code></a>: Find overlap between given intervals.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.phases.gen_interval_times" title="fmdtools.analyze.phases.gen_interval_times"><code class="xref py py-func docutils literal notranslate"><span class="pre">gen_interval_times()</span></code></a>: Creates times in a given interval.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.phases.PhaseMap">
@@ -3145,18 +3228,17 @@ phases for future sampling.</p>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.analyze.history</span> <span class="kn">import</span> <span class="n">History</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s1">&#39;a.m.mode&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;off&#39;</span><span class="p">,</span> <span class="s1">&#39;off&#39;</span><span class="p">,</span> <span class="s1">&#39;on&#39;</span><span class="p">],</span> <span class="s1">&#39;time&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">from_hist</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: PhaseMap({&#39;off&#39;: [0, 1], &#39;on&#39;: [2, 2]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;on&#39;: {&#39;on&#39;}})}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s1">&#39;b.m.mode&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;off&#39;</span><span class="p">,</span> <span class="s1">&#39;off&#39;</span><span class="p">,</span> <span class="s1">&#39;on&#39;</span><span class="p">],</span> <span class="s1">&#39;c.m.mode&#39;</span><span class="p">:[</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">],</span> <span class="s1">&#39;time&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">from_hist</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
+<span class="go">{&#39;b&#39;: PhaseMap({&#39;off&#39;: [0, 1], &#39;on&#39;: [2, 2]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;on&#39;: {&#39;on&#39;}}), &#39;c&#39;: PhaseMap({&#39;up&#39;: [0, 0], &#39;down&#39;: [1, 1], &#39;left&#39;: [2, 2]}, {&#39;up&#39;: {&#39;up&#39;}, &#39;down&#39;: {&#39;down&#39;}, &#39;left&#39;: {&#39;left&#39;}})}</span>
+</pre></div>
+</div>
 </dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.analyze.phases.gen_interval_times">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.phases.</span></span><span class="sig-name descname"><span class="pre">gen_interval_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.phases.gen_interval_times" title="Link to this definition"></a></dt>
-<dd><p>Generate the times in a given interval given the timestep dt.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.analyze.phases.get_joint_phase">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.phases.</span></span><span class="sig-name descname"><span class="pre">get_joint_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">phases</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.phases.get_joint_phase" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.phases.join_phasemaps">
@@ -3219,8 +3301,7 @@ each row</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.phases.samplemetric">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.phases.</span></span><span class="sig-name descname"><span class="pre">samplemetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faultsamp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rate'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_rad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{:.2e}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'stem'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">scen_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.phases.samplemetric" title="Link to this definition"></a></dt>
-<dd><p>Plots the sample metric and rate of a given fault over the injection times defined
-in the app sampleapproach</p>
+<dd><p>Plot the sample metric and rate of a given fault over sample times.</p>
 <p>(note: not currently compatible with joint fault modes)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -3250,8 +3331,7 @@ the max metric value.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.phases.samplemetrics">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.phases.</span></span><span class="sig-name descname"><span class="pre">samplemetrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.phases.samplemetrics" title="Link to this definition"></a></dt>
-<dd><p>Plot the costs and rates of a set of faults injected over time according to the
-approach app.</p>
+<dd><p>Plot costs and rates of a set of faults injected over time according to the sample.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

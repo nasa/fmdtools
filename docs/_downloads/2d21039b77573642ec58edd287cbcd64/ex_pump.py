@@ -599,7 +599,7 @@ def script_fault_degradation_tables(**kwargs):
     """Show fault/degradation tables/plots for a given fault scenario."""
     mdl = Pump(**kwargs, track="all")
     endclass, mdlhist = propagate.one_fault(
-        mdl, 'import_ee', 'no_v', time=29,  staged=True)
+        mdl, 'import_ee', 'no_v', time=29, staged=True)
 
     ks = mdl.get_roles_as_dict("fxn", "flow", flex_prefixes=True)
     deghist = mdlhist.get_degraded_hist(*ks)
