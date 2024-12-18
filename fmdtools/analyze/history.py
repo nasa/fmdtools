@@ -703,7 +703,7 @@ class History(Result):
                 xlab = xlabel
             else:
                 xlab = ' '
-            ylab = ylabels.get(value, '')
+            ylab = ylabels.get(value, kwargs.get('ylabel', ''))
             for group, hists in grouphists.items():
                 loc_kwargs = {**kwargs, 'label': group, 'xlabel': xlab, 'ylabel': ylab,
                               'title': subplot_titles[value],
@@ -738,7 +738,8 @@ class History(Result):
         return fig, axs
 
     def plot_individual_line(self, value, fig=None, ax=None, figsize=(6, 4),
-                             time='time', xlabel='', ylabel='', title='', **kwargs):
+                             time='time', xlabel='', ylabel='', title='',
+                             xlim=(), ylim=(), zlim=(), **kwargs):
         """Plot value in hist as individual lines."""
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         scens = [*self.nest(1).keys()]
@@ -750,10 +751,12 @@ class History(Result):
             h_value = hist_to_plot.get(value)
             times = hist_to_plot.get(time)
             ax.plot(times, h_value, **kwargs)
-        add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, title=title)
-        min_ind = np.min([i[0] for i in self.get_values(time).values()])
-        max_ind = np.max([i[-1] for i in self.get_values(time).values()])
-        ax.set_xlim(min_ind, max_ind)
+        if not xlim:
+            min_ind = np.min([i[0] for i in self.get_values(time).values()])
+            max_ind = np.max([i[-1] for i in self.get_values(time).values()])
+            xlim = (min_ind, max_ind)
+        add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, title=title,
+                         xlim=xlim, ylim=ylim, zlim=zlim)
         return fig, ax
 
     def get_mean_std_errhist(self, value, time='time'):
@@ -946,7 +949,8 @@ class History(Result):
                           comp_groups={}, indiv_kwargs={}, figsize=(4, 4), time='time',
                           time_groups=[], time_ticks=5.0, time_fontsize=8,
                           t_pretext="t=", xlim=(), ylim=(), zlim=(), legend=True,
-                          title='', fig=None, ax=None, **kwargs):
+                          xlabel='x', ylabel='y', zlabel='z', title='',
+                          fig=None, ax=None, **kwargs):
         """
         Plot trajectories from the environment in 2d or 3d space.
 
@@ -1033,16 +1037,9 @@ class History(Result):
                 hists.plot_trajectory(*plot_values, **local_kwargs)
             elif len(plot_values) == 3:
                 hists.plot_trajectory3(*plot_values, **local_kwargs)
-
-        if xlim:
-            ax.set_xlim(*xlim)
-        if ylim:
-            ax.set_ylim(*ylim)
-        if zlim:
-            ax.set_zlim(*zlim)
         consolidate_legend(ax, **kwargs)
-        if title:
-            ax.set_title(title)
+        add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, title=title,
+                         xlim=xlim, ylim=ylim, zlim=zlim)
         return fig, ax
 
     def plot_trajectory(self, xlab, ylab, fig=None, ax=None, figsize=(6, 4),
@@ -1050,6 +1047,8 @@ class History(Result):
                         t_pretext="t=", **kwargs):
         """
         Plot a single set of trajectories on an existing matplotlib axis.
+
+        Used by History.plot_trajectories (the main interface).
 
         Parameters
         ----------

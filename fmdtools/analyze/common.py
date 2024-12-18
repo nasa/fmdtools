@@ -362,7 +362,7 @@ def phase_overlay(ax, phasemap, label_phases=True):
 
 def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
                   boundcolor='gray', boundlinestyle='--', fillalpha=0.3, time='time',
-                  xlabel='time', ylabel='', title='', **kwargs):
+                  xlabel='time', ylabel='', title='', xlim=(), ylim=(), **kwargs):
     """
     Plot a line with a given range of uncertainty around it.
 
@@ -412,17 +412,29 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
                            ax=ax, fig=fig, color=boundcolor, linestyle=boundlinestyle)
     else:
         raise Exception("Invalid bound type: "+boundtype)
-    add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
-    ax.set_xlim(err_hist[time][0], err_hist[time][-1])
+    if not xlim:
+        xlim = err_hist[time][0], err_hist[time][-1]
+    add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, title=title,
+                     xlim=xlim, ylim=ylim)
     return fig, ax
 
 
-def add_title_xylabs(ax, title='', xlabel='', ylabel=''):
-    """Add title and x/y labels to the given axis."""
+def add_title_xylabs(ax, title='', xlabel='', ylabel='', zlabel='',
+                     xlim=(), ylim=(), zlim=()):
+    """Add/set title, x/y labels, and limits to the given axis."""
     if xlabel:
         ax.set_xlabel(xlabel)
     if ylabel:
         ax.set_ylabel(ylabel)
+    if xlim:
+        ax.set_xlim(*xlim)
+    if ylim:
+        ax.set_ylim(*ylim)
+    if ax.name == '3d':
+        if zlim:
+            ax.set_zlim(*zlim)
+        if zlabel:
+            ax.set_zlabel(zlabel)
     if title:
         ax.set_title(title)
 
