@@ -14,7 +14,7 @@ Classes:
 - :class:`DisturbanceProblem`: Enables optimizing disturbances that occur at a set time
 - :class:`SingleFaultScenarioProblem`: Enables optimizing the time of a given fault
   scenario
-- :class:`ResponseMap`: Enables visualiation of 2-d search space.
+- :class:`ResponseCoords`: Enables visualiation of 2-d search space.
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -31,7 +31,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import t_key
-from fmdtools.define.object.coords import Coords, CoordsParam
+from fmdtools.define.object.coords import BaseCoords
 from fmdtools.define.block.function import ExampleFunction
 from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
 from fmdtools.sim.sample import FaultDomain
@@ -42,6 +42,7 @@ from fmdtools.analyze.history import History, init_dicthist
 import numpy as np
 import networkx as nx
 import time
+import inspect
 from collections.abc import Iterable
 from recordclass import dataobject
 
@@ -1880,41 +1881,50 @@ class DynamicInterface():
         return end
 
 
-class ResponseMapParam(CoordsParam):
-    """Default CoordsParam for ResponseMap."""
-
-    x_size: int = 10
-    y_size: int = 10
-    blocksize: float = 1.0
-    state_fval: tuple = (float, np.NaN)
-
-
-class ResponseMap(Coords):
+class ResponseCoords(BaseCoords):
     """
     Class for sampling functions and displaying them on maps.
 
     Examples
     --------
-    >>> rm = ResponseMap(lambda a, b: a*b, p={'x_size': 3, 'y_size': 3, 'blocksize': 2})
+    >>> rm = ResponseCoords(lambda a, b: a*b, p={'x_size': 3, 'y_size': 3, 'blocksize': 2})
     >>> rm.fval
     array([[ 0.,  0.,  0.],
            [ 0.,  4.,  8.],
            [ 0.,  8., 16.]])
+    >>> rm2 = ResponseCoords(lambda a, b: (a*b, a+b), returns={'fval': (float, 0.0), 'fval2': (float, 0.0)}, p={'x_size': 3, 'y_size': 3, 'blocksize': 2})
+    >>> rm2.fval2
+    array([[0., 2., 4.],
+           [2., 4., 6.],
+           [4., 6., 8.]])
     """
 
-    container_p = ResponseMapParam
+    def __init__(self, function, *args, returns={'fval': (float, 0.0)}, **kwargs):
+        func_params = inspect.signature(function).parameters
+        if len(func_params) > 2:
+            raise Exception("Too many function parameters: "+str(func_params))
+        super().__init__(*args, **kwargs)
+        self.add_property_arrays(returns)
+        self.init_properties(function, returns=[*returns], **kwargs)
 
-    def init_properties(self, function, **kwargs):
+    def init_properties(self, function, returns=['fval'], **kwargs):
         """
-        Initializes ResponseMap to given function.
+        Initialize ResponseCoords to given function.
 
         Parameters
         ----------
         function : callable
             Function to sample from over map/grid.
+        returns : list
+            Name(s) of returns from function in order.
         """
         for pt in self.pts:
-            self.set(*pt, "fval", function(*pt))
+            f_ret = function(*pt)
+            if len(returns) == 1:
+                self.set(*pt, returns[0], f_ret)
+            else:
+                for i, ret in enumerate(returns):
+                    self.set(*pt, ret, f_ret[i])
 
 
 if __name__ == "__main__":
