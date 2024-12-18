@@ -109,11 +109,8 @@ class BaseTab(UserDict):
 
     Userdict has structure {metric: {comp_group: value}} which enables plots/tables.
 
-    ...
-
-    Attributes:
-    -----------
-
+    Attributes
+    ----------
     factors : list
         List of factors in the table
     """
@@ -380,6 +377,7 @@ class BaseTab(UserDict):
                                legend_loc=legend_loc,
                                legend_title=color_factor)
         return fig, axs
+
 
 class FMEA(BaseTab):
     def __init__(self, res, fs, metrics=[], weight_metrics=[], avg_metrics=[],

@@ -93,150 +93,43 @@ class CoordsParam(Parameter):
     gapwidth: ClassVar[float] = 0.0
 
 
-class Coords(BaseObject):
+class DefaultCoordsParam(Parameter):
+    """Default Parameter for Coords (with no states/features)."""
+
+    x_size: int = 10
+    y_size: int = 10
+    blocksize: float = 1.0
+    gapwidth: float = 0.0
+
+
+class BaseCoords(BaseObject):
     """
-    Class for generating, accessing, and setting gridworld properties.
+    Abstract Base Coords class used for definition and analysis subclasses.
 
-    Creates arrays, points, and lists of points which may correspond to desired
-    modeling properties.
-
-    ...
-
-    Class Variables/Modifiers
-    ---------------
-    init_p: CoordsParam
-        Parameter controlling default grid matrix (see CoordsParam), along with other
-        properties of interest. Sets the .p container.
-    init_r: Rand
-        Random number generator. sets the .r container.
-    init_properties: method
-        Method that initializes the (non-default) properties of the Coords.
-
-    Examples
-    --------
-    >>> class ExampleCoords(Coords):
-    ...    container_p = ExampleCoordsParam
-    ...    def init_properties(self, *args, **kwargs):
-    ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
-
-    Instantiating a class with (see ExampleCoordsParam):
-
-    - immutable arrays a and v,
-    - mutable array st,
-    - point start at (0.0), and
-    - collection high made up of all points where v > 10.0.
-
-    As shown, features are normal numpy arrays set to readonly:
-
-    >>> ex = ExampleCoords()
-    >>> type(ex.a)
-    <class 'numpy.ndarray'>
-    >>> np.size(ex.a)
-    100
-    >>> ex.a[0, 0] = True
-    Traceback (most recent call last):
-      ...
-    ValueError: assignment destination is read-only
-
-    The main difference with states is that they can be set, e.g.,:
-
-    >>> ex.st[0, 0] = 100.0
-    >>> ex.st[0, 0]
-    100.0
-
-    Collections are lists of points that map to immutable properties. In ExampleCoords,
-    all points where v > 5.0 should be a part of high_v, as shown:
-
-    >>> ex.high_v
-    array([[ 0.,  0.],
-           [10.,  0.]])
-
-    Additionally, defined points (e.g., start) should be accessible via their names:
-
-    >>> ex.start
-    (0.0, 0.0)
-
-    Note that these histories are tracked:
-
-    >>> h = ex.create_hist([0, 1, 2])
-    >>> h.keys()
-    dict_keys(['r.probdens', 'st'])
-    >>> h.st[0]
-    array([[100.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])
+    Creates a grid with given properties. Do not use for model definition.
+    (Use Coords instead).
     """
 
-    __slots__ = ("p", "r", "grid", "pts", "points", "collections", "features", "states",
-                 "properties", "_args", "_kwargs")
-    container_p = CoordsParam
-    container_r = Rand
-    roledicts = ['points', 'collections', 'features', 'states']
-    immutable_roles = BaseObject.immutable_roles + \
-        ['points', 'collections', 'features']
-    default_track = ["r", "states"]
+    __slots__ = ("p", "grid", "pts")
+    container_p = DefaultCoordsParam
 
-    def __init__(self, *args, track='default', **kwargs):
-        """Initialize class with properties in init_properties."""
-        self._args = args
-        self._kwargs = kwargs
-        super().__init__(*args, track=[], **kwargs)
-        self.init_grids(*args, **kwargs)
-        self.init_properties(*args, **kwargs)
-        self.build()
-        self.init_track(track)
+    def __init__(self, *args, track=[], **kwargs):
+        super().__init__(*args, track=track, **kwargs)
+        self.init_grid_mesh()
 
-    def base_type(self):
-        """Return fmdtools type of the model class."""
-        return Coords
-
-    def check_role(self, roletype, rolename):
-        """Check that the rolename for coords is 'c'."""
-        if roletype != 'coords':
-            raise Exception("Invalid roletype for coords: " + roletype)
-        if rolename != 'c':
-            raise Exception("Invalid container name for Coords: "+rolename)
-
-    def init_grids(self, *args, **kwargs):
-        """Prepare class with defined features."""
+    def init_grid_mesh(self):
+        """Initialize grid and points arrays."""
         self.grid = np.array([[(i, j) for j in range(0, self.p.y_size)]
                              for i in range(0, self.p.x_size)]) * self.p.blocksize
         self.pts = self.grid.reshape(int(self.grid.size/2), 2)
 
-        self.init_role_dict("point", set_attr=True)
-        self.init_role_dict("collect", "ions")
-        self.init_role_dict("feature")
-        self.init_role_dict("state")
-        self.properties = {**self.features, **self.states}
-        for propname, prop in self.properties.items():
+    def add_property_arrays(self, properties):
+        """Add arrays for the given properties of the mesh."""
+        for propname, prop in properties.items():
             prop_type, prop_default = prop
             proparray = np.full((self.p.x_size, self.p.y_size),
                                 prop[1], dtype=prop[0])
             setattr(self, propname, proparray)
-
-    def init_properties(self, *args, **kwargs):
-        """Initialize arrays with non-default values."""
-        return 0
-
-    def build(self):
-        """Set features as immutable."""
-        for propname, prop in self.properties.items():
-            if propname in self.features:
-                proparray = getattr(self, propname)
-                proparray.flags.writeable = False
-        for cname, collection in self.collections.items():
-            if collection[0] in self.features:
-                setattr(self, cname, self.find_all_prop(*collection))
-            else:
-                raise Exception("Invalid collection: " + cname +
-                                " collections may only map to (immutable) features")
 
     def find_all_prop(self, name, value=True, comparator=np.equal):
         """
@@ -266,72 +159,6 @@ class Coords(BaseObject):
         """
         prop = getattr(self, name)
         where = np.where(comparator(prop, value))
-        pts_with_condition = [(p, where[1][i]) for i, p in enumerate(where[0])]
-        return np.array([self.grid[tuple(p)] for p in pts_with_condition])
-
-    def find_all(self, *points_colls, in_points_colls=True, **prop_kwargs):
-        """
-        Find all points in array satisfying multiple statements.
-
-        Parameters
-        ----------
-        *points_colls: str
-            Name(s) of points or collections defining the set of points to check.
-            If not provided, assumes all points.
-        in_points_colls: bool
-            Whether the properties are to be searched in the given set of
-            points/collections (True) or outside the given set of points/collections
-            (False). The default is True
-        **prop_kwargs : kwargs
-            keyword arguments corresponding to properties, values and comparators, e.g.:
-            statename=(True, np.equal)
-
-        Returns
-        -------
-        all: np.array
-            List of points where the comparator methods returns true.
-
-        Examples
-        --------
-        >>> ex = ExampleCoords()
-        >>> ex.find_all(v=(10.0, np.equal))
-        array([[ 0.,  0.],
-               [10.,  0.]])
-        >>> ex.st[0, 0] = 5.0
-        >>> ex.find_all(v=(10.0, np.equal), st=(0.0, np.greater))
-        array([[0., 0.]])
-        >>> ex.find_all("high_v", v=(10.0, np.equal))
-        array([[ 0.,  0.],
-               [10.,  0.]])
-        >>> ex.find_all("high_v", v=(10.0, np.less))
-        array([], dtype=float64)
-        >>> ex.st[2,2] = 1.0
-        >>> ex.find_all("high_v", in_points_colls=False, st=(0.0, np.greater))
-        array([[20., 20.]])
-        """
-        # check if in points or collections
-        if points_colls:
-            pts = []
-            for name in points_colls:
-                prop = getattr(self, name)
-                if name in self.points:
-                    pts.append(prop)
-                elif name in self.collections:
-                    pts.extend(prop)
-                else:
-                    raise Exception(name+"not in points or collections")
-            true_array = np.full(
-                (self.p.x_size, self.p.y_size), not in_points_colls)
-            for pt in pts:
-                true_array[self.to_index(*pt)] = in_points_colls
-        else:
-            true_array = np.full((self.p.x_size, self.p.y_size), True)
-
-        # check properties
-        for name, (value, comparator) in prop_kwargs.items():
-            prop = getattr(self, name)
-            true_array *= comparator(prop, value)
-        where = np.where(true_array)
         pts_with_condition = [(p, where[1][i]) for i, p in enumerate(where[0])]
         return np.array([self.grid[tuple(p)] for p in pts_with_condition])
 
@@ -701,67 +528,6 @@ class Coords(BaseObject):
                 neighbors.append(self.grid[n_point[0], n_point[1]])
         return neighbors
 
-    def find_closest(self, x, y, prop, include_pt=True, value=True,
-                     comparator=np.equal):
-        """
-        Find the closest point in the grid satisfying a given property.
-
-        Parameters
-        ----------
-        x : number
-            x-position to check from.
-        y : number
-            y-position to check from.
-        prop : str
-            Property or collection of the grid to check.
-        include_pt : bool, optional
-            Whether to include the containing grid point. The default is True.
-        value : bool/int/str, optional
-            Value to compare against. The default is None, which returns the points
-            that have the value True.
-        comparator : method, optional
-            Comparator function to use (e.g., np.equal, np.greater...).
-            The default is np.equal.
-
-        Returns
-        -------
-        pt: np.array
-            x-y position of the closest point satisfying the property.
-
-        Examples
-        --------
-        Can be used with default options to check collections, e.g.,:
-
-        >>> ex = ExampleCoords()
-        >>> ex.find_closest(20, 0, "high_v")
-        array([10.,  0.])
-
-        Alternatively can be used to search for the closest with a given property value,
-        e.g.,:
-
-        >>> ex.set(0, 0, "st", 1.0)
-        >>> ex.find_closest(20, 0, "st", value=1.0, comparator=np.equal)
-        array([0., 0.])
-        """
-        if prop in self.properties:
-            pts = self.find_all_prop(prop, value, comparator)
-        elif prop in self.collections or prop == 'pts':
-            pts = getattr(self, prop)
-        else:
-            raise Exception(prop+" not in .properties or .collections")
-
-        p_rounded = self.to_gridpoint(x, y)
-
-        if p_rounded.tolist() in pts.tolist():
-            return p_rounded
-        else:
-            if not include_pt:
-                pts = np.array([p for p in pts if all(p != p_rounded)])
-            dists = np.sqrt(np.sum((np.array([x, y])-pts)**2, 1))
-            closest_ind = np.argmin(dists)
-            xy = pts[closest_ind]
-            return xy
-
     def in_range(self, x, y):
         """
         Check to see if the x-y point is in the range of the coordinate system.
@@ -781,148 +547,6 @@ class Coords(BaseObject):
         half_b = self.p.blocksize/2
         return (-half_b <= x <= self.p.blocksize * self.p.x_size - half_b and
                 -half_b <= y <= self.p.blocksize * self.p.y_size - half_b)
-
-    def in_area(self, x, y, coll):
-        """
-        Check to see if the point x, y is in a given collection or at a point.
-
-        Parameters
-        ----------
-        x : number
-            x-position to check from.
-        y : number
-            y-position to check from.
-        coll: str
-            Property or collection of the grid to check.
-
-        Returns
-        -------
-        in: bool
-            Whether the point is in the collection
-
-        Examples
-        --------
-        >>> ex = ExampleCoords()
-        >>> ex.in_area(0.4, 0.2, 'start')
-        True
-        >>> ex.in_area(10, 10, 'start')
-        False
-        """
-        pts = getattr(self, coll)
-        try:
-            pt = self.to_gridpoint(x, y)
-        except IndexError:
-            return False
-        if coll in self.points:
-            return np.all(pt == pts)
-        elif coll in self.collections:
-            return pt in pts
-        else:
-            raise Exception("coll "+coll+" not a point or collection")
-
-    def set_rand_pts(self, prop, value, number, pts=None, replace=False):
-        """
-        Set a given number of points for a property to random value.
-
-        Parameters
-        ----------
-        prop : str
-            Property to set
-        value : int/float/str/etc
-            Value to set the points to
-        number : int
-            Number of points to set
-        pts : list, optional
-            List of points to select from.
-            The default is None (which selects from all points).
-        replace : bool, optional
-            Whether to select with replacement. The default is False.
-
-        Examples
-        --------
-        >>> ex = ExampleCoords()
-        >>> ex.set_rand_pts("st", 40, 5)
-        >>> len(ex.find_all_prop("st", 40))
-        5
-        """
-        if pts is None:
-            pts = self.pts
-        else:
-            pts = pts
-        set_pts = self.r.rng.choice(pts, number, replace=replace)
-        self.set_pts(set_pts, prop, value)
-
-    def set_prop_dist(self, prop, dist, *args, **kwargs):
-        """
-        Randomizes a property according to a given distribution.
-
-        Parameters
-        ----------
-        prop : str
-            Property to set
-        dist : str
-            Name of distribution to call from the rng.
-            (see documentation for numpy.random)
-        *args : tuple, optional
-            Arguments to the distribution method (e.g., (min, max)). The default is ().
-        **kwargs : kwargs, optional
-            Keyword arguments to the distribution method. The default is {}.
-        """
-        p = getattr(self, prop)
-        meth = getattr(self.r.rng, dist)
-        new_p = meth(*args, size=p.shape, **kwargs)
-        setattr(self, prop, new_p)
-
-    def return_mutables(self):
-        """Check if grid properties have changed (used in propagation)."""
-        return tuple([*(tuple(map(tuple, replace_array_nan(getattr(self, state))))
-                        for state in self.states)])
-
-    def copy(self):
-        """
-        Copy the Coords object.
-
-        Examples
-        --------
-        >>> ex = ExampleCoords()
-        >>> ex.set(0, 0, "st", 25.0)
-        >>> cop = ex.copy()
-        >>> cop.get(0, 0, "st")
-        25.0
-        >>> np.all(ex.st == cop.st)
-        True
-        >>> id(ex.st) == id(cop.st)
-        False
-        """
-        cop = self.__class__(*self._args, **self._kwargs)
-        for state in self.states:
-            setattr(cop, state, np.copy(getattr(self, state)))
-        return cop
-
-    def get_all_possible_track(self):
-        """Extend BaseObject to include states in tracking."""
-        return BaseObject.get_all_possible_track(self) + [*self.states]
-
-    def get_collection(self, prop):
-        """
-        Get the points for a given collection.
-
-        Parameters
-        ----------
-        prop : str
-            Name of the collection.
-
-        Returns
-        -------
-        coll: np.ndarray
-            Array of points in the collection
-        """
-        if prop in self.collections or prop == 'pts':
-            return getattr(self, prop)
-        elif prop in self.points:
-            return np.array([getattr(self, prop)])
-        else:
-            raise Exception("Not a point or collection")
 
     def show_property_text(self, prop, fontsize=8, digits=3,
                            fig=None, ax=None, figsize=(5, 5)):
@@ -1152,6 +776,477 @@ class Coords(BaseObject):
         ax.set_zlabel(zlabel)
         return fig, ax
 
+    def _show_properties(self, properties, fig, ax, pallette, **kwargs):
+        """Show multiple properties on a plot. Helper function to .show()."""
+        for i, (prop, prop_kwargs) in enumerate(properties.items()):
+            kwar = {**kwargs,
+                    'color': pallette[i],
+                    'xlabel': '', 'ylabel': '', 'title': '',
+                    **prop_kwargs}
+            fig, ax = self.show_property(prop, fig=fig, ax=ax, **kwar)
+
+    def show(self, properties={}, fig=None, ax=None, figsize=(5, 5),
+             xlabel='x', ylabel='y', title='',
+             pallette=[*TABLEAU_COLORS.keys()], **kwargs):
+        """Show the properties array(s) of the BaseCoords object."""
+        fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
+        self._show_properties(properties, fig, ax, pallette, **kwargs)
+        add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
+        return fig, ax
+
+    def show_from(self, t, history={}, properties={}, clear_fig=False, **kwargs):
+        """
+        Run Coords.show() at a particular time in the history.
+
+        Parameters
+        ----------
+        t : int
+            Time index to show the Coords object at.
+        hist : History
+            History to show the Coords object at.
+        clear_fig : bool
+            Whether to clear the figure beforehand. Default is False.
+        **kwargs : kwargs
+            kwargs for self.show
+
+        Returns
+        -------
+        fig : mpl.figure
+            Plotted figure object
+        ax : mpl.axis
+            Ploted axis object.
+        """
+        kwargs = prep_animation_title(t, **kwargs)
+        if clear_fig:
+            kwargs = clear_prev_figure(**kwargs)
+        props = [p for p in properties if p in history]
+        self.assign_from(history, t, *props)
+        return self.show(properties=properties, **kwargs)
+
+    def animate(self, hist, times='all', clear_fig=True, **kwargs):
+        """
+        Animate the coords over a history using show_from.
+
+        Parameters
+        ----------
+        hist : History
+            History of coords.
+        times : list/'all'
+            Times to animate over.
+        **kwargs : kwargs
+            Arguments to self.show.
+
+        Returns
+        -------
+        ani : animation.Funcanimation
+            Object with animation.
+        """
+        return hist.animate(self.show_from, times=times, clear_fig=clear_fig, **kwargs)
+
+
+class Coords(BaseCoords):
+    """
+    Class for generating, accessing, and setting gridworld properties.
+
+    Creates arrays, points, and lists of points which may correspond to desired
+    modeling properties.
+
+    Class Variables/Modifiers
+    ---------------
+    init_p: CoordsParam
+        Parameter controlling default grid matrix (see CoordsParam), along with other
+        properties of interest. Sets the .p container.
+    init_r: Rand
+        Random number generator. sets the .r container.
+    init_properties: method
+        Method that initializes the (non-default) properties of the Coords.
+
+    Examples
+    --------
+    >>> class ExampleCoords(Coords):
+    ...    container_p = ExampleCoordsParam
+    ...    def init_properties(self, *args, **kwargs):
+    ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
+
+    Instantiating a class with (see ExampleCoordsParam):
+
+    - immutable arrays a and v,
+    - mutable array st,
+    - point start at (0.0), and
+    - collection high made up of all points where v > 10.0.
+
+    As shown, features are normal numpy arrays set to readonly:
+
+    >>> ex = ExampleCoords()
+    >>> type(ex.a)
+    <class 'numpy.ndarray'>
+    >>> np.size(ex.a)
+    100
+    >>> ex.a[0, 0] = True
+    Traceback (most recent call last):
+      ...
+    ValueError: assignment destination is read-only
+
+    The main difference with states is that they can be set, e.g.,:
+
+    >>> ex.st[0, 0] = 100.0
+    >>> ex.st[0, 0]
+    100.0
+
+    Collections are lists of points that map to immutable properties. In ExampleCoords,
+    all points where v > 5.0 should be a part of high_v, as shown:
+
+    >>> ex.high_v
+    array([[ 0.,  0.],
+           [10.,  0.]])
+
+    Additionally, defined points (e.g., start) should be accessible via their names:
+
+    >>> ex.start
+    (0.0, 0.0)
+
+    Note that these histories are tracked:
+
+    >>> h = ex.create_hist([0, 1, 2])
+    >>> h.keys()
+    dict_keys(['r.probdens', 'st'])
+    >>> h.st[0]
+    array([[100.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])
+    """
+
+    __slots__ = ("r", "points", "collections", "features", "states",
+                 "properties", "_args", "_kwargs")
+    container_r = Rand
+    roledicts = ['points', 'collections', 'features', 'states']
+    immutable_roles = BaseObject.immutable_roles + \
+        ['points', 'collections', 'features']
+    default_track = ["r", "states"]
+
+    def __init__(self, *args, track='default', **kwargs):
+        """Initialize class with properties in init_properties."""
+        self._args = args
+        self._kwargs = kwargs
+        super().__init__(*args, track=[], **kwargs)
+        self.add_coords_roles()
+        self.add_property_arrays(self.properties)
+        self.init_properties(*args, **kwargs)
+        self.build()
+        self.init_track(track)
+
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Coords
+
+    def check_role(self, roletype, rolename):
+        """Check that the rolename for coords is 'c'."""
+        if roletype != 'coords':
+            raise Exception("Invalid roletype for coords: " + roletype)
+        if rolename != 'c':
+            raise Exception("Invalid container name for Coords: "+rolename)
+
+    def add_coords_roles(self):
+        """Add points, collections, features, and states as roles to Coords."""
+        self.init_role_dict("point", set_attr=True)
+        self.init_role_dict("collect", "ions")
+        self.init_role_dict("feature")
+        self.init_role_dict("state")
+        self.properties = {**self.features, **self.states}
+
+    def init_properties(self, *args, **kwargs):
+        """Initialize arrays with non-default values."""
+        return 0
+
+    def build(self):
+        """Set features as immutable."""
+        for propname, prop in self.properties.items():
+            if propname in self.features:
+                proparray = getattr(self, propname)
+                proparray.flags.writeable = False
+        for cname, collection in self.collections.items():
+            if collection[0] in self.features:
+                setattr(self, cname, self.find_all_prop(*collection))
+            else:
+                raise Exception("Invalid collection: " + cname +
+                                " collections may only map to (immutable) features")
+
+    def find_all(self, *points_colls, in_points_colls=True, **prop_kwargs):
+        """
+        Find all points in array satisfying multiple statements.
+
+        Parameters
+        ----------
+        *points_colls: str
+            Name(s) of points or collections defining the set of points to check.
+            If not provided, assumes all points.
+        in_points_colls: bool
+            Whether the properties are to be searched in the given set of
+            points/collections (True) or outside the given set of points/collections
+            (False). The default is True
+        **prop_kwargs : kwargs
+            keyword arguments corresponding to properties, values and comparators, e.g.:
+            statename=(True, np.equal)
+
+        Returns
+        -------
+        all: np.array
+            List of points where the comparator methods returns true.
+
+        Examples
+        --------
+        >>> ex = ExampleCoords()
+        >>> ex.find_all(v=(10.0, np.equal))
+        array([[ 0.,  0.],
+               [10.,  0.]])
+        >>> ex.st[0, 0] = 5.0
+        >>> ex.find_all(v=(10.0, np.equal), st=(0.0, np.greater))
+        array([[0., 0.]])
+        >>> ex.find_all("high_v", v=(10.0, np.equal))
+        array([[ 0.,  0.],
+               [10.,  0.]])
+        >>> ex.find_all("high_v", v=(10.0, np.less))
+        array([], dtype=float64)
+        >>> ex.st[2,2] = 1.0
+        >>> ex.find_all("high_v", in_points_colls=False, st=(0.0, np.greater))
+        array([[20., 20.]])
+        """
+        # check if in points or collections
+        if points_colls:
+            pts = []
+            for name in points_colls:
+                prop = getattr(self, name)
+                if name in self.points:
+                    pts.append(prop)
+                elif name in self.collections:
+                    pts.extend(prop)
+                else:
+                    raise Exception(name+"not in points or collections")
+            true_array = np.full(
+                (self.p.x_size, self.p.y_size), not in_points_colls)
+            for pt in pts:
+                true_array[self.to_index(*pt)] = in_points_colls
+        else:
+            true_array = np.full((self.p.x_size, self.p.y_size), True)
+
+        # check properties
+        for name, (value, comparator) in prop_kwargs.items():
+            prop = getattr(self, name)
+            true_array *= comparator(prop, value)
+        where = np.where(true_array)
+        pts_with_condition = [(p, where[1][i]) for i, p in enumerate(where[0])]
+        return np.array([self.grid[tuple(p)] for p in pts_with_condition])
+
+    def find_closest(self, x, y, prop, include_pt=True, value=True,
+                     comparator=np.equal):
+        """
+        Find the closest point in the grid satisfying a given property.
+
+        Parameters
+        ----------
+        x : number
+            x-position to check from.
+        y : number
+            y-position to check from.
+        prop : str
+            Property or collection of the grid to check.
+        include_pt : bool, optional
+            Whether to include the containing grid point. The default is True.
+        value : bool/int/str, optional
+            Value to compare against. The default is None, which returns the points
+            that have the value True.
+        comparator : method, optional
+            Comparator function to use (e.g., np.equal, np.greater...).
+            The default is np.equal.
+
+        Returns
+        -------
+        pt: np.array
+            x-y position of the closest point satisfying the property.
+
+        Examples
+        --------
+        Can be used with default options to check collections, e.g.,:
+
+        >>> ex = ExampleCoords()
+        >>> ex.find_closest(20, 0, "high_v")
+        array([10.,  0.])
+
+        Alternatively can be used to search for the closest with a given property value,
+        e.g.,:
+
+        >>> ex.set(0, 0, "st", 1.0)
+        >>> ex.find_closest(20, 0, "st", value=1.0, comparator=np.equal)
+        array([0., 0.])
+        """
+        if prop in self.properties:
+            pts = self.find_all_prop(prop, value, comparator)
+        elif prop in self.collections or prop == 'pts':
+            pts = getattr(self, prop)
+        else:
+            raise Exception(prop+" not in .properties or .collections")
+
+        p_rounded = self.to_gridpoint(x, y)
+
+        if p_rounded.tolist() in pts.tolist():
+            return p_rounded
+        else:
+            if not include_pt:
+                pts = np.array([p for p in pts if all(p != p_rounded)])
+            dists = np.sqrt(np.sum((np.array([x, y])-pts)**2, 1))
+            closest_ind = np.argmin(dists)
+            xy = pts[closest_ind]
+            return xy
+
+    def in_area(self, x, y, coll):
+        """
+        Check to see if the point x, y is in a given collection or at a point.
+
+        Parameters
+        ----------
+        x : number
+            x-position to check from.
+        y : number
+            y-position to check from.
+        coll: str
+            Property or collection of the grid to check.
+
+        Returns
+        -------
+        in: bool
+            Whether the point is in the collection
+
+        Examples
+        --------
+        >>> ex = ExampleCoords()
+        >>> ex.in_area(0.4, 0.2, 'start')
+        True
+        >>> ex.in_area(10, 10, 'start')
+        False
+        """
+        pts = getattr(self, coll)
+        try:
+            pt = self.to_gridpoint(x, y)
+        except IndexError:
+            return False
+        if coll in self.points:
+            return np.all(pt == pts)
+        elif coll in self.collections:
+            return pt in pts
+        else:
+            raise Exception("coll "+coll+" not a point or collection")
+
+    def set_rand_pts(self, prop, value, number, pts=None, replace=False):
+        """
+        Set a given number of points for a property to random value.
+
+        Parameters
+        ----------
+        prop : str
+            Property to set
+        value : int/float/str/etc
+            Value to set the points to
+        number : int
+            Number of points to set
+        pts : list, optional
+            List of points to select from.
+            The default is None (which selects from all points).
+        replace : bool, optional
+            Whether to select with replacement. The default is False.
+
+        Examples
+        --------
+        >>> ex = ExampleCoords()
+        >>> ex.set_rand_pts("st", 40, 5)
+        >>> len(ex.find_all_prop("st", 40))
+        5
+        """
+        if pts is None:
+            pts = self.pts
+        else:
+            pts = pts
+        set_pts = self.r.rng.choice(pts, number, replace=replace)
+        self.set_pts(set_pts, prop, value)
+
+    def set_prop_dist(self, prop, dist, *args, **kwargs):
+        """
+        Randomizes a property according to a given distribution.
+
+        Parameters
+        ----------
+        prop : str
+            Property to set
+        dist : str
+            Name of distribution to call from the rng.
+            (see documentation for numpy.random)
+        *args : tuple, optional
+            Arguments to the distribution method (e.g., (min, max)). The default is ().
+        **kwargs : kwargs, optional
+            Keyword arguments to the distribution method. The default is {}.
+        """
+        p = getattr(self, prop)
+        meth = getattr(self.r.rng, dist)
+        new_p = meth(*args, size=p.shape, **kwargs)
+        setattr(self, prop, new_p)
+
+    def return_mutables(self):
+        """Check if grid properties have changed (used in propagation)."""
+        return tuple([*(tuple(map(tuple, replace_array_nan(getattr(self, state))))
+                        for state in self.states)])
+
+    def copy(self):
+        """
+        Copy the Coords object.
+
+        Examples
+        --------
+        >>> ex = ExampleCoords()
+        >>> ex.set(0, 0, "st", 25.0)
+        >>> cop = ex.copy()
+        >>> cop.get(0, 0, "st")
+        25.0
+        >>> np.all(ex.st == cop.st)
+        True
+        >>> id(ex.st) == id(cop.st)
+        False
+        """
+        cop = self.__class__(*self._args, **self._kwargs)
+        for state in self.states:
+            setattr(cop, state, np.copy(getattr(self, state)))
+        return cop
+
+    def get_all_possible_track(self):
+        """Extend BaseObject to include states in tracking."""
+        return BaseObject.get_all_possible_track(self) + [*self.states]
+
+    def get_collection(self, prop):
+        """
+        Get the points for a given collection.
+
+        Parameters
+        ----------
+        prop : str
+            Name of the collection.
+
+        Returns
+        -------
+        coll: np.ndarray
+            Array of points in the collection
+        """
+        if prop in self.collections or prop == 'pts':
+            return getattr(self, prop)
+        elif prop in self.points:
+            return np.array([getattr(self, prop)])
+        else:
+            raise Exception("Not a point or collection")
+
     def show_collection(self, prop, fig=None, ax=None, label=True, z="",
                         xlabel='x', ylabel='y', title='',
                         legend_args=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
@@ -1239,15 +1334,6 @@ class Coords(BaseObject):
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
-    def _show_properties(self, properties, fig, ax, pallette, **kwargs):
-        """Show multiple properties on a plot. Helper function to .show()."""
-        for i, (prop, prop_kwargs) in enumerate(properties.items()):
-            kwar = {**kwargs,
-                    'color': pallette[i],
-                    'xlabel': '', 'ylabel': '', 'title': '',
-                    **prop_kwargs}
-            fig, ax = self.show_property(prop, fig=fig, ax=ax, **kwar)
-
     def _show_collections(self, collections, fig, ax, pallette, c_offset=0):
         """Show multiple collections on a plot. Helper function to .show()."""
         for i, (coll, coll_kwargs) in enumerate(collections.items()):
@@ -1304,55 +1390,6 @@ class Coords(BaseObject):
 
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
-
-    def show_from(self, t, history={}, properties={}, clear_fig=False, **kwargs):
-        """
-        Run Coords.show() at a particular time in the history.
-
-        Parameters
-        ----------
-        t : int
-            Time index to show the Coords object at.
-        hist : History
-            History to show the Coords object at.
-        clear_fig : bool
-            Whether to clear the figure beforehand. Default is False.
-        **kwargs : kwargs
-            kwargs for self.show
-
-        Returns
-        -------
-        fig : mpl.figure
-            Plotted figure object
-        ax : mpl.axis
-            Ploted axis object.
-        """
-        kwargs = prep_animation_title(t, **kwargs)
-        if clear_fig:
-            kwargs = clear_prev_figure(**kwargs)
-        props = [p for p in properties if p in history]
-        self.assign_from(history, t, *props)
-        return self.show(properties=properties, **kwargs)
-
-    def animate(self, hist, times='all', clear_fig=True, **kwargs):
-        """
-        Animate the coords over a history using show_from.
-
-        Parameters
-        ----------
-        hist : History
-            History of coords.
-        times : list/'all'
-            Times to animate over.
-        **kwargs : kwargs
-            Arguments to self.show.
-
-        Returns
-        -------
-        ani : animation.Funcanimation
-            Object with animation.
-        """
-        return hist.animate(self.show_from, times=times, clear_fig=clear_fig, **kwargs)
 
     def show_z(self, prop, z="prop", collections={}, legend_args=False, voxels=True,
                **kwargs):
@@ -1424,6 +1461,42 @@ class ExampleCoords(Coords):
     def init_properties(self, *args, **kwargs):
         """Initialize points where v=10.0."""
         self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
+
+
+class MetricCoords(BaseCoords):
+    """
+    Create an array of metrics from a given result.
+
+    MetricCoords can be used to display summary statistics e.g., min, max, mean) of
+    coords object results returned from simulations.
+
+    Parameters
+    ----------
+    res : Result
+        Result to get the result/histories from
+    values : list
+        List of values to get. Default is [], which will not get any values.
+    metric : method
+        Method to use to compute the metric.
+
+    Examples
+    --------
+    >>> from fmdtools.analyze.result import Result
+    >>> r = Result({'b1.a': np.array([[0,1], [0,4]]), 'b2.a': np.array([[2,1], [2,6]])})
+    >>> mc = MetricCoords(r, values=['a'], metric=np.mean, p={'x_size':2, 'y_size': 2})
+    >>> mc.a
+    array([[1., 1.],
+           [1., 5.]])
+    >>> mc = MetricCoords(r, values=['a'], metric=np.min, p={'x_size':2, 'y_size': 2})
+    >>> mc.a
+    array([[0, 1],
+           [0, 4]])
+    """
+
+    def __init__(self, res, *args, values=[], metric=np.mean, **kwargs):
+        super().__init__(*args, **kwargs)
+        for value in values:
+            setattr(self, value, metric([*res.get_values(value).values()], 0))
 
 
 if __name__ == "__main__":
