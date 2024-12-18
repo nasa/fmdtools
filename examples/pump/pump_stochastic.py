@@ -19,7 +19,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.pump.ex_pump  import MoveWat as DetMoveWat
+from examples.pump.ex_pump import MoveWat as DetMoveWat
 from examples.pump.ex_pump import ImportWater, ExportWater
 from examples.pump.ex_pump import ImportEE as DetImportEE
 from examples.pump.ex_pump import ImportSig as DetImportSig
@@ -214,13 +214,13 @@ if __name__ == "__main__":
         #    print(fxn.return_probdens())
         #    print(getattr(fxn, 'pds', None))
 
-    endresults,  mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
-                                               time=20, staged=False, run_stochastic=False,
-                                               new_params={'modelparams': {'seed': 50}})
+    endresults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
+                                              time=20, staged=False, run_stochastic=False,
+                                              new_params={'modelparams': {'seed': 50}})
 
-    endresults,  mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
-                                               time=20, staged=False, run_stochastic=True,
-                                               new_params={'modelparams': {'seed': 50}})
+    endresults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
+                                              time=20, staged=False, run_stochastic=True,
+                                              new_params={'modelparams': {'seed': 50}})
 
     # mdlhist['faulty']['functions']['ImportEE']['probdens']
 

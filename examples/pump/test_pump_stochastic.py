@@ -67,10 +67,10 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
             res_1, hist_1 = prop.nominal(mdl, run_stochastic=True, showprogress=False)
             res_f1, hist_f1 = prop.single_faults(mdl, run_stochastic=True,
                                                  showprogress=False)
-            if seed == None:
+            if seed is None:
                 seed = mdl.r.seed
             mdl2 = Pump(r={'seed': seed})
-            res_2,  hist_2 = prop.nominal(mdl2, run_stochastic=True, showprogress=False)
+            res_2, hist_2 = prop.nominal(mdl2, run_stochastic=True, showprogress=False)
             res_f2, hist_f2 = prop.single_faults(mdl2, run_stochastic=True,
                                                  showprogress=False)
             self.assertTrue(all(hist_1.fxns.move_water.s.eff ==

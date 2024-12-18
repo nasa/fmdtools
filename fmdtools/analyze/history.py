@@ -8,10 +8,6 @@ Defines :class:`History`: class and for structuring/analyzing simulation histori
 
 And functions/methods:
 
-- :func:`diff`: Helper function for finding inconsistent states between val1, val2, with
-  the difftype option
-- :func:`init_hist_iter`: Initializes the history for a given attribute att with value
-  val. Enables the recursive definition of a history as a nested structure.
 - :func:`init_dicthist`: Initializes histories for dictionary attributes (if any)
 - :func:`def prep_hists`: Prepare the history for plotting.
 
@@ -38,62 +34,12 @@ from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import plot_err_hist, setup_plot, set_empty_multiplots
 from fmdtools.analyze.common import mark_times, consolidate_legend, add_title_xylabs
 from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
+from fmdtools.analyze.common import is_known_mutable, diff
 
 from matplotlib import animation
 from functools import partial
 import numpy as np
 import copy
-
-
-def is_known_immutable(val):
-    """Check if value is known immutable."""
-    return type(val) in [int, float, str, tuple, bool] or isinstance(val, np.number)
-
-
-def is_known_mutable(val):
-    """Check if value is a known mutable."""
-    return type(val) in [dict, set]
-
-
-def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<U20'):
-    """
-    Initialize the history for a given attribute att with value val.
-
-    Enables the recursive definition of a history as a nested structure.
-
-    If a timerange is given, the base fields are initializes as fixed-length numpy
-    arrays corresponding to the data type of the field. Otherwise, an empty list
-    is initialized.
-
-    Parameters
-    ----------
-    att : str
-        Name of the attribute.
-    val : dict/field
-        dict to be initialized as a History or field to be initialized as a list or
-        numpy array
-    timerange : iterable, optional
-        Time-range to initialize the history over. The default is None.
-    track : list/str/dict, optional
-        argument specifying attributes for :func:`get_sub_include'. The default is None.
-    dtype : str, optional
-        Datatype to initialze the array as (if given). The default is None.
-    str_size : str, optional
-        Data type for strings. The default is '<U20'.
-
-    Returns
-    -------
-    Hist : History, List, or np.array
-        Initialized history structure corresponding to the attribute
-    """
-    sub_track = get_sub_include(att, track)
-    if sub_track and hasattr(val, 'create_hist'):
-        return val.create_hist(timerange, sub_track)
-    elif sub_track and isinstance(val, dict):
-        return init_dicthist(val, timerange, sub_track)
-    elif sub_track:
-        hist = History()
-        hist.init_att(att, val, timerange, track, dtype, str_size)
 
 
 def init_dicthist(start_dict, timerange, track="all"):
@@ -120,25 +66,7 @@ def init_dicthist(start_dict, timerange, track="all"):
     return hist
 
 
-def diff(val1, val2, difftype='bool'):
-    """
-    Find inconsistent states between val1, val2.
-
-    The difftype option ('diff' (takes the difference), 'bool' (checks if the same),
-                         and float (checks if under the provided tolerance))
-    """
-    try:
-        if difftype == 'diff':
-            return val1-val2
-        elif difftype == 'bool':
-            return val1 != val2
-        elif isinstance(difftype, float):
-            return abs(val1-val2) > difftype
-    except ValueError as e:
-        raise Exception("Unable to diff "+str(val1)+" and "+str(val2)) from e
-
-
-def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs):
+def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs, time='time'):
     """Prepare hists for plotting."""
     # Process data - clip and flatten
     if "time" in simhists:
@@ -148,7 +76,7 @@ def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs):
 
     plot_values = unpack_plot_values(plot_values)
 
-    grouphists = simhists.get_comp_groups(*plot_values, **comp_groups)
+    grouphists = simhists.get_comp_groups(*plot_values, time=time, **comp_groups)
 
     # Set up plots and iteration
     if 'nominal' in grouphists.keys() and len(grouphists) > 1:
@@ -203,6 +131,7 @@ class History(Result):
 
     def init_att(self, att, val,
                  timerange=None, track=None, dtype=None, str_size='<U20'):
+        """Add key/hist array for an attribute over a given timerange."""
         sub_track = get_sub_include(att, track)
         if sub_track:
             if isinstance(val, dict) or (hasattr(val, 'keys') and hasattr(val, 'values')):
@@ -218,10 +147,12 @@ class History(Result):
             else:
                 try:
                     self[att] = np.full(len(timerange), val)
-                except:
+                except ValueError:
                     self[att] = np.empty((len(timerange),), dtype=object)
 
-    def fromdict(inputdict):
+    @classmethod
+    def fromdict(cls, inputdict):
+        """Create history from dictionary. Used in initialization."""
         return fromdict(History, inputdict)
 
     def load(filename, filetype="", renest_dict=False, indiv=False):
@@ -390,12 +321,24 @@ class History(Result):
         return hist
 
     def get_slice(self, t_ind=0):
-        """Return dict of values from (flattenned) version of the history at t_ind."""
+        """
+        Return Result of values from (flattenned) version of the history at t_ind.
+
+        Examples
+        --------
+        >>> h = History(a=[3,4,5], time=[1,2,3])
+        >>> h.get_slice(0)
+        a:                                     3
+        time:                                  1
+        >>> h.get_slice(2)
+        a:                                     5
+        time:                                  3
+        """
         flathist = self.flatten()
         slice_dict = dict.fromkeys(flathist)
         for key, arr in flathist.items():
             slice_dict[key] = flathist[key][t_ind]
-        return slice_dict
+        return Result(slice_dict)
 
     def is_in(self, at):
         """Check if at is in the dictionary."""
@@ -407,7 +350,7 @@ class History(Result):
 
         Parameters
         ----------
-        metric : 'earliest','latest','total', optional
+        metric : 'earliest','latest','total', 'times', optional
             Earliest, latest, or total time fault(s) are present.
             The default is "earliest".
 
@@ -415,15 +358,28 @@ class History(Result):
         -------
         int
             index in the history when the fault is present
+
+        Examples
+        --------
+        >>> History({'m.faults.fault1': [False, False, False]}).get_fault_time()
+        nan
+        >>> History({'m.faults.fault1': [False, False, True]}).get_fault_time()
+        2
         """
         flatdict = self.flatten()
         all_faults_hist = np.sum([v for k, v in flatdict.items() if 'faults' in k], 0)
-        if metric == 'earliest':
-            return np.where(all_faults_hist >= 1)
-        elif metric == 'latest':
-            return np.where(np.flip(all_faults_hist) >= 1)
-        elif metric == 'total':
+        if metric == 'total':
             return np.sum(all_faults_hist >= 1)
+        else:
+            times = np.where(all_faults_hist >= 1)[0]
+            if times.size == 0:
+                return np.NaN
+            elif metric == 'times':
+                return times
+            elif metric == 'earliest':
+                return times[0]
+            elif metric == 'latest':
+                return times[-1]
 
     def _prep_faulty(self):
         """Create a faulty history of states from the current history."""
@@ -499,6 +455,15 @@ class History(Result):
         -------
         deghist : History
             History of degraded attributes
+
+        Examples
+        --------
+        >>> h = History({'nominal.a': np.array([1,2,3]), 'nominal.time': [0,1,2], 'faulty.a': np.array([1,1,1]), 'faulty.time': [0,1,2]})
+        >>> dh = h.get_degraded_hist("a")
+        >>> dh['total']
+        array([0, 1, 1])
+        >>> dh['a']
+        array([False,  True,  True])
         """
         if not attrs:
             attrs = self.keys()
@@ -519,7 +484,7 @@ class History(Result):
                 raise Exception("Unable to diff att " + att) from e
 
         if withtotal:
-            deghist['total'] = len(deghist.values()) - np.sum([*deghist.values()], axis=0)
+            deghist['total'] = np.sum([*deghist.values()], axis=0)
         if withtime:
             deghist['time'] = nomhist['time']
         return deghist
@@ -567,6 +532,22 @@ class History(Result):
         -------
         has_faults_hist : History
             History of attrs being faulty/not faulty
+
+        Examples
+        --------
+        >>> h = History({'f1.m.faults': [False, False, True], 'f2.m.faults': [True, False, False], 'time': [0,1,2]})
+        >>> fh = h.get_faulty_hist("f1", "f2")
+        >>> fh
+        f1:                             array(3)
+        f2:                             array(3)
+        total:                          array(3)
+        time:                           array(3)
+        >>> fh['total']
+        array([1, 0, 1])
+        >>> fh.f1
+        array([False, False,  True])
+        >>> fh.f2
+        array([ True, False, False])
         """
         faulthist = self._prep_faulty()
         faults_hist = self.get_faults_hist(*attrs)
@@ -722,7 +703,7 @@ class History(Result):
                 xlab = xlabel
             else:
                 xlab = ' '
-            ylab = ylabels.get(value, '')
+            ylab = ylabels.get(value, kwargs.get('ylabel', ''))
             for group, hists in grouphists.items():
                 loc_kwargs = {**kwargs, 'label': group, 'xlabel': xlab, 'ylabel': ylab,
                               'title': subplot_titles[value],
@@ -757,26 +738,28 @@ class History(Result):
         return fig, axs
 
     def plot_individual_line(self, value, fig=None, ax=None, figsize=(6, 4),
-                             xlabel='', ylabel='', title='', **kwargs):
+                             time='time', xlabel='', ylabel='', title='',
+                             xlim=(), ylim=(), zlim=(), **kwargs):
         """Plot value in hist as individual lines."""
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         scens = [*self.nest(1).keys()]
-        all_times = self.get_values('time')
         hist_to_plot = self.get_values(value)
         if 'color' not in kwargs:
             kwargs['color'] = ax._get_lines.get_next_color()
         for scen in scens:
             hist_to_plot = self.get(scen)
             h_value = hist_to_plot.get(value)
-            times = hist_to_plot.get('time')
+            times = hist_to_plot.get(time)
             ax.plot(times, h_value, **kwargs)
-        add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, title=title)
-        min_ind = np.min([i[0] for i in self.get_values('time').values()])
-        max_ind = np.max([i[-1] for i in self.get_values('time').values()])
-        ax.set_xlim(min_ind, max_ind)
+        if not xlim:
+            min_ind = np.min([i[0] for i in self.get_values(time).values()])
+            max_ind = np.max([i[-1] for i in self.get_values(time).values()])
+            xlim = (min_ind, max_ind)
+        add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, title=title,
+                         xlim=xlim, ylim=ylim, zlim=zlim)
         return fig, ax
 
-    def get_mean_std_errhist(self, value):
+    def get_mean_std_errhist(self, value, time='time'):
         """
         Get aggregated err_hist of means surrounded by std deviation.
 
@@ -792,19 +775,20 @@ class History(Result):
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
         """
         hist = History()
-        hist['time'] = self.get_metric('time', axis=0)
+        hist[time] = self.get_metric(time, axis=0)
         hist['stat'] = self.get_metric(value, np.mean, axis=0)
         std_dev = self.get_metric(value, np.std)
         hist['high'] = hist['stat']+std_dev/2
         hist['low'] = hist['stat']-std_dev/2
         return hist
 
-    def plot_mean_std_line(self, value, fig=None, ax=None, figsize=(6, 4), **kwargs):
+    def plot_mean_std_line(self, value, fig=None, ax=None, figsize=(6, 4), time='time',
+                           **kwargs):
         """Plot value in hist aggregated by mean and standard devation."""
-        hist = self.get_mean_std_errhist(value)
-        return plot_err_hist(hist, ax, fig, figsize, **kwargs)
+        hist = self.get_mean_std_errhist(value, time=time)
+        return plot_err_hist(hist, ax, fig, figsize, time=time, **kwargs)
 
-    def get_mean_ci_errhist(self, value, ci=0.95, max_ind='max'):
+    def get_mean_ci_errhist(self, value, ci=0.95, max_ind='max', time='time'):
         """
         Get aggregated err_hist of means surrounded by confidence intervals.
 
@@ -824,7 +808,7 @@ class History(Result):
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
         """
         hist = History()
-        hist['time'] = self.get_metric('time', axis=0)
+        hist[time] = self.get_metric(time, axis=0)
         hist['stat'] = self.get_metric(value, np.mean, axis=0)
         if max_ind == 'max':
             max_ind = min([len(h) for h in self.values()])
@@ -838,12 +822,12 @@ class History(Result):
         return hist
 
     def plot_mean_ci_line(self, value, fig=None, ax=None, figsize=(6, 4),
-                          ci=0.95, max_ind='max', **kwargs):
+                          ci=0.95, max_ind='max', time='time', **kwargs):
         """Plot value in hist aggregated by bootstrap confidence interval for mean."""
-        hist = self.get_mean_ci_errhist(value, ci, max_ind)
-        return plot_err_hist(hist, ax, fig, figsize, **kwargs)
+        hist = self.get_mean_ci_errhist(value, ci, max_ind, time=time)
+        return plot_err_hist(hist, ax, fig, figsize, time=time, **kwargs)
 
-    def get_mean_bound_errhist(self, value):
+    def get_mean_bound_errhist(self, value, time='time'):
         """
         Get aggregated err_hist of means surrounded by bounds.
 
@@ -870,18 +854,19 @@ class History(Result):
         array([1])
         """
         hist = History()
-        hist['time'] = self.get_metric('time', axis=0)
+        hist[time] = self.get_metric(time, axis=0)
         hist['stat'] = self.get_metric(value, np.mean, axis=0)
         hist['high'] = self.get_metric(value, np.max, axis=0)
         hist['low'] = self.get_metric(value, np.min, axis=0)
         return hist
 
-    def plot_mean_bound_line(self, value, fig=None, ax=None, figsize=(6, 4), **kwargs):
+    def plot_mean_bound_line(self, value, fig=None, ax=None, figsize=(6, 4),
+                             time='time', **kwargs):
         """Plot the value in hist aggregated by the mean and variable bounds."""
-        hist = self.get_mean_bound_errhist(value)
-        return plot_err_hist(hist, ax, fig, figsize, **kwargs)
+        hist = self.get_mean_bound_errhist(value, time=time)
+        return plot_err_hist(hist, ax, fig, figsize, time=time, **kwargs)
 
-    def get_percentile_errhist(self, val, prange=50):
+    def get_percentile_errhist(self, val, prange=50, time='time'):
         """
         Get aggregated err_hist of medians surrounded by percentile range prange.
 
@@ -899,23 +884,23 @@ class History(Result):
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
         """
         hist = History()
-        hist['time'] = self.get_metric('time', axis=0)
+        hist[time] = self.get_metric(time, axis=0)
         hist['stat'] = self.get_metric(val, np.median, axis=0)
         hist['low'] = self.get_metric(val, np.percentile, args=(50-prange/2,), axis=0)
         hist['high'] = self.get_metric(val, np.percentile, args=(50+prange/2,), axis=0)
         return hist
 
     def plot_percentile_line(self, value, fig=None, ax=None, figsize=(6, 4), prange=50,
-                             with_bounds=True, **kwargs):
+                             with_bounds=True, time='time', **kwargs):
         """Plot the value in hist aggregated by percentiles."""
-        hist = self.get_mean_bound_errhist(value)
-        perc_hist = self.get_percentile_errhist(value, prange)
+        hist = self.get_mean_bound_errhist(value, time=time)
+        perc_hist = self.get_percentile_errhist(value, prange, time=time)
         if with_bounds:
             hist['med_low'] = perc_hist['low']
             hist['med_high'] = perc_hist['high']
         else:
             hist = perc_hist
-        return plot_err_hist(hist, ax, fig, figsize, **kwargs)
+        return plot_err_hist(hist, ax, fig, figsize, time=time, **kwargs)
 
     def plot_metric_dist(self, times, *plot_values, **kwargs):
         """
@@ -961,9 +946,10 @@ class History(Result):
         return fig, axs
 
     def plot_trajectories(self, *plot_values,
-                          comp_groups={}, indiv_kwargs={}, figsize=(4, 4),
+                          comp_groups={}, indiv_kwargs={}, figsize=(4, 4), time='time',
                           time_groups=[], time_ticks=5.0, time_fontsize=8,
-                          xlim=(), ylim=(), zlim=(), legend=True, title='',
+                          t_pretext="t=", xlim=(), ylim=(), zlim=(), legend=True,
+                          xlabel='x', ylabel='y', zlabel='z', title='',
                           fig=None, ax=None, **kwargs):
         """
         Plot trajectories from the environment in 2d or 3d space.
@@ -1031,7 +1017,8 @@ class History(Result):
         simhists, plot_values, grouphists, indiv_kwargs = prep_hists(self,
                                                                      plot_values,
                                                                      comp_groups,
-                                                                     indiv_kwargs)
+                                                                     indiv_kwargs,
+                                                                     time=time)
         if len(plot_values) == 2:
             fig, ax = setup_plot(fig=fig, ax=ax, z=False, figsize=figsize)
         elif len(plot_values) == 3:
@@ -1042,29 +1029,26 @@ class History(Result):
 
         for group, hists in grouphists.items():
             mark_time = group in time_groups
-            pass_kwargs = dict(label=group, fig=fig, ax=ax, mark_time=mark_time,
-                               time_ticks=time_ticks, time_fontsize=time_fontsize)
+            pass_kwargs = dict(label=group, fig=fig, ax=ax, time=time,
+                               mark_time=mark_time, time_ticks=time_ticks,
+                               time_fontsize=time_fontsize, t_pretext=t_pretext)
             local_kwargs = {**kwargs, **pass_kwargs, **indiv_kwargs.get(group, {})}
             if len(plot_values) == 2:
                 hists.plot_trajectory(*plot_values, **local_kwargs)
             elif len(plot_values) == 3:
                 hists.plot_trajectory3(*plot_values, **local_kwargs)
-
-        if xlim:
-            ax.set_xlim(*xlim)
-        if ylim:
-            ax.set_ylim(*ylim)
-        if zlim:
-            ax.set_zlim(*zlim)
         consolidate_legend(ax, **kwargs)
-        if title:
-            ax.set_title(title)
+        add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, title=title,
+                         xlim=xlim, ylim=ylim, zlim=zlim)
         return fig, ax
 
     def plot_trajectory(self, xlab, ylab, fig=None, ax=None, figsize=(6, 4),
-                        mark_time=False, time_ticks=1.0, time_fontsize=8, **kwargs):
+                        time="time", mark_time=False, time_ticks=1.0, time_fontsize=8,
+                        t_pretext="t=", **kwargs):
         """
         Plot a single set of trajectories on an existing matplotlib axis.
+
+        Used by History.plot_trajectories (the main interface).
 
         Parameters
         ----------
@@ -1089,14 +1073,16 @@ class History(Result):
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         xs = [*self.get_values(xlab).values()]
         ys = [*self.get_values(ylab).values()]
-        times = [*self.get_values("time").values()]
+        times = [i for k, i in self.get_values(time).items() if "t." not in k]
         for i, x in enumerate(xs):
             ax.plot(x, ys[i], **kwargs)
             if mark_time:
-                mark_times(ax, time_ticks, times[i], x, ys[i], fontsize=time_fontsize)
+                mark_times(ax, time_ticks, times[i], x, ys[i],
+                           fontsize=time_fontsize, pretext=t_pretext)
 
     def plot_trajectory3(self, xlab, ylab, zlab, fig=None, ax=None, figsize=(6, 4),
-                         mark_time=False, time_ticks=1.0, time_fontsize=8, **kwargs):
+                         time="time", mark_time=False, time_ticks=1.0, time_fontsize=8,
+                         t_pretext="t=", **kwargs):
         """
         Plot a single set of trajectories on an existing matplotlib axis (3d).
 
@@ -1105,12 +1091,12 @@ class History(Result):
         xs = [*self.get_values(xlab).values()]
         ys = [*self.get_values(ylab).values()]
         zs = [*self.get_values(zlab).values()]
-        times = [*self.get_values("time").values()]
+        times = [i for k, i in self.get_values(time).items() if "t." not in k][0]
         for i, x in enumerate(xs):
             ax.plot(x, ys[i], zs[i], **kwargs)
             if mark_time:
                 mark_times(ax, time_ticks, times[i], x, ys[i], zs[i],
-                           fontsize=time_fontsize)
+                           fontsize=time_fontsize, t_pretext=t_pretext)
 
     def plot_trajectories_from(self, t, plot_values=(), **kwargs):
         """

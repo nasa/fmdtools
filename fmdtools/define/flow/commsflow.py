@@ -21,7 +21,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.flow.base import Flow
+from fmdtools.define.flow.base import Flow, ExampleFlow
 from fmdtools.define.flow.multiflow import MultiFlow, MultiFlowGraph
 from fmdtools.define.base import get_obj_name
 from fmdtools.analyze.graph.model import add_edge, ModelGraph
@@ -58,12 +58,47 @@ class CommsFlow(MultiFlow):
         - receive, for receiving messages from other functions
         - inbox, for seeing what messages may be received
         - clear_inbox, for clearing the inbox to enable more messages to be received
+
+    Examples
+    --------
+    >>> ecf = ExampleCommsFlow()
+    >>> t1 = ecf.create_comms("t1")
+    >>> t2 = ecf.create_comms("t2")
+    >>> ecf
+    examplecommsflow ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
+       t1: t1 ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
+           out: t1_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
+           in: {}
+           received: {}
+       t2: t2 ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
+           out: t2_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
+           in: {}
+           received: {}
+    >>> t1.s.put(x=10.0, y=10.0)
+    >>> t1.send("t2", "x")
+    >>> t1
+    t1 ExampleCommsFlow flow: ExampleState(x=10.0, y=10.0)
+           out: t1_out ExampleCommsFlow flow: ExampleState(x=10.0, y=1.0)
+           in: {}
+           received: {}
+    >>> t2
+    t2 ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
+           out: t2_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
+           in: {'t1': ('x',)}
+           received: {}
+    >>> t2.receive()
+    >>> t2
+    t2 ExampleCommsFlow flow: ExampleState(x=10.0, y=1.0)
+           out: t2_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
+           in: {}
+           received: {'t1': ('x',)}
     """
 
     slots = ['fxns', '__dict__']
     check_dict_creation = False
 
     def __init__(self, name='', glob=[], track=['s'], **kwargs):
+        """Initialize CommsFlow object."""
         self.fxns = {}
         super().__init__(name=name, glob=glob, track=track, **kwargs)
 
@@ -72,17 +107,18 @@ class CommsFlow(MultiFlow):
         return CommsFlow
 
     def __repr__(self):
+        """Print console representation of CommsFlow."""
         rep_str = Flow.__repr__(self)
         if self.name == self.glob.name:
             for fname, func in self.fxns.items():
-                rep_str=rep_str+"\n   "+fname+": "+func["internal"].__repr__()
+                rep_str = rep_str+"\n   "+fname+": "+func["internal"].__repr__()
         elif self.name in self.glob.fxns:
             rep_str = (rep_str +
                        "\n       out: " + self.out().__repr__() +
                        "\n       in: " + str(self.inbox()) +
                        "\n       received: " + str(self.received()))
-            for l in self.locals:
-                rep_str = rep_str+"\n       "+l+": "+getattr(self, l).__repr__()
+            for lo in self.locals:
+                rep_str = rep_str+"\n       "+lo+": "+getattr(self, lo).__repr__()
         return rep_str
 
     def create_comms(self, name, ports=[], **kwargs):
@@ -115,7 +151,7 @@ class CommsFlow(MultiFlow):
                                "received": kwargs.get("received", {})}
         return self.fxns[name]["internal"]
 
-    def send(self, fxn_to, fxn_from="local", *states):
+    def send(self, fxn_to, *states, fxn_from="local"):
         """
         Sends a function's (fxn_from) view for the CommsFlow to another function fxn_to
         by updating the function's out property and fxn_to's inbox list. Note that the
@@ -153,11 +189,12 @@ class CommsFlow(MultiFlow):
                 self.glob.fxns[f_to]["in"][fxn_from] = tuple(set(newstates))
 
     def inbox(self, fxnname="local"):
-        """ Provide list of messages which have not been received by the function yet"""
+        """Provide list of messages which have not been received by the function yet."""
         fxnname = self.get_local_name(fxnname)
         return self.glob.fxns[fxnname]["in"]
 
     def received(self, fxnname="local"):
+        """Get received property for external function."""
         fxnname = self.get_local_name(fxnname)
         return self.glob.fxns[fxnname]["received"]
 
@@ -216,16 +253,18 @@ class CommsFlow(MultiFlow):
                 args = self.glob.fxns[fxn_to]["in"][f_from]
             port_from = self.get_port(f_from, fxn_to, "out")
             port_to = self.get_port(fxn_to, f_from, "internal")
-            port_to.s.assign(port_from.s,  *args, as_copy=True)
-            self.glob.fxns[fxn_to]["received"][f_from]=args
+            port_to.s.assign(port_from.s, *args, as_copy=True)
+            self.glob.fxns[fxn_to]["received"][f_from] = args
 
     def reset(self):
+        """Reset the CommsFlow (and all subflows)."""
         super().reset()
         for fxn in self.fxns:
             self.fxns[fxn]["in"] = {}
             self.fxns[fxn]["received"] = {}
 
     def copy(self, name='', glob=[], p={}, s={}, track=['s']):
+        """Copy the CommsFlow (and all subflows)."""
         cop = super().copy(name=name, glob=glob, p=p, s=s, track=track)
         for fxn in self.fxns:
             cop.create_comms(fxn,
@@ -281,3 +320,14 @@ class CommsFlow(MultiFlow):
     def as_modelgraph(self, gtype=CommsFlowGraph, **kwargs):
         """Create and return the corresponding ModelGraph for the Object."""
         return gtype(self, **kwargs)
+
+
+class ExampleCommsFlow(ExampleFlow, CommsFlow):
+    """Extension of ExampleFlow to CommsFlow case."""
+
+    __slots__ = ()
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

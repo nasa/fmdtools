@@ -26,12 +26,12 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from fmdtools.define.base import get_var, nest_dict
+from fmdtools.define.base import get_var, nest_dict, gen_timerange
 from fmdtools.define.container.parameter import Parameter, ExampleParameter
 from fmdtools.sim.scenario import SingleFaultScenario, JointFaultScenario
 from fmdtools.sim.scenario import ParameterScenario
 from fmdtools.analyze.common import is_numeric
-from fmdtools.analyze.phases import gen_interval_times, PhaseMap, join_phasemaps
+from fmdtools.analyze.phases import PhaseMap, join_phasemaps
 
 import numpy as np
 import itertools
@@ -108,7 +108,7 @@ class ParameterDomain(object):
         self.var_maps = {}
         self.constants = {}
 
-    def add_variable(self, variable, var_set=(),  var_lim=(), var_map=pass_var):
+    def add_variable(self, variable, var_set=(), var_lim=(), var_map=pass_var):
         """
         Add a variable to the ParameterDomain.
 
@@ -986,7 +986,7 @@ class FaultSample(BaseSample):
         else:
             interval = [0, self.faultdomain.mdl.sp.times[-1]]
             tstep = self.faultdomain.mdl.sp.dt
-            phasetimes = {'phase': gen_interval_times(interval, tstep)}
+            phasetimes = {'phase': gen_timerange(interval[0], interval[-1], tstep)}
 
         for phase, times in phasetimes.items():
             loc_method = phase_methods.get(phase, method)

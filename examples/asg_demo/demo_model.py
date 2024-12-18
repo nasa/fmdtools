@@ -157,7 +157,7 @@ class ProduceHazard(Function):
 class PassStates(State):
     """Whether or not the hazard is ultimately passed or mitigated."""
 
-    hazards_mitigated:  int = 0
+    hazards_mitigated: int = 0
     hazards_propagated: int = 0
 
 
@@ -185,7 +185,7 @@ class HazardModel(FunctionArchitecture):
         self.add_flow("hazard", Hazard)
         self.add_fxn("produce_hazard", ProduceHazard, 'hazard')
         self.add_fxn("detect_hazard", DetectHazard, 'hazard')
-        self.add_fxn("pass_hazard",  PassHazard, 'hazard')
+        self.add_fxn("pass_hazard", PassHazard, 'hazard')
 
 
 if __name__ == '__main__':

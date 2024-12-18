@@ -2,7 +2,7 @@ fmdtools.analyze
 ===========================
 .. automodule:: fmdtools.analyze
 
-.. image:: figures/powerpoint/analyze_module_structure.png
+.. image:: figures/powerpoint/analyze_module_structure.svg
    :width: 800
 
 The analyze package is organized into the modules:

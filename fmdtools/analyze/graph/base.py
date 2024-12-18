@@ -130,7 +130,7 @@ class Graph(object):
                 else:
                     try:
                         self.pos = nx.planar_layout(nx.MultiGraph(self.g))
-                    except:
+                    except nx.NetworkXException:
                         self.pos = nx.spring_layout(nx.MultiGraph(self.g))
             else:
                 self.pos = {n: self.pos.get(n, (0.5, 0.5)) for n in self.g.nodes}

@@ -10,15 +10,9 @@ Has classes:
 And functions:
 
 - :func:`load`: Loads a given file to a Result/History
-- :func:`load_folder`: Loads a given folder to a Result/History
 
 Private Methods:
 
-- :func:`file_check`: Check if files exists and whether to overwrite the file
-- :func:`auto_filetype`: Helper function that automatically determines the filetype
-  (npz, csv, or json) of a given filename
-- :func:`create_indiv_filename`: Helper function that creates an individualized name for
-  a file given the general filename and an individual id
 - :func:`clean_resultdict_keys`: Helper function for recreating results dictionary keys
   (tuples) from a dictionary loaded from a file (where keys are strings)
   (used in csv/json results)
@@ -52,52 +46,13 @@ from fmdtools.analyze.common import bootstrap_confidence_interval, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import set_empty_multiplots
+from fmdtools.analyze.common import auto_filetype, file_check, load_folder
 
 import numpy as np
 import pandas as pd
 import sys
 import os
 from collections import UserDict
-
-
-def file_check(filename, overwrite):
-    """Check if files exists and whether to overwrite the file."""
-    if os.path.exists(filename):
-        if not overwrite:
-            raise Exception("File already exists: "+filename)
-        else:
-            print("File already exists: "+filename+", writing anyway...")
-            os.remove(filename)
-    if "/" in filename:
-        last_split_index = filename.rfind("/")
-        foldername = filename[:last_split_index]
-        if not os.path.exists(foldername):
-            os.makedirs(foldername)
-
-
-def auto_filetype(filename, filetype=""):
-    """Automatically determines the filetype (pickle, csv, or json) of a filename."""
-    if not filetype:
-        if '.' not in filename:
-            raise Exception("No file extension in: " + filename)
-        if filename[-4:] == '.npz':
-            filetype = "npz"
-        elif filename[-4:] == '.csv':
-            filetype = "csv"
-        elif filename[-5:] == '.json':
-            filetype = "json"
-        else:
-            raise Exception("Invalid File Type in: " + filename +
-                            ", ensure extension is npz, csv, or json ")
-    return filetype
-
-
-def create_indiv_filename(filename, indiv_id, splitchar='_'):
-    """Create filename name for a file given general filename and individual id."""
-    filename_parts = filename.split(".")
-    filename_parts.insert(1, '.')
-    filename_parts.insert(1, splitchar+indiv_id)
-    return "".join(filename_parts)
 
 
 def clean_resultdict_keys(resultdict_dirty):
@@ -140,7 +95,7 @@ def get_dict_attr(dict_in, des_class, *attr):
     if len(attr) == 1:
         return dict_in[attr[0]]
     else:
-        return get_dict_attr(des_class(dict_in[attr[0]]), *attr[1:])
+        return get_dict_attr(des_class(dict_in[attr[0]]), des_class, *attr[1:])
 
 
 def fromdict(resultclass, inputdict):
@@ -155,6 +110,7 @@ def fromdict(resultclass, inputdict):
 
 
 def check_include_errors(result, to_include):
+    """Throw error if any keys aren't in the result."""
     if type(to_include) is not str:
         for k in to_include:
             check_include_error(result, k)
@@ -163,6 +119,7 @@ def check_include_errors(result, to_include):
 
 
 def check_include_error(result, to_include):
+    """Throw error if key not in keys."""
     if to_include not in ('all', 'default') and to_include not in result:
         raise Exception("to_include key " + to_include +
                         " not in result keys: " + str(result.keys()))
@@ -198,12 +155,28 @@ class Result(UserDict):
     1
     >>> rf.keys()
     dict_keys(['y.z'])
+    >>> Result({'a': 'b', 'c': {'d': 'e'}})
+    a:                                     b
+    c: 
+    --d:                                   e
 
     It also enables saving and loading to files via r.save(), r.load(), and
     r.load_folder()
     """
 
+    def __init__(self, mapping=None, **kwargs):
+        if isinstance(mapping, dict):
+            mapping = self.fromdict({**mapping, **kwargs})
+        elif mapping is None:
+            mapping = dict(**kwargs)
+        elif isinstance(mapping, Result):
+            mapping.update(**kwargs)
+        else:
+            raise Exception("Invalid mapping: "+str(mapping))
+        super().__init__(mapping)
+
     def __repr__(self, ind=0):
+        """Provide string representation for console."""
         str_rep = ""
         for k, val in self.items():
             if isinstance(val, np.ndarray) or isinstance(val, list):
@@ -254,11 +227,34 @@ class Result(UserDict):
         -------
         equality : Bool
             Whether the results are equal
+
+        Examples
+        >>> a = Result({'a': 1})
+        >>> a1 = Result({'a': 1})
+        >>> a == a1
+        True
+        >>> az = Result({'a': 3})
+        >>> a == az
+        False
+        >>> b = Result({'b': 3})
+        >>> a == b
+        False
+        >>> az == b
+        False
+        >>> Result({'b': [1,2], 'c': [3,4]}) == Result({'b': [1,2], 'c': [3,4]})
+        True
+        >>> Result({'b': [1,2], 'c': [3,4]}) == Result({'b': [1,2], 'c': [1,2]})
+        False
+        >>> Result({'b': [1,2]}) == Result({'b': [1,2], 'c': [1,2]})
+        False
         """
-        return all([all(v == other[k])
-                    if isinstance(v, np.ndarray)
-                    else v == other[k]
-                    for k, v in self.data.items()])
+        if self.keys() != other.keys():
+            return False
+        else:
+            return all([all(v == other.data.get(k, None))
+                        if isinstance(v, np.ndarray)
+                        else v == other.data.get(k, None)
+                        for k, v in self.data.items()])
 
     def __sub__(self, other):
         """
@@ -282,6 +278,15 @@ class Result(UserDict):
         -------
         ret : Result/History
             Result with values correspnding to the difference between the two.
+
+        Examples
+        --------
+        >>> Result({'a': 4, 'b': 5}) - Result({'a': 2, 'b': 4})
+        a:                                     2
+        b:                                     1
+        >>> c = Result({'b': np.array([5, 4])}) - Result({'b': np.array([3,4])})
+        >>> c['b']
+        array([2, 0])
         """
         ret = self.__class__()
         # creates a dict where the values are the mathematical difference if the
@@ -313,34 +318,40 @@ class Result(UserDict):
         return different
 
     def keys(self):
+        """Get keys iterator (not nested)."""
         return self.data.keys()
 
     def items(self):
+        """Get items iterator (not nested)."""
         return self.data.items()
 
     def values(self):
+        """Get values iterato (not nested)r."""
         return self.data.values()
 
     def __reduce__(self):
+        """Serialize Result userdict by its items."""
         return type(self), (), None, None, iter(self.items())
 
     def __getattr__(self, argstr):
+        """Get attribute (custom method)."""
         try:
             args = argstr.split(".")
             return get_dict_attr(self.data, self.__class__, *args)
-        except:
+        except KeyError:
             try:
                 return self.all_with(argstr)
-            except:
+            except Exception:
                 raise AttributeError("Not in dict: "+str(argstr))
 
     def __setattr__(self, key, val):
+        """Set attribute (custom method)."""
         if key == "data":
             UserDict.__setattr__(self, key, val)
         else:
             self.data[key] = val
 
-    def get(self, *argstr,  **to_include):
+    def get(self, *argstr, default={}, **to_include):
         """
         Provide dict-like access to the history/result across a number of arguments.
 
@@ -348,6 +359,9 @@ class Result(UserDict):
         ----------
         *argstr : str
             keys to get directly (e.g. 'fxns.fxnname')
+        default : dict or value
+            default(s) to use if not in Result. May be a dict of keys {'k': val} or a
+            default for all values to get. Default is {}.
         **to_include : dict/str/
             to_include dict for arguments to get (e.g., {'fxns':{'fxnname'}})
 
@@ -355,11 +369,29 @@ class Result(UserDict):
         -------
         Result/History
             Result/History with the attributes (or single att)
+
+        Examples
+        --------
+        >>> r=Result({'a': 'b', 'c': {'d': 'e'}})
+        >>> r.get('a')
+        'b'
+        >>> r.get('c')
+        d:                                     e
+        >>> r.get('c.d')
+        'e'
         """
         atts_to_get = argstr + to_include_keys(to_include)
         res = self.__class__()
+        if not isinstance(default, dict):
+            default = {at: default for at in atts_to_get}
         for at in atts_to_get:
-            res[at] = self.__getattr__(at)
+            try:
+                res[at] = self.__getattr__(at)
+            except AttributeError:
+                try:
+                    res[at] = default[at]
+                except KeyError:
+                    raise Exception(at+" not in Result or defaults")
         if len(res) == 1 and at in res:
             return res[at]
         else:
@@ -384,7 +416,21 @@ class Result(UserDict):
         else:
             raise Exception(attr+" not in Result keys: "+str(self.keys()))
 
-    def fromdict(inputdict):
+    @classmethod
+    def fromdict(cls, inputdict):
+        """
+        Set up new Result from dictionary.
+
+        Examples
+        --------
+        >>> d = Result.fromdict({'a': 2, 'b': {'c': 4}})
+        >>> d
+        a:                                     2
+        b: 
+        --c:                                   4
+        >>> d.b
+        c:                                     4
+        """
         return fromdict(Result, inputdict)
 
     def load(filename, filetype="", renest_dict=False, indiv=False):
@@ -428,7 +474,7 @@ class Result(UserDict):
             h[k] = self[k]
         return h
 
-    def get_comp_groups(self, *values, **groups):
+    def get_comp_groups(self, *values, time='time', **groups):
         """
         Get comparison groups of *values (i.e., aspects of the model) in groups
         **groups (sets of scenarios with structure )
@@ -447,8 +493,8 @@ class Result(UserDict):
         """
         if not groups:
             groups = self.get_default_comp_groups()
-        if 'time' not in values:
-            values = values + ('time', )
+        if time not in values:
+            values = values + (time, )
         group_hist = self.__class__()
         for group, scens in groups.items():
             if scens == 'default':
@@ -534,22 +580,28 @@ class Result(UserDict):
         return newhist
 
     def is_flat(self):
-        """Checks if the history is flat."""
+        """
+        Check if the history is flat.
+
+        Examples
+        --------
+        >>> Result({'a': 'b', 'c': {'d': 'e'}}).is_flat()
+        False
+        >>> Result({'a': 'b', 'c.d': 'e'}).is_flat()
+        True
+        """
         for v in self.values():
             if isinstance(v, Result):
                 return False
         return True
 
     def nest(self, levels=np.inf):
-        """
-        Re-nests a flattened result
-        """
+        """Re-nest a flattened result."""
         return nest_dict(self, levels=levels)
-
 
     def get_memory(self):
         """
-        Determines the memory usage of a given history and profiles.
+        Determine the memory usage of a given history and profiles.
 
         Returns
         -------
@@ -830,7 +882,7 @@ class Result(UserDict):
         return sum(ecs*weights)
 
     def average(self, metric, empty_as='nan'):
-        """Calculates the average value of a given metric in endclasses"""
+        """Calculate the average value of a given metric in endclasses"""
         ecs = [e for e in self.get_values(metric).values() if not np.isnan(e)]
         if len(ecs) > 0 or empty_as == 'nan':
             return np.mean(ecs)
@@ -922,7 +974,7 @@ class Result(UserDict):
 
     def plot_metric_dist(self, *values, cols=2, comp_groups={}, bins=10, metric_bins={},
                          legend_loc=-1, xlabels={}, ylabel='count', title='', titles={},
-                         figsize='default',  v_padding=0.4, h_padding=0.05,
+                         figsize='default', v_padding=0.4, h_padding=0.05,
                          title_padding=0.1, legend_title=None, indiv_kwargs={},
                          fig=None, axs=None, **kwargs):
         """
@@ -1112,32 +1164,9 @@ def load_json(filename, indiv=False):
     return resultdict
 
 
-def load_folder(folder, filetype):
-    """
-    Loads endclass/mdlhist results from a given folder
-    (e.g., that have been saved from multi-scenario propagate methods with 'indiv':True)
-
-    Parameters
-    ----------
-    folder : str
-        Name of the folder. Must be in the current directory
-    filetype : str
-        Type of files in the folder ('pickle', 'csv', or 'json')
-
-    Returns
-    -------
-    files_to_read : list
-        files to load for endclasses/mdlhists.
-    """
-    files = os.listdir(folder)
-    files_toread = []
-    for file in files:
-        read_filetype = auto_filetype(file)
-        if read_filetype == filetype:
-            files_toread.append(file)
-    return files_toread
-
-
 if __name__ == "__main__":
+
+    # r = Result({'a': 1, 'b': 3})
+    # r.c
     import doctest
     doctest.testmod(verbose=True)

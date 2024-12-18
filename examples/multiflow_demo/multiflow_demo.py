@@ -100,7 +100,7 @@ class ExModel(FunctionArchitecture):
     def init_architecture(self, **kwargs):
 
         self.add_flow("communications", Communications)
-        self.add_flow("location",  Location)
+        self.add_flow("location", Location)
         self.add_fxn("mover_1", Mover, "communications", "location", p={"x_up": 1.0})
         self.add_fxn("mover_2", Mover, "communications", "location", p={"y_up": 1.0})
 

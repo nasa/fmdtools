@@ -62,7 +62,8 @@ specific language governing permissions and limitations under the License.
 from fmdtools.define.base import get_var, t_key
 from fmdtools.sim.sample import SampleApproach
 from fmdtools.sim.scenario import Sequence, Scenario, SingleFaultScenario
-from fmdtools.analyze.result import Result, create_indiv_filename, file_check
+from fmdtools.analyze.common import create_indiv_filename, file_check
+from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 from fmdtools.analyze.phases import from_hist
 
@@ -1186,7 +1187,7 @@ def get_result(scen, mdl, desired_result, nomhist={}, nomresult={}, time=0.0):
         desired_result.pop('endfaults')
 
     graphs_to_get = [g for g in desired_result
-                     if type(g) == str and (g.startswith('graph')
+                     if type(g) is str and (g.startswith('graph')
                                             or g.startswith('Graph'))]
     for g in graphs_to_get:
         arg = desired_result.pop(g)
