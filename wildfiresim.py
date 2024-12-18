@@ -77,7 +77,7 @@ if __name__ == "__main__":
     mdl_graph = FunctionArchitectureGraph(mdl)
     mdl_graph.draw()
 
-    res, hist = prop.nominal(mdl, protect=False)
+    res, hist = prop.nominal(mdl)
     hist.flows.fireenvironment.c.burning
     fig, ax = hist.plot_line('fxns.aircraft_0.s.fuel_status',
                              'fxns.aircraft_0.s.location_x',

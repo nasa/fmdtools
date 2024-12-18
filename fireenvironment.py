@@ -82,12 +82,12 @@ class FireMap(Coords):
         else:
             return np.inf
 
-    def get_leading_edge(self):
+    def get_leading_edge(self, direction='direct'):
         # get all points
         burn_pts = [*self.find_all_prop("burning", True, np.equal)]
         leading_edge = []
         for i, pt2 in enumerate(burn_pts):
-            neighbors = self.get_neighbors(*pt2)
+            neighbors = self.get_neighbors(*pt2, direction='direct')
             any_to_burn = any([not (self.get(*p3, "burning")
                                     or self.get(*p3, "extinguished"))
                                for p3 in neighbors])
@@ -107,7 +107,7 @@ class FireMap(Coords):
     def set_to_burn(self, tstep=1.0):
         for pt in self.find_all_prop("burning"):
             # light the fire next to burning points
-            possible = self.get_neighbors(*pt)
+            possible = self.get_neighbors(*pt, direction="direct")
             for ppt in possible:
                 if not self.get(*ppt, "extinguished") and not self.get(*ppt, 'burning'):
                     to_burn = self.get(*ppt, "to_burn")
