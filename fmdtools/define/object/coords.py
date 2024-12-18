@@ -336,7 +336,7 @@ class BaseCoords(BaseObject):
             raise Exception(str(x) + ", " + str(y) + " out of bounds.") from e
 
     def set_range(self, prop, value, xmin=0, xmax='max', ymin=0, ymax='max',
-                  inclusive=True):
+                  inclusive=True, outside_error=True):
         """
         Set ranges of the grid property to a given value.
 
@@ -347,15 +347,17 @@ class BaseCoords(BaseObject):
         value : value
             Value to set
         xmin : number, optional
-            minimum x-value. The default is 0.
+            Minimum x-value. The default is 0.
         xmax : number, optional
-            maximum x-value. The default is 'max'.
+            Maximum x-value. The default is 'max'.
         ymin : number, optional
-            minimum y-value. The default is 0.
+            Minimum y-value. The default is 0.
         ymax : number, optional
-            maximum y-value. The default is 'max'.
+            Maximum y-value. The default is 'max'.
         inclusive : bool, optional
-            whether to include the end of the range. The default is False.
+            Whether to include the end of the range. The default is False.
+        outside_errr : bool, optional
+            whether to throw an error if the range is outside. Default is True
 
         Examples
         --------
@@ -398,21 +400,25 @@ class BaseCoords(BaseObject):
                [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])
         """
-        x_min_ind, y_min_ind = self.to_index(xmin, ymin)
-        if xmax == 'max':
-            x_max_ind = None
-        else:
-            x_max_ind, _ = self.to_index(xmax, 0.0)
-            if inclusive and x_max_ind < self.p.x_size:
-                x_max_ind += 1
-        if ymax == 'max':
-            y_max_ind = None
-        else:
-            _, y_max_ind = self.to_index(0.0, ymax)
-            if inclusive and y_max_ind < self.p.y_size:
-                y_max_ind += 1
-        proparray = getattr(self, prop)
-        proparray[x_min_ind:x_max_ind, y_min_ind:y_max_ind] = value
+        try:
+            x_min_ind, y_min_ind = self.to_index(xmin, ymin)
+            if xmax == 'max':
+                x_max_ind = None
+            else:
+                x_max_ind, _ = self.to_index(xmax, 0.0)
+                if inclusive and x_max_ind < self.p.x_size:
+                    x_max_ind += 1
+            if ymax == 'max':
+                y_max_ind = None
+            else:
+                _, y_max_ind = self.to_index(0.0, ymax)
+                if inclusive and y_max_ind < self.p.y_size:
+                    y_max_ind += 1
+            proparray = getattr(self, prop)
+            proparray[x_min_ind:x_max_ind, y_min_ind:y_max_ind] = value
+        except Exception as e:
+            if outside_error:
+                raise e
 
     def set_pts(self, pts, prop, value):
         """
@@ -1137,11 +1143,15 @@ class Coords(BaseCoords):
         True
         >>> ex.in_area(10, 10, 'start')
         False
+        >>> ex.in_area(-10, -10, 'start')
+        False
         """
         pts = getattr(self, coll)
         try:
             pt = self.to_gridpoint(x, y)
         except IndexError:
+            return False
+        except Exception:
             return False
         if coll in self.points:
             return np.all(pt == pts)

@@ -816,7 +816,8 @@ class BaseObject(object):
 
     def create_role_subgraph(self, g=None, name='', role_nodes=["all"], recursive=False,
                              with_containment=True, with_inheritance=False,
-                             with_subgraph_edges=True, end_at_fmdtools=True, **kwargs):
+                             with_methods=True, with_subgraph_edges=True,
+                             end_at_fmdtools=True, **kwargs):
         """
         Create a networkx graph view of the Block and its roles.
 
@@ -835,6 +836,8 @@ class BaseObject(object):
         with_inheritance : bool
             Whether to include class inheritance subgraphs. Default is False.
             The default is False.
+        with_methods : bool
+            Whether to include methods as nodes. Default is False.
         with_subgraph_edges : bool
             Whether to include subgraph edges, e.g. function/flow containment in an
             architecture graph.
@@ -863,6 +866,7 @@ class BaseObject(object):
                 roleobj.create_graph(g=g, role_nodes=role_nodes, recursive=recursive,
                                      name=subname, with_containment=with_containment,
                                      with_inheritance=with_inheritance,
+                                     with_methods=with_methods,
                                      end_at_fmdtools=end_at_fmdtools, **kwargs)
         if with_containment and with_subgraph_edges:
             self.add_subgraph_edges(g, **kwargs)

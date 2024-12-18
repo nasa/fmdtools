@@ -1091,12 +1091,12 @@ class History(Result):
         xs = [*self.get_values(xlab).values()]
         ys = [*self.get_values(ylab).values()]
         zs = [*self.get_values(zlab).values()]
-        times = [i for k, i in self.get_values(time).items() if "t." not in k][0]
+        times = [i for k, i in self.get_values(time).items() if "t." not in k]
         for i, x in enumerate(xs):
             ax.plot(x, ys[i], zs[i], **kwargs)
             if mark_time:
                 mark_times(ax, time_ticks, times[i], x, ys[i], zs[i],
-                           fontsize=time_fontsize, t_pretext=t_pretext)
+                           fontsize=time_fontsize, pretext=t_pretext)
 
     def plot_trajectories_from(self, t, plot_values=(), **kwargs):
         """

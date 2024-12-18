@@ -66,10 +66,10 @@ class Mover(Function):
         # communicate
         if self.p.x_up != 0.0:
             self.internal_info.s.x = self.loc.s.x
-            self.internal_info.send("all", "local", "x")
+            self.internal_info.send("all", "x")
         elif self.p.y_up != 0.0:
             self.internal_info.s.y = self.loc.s.y
-            self.internal_info.send("all", "local", "y")
+            self.internal_info.send("all", "y")
 
     def find_classification(self, scen, fxnhist):
         return {"last_x": self.loc.s.x, "min_x": fxnhist.faulty.location.get(self.name).x}
@@ -89,8 +89,8 @@ class Coordinator(Function):
 
     def static_behavior(self, time):
         self.coord_view.receive()
-        self.coord_view.update("local", "mover_1", "y")
-        self.coord_view.update("local", "mover_2", "x")
+        self.coord_view.update("y", to_update="local", to_get="mover_1")
+        self.coord_view.update("x", to_update="local", to_get="mover_2")
 
 
 class ExModel(FunctionArchitecture):

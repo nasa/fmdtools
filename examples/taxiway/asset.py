@@ -72,7 +72,7 @@ class Asset(Function):
             self.perc_requests.s.put(asset_req="land")
         atc_requests.s.assign(self.perc_requests.s, as_copy=True)
 
-        self.perc_requests.update("atc", "local", "asset_req")
+        self.perc_requests.update("asset_req", to_update="atc", to_get="local",)
 
         self.perc_location = self.location.create_local("percieved", s=self.location.s)
 
@@ -188,7 +188,7 @@ class Asset(Function):
             self.perc_requests.s.put(asset_req="none")
     def send_perception(self):
         self.perc_location.s.assign(self.location.s)
-        self.perc_requests.send('atc', 'local', 'asset_req')
+        self.perc_requests.send('atc', 'asset_req')
     def determine_visioncov(self, xd, yd):
         """
         Creates the polygon corresponding to the asset's vision cone.
