@@ -93,149 +93,43 @@ class CoordsParam(Parameter):
     gapwidth: ClassVar[float] = 0.0
 
 
-class Coords(BaseObject):
+class DefaultCoordsParam(Parameter):
+    """Default Parameter for Coords (with no states/features)."""
+
+    x_size: int = 10
+    y_size: int = 10
+    blocksize: float = 1.0
+    gapwidth: float = 0.0
+
+
+class BaseCoords(BaseObject):
     """
-    Class for generating, accessing, and setting gridworld properties.
+    Abstract Base Coords class used for definition and analysis subclasses.
 
-    Creates arrays, points, and lists of points which may correspond to desired
-    modeling properties.
-
-    ...
-
-    Class Variables/Modifiers
-    ---------------
-    init_p: CoordsParam
-        Parameter controlling default grid matrix (see CoordsParam), along with other
-        properties of interest. Sets the .p container.
-    init_r: Rand
-        Random number generator. sets the .r container.
-    init_properties: method
-        Method that initializes the (non-default) properties of the Coords.
-
-    Examples
-    --------
-    >>> class ExampleCoords(Coords):
-    ...    container_p = ExampleCoordsParam
-    ...    def init_properties(self, *args, **kwargs):
-    ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
-
-    Instantiating a class with (see ExampleCoordsParam):
-
-    - immutable arrays a and v,
-    - mutable array st,
-    - point start at (0.0), and
-    - collection high made up of all points where v > 10.0.
-
-    As shown, features are normal numpy arrays set to readonly:
-
-    >>> ex = ExampleCoords()
-    >>> type(ex.a)
-    <class 'numpy.ndarray'>
-    >>> np.size(ex.a)
-    100
-    >>> ex.a[0, 0] = True
-    Traceback (most recent call last):
-      ...
-    ValueError: assignment destination is read-only
-
-    The main difference with states is that they can be set, e.g.,:
-
-    >>> ex.st[0, 0] = 100.0
-    >>> ex.st[0, 0]
-    100.0
-
-    Collections are lists of points that map to immutable properties. In ExampleCoords,
-    all points where v > 5.0 should be a part of high_v, as shown:
-
-    >>> ex.high_v
-    array([[ 0.,  0.],
-           [10.,  0.]])
-
-    Additionally, defined points (e.g., start) should be accessible via their names:
-
-    >>> ex.start
-    (0.0, 0.0)
-
-    Note that these histories are tracked:
-
-    >>> h = ex.create_hist([0, 1, 2])
-    >>> h.keys()
-    dict_keys(['r.probdens', 'st'])
-    >>> h.st[0]
-    array([[100.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])
+    Creates a grid with given properties. Do not use for model definition.
+    (Use Coords instead).
     """
 
-    __slots__ = ("p", "r", "grid", "pts", "points", "collections", "features", "states",
-                 "properties", "_args", "_kwargs")
-    container_p = CoordsParam
-    container_r = Rand
-    roledicts = ['points', 'collections', 'features', 'states']
-    immutable_roles = BaseObject.immutable_roles + ['points', 'collections', 'features']
-    default_track = ["r", "states"]
+    __slots__ = ("p", "grid", "pts")
+    container_p = DefaultCoordsParam
 
-    def __init__(self, *args, track='default', **kwargs):
-        """Initialize class with properties in init_properties."""
-        self._args = args
-        self._kwargs = kwargs
-        super().__init__(*args, track=[], **kwargs)
-        self.init_grids(*args, **kwargs)
-        self.init_properties(*args, **kwargs)
-        self.build()
-        self.init_track(track)
+    def __init__(self, *args, track=[], **kwargs):
+        super().__init__(*args, track=track, **kwargs)
+        self.init_grid_mesh()
 
-    def base_type(self):
-        """Return fmdtools type of the model class."""
-        return Coords
-
-    def check_role(self, roletype, rolename):
-        """Check that the rolename for coords is 'c'."""
-        if roletype != 'coords':
-            raise Exception("Invalid roletype for coords: " + roletype)
-        if rolename != 'c':
-            raise Exception("Invalid container name for Coords: "+rolename)
-
-    def init_grids(self, *args, **kwargs):
-        """Prepare class with defined features."""
+    def init_grid_mesh(self):
+        """Initialize grid and points arrays."""
         self.grid = np.array([[(i, j) for j in range(0, self.p.y_size)]
                              for i in range(0, self.p.x_size)]) * self.p.blocksize
         self.pts = self.grid.reshape(int(self.grid.size/2), 2)
 
-        self.init_role_dict("point", set_attr=True)
-        self.init_role_dict("collect", "ions")
-        self.init_role_dict("feature")
-        self.init_role_dict("state")
-        self.properties = {**self.features, **self.states}
-        for propname, prop in self.properties.items():
+    def add_property_arrays(self, properties):
+        """Add arrays for the given properties of the mesh."""
+        for propname, prop in properties.items():
             prop_type, prop_default = prop
             proparray = np.full((self.p.x_size, self.p.y_size),
                                 prop[1], dtype=prop[0])
             setattr(self, propname, proparray)
-
-    def init_properties(self, *args, **kwargs):
-        """Initialize arrays with non-default values."""
-        return 0
-
-    def build(self):
-        """Set features as immutable."""
-        for propname, prop in self.properties.items():
-            if propname in self.features:
-                proparray = getattr(self, propname)
-                proparray.flags.writeable = False
-        for cname, collection in self.collections.items():
-            if collection[0] in self.features:
-                setattr(self, cname, self.find_all_prop(*collection))
-            else:
-                raise Exception("Invalid collection: " + cname +
-                                " collections may only map to (immutable) features")
 
     def find_all_prop(self, name, value=True, comparator=np.equal):
         """
@@ -268,78 +162,13 @@ class Coords(BaseObject):
         pts_with_condition = [(p, where[1][i]) for i, p in enumerate(where[0])]
         return np.array([self.grid[tuple(p)] for p in pts_with_condition])
 
-    def find_all(self, *points_colls, in_points_colls=True, **prop_kwargs):
-        """
-        Find all points in array satisfying multiple statements.
-
-        Parameters
-        ----------
-        *points_colls: str
-            Name(s) of points or collections defining the set of points to check.
-            If not provided, assumes all points.
-        in_points_colls: bool
-            Whether the properties are to be searched in the given set of
-            points/collections (True) or outside the given set of points/collections
-            (False). The default is True
-        **prop_kwargs : kwargs
-            keyword arguments corresponding to properties, values and comparators, e.g.:
-            statename=(True, np.equal)
-
-        Returns
-        -------
-        all: np.array
-            List of points where the comparator methods returns true.
-
-        Examples
-        --------
-        >>> ex = ExampleCoords()
-        >>> ex.find_all(v=(10.0, np.equal))
-        array([[ 0.,  0.],
-               [10.,  0.]])
-        >>> ex.st[0, 0] = 5.0
-        >>> ex.find_all(v=(10.0, np.equal), st=(0.0, np.greater))
-        array([[0., 0.]])
-        >>> ex.find_all("high_v", v=(10.0, np.equal))
-        array([[ 0.,  0.],
-               [10.,  0.]])
-        >>> ex.find_all("high_v", v=(10.0, np.less))
-        array([], dtype=float64)
-        >>> ex.st[2,2] = 1.0
-        >>> ex.find_all("high_v", in_points_colls=False, st=(0.0, np.greater))
-        array([[20., 20.]])
-        """
-        # check if in points or collections
-        if points_colls:
-            pts = []
-            for name in points_colls:
-                prop = getattr(self, name)
-                if name in self.points:
-                    pts.append(prop)
-                elif name in self.collections:
-                    pts.extend(prop)
-                else:
-                    raise Exception(name+"not in points or collections")
-            true_array = np.full((self.p.x_size, self.p.y_size), not in_points_colls)
-            for pt in pts:
-                true_array[self.to_index(*pt)] = in_points_colls
-        else:
-            true_array = np.full((self.p.x_size, self.p.y_size), True)
-
-        # check properties
-        for name, (value, comparator) in prop_kwargs.items():
-            prop = getattr(self, name)
-            true_array *= comparator(prop, value)
-        where = np.where(true_array)
-        pts_with_condition = [(p, where[1][i]) for i, p in enumerate(where[0])]
-        return np.array([self.grid[tuple(p)] for p in pts_with_condition])
-
-    def to_index(self, *args):
+    def to_index(self, x, y):
         """
         Find the index of the array corresponding to the given x/y values.
 
         Parameters
         ----------
-        *args : number, number,...
+        x, y : float
             x-y values corresponding to the scalar location of the point in the grid.
 
         Returns
@@ -355,7 +184,9 @@ class Coords(BaseObject):
         >>> ex.to_index(54.234, 23.41)
         (5, 2)
         """
-        return tuple(round(arg/self.p.blocksize) for arg in args)
+        if not self.in_range(x, y):
+            raise Exception("Outside bounds of grid: "+str(x)+','+str(y))
+        return round(x/self.p.blocksize), round(y/self.p.blocksize)
 
     def to_gridpoint(self, *args):
         """
@@ -376,6 +207,10 @@ class Coords(BaseObject):
         >>> ex = ExampleCoords()
         >>> ex.to_gridpoint(3.5, 4)
         array([0., 0.])
+        >>> ex.to_gridpoint(5.0, 0) # block range covers (-blocksize/2, blocksize/2]
+        array([0., 0.])
+        >>> ex.to_gridpoint(5.01, 0) # the next block starts at blocksize/2
+        array([10.,  0.])
         >>> ex.to_gridpoint(14.0, 12.0)
         array([10., 10.])
         """
@@ -438,14 +273,15 @@ class Coords(BaseObject):
         >>> ex.get(50.0, 50.0, "v")
         1.0
         """
-        if not self.in_range(x, y):
-            if outside == "error":
-                raise Exception("Outside bounds of grid: "+str(x)+','+str(y))
+        proparray = getattr(self, prop)
+        try:
+            x_i, y_i = self.to_index(x, y)
+            return proparray[x_i, y_i]
+        except Exception as e:
+            if outside == 'error':
+                raise e
             else:
                 return outside
-        proparray = getattr(self, prop)
-        x_i, y_i = self.to_index(x, y)
-        return proparray[x_i, y_i]
 
     def assign_from(self, hist, t, *properties):
         """
@@ -631,6 +467,16 @@ class Coords(BaseObject):
             y-position
         direction: str/list
             Direction(s) to get neighbors from. Default is "all".
+            'direct' returns the top, bottom, left, and right neighbors.
+            'diagonal' returns the four diagonal neighbors.
+            'left' returns the left neighbor.
+            'right' returns the right neighbor.
+            'up' returns the top neighbor.
+            'down' returns the bottow neighbor.
+            'top-left' returns the top left neighbor.
+            'top-right' returns the top right neighbor.
+            'bottom-left' returns the bottom left neighbor.
+            'bottom-right' returns the bottom right neighbor.
 
         Returns
         -------
@@ -641,26 +487,45 @@ class Coords(BaseObject):
         --------
         >>> ex = ExampleCoords()
         >>> ex.get_neighbors(0, 0)
-        [array([10.,  0.]), array([ 0., 10.])]
+        [array([ 0., 10.]), array([10., 10.]), array([10.,  0.])]
         >>> ex.get_neighbors(10, 10)
-        [array([ 0., 10.]), array([20., 10.]), array([10., 20.]), array([10.,  0.])]
+        [array([ 0., 20.]), array([10., 20.]), array([20., 20.]), array([ 0., 10.]), array([20., 10.]), array([0., 0.]), array([10.,  0.]), array([20.,  0.])]
         >>> ex.get_neighbors(10, 10, direction="left")
         [array([ 0., 10.])]
-        >>> ex.get_neighbors(10, 10, direction="up-down")
-        [array([10., 20.]), array([10.,  0.])]
+        >>> ex.get_neighbors(10, 10, direction="top-left")
+        [array([ 0., 20.])]
         >>> ex.get_neighbors(10, 10, direction=["up","down"])
         [array([10., 20.]), array([10.,  0.])]
+        >>> ex.get_neighbors(10, 10, direction="direct")
+        [array([10., 20.]), array([ 0., 10.]), array([20., 10.]), array([10.,  0.])]
+        >>> ex.get_neighbors(10, 10, direction="diagonal")
+        [array([ 0., 20.]), array([20., 20.]), array([0., 0.]), array([20.,  0.])]
         """
         ind = self.to_index(x, y)
         neighbor_list = []
-        if 'left' in direction or direction == 'all':
-            neighbor_list.append((ind[0]-1, ind[1]))
-        if 'right' in direction or direction == 'all':
-            neighbor_list.append((ind[0]+1, ind[1]))
-        if 'up' in direction or direction == 'all':
-            neighbor_list.append((ind[0], ind[1]+1))
-        if 'down' in direction or direction == 'all':
-            neighbor_list.append((ind[0], ind[1]-1))
+
+        if isinstance(direction, list) is not True:
+            temp_dir = direction
+            direction = []
+            direction.append(temp_dir)
+
+        for i in direction:
+            if i == 'top-left' or i == 'all' or i == 'diagonal':
+                neighbor_list.append((ind[0]-1, ind[1]+1))
+            if i == 'up' or i == 'all' or i == 'direct':
+                neighbor_list.append((ind[0], ind[1]+1))
+            if i == 'top-right' or i == 'all' or i == 'diagonal':
+                neighbor_list.append((ind[0]+1, ind[1]+1))
+            if i == 'left' or i == 'all' or i == 'direct':
+                neighbor_list.append((ind[0]-1, ind[1]))
+            if i == 'right' or i == 'all' or i == 'direct':
+                neighbor_list.append((ind[0]+1, ind[1]))
+            if i == 'bottom-left' or i == 'all' or i == 'diagonal':
+                neighbor_list.append((ind[0]-1, ind[1]-1))
+            if i == 'down' or i == 'all' or i == 'direct':
+                neighbor_list.append((ind[0], ind[1]-1))
+            if i == 'bottom-right' or i == 'all' or i == 'diagonal':
+                neighbor_list.append((ind[0]+1, ind[1]-1))
 
         neighbors = []
         for i, n_point in enumerate(neighbor_list):
@@ -669,6 +534,522 @@ class Coords(BaseObject):
                     n_point[0] >= self.p.x_size or n_point[1] >= self.p.y_size):
                 neighbors.append(self.grid[n_point[0], n_point[1]])
         return neighbors
+
+    def in_range(self, x, y):
+        """
+        Check to see if the x-y point is in the range of the coordinate system.
+
+        Parameters
+        ----------
+        x : number
+            x-position to check from.
+        y : number
+            y-position to check from.
+
+        Returns
+        -------
+        in: bool
+            Whether the point is in the range of the grid
+        """
+        half_b = self.p.blocksize/2
+        return (-half_b < x <= self.p.blocksize * self.p.x_size - half_b and
+                -half_b < y <= self.p.blocksize * self.p.y_size - half_b)
+
+    def show_property_text(self, prop, fontsize=8, digits=3,
+                           fig=None, ax=None, figsize=(5, 5)):
+        """
+        Overlay text for a given property on map.
+
+        Parameters
+        ----------
+        prop : str
+            Property text.
+        fontsize : int, optional
+            ax.text fontize argument. The default is 8.
+        digits : int, optional
+            Digits of precision for property. The default is 3.
+
+        Returns
+        -------
+        fig : mpl.figure
+            Plotted figure object
+        ax : mpl.axis
+            Ploted axis object.
+        """
+        fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
+        # c_off = np.array([om.p.blocksize/2, om.p.blocksize/2])
+        for pt in self.pts:
+            # c_pt = np.array(pt)-c_off
+            ax.text(*pt, str(round(self.get(*pt, prop), digits)),
+                    verticalalignment='center', horizontalalignment='center',
+                    fontsize=fontsize)
+        return fig, ax
+
+    def show_property(self, prop, xlabel="x", ylabel="y", title='', proplab="prop",
+                      as_bool=False, color='green', cmap='Greens', ec='black',
+                      text=False, text_kwargs={}, legend_kwargs={}, fig=None, ax=None,
+                      figsize=(5, 5), **kwargs):
+        """
+        Plot a given property 'prop' as a colormesh on an x-y grid.
+
+        See matplotlib.pyplot.pcolormesh.
+
+        Parameters
+        ----------
+        prop : str
+            Name of the property to plot.
+        xlabel : str, optional
+            Label for x-axis. The default is "x".
+        ylabel : str, optional
+            Label for y-axis. The default is "y".
+        title : str, optional
+            Title for the plot. The default is ''.
+        proplab : str, optional
+            Label for the property. The default is "prop", which uses the name of the
+            property provided.
+        as_bool : bool, optional
+            Whether to interpret the property as a boolean where >0.0 returns as True
+            and <=0.0 returns as False.
+        color : str, optional
+            Color to use if the property is boolean. Default is 'green'.
+        cmap : str, optional
+            Colormap to use if property is continuous. Default is 'Greens'.
+        ec : str, optional
+            Default edge color. Default is 'black'. If 'face', no edges are drawn.
+        text : str, optional
+            Whether to overlay text on the property. Default is False.
+        text_kwargs : dict
+            kwargs to Coords.show_property_text (if text=True). Default is {}.
+        text: dict, optional
+        **kwargs : kwargs
+            Keyword arguments to matplotlib.pyplot.pcolormesh (e.g., cmap, edgecolors)
+
+        Returns
+        -------
+        fig : mpl.figure
+            Plotted figure object
+        ax : mpl.axis
+            Ploted axis object.
+        """
+        fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
+        # create mesh
+        p = getattr(self, prop)
+        x = np.linspace(0., self.p.blocksize*(self.p.x_size-1), self.p.x_size)
+        y = np.linspace(0., self.p.blocksize*(self.p.y_size-1), self.p.y_size)
+        X, Y = np.meshgrid(x, y)
+        # refine property for plotting
+        if as_bool:
+            p = p > 0.0
+        if p.dtype == 'bool':
+            cmap = ListedColormap([color])
+            default_kwargs = dict(ec=ec, cmap=cmap)
+            p = np.ma.array(p, mask=~p).swapaxes(0, 1)
+            vmin, vmax = 0, 1
+        else:
+            default_kwargs = dict(ec=ec, cmap=cmap)
+            p = p.swapaxes(0, 1)
+            vmin = p.min()
+            vmax = p.max()
+            if vmin == vmax:
+                vmax = vmin + 1.0
+        kwargs = {**kwargs, **default_kwargs}
+
+        im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **kwargs)
+        if text:
+            self.show_property_text(prop, fig=fig, ax=ax, **text_kwargs)
+
+        add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
+        if proplab == "prop":
+            proplab = prop
+
+        if p.dtype == 'bool':
+            # if boolean, create a legend
+            import matplotlib.patches as mpatches
+            patch = mpatches.Patch(color=color, label=proplab)
+            consolidate_legend(ax, add_handles=[patch], **legend_kwargs,
+                               title="Properties")
+        else:
+            # if float, create a colorbar
+            divider = make_axes_locatable(ax)
+            cax = divider.append_axes("right", size="5%", pad=0.05)
+            cbar = plt.colorbar(im, cax=cax)
+            cbar.set_label(proplab, rotation=270)
+        return fig, ax
+
+    def show_property_z(self, prop, z="prop", z_res=10, collections={},
+                        xlabel="x", ylabel="y", zlabel="prop",
+                        proplab="prop", cmap="Greens",
+                        fig=None, ax=None, figsize=(4, 5), **kwargs):
+        """
+        Plot a given properties 'prop' and 'z' as a voxels on an x-y-z grid.
+
+        See mpl_toolkits.mplot3d.axes3d.Axes3D.voxels.
+
+        Parameters
+        ----------
+        prop : str
+            Name of the property to represent a color.
+        z : str, optional
+            Name of the property to plot as z. The default is "prop", which uses same
+            property as prop.
+        z_res : int, optional
+            Resolution to plot z at. The default is 10.
+        collections:  dict, optional
+            Collections to plot and their respective kwargs for show_collection.
+            The default is {}.
+        xlabel : str, optional
+            Label for x-axis. The default is "x".
+        ylabel : str, optional
+            Label for y-axis. The default is "y".
+        zlabel : str, optional
+            Label for the z-axis. The default is "prop", which uses the name of the
+            property.
+        proplab : str, optional
+            Label for the property. The default is "prop", which uses the name of the
+            property provided.
+        cmap : str, optional
+            Name of the matplotlib colormap to use for colors. The default is "Greens".
+        fig : matplotlib.figure, optional
+            Existing Figure. The default is None.
+        ax : matplotlib.axis, optional
+            Existing axis. The default is None.
+        figsize : tuple, optional
+            Size for the figure. Default is (4,4)
+        **kwargs : kwargs
+            Kwargs to pass to Axes3D.voxels
+
+        Returns
+        -------
+        fig : mpl.figure
+            Plotted figure object
+        ax : mpl.axis
+            Ploted axis object.
+        """
+        default_kwargs = dict(edgecolor='k')
+        kwargs = {**kwargs, **default_kwargs}
+
+        fig, ax = setup_plot(fig=fig, ax=ax, z=True, figsize=figsize)
+
+        c_array = getattr(self, prop)
+        if z == "prop":
+            z_array = c_array
+        elif not z:
+            z_array = c_array * 0
+        else:
+            z_array = getattr(self, z)
+
+        dims = z_array.shape
+        X, Y, Z = np.indices((dims[0]+1, dims[1]+1, z_res+1))
+        z_shape = Z[:-1, :-1, :-1].swapaxes(0, 2).swapaxes(1, 2)
+
+        max_z = 1 * z_array.max()
+        min_z = 1 * z_array.min()
+        norm_z_array = z_res * (1*z_array - min_z)/(max_z - min_z + 0.00000001)
+        round_z_array = np.digitize(norm_z_array, [i for i in range(z_res)])
+        shape = z_shape < round_z_array
+        shape = shape.swapaxes(0, 1).swapaxes(1, 2)
+        X_scale = X * self.p.blocksize - self.p.blocksize/2
+        Y_scale = Y * self.p.blocksize - self.p.blocksize/2
+        Z_scale = Z * (max_z - min_z) / z_res + min_z
+
+        color_shape = np.array([c_array for i in range(z_res)])
+        norm = plt.Normalize(color_shape.min(), color_shape.max())
+        cmap = colormaps[cmap]
+        colors = cmap(norm(color_shape)).swapaxes(0, 1).swapaxes(1, 2)
+
+        for i, (prop, coll_kwargs) in enumerate(collections.items()):
+            coll_colors = cm.rainbow(np.linspace(0, 1, len(collections)))
+            coll = self.get_collection(prop)
+            if 'color' not in coll_kwargs:
+                coll_color = colormaps['rainbow'](coll_colors[i])
+            else:
+                coll_color = to_rgba(coll_kwargs['color'])
+
+            if "text_z_offset" not in coll_kwargs:
+                coll_kwargs['text_z_offset'] = (max_z - min_z) / z_res
+            for pt in coll:
+                index = self.to_index(*pt)
+                inds = np.where(shape[index])
+                if any(inds[0]):
+                    z_index = inds[0][-1]
+                else:
+                    z_index = 0
+                colors[index[0], index[1], z_index] = coll_color
+
+        ax.voxels(X_scale, Y_scale, Z_scale, shape,
+                  facecolors=colors, **kwargs)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+        ax.set_zlabel(zlabel)
+        return fig, ax
+
+    def _show_properties(self, properties, fig, ax, pallette, **kwargs):
+        """Show multiple properties on a plot. Helper function to .show()."""
+        for i, (prop, prop_kwargs) in enumerate(properties.items()):
+            kwar = {**kwargs,
+                    'color': pallette[i],
+                    'xlabel': '', 'ylabel': '', 'title': '',
+                    **prop_kwargs}
+            fig, ax = self.show_property(prop, fig=fig, ax=ax, **kwar)
+
+    def show(self, properties={}, fig=None, ax=None, figsize=(5, 5),
+             xlabel='x', ylabel='y', title='',
+             pallette=[*TABLEAU_COLORS.keys()], **kwargs):
+        """Show the properties array(s) of the BaseCoords object."""
+        fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
+        self._show_properties(properties, fig, ax, pallette, **kwargs)
+        add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
+        return fig, ax
+
+    def show_from(self, t, history={}, properties={}, clear_fig=False, **kwargs):
+        """
+        Run Coords.show() at a particular time in the history.
+
+        Parameters
+        ----------
+        t : int
+            Time index to show the Coords object at.
+        hist : History
+            History to show the Coords object at.
+        clear_fig : bool
+            Whether to clear the figure beforehand. Default is False.
+        **kwargs : kwargs
+            kwargs for self.show
+
+        Returns
+        -------
+        fig : mpl.figure
+            Plotted figure object
+        ax : mpl.axis
+            Ploted axis object.
+        """
+        kwargs = prep_animation_title(t, **kwargs)
+        if clear_fig:
+            kwargs = clear_prev_figure(**kwargs)
+        props = [p for p in properties if p in history]
+        self.assign_from(history, t, *props)
+        return self.show(properties=properties, **kwargs)
+
+    def animate(self, hist, times='all', clear_fig=True, **kwargs):
+        """
+        Animate the coords over a history using show_from.
+
+        Parameters
+        ----------
+        hist : History
+            History of coords.
+        times : list/'all'
+            Times to animate over.
+        **kwargs : kwargs
+            Arguments to self.show.
+
+        Returns
+        -------
+        ani : animation.Funcanimation
+            Object with animation.
+        """
+        return hist.animate(self.show_from, times=times, clear_fig=clear_fig, **kwargs)
+
+
+class Coords(BaseCoords):
+    """
+    Class for generating, accessing, and setting gridworld properties.
+
+    Creates arrays, points, and lists of points which may correspond to desired
+    modeling properties.
+
+    Class Variables/Modifiers
+    ---------------
+    init_p: CoordsParam
+        Parameter controlling default grid matrix (see CoordsParam), along with other
+        properties of interest. Sets the .p container.
+    init_r: Rand
+        Random number generator. sets the .r container.
+    init_properties: method
+        Method that initializes the (non-default) properties of the Coords.
+
+    Examples
+    --------
+    >>> class ExampleCoords(Coords):
+    ...    container_p = ExampleCoordsParam
+    ...    def init_properties(self, *args, **kwargs):
+    ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
+
+    Instantiating a class with (see ExampleCoordsParam):
+
+    - immutable arrays a and v,
+    - mutable array st,
+    - point start at (0.0), and
+    - collection high made up of all points where v > 10.0.
+
+    As shown, features are normal numpy arrays set to readonly:
+
+    >>> ex = ExampleCoords()
+    >>> type(ex.a)
+    <class 'numpy.ndarray'>
+    >>> np.size(ex.a)
+    100
+    >>> ex.a[0, 0] = True
+    Traceback (most recent call last):
+      ...
+    ValueError: assignment destination is read-only
+
+    The main difference with states is that they can be set, e.g.,:
+
+    >>> ex.st[0, 0] = 100.0
+    >>> ex.st[0, 0]
+    100.0
+
+    Collections are lists of points that map to immutable properties. In ExampleCoords,
+    all points where v > 5.0 should be a part of high_v, as shown:
+
+    >>> ex.high_v
+    array([[ 0.,  0.],
+           [10.,  0.]])
+
+    Additionally, defined points (e.g., start) should be accessible via their names:
+
+    >>> ex.start
+    (0.0, 0.0)
+
+    Note that these histories are tracked:
+
+    >>> h = ex.create_hist([0, 1, 2])
+    >>> h.keys()
+    dict_keys(['r.probdens', 'st'])
+    >>> h.st[0]
+    array([[100.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])
+    """
+
+    __slots__ = ("r", "points", "collections", "features", "states",
+                 "properties", "_args", "_kwargs")
+    container_r = Rand
+    roledicts = ['points', 'collections', 'features', 'states']
+    immutable_roles = BaseObject.immutable_roles + \
+        ['points', 'collections', 'features']
+    default_track = ["r", "states"]
+
+    def __init__(self, *args, track='default', **kwargs):
+        """Initialize class with properties in init_properties."""
+        self._args = args
+        self._kwargs = kwargs
+        super().__init__(*args, track=[], **kwargs)
+        self.add_coords_roles()
+        self.add_property_arrays(self.properties)
+        self.init_properties(*args, **kwargs)
+        self.build()
+        self.init_track(track)
+
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Coords
+
+    def check_role(self, roletype, rolename):
+        """Check that the rolename for coords is 'c'."""
+        if roletype != 'coords':
+            raise Exception("Invalid roletype for coords: " + roletype)
+        if rolename != 'c':
+            raise Exception("Invalid container name for Coords: "+rolename)
+
+    def add_coords_roles(self):
+        """Add points, collections, features, and states as roles to Coords."""
+        self.init_role_dict("point", set_attr=True)
+        self.init_role_dict("collect", "ions")
+        self.init_role_dict("feature")
+        self.init_role_dict("state")
+        self.properties = {**self.features, **self.states}
+
+    def init_properties(self, *args, **kwargs):
+        """Initialize arrays with non-default values."""
+        return 0
+
+    def build(self):
+        """Set features as immutable."""
+        for propname, prop in self.properties.items():
+            if propname in self.features:
+                proparray = getattr(self, propname)
+                proparray.flags.writeable = False
+        for cname, collection in self.collections.items():
+            if collection[0] in self.features:
+                setattr(self, cname, self.find_all_prop(*collection))
+            else:
+                raise Exception("Invalid collection: " + cname +
+                                " collections may only map to (immutable) features")
+
+    def find_all(self, *points_colls, in_points_colls=True, **prop_kwargs):
+        """
+        Find all points in array satisfying multiple statements.
+
+        Parameters
+        ----------
+        *points_colls: str
+            Name(s) of points or collections defining the set of points to check.
+            If not provided, assumes all points.
+        in_points_colls: bool
+            Whether the properties are to be searched in the given set of
+            points/collections (True) or outside the given set of points/collections
+            (False). The default is True
+        **prop_kwargs : kwargs
+            keyword arguments corresponding to properties, values and comparators, e.g.:
+            statename=(True, np.equal)
+
+        Returns
+        -------
+        all: np.array
+            List of points where the comparator methods returns true.
+
+        Examples
+        --------
+        >>> ex = ExampleCoords()
+        >>> ex.find_all(v=(10.0, np.equal))
+        array([[ 0.,  0.],
+               [10.,  0.]])
+        >>> ex.st[0, 0] = 5.0
+        >>> ex.find_all(v=(10.0, np.equal), st=(0.0, np.greater))
+        array([[0., 0.]])
+        >>> ex.find_all("high_v", v=(10.0, np.equal))
+        array([[ 0.,  0.],
+               [10.,  0.]])
+        >>> ex.find_all("high_v", v=(10.0, np.less))
+        array([], dtype=float64)
+        >>> ex.st[2,2] = 1.0
+        >>> ex.find_all("high_v", in_points_colls=False, st=(0.0, np.greater))
+        array([[20., 20.]])
+        """
+        # check if in points or collections
+        if points_colls:
+            pts = []
+            for name in points_colls:
+                prop = getattr(self, name)
+                if name in self.points:
+                    pts.append(prop)
+                elif name in self.collections:
+                    pts.extend(prop)
+                else:
+                    raise Exception(name+"not in points or collections")
+            true_array = np.full(
+                (self.p.x_size, self.p.y_size), not in_points_colls)
+            for pt in pts:
+                true_array[self.to_index(*pt)] = in_points_colls
+        else:
+            true_array = np.full((self.p.x_size, self.p.y_size), True)
+
+        # check properties
+        for name, (value, comparator) in prop_kwargs.items():
+            prop = getattr(self, name)
+            true_array *= comparator(prop, value)
+        where = np.where(true_array)
+        pts_with_condition = [(p, where[1][i]) for i, p in enumerate(where[0])]
+        return np.array([self.grid[tuple(p)] for p in pts_with_condition])
 
     def find_closest(self, x, y, prop, include_pt=True, value=True,
                      comparator=np.equal):
@@ -730,26 +1111,6 @@ class Coords(BaseObject):
             closest_ind = np.argmin(dists)
             xy = pts[closest_ind]
             return xy
-
-    def in_range(self, x, y):
-        """
-        Check to see if the x-y point is in the range of the coordinate system.
-
-        Parameters
-        ----------
-        x : number
-            x-position to check from.
-        y : number
-            y-position to check from.
-
-        Returns
-        -------
-        in: bool
-            Whether the point is in the range of the grid
-        """
-        half_b = self.p.blocksize/2
-        return (-half_b <= x <= self.p.blocksize * self.p.x_size - half_b and
-                -half_b <= y <= self.p.blocksize * self.p.y_size - half_b)
 
     def in_area(self, x, y, coll):
         """
@@ -893,195 +1254,6 @@ class Coords(BaseObject):
         else:
             raise Exception("Not a point or collection")
 
-    def show_property(self, prop, xlabel="x", ylabel="y", title='', proplab="prop",
-                      as_bool=False, color='green', cmap='Greens', ec='black',
-                      legend_kwargs={}, fig=None, ax=None, figsize=(5, 5), **kwargs):
-        """
-        Plot a given property 'prop' as a colormesh on an x-y grid.
-
-        See matplotlib.pyplot.pcolormesh.
-
-        Parameters
-        ----------
-        prop : str
-            Name of the property to plot.
-        xlabel : str, optional
-            Label for x-axis. The default is "x".
-        ylabel : str, optional
-            Label for y-axis. The default is "y".
-        title : str, optional
-            Title for the plot. The default is ''.
-        proplab : str, optional
-            Label for the property. The default is "prop", which uses the name of the
-            property provided.
-        as_bool : bool, optional
-            Whether to interpret the property as a boolean where >0.0 returns as True
-            and <=0.0 returns as False.
-        color : str, optional
-            Color to use if the property is boolean. Default is 'green'.
-        cmap : str, optional
-            Colormap to use if property is continuous. Default is 'Greens'.
-        ec : str, optional
-            Default edge color. Default is 'black'. If 'face', no edges are drawn.
-        **kwargs : kwargs
-            Keyword arguments to matplotlib.pyplot.pcolormesh (e.g., cmap, edgecolors)
-
-        Returns
-        -------
-        fig : mpl.figure
-            Plotted figure object
-        ax : mpl.axis
-            Ploted axis object.
-        """
-        fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
-        # create mesh
-        p = getattr(self, prop)
-        x = np.linspace(0., self.p.blocksize*(self.p.x_size-1), self.p.x_size)
-        y = np.linspace(0., self.p.blocksize*(self.p.y_size-1), self.p.y_size)
-        X, Y = np.meshgrid(x, y)
-        # refine property for plotting
-        if as_bool:
-            p = p > 0.0
-        if p.dtype == 'bool':
-            cmap = ListedColormap([color])
-            default_kwargs = dict(ec=ec, cmap=cmap)
-            p = np.ma.array(p, mask=~p).swapaxes(0, 1)
-            vmin, vmax = 0, 1
-        else:
-            default_kwargs = dict(ec=ec, cmap=cmap)
-            p = p.swapaxes(0, 1)
-            vmin = p.min()
-            vmax = p.max()
-            if vmin == vmax:
-                vmax = vmin + 1.0
-        kwargs = {**kwargs, **default_kwargs}
-
-        im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **kwargs)
-
-        add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
-        if proplab == "prop":
-            proplab = prop
-
-        if p.dtype == 'bool':
-            # if boolean, create a legend
-            import matplotlib.patches as mpatches
-            patch = mpatches.Patch(color=color, label=proplab)
-            consolidate_legend(ax, add_handles=[patch], **legend_kwargs,
-                               title="Properties")
-        else:
-            # if float, create a colorbar
-            divider = make_axes_locatable(ax)
-            cax = divider.append_axes("right", size="5%", pad=0.05)
-            cbar = plt.colorbar(im, cax=cax)
-            cbar.set_label(proplab, rotation=270)
-        return fig, ax
-
-    def show_property_z(self, prop, z="prop", z_res=10, collections={},
-                        xlabel="x", ylabel="y", zlabel="prop",
-                        proplab="prop", cmap="Greens",
-                        fig=None, ax=None, figsize=(4, 5), **kwargs):
-        """
-        Plot a given properties 'prop' and 'z' as a voxels on an x-y-z grid.
-
-        See mpl_toolkits.mplot3d.axes3d.Axes3D.voxels.
-
-        Parameters
-        ----------
-        prop : str
-            Name of the property to represent a color.
-        z : str, optional
-            Name of the property to plot as z. The default is "prop", which uses same
-            property as prop.
-        z_res : int, optional
-            Resolution to plot z at. The default is 10.
-        collections:  dict, optional
-            Collections to plot and their respective kwargs for show_collection.
-            The default is {}.
-        xlabel : str, optional
-            Label for x-axis. The default is "x".
-        ylabel : str, optional
-            Label for y-axis. The default is "y".
-        zlabel : str, optional
-            Label for the z-axis. The default is "prop", which uses the name of the
-            property.
-        proplab : str, optional
-            Label for the property. The default is "prop", which uses the name of the
-            property provided.
-        cmap : str, optional
-            Name of the matplotlib colormap to use for colors. The default is "Greens".
-        fig : matplotlib.figure, optional
-            Existing Figure. The default is None.
-        ax : matplotlib.axis, optional
-            Existing axis. The default is None.
-        figsize : tuple, optional
-            Size for the figure. Default is (4,4)
-        **kwargs : kwargs
-            Kwargs to pass to Axes3D.voxels
-
-        Returns
-        -------
-        fig : mpl.figure
-            Plotted figure object
-        ax : mpl.axis
-            Ploted axis object.
-        """
-        default_kwargs = dict(edgecolor='k')
-        kwargs = {**kwargs, **default_kwargs}
-
-        fig, ax = setup_plot(fig=fig, ax=ax, z=True, figsize=figsize)
-
-        c_array = getattr(self, prop)
-        if z == "prop":
-            z_array = c_array
-        elif not z:
-            z_array = c_array * 0
-        else:
-            z_array = getattr(self, z)
-
-        dims = z_array.shape
-        X, Y, Z = np.indices((dims[0]+1, dims[1]+1, z_res+1))
-        z_shape = Z[:-1, :-1, :-1].swapaxes(0, 2).swapaxes(1, 2)
-
-        max_z = 1 * z_array.max()
-        min_z = 1 * z_array.min()
-        norm_z_array = z_res * (1*z_array - min_z)/(max_z - min_z + 0.00000001)
-        round_z_array = np.digitize(norm_z_array, [i for i in range(z_res)])
-        shape = z_shape < round_z_array
-        shape = shape.swapaxes(0, 1).swapaxes(1, 2)
-        X_scale = X * self.p.blocksize - self.p.blocksize/2
-        Y_scale = Y * self.p.blocksize - self.p.blocksize/2
-        Z_scale = Z * (max_z - min_z) / z_res + min_z
-
-        color_shape = np.array([c_array for i in range(z_res)])
-        norm = plt.Normalize(color_shape.min(), color_shape.max())
-        cmap = colormaps[cmap]
-        colors = cmap(norm(color_shape)).swapaxes(0, 1).swapaxes(1, 2)
-
-        for i, (prop, coll_kwargs) in enumerate(collections.items()):
-            coll_colors = cm.rainbow(np.linspace(0, 1, len(collections)))
-            coll = self.get_collection(prop)
-            if 'color' not in coll_kwargs:
-                coll_color = colormaps['rainbow'](coll_colors[i])
-            else:
-                coll_color = to_rgba(coll_kwargs['color'])
-
-            if "text_z_offset" not in coll_kwargs:
-                coll_kwargs['text_z_offset'] = (max_z - min_z) / z_res
-            for pt in coll:
-                index = self.to_index(*pt)
-                inds = np.where(shape[index])
-                if any(inds[0]):
-                    z_index = inds[0][-1]
-                else:
-                    z_index = 0
-                colors[index[0], index[1], z_index] = coll_color
-
-        ax.voxels(X_scale, Y_scale, Z_scale, shape, facecolors=colors, **kwargs)
-        ax.set_xlabel(xlabel)
-        ax.set_ylabel(ylabel)
-        ax.set_zlabel(zlabel)
-        return fig, ax
-
     def show_collection(self, prop, fig=None, ax=None, label=True, z="",
                         xlabel='x', ylabel='y', title='',
                         legend_args=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
@@ -1169,15 +1341,6 @@ class Coords(BaseObject):
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
-    def _show_properties(self, properties, fig, ax, pallette, **kwargs):
-        """Show multiple properties on a plot. Helper function to .show()."""
-        for i, (prop, prop_kwargs) in enumerate(properties.items()):
-            kwar = {**kwargs,
-                    'color': pallette[i],
-                    'xlabel': '', 'ylabel': '', 'title': '',
-                    **prop_kwargs}
-            fig, ax = self.show_property(prop, fig=fig, ax=ax, **kwar)
-
     def _show_collections(self, collections, fig, ax, pallette, c_offset=0):
         """Show multiple collections on a plot. Helper function to .show()."""
         for i, (coll, coll_kwargs) in enumerate(collections.items()):
@@ -1225,62 +1388,15 @@ class Coords(BaseObject):
         c_offset = len(properties)
         if coll_overlay:
             self._show_properties(properties, fig, ax, pallette, **kwargs)
-            self._show_collections(collections, fig, ax, pallette, c_offset=c_offset)
+            self._show_collections(collections, fig, ax,
+                                   pallette, c_offset=c_offset)
         else:
-            self._show_collections(collections, fig, ax, pallette, c_offset=c_offset)
+            self._show_collections(collections, fig, ax,
+                                   pallette, c_offset=c_offset)
             self._show_properties(properties, fig, ax, pallette, **kwargs)
 
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
-
-    def show_from(self, t, history={}, properties={}, clear_fig=False, **kwargs):
-        """
-        Run Coords.show() at a particular time in the history.
-
-        Parameters
-        ----------
-        t : int
-            Time index to show the Coords object at.
-        hist : History
-            History to show the Coords object at.
-        clear_fig : bool
-            Whether to clear the figure beforehand. Default is False.
-        **kwargs : kwargs
-            kwargs for self.show
-
-        Returns
-        -------
-        fig : mpl.figure
-            Plotted figure object
-        ax : mpl.axis
-            Ploted axis object.
-        """
-        kwargs = prep_animation_title(t, **kwargs)
-        if clear_fig:
-            kwargs = clear_prev_figure(**kwargs)
-        props = [p for p in properties if p in history]
-        self.assign_from(history, t, *props)
-        return self.show(properties=properties, **kwargs)
-
-    def animate(self, hist, times='all', clear_fig=True, **kwargs):
-        """
-        Animate the coords over a history using show_from.
-
-        Parameters
-        ----------
-        hist : History
-            History of coords.
-        times : list/'all'
-            Times to animate over.
-        **kwargs : kwargs
-            Arguments to self.show.
-
-        Returns
-        -------
-        ani : animation.Funcanimation
-            Object with animation.
-        """
-        return hist.animate(self.show_from, times=times, clear_fig=clear_fig, **kwargs)
 
     def show_z(self, prop, z="prop", collections={}, legend_args=False, voxels=True,
                **kwargs):
@@ -1315,7 +1431,8 @@ class Coords(BaseObject):
         elif z == '':
             z = 0.0
         if voxels:
-            fig, ax = self.show_property_z(prop, z=z, collections=collections, **kwargs)
+            fig, ax = self.show_property_z(
+                prop, z=z, collections=collections, **kwargs)
         else:
             fig, ax = self.show_collection("pts", z=z, legend_args=legend_args,
                                            label=False, **kwargs)
@@ -1353,6 +1470,42 @@ class ExampleCoords(Coords):
         self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
 
 
+class MetricCoords(BaseCoords):
+    """
+    Create an array of metrics from a given result.
+
+    MetricCoords can be used to display summary statistics e.g., min, max, mean) of
+    coords object results returned from simulations.
+
+    Parameters
+    ----------
+    res : Result
+        Result to get the result/histories from
+    values : list
+        List of values to get. Default is [], which will not get any values.
+    metric : method
+        Method to use to compute the metric.
+
+    Examples
+    --------
+    >>> from fmdtools.analyze.result import Result
+    >>> r = Result({'b1.a': np.array([[0,1], [0,4]]), 'b2.a': np.array([[2,1], [2,6]])})
+    >>> mc = MetricCoords(r, values=['a'], metric=np.mean, p={'x_size':2, 'y_size': 2})
+    >>> mc.a
+    array([[1., 1.],
+           [1., 5.]])
+    >>> mc = MetricCoords(r, values=['a'], metric=np.min, p={'x_size':2, 'y_size': 2})
+    >>> mc.a
+    array([[0, 1],
+           [0, 4]])
+    """
+
+    def __init__(self, res, *args, values=[], metric=np.mean, **kwargs):
+        super().__init__(*args, **kwargs)
+        for value in values:
+            setattr(self, value, metric([*res.get_values(value).values()], 0))
+
+
 if __name__ == "__main__":
     ex = ExampleCoords()
     import doctest
@@ -1371,6 +1524,6 @@ if __name__ == "__main__":
     ex.show_collection("high_v")
     ex.show_collection("high_v", z="v")
     ex.show_z("st", z="v",
-            collections={"pts": {"color": "blue"},
-                         "high_v": {"alpha": 0.5, "color": "red"}},
-            legend_args=True)
+              collections={"pts": {"color": "blue"},
+                           "high_v": {"alpha": 0.5, "color": "red"}},
+              legend_args=True)

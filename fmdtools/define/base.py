@@ -10,6 +10,7 @@ Includes functions:
 - :func:`is_iter`: Checks whether a data type should be interpreted as an iterable
 - :func:`t_key`:Used to generate keys for a given (float) time that is queryable as an
   attribute of an object/dict
+ - :func:`gen_timerange`: Generates timerange from start/endtime
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -218,7 +219,12 @@ def t_key(time):
 
 def round_float(number, res=1.0, min_r=7):
     """Round floats to a given resolution (avoiding fp errors)."""
-    return np.round(round(number/res)*res, 7)
+    return np.round(round(number/res)*res, min_r)
+
+
+def gen_timerange(start_time, end_time, dt=1.0, min_r=7):
+    """Generate the times in a given interval given the timestep dt."""
+    return np.round(np.arange(start_time, end_time + dt, dt), min_r)
 
 
 def get_code_attrs(obj):

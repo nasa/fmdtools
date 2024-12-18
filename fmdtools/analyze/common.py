@@ -10,6 +10,8 @@ Has methods:
   otherwise returns the number
 - :func:`is_numeric`: Helper function for Result Class, checks if a given value is
   numeric
+- :func:`diff`: Helper function for finding inconsistent states between val1, val2, with
+  the difftype option
 - :func:`join_key`: Helper function for Result Class
 - :func:`setup_plot`: initializes mpl figure
 - :func:`plot_err_hist`: Plots a line with a given range of uncertainty around it
@@ -17,6 +19,12 @@ Has methods:
 - :func:`multiplot_legend_title`: Helper function for multiplot legends and titles
 - :func:`consolidate_legend`: Creates a single legend for a given multiplot where
   multiple groups are being compared
+- :func:`load_folder`: Lists files to load in folder.
+- :func:`file_check`: Check if files exists and whether to overwrite the file
+- :func:`auto_filetype`: Helper function that automatically determines the filetype
+  (npz, csv, or json) of a given filename
+- :func:`create_indiv_filename`: Helper function that creates an individualized name for
+  a file given the general filename and an individual id
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -32,6 +40,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import numpy as np
+import os
 import matplotlib.pyplot as plt
 
 
@@ -103,6 +112,135 @@ def is_numeric(val):
         return np.issubdtype(np.array(val).dtype, np.number)
     except TypeError:
         return type(val) in [float, bool, int]
+
+
+def is_known_immutable(val):
+    """Check if value is known immutable."""
+    return type(val) in [int, float, str, tuple, bool] or isinstance(val, np.number)
+
+
+def is_known_mutable(val):
+    """Check if value is a known mutable."""
+    return type(val) in [dict, set]
+
+
+def diff(val1, val2, difftype='bool'):
+    """
+    Find inconsistent states between val1, val2.
+
+    The difftype option ('diff' (takes the difference), 'bool' (checks if the same),
+                         and float (checks if under the provided tolerance))
+
+    Examples
+    --------
+    >>> diff([1, 2, 3], [2, 2, 3])
+    array([ True, False, False])
+    >>> diff([1, 2, 3], [2, 2, 3], difftype="diff")
+    array([-1,  0,  0])
+    """
+    try:
+        if isinstance(val1, list):
+            val1 = np.array(val1)
+        if isinstance(val2, list):
+            val2 = np.array(val2)
+        if difftype == 'diff':
+            return val1-val2
+        elif difftype == 'bool':
+            return val1 != val2
+        elif isinstance(difftype, float):
+            return abs(val1-val2) > difftype
+    except ValueError as e:
+        raise Exception("Unable to diff "+str(val1)+" and "+str(val2)) from e
+
+
+def file_check(filename, overwrite):
+    """Check if files exists and whether to overwrite the file."""
+    if os.path.exists(filename):
+        if not overwrite:
+            raise Exception("File already exists: "+filename)
+        else:
+            print("File already exists: "+filename+", writing anyway...")
+            os.remove(filename)
+    if "/" in filename:
+        last_split_index = filename.rfind("/")
+        foldername = filename[:last_split_index]
+        if not os.path.exists(foldername):
+            os.makedirs(foldername)
+
+
+def auto_filetype(filename, filetype="", filetypes=['npz', 'csv', 'json']):
+    """
+    Automatically determine the filetype (npz, csv, or json) of a filename.
+
+    Examples
+    --------
+    >>> auto_filetype("hi.npz")
+    'npz'
+    >>> auto_filetype("example.csv")
+    'csv'
+    >>> auto_filetype("example.json")
+    'json'
+    >>> auto_filetype("x.pdf")
+    Traceback (most recent call last):
+      ...
+    Exception: Invalid filename in x.pdf, ensure extension is in ['npz', 'csv', 'json'].
+    >>> auto_filetype("no_ext", "csv")
+    'csv'
+    """
+    if not filetype:
+        if '.' not in filename:
+            raise Exception("No file extension in: " + filename)
+        for ft in filetypes:
+            len_ft = len(ft)
+            if filename[-(len_ft+1):] == '.'+ft:
+                filetype = ft
+                break
+        if not filetype:
+            raise Exception("Invalid filename in " + filename +
+                            ", ensure extension is in "+str(filetypes)+".")
+    return filetype
+
+
+def create_indiv_filename(filename, indiv_id, splitchar='_'):
+    """
+    Create filename name for a file given general filename and individual id.
+
+    Examples
+    --------
+    >>> create_indiv_filename("hi.csv", "4")
+    'hi_4.csv'
+    """
+    filename_parts = filename.split(".")
+    filename_parts.insert(1, '.')
+    filename_parts.insert(1, splitchar+indiv_id)
+    return "".join(filename_parts)
+
+
+def load_folder(folder, filetype):
+    """
+    Create list of files to be read from a folder.
+
+    (e.g., that have been saved from multi-scenario propagate methods with 'indiv':True)
+
+    Parameters
+    ----------
+    folder : str
+        Name of the folder. Must be in the current directory
+    filetype : str
+        Type of files in the folder ('pickle', 'csv', or 'json')
+
+    Returns
+    -------
+    files_to_read : list
+        files to load for endclasses/mdlhists.
+    """
+    files = os.listdir(folder)
+    files_toread = []
+    for file in files:
+        read_filetype = auto_filetype(file)
+        if read_filetype == filetype:
+            files_toread.append(file)
+    return files_toread
 
 
 def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):
@@ -223,8 +361,8 @@ def phase_overlay(ax, phasemap, label_phases=True):
 
 
 def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
-                  boundcolor='gray', boundlinestyle='--', fillalpha=0.3,
-                  xlabel='time', ylabel='', title='', **kwargs):
+                  boundcolor='gray', boundlinestyle='--', fillalpha=0.3, time='time',
+                  xlabel='time', ylabel='', title='', xlim=(), ylim=(), **kwargs):
     """
     Plot a line with a given range of uncertainty around it.
 
@@ -247,6 +385,8 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
         linestyle for bound lines (if any). The default is '--'.
     fillalpha : float, optional
         Alpha for fill. The default is 0.3.
+    time : str, optional
+        history to use as time. The default is 'time'.
     **kwargs : kwargs
         kwargs for the line
 
@@ -259,30 +399,42 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
     ax.plot(err_hist['stat'], **kwargs)
     if boundtype == 'fill':
         col = ax.lines[-1].get_color()
-        ax.fill_between(err_hist['time'], err_hist['low'], err_hist['high'],
+        ax.fill_between(err_hist[time], err_hist['low'], err_hist['high'],
                         alpha=fillalpha, color=col)
         if 'med_high' in err_hist and 'med_low' in err_hist:
-            ax.fill_between(err_hist['time'], err_hist['med_low'], err_hist['med_high'],
+            ax.fill_between(err_hist[time], err_hist['med_low'], err_hist['med_high'],
                             alpha=fillalpha, color=col)
     elif boundtype == 'line':
-        plot_err_lines(err_hist['time'], err_hist['low'], err_hist['high'], ax=ax,
+        plot_err_lines(err_hist[time], err_hist['low'], err_hist['high'], ax=ax,
                        fig=fig, color=boundcolor, linestyle=boundlinestyle)
         if 'med_high' in err_hist and 'med_low' in err_hist:
-            plot_err_lines(err_hist['time'], err_hist['med_low'], err_hist['med_high'],
+            plot_err_lines(err_hist[time], err_hist['med_low'], err_hist['med_high'],
                            ax=ax, fig=fig, color=boundcolor, linestyle=boundlinestyle)
     else:
         raise Exception("Invalid bound type: "+boundtype)
-    add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
-    ax.set_xlim(err_hist['time'][0], err_hist['time'][-1])
+    if not xlim:
+        xlim = err_hist[time][0], err_hist[time][-1]
+    add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, title=title,
+                     xlim=xlim, ylim=ylim)
     return fig, ax
 
 
-def add_title_xylabs(ax, title='', xlabel='', ylabel=''):
-    """Add title and x/y labels to the given axis."""
+def add_title_xylabs(ax, title='', xlabel='', ylabel='', zlabel='',
+                     xlim=(), ylim=(), zlim=()):
+    """Add/set title, x/y labels, and limits to the given axis."""
     if xlabel:
         ax.set_xlabel(xlabel)
     if ylabel:
         ax.set_ylabel(ylabel)
+    if xlim:
+        ax.set_xlim(*xlim)
+    if ylim:
+        ax.set_ylim(*ylim)
+    if ax.name == '3d':
+        if zlim:
+            ax.set_zlim(*zlim)
+        if zlabel:
+            ax.set_zlabel(zlabel)
     if title:
         ax.set_title(title)
 
@@ -454,7 +606,7 @@ def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
               bbox_to_anchor=bbox_to_anchor, loc=loc, **kwargs)
 
 
-def mark_times(ax, tick, time, *plot_values, fontsize=8, rounddec=1):
+def mark_times(ax, tick, time, *plot_values, fontsize=8, rounddec=1, pretext="t="):
     """
     Mark times on an axis at a particular tick interval.
 
@@ -476,7 +628,8 @@ def mark_times(ax, tick, time, *plot_values, fontsize=8, rounddec=1):
         tt = st[-1]
         xyz = st[:-1]
         if tt >= t_tick+tick:
-            ax.text(*xyz, 't='+str(np.round(tt, rounddec)), fontsize=fontsize)
+            if tt < t_tick+tick+tick:
+                ax.text(*xyz, pretext+str(np.round(tt, rounddec)), fontsize=fontsize)
             t_tick += tick
 
 

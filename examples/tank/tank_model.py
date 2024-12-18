@@ -149,8 +149,8 @@ class GuideLiquidOut(GuideLiquid):
 
 
 class StoreLiquidState(State):
-    level:      float = 10.0
-    net_flow:   float = 0.0
+    level: float = 10.0
+    net_flow: float = 0.0
 
 
 class StoreLiquidMode(Mode):
@@ -419,10 +419,14 @@ if __name__ == '__main__':
     import fmdtools.sim.propagate as propagate
     from fmdtools.sim.sample import FaultDomain, FaultSample
 
-    mdl = Tank()
+    mdl = Tank(track='all')
 
     endclass, mdlhist = propagate.one_fault(mdl, 'human', 'look_not_visible', time=2,
                                             staged=True)
+
+    from fmdtools.define.architecture.function import FunctionArchitectureGraph
+    mg = FunctionArchitectureGraph(mdl)
+    fig, ax = mg.draw_from(10, mdlhist)
 
     # nominal run
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass', 'graph'])

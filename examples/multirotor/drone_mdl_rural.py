@@ -111,7 +111,7 @@ class DroneParam(Parameter, readonly=True):
     phys_param: DronePhysicalParameters
     """
 
-    respolicy:  ResPolicy = ResPolicy()
+    respolicy: ResPolicy = ResPolicy()
     flightplan: tuple = ((0, 0, 0),  # flies through a few points and back to the start
                          (0, 0, 100),
                          (100, 0, 100),
@@ -164,9 +164,9 @@ class BatState(State):
         Power transference with nominal value 1.0
     """
 
-    soc:  float = 100.0
+    soc: float = 100.0
     ee_e: float = 1.0
-    e_t:  float = 1.0
+    e_t: float = 1.0
 
 
 class BatMode(Mode):
@@ -347,7 +347,7 @@ class StoreEEMode(Mode):
     """Overall StoreEE mode."""
 
     failrate = 1e-4
-    fm_args = {'nocharge':  (0.2, 0, {"taxi": 0.6, "move": 0.2, "land": 0.2}),
+    fm_args = {'nocharge': (0.2, 0, {"taxi": 0.6, "move": 0.2, "land": 0.2}),
                'lowcharge': (0.7, 0, {"taxi": 0.6, "move": 0.2, "land": 0.2})}
     units = 'hr'
 
@@ -934,7 +934,7 @@ if __name__ == "__main__":
 
     # run approach - all faults in "move" mode
     mdl = Drone()
-    app = SampleApproach(mdl,  phasemaps=phasemaps)
+    app = SampleApproach(mdl, phasemaps=phasemaps)
     app.add_faultdomain("drone_faults", "all")
     app.add_faultsample("move_scens", "fault_phases", "drone_faults", "move",
                         phasemap='plan_path', args=(3,))

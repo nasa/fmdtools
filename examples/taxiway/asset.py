@@ -25,7 +25,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from common import  default_air_loc, AssetParams, Location, Requests, Environment
+from common import AssetParams, Location, Requests, Environment
 
 from fmdtools.define.container.state import State
 from fmdtools.define.container.mode import Mode
@@ -33,7 +33,6 @@ from fmdtools.define.container.time import Time
 from fmdtools.define.block.function import Function
 
 from shapely.geometry import Point, Polygon
-from shapely.ops import nearest_points
 import numpy as np
 
 
@@ -265,7 +264,7 @@ class Asset(Function):
                     colassets[i] = local_pos.distance(assetpos)
         if len(colassets) > 0:
             asset = min(colassets, key=colassets.get)
-            assetloc = getattr(self.location.glob,  asset)
+            assetloc = getattr(self.location.glob, asset)
             distance = colassets[asset]
         if in_vision and assetloc:
             self.closest_location.s.assign(assetloc.s)

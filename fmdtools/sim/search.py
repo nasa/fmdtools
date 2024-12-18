@@ -14,6 +14,7 @@ Classes:
 - :class:`DisturbanceProblem`: Enables optimizing disturbances that occur at a set time
 - :class:`SingleFaultScenarioProblem`: Enables optimizing the time of a given fault
   scenario
+- :class:`ResponseCoords`: Enables visualiation of 2-d search space.
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -30,6 +31,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import t_key
+from fmdtools.define.object.coords import BaseCoords
 from fmdtools.define.block.function import ExampleFunction
 from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
 from fmdtools.sim.sample import FaultDomain
@@ -40,6 +42,7 @@ from fmdtools.analyze.history import History, init_dicthist
 import numpy as np
 import networkx as nx
 import time
+import inspect
 from collections.abc import Iterable
 from recordclass import dataobject
 
@@ -157,6 +160,7 @@ class Constraint(Objective):
 
 
 def unpack_x(*x):
+    """Unpack arrays/lists sent from solvers into tuples."""
     if len(x) == 1 and isinstance(x[0], Iterable):
         x = tuple(x[0])
     elif len(x) == 2 and isinstance(x[0], Iterable) and isinstance(x[1], Iterable):
@@ -167,8 +171,6 @@ def unpack_x(*x):
 class BaseProblem(object):
     """
     Base optimization problem.
-
-    ...
 
     Attributes
     ----------
@@ -186,6 +188,7 @@ class BaseProblem(object):
         self.objectives = {}
         self.constraints = {}
         self.iter_hist = History({"time": [],
+                                  "iter": [],
                                   "variables": History({k: [] for k in self.variables}),
                                   "objectives": History(),
                                   "constraints": History()})
@@ -293,9 +296,14 @@ class BaseProblem(object):
         return self.constraints[constraint].value
 
     def log_time(self):
+        """Log the time/iteration of the optimization."""
         if not hasattr(self, 't_start'):
             self.t_start = time.time()
+            self.iter = 0
+        else:
+            self.iter += 1
         self.iter_hist.time.append(time.time()-self.t_start)
+        self.iter_hist.iter.append(self.iter)
 
     def log_hist(self):
         """Log the history for objectives, constraints, time, etc."""
@@ -304,7 +312,73 @@ class BaseProblem(object):
         self.iter_hist.constraints.log(self.constraints, 1)
         self.iter_hist.variables.log(self.variables, 1)
 
+    def get_opt_hist(self, *objectives, time='time'):
+        """
+        Get the history of minimum/maximum objective values over time to plot.
+
+        Parameters
+        ----------
+        *objectives : str
+            Objectives to get (if none provided, returns all).
+        time : str, optional
+            Value to use for time indices (time or iter). The default is 'time'.
+
+        Returns
+        -------
+        opt_hist : History
+            History of minimum/maximum objective values over time.
+
+        Examples
+        --------
+        >>> exp = SimpleProblem()
+        >>> exp.add_objective("a", "a", negative=True)
+        >>> exp.add_objective("b", "b")
+        >>> exp.iter_hist = History({'time': [0,1,2], 'objectives.a': [10, 11, 12], 'objectives.b': [8, 10, 7]})
+        >>> h = exp.get_opt_hist()
+        >>> h.a
+        [10, 11, 12]
+        >>> h.b
+        [8, 8, 7]
+        """
+        if objectives:
+            hist = self.iter_hist.objectives.get_values(*objectives)
+        else:
+            hist = self.iter_hist.objectives.copy()
+        for val, arr in hist.items():
+            if getattr(self.objectives[val], 'negative', False):
+                hist[val] = [np.nanmax(arr[:i]) for i in range(1, len(arr)+1)]
+            else:
+                hist[val] = [np.nanmin(arr[:i]) for i in range(1, len(arr)+1)]
+        hist[time] = self.iter_hist.get(time)
+        return hist
+
+    def plot_opt_hist(self, *objectives, time='time', **kwargs):
+        """
+        Plot the optimal value(s) of the search over time.
+
+        Parameters
+        ----------
+        *objectives : str
+            Objectives to get (if none provided, returns all).
+        time : str, optional
+            Value to use for time indices (time or iter). The default is 'time'.
+        **kwargs : kwargs
+            Keyword arguments to History.plot_line
+
+        Returns
+        -------
+        fig, ax: matplotlib figure/axes
+            Figures/axes returned from Hist.plot_line.
+        """
+        hist = self.get_opt_hist(*objectives, time=time)
+        if not objectives:
+            objectives = [k for k in hist.keys() if k not in ('time', 'iter')]
+        if 'xlabel' not in kwargs:
+            kwargs['xlabel'] = time
+        return hist.plot_line(*objectives, **kwargs)
+
     def get_default_x(self, *x):
+        """Get x for the current iteration (previous x if x not provided)."""
         if not x:
             return tuple([*self.variables.values()])
         else:
@@ -409,8 +483,6 @@ class ResultObjective(Objective):
     """
     Base class of objectives which derive from Results.
 
-    ...
-
     Fields
     ------
     time : float
@@ -466,8 +538,6 @@ class ResultObjective(Objective):
 class ResultConstraint(ResultObjective):
     """
     Base class for constraints which derive from results.
-
-    ...
 
     Fields
     ------
@@ -539,15 +609,15 @@ class BaseSimProblem(BaseProblem):
     """
     Base optimization problem for optimizing over simulations.
 
-    ...
-
     Attributes
     ----------
     prop_method : callable
         Method in propagate to call.
+    keep_ec : bool, optional
+        Whether to get/keep the endresult. Default is False.
     """
 
-    def __init__(self, mdl, prop_method, *args, **kwargs):
+    def __init__(self, mdl, prop_method, *args, keep_ec=False, **kwargs):
         self.mdl = mdl
         if type(prop_method) is str:
             self.prop_method = getattr(propagate, prop_method)
@@ -556,6 +626,7 @@ class BaseSimProblem(BaseProblem):
         else:
             raise Exception("Invalid prop_method "+str(prop_method))
 
+        self.keep_ec = keep_ec
         self.args = args
         self.kwargs = kwargs
         super().__init__()
@@ -631,7 +702,10 @@ class BaseSimProblem(BaseProblem):
         des_res : dict
             desired_result argument to prop_method.
         """
-        des_res = {}
+        if self.keep_ec:
+            des_res = {'end': ['endclass']}
+        else:
+            des_res = {}
         for n in {**self.objectives, **self.constraints}.values():
             if n.time:
                 t = n.time
@@ -646,7 +720,7 @@ class BaseSimProblem(BaseProblem):
     def update_objectives(self, *x):
         """Update objectives/constraints by simulating the model at x."""
         self.update_variables(*x)
-        self.res, self.hist = self.sim_mdl(*x)
+        self.res, self.hist = self.sim_mdl(*self.current_x())
         for obj in {**self.objectives, **self.constraints}.values():
             if isinstance(obj, HistoryObjective) or isinstance(obj, HistoryConstraint):
                 obj.update(self.hist)
@@ -848,7 +922,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
     phasemap : PhaseMap
         PhaseMap for fault sampling
     t_start : float
-        Minimum start time for the simulation and lower bound on scenario time..
+        Minimum start time for the simulation and lower bound on scenario time.
         Default is 0.0.
 
     Examples
@@ -870,7 +944,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         faulttup = [*self.faultdomain.faults.keys()][0]
         return "SingleScenarioProblem("+faulttup[0]+", "+faulttup[1]+")"
 
-    def __init__(self, mdl, faulttup, phasemap=None, t_start=0.0, **kwargs):
+    def __init__(self, mdl, faulttup, phasemap=None, sim_start=0.0, **kwargs):
         """
         Initialize the SingleFaultScenarioProblem with a given fault to optimize.
 
@@ -882,7 +956,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
             (fxn, fault) defining the fault.
         phasemap : PhaseMap, optional
             PhaseMap for fault sampling. The default is None.
-        t_start : float, optional
+        sim_start : float, optional
             Minimum start time for the simulation and lower bound on scenario time..
             Default is 0.0.
         **kwargs : kwargs
@@ -892,13 +966,13 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         faultdomain.add_fault(*faulttup)
         self.faultdomain = faultdomain
         self.phasemap = phasemap
-        self.t_start = t_start
+        self.sim_start = sim_start
         self.variables = {"time": np.nan}
         super().__init__(mdl, **kwargs)
 
     def get_start_time(self):
         """Get the scenario start time to copy the model at."""
-        return self.t_start
+        return self.sim_start
 
     def gen_scenario(self, x):
         """
@@ -914,7 +988,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         scen : SingleFaultScenario
             SingleFaultScenario to simulate.
         """
-        starttime=self.get_start_time()
+        starttime = self.get_start_time()
         end_time = self.get_end_time()
         if not starttime <= x <= end_time:
             raise Exception("time out of range: "+str((starttime, end_time)))
@@ -1733,7 +1807,7 @@ class DynamicInterface():
             self.t_max = mdl.sp.end_time
         else:
             self.t_max = t_max
-        if type(desired_result) == str:
+        if isinstance(desired_result, str):
             self.desired_result = [desired_result]
         else:
             self.desired_result = desired_result
@@ -1805,6 +1879,52 @@ class DynamicInterface():
             self.hist.cut(self.t_ind)
             self.mdl.h.cut(self.t_ind)
         return end
+
+
+class ResponseCoords(BaseCoords):
+    """
+    Class for sampling functions and displaying them on maps.
+
+    Examples
+    --------
+    >>> rm = ResponseCoords(lambda a, b: a*b, p={'x_size': 3, 'y_size': 3, 'blocksize': 2})
+    >>> rm.fval
+    array([[ 0.,  0.,  0.],
+           [ 0.,  4.,  8.],
+           [ 0.,  8., 16.]])
+    >>> rm2 = ResponseCoords(lambda a, b: (a*b, a+b), returns={'fval': (float, 0.0), 'fval2': (float, 0.0)}, p={'x_size': 3, 'y_size': 3, 'blocksize': 2})
+    >>> rm2.fval2
+    array([[0., 2., 4.],
+           [2., 4., 6.],
+           [4., 6., 8.]])
+    """
+
+    def __init__(self, function, *args, returns={'fval': (float, 0.0)}, **kwargs):
+        func_params = inspect.signature(function).parameters
+        if len(func_params) > 2:
+            raise Exception("Too many function parameters: "+str(func_params))
+        super().__init__(*args, **kwargs)
+        self.add_property_arrays(returns)
+        self.init_properties(function, returns=[*returns], **kwargs)
+
+    def init_properties(self, function, returns=['fval'], **kwargs):
+        """
+        Initialize ResponseCoords to given function.
+
+        Parameters
+        ----------
+        function : callable
+            Function to sample from over map/grid.
+        returns : list
+            Name(s) of returns from function in order.
+        """
+        for pt in self.pts:
+            f_ret = function(*pt)
+            if len(returns) == 1:
+                self.set(*pt, returns[0], f_ret)
+            else:
+                for i, ret in enumerate(returns):
+                    self.set(*pt, ret, f_ret[i])
 
 
 if __name__ == "__main__":

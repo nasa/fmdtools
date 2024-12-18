@@ -6,7 +6,7 @@ Why fmdtools?
 
 Use fmdtools to improve your understanding of the dynamics of hazardous behavior. The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. Resilience is the ability of a system to mitigate hazardous scenarios as they arise. As shown below, the key defining aspect of resilience is the **dynamics of failure events**, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome).
 
-.. figure:: figures/powerpoint/resilience_importance.png
+.. figure:: figures/powerpoint/resilience_importance.svg
    :width: 800
    :alt: importance of considering resilience 
    

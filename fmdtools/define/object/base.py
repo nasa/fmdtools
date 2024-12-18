@@ -875,12 +875,11 @@ class BaseObject(object):
 
 def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     """Check to see which attributes of an object will pickle (and parallelize)."""
-    from pickle import PicklingError
     from fmdtools.define.container.base import check_container_pick, BaseContainer
     unpickleable = []
     try:
         itera = vars(obj)
-    except:
+    except TypeError:
         itera = {a: getattr(obj, a) for a in obj.__slots__}
     for name, attribute in itera.items():
         print(name)
@@ -900,23 +899,25 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
             raise ValueError("Problem in " + name +
                              " with attribute " + str(attribute)) from e
         if try_pick:
-            try:
-                a = pickle.dumps(attribute)
-                b = pickle.loads(a)
-            except:
-                raise Exception(obj.name + " will not pickle")
+            try_pickle_obj(attribute)
     if try_pick:
-        try:
-            a = pickle.dumps(obj)
-            b = pickle.loads(a)
-        except PicklingError as e:
-            raise Exception(obj.name + " will not pickle") from e
+        try_pickle_obj(obj)
     if verbose:
         if unpickleable:
             print("The following attributes will not pickle: " + str(unpickleable))
         else:
             print("The object is pickleable")
     return unpickleable
+
+
+def try_pickle_obj(obj):
+    """Try to pickle an object. Raise exception if it doesn't work."""
+    from pickle import PicklingError
+    try:
+        a = pickle.dumps(obj)
+        b = pickle.loads(a)
+    except PicklingError:
+        raise Exception(obj.name + " will not pickle")
 
 
 def init_obj(name, objclass=BaseObject, track='default', as_copy=False, **kwargs):

@@ -30,33 +30,42 @@ def close_pool(pool):
     pool.close()
     pool.terminate()
 
-def delay_test(delays =  [i for i in range(0,100,10)]):
-    """ Delay parameter use-case described in notebook--here we are using pool.map to manually
-    simulate the model several times over parameters we want to run."""
+
+def delay_test(delays=[i for i in range(0, 100, 10)]):
+    """
+    Delay parameter use-case described in notebook.
+
+    Uses pool.map to manually simulate the model several times over parameters we want
+    to run.
+    """
     pool = mp.Pool(4)
     resultslist = pool.map(one_delay_helper, delays)
     close_pool(pool)
     return resultslist
 
+
 def one_delay_helper(delay):
-    """This helper function is used by pool.map to generate output over the given 
-    input delays"""
+    """Generate output over the given input delays."""
     mdl = Pump(p=PumpParam(delay=delay))
     endclasses, mdlhists = propagate.one_fault(mdl, 'export_water', 'block')
     return endclasses
 
-def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, track_times='all'):
+
+def compare_pools(mdl, app, pools, staged=False, track=False, verbose=True,
+                  track_times='all'):
     """
-    Method to compare the performance of different process pools on a given model/fault sampling approach
+    Compare the performance for given a model and sampling approach.
 
     Parameters
     ----------
     mdl : Model
         fmdtools model
     app : FaultSample
-        SampleApproach of fault scenarios to simulate the model over using propagate.fault_sample
+        SampleApproach of fault scenarios to simulate the model over using
+        propagate.fault_sample
     pools : dict
-        Dictionary of parallel/process pools {'poolname':pool} to compare. Pools must have a map function.
+        Dictionary of parallel/process pools {'poolname':pool} to compare. Pools must
+        have a map function.
     staged : bool, optional
         Whether to use staged execution on the model. The default is False.
     track : str/bool, optional
@@ -67,7 +76,8 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, tra
         Defines what times to include in the history. Options are:
             'all'--all simulated times
             ('interval', n)--includes every nth time in the history
-            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
+            ('times', [t1, ... tn])--only includes times defined in the vector
+            [t1 ... tn]
 
     Returns
     -------
@@ -114,31 +124,36 @@ def parallel_mc(iters=10):
     close_pool(pool)
     return res
 
+
 def parallel_mc2(iters=10):
-    """run for performance evaluation of model with map function"""
+    """Run to evaluate performance of model with map function."""
     pool = mp.Pool(4)
     models = [Pump() for i in range(iters)]
     result_list = pool.map(propagate.nominal, models)
     close_pool(pool)
     return result_list
 
+
 def one_fault_helper(args):
-    """Helper function for parallel_mc3 to run in pool.map"""
+    """Helper function for parallel_mc3 to run in pool.map."""
     mdl = Pump()
     endclasses, mdlhists = propagate.one_fault(mdl, args[0], args[1])
     return endclasses, mdlhists
 
+
 def parallel_mc3():
-    """run for performance evaluation of model single fault simulation"""
+    """Run for performance evaluation of model single fault simulation."""
     pool = mp.Pool(4)
     mdl = Pump()
-    inputlist = [(fxn,fm) for fxn in mdl.fxns for fm in mdl.fxns[fxn].faultmodes.keys()]
+    inputlist = [(fxn, fm) for fxn in mdl.fxns
+                 for fm in mdl.fxns[fxn].faultmodes.keys()]
     resultslist = pool.map(one_fault_helper, inputlist)
     close_pool(pool)
     return resultslist
 
+
 def instantiate_pools(cores, with_pathos=False):
-    """Used to instantiate multiprocessing pools for comparison"""
+    """Instantiate multiprocessing pools for comparison."""
     if with_pathos:
         from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
         return {'multiprocessing': mp.Pool(cores),
@@ -150,14 +165,18 @@ def instantiate_pools(cores, with_pathos=False):
         return {'multiprocessing': mp.Pool(cores),
                 'multiprocess': ms.Pool(cores)}
 
+
 def terminate_pools(pools):
     """End pools after comparing them."""
     for pool in pools.values():
         pool.terminate()
 
 
-if __name__=='__main__':
-    mdl=Pump(sp = dict(phases=(('start',0,4),('on',5, 49),('end',50,500)), end_time=500))
+if __name__ == '__main__':
+    mdl = Pump(sp=dict(phases=(('start', 0, 4),
+                               ('on', 5, 49),
+                               ('end', 50, 500)),
+                       end_time=500))
     from fmdtools.sim.sample import FaultDomain, FaultSample
     fd = FaultDomain(mdl)
     fd.add_all()

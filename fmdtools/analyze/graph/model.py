@@ -115,13 +115,22 @@ def create_inheritance_subgraph(obj, g=None, name='', end_at_fmdtools=True):
         Networkx graph to add to. The default is None.
     end_at_fmdtools : bool
         Option to end at first fmdtools node while building the subgraph
-        Default is False, which stops the subgraph at the first fmdtools class, rather
+        Default is True, which stops the subgraph at the first fmdtools class, rather
         than includeing the fmdtools class inheritance.
 
     Returns
     -------
     g : graph
         Networkx graph of inheritance from classes.
+
+    Example
+    -------
+    >>> from fmdtools.define.block.function import ExampleFunction
+    >>> g = create_inheritance_subgraph(ExampleFunction(), end_at_fmdtools=False)
+    >>> [*g.nodes]
+    ['examplefunction', 'fmdtools.define.block.function.ExampleFunction', 'fmdtools.define.block.function.Function', 'fmdtools.define.block.base.Block', 'fmdtools.define.block.base.Simulable', 'fmdtools.define.object.base.BaseObject']
+    >>> [*g.edges]
+    [('examplefunction', 'fmdtools.define.block.function.ExampleFunction'), ('fmdtools.define.block.function.ExampleFunction', 'fmdtools.define.block.function.Function'), ('fmdtools.define.block.function.Function', 'fmdtools.define.block.base.Block'), ('fmdtools.define.block.base.Block', 'fmdtools.define.block.base.Simulable'), ('fmdtools.define.block.base.Simulable', 'fmdtools.define.object.base.BaseObject')]
     """
     if not name:
         name = get_obj_name(obj)
@@ -203,12 +212,20 @@ class ModelGraph(Graph):
         whether to get states for the graph
     **kwargs:
         keyword arguments for self.nx_from_obj
+
+    Examples
+    --------
+    >>> from fmdtools.define.block.function import ExampleFunction
+    >>> mg = ModelGraph(ExampleFunction())
+    >>> mg.get_nodes()
+    ['examplefunction', 'examplefunction.m', 'examplefunction.p', 'examplefunction.s', 'examplefunction.sp', 'examplefunction.t', 'examplefunction.exampleflow', 'examplefunction.dynamic_behavior']
     """
 
     def __init__(self, mdl, check_info=True, **kwargs):
         Graph.__init__(self, mdl.create_graph(**kwargs), check_info=check_info)
 
     def get_nodes(self, rem_ind=0):
+        """Get nodes (with shortened names if needed)."""
         return [shorten_name(n, rem_ind) for n in self.g.nodes]
 
     def set_from(self, time, history=History(), rem_ind=0):
@@ -216,7 +233,7 @@ class ModelGraph(Graph):
         faulty = history.get_faulty_hist(*self.get_nodes(rem_ind),
                                          withtotal=False,
                                          withtime=False).get_slice(time)
-        fault_nodes = {n: bool(faulty.get(shorten_name(n, rem_ind), 0))
+        fault_nodes = {n: bool(faulty.get(shorten_name(n, rem_ind), default=False))
                        for n in self.g.nodes}
         nx.set_node_attributes(self.g, fault_nodes, 'faulty')
 
@@ -230,7 +247,7 @@ class ModelGraph(Graph):
         degraded = history.get_degraded_hist(*self.get_nodes(rem_ind),
                                              withtotal=False,
                                              withtime=False).get_slice(time)
-        deg_nodes = {n: bool(degraded.get(shorten_name(n, rem_ind), 0))
+        deg_nodes = {n: bool(degraded.get(shorten_name(n, rem_ind), default=False))
                      for n in self.g.nodes}
         nx.set_node_attributes(self.g, deg_nodes, 'degraded')
 
