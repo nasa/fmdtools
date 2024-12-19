@@ -94,7 +94,7 @@ class DroneParameterTests(unittest.TestCase):
 mdl = Drone()
 
 sp = SingleFaultScenarioProblem(mdl, ("affect_dof", "rf_propwarp"),
-                                t_start=2.0, track=None)
+                                sim_start=2.0, track=None)
 sp.add_result_objective("f1", "plan_path.t.time", time=15)
 sp.add_result_objective("f2", "dofs.s.x", time=15)
 
