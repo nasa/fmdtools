@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools/sim/propagate.py: 45%</title>
+    <title>Coverage for fmdtools/sim/propagate.py: 46%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools/sim/propagate.py</b>:
-            <span class="pc_cov">45%</span>
+            <span class="pc_cov">46%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">386 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">173<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">213<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">178<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">208<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">7<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8475a062c7251150_sample_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.9">coverage.py v7.6.9</a>,
-            created at 2024-12-18 16:46 +0000
+            created at 2024-12-18 19:49 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -1221,7 +1221,7 @@
     <p class="pln"><span class="n"><a id="t1139" href="#t1139">1139</a></span><span class="t">                                   <span class="nam">time</span><span class="op">=</span><span class="nam">t</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1140" href="#t1140">1140</a></span><span class="t">    <span class="key">elif</span> <span class="op">(</span><span class="nam">type</span><span class="op">(</span><span class="nam">desired_result</span><span class="op">)</span> <span class="key">is</span> <span class="key">not</span> <span class="nam">dict</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1141" href="#t1141">1141</a></span><span class="t">          <span class="key">or</span> <span class="nam">all</span><span class="op">(</span><span class="op">[</span><span class="nam">type</span><span class="op">(</span><span class="nam">k</span><span class="op">)</span> <span class="key">is</span> <span class="nam">str</span> <span class="key">for</span> <span class="nam">k</span> <span class="key">in</span> <span class="nam">desired_result</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1142" href="#t1142">1142</a></span><span class="t">        <span class="nam">result</span><span class="op">.</span><span class="nam">update</span><span class="op">(</span><span class="nam">get_result</span><span class="op">(</span><span class="nam">scen</span><span class="op">,</span> <span class="nam">mdl</span><span class="op">,</span> <span class="nam">desired_result</span><span class="op">,</span> <span class="nam">nomhist</span><span class="op">,</span> <span class="nam">nomresult</span><span class="op">,</span> <span class="nam">time</span><span class="op">=</span><span class="nam">t</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1142" href="#t1142">1142</a></span><span class="t">        <span class="nam">result</span><span class="op">.</span><span class="nam">update</span><span class="op">(</span><span class="nam">get_result</span><span class="op">(</span><span class="nam">scen</span><span class="op">,</span> <span class="nam">mdl</span><span class="op">,</span> <span class="nam">desired_result</span><span class="op">,</span> <span class="nam">nomhist</span><span class="op">,</span> <span class="nam">nomresult</span><span class="op">,</span> <span class="nam">time</span><span class="op">=</span><span class="nam">t</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1143" href="#t1143">1143</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1144" href="#t1144">1144</a></span><span class="t">    <span class="key">if</span> <span class="key">None</span> <span class="key">in</span> <span class="nam">c_mdl</span><span class="op">.</span><span class="nam">values</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t1145" href="#t1145">1145</a></span><span class="t">        <span class="key">raise</span> <span class="nam">Exception</span><span class="op">(</span><span class="str">"Sample times"</span> <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">ctimes</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -1234,7 +1234,7 @@
     <p class="run"><span class="n"><a id="t1152" href="#t1152">1152</a></span><span class="t">    <span class="nam">mdlhist</span> <span class="op">=</span> <span class="nam">mdl</span><span class="op">.</span><span class="nam">h</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1153" href="#t1153">1153</a></span><span class="t">    <span class="nam">desired_result</span> <span class="op">=</span> <span class="nam">copy</span><span class="op">.</span><span class="nam">deepcopy</span><span class="op">(</span><span class="nam">desired_result</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1154" href="#t1154">1154</a></span><span class="t">    <span class="key">if</span> <span class="nam">type</span><span class="op">(</span><span class="nam">desired_result</span><span class="op">)</span> <span class="key">is</span> <span class="nam">str</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1155" href="#t1155">1155</a></span><span class="t">        <span class="nam">desired_result</span> <span class="op">=</span> <span class="op">{</span><span class="nam">desired_result</span><span class="op">:</span> <span class="key">None</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1155" href="#t1155">1155</a></span><span class="t">        <span class="nam">desired_result</span> <span class="op">=</span> <span class="op">{</span><span class="nam">desired_result</span><span class="op">:</span> <span class="key">None</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1156" href="#t1156">1156</a></span><span class="t">    <span class="key">elif</span> <span class="nam">type</span><span class="op">(</span><span class="nam">desired_result</span><span class="op">)</span> <span class="key">in</span> <span class="op">[</span><span class="nam">list</span><span class="op">,</span> <span class="nam">set</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1157" href="#t1157">1157</a></span><span class="t">        <span class="nam">des_res</span> <span class="op">=</span> <span class="nam">desired_result</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1158" href="#t1158">1158</a></span><span class="t">        <span class="nam">desired_result</span> <span class="op">=</span> <span class="op">{</span><span class="nam">str</span><span class="op">(</span><span class="nam">k</span><span class="op">)</span><span class="op">:</span> <span class="nam">k</span> <span class="key">for</span> <span class="nam">k</span> <span class="key">in</span> <span class="nam">des_res</span> <span class="key">if</span> <span class="nam">type</span><span class="op">(</span><span class="nam">k</span><span class="op">)</span> <span class="key">is</span> <span class="key">not</span> <span class="nam">str</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
@@ -1257,13 +1257,13 @@
     <p class="pln"><span class="n"><a id="t1175" href="#t1175">1175</a></span><span class="t">                                         <span class="key">if</span> <span class="nam">k</span> <span class="key">in</span> <span class="nam">ec_des_res</span><span class="op">}</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1176" href="#t1176">1176</a></span><span class="t">            <span class="key">for</span> <span class="nam">k</span> <span class="key">in</span> <span class="nam">ec_des_res</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1177" href="#t1177">1177</a></span><span class="t">                <span class="nam">desired_result</span><span class="op">.</span><span class="nam">pop</span><span class="op">(</span><span class="str">'endclass.'</span><span class="op">+</span><span class="nam">k</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1178" href="#t1178">1178</a></span><span class="t">        <span class="key">elif</span> <span class="nam">type</span><span class="op">(</span><span class="nam">desired_result</span><span class="op">[</span><span class="str">'endclass'</span><span class="op">]</span><span class="op">)</span> <span class="key">is</span> <span class="nam">dict</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1178" href="#t1178">1178</a></span><span class="t">        <span class="key">elif</span> <span class="nam">type</span><span class="op">(</span><span class="nam">desired_result</span><span class="op">[</span><span class="str">'endclass'</span><span class="op">]</span><span class="op">)</span> <span class="key">is</span> <span class="nam">dict</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t1179" href="#t1179">1179</a></span><span class="t">            <span class="nam">result</span><span class="op">[</span><span class="str">'endclass'</span><span class="op">]</span> <span class="op">=</span> <span class="nam">Result</span><span class="op">(</span><span class="op">{</span><span class="nam">k</span><span class="op">:</span> <span class="nam">v</span> <span class="key">for</span> <span class="nam">k</span><span class="op">,</span> <span class="nam">v</span> <span class="key">in</span> <span class="nam">endclass</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1180" href="#t1180">1180</a></span><span class="t">                                         <span class="key">if</span> <span class="nam">k</span> <span class="key">in</span> <span class="nam">desired_result</span><span class="op">[</span><span class="str">'endclass'</span><span class="op">]</span><span class="op">}</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t1181" href="#t1181">1181</a></span><span class="t">            <span class="nam">desired_result</span><span class="op">.</span><span class="nam">pop</span><span class="op">(</span><span class="str">'endclass'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1182" href="#t1182">1182</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1183" href="#t1183">1183</a></span><span class="t">            <span class="nam">result</span><span class="op">[</span><span class="str">'endclass'</span><span class="op">]</span> <span class="op">=</span> <span class="nam">endclass</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1184" href="#t1184">1184</a></span><span class="t">            <span class="nam">desired_result</span><span class="op">.</span><span class="nam">pop</span><span class="op">(</span><span class="str">'endclass'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1183" href="#t1183">1183</a></span><span class="t">            <span class="nam">result</span><span class="op">[</span><span class="str">'endclass'</span><span class="op">]</span> <span class="op">=</span> <span class="nam">endclass</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1184" href="#t1184">1184</a></span><span class="t">            <span class="nam">desired_result</span><span class="op">.</span><span class="nam">pop</span><span class="op">(</span><span class="str">'endclass'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1185" href="#t1185">1185</a></span><span class="t">    <span class="key">if</span> <span class="str">'endfaults'</span> <span class="key">in</span> <span class="nam">desired_result</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t1186" href="#t1186">1186</a></span><span class="t">        <span class="nam">result</span><span class="op">[</span><span class="str">'endfaults'</span><span class="op">]</span><span class="op">,</span> <span class="nam">result</span><span class="op">[</span><span class="str">'faultprops'</span><span class="op">]</span> <span class="op">=</span> <span class="nam">mdl</span><span class="op">.</span><span class="nam">return_faultmodes</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t1187" href="#t1187">1187</a></span><span class="t">        <span class="nam">desired_result</span><span class="op">.</span><span class="nam">pop</span><span class="op">(</span><span class="str">'endfaults'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -1335,7 +1335,7 @@
             <a class="nav" href="z_8475a062c7251150_sample_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.9">coverage.py v7.6.9</a>,
-            created at 2024-12-18 16:46 +0000
+            created at 2024-12-18 19:49 +0000
         </p>
     </div>
 </footer>
