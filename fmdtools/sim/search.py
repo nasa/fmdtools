@@ -913,8 +913,6 @@ class SingleFaultScenarioProblem(ScenarioProblem):
     """
     Class for optimizing the time of a given fault scenario.
 
-    ...
-
     Attributes
     ----------
     faultdomain : FaultDomain
