@@ -27,11 +27,11 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-
+from fmdtools.define.base import is_numeric
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.common import multiplot_helper, consolidate_legend
 from fmdtools.analyze.common import set_empty_multiplots
-from fmdtools.analyze.common import multiplot_legend_title, is_numeric, setup_plot
+from fmdtools.analyze.common import multiplot_legend_title, setup_plot
 
 import pandas as pd
 import numpy as np

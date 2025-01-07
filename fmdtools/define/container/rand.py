@@ -3,19 +3,20 @@
 """
 Defines :class:`Rand` class and other methods defining random properties used in blocks.
 
-Has Classes and Functions:
+Has public Classes and Functions:
 
 - :class:`Rand`: Superclass for Block random properties.
-
-- :func:`get_pdf_for_rand`: Gets the corresponding probability mass/density for random
-  sample x from 'randname' function in numpy.
-
-- :func:`get_scipy_pdf_helper`: Gets probability mass/density for the outcome x from the
-  distribution "randname". Used as a helper function in determining stochastic model
-  state probability
-
-- :func:`get_pdf_for_dist`: Gets the corresponding probability mass/density (from scipy)
+- :func:`get_pfunc_for_dist`: Gets the corresponding probability mass/density
   for outcome x for probability distributions with name 'randname' in numpy.
+- :func:`get_prob_for_rand`: Gets the corresponding probability mass/density for random
+  sample x from 'randname' function in numpy.
+- :func:`calc_prob_for_integers`: Calculate probability for random.integers.
+- :func:`calc_prob_density_for_random`: Calc probability density for random.random.
+- :func:`calc_prob_for_choice`: Calculate probability for random.choice.
+- :func:`calc_prob_for_shuffle_permutation`: Calculate probability for random.shuffle
+  and random.permutation.
+- :func:`calc_prob_for_permuted`: Calculate probability for random.permuted.
+- :func:`array
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -33,8 +34,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.base import BaseContainer
 from fmdtools.define.container.state import State
-from fmdtools.define.base import is_iter, round_float
-from fmdtools.analyze.common import is_numeric
+from fmdtools.define.base import is_iter, round_float, array_x
 
 from scipy import stats, special
 from recordclass import astuple
@@ -67,10 +67,12 @@ class Rand(BaseContainer):
     Which enables the use of set_rand_state, update_stochastic_states, etc for updating
     these states with methods called from the rng when run_stochastic=True.
 
-    >>> exr = ExampleRand(run_stochastic=True)
+    >>> exr = ExampleRand(run_stochastic='track_pdf')
     >>> exr.set_rand_state('noise', 'normal', 1.0, 1.0)
     >>> exr.s
     RandState(noise=1.3047170797544314)
+    >>> exr.probs
+    [0.3808442490605113]
 
     Checking copy:
 
@@ -78,9 +80,18 @@ class Rand(BaseContainer):
     >>> exr2.s
     RandState(noise=1.3047170797544314)
     >>> exr2.run_stochastic
-    True
+    'track_pdf'
     >>> exr2.rng.__getstate__()['state'] == exr.rng.__getstate__()['state']
     True
+
+    More state setting:
+    >>> exr.set_rand_state('noise', 'normal', 1.0, 1.0)
+    >>> exr.probs
+    [0.3808442490605113, 0.23230084450139615]
+    >>> exr.return_probdens()
+    0.08847044068025682
+    >>> exr2.probs
+    [0.3808442490605113]
     """
 
     rolename = "r"
@@ -91,12 +102,11 @@ class Rand(BaseContainer):
     run_stochastic: bool = False
     default_track = ('s', 'probdens')
 
-    def __init__(self, *args, seed=42, run_stochastic=False, probs=list(), s_kwargs={}):
+    def __init__(self, *args, seed=42, s_kwargs={}, **kwargs):
         args = self.get_true_fields(*args,
                                     seed=seed,
-                                    run_stochastic=run_stochastic,
-                                    probs=probs,
-                                    rng=np.random.default_rng(seed))
+                                    rng=np.random.default_rng(seed),
+                                    **kwargs)
         super().__init__(*args)
         if 's' in self.__fields__:
             self.s = self.s.__class__()
@@ -161,21 +171,23 @@ class Rand(BaseContainer):
                 newvalue = newvalue[0]
             setattr(self.s, statename, newvalue)
             if self.run_stochastic == 'track_pdf':
-                value_pds = get_pdf_for_rand(newvalue, methodname, *args)
+                value_pds = get_prob_for_rand(newvalue, methodname, *args)
                 self.probs.append(value_pds)
 
     def return_mutables(self):
+        """Get mutable rand states."""
+        rs = tuple([*self.rng.__getstate__()['state'].values()])
         if 's' in self.__fields__:
-            return astuple(self.s)
+            return rs + astuple(self.s)
         else:
-            return ()
+            return rs
 
     def return_probdens(self):
+        """Return probability density/mass corresponding to random sim."""
         if self.probs:
-            state_pd = np.prod(self.probs)
+            return as_prob(self.probs)
         else:
-            state_pd = 1.0
-        return state_pd
+            return 1.0
 
     def update_stochastic_states(self):
         """Update the defined stochastic states defined to auto-update."""
@@ -221,17 +233,17 @@ class Rand(BaseContainer):
             BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
 
 
-def get_prob_for_integers(x, *args):
+def calc_prob_for_integers(x, *args):
     """
     Get probability for np.default_rng.integers.
 
     Examples
     --------
-    >>> get_prob_for_integers([0], 2)
+    >>> calc_prob_for_integers([0], 2)
     0.5
-    >>> get_prob_for_integers([0, 1], 0, 2)
+    >>> calc_prob_for_integers([0, 1], 0, 2)
     0.25
-    >>> get_prob_for_integers([0, 1, 2], 0, 2)
+    >>> calc_prob_for_integers([0, 1, 2], 0, 2)
     0.0
     """
     if len(args) == 1:
@@ -246,17 +258,17 @@ def get_prob_for_integers(x, *args):
         return 0.0
 
 
-def get_prob_density_for_random(x):
+def calc_prob_density_for_random(x):
     """
     Get probability density for np.default_rng.random.
 
     Examples
     --------
-    >>> get_prob_density_for_random([0.5])
+    >>> calc_prob_density_for_random([0.5])
     1.0
-    >>> get_prob_density_for_random([0.5, 0.1, 0.9, 0.5])
+    >>> calc_prob_density_for_random([0.5, 0.1, 0.9, 0.5])
     0.25
-    >>> get_prob_density_for_random([0.5, 0.1, 0.9, 0.5, 1.1])
+    >>> calc_prob_density_for_random([0.5, 0.1, 0.9, 0.5, 1.1])
     0.0
     """
     if 0 <= np.min(x) and np.max(x) < 1.0:
@@ -265,17 +277,17 @@ def get_prob_density_for_random(x):
         return 0.0
 
 
-def get_prob_for_choice(x, options=[], size=1, replace=True, p=None):
+def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
     """
     Get probability corresponding to a call to np.choice.
 
     Examples
     --------
-    >>> get_prob_for_choice([1], [1,2])
+    >>> calc_prob_for_choice([1], [1,2])
     0.5
-    >>> get_prob_for_choice([1,2], [1,2], replace=False)
+    >>> calc_prob_for_choice([1,2], [1,2], replace=False)
     0.5
-    >>> get_prob_for_choice([1,2], [1,2,3], p=[0.1, 0.1, 0.9])
+    >>> calc_prob_for_choice([1,2], [1,2,3], p=[0.1, 0.1, 0.9])
     0.01
     """
     if isinstance(options, int):
@@ -297,15 +309,15 @@ def get_prob_for_choice(x, options=[], size=1, replace=True, p=None):
         return round_float(1/perms, res=1e-6)
 
 
-def get_prob_for_shuffle_permutation(options):
+def calc_prob_for_shuffle_permutation(options):
     """
     Get probability corresponding to rng.shuffle and rng.permutation.
 
     Examples
     --------
-    >>> get_prob_for_shuffle_permutation([1,2])
+    >>> calc_prob_for_shuffle_permutation([1,2])
     0.5
-    >>> get_prob_for_shuffle_permutation([1,2,3])
+    >>> calc_prob_for_shuffle_permutation([1,2,3])
     0.16666666666666666
     """
     if not is_iter(options):
@@ -315,123 +327,160 @@ def get_prob_for_shuffle_permutation(options):
     return 1/math.factorial(options.size)
 
 
-def get_prob_for_permuted(x, axis=None):
+def calc_prob_for_permuted(x, axis=None):
     """
     Get probability corresponding to rng.permuted.
 
     Examples
     --------
-    >>> get_prob_for_permuted(np.array([[1,2], [3,4]]))
+    >>> calc_prob_for_permuted(np.array([[1,2], [3,4]]))
     0.041666666666666664
-    >>> get_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 0)
+    >>> calc_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 0)
     0.16666666666666666
-    >>> get_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 1)
+    >>> calc_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 1)
     0.5
     """
     if axis is not None:
-        return get_prob_for_shuffle_permutation(x.shape[axis])
+        return calc_prob_for_shuffle_permutation(x.shape[axis])
     else:
-        return get_prob_for_shuffle_permutation(x)
+        return calc_prob_for_shuffle_permutation(x)
 
 
-def get_pdf_for_rand(x, randname, *args):
-    """
-    Get the probability density/mass function for random sample x.
-
-    Pulled from 'randname' function in numpy. Calls get_pdf_for_dist when scipy has
-    a corresponding distribution function, otherwise calls custom functions
-    to calculate the probabilities/probability densities.
-
-    Parameters
-    ----------
-    x : int/float/array
-        samples to get probability mass/density of
-    randname : str
-        Name of numpy.random distribution
-    args : tuple
-        Arguments sent to numpy.random distribution
-
-    Returns
-    -------
-    prob: float of probability density or mass, depending on function
-
-    Examples
-    --------
-    >>> get_pdf_for_rand(0, "normal", 0,1)
-    0.3989422804014327
-    >>> get_pdf_for_rand(2, "integers", 4)
-    0.25
-    """
-    if is_iter(x):
-        x = np.array(x)
-    elif is_numeric(x):
-        x = np.array([x])
-    else:
-        raise Exception("Invalid x '"+str(x)+"' of type "+str(type(x)))
-
-    if randname == 'integers':
-        pd = get_prob_for_integers(x, *args)
-    elif randname == 'random':
-        pd = get_prob_density_for_random(x)
-    elif randname == 'bytes':
-        raise Exception("Not able to calculate probability density for bytes")
-    elif randname == 'choice':
-        pd = get_prob_for_choice(x)
-    elif randname in ['shuffle', 'permutation']:
-        pd = get_prob_for_shuffle_permutation(*args)
-    elif randname == 'permuted':
-        pd = get_prob_for_permuted(*args)
-    else:
-        pd = get_pdf_for_dist(x, randname, args)
-
+def as_prob(pd):
+    """Return array output of probabilities as single joint probability."""
     if is_iter(pd):
         return np.prod(pd)
     else:
         return pd
 
 
-def get_scipy_pdf_helper(x, randname, args, pmf=False):
+def get_scipy_pdf(randname, *args, **kwargs):
+    """Get callable for scipy pdf function with given name and arguments."""
+    def scipy_pdf(*x):
+        return as_prob(getattr(stats, randname).pdf(array_x(x), *args, **kwargs))
+    return scipy_pdf
+
+
+def get_scipy_pmf(randname, *args, **kwargs):
+    """Get callable for scipy pmf function with given name and arguments."""
+    def scipy_pmf(*x):
+        return as_prob(getattr(stats, randname).pmf(array_x(x), *args, **kwargs))
+    return scipy_pmf
+
+
+def get_custom_pfunc(func_handle, *args, **kwargs):
+    """Get callable for calc_func pdf/pmf function with provided arguments."""
+    def custom_pfunc(*x):
+        return as_prob(func_handle(array_x(x), *args, **kwargs))
+    return custom_pfunc
+
+
+def get_exp_ray_pdf(randname, *args):
     """
-    Get probability mass/density for the outcome x.
+    Get callable for scipy exponential and rayleigh pdf with numpy.random arguments.
 
-    Pulled from the distribution "randname" in scipy with arguments "args".
-
-    Used as a helper function in determining stochastic model state probability
-
-    Parameters
-    ----------
-    x : int/float/array
-        samples to get probability mass/density of
-    randname : str
-        Name of scipy.stats probability distribution
-    args : tuple
-        Arguments to send to scipy.stats.randname.pdf
-    pmf : Bool, optional
-        Whether the distribution uses a probability mass function instead of a pdf.
-        The default is False.
-
-    Returns
-    -------
-    prob: float/array of probability densities
-
+    Examples
+    --------
+    >>> get_exp_ray_pdf("rayleigh", 2)(2.0)
+    0.3032653298563167
+    >>> get_exp_ray_pdf("rayleigh", 2, 2)(2.0)
+    0.0
+    >>> get_exp_ray_pdf("exponential", 1)(0.0)
+    1.0
+    >>> get_exp_ray_pdf("exponential", 1, -1.0)(0.0)
+    0.36787944117144233
     """
-    if randname == 'dirichlet':
-        a = 1
-    if pmf:
-        return getattr(stats, randname).pmf(x, *args)
+    if randname == 'exponential':
+        randname = "expon"
+    if len(args) == 0:
+        return get_scipy_pdf(randname, *args)
+    elif len(args) == 1:
+        return get_scipy_pdf(randname, scale=args[0])
+    elif len(args) == 2:
+        return get_scipy_pdf(randname, loc=args[1], scale=args[0])
     else:
-        return getattr(stats, randname).pdf(x, *args)
+        raise Exception("Too many arguments for "+randname+" distribution")
 
 
-# note: when python 3.10 releases, this should become match/case
-def get_pdf_for_dist(x, randname, args):
+def get_hypergeometric_pmf(*args):
     """
-    Get the scipy probability mass/density for outcome x from numpy random draw.
+    Get callable for scipy hypergeomeric pmf with numpy.random arguments.
+
+    Examples
+    --------
+    >>> get_hypergeometric_pmf(50, 450, 100)(10)
+    0.14736784420411747
+    """
+    n_pop = args[0]+args[1]
+    n_good = args[0]
+    n_sample = args[2]
+    return get_scipy_pmf("hypergeom", n_pop, n_good, n_sample)
+
+
+def get_lognormal_pdf(*args):
+    """
+    Get callable for scipy lognormal pdf with numpy.random arguments.
+
+    Examples
+    --------
+    >>> get_lognormal_pdf(0, .25)(1.0)
+    1.5957691216057308
+    """
+    s = args[1]
+    scale = np.exp(args[0])
+    return get_scipy_pdf("lognorm", s, scale=scale)
+
+
+def get_standard_t_pdf(*args):
+    """
+    Get callable for scipy multivariate_t dist for a numpy.random.standard_t call.
+
+    Note: doesn't support len(x)>1.
+
+    Examples
+    --------
+    >>> get_standard_t_pdf(1)([0.0])
+    0.31830988618379075
+    """
+    return get_scipy_pdf("multivariate_t", df=args[0])
+
+
+def get_triangular_pdf(*args):
+    """
+    Get callable for scipy.triang corresponding to a numpy.random.triangular call.
+
+    Examples
+    --------
+    >>> get_triangular_pdf(0,1,2)(0.0)
+    0.0
+    >>> get_triangular_pdf(0,1,2)(1.0)
+    1.0
+    >>> get_triangular_pdf(0,1,2)(1.5)
+    0.5
+    >>> get_triangular_pdf(0,1,2)(0.5, 0.5)
+    0.25
+    """
+    left, mode, right = args[:3]
+    loc = left
+    scale = right-loc
+    c = (mode-loc)/scale
+    return get_scipy_pdf("triang", c, loc, scale)
+
+
+def get_vonmises_pdf(*args):
+    """Get callable for scipy.vonmises corresponding to numpy.random arguments."""
+    return get_scipy_pdf(args[1], args[0])
+
+
+def get_pfunc_for_dist(randname, *args):
+    """
+    Get the probability mass/density function corresponding to a numpy random draw.
+
+    Uses a call to scipy.stats when available (with the correct arguments), otherwise
+    uses a custom function provided in this module.
 
     Parameters
     ----------
-    x : int/float/array
-        samples to get probability mass/density of
     randname : str
         Name of numpy.random distribution
     args : tuple
@@ -439,11 +488,9 @@ def get_pdf_for_dist(x, randname, args):
 
     Returns
     -------
-    prob: float/array of probability densities
+    pfunc : callable
+        pdf/pmf for the draw.
     """
-    if type(x) in [np.ndarray, list] and len(x) > 1 and len(args) > 0:
-        args = args[:-1]
-
     same_funcs = ['beta', 'dirichlet', 'f', 'gamma', 'laplace',
                   'logistic', 'multivariate_normal', 'pareto', 'uniform', 'wald']
     same_funcs_pmf = ['multinomial', 'poisson', 'zipf']
@@ -463,45 +510,76 @@ def get_pdf_for_dist(x, randname, args):
                        'standard_gamma': 'gamma',
                        'standard_normal': 'norm',
                        'weibull': 'weibull_min'}
-    if randname in same_funcs:
-        return get_scipy_pdf_helper(x, randname, args)
-    elif randname in same_funcs_pmf:
-        return get_scipy_pdf_helper(x, randname, args, pmf=True)
-    elif randname in different_funcs:
-        return get_scipy_pdf_helper(x, different_funcs[randname], args)
-    elif randname in different_funcs_pmf:
-        return get_scipy_pdf_helper(x, different_funcs_pmf[randname], args, pmf=True)
-    elif randname in ['exponential', 'rayleigh']:
-        if len(args) == 0:
-            return getattr(stats, randname).pdf(x)
-        elif len(args) == 1:
-            return getattr(stats, randname).pdf(x, scale=args[0])
-        elif len(args) == 2:
-            return getattr(stats, randname).pdf(x, loc=args[1], scale=args[0])
-        else:
-            raise Exception("Too many arguments for "+randname+" distribution")
-    elif randname == 'hypergeometric':
-        n_pop = args[0]+args[1]
-        n_good = args[0]
-        n_sample = args[2]
-        return stats.hypergeom.pmf(x, n_pop, n_good, n_sample)
-    elif randname == 'lognormal':
-        s = args[1]
-        scale = np.exp(args[0])
-        return stats.lognormal.pdf(x, s, scale=scale)
-    elif randname == 'standard_t':
-        return stats.multivariate_t.pdf(x, df=args[0])
-    elif randname == 'triangular':
-        left, mode, right = args[:3]
-        loc = left
-        scale = right-loc
-        c = (mode-loc)/scale
-        return stats.triang.pdf(x, c, loc, scale)
-    elif randname == 'vonmises':
-        return stats.vonmises.pdf(x, args[1], args[0])
-    else:
-        raise Exception("Invalid randname distribution: " + randname +
-                        ". Ensure that it is a part of numpy.random/scipy.stats")
+    match randname:
+        case str if randname in same_funcs:
+            return get_scipy_pdf(randname, *args)
+        case str if randname in same_funcs_pmf:
+            return get_scipy_pmf(randname, *args)
+        case str if randname in different_funcs:
+            return get_scipy_pdf(different_funcs[randname], *args)
+        case str if randname in different_funcs_pmf:
+            return get_scipy_pmf(different_funcs_pmf[randname], *args)
+        case str if randname in ['exponential', 'rayleigh']:
+            return get_exp_ray_pdf(randname, *args)
+        case 'hypergeometric':
+            return get_hypergeometric_pmf(*args)
+        case 'lognormal':
+            return get_lognormal_pdf(*args)
+        case 'standard_t':
+            return get_standard_t_pdf(*args)
+        case 'triangular':
+            return get_triangular_pdf(*args)
+        case 'vonmises':
+            return get_vonmises_pdf(*args)
+        case 'integers':
+            return get_custom_pfunc(calc_prob_for_integers, *args)
+        case 'random':
+            return get_custom_pfunc(calc_prob_density_for_random)
+        case 'bytes':
+            raise Exception("Not able to calculate probability density for bytes")
+        case 'choice':
+            return get_custom_pfunc(calc_prob_for_choice)
+        case str if randname in ['shuffle', 'permutation']:
+            return get_custom_pfunc(calc_prob_for_shuffle_permutation, *args)
+        case 'permuted':
+            return get_custom_pfunc(calc_prob_for_permuted, *args)
+        case _:
+            raise Exception("Invalid randname distribution: " + randname +
+                            ". Ensure that it is a part of numpy.random/scipy.stats")
+
+
+def get_prob_for_rand(x, randname, *args):
+    """
+    Get the probability density/mass for random sample x.
+
+    Pulled from 'randname' function in numpy. Calls get_pfunc_for_dist when scipy has
+    a corresponding distribution function, otherwise calls custom functions
+    to calculate the probabilities/probability densities.
+
+    Parameters
+    ----------
+    x : int/float/array
+        samples to get probability mass/density of
+    randname : str
+        Name of numpy.random distribution
+    *args : tuple
+        Arguments sent to numpy.random distribution
+
+    Returns
+    -------
+    prob: float of probability density or mass, depending on function
+
+    Examples
+    --------
+    >>> get_prob_for_rand(0, "normal", 0, 1)
+    0.3989422804014327
+    >>> get_prob_for_rand([0,0], "normal", 0, 1)
+    0.15915494309189535
+    >>> get_prob_for_rand(2, "integers", 4)
+    0.25
+    """
+    pfunc = get_pfunc_for_dist(randname, *args)
+    return pfunc(x)
 
 
 class RandState(State):

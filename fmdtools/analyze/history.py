@@ -25,7 +25,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import get_var
+from fmdtools.define.base import get_var, is_known_mutable
 
 from fmdtools.analyze.result import Result, load_folder, load, fromdict
 from fmdtools.analyze.common import bootstrap_confidence_interval, get_sub_include
@@ -34,7 +34,7 @@ from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import plot_err_hist, setup_plot, set_empty_multiplots
 from fmdtools.analyze.common import mark_times, consolidate_legend, add_title_xylabs
 from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
-from fmdtools.analyze.common import is_known_mutable, diff
+from fmdtools.analyze.common import diff
 
 from matplotlib import animation
 from functools import partial
