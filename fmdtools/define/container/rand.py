@@ -33,8 +33,10 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.base import BaseContainer
 from fmdtools.define.container.state import State
+from fmdtools.define.base import is_iter, round_float
+from fmdtools.analyze.common import is_numeric
 
-from scipy import stats
+from scipy import stats, special
 from recordclass import astuple
 import numpy as np
 import math
@@ -159,7 +161,7 @@ class Rand(BaseContainer):
                 newvalue = newvalue[0]
             setattr(self.s, statename, newvalue)
             if self.run_stochastic == 'track_pdf':
-                value_pds = get_pdf_for_rand(newvalue, methodname, args)
+                value_pds = get_pdf_for_rand(newvalue, methodname, *args)
                 self.probs.append(value_pds)
 
     def return_mutables(self):
@@ -219,11 +221,126 @@ class Rand(BaseContainer):
             BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
 
 
-def get_pdf_for_rand(x, randname, args):
+def get_prob_for_integers(x, *args):
+    """
+    Get probability for np.default_rng.integers.
+
+    Examples
+    --------
+    >>> get_prob_for_integers([0], 2)
+    0.5
+    >>> get_prob_for_integers([0, 1], 0, 2)
+    0.25
+    >>> get_prob_for_integers([0, 1, 2], 0, 2)
+    0.0
+    """
+    if len(args) == 1:
+        xmin, xmax = 0, args[0]
+    elif len(args) == 2:
+        xmin, xmax = args
+    else:
+        raise Exception("Invalid args: "+str(args))
+    if xmin <= np.min(x) and np.max(x) < xmax:
+        return np.prod([1/(xmax-xmin) for x in x])
+    else:
+        return 0.0
+
+
+def get_prob_density_for_random(x):
+    """
+    Get probability density for np.default_rng.random.
+
+    Examples
+    --------
+    >>> get_prob_density_for_random([0.5])
+    1.0
+    >>> get_prob_density_for_random([0.5, 0.1, 0.9, 0.5])
+    0.25
+    >>> get_prob_density_for_random([0.5, 0.1, 0.9, 0.5, 1.1])
+    0.0
+    """
+    if 0 <= np.min(x) and np.max(x) < 1.0:
+        return 1/len(x)
+    else:
+        return 0.0
+
+
+def get_prob_for_choice(x, options=[], size=1, replace=True, p=None):
+    """
+    Get probability corresponding to a call to np.choice.
+
+    Examples
+    --------
+    >>> get_prob_for_choice([1], [1,2])
+    0.5
+    >>> get_prob_for_choice([1,2], [1,2], replace=False)
+    0.5
+    >>> get_prob_for_choice([1,2], [1,2,3], p=[0.1, 0.1, 0.9])
+    0.01
+    """
+    if isinstance(options, int):
+        options = [*np.arange(options)]
+
+    if replace:
+        if p is None:
+            p = [1/len(options) for i in options]
+        return round_float(np.prod([p[options.index(i)] for i in x]), res=1e-6)
+    else:
+        if p is not None:
+            raise Exception("Cannot calculate probabilities with replacement.")
+        for j in x:
+            if j not in options:
+                raise Exception(str(j)+" not in options: "+str(options))
+        perms = special.perm(len(options), len(x))
+        if perms == 0.0:
+            raise Exception("Too many draws from sample with replacement")
+        return round_float(1/perms, res=1e-6)
+
+
+def get_prob_for_shuffle_permutation(options):
+    """
+    Get probability corresponding to rng.shuffle and rng.permutation.
+
+    Examples
+    --------
+    >>> get_prob_for_shuffle_permutation([1,2])
+    0.5
+    >>> get_prob_for_shuffle_permutation([1,2,3])
+    0.16666666666666666
+    """
+    if not is_iter(options):
+        options = np.arange(options)
+    else:
+        options = np.array(options)
+    return 1/math.factorial(options.size)
+
+
+def get_prob_for_permuted(x, axis=None):
+    """
+    Get probability corresponding to rng.permuted.
+
+    Examples
+    --------
+    >>> get_prob_for_permuted(np.array([[1,2], [3,4]]))
+    0.041666666666666664
+    >>> get_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 0)
+    0.16666666666666666
+    >>> get_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 1)
+    0.5
+    """
+    if axis is not None:
+        return get_prob_for_shuffle_permutation(x.shape[axis])
+    else:
+        return get_prob_for_shuffle_permutation(x)
+
+
+def get_pdf_for_rand(x, randname, *args):
     """
     Get the probability density/mass function for random sample x.
 
-    Pulled from 'randname' function in numpy.
+    Pulled from 'randname' function in numpy. Calls get_pdf_for_dist when scipy has
+    a corresponding distribution function, otherwise calls custom functions
+    to calculate the probabilities/probability densities.
 
     Parameters
     ----------
@@ -236,43 +353,41 @@ def get_pdf_for_rand(x, randname, args):
 
     Returns
     -------
-    prob: float/array of probability densities
+    prob: float of probability density or mass, depending on function
+
+    Examples
+    --------
+    >>> get_pdf_for_rand(0, "normal", 0,1)
+    0.3989422804014327
+    >>> get_pdf_for_rand(2, "integers", 4)
+    0.25
     """
-    if type(x) not in [np.ndarray, list]:
-        x = [x]
+    if is_iter(x):
+        x = np.array(x)
+    elif is_numeric(x):
+        x = np.array([x])
+    else:
+        raise Exception("Invalid x '"+str(x)+"' of type "+str(type(x)))
+
     if randname == 'integers':
-        if len(args) == 1:
-            pd = [1/args[0] for x in x]
-        elif len(args) >= 2:
-            pd = [1/(args[1]-args[0]) for x in x]
+        pd = get_prob_for_integers(x, *args)
     elif randname == 'random':
-        pd = [1 for x in x]
+        pd = get_prob_density_for_random(x)
     elif randname == 'bytes':
-        raise Exception("Not able to calculate pdf for bytes")
+        raise Exception("Not able to calculate probability density for bytes")
     elif randname == 'choice':
-        if isinstance(args[0], int):
-            options = [*np.arange(args[0])]
-        else:
-            options = args[0]
-        if len(args) == 4:
-            p = args[3]
-        else:
-            p = [1/len(options) for i in options]
-        pd = [p[options.index(i)] for i in x]
+        pd = get_prob_for_choice(x)
     elif randname in ['shuffle', 'permutation']:
-        pd = [1/math.factorial(len(args[0]))]
+        pd = get_prob_for_shuffle_permutation(*args)
     elif randname == 'permuted':
-        if len(args) > 1 and isinstance(args[0], np.ndarray):
-            pd = [1/math.factorial(args[0].shape(args[1]))]
-        else:
-            pd = [1/math.factorial(len(args[0]))]
+        pd = get_prob_for_permuted(*args)
     else:
         pd = get_pdf_for_dist(x, randname, args)
-    if isinstance(pd, list):
-        pd = np.array(pd)
-    elif not isinstance(pd, np.ndarray):
-        pd = np.array([pd])
-    return pd
+
+    if is_iter(pd):
+        return np.prod(pd)
+    else:
+        return pd
 
 
 def get_scipy_pdf_helper(x, randname, args, pmf=False):
