@@ -6,10 +6,6 @@ Some common methods for analysis used by other modules.
 Has methods:
 
 - :func:`bootstrap_confidence_interval`: Convenience wrapper for scipy.bootstrap
-- :func:`nan_to_x`: Helper function for Result Class, returns nan as zero if present,
-  otherwise returns the number
-- :func:`is_numeric`: Helper function for Result Class, checks if a given value is
-  numeric
 - :func:`diff`: Helper function for finding inconsistent states between val1, val2, with
   the difftype option
 - :func:`join_key`: Helper function for Result Class
@@ -91,37 +87,6 @@ def to_include_keys(to_include):
             add = to_include_keys(v)
             keys.extend([k+'.'+v for v in add])
         return tuple(keys)
-
-
-def is_numeric(val):
-    """
-    Check if a given value is a number.
-
-    Examples
-    --------
-    >>> is_numeric(1.0)
-    True
-    >>> is_numeric("hi")
-    False
-    >>> is_numeric(np.array([1.0])[0])
-    True
-    >>> is_numeric(np.array(["hi"])[0])
-    False
-    """
-    try:
-        return np.issubdtype(np.array(val).dtype, np.number)
-    except TypeError:
-        return type(val) in [float, bool, int]
-
-
-def is_known_immutable(val):
-    """Check if value is known immutable."""
-    return type(val) in [int, float, str, tuple, bool] or isinstance(val, np.number)
-
-
-def is_known_mutable(val):
-    """Check if value is a known mutable."""
-    return type(val) in [dict, set]
 
 
 def diff(val1, val2, difftype='bool'):
@@ -269,44 +234,6 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
         return method(data), method(data), method(data)
     else:
         raise Exception("All data are the same!")
-
-
-def nan_to_x(metric, x=0.0):
-    """
-    Return nan as zero if present, otherwise return the number.
-
-    Examples
-    --------
-    >>> nan_to_x(1.0)
-    1.0
-    >>> nan_to_x(np.nan, 10.0)
-    10.0
-    """
-    if np.isnan(metric):
-        return x
-    else:
-        return metric
-
-
-def is_bool(val):
-    """
-    Check if the value is a boolean.
-
-    Examples
-    --------
-    >>> is_bool(True)
-    True
-    >>> is_bool(1.0)
-    False
-    >>> is_bool(np.array([True])[0])
-    True
-    >>> is_bool(np.array([1.0])[0])
-    False
-    """
-    try:
-        return val.dtype in ['bool']
-    except AttributeError:
-        return type(val) in [bool]
 
 
 def join_key(k):

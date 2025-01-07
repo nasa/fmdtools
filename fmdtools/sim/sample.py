@@ -26,11 +26,10 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from fmdtools.define.base import get_var, nest_dict, gen_timerange
+from fmdtools.define.base import get_var, nest_dict, gen_timerange, is_numeric
 from fmdtools.define.container.parameter import Parameter, ExampleParameter
 from fmdtools.sim.scenario import SingleFaultScenario, JointFaultScenario
 from fmdtools.sim.scenario import ParameterScenario
-from fmdtools.analyze.common import is_numeric
 from fmdtools.analyze.phases import PhaseMap, join_phasemaps
 
 import numpy as np

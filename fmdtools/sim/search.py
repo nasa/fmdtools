@@ -30,7 +30,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import t_key
+from fmdtools.define.base import t_key, unpack_x
 from fmdtools.define.object.coords import BaseCoords
 from fmdtools.define.block.function import ExampleFunction
 from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
@@ -43,7 +43,6 @@ import numpy as np
 import networkx as nx
 import time
 import inspect
-from collections.abc import Iterable
 from recordclass import dataobject
 
 
@@ -157,15 +156,6 @@ class Constraint(Objective):
                 self.satisfied = self.value >= 0.0
             else:
                 self.satisfied = self.value > 0.0
-
-
-def unpack_x(*x):
-    """Unpack arrays/lists sent from solvers into tuples."""
-    if len(x) == 1 and isinstance(x[0], Iterable):
-        x = tuple(x[0])
-    elif len(x) == 2 and isinstance(x[0], Iterable) and isinstance(x[1], Iterable):
-        x = tuple([*x[0], *x[1]])
-    return x
 
 
 class BaseProblem(object):

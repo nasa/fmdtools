@@ -40,8 +40,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import t_key, nest_dict
-from fmdtools.analyze.common import to_include_keys, is_numeric, nan_to_x, is_bool
+from fmdtools.define.base import t_key, nest_dict, is_numeric, is_bool, nan_to_x
+from fmdtools.analyze.common import to_include_keys
 from fmdtools.analyze.common import bootstrap_confidence_interval, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper

@@ -89,8 +89,6 @@ class Injection(BaseScenObj):
     """
     Defines a single fault/disturbance injection.
 
-    ...
-    
     Fields
     ------
     faults : dict
@@ -173,8 +171,6 @@ class Sequence(UserDict):
 class BaseScenario(BaseScenObj):
     """
     Base class for scenarios.
-
-    ...
 
     Parameters
     ----------

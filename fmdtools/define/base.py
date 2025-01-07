@@ -7,10 +7,27 @@ Includes functions:
 
 - :func:`get_var`:Gets the variable value of the object
 - :func:`set_var`:Sets variable of the object to a given value
+- :func:`nest_dict`: Nest a dictionary by a certin number of levels.
+- :func:`set_arg_as_type`: Change argument to given type.
 - :func:`is_iter`: Checks whether a data type should be interpreted as an iterable
+- :func:`is_numeric`: Check if a data type is numeric.
+- :func:`is_bool` : check if a data type is boolean.
+- :func:`is_numeric`: Helper function for Result Class, checks if a given value is
+  numeric
+- :func:`unpack_x`: Unpack an array x as a tuple argument.
+- :func:`array_x`: Pack x into an array.
+- :func:`eq_units`: Find conversion factor between rates and times.
 - :func:`t_key`:Used to generate keys for a given (float) time that is queryable as an
   attribute of an object/dict
+- :func:`round_float`: Round a float to a given precision.
+- :func:`nan_to_x`: Helper function for Result Class, returns nan as zero if present,
+  otherwise returns the number
  - :func:`gen_timerange`: Generates timerange from start/endtime
+ - :func:`get_code_atrs`: Get code attributes defining a given object or method.
+ - :func:`remove_para`: Remove paragraph newlines in a string.
+ - :func:`get_obj_name`: Get the name of an object.
+ - :func:`get_memory`: Get the memory an object takes.
+ - :func:`get_inheritanc`: Find the bases classes an object inherits from.
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -101,16 +118,14 @@ def set_var(obj, var, val):
     """
     if isinstance(var, str):
         var = var.split(".")
-    # if not attrgetter(".".join(var))(self):
-    #    raise Exception("does not exist: "+str(var))
 
     if len(var) == 1:
-        if type(obj) == dict:
+        if obj is dict:
             obj[var[0]] = val
         else:
             setattr(obj, var[0], val)
     else:
-        if type(obj) == dict:
+        if obj is dict:
             set_var(obj[var[0]], var[1:], val)
         else:
             set_var(getattr(obj, var[0]), var[1:], val)
@@ -186,10 +201,82 @@ def is_iter(data):
 
     Returned as a single value or tuple/array.
     """
-    if isinstance(data, Iterable) and type(data) != str:
+    if isinstance(data, Iterable) and data is str:
         return True
     else:
         return False
+
+
+def is_numeric(val):
+    """
+    Check if a given value is a number.
+
+    Examples
+    --------
+    >>> is_numeric(1.0)
+    True
+    >>> is_numeric("hi")
+    False
+    >>> is_numeric(np.array([1.0])[0])
+    True
+    >>> is_numeric(np.array(["hi"])[0])
+    False
+    """
+    try:
+        return np.issubdtype(np.array(val).dtype, np.number)
+    except TypeError:
+        return type(val) in [float, bool, int]
+
+
+def is_bool(val):
+    """
+    Check if the value is a boolean.
+
+    Examples
+    --------
+    >>> is_bool(True)
+    True
+    >>> is_bool(1.0)
+    False
+    >>> is_bool(np.array([True])[0])
+    True
+    >>> is_bool(np.array([1.0])[0])
+    False
+    """
+    try:
+        return val.dtype in ['bool']
+    except AttributeError:
+        return type(val) in [bool]
+
+
+def is_known_immutable(val):
+    """Check if value is known immutable."""
+    return type(val) in [int, float, str, tuple, bool] or isinstance(val, np.number)
+
+
+def is_known_mutable(val):
+    """Check if value is a known mutable."""
+    return type(val) in [dict, set]
+
+
+def unpack_x(*x):
+    """Unpack arrays/lists sent from libraries into tuples."""
+    if len(x) == 1 and isinstance(x[0], Iterable):
+        x = tuple(x[0])
+    elif len(x) == 2 and isinstance(x[0], Iterable) and isinstance(x[1], Iterable):
+        x = tuple([*x[0], *x[1]])
+    return x
+
+
+def array_x(*x):
+    """Translate variable-length x into an array input."""
+    if is_iter(x):
+        x = np.array(x)
+    elif is_numeric(x):
+        x = np.array([x])
+    else:
+        raise Exception("Invalid x '"+str(x)+"' of type "+str(type(x)))
+    return x
 
 
 def eq_units(rateunit, timeunit):
@@ -220,6 +307,23 @@ def t_key(time):
 def round_float(number, res=1.0, min_r=7):
     """Round floats to a given resolution (avoiding fp errors)."""
     return np.round(round(number/res)*res, min_r)
+
+
+def nan_to_x(metric, x=0.0):
+    """
+    Return nan as zero if present, otherwise return the number.
+
+    Examples
+    --------
+    >>> nan_to_x(1.0)
+    1.0
+    >>> nan_to_x(np.nan, 10.0)
+    10.0
+    """
+    if np.isnan(metric):
+        return x
+    else:
+        return metric
 
 
 def gen_timerange(start_time, end_time, dt=1.0, min_r=7):
