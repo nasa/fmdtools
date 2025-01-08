@@ -34,8 +34,9 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.base import BaseContainer
 from fmdtools.define.container.state import State
-from fmdtools.define.base import is_iter, round_float, array_x
+from fmdtools.define.base import round_float, array_x, unpack_x
 
+from collections.abc import Iterable
 from scipy import stats, special
 from recordclass import astuple
 import numpy as np
@@ -309,21 +310,23 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
         return round_float(1/perms, res=1e-6)
 
 
-def calc_prob_for_shuffle_permutation(options):
+def calc_prob_for_shuffle_permutation(x, options, *args, check_valid=True):
     """
     Get probability corresponding to rng.shuffle and rng.permutation.
 
     Examples
     --------
-    >>> calc_prob_for_shuffle_permutation([1,2])
+    >>> calc_prob_for_shuffle_permutation([1,2], [1,2])
     0.5
-    >>> calc_prob_for_shuffle_permutation([1,2,3])
+    >>> calc_prob_for_shuffle_permutation([2,1,3], [1,2,3])
     0.16666666666666666
     """
-    if not is_iter(options):
-        options = np.arange(options)
-    else:
+    if isinstance(options, Iterable):
         options = np.array(options)
+    else:
+        options = np.arange(options)
+    if check_valid and not set(unpack_x(options)).issuperset(set(unpack_x(x))):
+        return 0.0
     return 1/math.factorial(options.size)
 
 
@@ -341,14 +344,14 @@ def calc_prob_for_permuted(x, axis=None):
     0.5
     """
     if axis is not None:
-        return calc_prob_for_shuffle_permutation(x.shape[axis])
+        return calc_prob_for_shuffle_permutation(x, x.shape[axis], check_valid=False)
     else:
-        return calc_prob_for_shuffle_permutation(x)
+        return calc_prob_for_shuffle_permutation(x, x)
 
 
 def as_prob(pd):
     """Return array output of probabilities as single joint probability."""
-    if is_iter(pd):
+    if isinstance(pd, Iterable):
         return np.prod(pd)
     else:
         return pd
@@ -538,7 +541,7 @@ def get_pfunc_for_dist(randname, *args):
         case 'bytes':
             raise Exception("Not able to calculate probability density for bytes")
         case 'choice':
-            return get_custom_pfunc(calc_prob_for_choice)
+            return get_custom_pfunc(calc_prob_for_choice, *args)
         case str if randname in ['shuffle', 'permutation']:
             return get_custom_pfunc(calc_prob_for_shuffle_permutation, *args)
         case 'permuted':
