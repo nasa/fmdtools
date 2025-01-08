@@ -263,19 +263,23 @@ def unpack_x(*x):
     """Unpack arrays/lists sent from libraries into tuples."""
     if len(x) == 1 and isinstance(x[0], Iterable):
         x = tuple(x[0])
-    elif len(x) == 2 and isinstance(x[0], Iterable) and isinstance(x[1], Iterable):
-        x = tuple([*x[0], *x[1]])
+
+    x_list = []
+    for x_i in x:
+        if isinstance(x_i, Iterable):
+            x_list.append(unpack_x(x_i))
+        else:
+            x_list.append(x_i)
+    x = tuple(x_list)
     return x
 
 
 def array_x(*x):
     """Translate variable-length x into an array input."""
-    if is_iter(x):
-        x = np.array(x)
-    elif is_numeric(x):
-        x = np.array([x])
+    if len(x) == 1 and isinstance(x[0], Iterable):
+        x = np.array(x[0])
     else:
-        raise Exception("Invalid x '"+str(x)+"' of type "+str(type(x)))
+        x = np.array(x)
     return x
 
 

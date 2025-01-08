@@ -515,7 +515,7 @@ class Result(UserDict):
 
     def get_default_comp_groups(self):
         """
-        Gets a dict of nominal and faulty scenario keys from the Result
+        Get a dict of nominal and faulty scenario keys from the Result.
 
         Returns
         -------
@@ -537,7 +537,7 @@ class Result(UserDict):
 
     def flatten(self, newhist=False, prevname="", to_include='all'):
         """
-        Recursively creates a flattened result of the given nested model history
+        Recursively create a flattened result of the given nested model history.
 
         Parameters
         ----------
@@ -691,13 +691,13 @@ class Result(UserDict):
         file_handle.close()
 
     def as_table(self):
-        """Creates a table corresponding to the current dict structure"""
+        """Create a table corresponding to the current dict structure."""
         flatdict = self.flatten()
         newdict = {join_key(k): v for k, v in flatdict.items()}
         return pd.DataFrame.from_dict(newdict)
 
     def create_simple_fmea(self, *metrics):
-        """Makes a simple FMEA-stype table of the metrics in the endclasses
+        """Make a simple FMEA-stype table of the metrics in the endclasses
         of a list of fault scenarios run. If metrics not provided, returns all"""
         nested = {k: {**v.endclass} for k, v in self.nest(levels=1).items()}
         tab = pd.DataFrame.from_dict(nested).transpose()
