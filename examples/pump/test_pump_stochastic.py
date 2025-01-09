@@ -44,20 +44,20 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def test_stochastic_pdf(self):
         """Tests that (1) track_pdf option runs and (2) gives repeated
         probability density results under the same seed(s)"""
-        testvals = [6.634978895402383,
-                    7.52240849998729,
-                    0.015351713962842411,
-                    4.19649888042945,
-                    0.11203099056041071,
-                    1.5036852812847645,
-                    7.936686476148655,
-                    0.0853617670950819,
-                    3.0182506814918377]
+        testvals = [35.23570453993965,
+                    49.32124529702974,
+                    0.31327201999190035,
+                    21.386958080811567,
+                    1.1103965455215503,
+                    9.066120598345039,
+                    131.79987407014573,
+                    5.81402243889764,
+                    19.01081621541118]
+        mdl = Pump(r={'run_stochastic': 'track_pdf'})
         for i in range(1, 10):
-            self.mdl.update_seed(i)
-            self.mdl.propagate(i, run_stochastic='track_pdf')
-            pd = self.mdl.return_probdens()
-            # print(pd)
+            mdl.update_seed(i)
+            mdl.propagate(i, run_stochastic='track_pdf')
+            pd = mdl.return_probdens()
             self.assertAlmostEqual(pd, testvals[i-1])
 
     def test_run_safety(self):
@@ -282,7 +282,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
 if __name__ == '__main__':
     # suite = unittest.TestSuite()
-    # suite.addTest(StochasticPumpTests("test_run_approach"))
+    # suite.addTest(StochasticPumpTests("test_stochastic_pdf"))
 
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach"))
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach_indiv"))
@@ -292,6 +292,6 @@ if __name__ == '__main__':
     # runner = unittest.TextTestRunner()
     # runner.run(suite_for_plots(StochasticPumpTests))
 
-    # runner = unittest.TextTestRunner()
-    # runner.run(suite_for_plots(StochasticPumpTests, True))
+    runner = unittest.TextTestRunner()
+    runner.run(suite_for_plots(StochasticPumpTests, True))
     unittest.main()

@@ -169,8 +169,8 @@ class AffectDOF(AffectDOFDynamic):
         """Corrects for individual line faultmodes by turning off the opposite rotor
         and upping the throttle (amp_factor)"""
         for fault in self.m.faults:
-            if fault in self.ca.faultmodes:
-                comp = self.ca.faultmodes[fault]
+            if fault in self.ca.m.sub_modes:
+                comp = self.ca.m.sub_modes[fault]
                 opp = self.ca.p.opposite[comp]
                 if self.ca.s.forward[comp] != 0.0:
                     self.ca.s.forward[comp] = 0.0

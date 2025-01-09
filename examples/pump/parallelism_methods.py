@@ -146,7 +146,7 @@ def parallel_mc3():
     pool = mp.Pool(4)
     mdl = Pump()
     inputlist = [(fxn, fm) for fxn in mdl.fxns
-                 for fm in mdl.fxns[fxn].faultmodes.keys()]
+                 for fm in mdl.fxns[fxn].m.faultmodes.keys()]
     resultslist = pool.map(one_fault_helper, inputlist)
     close_pool(pool)
     return resultslist
