@@ -587,7 +587,7 @@ class FaultDomain(object):
             if hasattr(self.fxns[fxn], 'ca'):
                 firstcomp = list(self.fxns[fxn].ca.comps)[0]
                 compfaults = [(fxn, fmode)
-                              for fmode, comp in self.fxns[fxn].ca.faultmodes.items()
+                              for fmode, comp in self.fxns[fxn].ca.m.sub_modes.items()
                               if firstcomp == comp]
                 self.add_faults(*compfaults)
 

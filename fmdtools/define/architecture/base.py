@@ -77,7 +77,7 @@ class Architecture(Simulable):
     flexible roles.
     """
 
-    __slots__ = ['flows', 'as_copy', 'h', '_init_flexroles']
+    __slots__ = ['flows', 'as_copy', 'h', '_init_flexroles', 'm']
     flexible_roles = ['flows']
     roletype = 'arch'
 
@@ -102,6 +102,14 @@ class Architecture(Simulable):
         if rolename != self.rolename:
             raise Exception("invalid roletype for " + str(self.__class__) +
                             ", should be: " + self.rolename)
+
+    def is_static(self):
+        """Determine if static (False by default)."""
+        return False
+
+    def is_dynamic(self):
+        """Determine if dynamic (False by default)."""
+        return False
 
     def init_flexible_roles(self, **kwargs):
         """
@@ -239,6 +247,11 @@ class Architecture(Simulable):
 
         self.add_flex_role_obj(flex_role, name, objclass=simclass, flows=flows, **fkwargs)
 
+        # add modes to overall mode dict
+        sim = self.get_flex_role_objs(flex_role)[name]
+        if hasattr(sim, 'm') and hasattr(self, 'm'):
+            self.add_obj_modes(sim)
+
     def init_architecture(self, *args, **kwargs):
         """Use to initialize architecture."""
         return 0
@@ -326,13 +339,13 @@ class Architecture(Simulable):
         """Add modes from an object to faultmodes."""
         modes_to_add = {obj.name+'_'+f: val
                         for f, val in obj.m.faultmodes.items()}
-        fmode_intersect = set(modes_to_add).intersection(self.faultmodes)
+        fmode_intersect = set(modes_to_add).intersection(self.m.sub_modes)
         if any(fmode_intersect):
             raise Exception("Action " + obj.name +
                             " overwrites existing fault modes: "+str(fmode_intersect) +
                             ". Rename the faults")
-        self.faultmodes.update({obj.name+'_'+modename: obj.name
-                                for modename in obj.m.faultmodes})
+        self.m.sub_modes.update({obj.name+'_'+modename: obj.name
+                                 for modename in obj.m.faultmodes})
 
     def inject_faults(self, flexible_role, faults):
         """
@@ -340,16 +353,19 @@ class Architecture(Simulable):
 
         Parameters
         ----------
-        obj : TYPE
-            DESCRIPTION.
-        faults : TYPE
-            DESCRIPTION.
+        flexible_role: str
+            Name of role to inject faults in (e.g., fxns, .acts, comps)
+        faults : dict
+            Dict of faults to inject {'fxnname': ['faultname']}.
         """
+        compdict = getattr(self, flexible_role)
         for fault in faults:
-            if fault in self.faultmodes:
-                compdict = getattr(self, flexible_role)
-                comp = compdict[self.faultmodes[fault]]
-                comp.m.add_fault(fault[len(comp.name)+1:])
+            if hasattr(self, 'm') and self.m.sub_modes and fault in self.m.sub_modes:
+                comp = compdict[self.m.sub_modes[fault]]
+                comp.inject_faults(fault[len(comp.name)+1:])
+            elif fault in compdict:
+                comp = compdict[fault]
+                comp.inject_faults(faults[fault])
 
     def copy(self, flows={}, **kwargs):
         """

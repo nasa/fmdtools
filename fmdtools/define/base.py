@@ -120,12 +120,12 @@ def set_var(obj, var, val):
         var = var.split(".")
 
     if len(var) == 1:
-        if obj is dict:
+        if isinstance(obj, dict):
             obj[var[0]] = val
         else:
             setattr(obj, var[0], val)
     else:
-        if obj is dict:
+        if isinstance(obj, dict):
             set_var(obj[var[0]], var[1:], val)
         else:
             set_var(getattr(obj, var[0]), var[1:], val)
@@ -201,7 +201,7 @@ def is_iter(data):
 
     Returned as a single value or tuple/array.
     """
-    if isinstance(data, Iterable) and data is str:
+    if isinstance(data, Iterable) and not isinstance(data, str):
         return True
     else:
         return False

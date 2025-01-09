@@ -175,6 +175,8 @@ class Mode(BaseContainer, readonly=False):
         Name of the current mode. the default is 'nominal'
     mode_state_dict: dict
         Maps modes to states. Assigned by init_faultstates methods.
+    sub_modes: dict
+        Maps modes to internal architecture elements.
     faultmodes : dict
             Dictionary of :class:`Fault` defining possible fault modes and
             their properties
@@ -202,6 +204,7 @@ class Mode(BaseContainer, readonly=False):
     faults: set = set()
     faultmodes: dict = {}
     mode_state_dict: dict = {}
+    sub_modes: dict = {}
     fm_args = {}
     he_args = tuple()
     sfs_args = tuple()

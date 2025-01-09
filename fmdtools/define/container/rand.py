@@ -34,9 +34,8 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.base import BaseContainer
 from fmdtools.define.container.state import State
-from fmdtools.define.base import round_float, array_x, unpack_x
+from fmdtools.define.base import round_float, array_x, unpack_x, is_iter
 
-from collections.abc import Iterable
 from scipy import stats, special
 from recordclass import astuple
 import numpy as np
@@ -321,7 +320,7 @@ def calc_prob_for_shuffle_permutation(x, options, *args, check_valid=True):
     >>> calc_prob_for_shuffle_permutation([2,1,3], [1,2,3])
     0.16666666666666666
     """
-    if isinstance(options, Iterable):
+    if is_iter(options):
         options = np.array(options)
     else:
         options = np.arange(options)
@@ -351,7 +350,7 @@ def calc_prob_for_permuted(x, axis=None):
 
 def as_prob(pd):
     """Return array output of probabilities as single joint probability."""
-    if isinstance(pd, Iterable):
+    if is_iter(pd):
         return np.prod(pd)
     else:
         return pd

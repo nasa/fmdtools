@@ -31,6 +31,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
+from fmdtools.define.container.mode import Mode
 from fmdtools.define.base import set_var
 from fmdtools.define.architecture.base import Architecture, ArchitectureGraph
 from fmdtools.define.block.function import ExampleFlow
@@ -504,6 +505,7 @@ class FunctionArchitecture(Architecture):
     flexible_roles = ['flows', 'fxns']
     roletypes = ['container', 'flow', 'fxn']
     rolename = 'fa'
+    container_m = Mode
 
     def __init__(self, h={}, **kwargs):
         self.functionorder = OrderedSet()
@@ -532,6 +534,14 @@ class FunctionArchitecture(Architecture):
     def base_type(self):
         """Return fmdtools type of the model class."""
         return FunctionArchitecture
+
+    def is_static(self):
+        """Determine if static based on containment of static functions."""
+        return any(self.staticfxns)
+
+    def is_dynamic(self):
+        """Determine if dynamic based on containment of dynamic functions."""
+        return any(self.dynamicfxns)
 
     def add_fxn(self, name, fclass, *flownames, **fkwargs):
         """
@@ -746,7 +756,8 @@ class FunctionArchitecture(Architecture):
                     raise Exception(var[0] + " not a function, flow, or seed")
                 set_var(f, var, varvalues[i])
 
-    def propagate(self, time, fxnfaults={}, disturbances={}, run_stochastic=False):
+    def propagate(self, time, fxnfaults={}, disturbances={}, proptype="both",
+                  run_stochastic=False):
         """
         Inject and propagates faults through the graph at one time-step.
 
@@ -760,22 +771,23 @@ class FunctionArchitecture(Architecture):
         disturbances : dict
             Variables to change during this propagation step.
             With structure {'function.var1':value}
+        proptype : str
+            Whether the propagate 'static' or 'dynamic' behaviors, or 'both'. Default
+            is 'both'.
         run_stochastic : bool
             Whether to run stochastic behaviors or use default values. Default is False.
             Can set as 'track_pdf' to calculate/track the probability densities of
             random states over time.
         """
-        # Step 0: Update model states with disturbances
+        # Step 0: Update model states with disturbances and faults
         self.set_vars(**disturbances)
+        if fxnfaults:
+            self.inject_faults(fxnfaults)
 
         # Step 1: Run Dynamic Propagation Methods in Order Specified
-        # Inject Faults if Applicable
-        for fxnname in self.dynamicfxns.union(fxnfaults.keys()):
+        for fxnname in self.dynamicfxns:
             fxn = self.fxns[fxnname]
-            faults = fxnfaults.get(fxnname, [])
-            if not isinstance(faults, list):
-                faults = [faults]
-            fxn('dynamic', faults=faults, time=time, run_stochastic=run_stochastic)
+            fxn('dynamic', time=time, run_stochastic=run_stochastic)
 
         # Step 2: Run Static Propagation Methods
         try:

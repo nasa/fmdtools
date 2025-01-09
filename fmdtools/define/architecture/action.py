@@ -27,6 +27,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
+from fmdtools.define.container.mode import Mode
 from fmdtools.define.architecture.base import Architecture, ArchitectureGraph
 from fmdtools.define.block.action import ExampleAction
 from fmdtools.define.flow.base import ExampleFlow
@@ -217,8 +218,7 @@ class ActionArchitecture(Architecture):
         time-step (True) or stays in the current action (False). Default is False.
     """
 
-    __slots__ = ['acts', 'conds', 'action_graph', 'flow_graph', 'faultmodes',
-                 'active_actions']
+    __slots__ = ['acts', 'conds', 'action_graph', 'flow_graph', 'active_actions', 'm']
     initial_action = "auto"
     state_rep = "finite-state"
     max_action_prop = "until_false"
@@ -228,17 +228,25 @@ class ActionArchitecture(Architecture):
     flexible_roles = ['flows', 'acts', 'conds']
     roletypes = ['container', 'flow', 'act', 'cond']
     rolename = 'aa'
+    container_m = Mode
 
     def __init__(self, **kwargs):
         self.action_graph = nx.DiGraph()
         self.flow_graph = nx.DiGraph()
-        self.faultmodes = {}
         self.active_actions = set()
         Architecture.__init__(self, **kwargs)
 
     def base_type(self):
         """Return fmdtools type of the model class."""
         return ActionArchitecture
+
+    def is_static(self):
+        """Determine if static based on self.proptype."""
+        return self.proptype in ['static', 'both']
+
+    def is_dynamic(self):
+        """Determine if dynamic based on self.proptype."""
+        return self.proptype in ['dynamic', 'both']
 
     def copy(self, **kwargs):
         cop = super().copy(**kwargs)
@@ -292,9 +300,6 @@ class ActionArchitecture(Architecture):
         for flow in flows:
             self.flow_graph.add_node(flow, bipartite=1)
             self.flow_graph.add_edge(name, flow)
-
-        if hasattr(self.acts[name], 'm'):
-            self.add_obj_modes(self.acts[name])
 
     def cond_pass(self): # noqa
         return True

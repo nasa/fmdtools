@@ -18,18 +18,19 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.architecture.base import Architecture
+from fmdtools.define.container.mode import Mode
 
 
 class ComponentArchitecture(Architecture):
     """Class defining Component Architectures."""
 
-    __slots__ = ['comps', 'faultmodes']
+    __slots__ = ['comps']
     flexible_roles = ['flows', 'comps']
     roletypes = ['container', 'flow', 'comp']
     rolename = 'ca'
+    container_m = Mode
 
     def __init__(self, **kwargs):
-        self.faultmodes = {}
         Architecture.__init__(self, **kwargs)
 
     def add_comp(self, name, compclass, *flownames, **kwargs):
@@ -48,9 +49,6 @@ class ComponentArchitecture(Architecture):
             kwargs to instantiate the Component with
         """
         self.add_sim('comps', name, compclass, *flownames, **kwargs)
-
-        if hasattr(self.comps[name], 'm'):
-            self.add_obj_modes(self.comps[name])
 
     def inject_faults(self, faults):
         Architecture.inject_faults(self, 'comps', faults)

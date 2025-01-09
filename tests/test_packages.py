@@ -20,7 +20,6 @@ specific language governing permissions and limitations under the License.
 from fmdtools.define.container.rand import get_prob_for_rand
 
 import unittest
-import numpy as np
 
 
 class define_Tests(unittest.TestCase):
