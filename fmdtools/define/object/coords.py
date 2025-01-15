@@ -69,7 +69,8 @@ class CoordsParam(Parameter):
         as arrays.
     collect_collectionname : tuple
         Tuple (propertyname, value, comparator) defining a collection of points to
-        instantiate as a list, where the tuple is arguments to Coords.find_all_prop
+        instantiate as a list, where the tuple is arguments to Coords.find_all_prop or
+        to find_all_props
     point_pointname: tuple
         Tuple (x, y) referring to a point in the grid with a given name.
 
@@ -84,6 +85,7 @@ class CoordsParam(Parameter):
     ...     state_st: tuple = (float, 0.0)
     ...     point_start: tuple = (0.0, 0.0)
     ...     collect_high_v: tuple = ("v", 5.0, np.greater)
+    ...     collect_hi_v_not_a: tuple = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
     >>> ex = ExampleCoordsParam()
     """
 
@@ -130,6 +132,62 @@ class BaseCoords(BaseObject):
             proparray = np.full((self.p.x_size, self.p.y_size),
                                 prop[1], dtype=prop[0])
             setattr(self, propname, proparray)
+
+    def find_all_props(self, *args):
+        """
+        Find composite sets of points in arrays satisfying multiple conditions.
+
+        Parameters
+        ----------
+        *args : tuples/str
+            tuple of arguments to find_all, seperated by strings of conditionals.
+
+        Returns
+        -------
+        all: np.array
+            List of points satisfying conditions
+
+        Examples
+        --------
+        >>> ex = ExampleCoords()
+        >>> ex.find_all_props(("v", 10.0, np.equal))
+        array([[ 0.,  0.],
+               [10.,  0.]])
+        >>> ex.st[0] = 1
+        >>> ex.find_all_props(("v", 10.0, np.equal), "and", ("st", 1.0, np.equal))
+        array([[0., 0.]])
+        >>> ex.find_all_props(("v", 10.0, np.equal), "or", ("st", 1.0, np.equal))
+        array([[ 0.,  0.],
+               [ 0., 10.],
+               [ 0., 20.],
+               [ 0., 30.],
+               [ 0., 40.],
+               [ 0., 50.],
+               [ 0., 60.],
+               [ 0., 70.],
+               [ 0., 80.],
+               [ 0., 90.],
+               [10.,  0.]])
+        >>> ex.hi_v_not_a
+        array([[ 0.,  0.],
+               [10.,  0.]])
+        """
+        conditions = list(args[::2])
+        logicals = list(args[1::2])
+        prop_is_true = np.full((self.p.x_size, self.p.y_size), True, dtype=bool)
+        logical = np.logical_and
+        for condition in conditions:
+            prop = getattr(self, condition[0])
+            value, comparator = condition[1:]
+            where_true = comparator(prop, value)
+            prop_is_true = logical(prop_is_true, where_true)
+            if logicals:
+                logical = logicals.pop(0)
+                if isinstance(logical, str):
+                    logical = getattr(np, 'logical_'+logical)
+        where = np.where(prop_is_true)
+        true_pts = [(p, where[1][i]) for i, p in enumerate(where[0])]
+        return np.array([self.grid[tuple(p)] for p in true_pts])
 
     def find_all_prop(self, name, value=True, comparator=np.equal):
         """
@@ -987,6 +1045,8 @@ class Coords(BaseCoords):
         for cname, collection in self.collections.items():
             if collection[0] in self.features:
                 setattr(self, cname, self.find_all_prop(*collection))
+            elif isinstance(collection[0], tuple) and collection[0][0] in self.features:
+                setattr(self, cname, self.find_all_props(*collection))
             else:
                 raise Exception("Invalid collection: " + cname +
                                 " collections may only map to (immutable) features")
@@ -1468,6 +1528,7 @@ class ExampleCoordsParam(CoordsParam):
     state_st: tuple = (float, 0.0)
     point_start: tuple = (0.0, 0.0)
     collect_high_v: tuple = ("v", 5.0, np.greater)
+    collect_hi_v_not_a: tuple = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
 
 
 class ExampleCoords(Coords):
@@ -1518,10 +1579,9 @@ class MetricCoords(BaseCoords):
 
 if __name__ == "__main__":
     ex = ExampleCoords()
-    import doctest
-    doctest.testmod(verbose=True)
 
     ex = ExampleCoords()
+    ex.find_all_props(("v", 10.0, np.equal), "and", ("v", 10.0, np.equal))
     ex.show_property("v", cmap="Greys")
     ex.show_collection("high_v")
     ex.show({"st": {}}, collections={"high_v": {"alpha": 0.5, "color": "red"}})
@@ -1537,3 +1597,6 @@ if __name__ == "__main__":
               collections={"pts": {"color": "blue"},
                            "high_v": {"alpha": 0.5, "color": "red"}},
               legend_args=True)
+
+    import doctest
+    doctest.testmod(verbose=True)
