@@ -470,27 +470,24 @@ def set_empty_multiplots(axs, num_plots, cols, xlab_ang=-90, grid=False,
 
 def multiplot_legend_title(groupmetrics, axs, ax,
                            legend_loc=False, title='', v_padding=None, h_padding=None,
-                           title_padding=0.0, legend_title=None):
+                           title_padding=0.0, legend_title=None, **kwargs):
     """Create multiplot legends and titles on shared axes."""
     if len(groupmetrics) > 1 and legend_loc != False:
-        ax.legend()
-        handles, labels = ax.get_legend_handles_labels()
-        ax.get_legend().remove()
+        consolidate_legend(ax)
         ax_l = axs[legend_loc]
-        by_label = dict(zip(labels, handles))
         if ax_l != ax and legend_loc in [-1, len(axs)]:
-            ax_l.legend(by_label.values(), by_label.keys(),
-                        prop={'size': 8}, loc='center', title=legend_title)
+            kwarg = {'loc': "center", "bbox_to_anchor": (0.5, 0.5), **kwargs}
         else:
-            ax_l.legend(by_label.values(), by_label.keys(),
-                        prop={'size': 8}, title=legend_title)
+            kwarg = kwargs
+        consolidate_legend(ax_l, old_legend=ax.get_legend(), **kwarg)
     plt.subplots_adjust(hspace=v_padding, wspace=h_padding)
     if title:
         plt.suptitle(title, y=1.0+title_padding)
 
 
 def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
-                       add_handles=[], remove_empty=True, color='', **kwargs):
+                       add_handles=[], remove_empty=True, color='', new_labs={},
+                       old_legend=False, **kwargs):
     """
     Create a single legend for plots where multiple groups are being compared.
 
@@ -510,13 +507,15 @@ def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
     """
     # get handles/labels and any existing legend
     hands, labs = ax.get_legend_handles_labels()
-    old_legend = ax.get_legend()
+    if not old_legend:
+        old_legend = ax.get_legend()
 
     # if there is an old legend (which may not have these handles),
     # update it with new handles/labels
     if old_legend:
         old_hands = old_legend.legend_handles
-        ax.get_legend().remove()
+        kwargs['title'] = old_legend.get_title().get_text()
+        old_legend.remove()
         hands = old_hands + hands
 
     # if there are labels to add (add_handles argument), add them here
@@ -525,7 +524,7 @@ def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
         lab = handle.get_label()
         if not (not lab and remove_empty):
             handles.append(handle)
-            labels.append(lab)
+            labels.append(new_labs.get(lab, lab))
     by_label = dict(zip(labels, handles))
 
     # generate legend with consolidated labels/handles
