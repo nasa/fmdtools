@@ -1037,7 +1037,8 @@ class History(Result):
                 hists.plot_trajectory(*plot_values, **local_kwargs)
             elif len(plot_values) == 3:
                 hists.plot_trajectory3(*plot_values, **local_kwargs)
-        consolidate_legend(ax, **kwargs)
+        if legend:
+            consolidate_legend(ax, **kwargs)
         add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, title=title,
                          xlim=xlim, ylim=ylim, zlim=zlim)
         return fig, ax
