@@ -37,6 +37,7 @@ from matplotlib import pyplot as plt
 from matplotlib import colormaps, cm
 from matplotlib.colors import to_rgba, ListedColormap, TABLEAU_COLORS
 from matplotlib.patches import Rectangle
+import matplotlib.patches as mpatches
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.mplot3d import art3d
 
@@ -652,8 +653,8 @@ class BaseCoords(BaseObject):
 
     def show_property(self, prop, xlabel="x", ylabel="y", title='', proplab="prop",
                       as_bool=False, color='green', cmap='Greens', ec='black',
-                      text=False, text_kwargs={}, legend_kwargs={}, fig=None, ax=None,
-                      figsize=(5, 5), **kwargs):
+                      text=False, text_kwargs={}, hatch=False, legend_kwargs={},
+                      fig=None, ax=None, figsize=(5, 5), **kwargs):
         """
         Plot a given property 'prop' as a colormesh on an x-y grid.
 
@@ -703,7 +704,7 @@ class BaseCoords(BaseObject):
         y = np.linspace(0., self.p.blocksize*(self.p.y_size-1), self.p.y_size)
         X, Y = np.meshgrid(x, y)
         # refine property for plotting
-        if as_bool:
+        if as_bool or hatch:
             p = p > 0.0
         if p.dtype == 'bool':
             cmap = ListedColormap([color])
@@ -718,8 +719,15 @@ class BaseCoords(BaseObject):
             if vmin == vmax:
                 vmax = vmin + 1.0
         kwargs = {**kwargs, **default_kwargs}
-
-        im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **kwargs)
+        if not hatch:
+            im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **kwargs)
+            patch = mpatches.Patch(color=color, label=proplab)
+        else:
+            kwar = {**kwargs, 'cmap': ListedColormap(['none']),
+                    'linewidth': 0, 'ec': color}
+            im = ax.pcolor(X, Y, p, vmin=vmin, vmax=vmax, hatch=hatch, **kwar)
+            patch = mpatches.Patch(hatch=hatch, ec=kwar.get('ec'), label=proplab,
+                                   color='none')
         if text:
             self.show_property_text(prop, fig=fig, ax=ax, **text_kwargs)
 
@@ -728,9 +736,6 @@ class BaseCoords(BaseObject):
             proplab = prop
 
         if p.dtype == 'bool':
-            # if boolean, create a legend
-            import matplotlib.patches as mpatches
-            patch = mpatches.Patch(color=color, label=proplab)
             if legend_kwargs is not False:
                 if legend_kwargs is True:
                     legend_kwargs = {}
@@ -1685,5 +1690,8 @@ if __name__ == "__main__":
                            "high_v": {"alpha": 0.5, "color": "red"}},
               legend_kwargs=True)
 
+    ex.st[1]=1
+    ex.show({"st": {'hatch': 'xx', 'color': 'red'}},
+            collections={"high_v": {"alpha": 0.5, "color": "blue"}})
     import doctest
     doctest.testmod(verbose=True)
