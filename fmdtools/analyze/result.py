@@ -750,7 +750,8 @@ class Result(UserDict):
                                        axis=0, weights=weights)
         return expres
 
-    def get_metric(self, value, metric=np.mean, args=(), axis=None):
+    def get_metric(self, value, metric=np.average, args=(), axis=None, weights=None,
+                   normalized=False, **kwargs):
         """
         Calculate a statistic of the value using a provided metric function.
 
@@ -767,13 +768,26 @@ class Result(UserDict):
         axis : None or 0 or 1
             Whether to take the metric over variables (0) or over time (1) or
             both (None). The default is None.
+
+        Examples
+        --------
+        >>> r = Result({'t1.a': 0.5, 't1.b': 0.01, 't2.a': 0.0, 't2.b': 0.1})
+        >>> r.get_metric("a", metric=np.average, weights="b")
+        0.0025
         """
         if isinstance(metric, str):
             method = getattr(self, metric)
-            return method("."+value, *args)
+            return method("."+value, *args, **kwargs)
         else:
-            vals = self.get_values(value)
-            return metric([*vals.values()], *args, axis=axis)
+            vals = np.array([*self.get_values(value).values()])
+            if weights:
+                if isinstance(weights, str):
+                    weights = [*self.get_values(weights).values()]
+                weights = np.array(weights)
+                if normalized:
+                    weights = weights/np.sum(weights)
+                vals = vals*weights
+            return metric(vals, *args, axis=axis, **kwargs)
 
     def get_metric_ci(self, value, metric=np.mean, **kwargs):
         """
