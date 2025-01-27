@@ -208,7 +208,8 @@ def load_folder(folder, filetype):
     return files_toread
 
 
-def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):
+def bootstrap_confidence_interval(data, method=np.average, return_anyway=False,
+                                  **kwargs):
     """
     Return bootstrap confidence interval (helper for scipy.bootstrap).
 
@@ -234,6 +235,103 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
         return method(data), method(data), method(data)
     else:
         raise Exception("All data are the same!")
+
+
+def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
+                rates=None, r_dtype=None, r_norm=False, **kwargs):
+    """
+    Calculate a metric from data.
+
+    Parameters
+    ----------
+    data : array/list/tuple
+        Data to take metric over.
+    method : method, optional
+        Method to call to calculate the metric. The default is np.average.
+    args : tuple, optional
+        Arguments to the method. The default is ().
+    axis : int, optional
+        Axis of the array to take the metric over. The default is None.
+    dtype : type, optional
+        Datatype to pre-process to, if the datat should be interpreted as a different
+        data (e.g., preprocess as bool to calculate a rate). The default is None.
+    rate : array/list/tuple, optional
+        Array of rates corresponding to data to weight the data by before calculating
+        the metric. The default is None.
+    r_dtype : type, optional
+        Datatype to preprocess the rates over. The default is None.
+    r_norm : bool, optional
+        Whether to normalize rates. The default is False.
+    **kwargs : kwargs
+        Keyword arguments to method.
+
+    Returns
+    -------
+    metric: float
+        Metric calculated by method over data.
+
+    Examples
+    --------
+    >>> calc_metric([1,2,3]) # simple average
+    2.0
+    >>> calc_metric([1,2,3], rates=[0.1, 0.1, 0.0], method=np.sum) # weighted sum
+    0.30000000000000004
+    >>> calc_metric([0, 20, 30], dtype=bool, rates=[0.1, 0.1, 0.1], method=np.sum) # rate of nonzero event
+    0.2
+    """
+    vals = np.array(data, dtype=dtype)
+    if rates:
+        rates = np.array(rates, dtype=r_dtype)
+        if r_norm:
+            rates = rates/np.sum(rates)
+        vals = vals*rates
+    return method(vals, **kwargs)
+
+
+def calc_rate(data, rates=None, **kwargs):
+    """
+    Calculate a rate of a non-zero value in data using calc_metric.
+
+    Examples
+    --------
+    >>> calc_rate([0, 10, 0]) # defaults to equal rate
+    0.3333333333333333
+    >>> calc_rate([0, 10, 100], [0.1, 0.1, 0.1]) # provided rates
+    0.2
+    """
+    if rates is None:
+        rates = 1/np.size(data)
+    return calc_metric(data, method=np.sum, dtype=bool, rates=rates, **kwargs)
+
+
+def calc_total(data, **kwargs):
+    """
+    Calculate the total number of non-zero values in data using calc_metric.
+
+    Examples
+    --------
+    >>> calc_total([0, 10, 0])
+    1
+    >>> calc_total([0, 10, 100])
+    2
+    """
+    return calc_metric(data, method=np.sum, dtype=bool, **kwargs)
+
+
+def calc_expected(data, rates=None, **kwargs):
+    """
+    Calculate the expected value of given data using calc_metric.
+
+    Examples
+    --------
+    >>> calc_expected([0, 5, 10]) # defaults to average
+    5.0
+    >>> calc_expected([0, 5, 10], [0.1, 0.5, 0.1])
+    3.5
+    """
+    if rates is None:
+        rates = 1/np.size(data)
+    return calc_metric(data, method=np.sum, rates=rates, **kwargs)
 
 
 def join_key(k):
