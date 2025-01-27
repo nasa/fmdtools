@@ -122,7 +122,8 @@ class BaseTab(UserDict):
         Parameters
         ----------
         *factor : str/int
-            Name of factor(s) to sort by, in order of sorting. (non-included factors will be sorted last)
+            Name of factor(s) to sort by, in order of sorting.
+            (non-included factors will be sorted last)
         """
         factors = list(factors)
         factors.reverse()

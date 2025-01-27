@@ -450,13 +450,13 @@ class Result(UserDict):
             result = result.flatten()
         return result
 
-    def get_values(self, *values):
+    def get_values(self, *values, prefix=""):
         """Get a dict with all values corresponding to the strings in *values."""
         h = self.__class__()
         flatself = self.flatten()
         k_vs = []
         for v in values:
-            ks = [k for k in flatself.keys() if k.endswith(v)]
+            ks = [k for k in flatself.keys() if k.endswith(prefix+v)]
             if not ks:
                 raise Exception("Value "+v+" not in Result keys.")
             k_vs.extend(ks)
@@ -751,7 +751,7 @@ class Result(UserDict):
         return expres
 
     def get_metric(self, value, metric=np.average, args=(), axis=None, weights=None,
-                   normalized=False, **kwargs):
+                   normalized=False, prefix="", **kwargs):
         """
         Calculate a statistic of the value using a provided metric function.
 
@@ -768,6 +768,16 @@ class Result(UserDict):
         axis : None or 0 or 1
             Whether to take the metric over variables (0) or over time (1) or
             both (None). The default is None.
+        as_indicator : bool
+            Whether to process as indicator (for rates). The Default is False.
+        weights : str/array
+            Keys to use for weights, if any. Default is None.
+        normalized = Bool
+            Whether to normalize weights. Default is False.
+        prefix : str
+            Prefix to get values from. Default is "".
+        **kwargs : kwargs
+            Keyword arguments for metric function.
 
         Examples
         --------
@@ -777,7 +787,7 @@ class Result(UserDict):
         """
         if isinstance(metric, str):
             method = getattr(self, metric)
-            return method("."+value, *args, **kwargs)
+            return method(value, *args, **kwargs)
         else:
             vals = np.array([*self.get_values(value).values()])
             if weights:
@@ -789,7 +799,7 @@ class Result(UserDict):
                 vals = vals*weights
             return metric(vals, *args, axis=axis, **kwargs)
 
-    def get_metric_ci(self, value, metric=np.mean, **kwargs):
+    def get_metric_ci(self, value, prefix=".", metric=np.mean, **kwargs):
         """
         Get the confidence interval for the given value over the set of scenarios.
 
@@ -812,11 +822,11 @@ class Result(UserDict):
         upper bound : number
             upper bound of the statistic in the ci
         """
-        vals = self.get_values(value)
+        vals = self.get_values(value, prefix=prefix)
         ci = bootstrap_confidence_interval([*vals.values()], method=metric, **kwargs)
         return ci
 
-    def get_metrics(self, *values, metric=np.mean, args=(), axis=None):
+    def get_metrics(self, *values, prefix=".", **kwargs):
         """
         Calculate a statistic of the values using a provided metric function.
 
@@ -825,23 +835,18 @@ class Result(UserDict):
         *values : strs
             Values of the history to calculate the statistic over
             (if none provided, creates metric of all)
-        metric : func, optional
-            Function to process the history (e.g. np.mean, np.min...).
-            The default is np.mean.
-        args : args, optional
-            Arguments for the metric function. Default is ().
-        axis : None or 0 or 1
-            Whether to take the metric over variables (0) or over time (1)
-            or both (None). The default is None.
+        **kwargs : kwargs
+            Keyword arguments to get_metric.
         """
         if not values:
             values = self.keys()
+            prefix = ""
         metrics = Result()
         for value in values:
-            metrics[value] = self.get_metric(value, metric=metric, args=args, axis=axis)
+            metrics[value] = self.get_metric(value, prefix=prefix, **kwargs)
         return metrics
 
-    def total(self, metric):
+    def total(self, metric, prefix="."):
         """
         Tabulates the total (non-weighted sum) of a metric over a number of runs.
 
@@ -855,9 +860,10 @@ class Result(UserDict):
         totalcost : Float
             The total metric of the scenarios.
         """
-        return sum([e for e in self.get_values(metric).values()])
+        return sum([e for e in self.get_values(metric, prefix=prefix).values()])
 
-    def state_probabilities(self, prob_key='prob', class_key='classification'):
+    def state_probabilities(self, prob_key='prob', class_key='classification',
+                            prefix="."):
         """
         Tabulates the probabilities of different classifications in the result.
 
@@ -874,12 +880,12 @@ class Result(UserDict):
             Dictionary of probabilities of different simulation classifications
 
         """
-        classifications = self.get_values("." + class_key)
-        class_len = len("." + class_key)
-        probs = self.get_values("." + prob_key)
+        classifications = self.get_values(class_key, prefix=prefix)
+        class_len = len(prefix + class_key)
+        probs = self.get_values(prob_key, prefix=prefix)
         probabilities = dict()
         for key, classif in classifications.items():
-            prob = probs[key[:-class_len] + "." + prob_key]
+            prob = probs[key[:-class_len] + prefix + prob_key]
             if classif in probabilities:
                 probabilities[classif] += prob
             else:
@@ -1110,7 +1116,7 @@ def load_json(filename, indiv=False):
 
 if __name__ == "__main__":
 
-    # r = Result({'a': 1, 'b': 3})
+    r = Result({'a': 1, 'b': 3})
     # r.c
     import doctest
     doctest.testmod(verbose=True)
