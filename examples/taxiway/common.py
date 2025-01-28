@@ -823,7 +823,7 @@ def plot_tstep(mdl, mdlhist, t, fxnattr="", locattr="", markersize=10,
             if fxnattr:
                 try:
                     atthist = mdlhist.fxns.get(f + "." + fxnattr)
-                except AttributeError:
+                except Exception or AttributeError:
                     atthist = None
                 if (not atthist is None) and len(atthist) > 0:
                     if fxnattr == "s.visioncov" and atthist[t]:

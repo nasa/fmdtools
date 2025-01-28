@@ -28,6 +28,7 @@ specific language governing permissions and limitations under the License.
 """
 from fmdtools.define.base import get_var, nest_dict, gen_timerange, is_numeric
 from fmdtools.define.container.parameter import Parameter, ExampleParameter
+from fmdtools.define.architecture.function import ExFxnArch
 from fmdtools.sim.scenario import SingleFaultScenario, JointFaultScenario
 from fmdtools.sim.scenario import ParameterScenario
 from fmdtools.analyze.phases import PhaseMap, join_phasemaps
@@ -404,8 +405,6 @@ class FaultDomain(object):
     """
     Defines the faults which will be sampled from in an approach.
 
-    ...
-
     Attributes
     ----------
     fxns : dict
@@ -451,13 +450,11 @@ class FaultDomain(object):
 
         Examples
         --------
-        >>> from examples.multirotor.drone_mdl_rural import Drone
-        >>> fd= FaultDomain(Drone())
-        >>> fd.add_faults(('ctl_dof', 'noctl'), ('affect_dof', 'rr_ctldn'))
-        >>> fd
+        >>> exfd = FaultDomain(ExFxnArch())
+        >>> exfd.add_faults(("ex_fxn", "no_charge"))
+        >>> exfd
         FaultDomain with faults:
-         -('ctl_dof', 'noctl')
-         -('affect_dof', 'rr_ctldn')
+         -('ex_fxn', 'no_charge')
         """
         for fault in faults:
             self.add_fault(fault[0], fault[1])
@@ -468,13 +465,14 @@ class FaultDomain(object):
 
         Examples
         --------
-        >>> from examples.multirotor.drone_mdl_rural import Drone
-        >>> fd = FaultDomain(Drone().fxns['ctl_dof'])
-        >>> fd.add_all()
-        >>> fd
+        >>> exfd = FaultDomain(ExFxnArch())
+        >>> exfd.add_all()
+        >>> exfd
         FaultDomain with faults:
-         -('ctl_dof', 'noctl')
-         -('ctl_dof', 'degctl')
+         -('ex_fxn', 'no_charge')
+         -('ex_fxn', 'short')
+         -('ex_fxn2', 'no_charge')
+         -('ex_fxn2', 'short')
         """
         faults = [(fxnname, mode) for fxnname, fxn in self.fxns.items()
                   if hasattr(fxn, 'm')
@@ -510,19 +508,14 @@ class FaultDomain(object):
 
         Examples
         --------
-        >>> from examples.eps.eps import EPS
-        >>> fd1 = FaultDomain(EPS())
-        >>> fd1.add_all_fxnclass_modes("ExportHE")
-        >>> fd1
+        >>> exfd = FaultDomain(ExFxnArch())
+        >>> exfd.add_all_fxnclass_modes("ExampleFunction")
+        >>> exfd
         FaultDomain with faults:
-         -('export_he', 'hot_sink')
-         -('export_he', 'ineffective_sink')
-         -('export_waste_h1', 'hot_sink')
-         -('export_waste_h1', 'ineffective_sink')
-         -('export_waste_ho', 'hot_sink')
-         -('export_waste_ho', 'ineffective_sink')
-         -('export_waste_hm', 'hot_sink')
-         -('export_waste_hm', 'ineffective_sink')
+         -('ex_fxn', 'no_charge')
+         -('ex_fxn', 'short')
+         -('ex_fxn2', 'no_charge')
+         -('ex_fxn2', 'short')
         """
         for fxnclass in fxnclasses:
             faults = [(fxnname, mode)
@@ -541,13 +534,12 @@ class FaultDomain(object):
 
         Examples
         --------
-        >>> from examples.multirotor.drone_mdl_rural import Drone
-        >>> fd = FaultDomain(Drone())
-        >>> fd.add_all_fxn_modes("hold_payload")
-        >>> fd
+        >>> exfd = FaultDomain(ExFxnArch())
+        >>> exfd.add_all_fxn_modes("ex_fxn2")
+        >>> exfd
         FaultDomain with faults:
-         -('hold_payload', 'break')
-         -('hold_payload', 'deform')
+         -('ex_fxn2', 'no_charge')
+         -('ex_fxn2', 'short')
         """
         for fxnname in fxnnames:
             faults = [(fxnname, mode) for mode in self.fxns[fxnname].m.faultmodes
@@ -590,6 +582,10 @@ class FaultDomain(object):
                               for fmode, comp in self.fxns[fxn].ca.m.sub_modes.items()
                               if firstcomp == comp]
                 self.add_faults(*compfaults)
+
+
+exfd = FaultDomain(ExFxnArch())
+exfd.add_all()
 
 
 class BaseSample():
@@ -750,8 +746,6 @@ class FaultSample(BaseSample):
     """
     Defines a sample of a given faultdomain.
 
-    ...
-
     Parameters
     ----------
     faultdomain: FaultDomain
@@ -759,13 +753,19 @@ class FaultSample(BaseSample):
     phasemap: PhaseMap, (optional)
         Phases of operation to sample over.
 
-        
     Attributes
     ----------
     _scenarios : list
         List of scenarios to sample.
     _times : set
         Set of times where the scenarios will occur
+
+    Examples
+    --------
+    >>> exfs = FaultSample(exfd)
+    >>> exfs.add_fault_times([1, 2])
+    >>> exfs.get_scen_groups("function", "time")
+    {('ex_fxn', 1): ['ex_fxn_no_charge_t1', 'ex_fxn_short_t1'], ('ex_fxn', 2): ['ex_fxn_no_charge_t2', 'ex_fxn_short_t2'], ('ex_fxn2', 1): ['ex_fxn2_no_charge_t1', 'ex_fxn2_short_t1'], ('ex_fxn2', 2): ['ex_fxn2_no_charge_t2', 'ex_fxn2_short_t2']}
     """
 
     def __init__(self, faultdomain, phasemap={}, def_mdl_phasemap=True):
@@ -1001,6 +1001,10 @@ class FaultSample(BaseSample):
             else:
                 raise Exception("Invalid method: "+loc_method)
             self.add_fault_times(sampletimes, weights, n_joint=n_joint, **joint_kwargs)
+
+
+exfs = FaultSample(exfd)
+exfs.add_fault_times([1, 2])
 
 
 class JointFaultSample(FaultSample):

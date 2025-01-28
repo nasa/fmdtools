@@ -216,34 +216,6 @@ def load_folder(folder, filetype):
     return files_toread
 
 
-def bootstrap_confidence_interval(data, method=np.average, return_anyway=False,
-                                  **kwargs):
-    """
-    Return bootstrap confidence interval (helper for scipy.bootstrap).
-
-    Parameters
-    ----------
-    data : list/array/etc
-        Iterable with the data. May be float (for mean) or indicator (for proportion)
-    method : method
-        numpy method to give scipy.bootstrap.
-    return_anyway: bool
-        Gives a dummy interval of (stat, stat) if no . Used for plotting
-    Returns
-    ----------
-    statistic, lower bound, upper bound
-    """
-    if 'interval' in kwargs:
-        kwargs['confidence_level'] = kwargs.pop('interval')*0.01
-    if data.count(data[0]) != len(data):
-        bs = bootstrap([data], method, **kwargs)
-        return method(data), bs.confidence_interval.low, bs.confidence_interval.high
-    elif return_anyway:
-        return method(data), method(data), method(data)
-    else:
-        raise Exception("All data are the same!")
-
-
 def metric_preamble(data, dtype=None, rates=None, r_dtype=None, r_norm=False):
     """Process data for weighted metrics used by calc_metric and calc_metric_ci."""
     vals = np.array(data, dtype=dtype)
@@ -310,7 +282,7 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
                       r_dtype=r_dtype, r_norm=r_norm, **kwargs)
     else:
         vals = metric_preamble(data, dtype, rates, r_dtype, r_norm)
-        return method(vals, **kwargs)
+        return method(vals, *args, **get_func_kwargs(method, **kwargs, axis=axis))
 
 
 def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
@@ -426,6 +398,34 @@ def calc_expected(data, rates=None, weights=None, **kwargs):
     if rates is None:
         rates = 1/np.size(data)
     return calc_metric(data, **{**kwargs, 'method': np.sum, 'rates': rates})
+
+
+def calc_average(data, weights=None, rates=None, **kwargs):
+    """
+    Calculate the average value of given data using calc_metric.
+
+    Examples
+    --------
+    >>> calc_average([0, 5, 10])
+    5.0
+    >>> calc_average([0, 5, 10], [0.0, 0.5, 0.5])
+    7.5
+    """
+    return calc_metric(data, **{**kwargs, 'method': np.average, 'weights': weights})
+
+
+def calc_sum(data, weights=None, rates=None, **kwargs):
+    """
+    Calculate the average value of given data using calc_metric.
+
+    Examples
+    --------
+    >>> calc_sum([0, 5, 10.0])
+    15.0
+    >>> calc_sum([0, 5, 10.0], [0.0, 0.5, 0.5])
+    15.0
+    """
+    return calc_metric(data, **{**kwargs, 'method': np.sum})
 
 
 def join_key(k):

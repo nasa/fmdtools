@@ -381,10 +381,8 @@ class BaseTab(UserDict):
 
 
 class FMEA(BaseTab):
-    def __init__(self, res, fs, metrics=[], weight_metrics=[], avg_metrics=[],
-                 perc_metrics=[], mult_metrics={}, extra_classes={},
-                 group_by=('function', 'fault'), mdl={}, mode_types={},
-                 empty_as=0.0):
+    def __init__(self, res, fs, extra_classes={}, group_by=('function', 'fault'),
+                 mdl={}, mode_types={}, empty_as=0.0, prefix="endclass.", **kwargs):
         """
         Make a user-definable fmea of the endclasses of a set of fault scenarios.
 
@@ -394,23 +392,6 @@ class FMEA(BaseTab):
             Result corresponding to the the simulation runs
         fs : sampleapproach/faultsample
             FaultSample used for the underlying probability model of the set of scens.
-        metrics : list
-            generic unweighted metrics to query. metrics are summed over grouped scens.
-            The default is []. 'all' presents all metrics.
-        weight_metrics: list
-            weighted metrics to query. weight metrics are summed over groups.
-            The default is ['rate'].
-        avg_metrics: list
-            metrics to average and query. The default is ['cost'].
-            avg_metrics are averaged over groups, rather than a total.
-        perc_metrics : list, optional
-            metrics to treat as indicator variables to calculate a percentage.
-            perc_metrics are treated as indicator variables and averaged over groups.
-            The default is [].
-        mult_metrics : dict, optional
-            mult_metrics are new metrics calculated by multiplying existing metrics.
-            (e.g., to calculate expectations or risk values like an expected_cost/RPN)
-            The default is {"expected_cost":['rate', 'cost']}.
         extra_classes : dict, optional
             An additional set of endclasses to include in the table.
             The default is {}.
@@ -423,43 +404,55 @@ class FMEA(BaseTab):
             Model for use in 'fxnclassfault' and 'fxnclass' options
         empty_as : float/'nan'
             How to calculate stats of empty variables (for avg_metrics). Default is 0.0.
+        prefix : str
+            Prefix for the metrics to use for get_metric. Default is 'endclass.', which
+            gets the metrics from endclass only.
+        **kwargs: str/list
+            Metrics to calculate, (e.g., rate_metric='rate', expected_metric='cost')
+            Note that rate and rate metrics become inputs to average and expected.
+            All other kwargs will be kwargs to Result.get_metric
+            (e.g., rates or weights for get_expected and get_average)
+
+        Examples
+        --------
+        >>> from fmdtools.sim.sample import exfs
+        >>> res = Result({scen.name+'.endclass': {'rate': scen.time, 'cost': i} for i, scen in enumerate(exfs.scenarios())}).flatten()
+        >>> FMEA(res, exfs).as_table()
+                           average_rate  sum_cost  expected_cost
+        ex_fxn2 short               1.5        13             20
+                no_charge           1.5         9             14
+        ex_fxn  short               1.5         5              8
+                no_charge           1.5         1              2
+        >>> FMEA(res, exfs, sum_metric=["rate"], average_metric=["cost"]).as_table()
+                           sum_rate  average_cost
+        ex_fxn2 short             3           6.5
+                no_charge         3           4.5
+        ex_fxn  short             3           2.5
+                no_charge         3           0.5
         """
         self.factors = group_by
         grouped_scens = fs.get_scen_groups(*group_by)
-
-        if type(metrics) == str:
-            metrics = [metrics]
-        if type(weight_metrics) == str:
-            weight_metrics = [weight_metrics]
-        if type(perc_metrics) == str:
-            perc_metrics = [perc_metrics]
-        if type(avg_metrics) == str:
-            avg_metrics = [avg_metrics]
-
-        if not metrics and not weight_metrics and not perc_metrics and not avg_metrics and not mult_metrics:
+        all_metrics = {k[:-7]: [v] if not isinstance(v, list) else v
+                       for k, v in kwargs.items() if "_metric" in k}
+        met_kwar = {k: v for k, v in kwargs.items() if "_metric" not in k}
+        if not all_metrics:
             # default fmea is a cost-based table
-            weight_metrics = ["rate"]
-            avg_metrics = ["cost"]
-            mult_metrics = {"expected_cost": ['rate', 'cost']}
+            all_metrics = {'average': ['rate'], 'sum': ['cost'], "expected": ["cost"]}
+            if not met_kwar:
+                met_kwar = {'rates': 'rate'}
 
         res.update(extra_classes)
 
-        allmetrics = metrics+weight_metrics+avg_metrics+perc_metrics+[*mult_metrics.keys()]
-
-        fmeadict = {m: dict.fromkeys(grouped_scens) for m in allmetrics}
+        fmeadict = {m+"_"+vi: dict.fromkeys(grouped_scens)
+                    for m, v in all_metrics.items() for vi in v}
         for group, ids in grouped_scens.items():
             sub_result = Result({scenid: res.get(scenid) for scenid in ids})
-            for metric in metrics + weight_metrics:
-                fmeadict[metric][group] = sum([res.get(scenid).get('endclass.'+metric)
-                                               for scenid in ids])
-            for metric in perc_metrics:
-                fmeadict[metric][group] = sub_result.percent(metric)
-            for metric in avg_metrics:
-                fmeadict[metric][group] = sub_result.average(metric, empty_as=empty_as)
-            for metric, to_mult in mult_metrics.items():
-                fmeadict[metric][group] = sum([np.prod([res.get(scenid).get('endclass.'+m)
-                                                        for m in to_mult])
-                                               for scenid in ids])
+            for method, values in all_metrics.items():
+                for value in values:
+                    met = method+"_"+value
+                    fmeadict[met][group] = sub_result.get_metric(value, method=method,
+                                                                 prefix=prefix,
+                                                                 **met_kwar)
         self.data = fmeadict
 
 
@@ -501,7 +494,7 @@ class BaseComparison(BaseTab):
                     stat = default_stat
                 if met in ci_metrics:
                     try:
-                        mv, lb, ub = sub_res.get_metric_ci(met, metric=stat,
+                        mv, lb, ub = sub_res.get_metric_ci(met, method=stat,
                                                            **ci_kwargs)
                     except TypeError as e:
                         raise Exception("Invalid method: " + str(stat) + ", " +
@@ -511,7 +504,7 @@ class BaseComparison(BaseTab):
                     met_dict[met+"_lb"][fact_tup] = lb
                     met_dict[met+"_ub"][fact_tup] = ub
                 else:
-                    met_dict[met][fact_tup] = sub_res.get_metric(met, metric=stat)
+                    met_dict[met][fact_tup] = sub_res.get_metric(met, method=stat)
         self.data = met_dict
 
 
@@ -546,7 +539,7 @@ class Comparison(BaseComparison):
 
     example 1: checking the x = x^2 accross variables
 
-    >>> comp = Comparison(res, exp_ps, metrics=['a'], factors=['p.x'], default_stat='average')
+    >>> comp = Comparison(res, exp_ps, metrics=['a'], factors=['p.x'], default_stat='expected')
     >>> comp.sort_by_factors("p.x")
     >>> comp
     {'a': {(0,): 0.0, (1,): 1.0, (2,): 4.0, (3,): 9.0, (4,): 16.0, (5,): 25.0, (6,): 36.0, (7,): 49.0, (8,): 64.0, (9,): 81.0, (10,): 100.0}}
@@ -567,7 +560,7 @@ class Comparison(BaseComparison):
 
     example 2: viewing interaction between x and y:
 
-    >>> comp = Comparison(res, exp_ps, metrics=['b'], factors=['p.x', 'p.y'], default_stat='average')
+    >>> comp = Comparison(res, exp_ps, metrics=['b'], factors=['p.x', 'p.y'], default_stat='expected')
     >>> comp.sort_by_factors("p.x", "p.y")
     >>> comp.as_table(sort=False)
                b
@@ -864,5 +857,6 @@ class NominalEnvelope(object):
 
 
 if __name__ == "__main__":
+
     import doctest
     doctest.testmod(verbose=True)
