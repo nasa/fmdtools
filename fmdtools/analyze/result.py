@@ -460,7 +460,8 @@ class Result(UserDict):
         >>> r.get_vals("a", c="b")
         ([1], [3])
         """
-        get_vals = [[*self.get_values(val, prefix=prefix).values()] for val in values]
+        get_vals = [[*self.get_values(val, prefix=prefix).values()]
+                    for val in values]
         k_vals = [[*self.get_values(val, prefix=prefix).values()]
                   if isinstance(val, str) else val
                   for val in val_kwargs.values()]

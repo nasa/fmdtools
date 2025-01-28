@@ -644,7 +644,7 @@ def script_sample_faults(track='all', **kwargs):
 
 
 
-    c = an.tabulate.Comparison(endclasses, faultapp, default_stat=np.mean,
+    c = an.tabulate.Comparison(endclasses, faultapp, default_stat=np.average,
                                metrics=['cost', 'rate', 'expected_cost'],
                                ci_metrics=['cost'])
     c.as_table()
