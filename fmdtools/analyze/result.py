@@ -42,7 +42,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.base import t_key, nest_dict, is_numeric, is_bool, nan_to_x
 from fmdtools.analyze.common import to_include_keys
-from fmdtools.analyze.common import bootstrap_confidence_interval, join_key
+from fmdtools.analyze.common import calc_metric, calc_metric_ci, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import set_empty_multiplots
@@ -450,6 +450,22 @@ class Result(UserDict):
             result = result.flatten()
         return result
 
+    def get_vals(self, *values, prefix="", **val_kwargs):
+        """
+        Get *values from the dict and return as tuples.
+
+        Examples
+        --------
+        >>> r = Result({'a': 1, 'b': 3})
+        >>> r.get_vals("a", c="b")
+        ([1], [3])
+        """
+        get_vals = [[*self.get_values(val, prefix=prefix).values()] for val in values]
+        k_vals = [[*self.get_values(val, prefix=prefix).values()]
+                  if isinstance(val, str) else val
+                  for val in val_kwargs.values()]
+        return tuple(get_vals+k_vals)
+
     def get_values(self, *values, prefix=""):
         """Get a dict with all values corresponding to the strings in *values."""
         h = self.__class__()
@@ -750,8 +766,7 @@ class Result(UserDict):
                                        axis=0, weights=weights)
         return expres
 
-    def get_metric(self, value, metric=np.average, args=(), axis=None, weights=None,
-                   normalized=False, prefix="", **kwargs):
+    def get_metric(self, value, rates=None, weights=None, prefix="",**kwargs):
         """
         Calculate a statistic of the value using a provided metric function.
 
@@ -759,47 +774,33 @@ class Result(UserDict):
         ----------
         value : str
             Value of the history to calculate the statistic over
-        metric : func/'str', optional
-            Function to process the history (e.g. np.mean, np.min...).
-            The default is np.mean.
-            May alternatively provide name of Result method (e.g., 'expected', 'rate')
-        args : args
-            Arguments for the metric function. Default is ().
-        axis : None or 0 or 1
-            Whether to take the metric over variables (0) or over time (1) or
-            both (None). The default is None.
-        as_indicator : bool
-            Whether to process as indicator (for rates). The Default is False.
         weights : str/array
             Keys to use for weights, if any. Default is None.
-        normalized = Bool
-            Whether to normalize weights. Default is False.
+        rates : str/array
+            Keys to use for rates, if any. Default is None.
+
         prefix : str
             Prefix to get values from. Default is "".
         **kwargs : kwargs
-            Keyword arguments for metric function.
+            Keyword arguments for calc_metric.
 
         Examples
         --------
         >>> r = Result({'t1.a': 0.5, 't1.b': 0.01, 't2.a': 0.0, 't2.b': 0.1})
-        >>> r.get_metric("a", metric=np.average, weights="b")
+        >>> r.get_metric("a", method=np.average, rates="b")
         0.0025
+        >>> r.get_metric("a", method="total")
+        1
+        >>> r.get_metric("b", method="rate", rates="a")
+        0.5
+        >>> r.get_metric("b", method="expected", rates="a")
+        0.005
         """
-        if isinstance(metric, str):
-            method = getattr(self, metric)
-            return method(value, *args, **kwargs)
-        else:
-            vals = np.array([*self.get_values(value).values()])
-            if weights:
-                if isinstance(weights, str):
-                    weights = [*self.get_values(weights).values()]
-                weights = np.array(weights)
-                if normalized:
-                    weights = weights/np.sum(weights)
-                vals = vals*weights
-            return metric(vals, *args, axis=axis, **kwargs)
+        vals, rates, weights = self.get_vals(value, prefix=prefix,
+                                             rates=rates, weights=weights)
+        return calc_metric(vals, weights=weights, rates=rates, **kwargs)
 
-    def get_metric_ci(self, value, prefix=".", metric=np.mean, **kwargs):
+    def get_metric_ci(self, value, prefix=".", rates=None, weights=None, **kwargs):
         """
         Get the confidence interval for the given value over the set of scenarios.
 
@@ -807,11 +808,8 @@ class Result(UserDict):
         ----------
         value : str
             Value of the history to calculate the statistic over
-        metric : func, optional
-            Function to process the history (e.g., np.mean, np.min...).
-            The default is np.mean
         **kwargs : kwargs
-            kwargs to bootstrap_confidence_interval
+            kwargs to calc_metric_ci
 
         Returns
         -------
@@ -821,10 +819,18 @@ class Result(UserDict):
             lower bound of the statistic in the ci
         upper bound : number
             upper bound of the statistic in the ci
+
+        Examples
+        --------
+        >>> r = Result({'a.a': 1, 'b.a': 3, "c.a": 2})
+        >>> r.get_metric_ci("a")
+        (2.0, 1.0, 3.0)
+        >>> r.get_metric_ci("a", rates=[0.5, 1.0, 0.5], r_norm=True, method=np.sum)
+        (2.25, 1.0, 4.5)
         """
-        vals = self.get_values(value, prefix=prefix)
-        ci = bootstrap_confidence_interval([*vals.values()], method=metric, **kwargs)
-        return ci
+        vals, rates, weights = self.get_vals(value, prefix=prefix,
+                                             rates=rates, weights=weights)
+        return calc_metric_ci(vals, rates=rates, weights=weights, **kwargs)
 
     def get_metrics(self, *values, prefix=".", **kwargs):
         """
@@ -891,36 +897,6 @@ class Result(UserDict):
             else:
                 probabilities[classif] = prob
         return probabilities
-
-    def expected(self, metric, prob_key='rate'):
-        """Calculates the expected value of a given metric in endclasses using the rate
-        variable in endclasses"""
-        ecs = np.array([e for e in self.get_values(metric).values()
-                        if not np.isnan(e)])
-        weights = np.array([e for e in self.get_values(prob_key).values()
-                            if not np.isnan(e)])
-        return sum(ecs*weights)
-
-    def average(self, metric, empty_as='nan'):
-        """Calculate the average value of a given metric in endclasses"""
-        ecs = [e for e in self.get_values(metric).values() if not np.isnan(e)]
-        if len(ecs) > 0 or empty_as == 'nan':
-            return np.mean(ecs)
-        else:
-            return empty_as
-
-    def percent(self, metric):
-        """Calculate the percentage of a given indicator variable being True."""
-        return sum([int(bool(e)) for e in self.get_values(metric).values()
-                    if not np.isnan(e)])/(len(self.get_values(metric))+1e-16)
-
-    def rate(self, metric, prob_key='rate'):
-        """Calculate the rate of a metric being True using the rate variable."""
-        ecs = np.array([bool(e) for e in self.get_values(metric).values()
-                        if not np.isnan(e)])
-        weights = np.array([e for e in self.get_values(prob_key).values()
-                            if not np.isnan(e)])
-        return sum(ecs*weights)
 
     def plot_metric_dist(self, *values, cols=2, comp_groups={}, bins=10, metric_bins={},
                          legend_loc=-1, xlabels={}, ylabel='count', title='', titles={},
@@ -1117,6 +1093,9 @@ def load_json(filename, indiv=False):
 if __name__ == "__main__":
 
     r = Result({'a': 1, 'b': 3})
+
+    r = Result({'t1.a': 0.5, 't1.b': 0.01, 't2.a': 0.0, 't2.b': 0.1})
+    r.get_metric("b", method="rate", rates="a")
     # r.c
     import doctest
     doctest.testmod(verbose=True)
