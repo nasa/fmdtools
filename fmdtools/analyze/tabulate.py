@@ -59,6 +59,27 @@ def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
     -------
     pandas.DataFrame
         Table of metrics and degraded functions/flows over scenarios
+
+    Examples
+    --------
+    >>> from fmdtools.define.architecture.function import ExFxnArch
+    >>> from fmdtools.sim.propagate import fault_sample
+    >>> from fmdtools.sim.sample import exfs
+    >>> mdl = ExFxnArch()
+    >>> res, hist = fault_sample(mdl, exfs)
+    >>> result_summary_fmea(res, hist, *mdl.fxns, *mdl.flows)
+                                              degraded  ... expected_cost
+    ex_fxn_no_charge_t1              ['ex_fxn', 'exf']  ...           0.0
+    ex_fxn_no_charge_t2              ['ex_fxn', 'exf']  ...           0.0
+    ex_fxn_short_t1                  ['ex_fxn', 'exf']  ...           0.0
+    ex_fxn_short_t2                  ['ex_fxn', 'exf']  ...           0.0
+    ex_fxn2_no_charge_t1  ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
+    ex_fxn2_no_charge_t2  ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
+    ex_fxn2_short_t1      ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
+    ex_fxn2_short_t2      ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
+    nominal                                         []  ...           1.0
+    <BLANKLINE>
+    [9 rows x 5 columns]
     """
     from fmdtools.analyze.history import History
     deg_summaries = {}
@@ -93,6 +114,18 @@ def result_summary(endresult, mdlhist, *attrs):
     -------
     table : pd.DataFrame
         Table with summary
+
+    Examples
+    --------
+    >>> from fmdtools.define.architecture.function import ExFxnArch
+    >>> from fmdtools.sim.propagate import one_fault
+    >>> mdl = ExFxnArch()
+    >>> res, hist = one_fault(mdl, "ex_fxn", "short", time=2)
+    >>> result_summary(res, hist, *mdl.fxns, *mdl.flows)
+       endclass.rate  endclass.cost  ...       degraded    faulty
+    0        0.00001              1  ...  [ex_fxn, exf]  [ex_fxn]
+    <BLANKLINE>
+    [1 rows x 5 columns]
     """
     hist_summary = mdlhist.get_fault_degradation_summary(*attrs)
     if 'endclass' in endresult:
@@ -147,7 +180,7 @@ class BaseTab(UserDict):
         keys = [k for k in self[metric].keys()]
         ex_key = keys[0]
 
-        if hasattr(self, 'factors') and type(factor) == str:
+        if hasattr(self, 'factors') and isinstance(factor, str):
             value = self.factors.index(factor)
 
         order = np.argsort([k[value] for k in keys], axis=0, kind='stable')
@@ -262,7 +295,7 @@ class BaseTab(UserDict):
         # sort into color vs tick bars
         all_factors = [*met_dict.keys()]
         if color_factor:
-            if type(color_factor) == int:
+            if isinstance(color_factor, int):
                 c_fact = color_factor
                 color_factor = self.factors[c_fact]
             else:

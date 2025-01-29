@@ -607,7 +607,7 @@ class History(Result):
         faulty_hist = self.get_faulty_hist(*attrs, withtotal=False, withtime=False)
         faulty = [k for k, v in faulty_hist.items() if np.any(v)]
         deg_hist = self.get_degraded_hist(*attrs, withtotal=False, withtime=False)
-        degraded = [k for k, v in deg_hist.items() if not np.all(v)]
+        degraded = [k for k, v in deg_hist.items() if np.any(v)]
         return Result(faulty=faulty, degraded=degraded)
 
     def plot_line(self, *plot_values, cols=2, aggregation='individual',
