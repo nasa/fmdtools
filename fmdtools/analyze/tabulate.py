@@ -381,55 +381,67 @@ class BaseTab(UserDict):
 
 
 class FMEA(BaseTab):
+    """
+    Make a user-definable fmea of the endclasses of a set of fault scenarios.
+
+    Parameters
+    ----------
+    res : Result
+        Result corresponding to the the simulation runs
+    fs : sampleapproach/faultsample
+        FaultSample used for the underlying probability model of the set of scens.
+    extra_classes : dict, optional
+        An additional set of endclasses to include in the table.
+        The default is {}.
+    group_by : tuple, optional
+        Way of grouping fmea rows by scenario fields.
+        The default is ('function', 'fault').
+    mode_types : set
+        Mode types to group by in 'mode type' option
+    mdl : Model
+        Model for use in 'fxnclassfault' and 'fxnclass' options
+    empty_as : float/'nan'
+        How to calculate stats of empty variables (for avg_metrics). Default is 0.0.
+    prefix : str
+        Prefix for the metrics to use for get_metric. Default is 'endclass.', which
+        gets the metrics from endclass only.
+    rates/weights : str(s)
+        Weighting or rate factor to use for weighted averages and expectations.
+        Can be any value from the result (e,g. rates='rate') or the FaultSample
+        (e.g., rates='scenario.rate').
+    **kwargs: str/list
+        Metrics to calculate, (e.g., rate_metric='rate', expected_metric='cost')
+        Note that rate and rate metrics become inputs to average and expected.
+        rates='scenario_'
+        All other kwargs will be kwargs to Result.get_metric
+        (e.g., rates or weights for get_expected and get_average)
+
+    Examples
+    --------
+    >>> from fmdtools.sim.sample import exfs
+    >>> res = Result({scen.name+'.endclass': {'rate': scen.time, 'cost': i} for i, scen in enumerate(exfs.scenarios())}).flatten()
+    >>> FMEA(res, exfs).as_table(sort_by="sum_cost")
+                       average_scenario_rate  sum_cost  expected_cost
+    ex_fxn2 short                        0.0        13            0.0
+            no_charge                    0.0         9            0.0
+    ex_fxn  short                        0.0         5            0.0
+            no_charge                    0.0         1            0.0
+    >>> FMEA(res, exfs, average_metric=["rate"], sum_metric=["cost"], expected_metric=["cost"], rates="rate").as_table()
+                       average_rate  sum_cost  expected_cost
+    ex_fxn2 short               1.5        13             20
+            no_charge           1.5         9             14
+    ex_fxn  short               1.5         5              8
+            no_charge           1.5         1              2
+    >>> FMEA(res, exfs, sum_metric=["rate"], average_metric=["cost"]).as_table()
+                       sum_rate  average_cost
+    ex_fxn2 short             3           6.5
+            no_charge         3           4.5
+    ex_fxn  short             3           2.5
+            no_charge         3           0.5
+    """
+
     def __init__(self, res, fs, extra_classes={}, group_by=('function', 'fault'),
                  mdl={}, mode_types={}, empty_as=0.0, prefix="endclass.", **kwargs):
-        """
-        Make a user-definable fmea of the endclasses of a set of fault scenarios.
-
-        Parameters
-        ----------
-        res : Result
-            Result corresponding to the the simulation runs
-        fs : sampleapproach/faultsample
-            FaultSample used for the underlying probability model of the set of scens.
-        extra_classes : dict, optional
-            An additional set of endclasses to include in the table.
-            The default is {}.
-        group_by : tuple, optional
-            Way of grouping fmea rows by scenario fields.
-            The default is ('function', 'fault').
-        mode_types : set
-            Mode types to group by in 'mode type' option
-        mdl : Model
-            Model for use in 'fxnclassfault' and 'fxnclass' options
-        empty_as : float/'nan'
-            How to calculate stats of empty variables (for avg_metrics). Default is 0.0.
-        prefix : str
-            Prefix for the metrics to use for get_metric. Default is 'endclass.', which
-            gets the metrics from endclass only.
-        **kwargs: str/list
-            Metrics to calculate, (e.g., rate_metric='rate', expected_metric='cost')
-            Note that rate and rate metrics become inputs to average and expected.
-            All other kwargs will be kwargs to Result.get_metric
-            (e.g., rates or weights for get_expected and get_average)
-
-        Examples
-        --------
-        >>> from fmdtools.sim.sample import exfs
-        >>> res = Result({scen.name+'.endclass': {'rate': scen.time, 'cost': i} for i, scen in enumerate(exfs.scenarios())}).flatten()
-        >>> FMEA(res, exfs).as_table()
-                           average_rate  sum_cost  expected_cost
-        ex_fxn2 short               1.5        13             20
-                no_charge           1.5         9             14
-        ex_fxn  short               1.5         5              8
-                no_charge           1.5         1              2
-        >>> FMEA(res, exfs, sum_metric=["rate"], average_metric=["cost"]).as_table()
-                           sum_rate  average_cost
-        ex_fxn2 short             3           6.5
-                no_charge         3           4.5
-        ex_fxn  short             3           2.5
-                no_charge         3           0.5
-        """
         self.factors = group_by
         grouped_scens = fs.get_scen_groups(*group_by)
         all_metrics = {k[:-7]: [v] if not isinstance(v, list) else v
@@ -437,9 +449,13 @@ class FMEA(BaseTab):
         met_kwar = {k: v for k, v in kwargs.items() if "_metric" not in k}
         if not all_metrics:
             # default fmea is a cost-based table
-            all_metrics = {'average': ['rate'], 'sum': ['cost'], "expected": ["cost"]}
+            all_metrics = {'average': ['scenario_rate'],
+                           'sum': ['cost'], "expected": ["cost"]}
             if not met_kwar:
-                met_kwar = {'rates': 'rate'}
+                met_kwar = {'rates': 'scenario_rate'}
+        for met, met_value in met_kwar.items():
+            if isinstance(met_value, str) and met_value.startswith("scenario_"):
+                met_kwar[met] = fs.get_scen_values(met_value[9:])
 
         res.update(extra_classes)
 
@@ -450,14 +466,20 @@ class FMEA(BaseTab):
             for method, values in all_metrics.items():
                 for value in values:
                     met = method+"_"+value
-                    fmeadict[met][group] = sub_result.get_metric(value, method=method,
-                                                                 prefix=prefix,
-                                                                 **met_kwar)
+                    if isinstance(value, str) and value.startswith("scenario_"):
+                        sum_met = fs.get_metric(value[9:], ids=ids, method=method,
+                                                **met_kwar)
+                    else:
+                        sum_met = sub_result.get_metric(value, method=method,
+                                                        prefix=prefix, **met_kwar)
+                    fmeadict[met][group] = sum_met
         self.data = fmeadict
 
 
 class BaseComparison(BaseTab):
     """
+    Base comparison class used for other comparisons.
+
     Parameters
     ----------
     res : Result
@@ -478,6 +500,7 @@ class BaseComparison(BaseTab):
     ci_kwargs : dict
         kwargs to bootstrap_ci
     """
+
     def __init__(self, res, scen_groups, metrics=['cost'],
                  default_stat="expected", stats={}, ci_metrics=[], ci_kwargs={}):
 
@@ -531,7 +554,7 @@ class Comparison(BaseComparison):
         set of scenarios for the given factor level.
 
     Examples
-    -------
+    --------
     >>> from fmdtools.sim.sample import exp_ps
     >>> from fmdtools.analyze.result import Result
     >>> res = Result({k.name: Result({'a': k.p['x']**2, "b": k.p['y']*k.p['x'], 'rate':k.rate}) for i, k in enumerate(exp_ps.scenarios())})

@@ -31,6 +31,7 @@ from fmdtools.define.container.parameter import Parameter, ExampleParameter
 from fmdtools.define.architecture.function import ExFxnArch
 from fmdtools.sim.scenario import SingleFaultScenario, JointFaultScenario
 from fmdtools.sim.scenario import ParameterScenario
+from fmdtools.analyze.common import calc_metric
 from fmdtools.analyze.phases import PhaseMap, join_phasemaps
 
 import numpy as np
@@ -616,6 +617,53 @@ class BaseSample():
             scens = {k: v for k, v in scens.items() if get_var(v, kwarg) == kwargs[kwarg]}
         return scens
 
+    def get_scen_values(self, value):
+        """
+        Get a dict of information from the set of scenarios.
+
+        Parameters
+        ----------
+        value : str
+            Value to get from the scenarios.
+        """
+        return {scenname: getattr(scen, value)
+                for scenname, scen in self.get_scens().items()}
+
+    def get_metric(self, value, ids="all", **kwargs):
+        """
+        Get metrics from scenario(s).
+
+        Parameters
+        ----------
+        value : str
+            Scenario value to take the metric over.
+        ids : list, optional
+            List of scenarios to get the metric over. The default is "all".
+        **kwargs : kwargs
+            kwargs to calc_metric.
+
+        Returns
+        -------
+        metric : float
+            Metric (by default, average) over the set of scenarios.
+
+        Examples
+        --------
+        >>> exfs.get_metric("rate")
+        0.0
+        >>> exfs.scenarios()[0].rate=2
+        >>> exfs.get_metric("rate", method="sum")
+        2.0
+        >>> exfs.get_metric("rate", method="average")
+        0.25
+        """
+        if ids == "all":
+            data = np.array([*self.get_scen_values(value).values()])
+        else:
+            data = np.array([j for i, j in self.get_scen_values(value).items()
+                             if i in ids])
+        return calc_metric(data, **kwargs)
+
     def get_groups_scens(self, groupnames, groups):
         """
         Get scenarios related to the given groups.
@@ -687,60 +735,6 @@ class BaseSample():
         """Get list of scen names."""
         return [s.name for s in self.scenarios()]
 
-    def get_factor_metrics(self, res, metrics=['cost'], factors=["time"],
-                           default_stat="expected", stats={}, ci_metrics=[],
-                           ci_kwargs={}):
-        """
-        Make a dict of the statistic for given metrics over given factors.
-
-        Parameters
-        ----------
-        res : Result
-            Result with the given metrics over a number of scenarios.
-        metrics : list
-            metrics in res to tabulate over time. Default is ['cost'].
-        factors : list
-            Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take the
-            statistic over. Default is ['time']
-        default_stat : str
-            statistic to take for given metrics my default.
-            (e.g., 'average', 'percent'... see Result methods). Default is 'expected'.
-        stats : dict
-            Non-default statistics to take for each individual metric.
-            e.g. {'cost': 'average'}. Default is {}
-        ci_metrics : list
-            Metrics to calculate a confidence interval for (using bootstrap_ci).
-            Default is [].
-        ci_kwargs : dict
-            kwargs to bootstrap_ci
-
-        Returns
-        -------
-        met_table : dict
-            pandas dataframe with the statistic of the metric over the corresponding
-            set of scenarios for the given factor level.
-        """
-        scen_groups = self.get_scen_groups(*factors)
-        met_dict = {met: {} for met in metrics}
-        met_dict.update({met+"_lb": {} for met in ci_metrics})
-        met_dict.update({met+"_ub": {} for met in ci_metrics})
-
-        for fact_tup, scens in scen_groups.items():
-            sub_res = res.get_scens(*scens)
-            for met in metrics+ci_metrics:
-                if met in stats:
-                    stat = stats[met]
-                else:
-                    stat = default_stat
-                if met in ci_metrics:
-                    mv, lb, ub = sub_res.get_metric_ci(met, metric=stat, **ci_kwargs)
-                    met_dict[met][fact_tup] = mv
-                    met_dict[met+"_lb"][fact_tup] = lb
-                    met_dict[met+"_ub"][fact_tup] = ub
-                else:
-                    met_dict[met][fact_tup] = sub_res.get_metric(met, metric=stat)
-        return met_dict
-
 
 class FaultSample(BaseSample):
     """
@@ -764,8 +758,16 @@ class FaultSample(BaseSample):
     --------
     >>> exfs = FaultSample(exfd)
     >>> exfs.add_fault_times([1, 2])
-    >>> exfs.get_scen_groups("function", "time")
-    {('ex_fxn', 1): ['ex_fxn_no_charge_t1', 'ex_fxn_short_t1'], ('ex_fxn', 2): ['ex_fxn_no_charge_t2', 'ex_fxn_short_t2'], ('ex_fxn2', 1): ['ex_fxn2_no_charge_t1', 'ex_fxn2_short_t1'], ('ex_fxn2', 2): ['ex_fxn2_no_charge_t2', 'ex_fxn2_short_t2']}
+    >>> exfs
+    FaultSample of scenarios: 
+     - ex_fxn_no_charge_t1
+     - ex_fxn_no_charge_t2
+     - ex_fxn_short_t1
+     - ex_fxn_short_t2
+     - ex_fxn2_no_charge_t1
+     - ex_fxn2_no_charge_t2
+     - ex_fxn2_short_t1
+     - ex_fxn2_short_t2
     """
 
     def __init__(self, faultdomain, phasemap={}, def_mdl_phasemap=True):

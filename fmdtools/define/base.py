@@ -131,7 +131,7 @@ def set_var(obj, var, val):
             set_var(getattr(obj, var[0]), var[1:], val)
 
 
-def nest_dict(dic, levels=float('inf'), separator="."):
+def nest_dict(dic, levels=float('inf'), separator=".", skip=0):
     """
     Nest a dictionary a certain number of levels by separator.
 
@@ -140,9 +140,11 @@ def nest_dict(dic, levels=float('inf'), separator="."):
     dict : dict
         Dictionary to nest. e.g. {'a.b': 1.0}
     levels : int, optional
-        DESCRIPTION. The default is float('inf').
+        Levels to nest over. The default is float('inf').
     separator : str
-        Saparator to nest by. The default is "."
+        Seperator to nest by. The default is "."
+    skip : str
+        Levels to skip. The default is 0.
 
     Returns
     -------
@@ -150,7 +152,8 @@ def nest_dict(dic, levels=float('inf'), separator="."):
         Nested dictionary. e.g. {'a': {'b': 1.0}}
     """
     newhist = dic.__class__()
-    key_options = OrderedSet([h.split(separator)[0] for h in dic.keys()])
+    key_options = OrderedSet([".".join(h.split(separator)[:skip+1])
+                              for h in dic.keys()])
     for key in key_options:
         if key in dic:
             newhist[key] = dic[key]

@@ -459,13 +459,32 @@ class Result(UserDict):
         >>> r = Result({'a': 1, 'b': 3})
         >>> r.get_vals("a", c="b")
         ([1], [3])
+        >>> r = Result({'x.a': 1, 'y.a': 3})
+        >>> r.get_vals('a', c={'x': 4, 'y': 5})
+        ([1, 3], [4, 5])
         """
         get_vals = [[*self.get_values(val, prefix=prefix).values()]
                     for val in values]
         k_vals = [[*self.get_values(val, prefix=prefix).values()]
-                  if isinstance(val, str) else val
+                  if isinstance(val, str) else
+                  [*self.align_external_dict(val).values()] if isinstance(val, dict)
+                  else val
                   for val in val_kwargs.values()]
         return tuple(get_vals+k_vals)
+
+    def align_external_dict(self, ext_dict):
+        """
+        Align external dict with the order of the Result.
+
+        Examples
+        --------
+        >>> r.align_external_dict({'t2': 1, 't1': 2})
+        {'t1': 2, 't2': 1}
+        """
+        dict_key = [*ext_dict.keys()][0]
+        nest_level = dict_key.count(".")
+        nest_self = self.nest(skip=nest_level)
+        return {k: ext_dict[k] for k in nest_self.keys()}
 
     def get_values(self, *values, prefix=""):
         """Get a dict with all values corresponding to the strings in *values."""
@@ -612,9 +631,9 @@ class Result(UserDict):
                 return False
         return True
 
-    def nest(self, levels=np.inf):
+    def nest(self, levels=float('inf'), separator=".", skip=0):
         """Re-nest a flattened result."""
-        return nest_dict(self, levels=levels)
+        return nest_dict(self, levels=levels, separator=separator, skip=skip)
 
     def get_memory(self):
         """
@@ -767,7 +786,8 @@ class Result(UserDict):
                                        axis=0, weights=weights)
         return expres
 
-    def get_metric(self, value, rates=None, weights=None, prefix="",**kwargs):
+    def get_metric(self, value, method=np.average, rates=None, weights=None, prefix="",
+                   **kwargs):
         """
         Calculate a statistic of the value using a provided metric function.
 
@@ -796,12 +816,15 @@ class Result(UserDict):
         0.5
         >>> r.get_metric("b", method="expected", rates="a")
         0.005
+        >>> r.get_metric("b", "expected", rates={"t1": 1, "t2": 2})
+        0.21000000000000002
         """
         vals, rates, weights = self.get_vals(value, prefix=prefix,
                                              rates=rates, weights=weights)
-        return calc_metric(vals, weights=weights, rates=rates, **kwargs)
+        return calc_metric(vals, method=method, weights=weights, rates=rates, **kwargs)
 
-    def get_metric_ci(self, value, prefix=".", rates=None, weights=None, **kwargs):
+    def get_metric_ci(self, value, method=np.average, prefix=".",
+                      rates=None, weights=None, **kwargs):
         """
         Get the confidence interval for the given value over the set of scenarios.
 
@@ -831,7 +854,8 @@ class Result(UserDict):
         """
         vals, rates, weights = self.get_vals(value, prefix=prefix,
                                              rates=rates, weights=weights)
-        return calc_metric_ci(vals, rates=rates, weights=weights, **kwargs)
+        return calc_metric_ci(vals, method=method, rates=rates, weights=weights,
+                              **kwargs)
 
     def get_metrics(self, *values, prefix=".", **kwargs):
         """

@@ -536,9 +536,9 @@ if __name__ == "__main__":
     plot_env_with_traj(hists, mdl)
     statsfmea = an.tabulate.FMEA(endresults, app, group_by=('function', 'fault'),
                                  average_metric=['rate', 'unsafe_flight_time', 'cost',
-                                                  'repcost',
-                                              'landcost', 'body_strikes',
-                                              'head_strikes', 'property_restrictions'])
+                                                  'repcost', 'landcost', 'body_strikes',
+                                              'head_strikes', 'property_restrictions'],
+                                 rates='rate')
     statsfmea.sort_by_metric("average_cost")
     statsfmea.as_table()
     statsfmea.as_plots("average_repcost", "average_unsafe_flight_time", "average_cost", "average_rate",

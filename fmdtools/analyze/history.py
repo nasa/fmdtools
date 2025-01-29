@@ -773,6 +773,12 @@ class History(Result):
         err_hist : History
             hist of line, low, high values. Has the form::
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
+
+        Examples
+        --------
+        >>> hist = History({"a.a": [1, 2, 3], "b.a": [4, 5, 6], "time": [0, 1, 2]})
+        >>> hist.get_mean_std_errhist("a").stat
+        array([2.5, 3.5, 4.5])
         """
         hist = History()
         hist[time] = self.get_metric(time, axis=0)
@@ -890,6 +896,16 @@ class History(Result):
         err_hist : History
             hist of line, low, high values. Has the form::
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
+
+        Examples
+        --------
+        >>> hist = History({"a.a": [1, 2, 3], "b.a": [4, 5, 6], "time": [0, 1, 2]})
+        >>> hist.get_percentile_errhist("a").stat
+        array([2.5, 3.5, 4.5])
+        >>> hist.get_percentile_errhist("a").high
+        array([3.25, 4.25, 5.25])
+        >>> hist.get_percentile_errhist("a").low
+        array([1.75, 2.75, 3.75])
         """
         hist = History()
         hist[time] = self.get_metric(time, axis=0)
