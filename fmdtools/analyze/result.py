@@ -478,6 +478,7 @@ class Result(UserDict):
 
         Examples
         --------
+        >>> r = Result({'t1.a': 0.5, 't1.b': 0.01, 't2.a': 0.0, 't2.b': 0.1})
         >>> r.align_external_dict({'t2': 1, 't1': 2})
         {'t1': 2, 't2': 1}
         """

@@ -477,13 +477,13 @@ class ResultObjective(Objective):
     ------
     time : float
         Time the objective is called at. If None, time will be the end of the sim.
-    metric : callable
-        Metric to tabulate for the objective. Default is np.sum.
+    method : callable
+        Method to tabulate for the objective. Default is np.sum.
 
     """
 
     time: float = None
-    metric: callable = np.sum
+    method: callable = np.sum
 
     def get_result_value(self, res):
         """
@@ -507,16 +507,16 @@ class ResultObjective(Objective):
         >>> obj.get_result_value(res)
         10.0
 
-        >>> obj = ResultObjective("a.b", time=1.0, metric=np.sum)
+        >>> obj = ResultObjective("a.b", time=1.0, method=np.sum)
         >>> res = Result({'scen1.t1p0.a.b': 10.0, 'scen2.t1p0.a.b': 12.0})
         >>> obj.get_result_value(res)
         22.0
         """
         if not self.time:
-            val = res.get_metric(self.name, metric=self.metric)
+            val = res.get_metric(self.name, method=self.method)
         else:
             t = t_key(float(self.time))
-            val = res.get_metric(t+"."+self.name, metric=self.metric)
+            val = res.get_metric(t+"."+self.name, method=self.method)
         return val
 
     def update(self, res):
@@ -584,7 +584,7 @@ class HistoryObjective(ResultObjective):
 
     Examples
     --------
-    >>> obj = HistoryObjective("a.b", metric=np.max)
+    >>> obj = HistoryObjective("a.b", method=np.max)
     >>> hist = History({'t1p0.a.b': [5.0, 10.0], 't2p0.a.b': [1.0, 13.0]})
     >>> obj.get_result_value(hist)
     13.0
