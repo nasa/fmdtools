@@ -37,6 +37,7 @@ from fmdtools.analyze.phases import PhaseMap, join_phasemaps
 import numpy as np
 import itertools
 import inspect
+import copy
 
 
 def pass_var(*x):
@@ -651,10 +652,11 @@ class BaseSample():
         --------
         >>> exfs.get_metric("rate")
         0.0
-        >>> exfs.scenarios()[0].rate=2
-        >>> exfs.get_metric("rate", method="sum")
+        >>> exfs2 = copy.deepcopy(exfs)
+        >>> exfs2.scenarios()[0].rate=2
+        >>> exfs2.get_metric("rate", method="sum")
         2.0
-        >>> exfs.get_metric("rate", method="average")
+        >>> exfs2.get_metric("rate", method="average")
         0.25
         """
         if ids == "all":
