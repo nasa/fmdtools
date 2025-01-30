@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Using Parallel Computing in fmdtools &mdash; fmdtools 2.0.6 documentation</title>
+  <title>Using Parallel Computing in fmdtools &mdash; fmdtools 2.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3e466467"></script>
+      <script src="../../_static/documentation_options.js?v=9a3ee07e"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-6">Version: 2.0.6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -414,6 +414,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
@@ -422,13 +423,19 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.round_float"><code class="docutils literal notranslate"><span class="pre">round_float()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.set_arg_as_type"><code class="docutils literal notranslate"><span class="pre">set_arg_as_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
@@ -531,7 +538,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.SingleFaultScenarioProblem"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.VariableConnector"><code class="docutils literal notranslate"><span class="pre">VariableConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.obj_name"><code class="docutils literal notranslate"><span class="pre">obj_name()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -547,23 +553,27 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.add_title_xylabs"><code class="docutils literal notranslate"><span class="pre">add_title_xylabs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_average"><code class="docutils literal notranslate"><span class="pre">calc_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_expected"><code class="docutils literal notranslate"><span class="pre">calc_expected()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_metric"><code class="docutils literal notranslate"><span class="pre">calc_metric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_metric_ci"><code class="docutils literal notranslate"><span class="pre">calc_metric_ci()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_percent"><code class="docutils literal notranslate"><span class="pre">calc_percent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_rate"><code class="docutils literal notranslate"><span class="pre">calc_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_sum"><code class="docutils literal notranslate"><span class="pre">calc_sum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_total"><code class="docutils literal notranslate"><span class="pre">calc_total()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.clear_prev_figure"><code class="docutils literal notranslate"><span class="pre">clear_prev_figure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.metric_preamble"><code class="docutils literal notranslate"><span class="pre">metric_preamble()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_helper"><code class="docutils literal notranslate"><span class="pre">multiplot_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.phase_overlay"><code class="docutils literal notranslate"><span class="pre">phase_overlay()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_hist"><code class="docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
@@ -654,7 +664,12 @@
              
   <section id="Using-Parallel-Computing-in-fmdtools">
 <h1>Using Parallel Computing in fmdtools<a class="headerlink" href="#Using-Parallel-Computing-in-fmdtools" title="Link to this heading"></a></h1>
-<p>This notebook will discuss how to use parallel programming in fmdtools, including: - how to set up a model for parallelism - syntax for using parallelism in simulation functions - considerations for optimizing computational performance in a model</p>
+<p>This notebook will discuss how to use parallel programming in fmdtools, including:</p>
+<ul class="simple">
+<li><p>how to set up a model for parallelism</p></li>
+<li><p>syntax for using parallelism in simulation functions</p></li>
+<li><p>considerations for optimizing computational performance in a model</p></li>
+</ul>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Copyright © 2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved.
 
 The “&quot;Fault Model Design tools - fmdtools version 2&quot;” software is licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -799,7 +814,12 @@ The object is pickleable
 </section>
 <section id="Using-Parallelism-in-Simulation">
 <h2>Using Parallelism in Simulation<a class="headerlink" href="#Using-Parallelism-in-Simulation" title="Link to this heading"></a></h2>
-<p>Parallelism generally requires using some external parallel processing toolkit. The syntax used by fmdtools methods is compatible with: - <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html">multiprocessing</a>, python’s default parallel computing library - <a class="reference external" href="https://pypi.org/project/multiprocess/">multiprocess</a>, a fork of multiprocessing developed by The UQ Foundation - <a class="reference external" href="https://github.com/uqfoundation/pathos">pathos</a>, a broader parallel computing package developed by The UQ Foundation</p>
+<p>Parallelism generally requires using some external parallel processing toolkit. The syntax used by fmdtools methods is compatible with:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html">multiprocessing</a>, python’s default parallel computing library</p></li>
+<li><p><a class="reference external" href="https://pypi.org/project/multiprocess/">multiprocess</a>, a fork of multiprocessing developed by The UQ Foundation</p></li>
+<li><p><a class="reference external" href="https://github.com/uqfoundation/pathos">pathos</a>, a broader parallel computing package developed by The UQ Foundation</p></li>
+</ul>
 <p>And any other package that emulates multiprocessing.Pool</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -810,8 +830,13 @@ The object is pickleable
 </pre></div>
 </div>
 </div>
-<p>Parallelism can speed up simulation time when there is a large number of independent simulations to run. The prefered methods for using parallelism are to use a <code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code> or <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code> with the methods: - propagate.singlefaults (for all single-fault scenarios in a static model with no approach) - propagate.approach (for sampling a set of faults) - propagate.nominal_approach (for simulating the model nominally over a set of parameters) - propagate.nested_approach (for sampling a
-set of faults over a set of model parameters)</p>
+<p>Parallelism can speed up simulation time when there is a large number of independent simulations to run. The prefered methods for using parallelism are to use a <code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code> or <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code> with the methods:</p>
+<ul class="simple">
+<li><p>propagate.singlefaults (for all single-fault scenarios in a static model with no approach)</p></li>
+<li><p>propagate.approach (for sampling a set of faults)</p></li>
+<li><p>propagate.nominal_approach (for simulating the model nominally over a set of parameters)</p></li>
+<li><p>propagate.nested_approach (for sampling a set of faults over a set of model parameters)</p></li>
+</ul>
 <p>These methods can be run in parallel by sending them a <code class="docutils literal notranslate"><span class="pre">pool</span></code> object from one of these modules as the optional <code class="docutils literal notranslate"><span class="pre">pool</span></code> argument. Further details on setting up and running an approach are provided in <code class="docutils literal notranslate"><span class="pre">docs/Approach</span> <span class="pre">Use-Cases.ipynb</span></code></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
@@ -1008,7 +1033,13 @@ fault scenarios) to reduce the cost of each simulation.</p>
 </pre></div>
 </div>
 </div>
-<p>Below is the baseline comparison, where the the following parameters characterize the sampling approach: - single faults: only the single-fault scenarios are considered - 3 points per phase: an evenly-spaced quadrature is sampled at each phase of operation (start, on, end) for the model - staged: the model is copied at each point in time where faults is injected during the model time to save computation - track: the entire model history is returned for each simulation</p>
+<p>Below is the baseline comparison, where the the following parameters characterize the sampling approach:</p>
+<ul class="simple">
+<li><p>single faults: only the single-fault scenarios are considered</p></li>
+<li><p>3 points per phase: an evenly-spaced quadrature is sampled at each phase of operation (start, on, end) for the model</p></li>
+<li><p>staged: the model is copied at each point in time where faults is injected during the model time to save computation</p></li>
+<li><p>track: the entire model history is returned for each simulation</p></li>
+</ul>
 <p>This is typical for a small model like this where the per-model expense is low.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
@@ -2817,10 +2848,19 @@ SCENARIOS COMPLETE: 100%|██████████| 72/72 [00:05&lt;00:00, 
 
 </pre></div></div>
 </div>
-<p>As shown, running this model is not particularly computationally expensive. As a result, the majority of the computational expense is not actually because of the simulation itself, but because of the way the model is simulated: - the majority is spent simulating the model - a certain amount is spent re-initalizing the model at first so that the model object can be re-used without worrying about it being modified by any previous executions - another amount is spent recording the model history,
-wich can increase or decrease depending on tracking options (note the low number of values tracked in the pump model by default)</p>
-<p>This is mostly because the model itself is computationally inexpensive. However, this example shows how one might easily speed up simulation for optimization or large-n simulations–avoiding unnecessary re-initialization, tracking fewer model states, or speeding up model execution. This can be done in the following ways: - using the options for <code class="docutils literal notranslate"><span class="pre">track</span></code> (as mentioned above) to track fewer states (reducing time spent recording the history) - using <code class="docutils literal notranslate"><span class="pre">protect</span></code> options, which specifies whether the
-model used is re-instantiated for the simulation (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or used directly (<code class="docutils literal notranslate"><span class="pre">False</span></code>) - speeding up the model by using <code class="docutils literal notranslate"><span class="pre">dynamic_behavior()</span></code> methods instead of <code class="docutils literal notranslate"><span class="pre">static_behavior()</span></code> or <code class="docutils literal notranslate"><span class="pre">behavior()</span></code> methods (which can halve the simulation time at the expense of undirected propagation) - speeding up the model by using a longer global timestep (<code class="docutils literal notranslate"><span class="pre">'tstep'</span></code> in <code class="docutils literal notranslate"><span class="pre">modelparams</span></code>) or by speeding up paricularly expensive Function dynamic behaviors by setting (<code class="docutils literal notranslate"><span class="pre">dt=local_tstep</span></code>) in the <code class="docutils literal notranslate"><span class="pre">SimParam</span></code></p>
+<p>As shown, running this model is not particularly computationally expensive. As a result, the majority of the computational expense is not actually because of the simulation itself, but because of the way the model is simulated:</p>
+<ul class="simple">
+<li><p>the majority is spent simulating the model</p></li>
+<li><p>a certain amount is spent re-initalizing the model at first so that the model object can be re-used without worrying about it being modified by any previous executions</p></li>
+<li><p>another amount is spent recording the model history, wich can increase or decrease depending on tracking options (note the low number of values tracked in the pump model by default)</p></li>
+</ul>
+<p>This is mostly because the model itself is computationally inexpensive. However, this example shows how one might easily speed up simulation for optimization or large-n simulations–avoiding unnecessary re-initialization, tracking fewer model states, or speeding up model execution. This can be done in the following ways:</p>
+<ul class="simple">
+<li><p>using the options for <code class="docutils literal notranslate"><span class="pre">track</span></code> (as mentioned above) to track fewer states (reducing time spent recording the history)</p></li>
+<li><p>using <code class="docutils literal notranslate"><span class="pre">protect</span></code> options, which specifies whether the model used is re-instantiated for the simulation (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or used directly (<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
+<li><p>speeding up the model by using <code class="docutils literal notranslate"><span class="pre">dynamic_behavior()</span></code> methods instead of <code class="docutils literal notranslate"><span class="pre">static_behavior()</span></code> or <code class="docutils literal notranslate"><span class="pre">behavior()</span></code> methods (which can halve the simulation time at the expense of undirected propagation)</p></li>
+<li><p>speeding up the model by using a longer global timestep (<code class="docutils literal notranslate"><span class="pre">'tstep'</span></code> in <code class="docutils literal notranslate"><span class="pre">modelparams</span></code>) or by speeding up paricularly expensive Function dynamic behaviors by setting (<code class="docutils literal notranslate"><span class="pre">dt=local_tstep</span></code>) in the <code class="docutils literal notranslate"><span class="pre">SimParam</span></code></p></li>
+</ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Urban Drone Demo &mdash; fmdtools 2.0.6 documentation</title>
+  <title>Urban Drone Demo &mdash; fmdtools 2.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3e466467"></script>
+      <script src="../../_static/documentation_options.js?v=9a3ee07e"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-6">Version: 2.0.6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -414,6 +414,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
@@ -422,13 +423,19 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.round_float"><code class="docutils literal notranslate"><span class="pre">round_float()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.set_arg_as_type"><code class="docutils literal notranslate"><span class="pre">set_arg_as_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
@@ -531,7 +538,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.SingleFaultScenarioProblem"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.VariableConnector"><code class="docutils literal notranslate"><span class="pre">VariableConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.obj_name"><code class="docutils literal notranslate"><span class="pre">obj_name()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -547,23 +553,27 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.add_title_xylabs"><code class="docutils literal notranslate"><span class="pre">add_title_xylabs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_average"><code class="docutils literal notranslate"><span class="pre">calc_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_expected"><code class="docutils literal notranslate"><span class="pre">calc_expected()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_metric"><code class="docutils literal notranslate"><span class="pre">calc_metric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_metric_ci"><code class="docutils literal notranslate"><span class="pre">calc_metric_ci()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_percent"><code class="docutils literal notranslate"><span class="pre">calc_percent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_rate"><code class="docutils literal notranslate"><span class="pre">calc_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_sum"><code class="docutils literal notranslate"><span class="pre">calc_sum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_total"><code class="docutils literal notranslate"><span class="pre">calc_total()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.clear_prev_figure"><code class="docutils literal notranslate"><span class="pre">clear_prev_figure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.metric_preamble"><code class="docutils literal notranslate"><span class="pre">metric_preamble()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_helper"><code class="docutils literal notranslate"><span class="pre">multiplot_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.phase_overlay"><code class="docutils literal notranslate"><span class="pre">phase_overlay()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_hist"><code class="docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
@@ -1136,6 +1146,86 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+SCENARIOS COMPLETE:   0%|          | 0/118 [00:00&lt;?, ?it/s]
+SCENARIOS COMPLETE:   1%|          | 1/118 [00:04&lt;09:41,  4.97s/it]
+SCENARIOS COMPLETE:   2%|▏         | 2/118 [00:10&lt;09:48,  5.07s/it]
+SCENARIOS COMPLETE:   3%|▎         | 3/118 [00:15&lt;09:47,  5.11s/it]
+SCENARIOS COMPLETE:   3%|▎         | 4/118 [00:20&lt;09:52,  5.20s/it]
+SCENARIOS COMPLETE:   4%|▍         | 5/118 [00:26&lt;09:59,  5.30s/it]
+SCENARIOS COMPLETE:   5%|▌         | 6/118 [00:31&lt;09:58,  5.34s/it]
+SCENARIOS COMPLETE:   6%|▌         | 7/118 [00:36&lt;09:33,  5.17s/it]
+SCENARIOS COMPLETE:   7%|▋         | 8/118 [00:41&lt;09:34,  5.23s/it]
+SCENARIOS COMPLETE:   8%|▊         | 9/118 [00:47&lt;09:44,  5.36s/it]
+SCENARIOS COMPLETE:   8%|▊         | 10/118 [00:52&lt;09:33,  5.31s/it]
+SCENARIOS COMPLETE:   9%|▉         | 11/118 [00:57&lt;09:31,  5.35s/it]
+SCENARIOS COMPLETE:  10%|█         | 12/118 [01:02&lt;09:14,  5.23s/it]
+SCENARIOS COMPLETE:  11%|█         | 13/118 [01:08&lt;09:19,  5.33s/it]
+SCENARIOS COMPLETE:  12%|█▏        | 14/118 [01:13&lt;09:08,  5.28s/it]
+SCENARIOS COMPLETE:  13%|█▎        | 15/118 [01:19&lt;09:07,  5.32s/it]
+SCENARIOS COMPLETE:  14%|█▎        | 16/118 [01:24&lt;09:08,  5.38s/it]
+SCENARIOS COMPLETE:  14%|█▍        | 17/118 [01:29&lt;09:02,  5.37s/it]
+SCENARIOS COMPLETE:  15%|█▌        | 18/118 [01:35&lt;08:52,  5.32s/it]
+SCENARIOS COMPLETE:  16%|█▌        | 19/118 [01:40&lt;08:43,  5.28s/it]
+SCENARIOS COMPLETE:  17%|█▋        | 20/118 [01:46&lt;08:49,  5.41s/it]
+SCENARIOS COMPLETE:  18%|█▊        | 21/118 [01:51&lt;08:50,  5.47s/it]
+SCENARIOS COMPLETE:  19%|█▊        | 22/118 [01:57&lt;08:58,  5.61s/it]
+SCENARIOS COMPLETE:  19%|█▉        | 23/118 [02:03&lt;08:55,  5.63s/it]
+SCENARIOS COMPLETE:  20%|██        | 24/118 [02:08&lt;08:36,  5.50s/it]
+SCENARIOS COMPLETE:  21%|██        | 25/118 [02:14&lt;08:36,  5.55s/it]
+SCENARIOS COMPLETE:  22%|██▏       | 26/118 [02:19&lt;08:29,  5.54s/it]
+SCENARIOS COMPLETE:  23%|██▎       | 27/118 [02:25&lt;08:24,  5.54s/it]
+SCENARIOS COMPLETE:  24%|██▎       | 28/118 [02:29&lt;07:46,  5.19s/it]
+SCENARIOS COMPLETE:  25%|██▍       | 29/118 [02:32&lt;06:34,  4.43s/it]
+SCENARIOS COMPLETE:  25%|██▌       | 30/118 [02:34&lt;05:39,  3.86s/it]
+SCENARIOS COMPLETE:  26%|██▋       | 31/118 [02:37&lt;04:59,  3.44s/it]
+SCENARIOS COMPLETE:  27%|██▋       | 32/118 [02:39&lt;04:34,  3.20s/it]
+SCENARIOS COMPLETE:  28%|██▊       | 33/118 [02:42&lt;04:22,  3.09s/it]
+SCENARIOS COMPLETE:  29%|██▉       | 34/118 [02:45&lt;04:08,  2.96s/it]
+SCENARIOS COMPLETE:  30%|██▉       | 35/118 [02:50&lt;05:02,  3.64s/it]
+SCENARIOS COMPLETE:  31%|███       | 36/118 [02:56&lt;05:49,  4.26s/it]
+SCENARIOS COMPLETE:  31%|███▏      | 37/118 [03:01&lt;06:12,  4.60s/it]
+SCENARIOS COMPLETE:  32%|███▏      | 38/118 [03:07&lt;06:32,  4.90s/it]
+SCENARIOS COMPLETE:  33%|███▎      | 39/118 [03:12&lt;06:40,  5.07s/it]
+SCENARIOS COMPLETE:  34%|███▍      | 40/118 [03:17&lt;06:22,  4.90s/it]
+SCENARIOS COMPLETE:  35%|███▍      | 41/118 [03:19&lt;05:24,  4.22s/it]
+SCENARIOS COMPLETE:  36%|███▌      | 42/118 [03:22&lt;04:39,  3.67s/it]
+SCENARIOS COMPLETE:  36%|███▋      | 43/118 [03:24&lt;04:09,  3.32s/it]
+SCENARIOS COMPLETE:  37%|███▋      | 44/118 [03:27&lt;03:47,  3.08s/it]
+SCENARIOS COMPLETE:  38%|███▊      | 45/118 [03:29&lt;03:35,  2.95s/it]
+SCENARIOS COMPLETE:  39%|███▉      | 46/118 [03:32&lt;03:25,  2.85s/it]
+SCENARIOS COMPLETE:  40%|███▉      | 47/118 [03:34&lt;03:14,  2.74s/it]
+SCENARIOS COMPLETE:  41%|████      | 48/118 [03:37&lt;03:06,  2.66s/it]
+SCENARIOS COMPLETE:  42%|████▏     | 49/118 [03:39&lt;03:00,  2.62s/it]
+SCENARIOS COMPLETE:  42%|████▏     | 50/118 [03:42&lt;02:55,  2.59s/it]
+SCENARIOS COMPLETE:  43%|████▎     | 51/118 [03:45&lt;02:53,  2.59s/it]
+SCENARIOS COMPLETE:  44%|████▍     | 52/118 [03:47&lt;02:49,  2.57s/it]
+SCENARIOS COMPLETE:  45%|████▍     | 53/118 [03:50&lt;02:47,  2.57s/it]
+SCENARIOS COMPLETE:  46%|████▌     | 54/118 [03:52&lt;02:45,  2.59s/it]
+SCENARIOS COMPLETE:  47%|████▋     | 55/118 [03:55&lt;02:44,  2.61s/it]
+SCENARIOS COMPLETE:  47%|████▋     | 56/118 [03:58&lt;02:42,  2.62s/it]
+SCENARIOS COMPLETE:  48%|████▊     | 57/118 [04:00&lt;02:38,  2.59s/it]
+SCENARIOS COMPLETE:  49%|████▉     | 58/118 [04:03&lt;02:36,  2.60s/it]
+SCENARIOS COMPLETE:  50%|█████     | 59/118 [04:05&lt;02:32,  2.58s/it]
+SCENARIOS COMPLETE:  51%|█████     | 60/118 [04:08&lt;02:28,  2.56s/it]
+SCENARIOS COMPLETE:  52%|█████▏    | 61/118 [04:10&lt;02:24,  2.53s/it]
+SCENARIOS COMPLETE:  53%|█████▎    | 62/118 [04:13&lt;02:20,  2.52s/it]
+SCENARIOS COMPLETE:  53%|█████▎    | 63/118 [04:15&lt;02:18,  2.51s/it]
+SCENARIOS COMPLETE:  54%|█████▍    | 64/118 [04:18&lt;02:17,  2.55s/it]
+SCENARIOS COMPLETE:  55%|█████▌    | 65/118 [04:20&lt;02:15,  2.55s/it]
+SCENARIOS COMPLETE:  56%|█████▌    | 66/118 [04:23&lt;02:12,  2.54s/it]
+SCENARIOS COMPLETE:  57%|█████▋    | 67/118 [04:25&lt;02:09,  2.53s/it]
+SCENARIOS COMPLETE:  58%|█████▊    | 68/118 [04:28&lt;02:06,  2.52s/it]
+SCENARIOS COMPLETE:  58%|█████▊    | 69/118 [04:30&lt;02:02,  2.51s/it]
+SCENARIOS COMPLETE:  59%|█████▉    | 70/118 [04:33&lt;01:59,  2.48s/it]
+SCENARIOS COMPLETE:  60%|██████    | 71/118 [04:35&lt;01:56,  2.48s/it]
+SCENARIOS COMPLETE:  61%|██████    | 72/118 [04:38&lt;01:54,  2.49s/it]
+SCENARIOS COMPLETE:  62%|██████▏   | 73/118 [04:40&lt;01:53,  2.52s/it]
+SCENARIOS COMPLETE:  63%|██████▎   | 74/118 [04:43&lt;01:51,  2.53s/it]
+SCENARIOS COMPLETE:  64%|██████▎   | 75/118 [04:46&lt;01:48,  2.52s/it]
+SCENARIOS COMPLETE:  64%|██████▍   | 76/118 [04:48&lt;01:45,  2.50s/it]
+SCENARIOS COMPLETE:  65%|██████▌   | 77/118 [04:51&lt;01:43,  2.52s/it]
+SCENARIOS COMPLETE:  66%|██████▌   | 78/118 [04:53&lt;01:42,  2.55s/it]
 SCENARIOS COMPLETE:  66%|██████▌   | 78/118 [04:54&lt;02:31,  3.78s/it]
 </pre></div></div>
 </div>
@@ -1274,10 +1364,10 @@ File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\f
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">statsfmea</span> <span class="o">=</span> <span class="n">tabulate</span><span class="o">.</span><span class="n">FMEA</span><span class="p">(</span><span class="n">endresults</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span>
-                          <span class="n">weight_metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">],</span>
-                          <span class="n">avg_metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;unsafe_flight_time&#39;</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">,</span> <span class="s1">&#39;repcost&#39;</span><span class="p">,</span>
+                          <span class="n">average_metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">,</span> <span class="s1">&#39;unsafe_flight_time&#39;</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">,</span> <span class="s1">&#39;repcost&#39;</span><span class="p">,</span>
                                        <span class="s1">&#39;landcost&#39;</span><span class="p">,</span> <span class="s1">&#39;body_strikes&#39;</span><span class="p">,</span>
-                                       <span class="s1">&#39;head_strikes&#39;</span><span class="p">,</span> <span class="s1">&#39;property_restrictions&#39;</span><span class="p">])</span>
+                                       <span class="s1">&#39;head_strikes&#39;</span><span class="p">,</span> <span class="s1">&#39;property_restrictions&#39;</span><span class="p">],</span>
+                          <span class="n">rates</span><span class="o">=</span><span class="s1">&#39;rate&#39;</span><span class="p">)</span>
 <span class="n">fmeatab</span> <span class="o">=</span> <span class="n">statsfmea</span><span class="o">.</span><span class="n">as_table</span><span class="p">(</span><span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;cost&quot;</span><span class="p">)</span>
 <span class="n">fmeatab</span>
 </pre></div>

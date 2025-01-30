@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_a2266ba4c933f375_opt_drone_rural_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.9">coverage.py v7.6.9</a>,
-            created at 2024-12-19 02:33 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
+            created at 2025-01-30 19:24 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -617,13 +617,13 @@
     <p class="exc show_exc"><span class="n"><a id="t535" href="#t535">535</a></span><span class="t">    <span class="nam">plot_env_with_traj_z</span><span class="op">(</span><span class="nam">hists</span><span class="op">,</span> <span class="nam">mdl</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t536" href="#t536">536</a></span><span class="t">    <span class="nam">plot_env_with_traj</span><span class="op">(</span><span class="nam">hists</span><span class="op">,</span> <span class="nam">mdl</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t537" href="#t537">537</a></span><span class="t">    <span class="nam">statsfmea</span> <span class="op">=</span> <span class="nam">an</span><span class="op">.</span><span class="nam">tabulate</span><span class="op">.</span><span class="nam">FMEA</span><span class="op">(</span><span class="nam">endresults</span><span class="op">,</span> <span class="nam">app</span><span class="op">,</span> <span class="nam">group_by</span><span class="op">=</span><span class="op">(</span><span class="str">'function'</span><span class="op">,</span> <span class="str">'fault'</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t538" href="#t538">538</a></span><span class="t">                                 <span class="nam">weight_metrics</span><span class="op">=</span><span class="op">[</span><span class="str">'rate'</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t539" href="#t539">539</a></span><span class="t">                                 <span class="nam">avg_metrics</span><span class="op">=</span><span class="op">[</span><span class="str">'unsafe_flight_time'</span><span class="op">,</span> <span class="str">'cost'</span><span class="op">,</span> <span class="str">'repcost'</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t540" href="#t540">540</a></span><span class="t">                                              <span class="str">'landcost'</span><span class="op">,</span> <span class="str">'body_strikes'</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t541" href="#t541">541</a></span><span class="t">                                              <span class="str">'head_strikes'</span><span class="op">,</span> <span class="str">'property_restrictions'</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t542" href="#t542">542</a></span><span class="t">    <span class="nam">statsfmea</span><span class="op">.</span><span class="nam">sort_by_metric</span><span class="op">(</span><span class="str">"cost"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t538" href="#t538">538</a></span><span class="t">                                 <span class="nam">average_metric</span><span class="op">=</span><span class="op">[</span><span class="str">'rate'</span><span class="op">,</span> <span class="str">'unsafe_flight_time'</span><span class="op">,</span> <span class="str">'cost'</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t539" href="#t539">539</a></span><span class="t">                                                  <span class="str">'repcost'</span><span class="op">,</span> <span class="str">'landcost'</span><span class="op">,</span> <span class="str">'body_strikes'</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t540" href="#t540">540</a></span><span class="t">                                              <span class="str">'head_strikes'</span><span class="op">,</span> <span class="str">'property_restrictions'</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t541" href="#t541">541</a></span><span class="t">                                 <span class="nam">rates</span><span class="op">=</span><span class="str">'rate'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t542" href="#t542">542</a></span><span class="t">    <span class="nam">statsfmea</span><span class="op">.</span><span class="nam">sort_by_metric</span><span class="op">(</span><span class="str">"average_cost"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t543" href="#t543">543</a></span><span class="t">    <span class="nam">statsfmea</span><span class="op">.</span><span class="nam">as_table</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t544" href="#t544">544</a></span><span class="t">    <span class="nam">statsfmea</span><span class="op">.</span><span class="nam">as_plots</span><span class="op">(</span><span class="str">"repcost"</span><span class="op">,</span> <span class="str">"unsafe_flight_time"</span><span class="op">,</span> <span class="str">"cost"</span><span class="op">,</span> <span class="str">"rate"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t544" href="#t544">544</a></span><span class="t">    <span class="nam">statsfmea</span><span class="op">.</span><span class="nam">as_plots</span><span class="op">(</span><span class="str">"average_repcost"</span><span class="op">,</span> <span class="str">"average_unsafe_flight_time"</span><span class="op">,</span> <span class="str">"average_cost"</span><span class="op">,</span> <span class="str">"average_rate"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t545" href="#t545">545</a></span><span class="t">                       <span class="nam">color_factor</span><span class="op">=</span><span class="str">"function"</span><span class="op">,</span> <span class="nam">suppress_ticklabels</span><span class="op">=</span><span class="key">True</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t546" href="#t546">546</a></span><span class="t">                       <span class="nam">legend_loc</span><span class="op">=</span><span class="num">2</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t547" href="#t547">547</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -637,8 +637,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_a2266ba4c933f375_opt_drone_rural_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.9">coverage.py v7.6.9</a>,
-            created at 2024-12-19 02:33 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
+            created at 2025-01-30 19:24 +0000
         </p>
     </div>
 </footer>

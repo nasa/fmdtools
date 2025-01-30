@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.sim &mdash; fmdtools 2.0.6 documentation</title>
+  <title>fmdtools.sim &mdash; fmdtools 2.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3e466467"></script>
+      <script src="../_static/documentation_options.js?v=9a3ee07e"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-6">Version: 2.0.6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -411,6 +411,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
@@ -419,13 +420,19 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.round_float"><code class="docutils literal notranslate"><span class="pre">round_float()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.set_arg_as_type"><code class="docutils literal notranslate"><span class="pre">set_arg_as_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
@@ -528,7 +535,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.SingleFaultScenarioProblem"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.VariableConnector"><code class="docutils literal notranslate"><span class="pre">VariableConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.obj_name"><code class="docutils literal notranslate"><span class="pre">obj_name()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -544,23 +550,27 @@
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.add_title_xylabs"><code class="docutils literal notranslate"><span class="pre">add_title_xylabs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_average"><code class="docutils literal notranslate"><span class="pre">calc_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_expected"><code class="docutils literal notranslate"><span class="pre">calc_expected()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_metric"><code class="docutils literal notranslate"><span class="pre">calc_metric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_metric_ci"><code class="docutils literal notranslate"><span class="pre">calc_metric_ci()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_percent"><code class="docutils literal notranslate"><span class="pre">calc_percent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_rate"><code class="docutils literal notranslate"><span class="pre">calc_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_sum"><code class="docutils literal notranslate"><span class="pre">calc_sum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_total"><code class="docutils literal notranslate"><span class="pre">calc_total()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.clear_prev_figure"><code class="docutils literal notranslate"><span class="pre">clear_prev_figure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.metric_preamble"><code class="docutils literal notranslate"><span class="pre">metric_preamble()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.multiplot_helper"><code class="docutils literal notranslate"><span class="pre">multiplot_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.phase_overlay"><code class="docutils literal notranslate"><span class="pre">phase_overlay()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.plot_err_hist"><code class="docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
@@ -1538,7 +1548,6 @@ faults and disturbances.</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.scenario.</span></span><span class="sig-name descname"><span class="pre">BaseScenario</span></span><a class="headerlink" href="#fmdtools.sim.scenario.BaseScenario" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.scenario.BaseScenObj" title="fmdtools.sim.scenario.BaseScenObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseScenObj</span></code></a></p>
 <p>Base class for scenarios.</p>
-<p>…</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1596,7 +1605,6 @@ faults and disturbances.</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.scenario.</span></span><span class="sig-name descname"><span class="pre">Injection</span></span><a class="headerlink" href="#fmdtools.sim.scenario.Injection" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.scenario.BaseScenObj" title="fmdtools.sim.scenario.BaseScenObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseScenObj</span></code></a></p>
 <p>Defines a single fault/disturbance injection.</p>
-<p>…</p>
 <section id="fields">
 <h3>Fields<a class="headerlink" href="#fields" title="Link to this heading"></a></h3>
 <dl class="simple">
@@ -1979,36 +1987,6 @@ faults and disturbances.</p></li>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.sim.sample.BaseSample.get_factor_metrics">
-<span class="sig-name descname"><span class="pre">get_factor_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['cost']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['time']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'expected'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.BaseSample.get_factor_metrics" title="Link to this definition"></a></dt>
-<dd><p>Make a dict of the statistic for given metrics over given factors.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>res</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with the given metrics over a number of scenarios.</p></li>
-<li><p><strong>metrics</strong> (<em>list</em>) – metrics in res to tabulate over time. Default is [‘cost’].</p></li>
-<li><p><strong>factors</strong> (<em>list</em>) – Factors (Scenario properties e.g., ‘name’, ‘time’, ‘var’) in samp to take the
-statistic over. Default is [‘time’]</p></li>
-<li><p><strong>default_stat</strong> (<em>str</em>) – statistic to take for given metrics my default.
-(e.g., ‘average’, ‘percent’… see Result methods). Default is ‘expected’.</p></li>
-<li><p><strong>stats</strong> (<em>dict</em>) – Non-default statistics to take for each individual metric.
-e.g. {‘cost’: ‘average’}. Default is {}</p></li>
-<li><p><strong>ci_metrics</strong> (<em>list</em>) – Metrics to calculate a confidence interval for (using bootstrap_ci).
-Default is [].</p></li>
-<li><p><strong>ci_kwargs</strong> (<em>dict</em>) – kwargs to bootstrap_ci</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>met_table</strong> – pandas dataframe with the statistic of the metric over the corresponding
-set of scenarios for the given factor level.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.BaseSample.get_groups_scens">
 <span class="sig-name descname"><span class="pre">get_groups_scens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groupnames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.BaseSample.get_groups_scens" title="Link to this definition"></a></dt>
 <dd><p>Get scenarios related to the given groups.</p>
@@ -2030,6 +2008,38 @@ set of scenarios for the given factor level.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.sample.BaseSample.get_metric">
+<span class="sig-name descname"><span class="pre">get_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.BaseSample.get_metric" title="Link to this definition"></a></dt>
+<dd><p>Get metrics from scenario(s).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>str</em>) – Scenario value to take the metric over.</p></li>
+<li><p><strong>ids</strong> (<em>list</em><em>, </em><em>optional</em>) – List of scenarios to get the metric over. The default is “all”.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to calc_metric.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>metric</strong> – Metric (by default, average) over the set of scenarios.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfs</span><span class="o">.</span><span class="n">get_metric</span><span class="p">(</span><span class="s2">&quot;rate&quot;</span><span class="p">)</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfs2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">exfs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfs2</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rate</span><span class="o">=</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfs2</span><span class="o">.</span><span class="n">get_metric</span><span class="p">(</span><span class="s2">&quot;rate&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sum&quot;</span><span class="p">)</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfs2</span><span class="o">.</span><span class="n">get_metric</span><span class="p">(</span><span class="s2">&quot;rate&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;average&quot;</span><span class="p">)</span>
+<span class="go">0.25</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.BaseSample.get_scen_groups">
 <span class="sig-name descname"><span class="pre">get_scen_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">groupnames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.BaseSample.get_scen_groups" title="Link to this definition"></a></dt>
 <dd><p>Get all groups of scenarios grouped by <a href="#id9"><span class="problematic" id="id10">*</span></a>groupnames.</p>
@@ -2042,6 +2052,17 @@ set of scenarios for the given factor level.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.sample.BaseSample.get_scen_values">
+<span class="sig-name descname"><span class="pre">get_scen_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.BaseSample.get_scen_values" title="Link to this definition"></a></dt>
+<dd><p>Get a dict of information from the set of scenarios.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – Value to get from the scenarios.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2122,7 +2143,6 @@ set of scenarios for the given factor level.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">FaultDomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultDomain" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines the faults which will be sampled from in an approach.</p>
-<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.FaultDomain.fxns">
 <span class="sig-name descname"><span class="pre">fxns</span></span><a class="headerlink" href="#fmdtools.sim.sample.FaultDomain.fxns" title="Link to this definition"></a></dt>
@@ -2150,13 +2170,14 @@ set of scenarios for the given factor level.</p>
 <span class="sig-name descname"><span class="pre">add_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultDomain.add_all" title="Link to this definition"></a></dt>
 <dd><p>Add all faults in the Simulable to the FaultDomain.</p>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">examples.multirotor.drone_mdl_rural</span> <span class="kn">import</span> <span class="n">Drone</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">Drone</span><span class="p">()</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;ctl_dof&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_all</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">ExFxnArch</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span><span class="o">.</span><span class="n">add_all</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span>
 <span class="go">FaultDomain with faults:</span>
-<span class="go"> -(&#39;ctl_dof&#39;, &#39;noctl&#39;)</span>
-<span class="go"> -(&#39;ctl_dof&#39;, &#39;degctl&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;no_charge&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;short&#39;)</span>
+<span class="go"> -(&#39;ex_fxn2&#39;, &#39;no_charge&#39;)</span>
+<span class="go"> -(&#39;ex_fxn2&#39;, &#39;short&#39;)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2171,13 +2192,12 @@ set of scenarios for the given factor level.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">examples.multirotor.drone_mdl_rural</span> <span class="kn">import</span> <span class="n">Drone</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">Drone</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_all_fxn_modes</span><span class="p">(</span><span class="s2">&quot;hold_payload&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">ExFxnArch</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span><span class="o">.</span><span class="n">add_all_fxn_modes</span><span class="p">(</span><span class="s2">&quot;ex_fxn2&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span>
 <span class="go">FaultDomain with faults:</span>
-<span class="go"> -(&#39;hold_payload&#39;, &#39;break&#39;)</span>
-<span class="go"> -(&#39;hold_payload&#39;, &#39;deform&#39;)</span>
+<span class="go"> -(&#39;ex_fxn2&#39;, &#39;no_charge&#39;)</span>
+<span class="go"> -(&#39;ex_fxn2&#39;, &#39;short&#39;)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2192,19 +2212,14 @@ set of scenarios for the given factor level.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">examples.eps.eps</span> <span class="kn">import</span> <span class="n">EPS</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd1</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">EPS</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd1</span><span class="o">.</span><span class="n">add_all_fxnclass_modes</span><span class="p">(</span><span class="s2">&quot;ExportHE&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd1</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">ExFxnArch</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span><span class="o">.</span><span class="n">add_all_fxnclass_modes</span><span class="p">(</span><span class="s2">&quot;ExampleFunction&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span>
 <span class="go">FaultDomain with faults:</span>
-<span class="go"> -(&#39;export_he&#39;, &#39;hot_sink&#39;)</span>
-<span class="go"> -(&#39;export_he&#39;, &#39;ineffective_sink&#39;)</span>
-<span class="go"> -(&#39;export_waste_h1&#39;, &#39;hot_sink&#39;)</span>
-<span class="go"> -(&#39;export_waste_h1&#39;, &#39;ineffective_sink&#39;)</span>
-<span class="go"> -(&#39;export_waste_ho&#39;, &#39;hot_sink&#39;)</span>
-<span class="go"> -(&#39;export_waste_ho&#39;, &#39;ineffective_sink&#39;)</span>
-<span class="go"> -(&#39;export_waste_hm&#39;, &#39;hot_sink&#39;)</span>
-<span class="go"> -(&#39;export_waste_hm&#39;, &#39;ineffective_sink&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;no_charge&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;short&#39;)</span>
+<span class="go"> -(&#39;ex_fxn2&#39;, &#39;no_charge&#39;)</span>
+<span class="go"> -(&#39;ex_fxn2&#39;, &#39;short&#39;)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2247,13 +2262,11 @@ set of scenarios for the given factor level.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">examples.multirotor.drone_mdl_rural</span> <span class="kn">import</span> <span class="n">Drone</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">Drone</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_faults</span><span class="p">((</span><span class="s1">&#39;ctl_dof&#39;</span><span class="p">,</span> <span class="s1">&#39;noctl&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;affect_dof&#39;</span><span class="p">,</span> <span class="s1">&#39;rr_ctldn&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">ExFxnArch</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span><span class="o">.</span><span class="n">add_faults</span><span class="p">((</span><span class="s2">&quot;ex_fxn&quot;</span><span class="p">,</span> <span class="s2">&quot;no_charge&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span>
 <span class="go">FaultDomain with faults:</span>
-<span class="go"> -(&#39;ctl_dof&#39;, &#39;noctl&#39;)</span>
-<span class="go"> -(&#39;affect_dof&#39;, &#39;rr_ctldn&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;no_charge&#39;)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2294,7 +2307,6 @@ set of scenarios for the given factor level.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">FaultSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faultdomain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">def_mdl_phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultSample" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSample</span></code></a></p>
 <p>Defines a sample of a given faultdomain.</p>
-<p>…</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2325,6 +2337,21 @@ set of scenarios for the given factor level.</p>
 </dl>
 </dd></dl>
 
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfs</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">exfd</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfs</span><span class="o">.</span><span class="n">add_fault_times</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfs</span>
+<span class="go">FaultSample of scenarios:</span>
+<span class="go"> - ex_fxn_no_charge_t1</span>
+<span class="go"> - ex_fxn_no_charge_t2</span>
+<span class="go"> - ex_fxn_short_t1</span>
+<span class="go"> - ex_fxn_short_t2</span>
+<span class="go"> - ex_fxn2_no_charge_t1</span>
+<span class="go"> - ex_fxn2_no_charge_t2</span>
+<span class="go"> - ex_fxn2_short_t1</span>
+<span class="go"> - ex_fxn2_short_t2</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.FaultSample.add_fault_phases">
 <span class="sig-name descname"><span class="pre">add_fault_phases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">phases_to_sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'even'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_methods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_joint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">joint_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultSample.add_fault_phases" title="Link to this definition"></a></dt>
@@ -4131,8 +4158,8 @@ The default is {}.</p></li>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.sim.search.HistoryConstraint.metric">
-<span class="sig-name descname"><span class="pre">metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">callable</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryConstraint.metric" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.sim.search.HistoryConstraint.method">
+<span class="sig-name descname"><span class="pre">method</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">callable</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryConstraint.method" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4178,15 +4205,15 @@ The default is {}.</p></li>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.ResultObjective" title="fmdtools.sim.search.ResultObjective"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResultObjective</span></code></a></p>
 <p>Same as ResultObjective but marks that the result is a history.</p>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">HistoryObjective</span><span class="p">(</span><span class="s2">&quot;a.b&quot;</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">HistoryObjective</span><span class="p">(</span><span class="s2">&quot;a.b&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s1">&#39;t1p0.a.b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">],</span> <span class="s1">&#39;t2p0.a.b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">13.0</span><span class="p">]})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">get_result_value</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
 <span class="go">13.0</span>
 </pre></div>
 </div>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.sim.search.HistoryObjective.metric">
-<span class="sig-name descname"><span class="pre">metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">callable</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryObjective.metric" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.sim.search.HistoryObjective.method">
+<span class="sig-name descname"><span class="pre">method</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">callable</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryObjective.method" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4991,8 +5018,8 @@ The default is ‘’.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.sim.search.ResultConstraint.metric">
-<span class="sig-name descname"><span class="pre">metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">callable</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultConstraint.metric" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.sim.search.ResultConstraint.method">
+<span class="sig-name descname"><span class="pre">method</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">callable</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultConstraint.method" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -5049,7 +5076,7 @@ The default is ‘’.</p></li>
 <dl class="simple">
 <dt>time<span class="classifier">float</span></dt><dd><p>Time the objective is called at. If None, time will be the end of the sim.</p>
 </dd>
-<dt>metric<span class="classifier">callable</span></dt><dd><p>Metric to tabulate for the objective. Default is np.sum.</p>
+<dt>method<span class="classifier">callable</span></dt><dd><p>Method to tabulate for the objective. Default is np.sum.</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -5075,7 +5102,7 @@ The default is ‘’.</p></li>
 <span class="go">10.0</span>
 </pre></div>
 </div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">ResultObjective</span><span class="p">(</span><span class="s2">&quot;a.b&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">ResultObjective</span><span class="p">(</span><span class="s2">&quot;a.b&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Result</span><span class="p">({</span><span class="s1">&#39;scen1.t1p0.a.b&#39;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">,</span> <span class="s1">&#39;scen2.t1p0.a.b&#39;</span><span class="p">:</span> <span class="mf">12.0</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">get_result_value</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 <span class="go">22.0</span>
@@ -5084,8 +5111,8 @@ The default is ‘’.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.sim.search.ResultObjective.metric">
-<span class="sig-name descname"><span class="pre">metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">callable</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultObjective.metric" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.sim.search.ResultObjective.method">
+<span class="sig-name descname"><span class="pre">method</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">callable</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultObjective.method" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -5385,12 +5412,6 @@ Default is 0.0.</p>
 <dt class="sig sig-object py" id="fmdtools.sim.search.obj_name">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">obj_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.obj_name" title="Link to this definition"></a></dt>
 <dd><p>Create architecture-level objective name for problem.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.sim.search.unpack_x">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">unpack_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.unpack_x" title="Link to this definition"></a></dt>
-<dd><p>Unpack arrays/lists sent from solvers into tuples.</p>
 </dd></dl>
 
 </section>
