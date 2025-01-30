@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Action Sequence Graph Tutorial &mdash; fmdtools 2.0.6 documentation</title>
+  <title>Action Sequence Graph Tutorial &mdash; fmdtools 2.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3e466467"></script>
+      <script src="../../_static/documentation_options.js?v=9a3ee07e"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-6">Version: 2.0.6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -414,6 +414,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
@@ -422,13 +423,19 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.round_float"><code class="docutils literal notranslate"><span class="pre">round_float()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.set_arg_as_type"><code class="docutils literal notranslate"><span class="pre">set_arg_as_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
@@ -531,7 +538,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.SingleFaultScenarioProblem"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.VariableConnector"><code class="docutils literal notranslate"><span class="pre">VariableConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.obj_name"><code class="docutils literal notranslate"><span class="pre">obj_name()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -547,23 +553,27 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.add_title_xylabs"><code class="docutils literal notranslate"><span class="pre">add_title_xylabs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_average"><code class="docutils literal notranslate"><span class="pre">calc_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_expected"><code class="docutils literal notranslate"><span class="pre">calc_expected()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_metric"><code class="docutils literal notranslate"><span class="pre">calc_metric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_metric_ci"><code class="docutils literal notranslate"><span class="pre">calc_metric_ci()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_percent"><code class="docutils literal notranslate"><span class="pre">calc_percent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_rate"><code class="docutils literal notranslate"><span class="pre">calc_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_sum"><code class="docutils literal notranslate"><span class="pre">calc_sum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_total"><code class="docutils literal notranslate"><span class="pre">calc_total()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.clear_prev_figure"><code class="docutils literal notranslate"><span class="pre">clear_prev_figure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.metric_preamble"><code class="docutils literal notranslate"><span class="pre">metric_preamble()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_helper"><code class="docutils literal notranslate"><span class="pre">multiplot_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.phase_overlay"><code class="docutils literal notranslate"><span class="pre">phase_overlay()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_hist"><code class="docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
@@ -671,10 +681,19 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </pre></div>
 </div>
 </div>
-<p>Action architectures are used within a function block to represent Action Sequence Graphs - actions that the function performs and their sequence. Actions in an ActionArchitecture are respresented by <code class="docutils literal notranslate"><span class="pre">Action</span></code> blocks, which are similar to function and component blocks in that they have: - flow connections - modes, and - behaviors</p>
+<p>Action architectures are used within a function block to represent Action Sequence Graphs - actions that the function performs and their sequence. Actions in an ActionArchitecture are respresented by <code class="docutils literal notranslate"><span class="pre">Action</span></code> blocks, which are similar to function and component blocks in that they have:</p>
+<ul class="simple">
+<li><p>flow connections</p></li>
+<li><p>modes, and</p></li>
+<li><p>behaviors</p></li>
+</ul>
 <p>Flow connections are routed to the action in the function block definition and represent the <em>shared variables</em> between the actions.</p>
 <p>Modes are similar to function modes and are instantiated (as they are in components) at both the Function and Action level. Using the <code class="docutils literal notranslate"><span class="pre">name=</span></code> option enables one to tag these modes as action modes at the function level while using the same local name</p>
-<p>Below we define the states to performed by the ASG: - Outcome, which tracks the number of actions and perceptions performed by the ASG - HazardState, which specifies whether a hazard is present, percieved, or mitigated</p>
+<p>Below we define the states to performed by the ASG:</p>
+<ul class="simple">
+<li><p>Outcome, which tracks the number of actions and perceptions performed by the ASG</p></li>
+<li><p>HazardState, which specifies whether a hazard is present, percieved, or mitigated</p></li>
+</ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -717,7 +736,12 @@ class Hazard(Flow):
 
 </pre></div></div>
 </div>
-<p>Below we define three actions for use in a given model: - Perceive, a user’s perception abilities/behaviors. In this function the user percieves a hazard (unless their perception fails) - Act, the user’s action which they perform to mitigate the hazard. - Done, the user’s state when they are done performing the action.</p>
+<p>Below we define three actions for use in a given model:</p>
+<ul class="simple">
+<li><p>Perceive, a user’s perception abilities/behaviors. In this function the user percieves a hazard (unless their perception fails)</p></li>
+<li><p>Act, the user’s action which they perform to mitigate the hazard.</p></li>
+<li><p>Done, the user’s state when they are done performing the action.</p></li>
+</ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -789,7 +813,12 @@ class Done(Action):
 
 </pre></div></div>
 </div>
-<p>To proceed through the sequence of actions, <em>conditions</em> must be met between each action. In these actions, we have defined the following conditions: - Percieve.percieved: perception is done if the hazard is percieved - Act.acted: the action is complete if the action was performed - Done.complete: the hazard mitigation is over (and mitigated state is reset to False)</p>
+<p>To proceed through the sequence of actions, <em>conditions</em> must be met between each action. In these actions, we have defined the following conditions:</p>
+<ul class="simple">
+<li><p>Percieve.percieved: perception is done if the hazard is percieved</p></li>
+<li><p>Act.acted: the action is complete if the action was performed</p></li>
+<li><p>Done.complete: the hazard mitigation is over (and mitigated state is reset to False)</p></li>
+</ul>
 <p>To create the overall ASG structure, the following adds the flows, actions, and conditions to the ActionArchitecture class</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -825,7 +854,10 @@ class Human(ActionArchitecture):
 
 </pre></div></div>
 </div>
-<p>Note the use of the following methods: - add_flow adds a flow so it can pass variables between actions. Here <em>Outcome</em> is an internal flow, while <em>Hazard</em> is an external flow.</p>
+<p>Note the use of the following methods:</p>
+<ul class="simple">
+<li><p>add_flow adds a flow so it can pass variables between actions. Here <em>Outcome</em> is an internal flow, while <em>Hazard</em> is an external flow.</p></li>
+</ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>

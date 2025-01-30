@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hold-up Tank Model &mdash; fmdtools 2.0.6 documentation</title>
+  <title>Hold-up Tank Model &mdash; fmdtools 2.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3e466467"></script>
+      <script src="../../_static/documentation_options.js?v=9a3ee07e"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-6">Version: 2.0.6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -414,6 +414,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
@@ -422,13 +423,19 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.round_float"><code class="docutils literal notranslate"><span class="pre">round_float()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.set_arg_as_type"><code class="docutils literal notranslate"><span class="pre">set_arg_as_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
@@ -531,7 +538,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.SingleFaultScenarioProblem"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.VariableConnector"><code class="docutils literal notranslate"><span class="pre">VariableConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.obj_name"><code class="docutils literal notranslate"><span class="pre">obj_name()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -547,23 +553,27 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.add_title_xylabs"><code class="docutils literal notranslate"><span class="pre">add_title_xylabs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_average"><code class="docutils literal notranslate"><span class="pre">calc_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_expected"><code class="docutils literal notranslate"><span class="pre">calc_expected()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_metric"><code class="docutils literal notranslate"><span class="pre">calc_metric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_metric_ci"><code class="docutils literal notranslate"><span class="pre">calc_metric_ci()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_percent"><code class="docutils literal notranslate"><span class="pre">calc_percent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_rate"><code class="docutils literal notranslate"><span class="pre">calc_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_sum"><code class="docutils literal notranslate"><span class="pre">calc_sum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_total"><code class="docutils literal notranslate"><span class="pre">calc_total()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.clear_prev_figure"><code class="docutils literal notranslate"><span class="pre">clear_prev_figure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.metric_preamble"><code class="docutils literal notranslate"><span class="pre">metric_preamble()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_helper"><code class="docutils literal notranslate"><span class="pre">multiplot_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.phase_overlay"><code class="docutils literal notranslate"><span class="pre">phase_overlay()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_hist"><code class="docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
@@ -707,7 +717,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x00000211FC3A8150&gt;
+graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x000001FD1388F410&gt;
 </pre></div></div>
 </div>
 <p>With these results, we can now plot the graph of results resgraph using:</p>
@@ -1830,7 +1840,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>13</td>
+      <td>0</td>
       <td>0.0</td>
     </tr>
     <tr>
@@ -1848,7 +1858,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>13</td>
+      <td>0</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1866,7 +1876,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>13</td>
+      <td>0</td>
       <td>2.0</td>
     </tr>
     <tr>
@@ -1884,7 +1894,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>12</td>
+      <td>1</td>
       <td>3.0</td>
     </tr>
     <tr>
@@ -1902,7 +1912,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>12</td>
+      <td>1</td>
       <td>4.0</td>
     </tr>
     <tr>
@@ -1920,7 +1930,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>12</td>
+      <td>1</td>
       <td>5.0</td>
     </tr>
     <tr>
@@ -1938,7 +1948,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>False</td>
       <td>True</td>
       <td>False</td>
-      <td>10</td>
+      <td>3</td>
       <td>6.0</td>
     </tr>
     <tr>
@@ -1956,7 +1966,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>7.0</td>
     </tr>
     <tr>
@@ -1974,7 +1984,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>8.0</td>
     </tr>
     <tr>
@@ -1992,7 +2002,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>9.0</td>
     </tr>
     <tr>
@@ -2010,7 +2020,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>10.0</td>
     </tr>
     <tr>
@@ -2028,7 +2038,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>11.0</td>
     </tr>
     <tr>
@@ -2046,7 +2056,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>12.0</td>
     </tr>
     <tr>
@@ -2064,7 +2074,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>13.0</td>
     </tr>
     <tr>
@@ -2082,7 +2092,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>14.0</td>
     </tr>
     <tr>
@@ -2100,7 +2110,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>15.0</td>
     </tr>
     <tr>
@@ -2118,7 +2128,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>16.0</td>
     </tr>
     <tr>
@@ -2136,7 +2146,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>17.0</td>
     </tr>
     <tr>
@@ -2154,7 +2164,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>18.0</td>
     </tr>
     <tr>
@@ -2172,7 +2182,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>19.0</td>
     </tr>
     <tr>
@@ -2190,7 +2200,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>20.0</td>
     </tr>
   </tbody>
@@ -2297,7 +2307,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>13</td>
+      <td>0</td>
       <td>0.0</td>
     </tr>
     <tr>
@@ -2315,7 +2325,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>13</td>
+      <td>0</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -2333,7 +2343,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>13</td>
+      <td>0</td>
       <td>2.0</td>
     </tr>
     <tr>
@@ -2351,7 +2361,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>False</td>
       <td>False</td>
-      <td>7</td>
+      <td>6</td>
       <td>3.0</td>
     </tr>
     <tr>
@@ -2369,7 +2379,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>False</td>
       <td>False</td>
-      <td>7</td>
+      <td>6</td>
       <td>4.0</td>
     </tr>
     <tr>
@@ -2387,7 +2397,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>False</td>
       <td>False</td>
-      <td>7</td>
+      <td>6</td>
       <td>5.0</td>
     </tr>
     <tr>
@@ -2405,7 +2415,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>6.0</td>
     </tr>
     <tr>
@@ -2423,7 +2433,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>7.0</td>
     </tr>
     <tr>
@@ -2441,7 +2451,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>8.0</td>
     </tr>
     <tr>
@@ -2459,7 +2469,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>9.0</td>
     </tr>
     <tr>
@@ -2477,7 +2487,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>10.0</td>
     </tr>
     <tr>
@@ -2495,7 +2505,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>11.0</td>
     </tr>
     <tr>
@@ -2513,7 +2523,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>6</td>
+      <td>7</td>
       <td>12.0</td>
     </tr>
     <tr>
@@ -2531,7 +2541,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>4</td>
+      <td>9</td>
       <td>13.0</td>
     </tr>
     <tr>
@@ -2549,7 +2559,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>4</td>
+      <td>9</td>
       <td>14.0</td>
     </tr>
     <tr>
@@ -2567,7 +2577,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>4</td>
+      <td>9</td>
       <td>15.0</td>
     </tr>
     <tr>
@@ -2585,7 +2595,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>False</td>
       <td>False</td>
-      <td>5</td>
+      <td>8</td>
       <td>16.0</td>
     </tr>
     <tr>
@@ -2603,7 +2613,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>False</td>
       <td>False</td>
-      <td>5</td>
+      <td>8</td>
       <td>17.0</td>
     </tr>
     <tr>
@@ -2621,7 +2631,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>False</td>
       <td>False</td>
-      <td>5</td>
+      <td>8</td>
       <td>18.0</td>
     </tr>
     <tr>
@@ -2639,7 +2649,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>4</td>
+      <td>9</td>
       <td>19.0</td>
     </tr>
     <tr>
@@ -2657,7 +2667,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>4</td>
+      <td>9</td>
       <td>20.0</td>
     </tr>
   </tbody>
@@ -2744,7 +2754,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 30/30 [00:01&lt;00:00, 24.24it/s]
+SCENARIOS COMPLETE: 100%|██████████| 30/30 [00:01&lt;00:00, 23.93it/s]
 </pre></div></div>
 </div>
 <p>Here we consider all single and joint-fault scenarios in the set of simulations to see which ones lead to failure:</p>
@@ -2762,7 +2772,7 @@ SCENARIOS COMPLETE: 100%|██████████| 30/30 [00:01&lt;00:00, 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 240/240 [00:10&lt;00:00, 23.52it/s]
+SCENARIOS COMPLETE: 100%|██████████| 240/240 [00:09&lt;00:00, 24.28it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">

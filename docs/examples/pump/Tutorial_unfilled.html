@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Tutorial &mdash; fmdtools 2.0.6 documentation</title>
+  <title>fmdtools Tutorial &mdash; fmdtools 2.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3e466467"></script>
+      <script src="../../_static/documentation_options.js?v=9a3ee07e"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -78,7 +78,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-6">Version: 2.0.6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -412,6 +412,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
@@ -420,13 +421,19 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.round_float"><code class="docutils literal notranslate"><span class="pre">round_float()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.set_arg_as_type"><code class="docutils literal notranslate"><span class="pre">set_arg_as_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
@@ -529,7 +536,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.SingleFaultScenarioProblem"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.VariableConnector"><code class="docutils literal notranslate"><span class="pre">VariableConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.obj_name"><code class="docutils literal notranslate"><span class="pre">obj_name()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -545,23 +551,27 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.add_title_xylabs"><code class="docutils literal notranslate"><span class="pre">add_title_xylabs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_average"><code class="docutils literal notranslate"><span class="pre">calc_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_expected"><code class="docutils literal notranslate"><span class="pre">calc_expected()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_metric"><code class="docutils literal notranslate"><span class="pre">calc_metric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_metric_ci"><code class="docutils literal notranslate"><span class="pre">calc_metric_ci()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_percent"><code class="docutils literal notranslate"><span class="pre">calc_percent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_rate"><code class="docutils literal notranslate"><span class="pre">calc_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_sum"><code class="docutils literal notranslate"><span class="pre">calc_sum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_total"><code class="docutils literal notranslate"><span class="pre">calc_total()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.clear_prev_figure"><code class="docutils literal notranslate"><span class="pre">clear_prev_figure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.metric_preamble"><code class="docutils literal notranslate"><span class="pre">metric_preamble()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_helper"><code class="docutils literal notranslate"><span class="pre">multiplot_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.phase_overlay"><code class="docutils literal notranslate"><span class="pre">phase_overlay()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_hist"><code class="docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
@@ -795,16 +805,35 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[4], line 1</span>
 </pre></div>
 </div>
 </div>
-<p>Note that, for a model: - <code class="docutils literal notranslate"><span class="pre">p</span></code> is the <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> defining non-mutable attributes (which do not change over a simulation) - <code class="docutils literal notranslate"><span class="pre">sp</span></code> is the <code class="docutils literal notranslate"><span class="pre">SimParam</span></code> defining the simulation start, end, and end conditions - <code class="docutils literal notranslate"><span class="pre">r</span></code> is the <code class="docutils literal notranslate"><span class="pre">Rand</span></code> defining random variables (e.g., for setting a seed)</p>
+<p>Note that, for a model:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code> is the <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> defining non-mutable attributes (which do not change over a simulation)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sp</span></code> is the <code class="docutils literal notranslate"><span class="pre">SimParam</span></code> defining the simulation start, end, and end conditions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r</span></code> is the <code class="docutils literal notranslate"><span class="pre">Rand</span></code> defining random variables (e.g., for setting a seed)</p></li>
+</ul>
 </section>
 <section id="2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">
 <h2>2.), 3.), and 4.) Simulate and visualize the results!<a class="headerlink" href="#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!" title="Link to this heading"></a></h2>
 <p>Now, we will use the methods in <code class="docutils literal notranslate"><span class="pre">propagate</span></code> and the visualization modules in <code class="docutils literal notranslate"><span class="pre">rd</span></code> to simulate the model and visualize the results.</p>
 <section id="2a.)-Simulate-nominal">
 <h3>2a.) Simulate nominal<a class="headerlink" href="#2a.)-Simulate-nominal" title="Link to this heading"></a></h3>
-<p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.nominal</span></code> method, which returns: endresults, which is a result (or a dict of multiple results) specified by the <code class="docutils literal notranslate"><span class="pre">desired_result</span></code> option, e.g.: - ‘endclass’ (default), which provides the dict from <code class="docutils literal notranslate"><span class="pre">mdl.find_classification</span></code> - ‘graph’ or <code class="docutils literal notranslate"><span class="pre">fmdtools.define.graph.Graph</span></code> subclass for the model. - ‘fxnname.varname’/’flowname.varname’: which gets the values of these variables at a the end - a list of the above arguments (to return a
-dict of multiple) - a dict of lists (for multiple over time), e.g. <code class="docutils literal notranslate"><span class="pre">{time:[varnames,...</span> <span class="pre">'endclass']}</span></code></p>
-<p>and mdlhist, which is a history of model states specified by the <code class="docutils literal notranslate"><span class="pre">track</span></code> option. Some of these options include: - fxns’ - ‘flows’ - ‘all’ - ‘none’ - ‘valparams’ (model states specified in mdl.valparams), - or a dict of form: <code class="docutils literal notranslate"><span class="pre">{'functions':{'fxn1':'att1'},</span> <span class="pre">'flows':{'flow1':'att1'}}</span></code></p>
+<p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.nominal</span></code> method, which returns: endresults, which is a result (or a dict of multiple results) specified by the <code class="docutils literal notranslate"><span class="pre">desired_result</span></code> option, e.g.:</p>
+<ul class="simple">
+<li><p>‘endclass’ (default), which provides the dict from <code class="docutils literal notranslate"><span class="pre">mdl.find_classification</span></code></p></li>
+<li><p>‘graph’ or <code class="docutils literal notranslate"><span class="pre">fmdtools.define.graph.Graph</span></code> subclass for the model.</p></li>
+<li><p>‘fxnname.varname’/’flowname.varname’: which gets the values of these variables at a the end</p></li>
+<li><p>a list of the above arguments (to return a dict of multiple)</p></li>
+<li><p>a dict of lists (for multiple over time), e.g. <code class="docutils literal notranslate"><span class="pre">{time:[varnames,...</span> <span class="pre">'endclass']}</span></code></p></li>
+</ul>
+<p>and mdlhist, which is a history of model states specified by the <code class="docutils literal notranslate"><span class="pre">track</span></code> option. Some of these options include:</p>
+<ul class="simple">
+<li><p>fxns’</p></li>
+<li><p>‘flows’</p></li>
+<li><p>‘all’</p></li>
+<li><p>‘none’</p></li>
+<li><p>‘valparams’ (model states specified in mdl.valparams),</p></li>
+<li><p>or a dict of form: <code class="docutils literal notranslate"><span class="pre">{'functions':{'fxn1':'att1'},</span> <span class="pre">'flows':{'flow1':'att1'}}</span></code></p></li>
+</ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[178]:
 </pre></div>
@@ -822,7 +851,12 @@ dict of multiple) - a dict of lists (for multiple over time), e.g. <code class="
 </pre></div>
 </div>
 </div>
-<p>Note that an <code class="docutils literal notranslate"><span class="pre">endclass</span></code> dictionary can take arbitrary form based on what is produced in <code class="docutils literal notranslate"><span class="pre">find_classification</span></code>. By default, we often return: - <code class="docutils literal notranslate"><span class="pre">rate</span></code>, which is the rate for the scenario calculated from the underlying fault probability model (defined in the <code class="docutils literal notranslate"><span class="pre">Mode</span></code> for each <code class="docutils literal notranslate"><span class="pre">Function</span></code>), - <code class="docutils literal notranslate"><span class="pre">cost</span></code>, which is some cost calculated based on the consequences of the scenario - <code class="docutils literal notranslate"><span class="pre">expected_cost</span></code>, which is the expected value of the cost of the scenario (i.e. <code class="docutils literal notranslate"><span class="pre">rate*cost</span></code>).</p>
+<p>Note that an <code class="docutils literal notranslate"><span class="pre">endclass</span></code> dictionary can take arbitrary form based on what is produced in <code class="docutils literal notranslate"><span class="pre">find_classification</span></code>. By default, we often return:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rate</span></code>, which is the rate for the scenario calculated from the underlying fault probability model (defined in the <code class="docutils literal notranslate"><span class="pre">Mode</span></code> for each <code class="docutils literal notranslate"><span class="pre">Function</span></code>),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cost</span></code>, which is some cost calculated based on the consequences of the scenario</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">expected_cost</span></code>, which is the expected value of the cost of the scenario (i.e. <code class="docutils literal notranslate"><span class="pre">rate*cost</span></code>).</p></li>
+</ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[180]:
 </pre></div>
@@ -835,7 +869,11 @@ dict of multiple) - a dict of lists (for multiple over time), e.g. <code class="
 <section id="2b.)-Visualize-nominal-model">
 <h3>2b.) Visualize nominal model<a class="headerlink" href="#2b.)-Visualize-nominal-model" title="Link to this heading"></a></h3>
 <p>First, we can show the model graph using <code class="docutils literal notranslate"><span class="pre">Graph.draw</span></code> to see that it was set up correctly. We can do this both on the model graph itself (using <code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code>) and the results of the nominal run (by passing <code class="docutils literal notranslate"><span class="pre">graph</span></code> as an argument in <code class="docutils literal notranslate"><span class="pre">desired_result</span></code>) to verify both are fault-free.</p>
-<p>Note that the underlyign <code class="docutils literal notranslate"><span class="pre">Graph</span></code> class is very flexible and enables a wide range of display options: - <a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.graph.Graph">Graph docs</a> - <a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.graph.Graph.draw">Graph.draw</a></p>
+<p>Note that the underlyign <code class="docutils literal notranslate"><span class="pre">Graph</span></code> class is very flexible and enables a wide range of display options:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.graph.Graph">Graph docs</a></p></li>
+<li><p><a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.graph.Graph.draw">Graph.draw</a></p></li>
+</ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[181]:
 </pre></div>
@@ -1032,9 +1070,15 @@ dict of multiple) - a dict of lists (for multiple over time), e.g. <code class="
 </section>
 <section id="5.)-Saving-Work">
 <h2>5.) Saving Work<a class="headerlink" href="#5.)-Saving-Work" title="Link to this heading"></a></h2>
-<p>In computationally expensive simulations, running a lot of computational simulations can take a considerable amount of time. As a result, it becomes impractical to run a new simulation every time one wishes to analyse its data. Results from fmdtools simulations (endclasses or mdlhists) can be saved as pickle, csv, or json files in this instance using either: - <code class="docutils literal notranslate"><span class="pre">Result.save</span></code>/<code class="docutils literal notranslate"><span class="pre">History.save</span></code> or - passing a save_args dictionary to the respective propagate functions (e.g.,
-<code class="docutils literal notranslate"><span class="pre">{'endclass':{'filename':'file.pkl','overwrite':True}</span></code>)</p>
-<p>and then loaded using: - <code class="docutils literal notranslate"><span class="pre">Result.load</span></code>/<code class="docutils literal notranslate"><span class="pre">History.load</span></code></p>
+<p>In computationally expensive simulations, running a lot of computational simulations can take a considerable amount of time. As a result, it becomes impractical to run a new simulation every time one wishes to analyse its data. Results from fmdtools simulations (endclasses or mdlhists) can be saved as pickle, csv, or json files in this instance using either:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Result.save</span></code>/<code class="docutils literal notranslate"><span class="pre">History.save</span></code> or</p></li>
+<li><p>passing a save_args dictionary to the respective propagate functions (e.g., <code class="docutils literal notranslate"><span class="pre">{'endclass':{'filename':'file.pkl','overwrite':True}</span></code>)</p></li>
+</ul>
+<p>and then loaded using:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Result.load</span></code>/<code class="docutils literal notranslate"><span class="pre">History.load</span></code></p></li>
+</ul>
 <p>For example, for this variable:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[201]:

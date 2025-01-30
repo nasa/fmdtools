@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_075af532ff9c4ba0_jointfaults_ex_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.9">coverage.py v7.6.9</a>,
-            created at 2024-12-19 02:33 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
+            created at 2025-01-30 19:24 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -726,7 +726,7 @@
     <p class="exc show_exc"><span class="n"><a id="t644" href="#t644">644</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t645" href="#t645">645</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t646" href="#t646">646</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t647" href="#t647">647</a></span><span class="t">    <span class="nam">c</span> <span class="op">=</span> <span class="nam">an</span><span class="op">.</span><span class="nam">tabulate</span><span class="op">.</span><span class="nam">Comparison</span><span class="op">(</span><span class="nam">endclasses</span><span class="op">,</span> <span class="nam">faultapp</span><span class="op">,</span> <span class="nam">default_stat</span><span class="op">=</span><span class="nam">np</span><span class="op">.</span><span class="nam">mean</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t647" href="#t647">647</a></span><span class="t">    <span class="nam">c</span> <span class="op">=</span> <span class="nam">an</span><span class="op">.</span><span class="nam">tabulate</span><span class="op">.</span><span class="nam">Comparison</span><span class="op">(</span><span class="nam">endclasses</span><span class="op">,</span> <span class="nam">faultapp</span><span class="op">,</span> <span class="nam">default_stat</span><span class="op">=</span><span class="nam">np</span><span class="op">.</span><span class="nam">average</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t648" href="#t648">648</a></span><span class="t">                               <span class="nam">metrics</span><span class="op">=</span><span class="op">[</span><span class="str">'cost'</span><span class="op">,</span> <span class="str">'rate'</span><span class="op">,</span> <span class="str">'expected_cost'</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t649" href="#t649">649</a></span><span class="t">                               <span class="nam">ci_metrics</span><span class="op">=</span><span class="op">[</span><span class="str">'cost'</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t650" href="#t650">650</a></span><span class="t">    <span class="nam">c</span><span class="op">.</span><span class="nam">as_table</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -736,8 +736,8 @@
     <p class="exc show_exc"><span class="n"><a id="t654" href="#t654">654</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t655" href="#t655">655</a></span><span class="t">    <span class="nam">fmea</span> <span class="op">=</span> <span class="nam">an</span><span class="op">.</span><span class="nam">tabulate</span><span class="op">.</span><span class="nam">FMEA</span><span class="op">(</span><span class="nam">endclasses</span><span class="op">,</span> <span class="nam">faultapp</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t656" href="#t656">656</a></span><span class="t">    <span class="nam">fmea</span><span class="op">.</span><span class="nam">as_table</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t657" href="#t657">657</a></span><span class="t">    <span class="nam">fmea</span><span class="op">.</span><span class="nam">sort_by_metric</span><span class="op">(</span><span class="str">"cost"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t658" href="#t658">658</a></span><span class="t">    <span class="nam">fmea</span><span class="op">.</span><span class="nam">as_plot</span><span class="op">(</span><span class="str">"cost"</span><span class="op">,</span> <span class="nam">color_factor</span><span class="op">=</span><span class="str">"function"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t657" href="#t657">657</a></span><span class="t">    <span class="nam">fmea</span><span class="op">.</span><span class="nam">sort_by_metric</span><span class="op">(</span><span class="str">"expected_cost"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t658" href="#t658">658</a></span><span class="t">    <span class="nam">fmea</span><span class="op">.</span><span class="nam">as_plot</span><span class="op">(</span><span class="str">"expected_cost"</span><span class="op">,</span> <span class="nam">color_factor</span><span class="op">=</span><span class="str">"function"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t659" href="#t659">659</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t660" href="#t660">660</a></span><span class="t">    <span class="com"># test cases for multiplot legend/axis sharing</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t661" href="#t661">661</a></span><span class="t">    <span class="nam">mdlhists</span><span class="op">.</span><span class="nam">plot_line</span><span class="op">(</span><span class="str">"flows.ee_1.s.current"</span><span class="op">,</span> <span class="str">"flows.sig_1.s.power"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -779,8 +779,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_075af532ff9c4ba0_jointfaults_ex_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.9">coverage.py v7.6.9</a>,
-            created at 2024-12-19 02:33 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
+            created at 2025-01-30 19:24 +0000
         </p>
     </div>
 </footer>

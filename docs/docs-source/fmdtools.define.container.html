@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.container &mdash; fmdtools 2.0.6 documentation</title>
+  <title>fmdtools.define.container &mdash; fmdtools 2.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3e466467"></script>
+      <script src="../_static/documentation_options.js?v=9a3ee07e"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-6">Version: 2.0.6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -411,6 +411,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
@@ -419,13 +420,19 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.round_float"><code class="docutils literal notranslate"><span class="pre">round_float()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.set_arg_as_type"><code class="docutils literal notranslate"><span class="pre">set_arg_as_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
@@ -528,7 +535,6 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.SingleFaultScenarioProblem"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.VariableConnector"><code class="docutils literal notranslate"><span class="pre">VariableConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.obj_name"><code class="docutils literal notranslate"><span class="pre">obj_name()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -544,23 +550,27 @@
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.add_title_xylabs"><code class="docutils literal notranslate"><span class="pre">add_title_xylabs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_average"><code class="docutils literal notranslate"><span class="pre">calc_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_expected"><code class="docutils literal notranslate"><span class="pre">calc_expected()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_metric"><code class="docutils literal notranslate"><span class="pre">calc_metric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_metric_ci"><code class="docutils literal notranslate"><span class="pre">calc_metric_ci()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_percent"><code class="docutils literal notranslate"><span class="pre">calc_percent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_rate"><code class="docutils literal notranslate"><span class="pre">calc_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_sum"><code class="docutils literal notranslate"><span class="pre">calc_sum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_total"><code class="docutils literal notranslate"><span class="pre">calc_total()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.clear_prev_figure"><code class="docutils literal notranslate"><span class="pre">clear_prev_figure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.metric_preamble"><code class="docutils literal notranslate"><span class="pre">metric_preamble()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.multiplot_helper"><code class="docutils literal notranslate"><span class="pre">multiplot_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.phase_overlay"><code class="docutils literal notranslate"><span class="pre">phase_overlay()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.plot_err_hist"><code class="docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
@@ -654,10 +664,10 @@
 <span id="fmdtools-define-container"></span><h1>fmdtools.define.container<a class="headerlink" href="#module-fmdtools.define.container" title="Link to this heading"></a></h1>
 <p>Package defining system variables other base constructs.</p>
 <p>The containers subpackage provides the elemental building puzzle pieces needed (i.e., containers for holding states, modes, etc.) to develop simulations, shown below.</p>
-<figure class="align-default" id="id36">
+<figure class="align-default" id="id38">
 <a class="reference internal image-reference" href="../_images/Containers.svg"><img alt="fmdtools container classes" src="../_images/Containers.svg" width="800" /></a>
 <figcaption>
-<p><span class="caption-text">Container classes in fmdtools and their inheritance.</span><a class="headerlink" href="#id36" title="Link to this image"></a></p>
+<p><span class="caption-text">Container classes in fmdtools and their inheritance.</span><a class="headerlink" href="#id38" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>These classes are provided in the following modules:</p>
@@ -1058,10 +1068,10 @@ float in initialization.</p>
 <section id="fmdtools-define-container-mode">
 <h2>fmdtools.define.container.mode<a class="headerlink" href="#fmdtools-define-container-mode" title="Link to this heading"></a></h2>
 <p>The following template shows the basic syntax to use to define modes:</p>
-<figure class="align-default" id="id37">
+<figure class="align-default" id="id39">
 <a class="reference internal image-reference" href="../_images/mode_structure.svg"><img alt="Structure of a Mode Class" src="../_images/mode_structure.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">Mode class template/example.</span><a class="headerlink" href="#id37" title="Link to this image"></a></p>
+<p><span class="caption-text">Mode class template/example.</span><a class="headerlink" href="#id39" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p id="module-fmdtools.define.container.mode">Defines <a class="reference internal" href="#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a> class for defining (faulty and otherwise) <a class="reference internal" href="Development%20Guide.html#term-Mode"><span class="xref std std-term">mode</span></a> s.</p>
@@ -1073,7 +1083,7 @@ held in Blocks.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">ExampleMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">set()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_state_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'standby'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">ExampleMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">set()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_state_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_modes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'standby'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a></p>
 <p>Create class ExampleMode instance</p>
 <dl class="py attribute">
@@ -1109,6 +1119,11 @@ held in Blocks.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.opermodes">
 <span class="sig-name descname"><span class="pre">opermodes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('supply',</span> <span class="pre">'charge',</span> <span class="pre">'standby')</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.opermodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.sub_modes">
+<span class="sig-name descname"><span class="pre">sub_modes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.sub_modes" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1252,6 +1267,8 @@ Default is False (i.e. more than one can be present).</p>
 <dt>mode<span class="classifier">str</span></dt><dd><p>Name of the current mode. the default is ‘nominal’</p>
 </dd>
 <dt>mode_state_dict: dict</dt><dd><p>Maps modes to states. Assigned by init_faultstates methods.</p>
+</dd>
+<dt>sub_modes: dict</dt><dd><p>Maps modes to internal architecture elements.</p>
 </dd>
 <dt>faultmodes<span class="classifier">dict</span></dt><dd><p>Dictionary of <a class="reference internal" href="#fmdtools.define.container.mode.Fault" title="fmdtools.define.container.mode.Fault"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fault</span></code></a> defining possible fault modes and
 their properties</p>
@@ -1582,6 +1599,11 @@ their properties</p>
 <span class="sig-name descname"><span class="pre">sfs_args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.sfs_args" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.sub_modes">
+<span class="sig-name descname"><span class="pre">sub_modes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.sub_modes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.to_fault">
 <span class="sig-name descname"><span class="pre">to_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.to_fault" title="Link to this definition"></a></dt>
@@ -1619,17 +1641,17 @@ their properties</p>
 <p>Defines <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a> class for representing variables that change over time.</p>
 <p>State classes are used to represent mutables properties of the system that change over time.</p>
 <p>State classes are extended and deployed by the user, as shown below:</p>
-<figure class="align-default" id="id38">
+<figure class="align-default" id="id40">
 <a class="reference internal image-reference" href="../_images/State.svg"><img alt="example state class" src="../_images/State.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a> class to hold x/y fields.</span><a class="headerlink" href="#id38" title="Link to this image"></a></p>
+<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a> class to hold x/y fields.</span><a class="headerlink" href="#id40" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>The following template shows the basic syntax used to define states:</p>
-<figure class="align-default" id="id39">
+<figure class="align-default" id="id41">
 <a class="reference internal image-reference" href="../_images/state_structure.svg"><img alt="Structure of a State Class" src="../_images/state_structure.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">State class template/example.</span><a class="headerlink" href="#id39" title="Link to this image"></a></p>
+<p><span class="caption-text">State class template/example.</span><a class="headerlink" href="#id41" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <dl class="py class">
@@ -1896,17 +1918,17 @@ The default is 2 (points to the place in the model)</p></li>
 <span id="fmdtools-define-container-parameter"></span><h2>fmdtools.define.container.parameter<a class="headerlink" href="#module-fmdtools.define.container.parameter" title="Link to this heading"></a></h2>
 <p>Defines <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to represent attributes that do not change.</p>
 <p><a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> classes are used to represent immutable properties of the system. <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> classes are extended and deployed by the user, as shown below:</p>
-<figure class="align-default" id="id40">
+<figure class="align-default" id="id42">
 <a class="reference internal image-reference" href="../_images/Parameter.svg"><img alt="example state class" src="../_images/Parameter.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to hold x/y/z fields.</span><a class="headerlink" href="#id40" title="Link to this image"></a></p>
+<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to hold x/y/z fields.</span><a class="headerlink" href="#id42" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>The following template shows the basic syntax to use to define parameters:</p>
-<figure class="align-default" id="id41">
+<figure class="align-default" id="id43">
 <a class="reference internal image-reference" href="../_images/parameter_structure.svg"><img alt="Structure of a Parameter Class" src="../_images/parameter_structure.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">Parameter class template/example.</span><a class="headerlink" href="#id41" title="Link to this image"></a></p>
+<p><span class="caption-text">Parameter class template/example.</span><a class="headerlink" href="#id43" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <dl class="py class">
@@ -2044,20 +2066,24 @@ self.k_lim or set constraints self.k_set</p>
 <section id="module-fmdtools.define.container.rand">
 <span id="fmdtools-define-container-rand"></span><h2>fmdtools.define.container.rand<a class="headerlink" href="#module-fmdtools.define.container.rand" title="Link to this heading"></a></h2>
 <p>Defines <a class="reference internal" href="#fmdtools.define.container.rand.Rand" title="fmdtools.define.container.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a> class and other methods defining random properties used in blocks.</p>
-<p>Has Classes and Functions:</p>
+<p>Has public Classes and Functions:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.define.container.rand.Rand" title="fmdtools.define.container.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a>: Superclass for Block random properties.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.define.container.rand.get_pdf_for_rand" title="fmdtools.define.container.rand.get_pdf_for_rand"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a>: Gets the corresponding probability mass/density for random
-sample x from ‘randname’ function in numpy.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.define.container.rand.get_scipy_pdf_helper" title="fmdtools.define.container.rand.get_scipy_pdf_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a>: Gets probability mass/density for the outcome x from the
-distribution “randname”. Used as a helper function in determining stochastic model
-state probability</p></li>
-<li><p><a class="reference internal" href="#fmdtools.define.container.rand.get_pdf_for_dist" title="fmdtools.define.container.rand.get_pdf_for_dist"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a>: Gets the corresponding probability mass/density (from scipy)
+<li><p><a class="reference internal" href="#fmdtools.define.container.rand.get_pfunc_for_dist" title="fmdtools.define.container.rand.get_pfunc_for_dist"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pfunc_for_dist()</span></code></a>: Gets the corresponding probability mass/density
 for outcome x for probability distributions with name ‘randname’ in numpy.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.container.rand.get_prob_for_rand" title="fmdtools.define.container.rand.get_prob_for_rand"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_prob_for_rand()</span></code></a>: Gets the corresponding probability mass/density for random
+sample x from ‘randname’ function in numpy.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.container.rand.calc_prob_for_integers" title="fmdtools.define.container.rand.calc_prob_for_integers"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_prob_for_integers()</span></code></a>: Calculate probability for random.integers.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.container.rand.calc_prob_density_for_random" title="fmdtools.define.container.rand.calc_prob_density_for_random"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_prob_density_for_random()</span></code></a>: Calc probability density for random.random.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.container.rand.calc_prob_for_choice" title="fmdtools.define.container.rand.calc_prob_for_choice"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_prob_for_choice()</span></code></a>: Calculate probability for random.choice.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.container.rand.calc_prob_for_shuffle_permutation" title="fmdtools.define.container.rand.calc_prob_for_shuffle_permutation"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_prob_for_shuffle_permutation()</span></code></a>: Calculate probability for random.shuffle
+and random.permutation.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.container.rand.calc_prob_for_permuted" title="fmdtools.define.container.rand.calc_prob_for_permuted"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_prob_for_permuted()</span></code></a>: Calculate probability for random.permuted.</p></li>
+<li><p>:func:<a href="#id26"><span class="problematic" id="id27">`</span></a>array</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.ExampleRand">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">ExampleRand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">ExampleRand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.rand.Rand" title="fmdtools.define.container.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a></p>
 <p>Example Rand for testing and docs.</p>
 <dl class="py attribute">
@@ -2094,7 +2120,7 @@ for outcome x for probability distributions with name ‘randname’ in numpy.</
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">Rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.Rand" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">Rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.Rand" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
 <p>Class for defining and interacting with random states of the model.</p>
 <dl class="py attribute">
@@ -2140,10 +2166,12 @@ for outcome x for probability distributions with name ‘randname’ in numpy.</
 </div>
 <p>Which enables the use of set_rand_state, update_stochastic_states, etc for updating
 these states with methods called from the rng when run_stochastic=True.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exr</span> <span class="o">=</span> <span class="n">ExampleRand</span><span class="p">(</span><span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exr</span> <span class="o">=</span> <span class="n">ExampleRand</span><span class="p">(</span><span class="n">run_stochastic</span><span class="o">=</span><span class="s1">&#39;track_pdf&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exr</span><span class="o">.</span><span class="n">set_rand_state</span><span class="p">(</span><span class="s1">&#39;noise&#39;</span><span class="p">,</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exr</span><span class="o">.</span><span class="n">s</span>
 <span class="go">RandState(noise=1.3047170797544314)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exr</span><span class="o">.</span><span class="n">probs</span>
+<span class="go">[0.3808442490605113]</span>
 </pre></div>
 </div>
 <p>Checking copy:</p>
@@ -2151,11 +2179,19 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exr2</span><span class="o">.</span><span class="n">s</span>
 <span class="go">RandState(noise=1.3047170797544314)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exr2</span><span class="o">.</span><span class="n">run_stochastic</span>
-<span class="go">True</span>
+<span class="go">&#39;track_pdf&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exr2</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">exr</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span>
 <span class="go">True</span>
 </pre></div>
 </div>
+<p>More state setting:
+&gt;&gt;&gt; exr.set_rand_state(‘noise’, ‘normal’, 1.0, 1.0)
+&gt;&gt;&gt; exr.probs
+[0.3808442490605113, 0.23230084450139615]
+&gt;&gt;&gt; exr.return_probdens()
+0.08847044068025682
+&gt;&gt;&gt; exr2.probs
+[0.3808442490605113]</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.base_type">
 <span class="sig-name descname"><span class="pre">base_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.Rand.base_type" title="Link to this definition"></a></dt>
@@ -2216,17 +2252,18 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.return_mutables">
 <span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.Rand.return_mutables" title="Link to this definition"></a></dt>
-<dd><p>Return mutable aspects of the container.</p>
+<dd><p>Get mutable rand states.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.return_probdens">
 <span class="sig-name descname"><span class="pre">return_probdens</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.Rand.return_probdens" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return probability density/mass corresponding to random sim.</p>
+</dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id26">
-<span class="sig-name descname"><span class="pre">rng</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Generator</span></em><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id28">
+<span class="sig-name descname"><span class="pre">rng</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Generator</span></em><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2240,8 +2277,8 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id27">
-<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id29">
+<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2299,71 +2336,229 @@ these states with methods called from the rng when run_stochastic=True.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_pdf_for_dist">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_pdf_for_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_pdf_for_dist" title="Link to this definition"></a></dt>
-<dd><p>Get the scipy probability mass/density for outcome x from numpy random draw.</p>
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.as_prob">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">as_prob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.as_prob" title="Link to this definition"></a></dt>
+<dd><p>Return array output of probabilities as single joint probability.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.calc_prob_density_for_random">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_density_for_random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_density_for_random" title="Link to this definition"></a></dt>
+<dd><p>Get probability density for np.default_rng.random.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_density_for_random</span><span class="p">([</span><span class="mf">0.5</span><span class="p">])</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_density_for_random</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<span class="go">0.25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_density_for_random</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.calc_prob_for_choice">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_for_choice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_for_choice" title="Link to this definition"></a></dt>
+<dd><p>Get probability corresponding to a call to np.choice.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_choice</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
+<span class="go">0.01</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.calc_prob_for_integers">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_for_integers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_for_integers" title="Link to this definition"></a></dt>
+<dd><p>Get probability for np.default_rng.integers.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_integers</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_integers</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">0.25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_integers</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.calc_prob_for_permuted">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_for_permuted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_for_permuted" title="Link to this definition"></a></dt>
+<dd><p>Get probability corresponding to rng.permuted.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_permuted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]]))</span>
+<span class="go">0.041666666666666664</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_permuted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]]),</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">0.16666666666666666</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_permuted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]]),</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.calc_prob_for_shuffle_permutation">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_for_shuffle_permutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_valid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_for_shuffle_permutation" title="Link to this definition"></a></dt>
+<dd><p>Get probability corresponding to rng.shuffle and rng.permutation.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_shuffle_permutation</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_shuffle_permutation</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">0.16666666666666666</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_custom_pfunc">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_custom_pfunc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_handle</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_custom_pfunc" title="Link to this definition"></a></dt>
+<dd><p>Get callable for calc_func pdf/pmf function with provided arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_exp_ray_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_exp_ray_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_exp_ray_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get callable for scipy exponential and rayleigh pdf with numpy.random arguments.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;rayleigh&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="go">0.3032653298563167</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;rayleigh&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;exponential&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;exponential&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="go">0.36787944117144233</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_hypergeometric_pmf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_hypergeometric_pmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_hypergeometric_pmf" title="Link to this definition"></a></dt>
+<dd><p>Get callable for scipy hypergeomeric pmf with numpy.random arguments.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_hypergeometric_pmf</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">450</span><span class="p">,</span> <span class="mi">100</span><span class="p">)(</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">0.14736784420411747</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_lognormal_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_lognormal_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_lognormal_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get callable for scipy lognormal pdf with numpy.random arguments.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_lognormal_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.25</span><span class="p">)(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="go">1.5957691216057308</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_pfunc_for_dist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_pfunc_for_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_pfunc_for_dist" title="Link to this definition"></a></dt>
+<dd><p>Get the probability mass/density function corresponding to a numpy random draw.</p>
+<p>Uses a call to scipy.stats when available (with the correct arguments), otherwise
+uses a custom function provided in this module.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>int/float/array</em>) – samples to get probability mass/density of</p></li>
 <li><p><strong>randname</strong> (<em>str</em>) – Name of numpy.random distribution</p></li>
 <li><p><strong>args</strong> (<em>tuple</em>) – Arguments sent to numpy.random distribution</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>prob</strong></p>
+<dd class="field-even"><p><strong>pfunc</strong> – pdf/pmf for the draw.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float/array of probability densities</p>
+<dd class="field-odd"><p>callable</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_pdf_for_rand">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_pdf_for_rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_pdf_for_rand" title="Link to this definition"></a></dt>
-<dd><p>Get the probability density/mass function for random sample x.</p>
-<p>Pulled from ‘randname’ function in numpy.</p>
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_prob_for_rand">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_prob_for_rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_prob_for_rand" title="Link to this definition"></a></dt>
+<dd><p>Get the probability density/mass for random sample x.</p>
+<p>Pulled from ‘randname’ function in numpy. Calls get_pfunc_for_dist when scipy has
+a corresponding distribution function, otherwise calls custom functions
+to calculate the probabilities/probability densities.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>int/float/array</em>) – samples to get probability mass/density of</p></li>
 <li><p><strong>randname</strong> (<em>str</em>) – Name of numpy.random distribution</p></li>
-<li><p><strong>args</strong> (<em>tuple</em>) – Arguments sent to numpy.random distribution</p></li>
+<li><p><strong>*args</strong> (<em>tuple</em>) – Arguments sent to numpy.random distribution</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>prob</strong></p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float/array of probability densities</p>
+<dd class="field-odd"><p>float of probability density or mass, depending on function</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_prob_for_rand</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">0.3989422804014327</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_prob_for_rand</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">0.15915494309189535</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_prob_for_rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;integers&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">0.25</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_scipy_pdf_helper">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_scipy_pdf_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pmf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_scipy_pdf_helper" title="Link to this definition"></a></dt>
-<dd><p>Get probability mass/density for the outcome x.</p>
-<p>Pulled from the distribution “randname” in scipy with arguments “args”.</p>
-<p>Used as a helper function in determining stochastic model state probability</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>int/float/array</em>) – samples to get probability mass/density of</p></li>
-<li><p><strong>randname</strong> (<em>str</em>) – Name of scipy.stats probability distribution</p></li>
-<li><p><strong>args</strong> (<em>tuple</em>) – Arguments to send to scipy.stats.randname.pdf</p></li>
-<li><p><strong>pmf</strong> (<em>Bool</em><em>, </em><em>optional</em>) – Whether the distribution uses a probability mass function instead of a pdf.
-The default is False.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>prob</strong></p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float/array of probability densities</p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_scipy_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_scipy_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_scipy_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get callable for scipy pdf function with given name and arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_scipy_pmf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_scipy_pmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_scipy_pmf" title="Link to this definition"></a></dt>
+<dd><p>Get callable for scipy pmf function with given name and arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_standard_t_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_standard_t_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_standard_t_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get callable for scipy multivariate_t dist for a numpy.random.standard_t call.</p>
+<p>Note: doesn’t support len(x)&gt;1.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_standard_t_pdf</span><span class="p">(</span><span class="mi">1</span><span class="p">)([</span><span class="mf">0.0</span><span class="p">])</span>
+<span class="go">0.31830988618379075</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_triangular_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_triangular_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_triangular_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get callable for scipy.triang corresponding to a numpy.random.triangular call.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_triangular_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_triangular_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_triangular_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="go">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_triangular_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">0.25</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_vonmises_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_vonmises_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_vonmises_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get callable for scipy.vonmises corresponding to numpy.random arguments.</p>
 </dd></dl>
 
 </section>
@@ -2551,8 +2746,8 @@ global</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id28">
-<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2584,8 +2779,8 @@ global</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id29">
-<span class="sig-name descname"><span class="pre">run_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">run_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2597,33 +2792,33 @@ global_timestep.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id30">
-<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id31">
-<span class="sig-name descname"><span class="pre">t_loc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="id32">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id33">
-<span class="sig-name descname"><span class="pre">timernames</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">t_loc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id34">
-<span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id35">
-<span class="sig-name descname"><span class="pre">use_local</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">timernames</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id36">
+<span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#id36" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id37">
+<span class="sig-name descname"><span class="pre">use_local</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id37" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

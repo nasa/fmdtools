@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_a2266ba4c933f375_drone_mdl_rural_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.9">coverage.py v7.6.9</a>,
-            created at 2024-12-19 02:33 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
+            created at 2025-01-30 19:24 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -251,8 +251,8 @@
     <p class="pln"><span class="n"><a id="t169" href="#t169">169</a></span><span class="t">        <span class="str">"""Corrects for individual line faultmodes by turning off the opposite rotor</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t170" href="#t170">170</a></span><span class="t"><span class="str">        and upping the throttle (amp_factor)"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t171" href="#t171">171</a></span><span class="t">        <span class="key">for</span> <span class="nam">fault</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">faults</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t172" href="#t172">172</a></span><span class="t">            <span class="key">if</span> <span class="nam">fault</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">ca</span><span class="op">.</span><span class="nam">faultmodes</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t173" href="#t173">173</a></span><span class="t">                <span class="nam">comp</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">ca</span><span class="op">.</span><span class="nam">faultmodes</span><span class="op">[</span><span class="nam">fault</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t172" href="#t172">172</a></span><span class="t">            <span class="key">if</span> <span class="nam">fault</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">ca</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">sub_modes</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t173" href="#t173">173</a></span><span class="t">                <span class="nam">comp</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">ca</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">sub_modes</span><span class="op">[</span><span class="nam">fault</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t174" href="#t174">174</a></span><span class="t">                <span class="nam">opp</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">ca</span><span class="op">.</span><span class="nam">p</span><span class="op">.</span><span class="nam">opposite</span><span class="op">[</span><span class="nam">comp</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t175" href="#t175">175</a></span><span class="t">                <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">ca</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">forward</span><span class="op">[</span><span class="nam">comp</span><span class="op">]</span> <span class="op">!=</span> <span class="num">0.0</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t176" href="#t176">176</a></span><span class="t">                    <span class="nam">self</span><span class="op">.</span><span class="nam">ca</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">forward</span><span class="op">[</span><span class="nam">comp</span><span class="op">]</span> <span class="op">=</span> <span class="num">0.0</span>&nbsp;</span><span class="r"></span></p>
@@ -422,8 +422,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_a2266ba4c933f375_drone_mdl_rural_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.9">coverage.py v7.6.9</a>,
-            created at 2024-12-19 02:33 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
+            created at 2025-01-30 19:24 +0000
         </p>
     </div>
 </footer>

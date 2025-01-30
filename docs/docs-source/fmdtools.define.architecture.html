@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.architecture &mdash; fmdtools 2.0.6 documentation</title>
+  <title>fmdtools.define.architecture &mdash; fmdtools 2.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3e466467"></script>
+      <script src="../_static/documentation_options.js?v=9a3ee07e"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-6">Version: 2.0.6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -411,6 +411,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
@@ -419,13 +420,19 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.round_float"><code class="docutils literal notranslate"><span class="pre">round_float()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.set_arg_as_type"><code class="docutils literal notranslate"><span class="pre">set_arg_as_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
@@ -528,7 +535,6 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.SingleFaultScenarioProblem"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.VariableConnector"><code class="docutils literal notranslate"><span class="pre">VariableConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.obj_name"><code class="docutils literal notranslate"><span class="pre">obj_name()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -544,23 +550,27 @@
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.add_title_xylabs"><code class="docutils literal notranslate"><span class="pre">add_title_xylabs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_average"><code class="docutils literal notranslate"><span class="pre">calc_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_expected"><code class="docutils literal notranslate"><span class="pre">calc_expected()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_metric"><code class="docutils literal notranslate"><span class="pre">calc_metric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_metric_ci"><code class="docutils literal notranslate"><span class="pre">calc_metric_ci()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_percent"><code class="docutils literal notranslate"><span class="pre">calc_percent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_rate"><code class="docutils literal notranslate"><span class="pre">calc_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_sum"><code class="docutils literal notranslate"><span class="pre">calc_sum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_total"><code class="docutils literal notranslate"><span class="pre">calc_total()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.clear_prev_figure"><code class="docutils literal notranslate"><span class="pre">clear_prev_figure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.metric_preamble"><code class="docutils literal notranslate"><span class="pre">metric_preamble()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.multiplot_helper"><code class="docutils literal notranslate"><span class="pre">multiplot_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.phase_overlay"><code class="docutils literal notranslate"><span class="pre">phase_overlay()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.plot_err_hist"><code class="docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
@@ -901,12 +911,29 @@ May alternatively provide already-instanced object.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
-<li><p><strong>faults</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+<li><p><strong>flexible_role</strong> (<em>str</em>) – Name of role to inject faults in (e.g., fxns, .acts, comps)</p></li>
+<li><p><strong>faults</strong> (<em>dict</em>) – Dict of faults to inject {‘fxnname’: [‘faultname’]}.</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.is_dynamic">
+<span class="sig-name descname"><span class="pre">is_dynamic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.is_dynamic" title="Link to this definition"></a></dt>
+<dd><p>Determine if dynamic (False by default).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.is_static">
+<span class="sig-name descname"><span class="pre">is_static</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.is_static" title="Link to this definition"></a></dt>
+<dd><p>Determine if static (False by default).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.m">
+<span class="sig-name descname"><span class="pre">m</span></span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.m" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.reset">
@@ -1143,6 +1170,12 @@ Defaults to self.condition_pass if none are provided.</p></li>
 <span class="sig-name descname"><span class="pre">conds</span></span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.conds" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.container_m">
+<span class="sig-name descname"><span class="pre">container_m</span></span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.container_m" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a></p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.copy" title="Link to this definition"></a></dt>
@@ -1166,11 +1199,6 @@ Defaults to self.condition_pass if none are provided.</p></li>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.faultmodes">
-<span class="sig-name descname"><span class="pre">faultmodes</span></span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.faultmodes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.flexible_roles">
 <span class="sig-name descname"><span class="pre">flexible_roles</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['flows',</span> <span class="pre">'acts',</span> <span class="pre">'conds']</span></em><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.flexible_roles" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -1190,6 +1218,23 @@ Defaults to self.condition_pass if none are provided.</p></li>
 <span class="sig-name descname"><span class="pre">inject_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.inject_faults" title="Link to this definition"></a></dt>
 <dd><p>Inject faults into the actions contained in the architecture.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.is_dynamic">
+<span class="sig-name descname"><span class="pre">is_dynamic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.is_dynamic" title="Link to this definition"></a></dt>
+<dd><p>Determine if dynamic based on self.proptype.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.is_static">
+<span class="sig-name descname"><span class="pre">is_static</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.is_static" title="Link to this definition"></a></dt>
+<dd><p>Determine if static based on self.proptype.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.m">
+<span class="sig-name descname"><span class="pre">m</span></span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.m" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.max_action_prop">
@@ -1354,9 +1399,10 @@ to nx.draw_networkx_nodes. The default is {“label”:{}}.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture.faultmodes">
-<span class="sig-name descname"><span class="pre">faultmodes</span></span><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture.faultmodes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture.container_m">
+<span class="sig-name descname"><span class="pre">container_m</span></span><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture.container_m" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a></p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture.flexible_roles">
@@ -1370,8 +1416,8 @@ to nx.draw_networkx_nodes. The default is {“label”:{}}.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
-<li><p><strong>faults</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+<li><p><strong>flexible_role</strong> (<em>str</em>) – Name of role to inject faults in (e.g., fxns, .acts, comps)</p></li>
+<li><p><strong>faults</strong> (<em>dict</em>) – Dict of faults to inject {‘fxnname’: [‘faultname’]}.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1593,6 +1639,12 @@ in assoc_faultmodes/ Default is 0.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.container_m">
+<span class="sig-name descname"><span class="pre">container_m</span></span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.container_m" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.default_name">
 <span class="sig-name descname"><span class="pre">default_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'model'</span></em><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.default_name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -1659,11 +1711,23 @@ in assoc_faultmodes/ Default is 0.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
-<li><p><strong>faults</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+<li><p><strong>flexible_role</strong> (<em>str</em>) – Name of role to inject faults in (e.g., fxns, .acts, comps)</p></li>
+<li><p><strong>faults</strong> (<em>dict</em>) – Dict of faults to inject {‘fxnname’: [‘faultname’]}.</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.is_dynamic">
+<span class="sig-name descname"><span class="pre">is_dynamic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.is_dynamic" title="Link to this definition"></a></dt>
+<dd><p>Determine if dynamic based on containment of dynamic functions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.is_static">
+<span class="sig-name descname"><span class="pre">is_static</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.is_static" title="Link to this definition"></a></dt>
+<dd><p>Determine if static based on containment of static functions.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1707,7 +1771,7 @@ random states over time.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.propagate">
-<span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fxnfaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disturbances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.propagate" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fxnfaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disturbances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proptype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.propagate" title="Link to this definition"></a></dt>
 <dd><p>Inject and propagates faults through the graph at one time-step.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1717,6 +1781,8 @@ random states over time.</p></li>
 With structure {‘function’:[‘fault1’, ‘fault2’…]}</p></li>
 <li><p><strong>disturbances</strong> (<em>dict</em>) – Variables to change during this propagation step.
 With structure {‘function.var1’:value}</p></li>
+<li><p><strong>proptype</strong> (<em>str</em>) – Whether the propagate ‘static’ or ‘dynamic’ behaviors, or ‘both’. Default
+is ‘both’.</p></li>
 <li><p><strong>run_stochastic</strong> (<em>bool</em>) – Whether to run stochastic behaviors or use default values. Default is False.
 Can set as ‘track_pdf’ to calculate/track the probability densities of
 random states over time.</p></li>
@@ -2231,6 +2297,11 @@ is provided, calls method_layout, where method is the string provided</p></li>
 <dd><p>Initialize example geoms.</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.ExGeomArch.m">
+<span class="sig-name descname"><span class="pre">m</span></span><a class="headerlink" href="#fmdtools.define.architecture.geom.ExGeomArch.m" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -2392,6 +2463,11 @@ geoms. We can then access the individual geoms in the geoms dict, e.g.,:</p>
 <span class="sig-name descname"><span class="pre">init_architecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.init_architecture" title="Link to this definition"></a></dt>
 <dd><p>Use this placeholder method to define custom architectures.</p>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.m">
+<span class="sig-name descname"><span class="pre">m</span></span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.m" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.rolename">
