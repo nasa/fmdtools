@@ -40,9 +40,9 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import t_key, nest_dict
-from fmdtools.analyze.common import to_include_keys, is_numeric, nan_to_x, is_bool
-from fmdtools.analyze.common import bootstrap_confidence_interval, join_key
+from fmdtools.define.base import t_key, nest_dict, is_numeric, is_bool, nan_to_x
+from fmdtools.analyze.common import to_include_keys
+from fmdtools.analyze.common import calc_metric, calc_metric_ci, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import set_empty_multiplots
@@ -450,13 +450,50 @@ class Result(UserDict):
             result = result.flatten()
         return result
 
-    def get_values(self, *values):
+    def get_vals(self, *values, prefix="", **val_kwargs):
+        """
+        Get *values from the dict and return as tuples.
+
+        Examples
+        --------
+        >>> r = Result({'a': 1, 'b': 3})
+        >>> r.get_vals("a", c="b")
+        ([1], [3])
+        >>> r = Result({'x.a': 1, 'y.a': 3})
+        >>> r.get_vals('a', c={'x': 4, 'y': 5})
+        ([1, 3], [4, 5])
+        """
+        get_vals = [[*self.get_values(val, prefix=prefix).values()]
+                    for val in values]
+        k_vals = [[*self.get_values(val, prefix=prefix).values()]
+                  if isinstance(val, str) else
+                  [*self.align_external_dict(val).values()] if isinstance(val, dict)
+                  else val
+                  for val in val_kwargs.values()]
+        return tuple(get_vals+k_vals)
+
+    def align_external_dict(self, ext_dict):
+        """
+        Align external dict with the order of the Result.
+
+        Examples
+        --------
+        >>> r = Result({'t1.a': 0.5, 't1.b': 0.01, 't2.a': 0.0, 't2.b': 0.1})
+        >>> r.align_external_dict({'t2': 1, 't1': 2})
+        {'t1': 2, 't2': 1}
+        """
+        dict_key = [*ext_dict.keys()][0]
+        nest_level = dict_key.count(".")
+        nest_self = self.nest(skip=nest_level)
+        return {k: ext_dict[k] for k in nest_self.keys()}
+
+    def get_values(self, *values, prefix=""):
         """Get a dict with all values corresponding to the strings in *values."""
         h = self.__class__()
         flatself = self.flatten()
         k_vs = []
         for v in values:
-            ks = [k for k in flatself.keys() if k.endswith(v)]
+            ks = [k for k in flatself.keys() if k.endswith(prefix+v)]
             if not ks:
                 raise Exception("Value "+v+" not in Result keys.")
             k_vs.extend(ks)
@@ -515,7 +552,7 @@ class Result(UserDict):
 
     def get_default_comp_groups(self):
         """
-        Gets a dict of nominal and faulty scenario keys from the Result
+        Get a dict of nominal and faulty scenario keys from the Result.
 
         Returns
         -------
@@ -537,7 +574,7 @@ class Result(UserDict):
 
     def flatten(self, newhist=False, prevname="", to_include='all'):
         """
-        Recursively creates a flattened result of the given nested model history
+        Recursively create a flattened result of the given nested model history.
 
         Parameters
         ----------
@@ -595,9 +632,9 @@ class Result(UserDict):
                 return False
         return True
 
-    def nest(self, levels=np.inf):
+    def nest(self, levels=float('inf'), separator=".", skip=0):
         """Re-nest a flattened result."""
-        return nest_dict(self, levels=levels)
+        return nest_dict(self, levels=levels, separator=separator, skip=skip)
 
     def get_memory(self):
         """
@@ -691,13 +728,13 @@ class Result(UserDict):
         file_handle.close()
 
     def as_table(self):
-        """Creates a table corresponding to the current dict structure"""
+        """Create a table corresponding to the current dict structure."""
         flatdict = self.flatten()
         newdict = {join_key(k): v for k, v in flatdict.items()}
         return pd.DataFrame.from_dict(newdict)
 
     def create_simple_fmea(self, *metrics):
-        """Makes a simple FMEA-stype table of the metrics in the endclasses
+        """Make a simple FMEA-stype table of the metrics in the endclasses
         of a list of fault scenarios run. If metrics not provided, returns all"""
         nested = {k: {**v.endclass} for k, v in self.nest(levels=1).items()}
         tab = pd.DataFrame.from_dict(nested).transpose()
@@ -750,7 +787,8 @@ class Result(UserDict):
                                        axis=0, weights=weights)
         return expres
 
-    def get_metric(self, value, metric=np.mean, args=(), axis=None):
+    def get_metric(self, value, method=np.average, rates=None, weights=None, prefix="",
+                   **kwargs):
         """
         Calculate a statistic of the value using a provided metric function.
 
@@ -758,24 +796,36 @@ class Result(UserDict):
         ----------
         value : str
             Value of the history to calculate the statistic over
-        metric : func/'str', optional
-            Function to process the history (e.g. np.mean, np.min...).
-            The default is np.mean.
-            May alternatively provide name of Result method (e.g., 'expected', 'rate')
-        args : args
-            Arguments for the metric function. Default is ().
-        axis : None or 0 or 1
-            Whether to take the metric over variables (0) or over time (1) or
-            both (None). The default is None.
-        """
-        if isinstance(metric, str):
-            method = getattr(self, metric)
-            return method("."+value, *args)
-        else:
-            vals = self.get_values(value)
-            return metric([*vals.values()], *args, axis=axis)
+        weights : str/array
+            Keys to use for weights, if any. Default is None.
+        rates : str/array
+            Keys to use for rates, if any. Default is None.
 
-    def get_metric_ci(self, value, metric=np.mean, **kwargs):
+        prefix : str
+            Prefix to get values from. Default is "".
+        **kwargs : kwargs
+            Keyword arguments for calc_metric.
+
+        Examples
+        --------
+        >>> r = Result({'t1.a': 0.5, 't1.b': 0.01, 't2.a': 0.0, 't2.b': 0.1})
+        >>> r.get_metric("a", method=np.average, rates="b")
+        0.0025
+        >>> r.get_metric("a", method="total")
+        1
+        >>> r.get_metric("b", method="rate", rates="a")
+        0.5
+        >>> r.get_metric("b", method="expected", rates="a")
+        0.005
+        >>> r.get_metric("b", "expected", rates={"t1": 1, "t2": 2})
+        0.21000000000000002
+        """
+        vals, rates, weights = self.get_vals(value, prefix=prefix,
+                                             rates=rates, weights=weights)
+        return calc_metric(vals, method=method, weights=weights, rates=rates, **kwargs)
+
+    def get_metric_ci(self, value, method=np.average, prefix=".",
+                      rates=None, weights=None, **kwargs):
         """
         Get the confidence interval for the given value over the set of scenarios.
 
@@ -783,11 +833,8 @@ class Result(UserDict):
         ----------
         value : str
             Value of the history to calculate the statistic over
-        metric : func, optional
-            Function to process the history (e.g., np.mean, np.min...).
-            The default is np.mean
         **kwargs : kwargs
-            kwargs to bootstrap_confidence_interval
+            kwargs to calc_metric_ci
 
         Returns
         -------
@@ -797,12 +844,21 @@ class Result(UserDict):
             lower bound of the statistic in the ci
         upper bound : number
             upper bound of the statistic in the ci
-        """
-        vals = self.get_values(value)
-        ci = bootstrap_confidence_interval([*vals.values()], method=metric, **kwargs)
-        return ci
 
-    def get_metrics(self, *values, metric=np.mean, args=(), axis=None):
+        Examples
+        --------
+        >>> r = Result({'a.a': 1, 'b.a': 3, "c.a": 2})
+        >>> r.get_metric_ci("a")
+        (2.0, 1.0, 3.0)
+        >>> r.get_metric_ci("a", rates=[0.5, 1.0, 0.5], r_norm=True, method=np.sum)
+        (2.25, 1.0, 4.5)
+        """
+        vals, rates, weights = self.get_vals(value, prefix=prefix,
+                                             rates=rates, weights=weights)
+        return calc_metric_ci(vals, method=method, rates=rates, weights=weights,
+                              **kwargs)
+
+    def get_metrics(self, *values, prefix=".", **kwargs):
         """
         Calculate a statistic of the values using a provided metric function.
 
@@ -811,23 +867,18 @@ class Result(UserDict):
         *values : strs
             Values of the history to calculate the statistic over
             (if none provided, creates metric of all)
-        metric : func, optional
-            Function to process the history (e.g. np.mean, np.min...).
-            The default is np.mean.
-        args : args, optional
-            Arguments for the metric function. Default is ().
-        axis : None or 0 or 1
-            Whether to take the metric over variables (0) or over time (1)
-            or both (None). The default is None.
+        **kwargs : kwargs
+            Keyword arguments to get_metric.
         """
         if not values:
             values = self.keys()
+            prefix = ""
         metrics = Result()
         for value in values:
-            metrics[value] = self.get_metric(value, metric=metric, args=args, axis=axis)
+            metrics[value] = self.get_metric(value, prefix=prefix, **kwargs)
         return metrics
 
-    def total(self, metric):
+    def total(self, metric, prefix="."):
         """
         Tabulates the total (non-weighted sum) of a metric over a number of runs.
 
@@ -841,9 +892,10 @@ class Result(UserDict):
         totalcost : Float
             The total metric of the scenarios.
         """
-        return sum([e for e in self.get_values(metric).values()])
+        return sum([e for e in self.get_values(metric, prefix=prefix).values()])
 
-    def state_probabilities(self, prob_key='prob', class_key='classification'):
+    def state_probabilities(self, prob_key='prob', class_key='classification',
+                            prefix="."):
         """
         Tabulates the probabilities of different classifications in the result.
 
@@ -860,117 +912,17 @@ class Result(UserDict):
             Dictionary of probabilities of different simulation classifications
 
         """
-        classifications = self.get_values("." + class_key)
-        class_len = len("." + class_key)
-        probs = self.get_values("." + prob_key)
+        classifications = self.get_values(class_key, prefix=prefix)
+        class_len = len(prefix + class_key)
+        probs = self.get_values(prob_key, prefix=prefix)
         probabilities = dict()
         for key, classif in classifications.items():
-            prob = probs[key[:-class_len] + "." + prob_key]
+            prob = probs[key[:-class_len] + prefix + prob_key]
             if classif in probabilities:
                 probabilities[classif] += prob
             else:
                 probabilities[classif] = prob
         return probabilities
-
-    def expected(self, metric, prob_key='rate'):
-        """Calculates the expected value of a given metric in endclasses using the rate
-        variable in endclasses"""
-        ecs = np.array([e for e in self.get_values(metric).values()
-                        if not np.isnan(e)])
-        weights = np.array([e for e in self.get_values(prob_key).values()
-                            if not np.isnan(e)])
-        return sum(ecs*weights)
-
-    def average(self, metric, empty_as='nan'):
-        """Calculate the average value of a given metric in endclasses"""
-        ecs = [e for e in self.get_values(metric).values() if not np.isnan(e)]
-        if len(ecs) > 0 or empty_as == 'nan':
-            return np.mean(ecs)
-        else:
-            return empty_as
-
-    def percent(self, metric):
-        """Calculate the percentage of a given indicator variable being True."""
-        return sum([int(bool(e)) for e in self.get_values(metric).values()
-                    if not np.isnan(e)])/(len(self.get_values(metric))+1e-16)
-
-    def rate(self, metric, prob_key='rate'):
-        """Calculate the rate of a metric being True using the rate variable."""
-        ecs = np.array([bool(e) for e in self.get_values(metric).values()
-                        if not np.isnan(e)])
-        weights = np.array([e for e in self.get_values(prob_key).values()
-                            if not np.isnan(e)])
-        return sum(ecs*weights)
-
-    def end_diff(self, metric, nan_as=np.nan, as_ind=False, no_diff=False):
-        """
-        Calculate the difference between the nominal and fault scenarios.
-
-        Parameters
-        ----------
-        metric : str
-            metric to calculate the difference of in the endclasses
-        nan_as : float, optional
-            How do deal with nans in the difference. The default is np.nan.
-        as_ind : bool, optional
-            Whether to return the difference as an indicator (1,-1,0) or real value.
-            The default is False.
-        no_diff : bool, optional
-            Option for not computing the difference
-            (but still performing the processing here). The default is False.
-
-        Returns
-        -------
-        difference : dict
-            dictionary of differences over the set of scenarios
-        """
-        endclasses = self.copy()
-        nomendclass = endclasses.pop('nominal')
-        if not no_diff:
-            if as_ind:
-                difference = {scen: bool(nan_to_x(ec.endclass[metric], nan_as)) -
-                              bool(nan_to_x(nomendclass[metric], nan_as))
-                              for scen, ec in endclasses.items()}
-            else:
-                difference = {scen: nan_to_x(ec.endclass[metric], nan_as) -
-                              nan_to_x(nomendclass[metric], nan_as)
-                              for scen, ec in endclasses.items()}
-        else:
-            difference = {scen: nan_to_x(ec.endclass[metric], nan_as)
-                          for scen, ec in endclasses.items()}
-            if as_ind:
-                difference = {scen: np.sign(metric)
-                              for scen, metric in difference.items()}
-        return difference
-
-    def overall_diff(self, metric, nan_as=np.nan, as_ind=False, no_diff=False):
-        """
-        Calculate difference between the nominal and fault scenarios.
-
-        Parameters
-        ----------
-        nested_endclasses : dict
-            Nested dict of endclasses from propogate.nested
-        metric : str
-            metric to calculate the difference of in the endclasses
-        nan_as : float, optional
-            How do deal with nans in the difference. The default is np.nan.
-        as_ind : bool, optional
-            Whether to return the difference as an indicator (1,-1,0) or real value.
-            The default is False.
-        no_diff : bool, optional
-            Option for not computing the difference
-            (but still performing the processing here). The default is False.
-
-        Returns
-        -------
-        differences : dict
-            nested dictionary of differences over the set of fault scenarios nested in
-            nominal scenarios
-        """
-        return {scen:
-                endclass.end_diff(metric, nan_as=nan_as, as_ind=as_ind, no_diff=no_diff)
-                for scen, endclass in self.items()}
 
     def plot_metric_dist(self, *values, cols=2, comp_groups={}, bins=10, metric_bins={},
                          legend_loc=-1, xlabels={}, ylabel='count', title='', titles={},
@@ -1166,7 +1118,10 @@ def load_json(filename, indiv=False):
 
 if __name__ == "__main__":
 
-    # r = Result({'a': 1, 'b': 3})
+    r = Result({'a': 1, 'b': 3})
+
+    r = Result({'t1.a': 0.5, 't1.b': 0.01, 't2.a': 0.0, 't2.b': 0.1})
+    r.get_metric("b", method="rate", rates="a")
     # r.c
     import doctest
     doctest.testmod(verbose=True)

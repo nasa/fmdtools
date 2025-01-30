@@ -644,7 +644,7 @@ def script_sample_faults(track='all', **kwargs):
 
 
 
-    c = an.tabulate.Comparison(endclasses, faultapp, default_stat=np.mean,
+    c = an.tabulate.Comparison(endclasses, faultapp, default_stat=np.average,
                                metrics=['cost', 'rate', 'expected_cost'],
                                ci_metrics=['cost'])
     c.as_table()
@@ -654,8 +654,8 @@ def script_sample_faults(track='all', **kwargs):
 
     fmea = an.tabulate.FMEA(endclasses, faultapp)
     fmea.as_table()
-    fmea.sort_by_metric("cost")
-    fmea.as_plot("cost", color_factor="function")
+    fmea.sort_by_metric("expected_cost")
+    fmea.as_plot("expected_cost", color_factor="function")
 
     # test cases for multiplot legend/axis sharing
     mdlhists.plot_line("flows.ee_1.s.current", "flows.sig_1.s.power",

@@ -194,9 +194,6 @@ if __name__ == '__main__':
     result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard',
                                                  'act_unable', time=4,
                                                  desired_result='graph')
-    result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard',
-                                                 'perceive_failed', time=4,
-                                                 desired_result='graph')
 
     result_fault.graph.draw()
     ex_fxn = DetectHazard('detect_hazard')

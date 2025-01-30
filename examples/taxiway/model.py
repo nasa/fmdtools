@@ -83,19 +83,19 @@ class taxiway_model(FunctionArchitecture):
 
 def create_fault_scen_metrics(mdlhist):
     nomhist = History({'incorrect_fields':
-             mdlhist.nominal.get_metric("i.incorrect", metric=np.sum, axis=0),
+             mdlhist.nominal.get_metric("i.incorrect", method=np.sum, axis=0),
              'assets_without_sight':
-             mdlhist.nominal.get_metric("i.nosight", metric=np.sum, axis=0),
+             mdlhist.nominal.get_metric("i.nosight", method=np.sum, axis=0),
              "unsafe_distances":
-            mdlhist.nominal.get_metric("i.unsafe", metric=np.sum, axis=0),
+            mdlhist.nominal.get_metric("i.unsafe", method=np.sum, axis=0),
             "overbooked_locations":
-            mdlhist.nominal.get_metric("i.overbooked", metric=np.sum, axis=0),
+            mdlhist.nominal.get_metric("i.overbooked", method=np.sum, axis=0),
             "incorrect_perception":
-            mdlhist.nominal.get_metric("i.incorrect_perception", metric=np.sum, axis=0),
+            mdlhist.nominal.get_metric("i.incorrect_perception", method=np.sum, axis=0),
             "duplicate_land_commands":
-            mdlhist.nominal.get_metric("i.duplicate_land", metric=np.sum, axis=0),
+            mdlhist.nominal.get_metric("i.duplicate_land", method=np.sum, axis=0),
             "cycled_assets":
-            mdlhist.nominal.get_metric('cycled', metric=np.sum, axis=0),
+            mdlhist.nominal.get_metric('cycled', methodc=np.sum, axis=0),
             "degraded_fields":
             0*mdlhist.nominal.time,
             "faulty_functions":
@@ -103,19 +103,19 @@ def create_fault_scen_metrics(mdlhist):
             "time": mdlhist.nominal.time})
         
     faulthist = History({"incorrect_fields":
-             mdlhist.faulty.get_metric("i.incorrect", metric=np.sum, axis=0),
+             mdlhist.faulty.get_metric("i.incorrect", method=np.sum, axis=0),
              'assets_without_sight':
-             mdlhist.faulty.get_metric("i.nosight", metric=np.sum, axis=0),
+             mdlhist.faulty.get_metric("i.nosight", method=np.sum, axis=0),
              "unsafe_distances":
-            mdlhist.faulty.get_metric("i.unsafe", metric=np.sum, axis=0),
+            mdlhist.faulty.get_metric("i.unsafe", method=np.sum, axis=0),
             "overbooked_locations":
-            mdlhist.faulty.get_metric("i.overbooked", metric=np.sum, axis=0),
+            mdlhist.faulty.get_metric("i.overbooked", method=np.sum, axis=0),
             "incorrect_perception":
-            mdlhist.faulty.get_metric("i.incorrect_perception", metric=np.sum, axis=0),
+            mdlhist.faulty.get_metric("i.incorrect_perception", method=np.sum, axis=0),
             "duplicate_land_commands":
-            mdlhist.faulty.get_metric("i.duplicate_land", metric=np.sum, axis=0),
+            mdlhist.faulty.get_metric("i.duplicate_land", method=np.sum, axis=0),
             "cycled_assets": 
-            mdlhist.faulty.get_metric('cycled', metric=np.sum, axis=0),
+            mdlhist.faulty.get_metric('cycled', method=np.sum, axis=0),
             "degraded_fields":
             100*mdlhist.get_degraded_hist(*mdlhist.nominal.flows.keys())['total']/len(mdlhist.nominal.flows.keys()),
             "faulty_functions":
