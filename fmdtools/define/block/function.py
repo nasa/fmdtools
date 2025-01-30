@@ -22,6 +22,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
+from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.base import Block
 from fmdtools.define.container.state import ExampleState
 from fmdtools.define.container.parameter import ExampleParameter
@@ -135,26 +136,25 @@ class Function(Block):
             if hasattr(arch, 'r'):
                 arch.update_seed(self.r.seed)
 
-    def prop_arch_behaviors(self, proptype, faults, time, run_stochastic):
+    def prop_arch_behaviors(self, proptype, time, run_stochastic):
         """Propagate behaviors into contained architectures."""
         for objname in self.get_roles('arch'):
             try:
                 obj = getattr(self, objname)
-                obj.inject_faults(faults)
                 # TODO: this should be more general
                 if objname == 'aa':
                     obj(proptype, time, run_stochastic, self.t.dt)
                 elif objname == 'fa':
-                    obj.propagate(proptype, time=time, run_stochastic=run_stochastic)
+                    obj.propagate(time, proptype=proptype, run_stochastic=run_stochastic)
             except TypeError as e:
                 raise Exception("Poorly specified Architecture: "
-                                + str(self.at.__class__)) from e
+                                + str(obj.__class__)) from e
 
     def prop_arch_faults_up(self):
         """Get faults from contained components and add to .m."""
         for objname in self.get_roles('arch'):
             obj = getattr(self, objname)
-            self.m.faults.difference_update(obj.faultmodes)
+            self.m.faults.difference_update(obj.m.sub_modes)
             self.m.faults.update(obj.get_faults())
 
     def __call__(self, proptype, faults=[], time=0, run_stochastic=False):
@@ -176,14 +176,12 @@ class Function(Block):
         if hasattr(self, 'r'):
             self.r.run_stochastic = run_stochastic
         # if there is a fault, it is instantiated
-        if faults:
-            self.m.add_fault(*faults)
-            self.m.update_modestates()
+        self.inject_faults(faults)
 
         if time > self.t.time:
             if hasattr(self, 'r'):
                 self.r.update_stochastic_states()
-        self.prop_arch_behaviors(proptype, faults, time, run_stochastic)
+        self.prop_arch_behaviors(proptype, time, run_stochastic)
 
         if proptype == 'static' and hasattr(self, 'static_behavior'):
             self.static_behavior(time)

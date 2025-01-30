@@ -27,11 +27,11 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-
+from fmdtools.define.base import is_numeric
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.common import multiplot_helper, consolidate_legend
 from fmdtools.analyze.common import set_empty_multiplots
-from fmdtools.analyze.common import multiplot_legend_title, is_numeric, setup_plot
+from fmdtools.analyze.common import multiplot_legend_title, setup_plot
 
 import pandas as pd
 import numpy as np
@@ -59,6 +59,27 @@ def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
     -------
     pandas.DataFrame
         Table of metrics and degraded functions/flows over scenarios
+
+    Examples
+    --------
+    >>> from fmdtools.define.architecture.function import ExFxnArch
+    >>> from fmdtools.sim.propagate import fault_sample
+    >>> from fmdtools.sim.sample import exfs
+    >>> mdl = ExFxnArch()
+    >>> res, hist = fault_sample(mdl, exfs)
+    >>> result_summary_fmea(res, hist, *mdl.fxns, *mdl.flows)
+                                              degraded  ... expected_cost
+    ex_fxn_no_charge_t1              ['ex_fxn', 'exf']  ...           0.0
+    ex_fxn_no_charge_t2              ['ex_fxn', 'exf']  ...           0.0
+    ex_fxn_short_t1                  ['ex_fxn', 'exf']  ...           0.0
+    ex_fxn_short_t2                  ['ex_fxn', 'exf']  ...           0.0
+    ex_fxn2_no_charge_t1  ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
+    ex_fxn2_no_charge_t2  ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
+    ex_fxn2_short_t1      ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
+    ex_fxn2_short_t2      ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
+    nominal                                         []  ...           1.0
+    <BLANKLINE>
+    [9 rows x 5 columns]
     """
     from fmdtools.analyze.history import History
     deg_summaries = {}
@@ -93,6 +114,18 @@ def result_summary(endresult, mdlhist, *attrs):
     -------
     table : pd.DataFrame
         Table with summary
+
+    Examples
+    --------
+    >>> from fmdtools.define.architecture.function import ExFxnArch
+    >>> from fmdtools.sim.propagate import one_fault
+    >>> mdl = ExFxnArch()
+    >>> res, hist = one_fault(mdl, "ex_fxn", "short", time=2)
+    >>> result_summary(res, hist, *mdl.fxns, *mdl.flows)
+       endclass.rate  endclass.cost  ...       degraded    faulty
+    0        0.00001              1  ...  [ex_fxn, exf]  [ex_fxn]
+    <BLANKLINE>
+    [1 rows x 5 columns]
     """
     hist_summary = mdlhist.get_fault_degradation_summary(*attrs)
     if 'endclass' in endresult:
@@ -122,7 +155,8 @@ class BaseTab(UserDict):
         Parameters
         ----------
         *factor : str/int
-            Name of factor(s) to sort by, in order of sorting. (non-included factors will be sorted last)
+            Name of factor(s) to sort by, in order of sorting.
+            (non-included factors will be sorted last)
         """
         factors = list(factors)
         factors.reverse()
@@ -146,7 +180,7 @@ class BaseTab(UserDict):
         keys = [k for k in self[metric].keys()]
         ex_key = keys[0]
 
-        if hasattr(self, 'factors') and type(factor) == str:
+        if hasattr(self, 'factors') and isinstance(factor, str):
             value = self.factors.index(factor)
 
         order = np.argsort([k[value] for k in keys], axis=0, kind='stable')
@@ -261,7 +295,7 @@ class BaseTab(UserDict):
         # sort into color vs tick bars
         all_factors = [*met_dict.keys()]
         if color_factor:
-            if type(color_factor) == int:
+            if isinstance(color_factor, int):
                 c_fact = color_factor
                 color_factor = self.factors[c_fact]
             else:
@@ -380,90 +414,99 @@ class BaseTab(UserDict):
 
 
 class FMEA(BaseTab):
-    def __init__(self, res, fs, metrics=[], weight_metrics=[], avg_metrics=[],
-                 perc_metrics=[], mult_metrics={}, extra_classes={},
-                 group_by=('function', 'fault'), mdl={}, mode_types={},
-                 empty_as=0.0):
-        """
-        Make a user-definable fmea of the endclasses of a set of fault scenarios.
+    """
+    Make a user-definable fmea of the endclasses of a set of fault scenarios.
 
-        Parameters
-        ----------
-        res : Result
-            Result corresponding to the the simulation runs
-        fs : sampleapproach/faultsample
-            FaultSample used for the underlying probability model of the set of scens.
-        metrics : list
-            generic unweighted metrics to query. metrics are summed over grouped scens.
-            The default is []. 'all' presents all metrics.
-        weight_metrics: list
-            weighted metrics to query. weight metrics are summed over groups.
-            The default is ['rate'].
-        avg_metrics: list
-            metrics to average and query. The default is ['cost'].
-            avg_metrics are averaged over groups, rather than a total.
-        perc_metrics : list, optional
-            metrics to treat as indicator variables to calculate a percentage.
-            perc_metrics are treated as indicator variables and averaged over groups.
-            The default is [].
-        mult_metrics : dict, optional
-            mult_metrics are new metrics calculated by multiplying existing metrics.
-            (e.g., to calculate expectations or risk values like an expected_cost/RPN)
-            The default is {"expected_cost":['rate', 'cost']}.
-        extra_classes : dict, optional
-            An additional set of endclasses to include in the table.
-            The default is {}.
-        group_by : tuple, optional
-            Way of grouping fmea rows by scenario fields.
-            The default is ('function', 'fault').
-        mode_types : set
-            Mode types to group by in 'mode type' option
-        mdl : Model
-            Model for use in 'fxnclassfault' and 'fxnclass' options
-        empty_as : float/'nan'
-            How to calculate stats of empty variables (for avg_metrics). Default is 0.0.
-        """
+    Parameters
+    ----------
+    res : Result
+        Result corresponding to the the simulation runs
+    fs : sampleapproach/faultsample
+        FaultSample used for the underlying probability model of the set of scens.
+    add_res : dict/Result, optional
+        An additional set of metrics to include in the table. Should have similar
+        key structure to res. The default is {}.
+    group_by : tuple, optional
+        Way of grouping fmea rows by scenario fields.
+        The default is ('function', 'fault').
+    prefix : str
+        Prefix for the metrics to use for get_metric. Default is 'endclass.', which
+        gets the metrics from endclass (output of find_classification method) only.
+    rates/weights : str(s)
+        Weighting or rate factor to use for weighted averages and expectations.
+        Can be any value from the result (e,g. rates='rate') or the FaultSample
+        (e.g., rates='scenario.rate').
+    **kwargs: str/list
+        Metrics to calculate, (e.g., rate_metric='rate', expected_metric='cost')
+        Note that rate and rate metrics become inputs to average and expected.
+        rates='scenario_'
+        All other kwargs will be kwargs to Result.get_metric
+        (e.g., rates or weights for get_expected and get_average)
+
+    Examples
+    --------
+    >>> from fmdtools.sim.sample import exfs
+    >>> res = Result({scen.name+'.endclass': {'rate': scen.time, 'cost': i} for i, scen in enumerate(exfs.scenarios())}).flatten()
+    >>> FMEA(res, exfs).as_table(sort_by="sum_cost")
+                       average_scenario_rate  sum_cost  expected_cost
+    ex_fxn2 short                        0.0        13            0.0
+            no_charge                    0.0         9            0.0
+    ex_fxn  short                        0.0         5            0.0
+            no_charge                    0.0         1            0.0
+    >>> FMEA(res, exfs, average_metric=["rate"], sum_metric=["cost"], expected_metric=["cost"], rates="rate").as_table()
+                       average_rate  sum_cost  expected_cost
+    ex_fxn2 short               1.5        13             20
+            no_charge           1.5         9             14
+    ex_fxn  short               1.5         5              8
+            no_charge           1.5         1              2
+    >>> FMEA(res, exfs, sum_metric=["rate"], average_metric=["cost"]).as_table()
+                       sum_rate  average_cost
+    ex_fxn2 short             3           6.5
+            no_charge         3           4.5
+    ex_fxn  short             3           2.5
+            no_charge         3           0.5
+    """
+
+    def __init__(self, res, fs, add_res={}, group_by=('function', 'fault'),
+                 prefix="endclass.", **kwargs):
         self.factors = group_by
         grouped_scens = fs.get_scen_groups(*group_by)
-
-        if type(metrics) == str:
-            metrics = [metrics]
-        if type(weight_metrics) == str:
-            weight_metrics = [weight_metrics]
-        if type(perc_metrics) == str:
-            perc_metrics = [perc_metrics]
-        if type(avg_metrics) == str:
-            avg_metrics = [avg_metrics]
-
-        if not metrics and not weight_metrics and not perc_metrics and not avg_metrics and not mult_metrics:
+        all_metrics = {k[:-7]: [v] if not isinstance(v, list) else v
+                       for k, v in kwargs.items() if "_metric" in k}
+        met_kwar = {k: v for k, v in kwargs.items() if "_metric" not in k}
+        if not all_metrics:
             # default fmea is a cost-based table
-            weight_metrics = ["rate"]
-            avg_metrics = ["cost"]
-            mult_metrics = {"expected_cost": ['rate', 'cost']}
+            all_metrics = {'average': ['scenario_rate'],
+                           'sum': ['cost'], "expected": ["cost"]}
+            if not met_kwar:
+                met_kwar = {'rates': 'scenario_rate'}
+        for met, met_value in met_kwar.items():
+            if isinstance(met_value, str) and met_value.startswith("scenario_"):
+                met_kwar[met] = fs.get_scen_values(met_value[9:])
 
-        res.update(extra_classes)
+        res.update(add_res)
 
-        allmetrics = metrics+weight_metrics+avg_metrics+perc_metrics+[*mult_metrics.keys()]
-
-        fmeadict = {m: dict.fromkeys(grouped_scens) for m in allmetrics}
+        fmeadict = {m+"_"+vi: dict.fromkeys(grouped_scens)
+                    for m, v in all_metrics.items() for vi in v}
         for group, ids in grouped_scens.items():
             sub_result = Result({scenid: res.get(scenid) for scenid in ids})
-            for metric in metrics + weight_metrics:
-                fmeadict[metric][group] = sum([res.get(scenid).get('endclass.'+metric)
-                                               for scenid in ids])
-            for metric in perc_metrics:
-                fmeadict[metric][group] = sub_result.percent(metric)
-            for metric in avg_metrics:
-                fmeadict[metric][group] = sub_result.average(metric, empty_as=empty_as)
-            for metric, to_mult in mult_metrics.items():
-                fmeadict[metric][group] = sum([np.prod([res.get(scenid).get('endclass.'+m)
-                                                        for m in to_mult])
-                                               for scenid in ids])
+            for method, values in all_metrics.items():
+                for value in values:
+                    met = method+"_"+value
+                    if isinstance(value, str) and value.startswith("scenario_"):
+                        sum_met = fs.get_metric(value[9:], ids=ids, method=method,
+                                                **met_kwar)
+                    else:
+                        sum_met = sub_result.get_metric(value, method=method,
+                                                        prefix=prefix, **met_kwar)
+                    fmeadict[met][group] = sum_met
         self.data = fmeadict
 
 
 class BaseComparison(BaseTab):
     """
+    Base comparison class used for other comparisons.
+
     Parameters
     ----------
     res : Result
@@ -484,6 +527,7 @@ class BaseComparison(BaseTab):
     ci_kwargs : dict
         kwargs to bootstrap_ci
     """
+
     def __init__(self, res, scen_groups, metrics=['cost'],
                  default_stat="expected", stats={}, ci_metrics=[], ci_kwargs={}):
 
@@ -500,7 +544,7 @@ class BaseComparison(BaseTab):
                     stat = default_stat
                 if met in ci_metrics:
                     try:
-                        mv, lb, ub = sub_res.get_metric_ci(met, metric=stat,
+                        mv, lb, ub = sub_res.get_metric_ci(met, method=stat,
                                                            **ci_kwargs)
                     except TypeError as e:
                         raise Exception("Invalid method: " + str(stat) + ", " +
@@ -510,7 +554,7 @@ class BaseComparison(BaseTab):
                     met_dict[met+"_lb"][fact_tup] = lb
                     met_dict[met+"_ub"][fact_tup] = ub
                 else:
-                    met_dict[met][fact_tup] = sub_res.get_metric(met, metric=stat)
+                    met_dict[met][fact_tup] = sub_res.get_metric(met, method=stat)
         self.data = met_dict
 
 
@@ -537,7 +581,7 @@ class Comparison(BaseComparison):
         set of scenarios for the given factor level.
 
     Examples
-    -------
+    --------
     >>> from fmdtools.sim.sample import exp_ps
     >>> from fmdtools.analyze.result import Result
     >>> res = Result({k.name: Result({'a': k.p['x']**2, "b": k.p['y']*k.p['x'], 'rate':k.rate}) for i, k in enumerate(exp_ps.scenarios())})
@@ -545,7 +589,7 @@ class Comparison(BaseComparison):
 
     example 1: checking the x = x^2 accross variables
 
-    >>> comp = Comparison(res, exp_ps, metrics=['a'], factors=['p.x'], default_stat='average')
+    >>> comp = Comparison(res, exp_ps, metrics=['a'], factors=['p.x'], default_stat='expected')
     >>> comp.sort_by_factors("p.x")
     >>> comp
     {'a': {(0,): 0.0, (1,): 1.0, (2,): 4.0, (3,): 9.0, (4,): 16.0, (5,): 25.0, (6,): 36.0, (7,): 49.0, (8,): 64.0, (9,): 81.0, (10,): 100.0}}
@@ -566,7 +610,7 @@ class Comparison(BaseComparison):
 
     example 2: viewing interaction between x and y:
 
-    >>> comp = Comparison(res, exp_ps, metrics=['b'], factors=['p.x', 'p.y'], default_stat='average')
+    >>> comp = Comparison(res, exp_ps, metrics=['b'], factors=['p.x', 'p.y'], default_stat='expected')
     >>> comp.sort_by_factors("p.x", "p.y")
     >>> comp.as_table(sort=False)
                b
@@ -863,5 +907,6 @@ class NominalEnvelope(object):
 
 
 if __name__ == "__main__":
+
     import doctest
     doctest.testmod(verbose=True)

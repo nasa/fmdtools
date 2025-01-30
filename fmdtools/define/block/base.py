@@ -445,14 +445,7 @@ class Block(Simulable):
         return {'flows': b_flows, **arch_kwargs}
 
     def update_contained_modes(self):
-        """
-        Add contained faultmodes for the container at to the Function model.
-
-        Parameters
-        ----------
-        at : str ('ca' or 'aa')
-            Role to update (for ComponentArchitecture or ActionArchitecture roles)
-        """
+        """Add contained faultmodes for the container (from arch)."""
         for at in self.get_roles('arch'):
             arch = getattr(self, at)
             try:
@@ -505,12 +498,12 @@ class Block(Simulable):
         """Check if Block has static execution step."""
         return (getattr(self, 'behavior', False) or
                 getattr(self, 'static_behavior', False) or
-                (hasattr(self, 'aa') and getattr(self.aa, 'proptype', '') == 'static'))
+                any([getattr(self, r).is_static() for r in self.get_roles('arch')]))
 
     def is_dynamic(self):
         """Check if Block has dynamic execution step."""
         return (hasattr(self, 'dynamic_behavior') or
-                (hasattr(self, 'aa') and getattr(self.aa, 'proptype', '') == 'dynamic'))
+                any([getattr(self, r).is_dynamic() for r in self.get_roles('arch')]))
 
     def __repr__(self):
         """
@@ -625,7 +618,30 @@ class Block(Simulable):
             cop.h = self.h.copy()
         return cop
 
-    def propagate(self, time, faults={}, disturbances={}, run_stochastic=False):
+    def inject_faults(self, faults=[]):
+        """
+        Inject faults into the block and its contained architectures.
+
+        Parameters
+        ----------
+        faults : str/list/dict, optional
+            Faults to inject. The default is [].
+        """
+        if isinstance(faults, str):
+            faults = [faults]
+        elif isinstance(faults, dict):
+            faults = faults.get(self.name, [])
+
+        if faults:
+            if isinstance(faults, list):
+                self.m.add_fault(*faults)
+            for objname in self.get_roles('arch'):
+                obj = getattr(self, objname)
+                obj.inject_faults(faults)
+                self.m.faults.update(obj.get_faults())
+            self.m.update_modestates()
+
+    def propagate(self, time, faults=[], disturbances={}, run_stochastic=False):
         """
         Inject and propagates faults through the graph at one time-step.
 
@@ -635,7 +651,7 @@ class Block(Simulable):
             The current time-step.
         faults : dict
             Faults to inject during this propagation step.
-            With structure {fname: ['fault1', 'fault2'...]}
+            With structure ['fault1', 'fault2'...]
         disturbances : dict
             Variables to change during this propagation step.
             With structure {'var1': value}
@@ -647,14 +663,14 @@ class Block(Simulable):
         # Step 0: Update block states with disturbances
         for var, val in disturbances.items():
             set_var(self, var, val)
-        faults = faults.get(self.name, [])
+        self.inject_faults(faults)
 
         # Step 1: Run Dynamic Propagation Methods in Order Specified
         # and Inject Faults if Applicable
         if hasattr(self, 'dynamic_loading_before'):
             self.dynamic_loading_before(self, time)
         if self.is_dynamic():
-            self("dynamic", time=time, faults=faults, run_stochastic=run_stochastic)
+            self("dynamic", time=time, run_stochastic=run_stochastic)
         if hasattr(self, 'dynamic_loading_after'):
             self.dynamic_loading_after(self, time)
 
@@ -664,7 +680,7 @@ class Block(Simulable):
         flows_mutables = {f: fl.return_mutables() for f, fl in self.get_flows().items()}
         while active:
             if self.is_static():
-                self("static", time=time, faults=faults, run_stochastic=run_stochastic)
+                self("static", time=time, run_stochastic=run_stochastic)
 
             if hasattr(self, 'static_loading'):
                 self.static_loading(time)

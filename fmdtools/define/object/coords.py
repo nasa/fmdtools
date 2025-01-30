@@ -28,6 +28,7 @@ from fmdtools.define.base import is_iter
 from fmdtools.define.object.base import BaseObject
 from fmdtools.analyze.common import setup_plot, consolidate_legend, clear_prev_figure
 from fmdtools.analyze.common import prep_animation_title, add_title_xylabs
+from fmdtools.analyze.common import multiplot_helper, multiplot_legend_title
 
 import numpy as np
 from typing import ClassVar
@@ -36,6 +37,7 @@ from matplotlib import pyplot as plt
 from matplotlib import colormaps, cm
 from matplotlib.colors import to_rgba, ListedColormap, TABLEAU_COLORS
 from matplotlib.patches import Rectangle
+import matplotlib.patches as mpatches
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.mplot3d import art3d
 
@@ -69,7 +71,8 @@ class CoordsParam(Parameter):
         as arrays.
     collect_collectionname : tuple
         Tuple (propertyname, value, comparator) defining a collection of points to
-        instantiate as a list, where the tuple is arguments to Coords.find_all_prop
+        instantiate as a list, where the tuple is arguments to Coords.find_all_prop or
+        to find_all_props
     point_pointname: tuple
         Tuple (x, y) referring to a point in the grid with a given name.
 
@@ -84,6 +87,7 @@ class CoordsParam(Parameter):
     ...     state_st: tuple = (float, 0.0)
     ...     point_start: tuple = (0.0, 0.0)
     ...     collect_high_v: tuple = ("v", 5.0, np.greater)
+    ...     collect_hi_v_not_a: tuple = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
     >>> ex = ExampleCoordsParam()
     """
 
@@ -130,6 +134,62 @@ class BaseCoords(BaseObject):
             proparray = np.full((self.p.x_size, self.p.y_size),
                                 prop[1], dtype=prop[0])
             setattr(self, propname, proparray)
+
+    def find_all_props(self, *args):
+        """
+        Find composite sets of points in arrays satisfying multiple conditions.
+
+        Parameters
+        ----------
+        *args : tuples/str
+            tuple of arguments to find_all, seperated by strings of conditionals.
+
+        Returns
+        -------
+        all: np.array
+            List of points satisfying conditions
+
+        Examples
+        --------
+        >>> ex = ExampleCoords()
+        >>> ex.find_all_props(("v", 10.0, np.equal))
+        array([[ 0.,  0.],
+               [10.,  0.]])
+        >>> ex.st[0] = 1
+        >>> ex.find_all_props(("v", 10.0, np.equal), "and", ("st", 1.0, np.equal))
+        array([[0., 0.]])
+        >>> ex.find_all_props(("v", 10.0, np.equal), "or", ("st", 1.0, np.equal))
+        array([[ 0.,  0.],
+               [ 0., 10.],
+               [ 0., 20.],
+               [ 0., 30.],
+               [ 0., 40.],
+               [ 0., 50.],
+               [ 0., 60.],
+               [ 0., 70.],
+               [ 0., 80.],
+               [ 0., 90.],
+               [10.,  0.]])
+        >>> ex.hi_v_not_a
+        array([[ 0.,  0.],
+               [10.,  0.]])
+        """
+        conditions = list(args[::2])
+        logicals = list(args[1::2])
+        prop_is_true = np.full((self.p.x_size, self.p.y_size), True, dtype=bool)
+        logical = np.logical_and
+        for condition in conditions:
+            prop = getattr(self, condition[0])
+            value, comparator = condition[1:]
+            where_true = comparator(prop, value)
+            prop_is_true = logical(prop_is_true, where_true)
+            if logicals:
+                logical = logicals.pop(0)
+                if isinstance(logical, str):
+                    logical = getattr(np, 'logical_'+logical)
+        where = np.where(prop_is_true)
+        true_pts = [(p, where[1][i]) for i, p in enumerate(where[0])]
+        return np.array([self.grid[tuple(p)] for p in true_pts])
 
     def find_all_prop(self, name, value=True, comparator=np.equal):
         """
@@ -593,8 +653,8 @@ class BaseCoords(BaseObject):
 
     def show_property(self, prop, xlabel="x", ylabel="y", title='', proplab="prop",
                       as_bool=False, color='green', cmap='Greens', ec='black',
-                      text=False, text_kwargs={}, legend_kwargs={}, fig=None, ax=None,
-                      figsize=(5, 5), **kwargs):
+                      text=False, text_kwargs={}, hatch=False, legend_kwargs={},
+                      fig=None, ax=None, figsize=(5, 5), **kwargs):
         """
         Plot a given property 'prop' as a colormesh on an x-y grid.
 
@@ -644,7 +704,7 @@ class BaseCoords(BaseObject):
         y = np.linspace(0., self.p.blocksize*(self.p.y_size-1), self.p.y_size)
         X, Y = np.meshgrid(x, y)
         # refine property for plotting
-        if as_bool:
+        if as_bool or hatch:
             p = p > 0.0
         if p.dtype == 'bool':
             cmap = ListedColormap([color])
@@ -659,8 +719,15 @@ class BaseCoords(BaseObject):
             if vmin == vmax:
                 vmax = vmin + 1.0
         kwargs = {**kwargs, **default_kwargs}
-
-        im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **kwargs)
+        if not hatch:
+            im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **kwargs)
+            patch = mpatches.Patch(color=color, label=proplab)
+        else:
+            kwar = {**kwargs, 'cmap': ListedColormap(['none']),
+                    'linewidth': 0, 'ec': color}
+            im = ax.pcolor(X, Y, p, vmin=vmin, vmax=vmax, hatch=hatch, **kwar)
+            patch = mpatches.Patch(hatch=hatch, ec=kwar.get('ec'), label=proplab,
+                                   color='none')
         if text:
             self.show_property_text(prop, fig=fig, ax=ax, **text_kwargs)
 
@@ -669,11 +736,11 @@ class BaseCoords(BaseObject):
             proplab = prop
 
         if p.dtype == 'bool':
-            # if boolean, create a legend
-            import matplotlib.patches as mpatches
-            patch = mpatches.Patch(color=color, label=proplab)
-            consolidate_legend(ax, add_handles=[patch], **legend_kwargs,
-                               title="Properties")
+            if legend_kwargs is not False:
+                if legend_kwargs is True:
+                    legend_kwargs = {}
+                consolidate_legend(ax, add_handles=[patch], **legend_kwargs,
+                                   title="Properties")
         else:
             # if float, create a colorbar
             divider = make_axes_locatable(ax)
@@ -807,7 +874,8 @@ class BaseCoords(BaseObject):
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
-    def show_from(self, t, history={}, properties={}, clear_fig=False, **kwargs):
+    def show_from(self, t, history={}, properties={}, clear_fig=False,
+                  traj_hist={}, traj_args=(), traj_kwargs={}, cut_traj=True, **kwargs):
         """
         Run Coords.show() at a particular time in the history.
 
@@ -819,6 +887,11 @@ class BaseCoords(BaseObject):
             History to show the Coords object at.
         clear_fig : bool
             Whether to clear the figure beforehand. Default is False.
+        traj_hist, traj_args, traj_kwargs : Hist, tuple, dict
+            Optional history and arguments to the history to plot trajectories from
+            using hist.plot_trajectories.
+        cut_traj: bool
+            Whether to cut traj_hist to the current state of Coords. Default is True.
         **kwargs : kwargs
             kwargs for self.show
 
@@ -834,7 +907,84 @@ class BaseCoords(BaseObject):
             kwargs = clear_prev_figure(**kwargs)
         props = [p for p in properties if p in history]
         self.assign_from(history, t, *props)
-        return self.show(properties=properties, **kwargs)
+        fig, ax = self.show(properties=properties, **kwargs)
+        if traj_hist:
+            if cut_traj:
+                th = traj_hist.cut(t, newcopy=True)
+            else:
+                th = traj_hist
+            if kwargs.get('legend_kwargs', True):
+                legend = True
+            else:
+                legend = False
+            th.plot_trajectories(*traj_args, **traj_kwargs, fig=fig, ax=ax,
+                                 legend=legend)
+        return fig, ax
+
+    def show_over_time(self, times, cols=2, figsize=(6, 6), titles={}, legend_loc=-1,
+                       legend_kwargs={}, subplot_kwargs={}, xlabel='x', ylabel='y',
+                       title='', **kwargs):
+        """
+        Show multiple frames of the Coords history over given times.
+
+        Parameters
+        ----------
+        times : list
+            List of times to show over.
+        cols : int, optional
+            Number of columns for the multiplot. The default is 2.
+        figsize : tuple, optional
+            Figure size. The default is (6, 6).
+        titles : dict, optional
+            Individual titles for the plots. The default is {}.
+        legend_loc : int, optional
+            Subplot to overlay the legend on. The default is -1.
+        legend_kwargs : dict, optional
+            Legend keyword arguments. The default is {}.
+        subplot_kwargs : dict, optional
+            . The default is {}.
+        xlabel : str, optional
+            x-axis label. The default is 'x'.
+        ylabel : str, optional
+            y-axis label. The default is 'y'.
+        title : str, optional
+            Overall title. The default is ''.
+        **kwargs : kwargs
+            Keyword arguments to Coords.show_from.
+
+        Returns
+        -------
+        fig : matplotlib.figure
+            Figure with the frames.
+        axs : list
+            List of subplot axes.
+
+        """
+        fig, axs, cols, rows, subplot_titles = multiplot_helper(cols, *times,
+                                                                figsize=figsize,
+                                                                titles=titles,
+                                                                sharey=True)
+
+        for i, time in enumerate(times):
+            ax = axs[i]
+            if i >= (rows-1)*cols and xlabel:
+                xlab = xlabel
+            else:
+                xlab = ' '
+            if not i % cols and ylabel:
+                ylab = ylabel
+            else:
+                ylab = ' '
+            if i == legend_loc or (legend_loc == -1 and i==len(times)-1):
+                leg_kw = legend_kwargs
+            else:
+                leg_kw = False
+            self.show_from(time, fig=fig, ax=ax, legend_kwargs=leg_kw,
+                           xlabel=xlab, ylabel=ylab, **kwargs)
+
+        multiplot_legend_title([1, 2], axs, ax, title=title,
+                               legend_loc=legend_loc, **subplot_kwargs)
+        return fig, axs
 
     def animate(self, hist, times='all', clear_fig=True, **kwargs):
         """
@@ -987,6 +1137,8 @@ class Coords(BaseCoords):
         for cname, collection in self.collections.items():
             if collection[0] in self.features:
                 setattr(self, cname, self.find_all_prop(*collection))
+            elif isinstance(collection[0], tuple) and collection[0][0] in self.features:
+                setattr(self, cname, self.find_all_props(*collection))
             else:
                 raise Exception("Invalid collection: " + cname +
                                 " collections may only map to (immutable) features")
@@ -1266,7 +1418,7 @@ class Coords(BaseCoords):
 
     def show_collection(self, prop, fig=None, ax=None, label=True, z="",
                         xlabel='x', ylabel='y', title='',
-                        legend_args=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
+                        legend_kwargs=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
         """
         Show a collection on the grid as square patches.
 
@@ -1293,7 +1445,7 @@ class Coords(BaseCoords):
         zlabel : str, optional
             Label for the z-axis. The default is "prop", which uses the name of the
             property.
-        legend_args : dict/False
+        legend_kwargs : dict/False
             Specifies arguments to legend. Default is False, which shows no legend.
         text_z_offset : float
             Offset for text. Default is 0.0
@@ -1344,19 +1496,19 @@ class Coords(BaseCoords):
                 else:
                     ax.text(pt[0], pt[1], lab,
                             horizontalalignment="center", verticalalignment="center")
-        if not legend_args == False:
-            if legend_args == True:
-                legend_args = {}
-            consolidate_legend(ax, **legend_args)
+        if legend_kwargs is not False:
+            if legend_kwargs is True:
+                legend_kwargs = {}
+            consolidate_legend(ax, **legend_kwargs)
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
-    def _show_collections(self, collections, fig, ax, pallette, c_offset=0):
+    def _show_collections(self, collections, fig, ax, pallette, c_offset=0, **kwargs):
         """Show multiple collections on a plot. Helper function to .show()."""
         for i, (coll, coll_kwargs) in enumerate(collections.items()):
             kwar = {'color': pallette[i+c_offset],
                     'xlabel': '', 'ylabel': '', 'title': '',
-                    'legend_args': True,
+                    'legend_kwargs': kwargs.get('legend_kwargs', True),
                     **coll_kwargs}
             self.show_collection(coll, fig=fig, ax=ax, **kwar)
 
@@ -1399,16 +1551,16 @@ class Coords(BaseCoords):
         if coll_overlay:
             self._show_properties(properties, fig, ax, pallette, **kwargs)
             self._show_collections(collections, fig, ax,
-                                   pallette, c_offset=c_offset)
+                                   pallette, c_offset=c_offset, **kwargs)
         else:
             self._show_collections(collections, fig, ax,
-                                   pallette, c_offset=c_offset)
+                                   pallette, c_offset=c_offset, **kwargs)
             self._show_properties(properties, fig, ax, pallette, **kwargs)
 
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
-    def show_z(self, prop, z="prop", collections={}, legend_args=False, voxels=True,
+    def show_z(self, prop, z="prop", collections={}, legend_kwargs=False, voxels=True,
                **kwargs):
         """
         Plot a property and set of collections in a discretized version of the grid.
@@ -1422,7 +1574,7 @@ class Coords(BaseCoords):
         collections : dict, optional
             Collections to plot and their respective kwargs for show_collection.
             The default is {}.
-        legend_args : dict/False
+        legend_kwargs : dict/False
             Specifies arguments to legend. Default is False, which shows no legend.
         voxels : bool
             Whether or not to plot the grid as voxels. Default is True.
@@ -1444,10 +1596,10 @@ class Coords(BaseCoords):
             fig, ax = self.show_property_z(
                 prop, z=z, collections=collections, **kwargs)
         else:
-            fig, ax = self.show_collection("pts", z=z, legend_args=legend_args,
+            fig, ax = self.show_collection("pts", z=z, legend_kwargs=legend_kwargs,
                                            label=False, **kwargs)
         for coll in collections:
-            self.show_collection(coll, fig=fig, ax=ax, legend_args=legend_args,
+            self.show_collection(coll, fig=fig, ax=ax, legend_kwargs=legend_kwargs,
                                  **collections[coll], z=z)
         return fig, ax
 
@@ -1468,6 +1620,7 @@ class ExampleCoordsParam(CoordsParam):
     state_st: tuple = (float, 0.0)
     point_start: tuple = (0.0, 0.0)
     collect_high_v: tuple = ("v", 5.0, np.greater)
+    collect_hi_v_not_a: tuple = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
 
 
 class ExampleCoords(Coords):
@@ -1518,10 +1671,9 @@ class MetricCoords(BaseCoords):
 
 if __name__ == "__main__":
     ex = ExampleCoords()
-    import doctest
-    doctest.testmod(verbose=True)
 
     ex = ExampleCoords()
+    ex.find_all_props(("v", 10.0, np.equal), "and", ("v", 10.0, np.equal))
     ex.show_property("v", cmap="Greys")
     ex.show_collection("high_v")
     ex.show({"st": {}}, collections={"high_v": {"alpha": 0.5, "color": "red"}})
@@ -1536,4 +1688,10 @@ if __name__ == "__main__":
     ex.show_z("st", z="v",
               collections={"pts": {"color": "blue"},
                            "high_v": {"alpha": 0.5, "color": "red"}},
-              legend_args=True)
+              legend_kwargs=True)
+
+    ex.st[1]=1
+    ex.show({"st": {'hatch': 'xx', 'color': 'red'}},
+            collections={"high_v": {"alpha": 0.5, "color": "blue"}})
+    import doctest
+    doctest.testmod(verbose=True)

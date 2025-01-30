@@ -25,16 +25,16 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import get_var
+from fmdtools.define.base import get_var, is_known_mutable
 
 from fmdtools.analyze.result import Result, load_folder, load, fromdict
-from fmdtools.analyze.common import bootstrap_confidence_interval, get_sub_include
+from fmdtools.analyze.common import calc_metric_ci, get_sub_include
 from fmdtools.analyze.common import unpack_plot_values, phase_overlay
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import plot_err_hist, setup_plot, set_empty_multiplots
 from fmdtools.analyze.common import mark_times, consolidate_legend, add_title_xylabs
 from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
-from fmdtools.analyze.common import is_known_mutable, diff
+from fmdtools.analyze.common import diff
 
 from matplotlib import animation
 from functools import partial
@@ -607,7 +607,7 @@ class History(Result):
         faulty_hist = self.get_faulty_hist(*attrs, withtotal=False, withtime=False)
         faulty = [k for k, v in faulty_hist.items() if np.any(v)]
         deg_hist = self.get_degraded_hist(*attrs, withtotal=False, withtime=False)
-        degraded = [k for k, v in deg_hist.items() if not np.all(v)]
+        degraded = [k for k, v in deg_hist.items() if np.any(v)]
         return Result(faulty=faulty, degraded=degraded)
 
     def plot_line(self, *plot_values, cols=2, aggregation='individual',
@@ -773,6 +773,12 @@ class History(Result):
         err_hist : History
             hist of line, low, high values. Has the form::
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
+
+        Examples
+        --------
+        >>> hist = History({"a.a": [1, 2, 3], "b.a": [4, 5, 6], "time": [0, 1, 2]})
+        >>> hist.get_mean_std_errhist("a").stat
+        array([2.5, 3.5, 4.5])
         """
         hist = History()
         hist[time] = self.get_metric(time, axis=0)
@@ -788,7 +794,7 @@ class History(Result):
         hist = self.get_mean_std_errhist(value, time=time)
         return plot_err_hist(hist, ax, fig, figsize, time=time, **kwargs)
 
-    def get_mean_ci_errhist(self, value, ci=0.95, max_ind='max', time='time'):
+    def get_mean_ci_errhist(self, value, ci=0.95, max_ind='max', time='time', **kwargs):
         """
         Get aggregated err_hist of means surrounded by confidence intervals.
 
@@ -806,19 +812,27 @@ class History(Result):
         err_hist : History
             hist of line, low, high values. Has the form::
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
+
+        Examples
+        --------
+        >>> hist = History({"a.a": [1, 2, 3], "b.a": [4, 5, 6], "time": [0, 1, 2]})
+        >>> metric_ci = hist.get_mean_ci_errhist("a",rates=np.array([0,1]), metric=np.sum)
+        >>> metric_ci.high
+        array([4., 5., 6.])
+        >>> metric_ci.low
+        array([0., 0., 0.])
+        >>> metric_ci.stat
+        array([2. , 2.5, 3. ])
         """
         hist = History()
         hist[time] = self.get_metric(time, axis=0)
-        hist['stat'] = self.get_metric(value, np.mean, axis=0)
         if max_ind == 'max':
             max_ind = min([len(h) for h in self.values()])
-        vals = [[hist[t] for hist in self.get_values(value).values()]
-                for t in range(max_ind)]
-        boot_stats = np.array([bootstrap_confidence_interval(val, return_anyway=True,
-                                                             confidence_level=ci)
-                               for val in vals]).transpose()
-        hist['high'] = boot_stats[1]
-        hist['low'] = boot_stats[2]
+        vals = np.array([*self.get_values(value).values()])[:, :max_ind]
+        boot_stats = calc_metric_ci(vals, confidence_level=ci, axis=0, **kwargs)
+        hist['stat'] = boot_stats[0]
+        hist['low'] = boot_stats[1]
+        hist['high'] = boot_stats[2]
         return hist
 
     def plot_mean_ci_line(self, value, fig=None, ax=None, figsize=(6, 4),
@@ -882,6 +896,16 @@ class History(Result):
         err_hist : History
             hist of line, low, high values. Has the form::
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
+
+        Examples
+        --------
+        >>> hist = History({"a.a": [1, 2, 3], "b.a": [4, 5, 6], "time": [0, 1, 2]})
+        >>> hist.get_percentile_errhist("a").stat
+        array([2.5, 3.5, 4.5])
+        >>> hist.get_percentile_errhist("a").high
+        array([3.25, 4.25, 5.25])
+        >>> hist.get_percentile_errhist("a").low
+        array([1.75, 2.75, 3.75])
         """
         hist = History()
         hist[time] = self.get_metric(time, axis=0)
@@ -1037,7 +1061,8 @@ class History(Result):
                 hists.plot_trajectory(*plot_values, **local_kwargs)
             elif len(plot_values) == 3:
                 hists.plot_trajectory3(*plot_values, **local_kwargs)
-        consolidate_legend(ax, **kwargs)
+        if legend:
+            consolidate_legend(ax, **kwargs)
         add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, title=title,
                          xlim=xlim, ylim=ylim, zlim=zlim)
         return fig, ax
