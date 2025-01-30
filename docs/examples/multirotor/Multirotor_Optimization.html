@@ -835,8 +835,8 @@ DroneParam(respolicy=ResPolicy(bat=&#39;to_home&#39;, line=&#39;emland&#39;), fl
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="n">oper_prob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;co&quot;</span><span class="p">,</span> <span class="s2">&quot;endclass.expected_cost&quot;</span><span class="p">)</span>
 <span class="n">oper_prob</span><span class="o">.</span><span class="n">add_result_constraint</span><span class="p">(</span><span class="s2">&quot;g_soc&quot;</span><span class="p">,</span> <span class="s2">&quot;store_ee.s.soc&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="c1">#oper_prob.add_result_constraint(&quot;g_fault&quot;, &quot;endfaults&quot;, metric=np.any)</span>
-<span class="n">oper_prob</span><span class="o">.</span><span class="n">add_history_constraint</span><span class="p">(</span><span class="s2">&quot;g_max_height&quot;</span><span class="p">,</span> <span class="s2">&quot;dofs.s.z&quot;</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">,</span>
+<span class="c1">#oper_prob.add_result_constraint(&quot;g_fault&quot;, &quot;endfaults&quot;, method=np.any)</span>
+<span class="n">oper_prob</span><span class="o">.</span><span class="n">add_history_constraint</span><span class="p">(</span><span class="s2">&quot;g_max_height&quot;</span><span class="p">,</span> <span class="s2">&quot;dofs.s.z&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">,</span>
                                  <span class="n">threshold</span><span class="o">=</span><span class="mi">122</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s1">&#39;less&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -941,7 +941,7 @@ end.dofs.s.z:                        0.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;co&#39;: ResultObjective(name=&#39;endclass.expected_cost&#39;, value=-50000.0, negative=False, time=None, metric=&lt;function sum at 0x0000019440F03270&gt;)}
+{&#39;co&#39;: ResultObjective(name=&#39;endclass.expected_cost&#39;, value=-50000.0, negative=False, time=None, method=&lt;function sum at 0x000001C97E7D6DB0&gt;)}
 </pre></div></div>
 </div>
 <p>Again, this should be the same as if we simulated manually (e.g., using <code class="docutils literal notranslate"><span class="pre">x_to_ocost</span></code>):</p>
@@ -972,7 +972,7 @@ end.dofs.s.z:                        0.0
  -24.579923529411744,
  0,
  {&#39;ctl_dof&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 30.0]}, {&#39;nominal&#39;: {&#39;nominal&#39;}}),
-  &#39;plan_path&#39;: PhaseMap({&#39;taxi&#39;: [0.0, 1.0], &#39;move&#39;: [2.0, 8.0], &#39;land&#39;: [9.0, 15.0], &#39;taxi1&#39;: [16.0, 30.0]}, {&#39;taxi&#39;: {&#39;taxi&#39;, &#39;taxi1&#39;}, &#39;move&#39;: {&#39;move&#39;}, &#39;land&#39;: {&#39;land&#39;}})})
+  &#39;plan_path&#39;: PhaseMap({&#39;taxi&#39;: [0.0, 1.0], &#39;move&#39;: [2.0, 8.0], &#39;land&#39;: [9.0, 15.0], &#39;taxi1&#39;: [16.0, 30.0]}, {&#39;taxi&#39;: {&#39;taxi1&#39;, &#39;taxi&#39;}, &#39;move&#39;: {&#39;move&#39;}, &#39;land&#39;: {&#39;land&#39;}})})
 </pre></div></div>
 </div>
 <p>Note that we can view the results of these simulations by looking in <code class="docutils literal notranslate"><span class="pre">res</span></code> and <code class="docutils literal notranslate"><span class="pre">hist</span></code>, provided the history is being tracked.</p>
@@ -1105,7 +1105,7 @@ FaultDomain with faults:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.6670050621032715
+0.6497964859008789
 </pre></div></div>
 </div>
 <p>One issue with this formulation is that it assumes a static faultsample.</p>
@@ -1151,7 +1151,7 @@ SampleApproach for drone with:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-PhaseMap({&#39;taxi&#39;: [0.0, 1.0], &#39;move&#39;: [2.0, 8.0], &#39;land&#39;: [9.0, 15.0], &#39;taxi1&#39;: [16.0, 30.0]}, {&#39;taxi&#39;: {&#39;taxi&#39;, &#39;taxi1&#39;}, &#39;move&#39;: {&#39;move&#39;}, &#39;land&#39;: {&#39;land&#39;}})
+PhaseMap({&#39;taxi&#39;: [0.0, 1.0], &#39;move&#39;: [2.0, 8.0], &#39;land&#39;: [9.0, 15.0], &#39;taxi1&#39;: [16.0, 30.0]}, {&#39;taxi&#39;: {&#39;taxi1&#39;, &#39;taxi&#39;}, &#39;move&#39;: {&#39;move&#39;}, &#39;land&#39;: {&#39;land&#39;}})
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1233,7 +1233,7 @@ PhaseMap({&#39;taxi&#39;: [0.0, 1.0], &#39;move&#39;: [2.0, 8.0], &#39;land&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.43148016929626465
+0.4341451406478882
 </pre></div></div>
 </div>
 <p>Note that this should produce identical values to the manually-constructed <code class="docutils literal notranslate"><span class="pre">x_to_rcost</span></code>:</p>
@@ -1252,8 +1252,8 @@ PhaseMap({&#39;taxi&#39;: [0.0, 1.0], &#39;move&#39;: [2.0, 8.0], &#39;land&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p2_lowcharge&#39;, &#39;s1p1_lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p2_lowcharge&#39;, &#39;s1p1_lowcharge&#39;, &#39;lowcharge&#39;]}
+Faults found during the nominal run {&#39;store_ee&#39;: [&#39;lowcharge&#39;, &#39;s1p2_lowcharge&#39;, &#39;s1p1_lowcharge&#39;]}
+Faults found during the nominal run {&#39;store_ee&#39;: [&#39;lowcharge&#39;, &#39;s1p2_lowcharge&#39;, &#39;s1p1_lowcharge&#39;]}
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -1440,7 +1440,7 @@ CONSTRAINTS
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.5366060256958007
+0.5243747711181641
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
