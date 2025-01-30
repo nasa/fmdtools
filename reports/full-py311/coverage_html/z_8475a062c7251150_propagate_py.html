@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools/sim/propagate.py: 94%</title>
+    <title>Coverage for fmdtools/sim/propagate.py: 95%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools/sim/propagate.py</b>:
-            <span class="pc_cov">94%</span>
+            <span class="pc_cov">95%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">386 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">361<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">25<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">365<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">21<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">7<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8475a062c7251150_sample_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
-            created at 2025-01-30 19:24 +0000
+            created at 2025-01-30 21:15 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -660,7 +660,7 @@
     <p class="pln"><span class="n"><a id="t578" href="#t578">578</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t579" href="#t579">579</a></span><span class="t">    <span class="nam">endfaults</span><span class="op">,</span> <span class="nam">endfaultprops</span> <span class="op">=</span> <span class="nam">mdl</span><span class="op">.</span><span class="nam">return_faultmodes</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t580" href="#t580">580</a></span><span class="t">    <span class="key">if</span> <span class="nam">any</span><span class="op">(</span><span class="nam">endfaults</span><span class="op">)</span> <span class="key">and</span> <span class="nam">warn_faults</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t581" href="#t581">581</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="str">"Faults found during the nominal run "</span> <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">endfaults</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t581" href="#t581">581</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="str">"Faults found during the nominal run "</span> <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">endfaults</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t582" href="#t582">582</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t583" href="#t583">583</a></span><span class="t">    <span class="key">if</span> <span class="key">not</span> <span class="nam">staged</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t584" href="#t584">584</a></span><span class="t">        <span class="nam">mdls</span> <span class="op">=</span> <span class="op">{</span><span class="num">0</span><span class="op">:</span> <span class="nam">mdl</span><span class="op">.</span><span class="nam">new</span><span class="op">(</span><span class="op">**</span><span class="nam">mdl_kwargs</span><span class="op">)</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
@@ -775,8 +775,8 @@
     <p class="run"><span class="n"><a id="t693" href="#t693">693</a></span><span class="t">    <span class="nam">mult_kwarg</span> <span class="op">=</span> <span class="nam">pack_mult_kwargs</span><span class="op">(</span><span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t694" href="#t694">694</a></span><span class="t">    <span class="nam">loc_kwargs</span> <span class="op">=</span> <span class="op">{</span><span class="op">**</span><span class="nam">sim_kwarg</span><span class="op">,</span> <span class="op">**</span><span class="nam">run_kwarg</span><span class="op">,</span> <span class="str">'staged'</span><span class="op">:</span> <span class="key">False</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t695" href="#t695">695</a></span><span class="t">    <span class="key">if</span> <span class="key">not</span> <span class="nam">scen</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t696" href="#t696">696</a></span><span class="t">        <span class="nam">mdl</span> <span class="op">=</span> <span class="nam">mdl</span><span class="op">.</span><span class="nam">new</span><span class="op">(</span><span class="op">**</span><span class="nam">run_kwarg</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">'mdl_kwargs'</span><span class="op">,</span> <span class="op">{</span><span class="op">}</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t697" href="#t697">697</a></span><span class="t">        <span class="nam">_</span><span class="op">,</span> <span class="nam">nomhist</span><span class="op">,</span> <span class="nam">_</span><span class="op">,</span> <span class="nam">_</span><span class="op">,</span> <span class="nam">t_end</span> <span class="op">=</span> <span class="nam">nom_helper</span><span class="op">(</span><span class="nam">mdl</span><span class="op">,</span> <span class="op">[</span><span class="op">]</span><span class="op">,</span> <span class="op">**</span><span class="nam">loc_kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t696" href="#t696">696</a></span><span class="t">        <span class="nam">mdl</span> <span class="op">=</span> <span class="nam">mdl</span><span class="op">.</span><span class="nam">new</span><span class="op">(</span><span class="op">**</span><span class="nam">run_kwarg</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">'mdl_kwargs'</span><span class="op">,</span> <span class="op">{</span><span class="op">}</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t697" href="#t697">697</a></span><span class="t">        <span class="nam">_</span><span class="op">,</span> <span class="nam">nomhist</span><span class="op">,</span> <span class="nam">_</span><span class="op">,</span> <span class="nam">_</span><span class="op">,</span> <span class="nam">t_end</span> <span class="op">=</span> <span class="nam">nom_helper</span><span class="op">(</span><span class="nam">mdl</span><span class="op">,</span> <span class="op">[</span><span class="op">]</span><span class="op">,</span> <span class="op">**</span><span class="nam">loc_kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t698" href="#t698">698</a></span><span class="t">    <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t699" href="#t699">699</a></span><span class="t">        <span class="nam">mdl</span> <span class="op">=</span> <span class="nam">mdl</span><span class="op">.</span><span class="nam">new</span><span class="op">(</span><span class="nam">p</span><span class="op">=</span><span class="nam">scen</span><span class="op">.</span><span class="nam">p</span><span class="op">,</span> <span class="nam">sp</span><span class="op">=</span><span class="nam">scen</span><span class="op">.</span><span class="nam">sp</span><span class="op">,</span> <span class="nam">r</span><span class="op">=</span><span class="nam">scen</span><span class="op">.</span><span class="nam">r</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t700" href="#t700">700</a></span><span class="t">        <span class="nam">_</span><span class="op">,</span> <span class="nam">nomhist</span><span class="op">,</span> <span class="nam">_</span><span class="op">,</span> <span class="nam">t_end</span><span class="op">,</span> <span class="op">=</span> <span class="nam">prop_one_scen</span><span class="op">(</span><span class="nam">mdl</span><span class="op">,</span> <span class="nam">scen</span><span class="op">,</span> <span class="op">**</span><span class="nam">loc_kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -1055,7 +1055,7 @@
     <p class="pln"><span class="n"><a id="t973" href="#t973">973</a></span><span class="t">                       <span class="nam">get_phasemap</span><span class="op">=</span><span class="key">False</span><span class="op">,</span> <span class="nam">nomhist</span><span class="op">=</span><span class="op">{</span><span class="op">}</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t974" href="#t974">974</a></span><span class="t">    <span class="str">"""Generate a SampleApproach from faultdomain and faultsample arguments."""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t975" href="#t975">975</a></span><span class="t">    <span class="key">if</span> <span class="nam">get_phasemap</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t976" href="#t976">976</a></span><span class="t">        <span class="nam">pm</span> <span class="op">=</span> <span class="nam">from_hist</span><span class="op">(</span><span class="nam">nomhist</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t976" href="#t976">976</a></span><span class="t">        <span class="nam">pm</span> <span class="op">=</span> <span class="nam">from_hist</span><span class="op">(</span><span class="nam">nomhist</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t977" href="#t977">977</a></span><span class="t">    <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t978" href="#t978">978</a></span><span class="t">        <span class="nam">pm</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t979" href="#t979">979</a></span><span class="t">    <span class="nam">app</span> <span class="op">=</span> <span class="nam">SampleApproach</span><span class="op">(</span><span class="nam">mdl</span><span class="op">,</span> <span class="nam">phasemaps</span><span class="op">=</span><span class="nam">pm</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -1335,7 +1335,7 @@
             <a class="nav" href="z_8475a062c7251150_sample_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
-            created at 2025-01-30 19:24 +0000
+            created at 2025-01-30 21:15 +0000
         </p>
     </div>
 </footer>
