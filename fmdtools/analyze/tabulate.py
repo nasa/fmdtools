@@ -423,21 +423,15 @@ class FMEA(BaseTab):
         Result corresponding to the the simulation runs
     fs : sampleapproach/faultsample
         FaultSample used for the underlying probability model of the set of scens.
-    extra_classes : dict, optional
-        An additional set of endclasses to include in the table.
-        The default is {}.
+    add_res : dict/Result, optional
+        An additional set of metrics to include in the table. Should have similar
+        key structure to res. The default is {}.
     group_by : tuple, optional
         Way of grouping fmea rows by scenario fields.
         The default is ('function', 'fault').
-    mode_types : set
-        Mode types to group by in 'mode type' option
-    mdl : Model
-        Model for use in 'fxnclassfault' and 'fxnclass' options
-    empty_as : float/'nan'
-        How to calculate stats of empty variables (for avg_metrics). Default is 0.0.
     prefix : str
         Prefix for the metrics to use for get_metric. Default is 'endclass.', which
-        gets the metrics from endclass only.
+        gets the metrics from endclass (output of find_classification method) only.
     rates/weights : str(s)
         Weighting or rate factor to use for weighted averages and expectations.
         Can be any value from the result (e,g. rates='rate') or the FaultSample
@@ -473,8 +467,8 @@ class FMEA(BaseTab):
             no_charge         3           0.5
     """
 
-    def __init__(self, res, fs, extra_classes={}, group_by=('function', 'fault'),
-                 mdl={}, mode_types={}, empty_as=0.0, prefix="endclass.", **kwargs):
+    def __init__(self, res, fs, add_res={}, group_by=('function', 'fault'),
+                 prefix="endclass.", **kwargs):
         self.factors = group_by
         grouped_scens = fs.get_scen_groups(*group_by)
         all_metrics = {k[:-7]: [v] if not isinstance(v, list) else v
@@ -490,7 +484,7 @@ class FMEA(BaseTab):
             if isinstance(met_value, str) and met_value.startswith("scenario_"):
                 met_kwar[met] = fs.get_scen_values(met_value[9:])
 
-        res.update(extra_classes)
+        res.update(add_res)
 
         fmeadict = {m+"_"+vi: dict.fromkeys(grouped_scens)
                     for m, v in all_metrics.items() for vi in v}
