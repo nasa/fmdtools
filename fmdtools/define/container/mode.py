@@ -148,8 +148,6 @@ class Mode(BaseContainer, readonly=False):
     exclusive : True/False
         Whether fault modes are exclusive of each other or not.
         Default is False (i.e. more than one can be present).
-    longnames : dict
-        Longer names for the faults (if desired). {faultname: longname}
     faults : set
         Set of faults present (or not) at any given time.
     mode : str
@@ -215,7 +213,6 @@ class Mode(BaseContainer, readonly=False):
     units_set = ('sec', 'min', 'hr', 'day', 'sim')
     phases = {}
     exclusive = False
-    longnames = {}
     default_track = ('mode', 'faults')
 
     def __init__(self, *args, s_kwargs={}, **kwargs):
@@ -610,6 +607,16 @@ class ExampleMode(Mode):
     opermodes = ("supply", "charge", "standby")
     exclusive = True
     mode: str = "standby"
+
+
+class NewMode(BaseContainer):
+     def get_faultmodes(self):
+         return self.get_pref_attrs("fault")
+
+
+class ExNewMode(NewMode):
+    fault_no_charge = (1e-5, 100, {'standby': 1.0})
+    fault_short = (1e-5, 100, {'supply': 1.0})
 
 
 if __name__ == "__main__":

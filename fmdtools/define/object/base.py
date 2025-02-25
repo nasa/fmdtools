@@ -372,8 +372,7 @@ class BaseObject(object):
         set_attr : bool
             Whether to also add the individual attributes attr to the obj
         """
-        spec_len = len(spec) + 1
-        specs = {p[spec_len:]: self.p[p] for p in self.p.__fields__ if spec in p}
+        specs = self.p.get_pref_attrs(spec)
         specname = spec + name_end
         setattr(self, specname, specs)
         if set_attr:
