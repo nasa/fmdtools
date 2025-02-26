@@ -41,7 +41,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
-from fmdtools.define.container.mode import Mode
+from fmdtools.define.container.mode import Mode, FlexibleMode
 from fmdtools.define.block.function import Function
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.flow.base import Flow
@@ -464,7 +464,8 @@ class PlanPathMode(Mode):
         Rover has competed the mission
     """
 
-    fm_args = {"no_con": (1e-4, 200), "crash": (1e-4, 200)}
+    fault_no_con = (1e-4, 200)
+    fault_crash = (1e-4, 200)
     opermodes = ("drive", "standby", "em_off", "finished")
     mode: str = "standby"
 
@@ -607,7 +608,7 @@ def rdiff_from_vects(u_self, u_lin):
     return rdiff
 
 
-class DriveMode(Mode):
+class DriveMode(FlexibleMode):
     """
     Instantiate Modes for the Drive Function.
 
@@ -771,7 +772,7 @@ class PerceptionMode(Mode):
     exlusive = True: Only one mode can be active at any given time
     """
 
-    fm_args = ("bad_feed",)
+    fault_bad_feed = ()
     opermodes = ("off", "feed")
     mode: str = "off"
     exclusive = True
@@ -862,8 +863,8 @@ class PowerMode(Mode):
         power supply is off
     """
 
-    fm_args = {"no_charge": (1e-5, 100, {"off": 1.0}),
-               "short": (1e-5, 100, {"supply": 1.0})}
+    fault_no_charge = (1e-5, 100, (("off", 1.0),))
+    fault_short = (1e-5, 100, (("supply", 1.0),))
     opermodes = ("supply", "charge", "off")
     mode: str = "off"
     exclusive = True

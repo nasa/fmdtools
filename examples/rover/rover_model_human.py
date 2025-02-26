@@ -97,7 +97,7 @@ class OperatorSignal(Flow):
 
 class HumanActionMode(Mode):
     """Generic/shared modes for human actions."""
-    fm_args = ('failed_no_action', )
+    fault_failed_no_action = ()
     opermodes = ('nominal', )
     mode: str = 'nominal'
     exclusive = True
@@ -148,7 +148,9 @@ class PerceptionMode(HumanActionMode):
         Position not percieved.
     """
 
-    fm_args = ("failed_no_action", "not_visible", "wrong_position")
+    fault_failed_no_action = ()
+    fault_not_visible = ()
+    fault_wrong_position = ()
     opermodes = ('nominal', 'no_action')
 
 
@@ -245,8 +247,11 @@ class ProjectMode(HumanActionMode):
         No projection performed.
     """
 
-    fm_args = ('failed_turn_left', 'failed_turn_right', 'failed_slow', 'failed_fast',
-               'failed_no_action')
+    fault_failed_turn_left = ()
+    fault_failed_turn_right = ()
+    fault_failed_slow = ()
+    fault_failed_fast = ()
+    fault_failed_no_action = ()
 
 
 class Project(Action, GenericHumanAction):
@@ -305,7 +310,9 @@ class DecideMode(Mode):
     failed_continue : Mode
         Decision not performed, but continues with actions.
     """
-    fm_args = ('failed_no_action', 'failed_continue')
+
+    fault_failed_no_action = ()
+    fault_failed_continue = ()
 
 
 class Decide(Action, GenericHumanAction):
@@ -357,7 +364,9 @@ class PressMode(Mode):
         Operator unexpectedly disengages controls (making power zero).
     """
 
-    fm_args = ('failed_left', 'failed_right', 'no_press')
+    fault_failed_left = ()
+    fault_failed_right = ()
+    fault_no_press = ()
 
 
 class Press(Action, GenericHumanAction):

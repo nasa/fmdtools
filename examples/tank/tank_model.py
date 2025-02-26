@@ -71,9 +71,9 @@ class TransportLiquidState(State):
 
 
 class TransportLiquidMode(Mode):
-    fm_args = {'stuck': (1e-5,)}
-    phases = {'na': 1.0}
-    units = 'hr'
+    fault_stuck = (1e-5,)
+    default_phases = (('na', 1.0),)
+    default_units = 'hr'
 
 
 class ImportLiquid(Function):
@@ -116,8 +116,9 @@ class ExportLiquid(Function):
 
 
 class GuideLiquidMode(Mode):
-    fm_args = {'leak': (1e-5,), 'clogged': (1e-5,)}
-    phases = {'na': 1.0}
+    fault_leak = (1e-5,)
+    fault_clogged = (1e-5,)
+    default_phases = (('na', 1.0),)
 
 
 class GuideLiquid(Function):
@@ -154,7 +155,7 @@ class StoreLiquidState(State):
 
 
 class StoreLiquidMode(Mode):
-    fm_args = {'leak': (1e-5, 0, {'na': 1.0})}
+    fault_leak = (1e-5, 0, (('na', 1.0),))
 
 
 class StoreLiquid(Function):
@@ -261,9 +262,8 @@ class HumanActions(Function):
 
 
 class LookMode(Mode):
-    failrate: float
-    fm_args = {'not_visible': (1, )}
-    phases = {'na': 1.0}
+    fault_not_visible = (1, )
+    default_phases = (('na', 1.0),)
     # using lists as inputs leaves the EPCs unlabeled
     he_args = (0.02, [[4, 0.1], [4, 0.6], [1.1, 0.9]])
 
@@ -277,9 +277,10 @@ class Look(Action):
 
 
 class DetectMode(Mode):
-    failrate: float
-    fm_args = ('not_detected', 'false_high', 'false_low')
-    phases = {'na': 1.0}
+    fault_not_detected = ()
+    fault_false_high = ()
+    fault_false_low = ()
+    default_phases = (('na', 1.0),)
     he_args = (0.03, {2: [11, 0.1], 10: [10, 0.2], 13: [4, 0],
                       14: [4, 0.1], 17: [3, 0], 34: [1.1, 0.6]})
 
@@ -311,9 +312,8 @@ class Detect(Action):
 
 
 class ReachMode(Mode):
-    failrate: float
-    fm_args = {'unable': (0.5, )}
-    phases = {'na': 1.0}
+    fault_unable = (0.5, )
+    default_phases = (('na', 1.0),)
     he_args = (0.09, {2: [11, 0.1], 10: [10, 0.0],
                       13: [4, 0], 14: [4, 0.1],
                       17: [3, 0], 34: [1.1, 0]})
@@ -328,9 +328,9 @@ class Reach(Action):
 
 
 class GraspMode(Mode):
-    failrate: float
-    fm_args = {'cannot': (1, )}
-    phases = {'na': 1.0}
+
+    fault_cannot = (1,)
+    default_phases = (('na', 1.0),)
     failrate = 0.02
 
 
@@ -343,10 +343,9 @@ class Grasp(Action):
 
 
 class TurnMode(Mode):
-    failrate: float
-    fm_args = {'cannot': (1,),
-                 'wrong_valve': (0.5,)}
-    phases = {'na': 1.0}
+    fault_cannot = (1,)
+    fault_wrong_valve = (0.5,)
+    default_phases = (('na', 1.0),)
     he_args = (0.009, {2: [11, 0.4], 10: [10, 0.2],
                        13: [4, 0], 14: [4, 0],
                        17: [3, 0.6], 34: [1.1, 0]})
@@ -421,7 +420,7 @@ if __name__ == '__main__':
 
     mdl = Tank(track='all')
 
-    endclass, mdlhist = propagate.one_fault(mdl, 'human', 'look_not_visible', time=2,
+    endclass, mdlhist = propagate.one_fault(mdl, 'human.aa.acts.look', 'not_visible', time=2,
                                             staged=True)
 
     from fmdtools.define.architecture.function import FunctionArchitectureGraph
@@ -441,14 +440,14 @@ if __name__ == '__main__':
     endres.graph.draw(title="leak response at time=end")
 
     resgraph, mdlhist = propagate.one_fault(
-        mdl, 'human', 'detect_false_high', time=2, desired_result='graph')
+        mdl, 'human.aa.acts.detect', 'false_high', time=2, desired_result='graph')
 
     mdlhist.plot_line("fxns.store_water.s.level",
                       title='detect_false_high', time_slice=2)
     resgraph.graph.draw(title='detect_false_high, t=2')
 
     resgraph, mdlhist = propagate.one_fault(
-        mdl, 'human', 'turn_wrong_valve', time=2, desired_result='graph')
+        mdl, 'human.aa.acts.turn', 'wrong_valve', time=2, desired_result='graph')
 
     mdlhist.plot_line("fxns.store_water.s.level",
                       title='turn_wrong_valve', time_slice=2)

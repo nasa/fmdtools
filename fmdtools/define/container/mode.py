@@ -61,6 +61,11 @@ class Fault(BaseContainer, readonly=True):
     disturbances: tuple = ()
     units: str = 'sim'
 
+    def __init__(self, *args, failrate=1.0, **kwargs):
+        args = self.get_true_fields(*args, force_kwargs=False, **kwargs)
+        args[0] = failrate * args[0]
+        super().__init__(*args)
+
     def calc_rate(self, time, phasemap={}, sim_time=1.0, sim_units='hr', weight=1.0):
         """
         Calculate the rate of a given fault mode.
@@ -148,6 +153,8 @@ class Mode(BaseContainer, readonly=False):
     exclusive : True/False
         Whether fault modes are exclusive of each other or not.
         Default is False (i.e. more than one can be present).
+    default_xx : float
+        Default values for Fault fields (e.g., prob, phases, etc)
 
     These fields are then used in simulation and elsewhere.
 
@@ -227,10 +234,16 @@ class Mode(BaseContainer, readonly=False):
         fault = getattr(self, 'fault_'+faultname)
         if isinstance(fault, Fault):
             return fault
-        elif isinstance(fault, tuple):
-            return Fault(*fault)
-        elif isinstance(fault, **dict):
-            return Fault(**fault)
+        else:
+            defaults = self.get_pref_attrs("default")
+            try:
+                if isinstance(fault, tuple):
+                    return Fault(*fault, **defaults, failrate=self.failrate)
+                elif isinstance(fault, **dict):
+                    return Fault(**{**defaults, **fault}, failrate=self.failrate)
+            except Exception as e:
+                raise Exception("Poorly specified fault mode: " + faultname + " in "
+                                + self.__class__.__name__) from e
 
     def get_all_faultnames(self):
         """Get all names of faults."""
@@ -416,38 +429,38 @@ class Mode(BaseContainer, readonly=False):
 
 
 class HumanErrorMode(Mode):
-    he_args = tuple()
+    """
+    Mode for Human Errors using HEART-based model.
+
+    Overall failrate of human error determined by given:
+
+    gtp : float
+        Generic task probability
+    epc_XX : tuple/list
+        Error producing condition factors (factor, effect proportion)
+    """
+
+    failrate: float = 1.0
+    gtp: ClassVar[float] = 1.0
+
     def __init__(self, *args, **kwargs):
-        if self.he_args:
-            if 'failrate' not in self.__fields__:
-                raise Exception("failrate must be added to " + self.__class__.__name__ +
-                                " Mode definition to calculate failrate from he_args")
-            kwargs['failrate'] = self.add_he_rate(*self.he_args)
+        kwargs['failrate'] = self.add_he_rate()
         super().__init__(*args, **kwargs)
 
-    def add_he_rate(self, gtp, EPCs={'na': [1, 0]}):
+    def calc_he_rate(self):
         """
         Calculate self.failrate based on a human error probability model.
 
-        Parameters
-        ----------
-        gtp : float
-            Generic Task Probability. (from HEART)
-        EPCs : Dict or list
-            Error producing conditions (and respective factors) for a given task
-            (from HEART). Used in format:
-
-            - Dict {'name':[EPC factor, Effect proportion]} or
-
-            - list [[EPC factor, Effect proportion],[[EPC factor, Effect proportion]]]
+        This model uses an overall generic task probability (set by self.gtp) as well as
+        error producing conditions (EPCs) to determine the overall failure rate of the
+        task.
         """
-        if type(EPCs) == dict:
+        EPCs = self.get_pref_attrs("epc")
+        if EPCs:
             EPC_f = np.prod([((epc-1)*x+1) for _, [epc, x] in EPCs.items()])
-        elif type(EPCs) == list:
-            EPC_f = np.prod([((epc-1)*x+1) for [epc, x] in EPCs])
+            return self.gtp*EPC_f
         else:
-            raise Exception("Invalid type for EPCs: " + str(type(EPCs)))
-        return gtp*EPC_f
+            return self.gtp
 
 
 class FlexibleMode(Mode):
