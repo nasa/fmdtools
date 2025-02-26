@@ -438,7 +438,7 @@ class FaultDomain(object):
         faultmode : str
             Name of the faultmode to inject.
         """
-        fault = self.fxns[fxnname].m.faultmodes[faultmode]
+        fault = self.fxns[fxnname].m.get_fault(faultmode)
         self.faults[(fxnname, faultmode)] = fault
 
     def add_faults(self, *faults):
@@ -478,7 +478,7 @@ class FaultDomain(object):
         """
         faults = [(fxnname, mode) for fxnname, fxn in self.fxns.items()
                   if hasattr(fxn, 'm')
-                  for mode in fxn.m.faultmodes]
+                  for mode in fxn.m.get_all_faultnames()]
         self.add_faults(*faults)
 
     def add_all_modes(self, *modenames, exact=True):
@@ -495,7 +495,7 @@ class FaultDomain(object):
         for modename in modenames:
             faults = [(fxnname, mode) for fxnname, fxn in self.fxns.items()
                       if hasattr(fxn, 'm')
-                      for mode in fxn.m.faultmodes
+                      for mode in fxn.m.get_all_faultnames()
                       if same_mode(modename, mode, exact=exact)]
             self.add_faults(*faults)
 
@@ -522,7 +522,7 @@ class FaultDomain(object):
         for fxnclass in fxnclasses:
             faults = [(fxnname, mode)
                       for fxnname, fxn in self.mdl.fxns_of_class(fxnclass).items()
-                      for mode in fxn.m.faultmodes if hasattr(fxn, 'm')]
+                      for mode in fxn.m.get_all_faultnames() if hasattr(fxn, 'm')]
             self.add_faults(*faults)
 
     def add_all_fxn_modes(self, *fxnnames):
@@ -544,7 +544,8 @@ class FaultDomain(object):
          -('ex_fxn2', 'short')
         """
         for fxnname in fxnnames:
-            faults = [(fxnname, mode) for mode in self.fxns[fxnname].m.faultmodes
+            faults = [(fxnname, mode)
+                      for mode in self.fxns[fxnname].m.get_all_faultnames()
                       if hasattr(self.fxns[fxnname], 'm')]
             self.add_faults(*faults)
 

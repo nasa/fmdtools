@@ -161,8 +161,8 @@ class PlanPathMode(Mode):
     """
 
     failrate = 1e-5
-    fm_args = {'noloc': (0.2, 10000),
-               'degloc': (0.8, 10000)}
+    fault_noloc = (0.2, 10000)
+    fault_degloc = (0.8, 10000)
     opermodes = ('taxi', 'hover', 'move', 'descend', 'land')
     mode: int = 'taxi'
 

@@ -348,10 +348,6 @@ class ActionArchitecture(Architecture):
         else:
             raise Exception("Invalid option for initial_action.")
 
-    def inject_faults(self, faults):
-        """Inject faults into the actions contained in the architecture."""
-        Architecture.inject_faults(self, 'acts', faults)
-
     def __call__(self, proptype, time, run_stochastic, dt):
         """
         Propagates behaviors through the ActionArchitecture.

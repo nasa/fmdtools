@@ -325,7 +325,7 @@ class Simulable(BaseObject):
         Parameters
         ----------
         fxnname: str
-            Name of the function with the fault
+            Name of the block or sub-block with the fault
         faultmode: str
             Name of the fault mode
         time: int
@@ -342,8 +342,11 @@ class Simulable(BaseObject):
         rate: float
             Rate of the scenario
         """
-        fxn = self.get_fxns()[fxnname]
-        fm = fxn.m.faultmodes.get(faultmode, False)
+        if fxnname == self.name or fxnname in ['self', 'global']:
+            fxn = self
+        else:
+            fxn = self.get_vars(fxnname)
+        fm = fxn.m.get_fault(faultmode)
         if not fm:
             raise Exception("faultmode "+faultmode+" not in "+str(fxn.m.__class__))
         else:
@@ -351,6 +354,29 @@ class Simulable(BaseObject):
             rate = fm.calc_rate(time, phasemap=phasemap, sim_time=sim_time,
                                 sim_units=self.sp.units, weight=weight)
         return rate
+
+    def inject_faults(self, faults=[]):
+        """
+        Inject faults into the block and its contained architectures.
+
+        Parameters
+        ----------
+        faults : str/list/dict, optional
+            Faults to inject. The default is [].
+        """
+        if isinstance(faults, str):
+            faults = [faults]
+        if faults and isinstance(faults, list):
+            faults = {self.name: faults}
+        for faultscope, fault in faults.items():
+            if faultscope == self.name:
+                self.m.add_fault(fault)
+            else:
+                if faultscope.startswith(self.name):
+                    faultscope = faultscope[len(self.name)+1:]
+                if faultscope.split(".")[0] in self.get_roles():
+                    obj = self.get_vars(faultscope)
+                    obj.inject_faults(fault)
 
     def return_probdens(self):
         """Get the probability density associated with Block and things it contains."""
@@ -413,7 +439,6 @@ class Block(Simulable):
         # send flows from block level to arch level
         if 'arch' in self.roletypes:
             self.init_roletypes('arch', **self.create_arch_kwargs(**kwargs))
-            self.update_contained_modes()
         self.check_flows(flows=flows)
         self.update_seed()
         # finally, allow for user-defined role/state changing
@@ -443,22 +468,6 @@ class Block(Simulable):
                 arch_kwargs[k] = {'flows': b_flows, 'name': k, 'sp': self.sp}
 
         return {'flows': b_flows, **arch_kwargs}
-
-    def update_contained_modes(self):
-        """Add contained faultmodes for the container (from arch)."""
-        for at in self.get_roles('arch'):
-            arch = getattr(self, at)
-            try:
-                for flex_role in arch.flexible_roles:
-                    role = getattr(arch, flex_role)
-                    for block in role.values():
-                        if hasattr(block, 'm'):
-                            fms = {block.name + '_' + fname: vals
-                                   for fname, vals in block.m.faultmodes.items()}
-                            self.m.faultmodes.update(fms)
-            except AttributeError as e:
-                raise Exception("Class " + self.__class__.__name__ + " missing mode" +
-                                "containter despite containing arch" + arch.name) from e
 
     def check_flows(self, flows={}):
         """
@@ -612,34 +621,9 @@ class Block(Simulable):
             cop.assign_roles('container', self)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
-        if 'arch' in self.roletypes:
-            cop.update_contained_modes()
         if hasattr(self, 'h'):
             cop.h = self.h.copy()
         return cop
-
-    def inject_faults(self, faults=[]):
-        """
-        Inject faults into the block and its contained architectures.
-
-        Parameters
-        ----------
-        faults : str/list/dict, optional
-            Faults to inject. The default is [].
-        """
-        if isinstance(faults, str):
-            faults = [faults]
-        elif isinstance(faults, dict):
-            faults = faults.get(self.name, [])
-
-        if faults:
-            if isinstance(faults, list):
-                self.m.add_fault(*faults)
-            for objname in self.get_roles('arch'):
-                obj = getattr(self, objname)
-                obj.inject_faults(faults)
-                self.m.faults.update(obj.get_faults())
-            self.m.update_modestates()
 
     def propagate(self, time, faults=[], disturbances={}, run_stochastic=False):
         """
@@ -663,7 +647,8 @@ class Block(Simulable):
         # Step 0: Update block states with disturbances
         for var, val in disturbances.items():
             set_var(self, var, val)
-        self.inject_faults(faults)
+        if faults:
+            self.inject_faults(faults)
 
         # Step 1: Run Dynamic Propagation Methods in Order Specified
         # and Inject Faults if Applicable

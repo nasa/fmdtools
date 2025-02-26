@@ -1003,7 +1003,7 @@ def list_init_faults(mdl, times):
     for time in times:
         for fxnname, fxn in fxns.items():
             if hasattr(fxn, 'm'):
-                faultmodes = fxn.m.faultmodes
+                faultmodes = fxn.m.get_faults()
             else:
                 faultmodes = {}
             for mode in faultmodes:

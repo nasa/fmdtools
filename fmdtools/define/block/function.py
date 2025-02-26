@@ -110,9 +110,9 @@ class Function(Block):
             ms = [m for m in self.m.faults.copy() if m != 'nom']
             modeprops = dict.fromkeys(ms)
             for mode in ms:
-                modeprops[mode] = self.m.faultmodes.get(mode)
-                if mode not in self.m.faultmodes:
-                    raise Exception("Mode " + mode + " not in m.faultmodes for fxn " +
+                modeprops[mode] = self.m.get_fault(mode)
+                if mode not in self.m.get_all_faultnames():
+                    raise Exception("Fault " + mode + " not in mode for fxn " +
                                     self.__class__.__name__+" and may not be tracked.")
         else:
             ms = []
@@ -150,13 +150,6 @@ class Function(Block):
                 raise Exception("Poorly specified Architecture: "
                                 + str(obj.__class__)) from e
 
-    def prop_arch_faults_up(self):
-        """Get faults from contained components and add to .m."""
-        for objname in self.get_roles('arch'):
-            obj = getattr(self, objname)
-            self.m.faults.difference_update(obj.m.sub_modes)
-            self.m.faults.update(obj.get_faults())
-
     def __call__(self, proptype, faults=[], time=0, run_stochastic=False):
         """
         Update the state of the function at a given time and injects faults.
@@ -176,7 +169,8 @@ class Function(Block):
         if hasattr(self, 'r'):
             self.r.run_stochastic = run_stochastic
         # if there is a fault, it is instantiated
-        self.inject_faults(faults)
+        if faults:
+            self.inject_faults(faults)
 
         if time > self.t.time:
             if hasattr(self, 'r'):
@@ -191,8 +185,6 @@ class Function(Block):
                     self.dynamic_behavior(time)
             elif not Decimal(str(time)) % Decimal(str(self.t.dt)):
                 self.dynamic_behavior(time)
-
-        self.prop_arch_faults_up()
 
         self.t.time = time
         if run_stochastic == 'track_pdf':

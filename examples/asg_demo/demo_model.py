@@ -52,7 +52,8 @@ class Hazard(Flow):
 
 
 class ActionMode(Mode):
-    fm_args = ('failed', 'unable')
+    fault_failed = ()
+    fault_unable = ()
     mode: str = 'nominal'
     exclusive = True
 
@@ -191,8 +192,8 @@ class HazardModel(FunctionArchitecture):
 if __name__ == '__main__':
     import fmdtools.sim.propagate as prop
     mdl = HazardModel()
-    result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard',
-                                                 'act_unable', time=4,
+    result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard.aa.acts.act',
+                                                 'unable', time=4,
                                                  desired_result='graph')
 
     result_fault.graph.draw()
@@ -203,7 +204,7 @@ if __name__ == '__main__':
                                     'aa.flows.hazard.s.percieved',
                                     'aa.flows.hazard.s.mitigated', figsize=(10,5))
 
-    result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard',
-                                                 'perceive_failed', time=4,
+    result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard.aa.acts.perceive',
+                                                 'failed', time=4,
                                                  desired_result='graph.fxns.detect_hazard.aa')
     result_fault.graph.fxns.detect_hazard.aa.draw_graphviz(layout='dot')
