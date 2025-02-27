@@ -76,10 +76,10 @@ def make_tankparam(*args, **kwargs):
 
 
 class TransportLiquidMode(Mode):
-    fm_args = {'stuck': (1e-5,),
-               'blockage': (1e-5,)}
-    phases = {'na': 1.0}
-    units = 'hr'
+    fault_stuck = 1e-5,
+    fault_blockage = 1e-5,
+    default_phases = ('na', 1.0),
+    default_units = 'hr'
 
 
 class ImportLiquid(Function):

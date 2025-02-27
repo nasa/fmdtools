@@ -38,7 +38,7 @@ specific language governing permissions and limitations under the License.
 """
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
-from fmdtools.define.container.mode import Mode
+from fmdtools.define.container.mode import Mode, HumanErrorMode
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.block.function import Function
 from fmdtools.define.architecture.function import FunctionArchitecture
@@ -261,11 +261,13 @@ class HumanActions(Function):
             raise Exception("invalid connection: valve1_sig")
 
 
-class LookMode(Mode):
+class LookMode(HumanErrorMode):
     fault_not_visible = (1, )
     default_phases = (('na', 1.0),)
-    # using lists as inputs leaves the EPCs unlabeled
-    he_args = (0.02, [[4, 0.1], [4, 0.6], [1.1, 0.9]])
+    gtp: float = 0.02
+    epc_x = 4, 0.1
+    epc_y = 4, 0.6
+    epc_z = 1.1, 0.9
 
 
 class Look(Action):
@@ -276,13 +278,18 @@ class Look(Action):
         return not self.m.has_fault('not_visible')
 
 
-class DetectMode(Mode):
+class DetectMode(HumanErrorMode):
     fault_not_detected = ()
     fault_false_high = ()
     fault_false_low = ()
     default_phases = (('na', 1.0),)
-    he_args = (0.03, {2: [11, 0.1], 10: [10, 0.2], 13: [4, 0],
-                      14: [4, 0.1], 17: [3, 0], 34: [1.1, 0.6]})
+    gtp: float = 0.03
+    epc_2 = 11, 0.1
+    epc_10 = 10, 0.2
+    epc_13 = 4, 0
+    epc_14 = 4, 0.1
+    epc_17 = 3, 0
+    epc_34 = 1.1, 0.6
 
 
 class Detect(Action):
@@ -311,12 +318,16 @@ class Detect(Action):
         return self.detect_sig.s.indicator
 
 
-class ReachMode(Mode):
+class ReachMode(HumanErrorMode):
     fault_unable = (0.5, )
     default_phases = (('na', 1.0),)
-    he_args = (0.09, {2: [11, 0.1], 10: [10, 0.0],
-                      13: [4, 0], 14: [4, 0.1],
-                      17: [3, 0], 34: [1.1, 0]})
+    gtp: float = 0.09
+    epc_2 = 11, 0.1
+    epc_10 = 10, 0.0
+    epc_13 = 4, 0
+    epc_14 = 4, 0.1
+    epc_17 = 3, 0
+    epc_34 = 1.1, 0
 
 
 class Reach(Action):
@@ -342,13 +353,17 @@ class Grasp(Action):
         return not self.m.has_fault('cannot')
 
 
-class TurnMode(Mode):
+class TurnMode(HumanErrorMode):
     fault_cannot = (1,)
     fault_wrong_valve = (0.5,)
     default_phases = (('na', 1.0),)
-    he_args = (0.009, {2: [11, 0.4], 10: [10, 0.2],
-                       13: [4, 0], 14: [4, 0],
-                       17: [3, 0.6], 34: [1.1, 0]})
+    gtp: float = 0.009
+    epc_2 = 11, 0.4
+    epc_10 = 10, 0.2
+    epc_13 = 4, 0
+    epc_14 = 4, 0
+    epc_17 = 3, 0.6
+    epc_34 = 1.1, 0
 
 
 class Turn(Action):

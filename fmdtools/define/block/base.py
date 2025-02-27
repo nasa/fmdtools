@@ -371,12 +371,20 @@ class Simulable(BaseObject):
         for faultscope, fault in faults.items():
             if faultscope == self.name:
                 self.m.add_fault(fault)
+                self.set_fault_disturbances(fault)
             else:
                 if faultscope.startswith(self.name):
                     faultscope = faultscope[len(self.name)+1:]
                 if faultscope.split(".")[0] in self.get_roles():
                     obj = self.get_vars(faultscope)
                     obj.inject_faults(fault)
+
+    def set_fault_disturbances(self, *faults):
+        """Set Mode-based disturbances (if present)."""
+        if hasattr(self, 'm'):
+            disturbances = self.m.get_fault_disturbances(*faults)
+            if disturbances:
+                self.set_vars(**disturbances)
 
     def return_probdens(self):
         """Get the probability density associated with Block and things it contains."""
