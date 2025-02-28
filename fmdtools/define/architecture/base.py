@@ -321,11 +321,6 @@ class Architecture(Simulable):
                     rand_states[objname] = rand_state
         return rand_states
 
-    def get_faults(self):
-        """Get faults from contained roles."""
-        return {obj.name+"_"+f for obj in self.get_flex_role_objs().values()
-                if hasattr(obj, 'm') for f in obj.m.faults}
-
     def reset(self):
         """Reset the architecture and its contained objects."""
         super().reset()

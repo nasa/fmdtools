@@ -230,7 +230,7 @@ class History(Result):
                         val = get_var(obj, methname)(time)
                     except TypeError:
                         val = get_var(obj, methname)()
-                elif 'faults' in att:
+                elif 'faults' in att and not att.endswith('m.sub_faults'):
                     split_att = att.split('.')
                     faultind = split_att.index('faults')
                     modename = split_att[faultind+1]
@@ -510,6 +510,7 @@ class History(Result):
         for att in attrs:
             faults_hist[att] = History({k.split('.')[-1]: v for k, v in faulthist.items()
                                         if ('.'+att+'.m.faults' in k) or
+                                        ('.'+att+'.m.sub_faults' in k) or
                                         (att+'.m.faults' in k and k.startswith(att))})
         return faults_hist
 

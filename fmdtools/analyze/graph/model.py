@@ -357,7 +357,8 @@ class ModelGraph(Graph):
             degindicators = (set(g.nodes[node].get('indicators', {}))
                              != set(nomg.nodes[node].get('indicators', {})))
             g.nodes[node]['degraded'] = degstates or degindicators
-            g.nodes[node]['faulty'] = any(g.nodes[node].get('m', {'faults': {}})['faults'])
+            m = g.nodes[node].get('m', {'faults': {}, 'sub_faults': False})
+            g.nodes[node]['faulty'] = any(m['faults']) or m['sub_faults']
 
 
 class ExtModelGraph(ModelGraph):

@@ -400,6 +400,7 @@ class ActionArchitecture(Architecture):
                 if num_prop > 10000:
                     raise Exception("Undesired looping in Function ASG for: "+self.name)
             self.active_actions = active_actions
+        self.set_sub_faults()
 
     def as_modelgraph(self, gtype=ActionArchitectureGraph, **kwargs):
         """Create and return the corresponding ModelGraph for the Object."""

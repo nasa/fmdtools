@@ -162,6 +162,8 @@ class Mode(BaseContainer, readonly=False):
     ------
     faults : set
         Set of faults present (or not) at any given time
+    sub_faults : bool
+        Whether objects contained by the object are faulty.
     mode : str
         Name of the current mode. the default is 'nominal'
     faultmodes : dict
@@ -189,9 +191,10 @@ class Mode(BaseContainer, readonly=False):
     mode: ClassVar[str] = 'nominal'
     failrate: ClassVar[float] = 1.0
     faults: set = set()
+    sub_faults: bool = False
     opermodes = ('nominal',)
     exclusive = False
-    default_track = ('mode', 'faults')
+    default_track = ('mode', 'faults', 'sub_faults')
 
     def __init__(self, *args, s_kwargs={}, **kwargs):
         args = self.get_true_fields(*args, **kwargs)
@@ -417,7 +420,9 @@ class Mode(BaseContainer, readonly=False):
             faults = self.faults
         dists = {}
         for fault in faults:
-            dists.update(self.get_fault(fault).disturbances)
+            faultobj = self.get_fault(fault)
+            if faultobj:
+                dists.update(faultobj.disturbances)
         return dists
 
     def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
@@ -433,6 +438,8 @@ class Mode(BaseContainer, readonly=False):
             modelength = max(fm_lens+om_lens)
             str_size = '<U'+str(modelength)
             BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
+        elif att == 'sub_faults':
+            hist.init_att(att, False, timerange, track='all', dtype=bool)
 
     def _assign_mode(self, mode):
         if 'mode' in self.__fields__:
@@ -580,21 +587,13 @@ class FlexibleMode(Mode):
 
 
 class ExampleMode(Mode):
+    """Example mode for testing/docs."""
+
     fault_no_charge = Fault(1e-5, 100, (('standby', 1.0),))
     fault_short = (1e-5, 100, (('supply', 1.0),))
     opermodes = ("supply", "charge", "standby")
     exclusive = True
     mode: str = "standby"
-
-
-class NewMode(BaseContainer):
-     def get_faultmodes(self):
-         return self.get_pref_attrs("fault")
-
-
-class ExNewMode(NewMode):
-    fault_no_charge = (1e-5, 100, {'standby': 1.0})
-    fault_short = (1e-5, 100, {'supply': 1.0})
 
 
 if __name__ == "__main__":

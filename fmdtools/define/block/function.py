@@ -187,6 +187,7 @@ class Function(Block):
                 self.dynamic_behavior(time)
 
         self.t.time = time
+        self.set_sub_faults()
         if run_stochastic == 'track_pdf':
             if hasattr(self, 'r'):
                 self.r.probdens = self.r.return_probdens()

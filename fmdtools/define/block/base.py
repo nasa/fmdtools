@@ -386,6 +386,45 @@ class Simulable(BaseObject):
             if disturbances:
                 self.set_vars(**disturbances)
 
+    def set_sub_faults(self):
+        """Set the mode to have sub_faults if contained objs have faults."""
+        if hasattr(self, 'm'):
+            sub_faults = self.get_faults(with_base_faults=False)
+            self.m.sub_faults = bool(sub_faults)
+
+    def get_faults(self, with_sub_faults=True, with_base_faults=True):
+        """
+        Get faults associated with the given block.
+
+        Parameters
+        ----------
+        with_sub_faults : bool, optional
+            Whether to get faults from the block. The default is True.
+        with_base_faults : bool, optional
+            Whether to get faults from objects contained by the block. The default is
+            True.
+
+        Returns
+        -------
+        all_faults : dict
+            Dictionary of blocks and faults present in the block. Of structure
+            {blockname: faults}
+        """
+        all_faults = dict()
+        if with_base_faults and hasattr(self, 'm'):
+            faults = self.m.faults.copy()
+            if faults:
+                all_faults[self.name] = faults
+
+        if with_sub_faults:
+            for objname in self.get_roles('arch'):
+                obj = getattr(self, objname)
+                all_faults.update(obj.get_faults())
+            for objname, obj in self.get_flex_role_objs().items():
+                if hasattr(obj, 'get_faults'):
+                    all_faults.update(obj.get_faults())
+        return all_faults
+
     def return_probdens(self):
         """Get the probability density associated with Block and things it contains."""
         if hasattr(self, 'r'):
