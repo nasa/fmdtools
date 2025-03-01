@@ -39,7 +39,8 @@ import numpy as np
 
 def create_scenname(faulttup, time):
     """Create a scenario name for a given fault scenario."""
-    return '_'.join([fm[0]+'_'+fm[1]+'_' for fm in faulttup])+t_key(time)
+    sn = '_'.join([fm[0]+'_'+fm[1]+'_' for fm in faulttup])+t_key(time)
+    return'_'.join(sn.split("."))
 
 
 class BaseScenObj(dataobject, readonly=True, mapping=True):

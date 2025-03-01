@@ -168,16 +168,16 @@ class AffectDOF(AffectDOFDynamic):
     def reconfig_faults(self):
         """Corrects for individual line faultmodes by turning off the opposite rotor
         and upping the throttle (amp_factor)"""
-        for fault in self.m.faults:
-            if fault in self.ca.m.sub_modes:
-                comp = self.ca.m.sub_modes[fault]
-                opp = self.ca.p.opposite[comp]
-                if self.ca.s.forward[comp] != 0.0:
-                    self.ca.s.forward[comp] = 0.0
-                    self.ca.s.upward[comp] = 0.0
-                if self.ca.s.forward[opp] != 0.0:
-                    self.ca.s.forward[opp] = 0.0
-                    self.ca.s.upward[opp] = 0.0
+        if self.get_faults(with_base_faults=False, only_present=True):
+            for cname, comp in self.ca.comps.items():
+                if comp.m.faults:
+                    oname = self.ca.p.opposite[cname]
+                    if self.ca.s.forward[cname] != 0.0:
+                        self.ca.s.forward[cname] = 0.0
+                        self.ca.s.upward[cname] = 0.0
+                    if self.ca.s.forward[oname] != 0.0:
+                        self.ca.s.forward[oname] = 0.0
+                        self.ca.s.upward[oname] = 0.0
         tot_comps = len(self.ca.comps)
         empty_comps = len([c for c in self.ca.s.forward if self.ca.s.forward[c] == 0.0])
         try:
@@ -305,25 +305,26 @@ if __name__ == "__main__":
 
     # check rf_mechbreack fault propagation in quad architecture:
     hierarchical_model = Drone(p=DroneParam(arch='quad'))
-    endclass, mdlhist = fs.propagate.one_fault(hierarchical_model,
-                                               'affect_dof',
-                                               'rf_mechbreak',
-                                               time=5)
-    mdlhist.plot_line('flows.dofs.s.x', 'flows.dofs.s.y', 'flows.dofs.s.z', 'fxns.store_ee.s.soc')
+    # endclass, mdlhist = fs.propagate.one_fault(hierarchical_model,
+    #                                            'affect_dof.ca.comps.rf',
+    #                                            'mechbreak',
+    #                                            time=5)
+    # mdlhist.plot_line('flows.dofs.s.x', 'flows.dofs.s.y', 'flows.dofs.s.z', 'fxns.store_ee.s.soc')
 
     # check rr2_propstuck fault in oct architecture over several times:
     mdl = Drone(p=DroneParam(arch='oct'))
     rr2_faults = FaultDomain(mdl)
-    rr2_faults.add_fault('affect_dof', 'rr2_propstuck')
+    # rr2_faults.add_fault('affect_dof.ca.comps.rr2', 'propstuck')
+    rr2_faults.add_all_fxn_modes("affect_dof")
 
     rr2_samp = FaultSample(rr2_faults, phasemap=PhaseMap(mdl.sp.phases))
     rr2_samp.add_fault_phases()
 
-    ec, hist = fs.propagate.fault_sample(mdl, rr2_samp , staged=True, pool=mp.Pool(4))
+    ec, hist = fs.propagate.fault_sample(mdl, rr2_samp, staged=True)
 
     # plot a single scen (at t=8)
     fault_kwargs = {'alpha': 0.2, 'color': 'red'}
-    h_plot = hist.get('nominal', 'affect_dof_rr2_propstuck_t8p0').flatten()
+    h_plot = hist.get('nominal', 'affect_dof_ca_comps_rr2_propstuck_t8p0').flatten()
     h_plot.plot_line('flows.dofs.s.x', 'flows.dofs.s.y', 'flows.dofs.s.z', 'fxns.store_ee.s.soc')
 
     # plot all scens

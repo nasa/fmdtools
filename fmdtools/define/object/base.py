@@ -542,6 +542,9 @@ class BaseObject(object):
         for i, var in enumerate(variables):
             if isinstance(var, str):
                 var = var.split(".")
+            if var[0] == self.name:
+                var = var[1:]
+
             if var[0] in self.roletypes + [rt+"s" for rt in self.roletypes]:
                 f = self.get_roles_as_dict()[var[1]]
                 var = var[2:]

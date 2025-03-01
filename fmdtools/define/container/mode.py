@@ -256,9 +256,11 @@ class Mode(BaseContainer, readonly=False):
         """Get all names of faults."""
         return tuple([*self.get_pref_attrs("fault")])
 
-    def get_faults(self):
+    def get_faults(self, *faults):
         """Get Fault objects for all associated faults."""
-        return {k: self.get_fault(k) for k in self.get_all_faultnames()}
+        if not faults:
+            faults = self.get_all_faultnames()
+        return {k: self.get_fault(k) for k in faults}
 
     def set_mode(self, mode):
         """

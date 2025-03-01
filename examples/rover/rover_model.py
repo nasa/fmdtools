@@ -1135,7 +1135,7 @@ class Rover(FunctionArchitecture):
             "endpt": list
                 rovers last position (or end point),
         """
-        modes, modeproperties = self.return_faultmodes()
+        modeproperties = self.return_faultmodes()
         classification = str()
         at_finish = True
 
@@ -1145,13 +1145,13 @@ class Rover(FunctionArchitecture):
             at_finish = False
 
         # mission is fault if any fault modes are present
-        if any(modes):
+        if any(modeproperties):
             classification = classification + " faulty"
 
         # missing is nominal in no fault modes are present
         if not classification:
             classification = "nominal mission"
-        num_modes = len(modes)
+        num_modes = len(modeproperties)
 
         end_dist = self.flows['ground'].end_dist(self.flows['pos'].s)
 
@@ -1171,7 +1171,7 @@ class Rover(FunctionArchitecture):
                 "num_modes": num_modes,
                 "end_dist": end_dist,
                 "tot_deviation": tot_deviation,
-                "faults": modes,
+                "faults": [*modeproperties],
                 "classification": classification,
                 "end_x": endpt[0],
                 "end_y": endpt[1],

@@ -95,30 +95,6 @@ class Function(Block):
         """Return fmdtools type of the model class."""
         return Function
 
-    def return_faultmodes(self):
-        """
-        Get the fault modes present in the simulation (for propagate/model).
-
-        Returns
-        -------
-        ms : list
-            List of faults present.
-        modeprops : dict
-            Dict of corresponding fault mode properties.
-        """
-        if hasattr(self, 'm'):
-            ms = [m for m in self.m.faults.copy() if m != 'nom']
-            modeprops = dict.fromkeys(ms)
-            for mode in ms:
-                modeprops[mode] = self.m.get_fault(mode)
-                if mode not in self.m.get_all_faultnames():
-                    raise Exception("Fault " + mode + " not in mode for fxn " +
-                                    self.__class__.__name__+" and may not be tracked.")
-        else:
-            ms = []
-            modeprops = {}
-        return ms, modeprops
-
     def update_seed(self, seed=[]):
         """
         Update seed and propagates update to contained actions/components.

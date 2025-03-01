@@ -790,8 +790,8 @@ class Drone(FunctionArchitecture):
 
     def find_classification(self, scen, mdlhist):
         """Calculate rate, cost, expected cost based on cost of repair information."""
-        modes, modeprops = self.return_faultmodes()
-        repcost = sum([c["cost"] for f, m in modeprops.items() for a, c in m.items()])
+        modeprops = self.return_faultmodes()
+        repcost = sum([m["cost"] for f, m in modeprops.items()])
 
         totcost = repcost
         rate = scen.rate

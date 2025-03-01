@@ -318,13 +318,28 @@ class Simulable(BaseObject):
             fxns = {self.name: self}
         return fxns
 
-    def get_scen_rate(self, fxnname, faultmode, time, phasemap={}, weight=1.0):
+    def get_fault(self, scope, faultmode):
+        """Get the faultmode in the given scope of the model."""
+        name = self.get_full_name()
+        if name.endswith(scope) or scope in ['self', 'global']:
+            obj = self
+        else:
+            if scope.startswith(name):
+                scope = scope[len(name)+1:]
+            obj = self.get_vars(scope)
+        fm = obj.m.get_fault(faultmode)
+        if not fm:
+            raise Exception("faultmode "+faultmode+" not in "+str(obj.m.__class__))
+        else:
+            return fm
+
+    def get_scen_rate(self, scope, faultmode, time, phasemap={}, weight=1.0):
         """
         Get the scenario rate for the given single-fault scenario.
 
         Parameters
         ----------
-        fxnname: str
+        scope: str
             Name of the block or sub-block with the fault
         faultmode: str
             Name of the fault mode
@@ -342,17 +357,10 @@ class Simulable(BaseObject):
         rate: float
             Rate of the scenario
         """
-        if fxnname == self.name or fxnname in ['self', 'global']:
-            fxn = self
-        else:
-            fxn = self.get_vars(fxnname)
-        fm = fxn.m.get_fault(faultmode)
-        if not fm:
-            raise Exception("faultmode "+faultmode+" not in "+str(fxn.m.__class__))
-        else:
-            sim_time = self.sp.start_time - self.sp.end_time + self.sp.dt
-            rate = fm.calc_rate(time, phasemap=phasemap, sim_time=sim_time,
-                                sim_units=self.sp.units, weight=weight)
+        fm = self.get_fault(scope, faultmode)
+        sim_time = self.sp.start_time - self.sp.end_time + self.sp.dt
+        rate = fm.calc_rate(time, phasemap=phasemap, sim_time=sim_time,
+                            sim_units=self.sp.units, weight=weight)
         return rate
 
     def inject_faults(self, faults=[]):
@@ -368,14 +376,19 @@ class Simulable(BaseObject):
             faults = [faults]
         if faults and isinstance(faults, list):
             faults = {self.name: faults}
+        full_name = self.get_full_name()
         for faultscope, fault in faults.items():
-            if faultscope == self.name:
+            if faultscope == self.name or faultscope == full_name:
                 self.m.add_fault(fault)
                 self.set_fault_disturbances(fault)
             else:
                 if faultscope.startswith(self.name):
                     faultscope = faultscope[len(self.name)+1:]
-                if faultscope.split(".")[0] in self.get_roles():
+                if faultscope.startswith(full_name):
+                    faultscope = faultscope[len(full_name)+1:]
+                fs_split = faultscope.split(".")
+                roles = self.get_roles()
+                if fs_split[0] in roles or fs_split[1] in roles:
                     obj = self.get_vars(faultscope)
                     obj.inject_faults(fault)
 
@@ -392,7 +405,8 @@ class Simulable(BaseObject):
             sub_faults = self.get_faults(with_base_faults=False)
             self.m.sub_faults = bool(sub_faults)
 
-    def get_faults(self, with_sub_faults=True, with_base_faults=True):
+    def get_faults(self, with_sub_faults=True, with_base_faults=True,
+                   only_present=True):
         """
         Get faults associated with the given block.
 
@@ -403,6 +417,9 @@ class Simulable(BaseObject):
         with_base_faults : bool, optional
             Whether to get faults from objects contained by the block. The default is
             True.
+        only_present: bool, optional
+            Whether to get only present faults (if True) or all possible faults. The
+            default is True.
 
         Returns
         -------
@@ -412,18 +429,30 @@ class Simulable(BaseObject):
         """
         all_faults = dict()
         if with_base_faults and hasattr(self, 'm'):
-            faults = self.m.faults.copy()
-            if faults:
-                all_faults[self.name] = faults
+            if only_present:
+                if self.m.faults:
+                    faults = self.m.get_faults(*self.m.faults)
+                    all_faults[self.name] = faults
+            else:
+                all_faults[self.get_full_name()] = self.m.get_faults()
 
         if with_sub_faults:
+            if not isinstance(with_sub_faults, bool):
+                with_sub_faults -= 1
+            sub_kwar = dict(only_present=only_present, with_sub_faults=with_sub_faults)
             for objname in self.get_roles('arch'):
                 obj = getattr(self, objname)
-                all_faults.update(obj.get_faults())
+                all_faults.update(obj.get_faults(**sub_kwar))
             for objname, obj in self.get_flex_role_objs().items():
                 if hasattr(obj, 'get_faults'):
-                    all_faults.update(obj.get_faults())
+                    all_faults.update(obj.get_faults(**sub_kwar))
         return all_faults
+
+    def return_faultmodes(self):
+        """Return all faults as a single dictionary."""
+        endfaultprops = {scope+"."+mode: f for scope, modes in self.get_faults().items()
+                         for mode, f in modes.items()}
+        return endfaultprops
 
     def return_probdens(self):
         """Get the probability density associated with Block and things it contains."""

@@ -576,7 +576,8 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
                                                         ctimes=ctimes,
                                                         **kwargs)
 
-    endfaults, endfaultprops = mdl.return_faultmodes()
+    endfaultprops = mdl.return_faultmodes()
+    endfaults = [*endfaultprops]
     if any(endfaults) and warn_faults:
         print("Faults found during the nominal run " + str(endfaults))
 
@@ -1183,7 +1184,8 @@ def get_result(scen, mdl, desired_result, nomhist={}, nomresult={}, time=0.0):
             result['endclass'] = endclass
             desired_result.pop('endclass')
     if 'endfaults' in desired_result:
-        result['endfaults'], result['faultprops'] = mdl.return_faultmodes()
+        result['faultprops'] = mdl.return_faultmodes()
+        result['endfaults'] = [*result['faultprops']]
         desired_result.pop('endfaults')
 
     graphs_to_get = [g for g in desired_result

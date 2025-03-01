@@ -639,31 +639,11 @@ class FunctionArchitecture(Architecture):
         repair_cost : float
             Cost of repairing the fault modes in the given model
         """
-        repmodes, modeprops = self.return_faultmodes()
-        modecost = sum([c['cost'] if c['cost'] > 0.0 else default_cost
-                        for m in modeprops.values() for c in m.values()])
+        fmodes = self.get_faults()
+        modecost = sum([mode['cost'] if mode['cost'] > 0.0 else default_cost
+                        for modes in fmodes.values() for mode in modes])
         repair_cost = np.min([modecost, max_cost])
         return repair_cost
-
-    def return_faultmodes(self):
-        """
-        Return faultmodes present in the model.
-
-        Returns
-        -------
-        modes : dict
-            Fault modes present in the model indexed by function name
-        modeprops : dict
-            Fault mode properties (defined in the function definition).
-            Has structure {fxn:mode:properties}.
-        """
-        modes, modeprops = {}, {}
-        for fxnname, fxn in self.fxns.items():
-            ms, mps = fxn.return_faultmodes()
-            if ms:
-                modeprops[fxnname] = mps
-                modes[fxnname] = ms
-        return modes, modeprops
 
     def get_memory(self):
         """

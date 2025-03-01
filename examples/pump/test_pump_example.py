@@ -125,9 +125,9 @@ class Integration_Tests(unittest.TestCase):
     def test_nominal_results(self):
         """Tests the output of the model when integrated in the nominal scenario"""
         endresult, mdlhist = propagate.nominal(self.mdl, protect=False)
-        modes, modeprops = self.mdl.return_faultmodes()
+        modeprops = self.mdl.return_faultmodes()
         # does it have any fault modes in the nominal scenario?
-        self.assertFalse(modes)
+        self.assertFalse([*modeprops])
         # are the values of the function/flow states what we wanted?
         for t in range(0, int(self.mdl.sp.end_time)):
             if t < 5 or t >= 50:
