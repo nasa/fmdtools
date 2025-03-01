@@ -639,9 +639,9 @@ class FunctionArchitecture(Architecture):
         repair_cost : float
             Cost of repairing the fault modes in the given model
         """
-        fmodes = self.get_faults()
+        fmodes = self.return_faultmodes()
         modecost = sum([mode['cost'] if mode['cost'] > 0.0 else default_cost
-                        for modes in fmodes.values() for mode in modes])
+                        for mode in fmodes.values()])
         repair_cost = np.min([modecost, max_cost])
         return repair_cost
 
