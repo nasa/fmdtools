@@ -394,6 +394,8 @@ class Simulable(BaseObject):
 
     def set_fault_disturbances(self, *faults):
         """Set Mode-based disturbances (if present)."""
+        if len(faults) == 1 and isinstance(faults[0], list):
+            faults = faults[0]
         if hasattr(self, 'm'):
             disturbances = self.m.get_fault_disturbances(*faults)
             if disturbances:

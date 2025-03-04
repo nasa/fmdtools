@@ -506,9 +506,8 @@ class RoverHuman(Rover):
         self.add_fxn("override", Override, "comms", "ee_5", "motor_control",
                      "auto_control")
 
-        drive_m = {"mode_args": self.p.drive_modes, 'deg_params': self.p.degradation}
         self.add_fxn("drive", Drive, "ground", 'pos', "ee_15", "motor_control",
-                     "fault_sig", m=drive_m)
+                     "fault_sig", m=self.p.drive_modes, p=self.p.degradation)
 
 
 asg_pos = {'look': [-0.9, 0.88], 'percieve': [-0.68, 0.62], 'comms': [-0.66, -0.68],

@@ -27,7 +27,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import get_var, get_methods, get_obj_name, get_memory
+from fmdtools.define.base import get_var, set_var, get_methods, get_obj_name, get_memory
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 from fmdtools.analyze.graph.model import add_node, add_edge, remove_base, ModelGraph
@@ -539,20 +539,10 @@ class BaseObject(object):
         if isinstance(variables, str):
             variables = [variables]
         variable_values = [None]*len(variables)
+        all_roles = self.get_roles_as_dict()
         for i, var in enumerate(variables):
-            if isinstance(var, str):
-                var = var.split(".")
-            if var[0] == self.name:
-                var = var[1:]
+            f, var = self._get_role_call(var, all_roles)
 
-            if var[0] in self.roletypes + [rt+"s" for rt in self.roletypes]:
-                f = self.get_roles_as_dict()[var[1]]
-                var = var[2:]
-            elif var[0] in self.get_roles():
-                f = self.get_roles_as_dict()[var[0]]
-                var = var[1:]
-            else:
-                f = self
             if var:
                 variable_values[i] = get_var(f, var)
             else:
@@ -561,6 +551,62 @@ class BaseObject(object):
             return variable_values[0]
         else:
             return tuple(variable_values)
+
+    def set_vars(self, *args, **kwargs):
+        """
+        Set variables in the model to set values (useful for optimization, etc.).
+
+        Parameters
+        ----------
+        varlist : list of lists/tuples
+            List of variables to set, with possible structures:
+                [['fxnname', 'att1'], ['fxnname2', 'comp1', 'att2'], ['flowname', 'att3']]
+                ['fxnname.att1', 'fxnname.comp1.att2', 'flowname.att3']
+        varvalues : list
+            List of values corresponding to varlist
+        kwargs : kwargs
+            attribute-value pairs. If provided, must be passed using ** syntax:
+            mdl.set_vars(**{'fxnname.varname':value})
+        """
+        if len(args) > 0:
+            varlist = args[0]
+            varvalues = args[1]
+            if isinstance(varlist, str):
+                varlist = [varlist]
+            if type(varvalues) in [str, float, int]:
+                varvalues = [varvalues]
+            if len(varlist) != len(varvalues):
+                raise Exception("length of varlist and varvalues do not correspond: "
+                                + str(len(varlist)) + ", "+str(len(varvalues)))
+        else:
+            varlist = []
+            varvalues = []
+        if kwargs:
+            varlist = varlist + [*kwargs.keys()]
+            varvalues = varvalues + [*kwargs.values()]
+        all_roles = self.get_roles_as_dict()
+        for i, var in enumerate(varlist):
+            if var == 'seed':
+                self.update_seed(seed=varvalues[i])
+            else:
+                f, var = self._get_role_call(var, all_roles)
+                set_var(f, var, varvalues[i])
+
+    def _get_role_call(self, var, all_roles):
+        """Get obj to use set_var and get_var on."""
+        if isinstance(var, str):
+            var = var.split(".")
+        if var[0] == self.name:
+            var = var[1:]
+        if var[0] in self.roletypes + [rt+"s" for rt in self.roletypes]:
+            f = all_roles[var[1]]
+            var = var[2:]
+        elif var[0] in all_roles:
+            f = all_roles[var[0]]
+            var = var[1:]
+        else:
+            f = self
+        return f, var
 
     def get_memory(self):
         """

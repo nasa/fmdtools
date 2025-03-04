@@ -896,10 +896,13 @@ class Power(Function):
         self.s.limit(charge=(0, 100))
 
     def short_power(self):
-        """Power in case of a short has normal voltage."""
-        self.ee_5.s.v = 5
-        self.ee_12.s.v = 12
-        self.ee_15.s.v = 15
+        """Short in power supply means now power provided."""
+        if self.s.charge > 0.1:
+            self.ee_5.s.v = 5
+            self.ee_12.s.v = 12
+            self.ee_15.s.v = 15
+        else:
+            self.no_charge_power()
 
     def no_charge_power(self):
         """Battery is out of charge."""
@@ -938,12 +941,8 @@ class Power(Function):
             self.m.set_mode("off")
 
     def short_power_usage(self):
-        """Calculate power usage when there is a short (calculated as double)."""
-        self.s.power = self.s.power * 2
-        if self.s.charge == 0:
-            self.m.set_mode("no_charge")
-        if not self.switch.s.power:
-            self.m.set_mode("off")
+        """Calculate power usage when there is a short (calculated as 10x)."""
+        self.s.power = self.s.power * 10
 
 
 class OverrideMode(Mode):
@@ -1206,6 +1205,8 @@ if __name__ == "__main__":
     from fmdtools.sim.sample import SampleApproach, FaultDomain, FaultSample
 
     mdl = Rover()
+
+
     ec1, hist1 = prop.nominal(mdl)
     fig, ax = hist1.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
                                      time_groups=['nominal'])
@@ -1242,6 +1243,9 @@ if __name__ == "__main__":
     ps_sine = ParameterSample(pd_sine)
     comb_kwargs = {'resolutions': {'ground.amp': 2, "ground.period": 20}}
     ps_sine.add_variable_ranges(comb_kwargs=comb_kwargs)
+    ec_nest, hist_nest, app_nest = prop.nested_sample(mdl, ps_sine, faultdomains={'drive_faults':  (('all_fxnclass_modes', 'Drive'), {})},
+                                                  faultsamples={'drive_faults': (('fault_phases', 'drive_faults', "start"), {})},
+                                                  pool=mp.Pool(5))
 
     res, hist = prop.parameter_sample(mdl, ps_sine)
     comp = tabulate.Comparison(res, ps_sine,

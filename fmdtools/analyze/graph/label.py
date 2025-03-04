@@ -113,7 +113,7 @@ def label_for_entry(g, iterator, entryname):
     elif entryname == 'faults_and_indicators':
         modes = nx.get_node_attributes(g, 'm')
         faults = {n: [*m['faults'], 'sub_faults'] if m['sub_faults']
-                  else [*m['faults'], 'sub_faults'] for n, m in modes.items()}
+                  else [*m['faults']] for n, m in modes.items()}
         indicators = nx.get_node_attributes(g, 'indicators')
         all_entries = [*faults, *indicators]
         entryvals = {n: faults.get(n, [])+indicators.get(n, []) for n in all_entries}
