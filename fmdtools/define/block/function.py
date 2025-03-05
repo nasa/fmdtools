@@ -227,3 +227,5 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
     exf = ExampleFunction("exf")
+    from fmdtools.sim import propagate
+    res, hist = propagate.one_fault(exf, "exf", "short", 2)

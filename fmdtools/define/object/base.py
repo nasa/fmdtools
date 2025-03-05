@@ -181,15 +181,20 @@ class BaseObject(object):
             May be a dict of non-default arguments (e.g. s={'x': 1.0}) or
             a fully instantiated object (e.g., s=ExampleState()),
         """
-        if not name:
-            self.name = self.__class__.__name__.lower()
-        else:
-            self.name = name
+        self.name = self.create_name(name)
         self.root = root
         self.init_indicators()
         self.init_roletypes(*roletypes, **kwargs)
         self.init_track(track)
         self.check_slots()
+
+    @classmethod
+    def create_name(cls, name=''):
+        """Create a name for the object (default is class name)."""
+        if name:
+            return name
+        else:
+            return cls.__name__.lower()
 
     def base_type(self):
         """Return fmdtools type of the model class."""
@@ -972,7 +977,7 @@ def try_pickle_obj(obj):
         raise Exception(obj.name + " will not pickle")
 
 
-def init_obj(name, objclass=BaseObject, track='default', as_copy=False, **kwargs):
+def init_obj(name='', objclass=BaseObject, track='default', as_copy=False, **kwargs):
     """
     Initialize an object.
 

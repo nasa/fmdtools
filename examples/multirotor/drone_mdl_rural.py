@@ -740,10 +740,8 @@ class Drone(FunctionArchitecture):
         ----------
         scen : Scenario
             Fault Scenario
-        viewed : TYPE
-            DESCRIPTION.
-        faulttime : TYPE
-            DESCRIPTION.
+        faulttime : int
+            time when the fault occurs.
 
         Returns
         -------
@@ -926,6 +924,7 @@ if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
     from fmdtools.analyze import phases
     from fmdtools.sim.sample import SampleApproach
+    from fmdtools.define.architecture.function import FunctionArchitectureGraph
 
     # check operational phases
     mdl = Drone()
