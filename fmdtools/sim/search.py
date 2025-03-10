@@ -651,7 +651,11 @@ class BaseSimProblem(BaseProblem):
         **kwargs : kwargs
             Keyword arguments to the propagate method.
         """
-        self.mdl = init_obj(objclass=mdl)
+        if 'track' in kwargs:
+            track = kwargs['track']
+        else:
+            track = mdl.track
+        self.mdl = init_obj(objclass=mdl, track=track)
         if type(prop_method) is str:
             self.prop_method = getattr(propagate, prop_method)
         elif callable(prop_method):

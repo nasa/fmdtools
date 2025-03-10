@@ -44,9 +44,12 @@ expd1.add_variable("phys_param.bat", var_map=bat_var_map, var_lim=(0, 3))
 expd1.add_variable("phys_param.linearch", var_map=line_arch_map, var_lim=(0, 2))
 
 
-ex_soc_opt = ParameterSimProblem(Drone(track=None), expd1, 'nominal')
-ex_soc_opt.add_result_objective("f1", "store_ee.s.soc", time=16)
-ex_soc_opt.add_result_constraint("g1", "store_ee.s.soc", time=16)
+class ExSOCProb(ParameterSimProblem):
+    def init_problem(self, **kwargs):
+        self.add_sim(Drone(track=None), 'nominal', track=None)
+        self.add_parameterdomain(expd1)
+        self.add_result_objective("f1", "store_ee.s.soc", time=16)
+        self.add_result_constraint("g1", "store_ee.s.soc", time=16)
 
 
 class DroneParameterTests(unittest.TestCase):
@@ -76,6 +79,7 @@ class DroneParameterTests(unittest.TestCase):
 
     def test_sim_mdl(self):
         """Test that Problem tracking options are used (only needed hist/res gotten)."""
+        ex_soc_opt = ExSOCProb()
         res, hist = ex_soc_opt.sim_mdl(1, 1)
         self.assertEqual(len(res), 1)
         self.assertTrue('t16p0.store_ee.s.soc' in res)
@@ -84,6 +88,7 @@ class DroneParameterTests(unittest.TestCase):
 
     def test_objectives(self):
         """Test that increasing architecture weight decreases soc objective."""
+        ex_soc_opt = ExSOCProb()
         oldobj = np.inf
         for i in range(2):
             obj = ex_soc_opt.f1(0, i)
@@ -91,12 +96,12 @@ class DroneParameterTests(unittest.TestCase):
             oldobj = obj
 
 
-mdl = Drone()
-
-sp = SingleFaultScenarioProblem(mdl, ("affect_dof", "rf_propwarp"),
-                                sim_start=2.0, track=None)
-sp.add_result_objective("f1", "plan_path.t.time", time=15)
-sp.add_result_objective("f2", "dofs.s.x", time=15)
+class ExSingleFaultProblem(SingleFaultScenarioProblem):
+    def init_problem(self, **kwargs):
+        self.add_sim(Drone(track=None), ("affect_dof.ca.comps.rf", "propwarp"),
+                     sim_start=2.0, track=None)
+        self.add_result_objective("f1", "plan_path.t.time", time=15)
+        self.add_result_objective("f2", "dofs.s.x", time=15)
 
 
 class DroneScenarioTest(unittest.TestCase):
@@ -104,16 +109,17 @@ class DroneScenarioTest(unittest.TestCase):
     time = 4
 
     def setUp(self):
-        res, self.hist = propagate.nominal(mdl)
+        res, self.hist = propagate.nominal(Drone())
+        self.sfp = ExSingleFaultProblem()
 
     def test_scenprob_results(self):
         """Test that the objective lines up with expected results at the given time."""
         # fault should cause the final x (f5) to match the nominal x at the fault time
         x_nominal = self.hist.flows.dofs.s.x[self.time]
-        x_failure = sp.f2(self.time)
+        x_failure = self.sfp.f2(self.time)
         self.assertEqual(x_nominal, x_failure)
         # time objective should be at 15
-        f_time = sp.f1(self.time)
+        f_time = self.sfp.f1(self.time)
         self.assertEqual(f_time, 15.0)
 
 
@@ -125,24 +131,29 @@ class DroneScenarioTest3(DroneScenarioTest):
     time = 6
 
 
-sp2 = DisturbanceProblem(mdl, 5.0, "store_ee.ca.comps.s1p1.s.soc", track=None)
-sp2.add_result_objective("f1", "store_ee.s.soc", time=10)
-sp2.add_result_objective("f2", "store_ee.s.soc", time=5)
+class ExDistProblem(DisturbanceProblem):
+    def init_problem(self, **kwargs):
+        self.add_sim(Drone(track=None), 5.0, "store_ee.ca.comps.s1p1.s.soc")
+        self.add_result_objective("f1", "store_ee.s.soc", time=10)
+        self.add_result_objective("f2", "store_ee.s.soc", time=5)
 
 
 class DroneDisturbanceTest(unittest.TestCase):
+    def setUp(self):
+        self.edp = ExDistProblem()
+        self.mdl = Drone(track=None)
 
     def test_disturbance_set(self):
         """Test that disturbance objectives set and call properly."""
         # make sure the disturbance is set (note that we correct by amt b/c of use)
         soc_set = 10.0
-        amt = mdl.fxns['store_ee'].ca.comps['s1p1'].p.amt
+        amt = self.mdl.fxns['store_ee'].ca.comps['s1p1'].p.amt
         soc_expected = soc_set - 100/amt
-        soc_res = sp2.f2(soc_set)
+        soc_res = self.edp.f2(soc_set)
         self.assertEqual(soc_expected, soc_res)
 
         # make sure the disturbance wasn't set permanently
-        soc_later = sp2.f1(soc_set)
+        soc_later = self.edp.f1(soc_set)
         self.assertLess(soc_later, soc_res)
 
 

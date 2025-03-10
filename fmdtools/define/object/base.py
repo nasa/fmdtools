@@ -1011,7 +1011,8 @@ def init_obj(name='', objclass=BaseObject, track='default', as_copy=False, **kwa
     if not isclass(objclass):
         if not as_copy:
             fl = objclass
-            fl.init_track(track)
+            if hasattr(fl, "init_track"):
+                fl.init_track(track)
         else:
             fl = objclass.copy(name=name, track=track, **kwargs)
     else:
