@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 
 # OBJECTIVES: FORMULATION 1
 
-
+drive_modes = {'mode_options': {'custom_fault': {}}}
 def line_dist(ind, show_plot=False, print_time=False):
     """
     Take all of the individuals in a species and returns each of their distances.
@@ -29,8 +29,6 @@ def line_dist(ind, show_plot=False, print_time=False):
     Distance calculated from the end line in an array.
     """
     starttime = time.time()
-    drive_modes = {'custom_fault':
-                   {'friction': ind[0], 'transfer': ind[1], 'drift': ind[2]}}
     mdl = rvr.Rover(p=rvr.RoverParam('turn', x_start=5.0, drive_modes=drive_modes))
     track = {'fxns': {'environment': 'all'}, 'flows': {'ground': 'all'}}
     endresults, reshist = prop.one_fault(mdl, 'drive', 'custom_fault', time=fault_time,
@@ -744,7 +742,6 @@ SUBPOP_SIZE = 50  # number of individuals in a subpopulation
 NUM_SUBPOP = 10  # number of subpopulation
 
 # nominal scenario info (used to find when to inject faults in nominal scenario)
-drive_modes = {'custom_fault': {'friction': 0.0, 'transfer': 0.0, 'drift': 0.0}}
 mdl = rvr.Rover(p=rvr.RoverParam('turn', x_start=5.0, drive_modes=drive_modes))
 
 res_nom, mdlhists_nom = prop.nominal(mdl)
@@ -759,23 +756,28 @@ fault_time = fs.times()[0]
 line_dist([0, 0, 0])
 end_time = phasemaps['plan_path'].phases['drive'][1]+25
 
+
+track={"flows": {"ground": "all"},
+       "fxns": {"environment": "all",
+                "drive": {"m": "s"}}}
 mdl = mdl.new(sp={'end_time': end_time},
-              p=rvr.RoverParam('turn', x_start=5.0))
+              p=rvr.RoverParam('turn', x_start=5.0, drive_modes=drive_modes),
+              track=track)
 
 # defining optimization problem interface (for line_dist_faster)
-mode_search_prob = DisturbanceProblem(mdl,
-                                      fault_time,
-                                      "fxns.drive.m.s.friction",
-                                      "fxns.drive.m.s.transfer",
-                                      "fxns.drive.m.s.drift",
-                                      track={"flows": {"ground": "all"},
-                                             "fxns": {"environment": "all",
-                                                      "drive": {"m": "s"}}})
+class ModeSearchProblem(DisturbanceProblem):
+    def init_problem(self, **kwargs):
+        self.add_sim(mdl, fault_time,
+                     "fxns.drive.s.friction",
+                     "fxns.drive.s.transfer",
+                     "fxns.drive.s.drift", **kwargs)
+        self.add_result_objective('line_dist', 'endclass.line_dist')
+        self.add_result_objective('end_dist', 'endclass.end_dist')
+        self.add_result_objective('end_x', 'endclass.end_x')
+        self.add_result_objective('end_y', 'endclass.end_y')
 
-mode_search_prob.add_result_objective('line_dist', 'endclass.line_dist')
-mode_search_prob.add_result_objective('end_dist', 'endclass.end_dist')
-mode_search_prob.add_result_objective('end_x', 'endclass.end_x')
-mode_search_prob.add_result_objective('end_y', 'endclass.end_y')
+mode_search_prob = ModeSearchProblem()
+
 
 # a=time.time(); line_dist([1,1.1,1]); print(time.time()-a)
 # mode_search_prob.plot_obj_const("custom_fault")

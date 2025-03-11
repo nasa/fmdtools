@@ -36,6 +36,7 @@ import fmdtools.sim as fs
 
 import numpy as np
 
+
 class DroneEnvironmentGridParam(CoordsParam):
     """
     Define the grid parameters.
@@ -161,8 +162,8 @@ class PlanPathMode(Mode):
     """
 
     failrate = 1e-5
-    fm_args = {'noloc': (0.2, 10000),
-               'degloc': (0.8, 10000)}
+    fault_noloc = (0.2, 10000)
+    fault_degloc = (0.8, 10000)
     opermodes = ('taxi', 'hover', 'move', 'descend', 'land')
     mode: int = 'taxi'
 
@@ -452,10 +453,8 @@ class Drone(FunctionArchitecture):
         else:
             crashcost = 0
 
-        modes, modeprops = self.return_faultmodes()
-        repcost = sum([c['cost']
-                       for f, m in modeprops.items()
-                       for a, c in m.items()])
+        modeprops = self.return_faultmodes()
+        repcost = sum([m['cost'] for f, m in modeprops.items()])
 
         totcost = repcost + crashcost + lostcost
         rate = scen.rate
@@ -554,5 +553,5 @@ if __name__ == "__main__":
     import doctest
     # doctest.testmod(verbose=True)
     # script_nominal_viewed()
-    # script_faulty_trajectories()
-    ani = script_env_viewed()
+    script_faulty_trajectories()
+    # ani = script_env_viewed()

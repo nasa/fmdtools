@@ -203,7 +203,7 @@ class StoreEEMode(Mode):
     """Specifies fault modes for battery (e.g., lowcharge)."""
 
     failrate = 1e-5
-    fm_args = {"nocharge": (1, 300)}
+    fault_nocharge = (1, 300)
 
 
 class StoreEEState(State):
@@ -245,9 +245,9 @@ class DistEEMode(Mode):
     """
 
     failrate = 1e-5
-    fm_args = {"short": (0.3, 3000),
-               "degr": (0.5, 1000),
-               "break": (0.2, 2000)}
+    fault_short = (0.3, 3000)
+    fault_degr = (0.5, 1000)
+    fault_break = (0.2, 2000)
 
 
 class DistEEState(State):
@@ -337,8 +337,8 @@ class HoldPayloadMode(Mode):
     """
 
     failrate = 1e-6
-    fm_args = {"break": (0.2, 10000),
-               "deform": (0.8, 10000)}
+    fault_break = (0.2, 10000)
+    fault_deform = (0.8, 10000)
 
 
 class HoldPayloadState(State):
@@ -468,18 +468,16 @@ class AffectDOFMode(Mode):
     """
 
     failrate = 1e-5
-    fm_args = {
-        "short": (0.1, 200),
-        "openc": (0.1, 200),
-        "ctlup": (0.2, 500),
-        "ctldn": (0.2, 500),
-        "ctlbreak": (0.2, 1000),
-        "mechbreak": (0.1, 500),
-        "mechfriction": (0.05, 500),
-        "propwarp": (0.01, 200),
-        "propstuck": (0.02, 200),
-        "propbreak": (0.03, 200),
-    }
+    fault_short = (0.1, 200)
+    fault_openc = (0.1, 200)
+    fault_ctlup = (0.2, 500)
+    fault_ctldn = (0.2, 500)
+    fault_ctlbreak = (0.2, 1000)
+    fault_mechbreak = (0.1, 500)
+    fault_mechfriction = (0.05, 500)
+    fault_propwarp = (0.01, 200)
+    fault_propstuck = (0.02, 200)
+    fault_propbreak = (0.03, 200)
 
 
 class BaseLine(object):
@@ -596,8 +594,8 @@ class CtlDOFMode(Mode):
     """Controller Modes, noctl (lack of control) and degctl (degraded control)."""
 
     failrate = 1e-5
-    fm_args = {"noctl": (0.2, 10000),
-               "degctl": (0.8, 10000)}
+    fault_noctl = (0.2, 10000)
+    fault_degctl = (0.8, 10000)
 
 
 class CtlDOF(Function):
@@ -670,7 +668,8 @@ class PlanPathMode(Mode):
     """Path planning modes (no location and degraded location)."""
 
     failrate = 1e-5
-    fm_args = {"noloc": (0.2, 10000), "degloc": (0.8, 10000)}
+    fault_noloc = (0.2, 10000)
+    fault_degloc = (0.8, 10000)
 
 
 class PlanPath(Function):
@@ -791,8 +790,8 @@ class Drone(FunctionArchitecture):
 
     def find_classification(self, scen, mdlhist):
         """Calculate rate, cost, expected cost based on cost of repair information."""
-        modes, modeprops = self.return_faultmodes()
-        repcost = sum([c["cost"] for f, m in modeprops.items() for a, c in m.items()])
+        modeprops = self.return_faultmodes()
+        repcost = sum([m["cost"] for f, m in modeprops.items()])
 
         totcost = repcost
         rate = scen.rate

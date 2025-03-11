@@ -438,7 +438,7 @@ class FaultDomain(object):
         faultmode : str
             Name of the faultmode to inject.
         """
-        fault = self.fxns[fxnname].m.faultmodes[faultmode]
+        fault = self.mdl.get_fault(fxnname, faultmode)
         self.faults[(fxnname, faultmode)] = fault
 
     def add_faults(self, *faults):
@@ -471,14 +471,14 @@ class FaultDomain(object):
         >>> exfd.add_all()
         >>> exfd
         FaultDomain with faults:
-         -('ex_fxn', 'no_charge')
-         -('ex_fxn', 'short')
-         -('ex_fxn2', 'no_charge')
-         -('ex_fxn2', 'short')
+         -('exfxnarch.fxns.ex_fxn', 'no_charge')
+         -('exfxnarch.fxns.ex_fxn', 'short')
+         -('exfxnarch.fxns.ex_fxn2', 'no_charge')
+         -('exfxnarch.fxns.ex_fxn2', 'short')
         """
-        faults = [(fxnname, mode) for fxnname, fxn in self.fxns.items()
-                  if hasattr(fxn, 'm')
-                  for mode in fxn.m.faultmodes]
+        faults = [(scope, mode)
+                  for scope, mds in self.mdl.get_faults(only_present=False).items()
+                  for mode in mds]
         self.add_faults(*faults)
 
     def add_all_modes(self, *modenames, exact=True):
@@ -493,10 +493,9 @@ class FaultDomain(object):
             Whether the mode name must be an exact match. The default is True.
         """
         for modename in modenames:
-            faults = [(fxnname, mode) for fxnname, fxn in self.fxns.items()
-                      if hasattr(fxn, 'm')
-                      for mode in fxn.m.faultmodes
-                      if same_mode(modename, mode, exact=exact)]
+            faults = [(scope, mode)
+                      for scope, mds in self.mdl.get_faults(only_present=False).items()
+                      for mode in mds if mode == modename]
             self.add_faults(*faults)
 
     def add_all_fxnclass_modes(self, *fxnclasses):
@@ -522,7 +521,7 @@ class FaultDomain(object):
         for fxnclass in fxnclasses:
             faults = [(fxnname, mode)
                       for fxnname, fxn in self.mdl.fxns_of_class(fxnclass).items()
-                      for mode in fxn.m.faultmodes if hasattr(fxn, 'm')]
+                      for mode in fxn.m.get_all_faultnames() if hasattr(fxn, 'm')]
             self.add_faults(*faults)
 
     def add_all_fxn_modes(self, *fxnnames):
@@ -540,12 +539,14 @@ class FaultDomain(object):
         >>> exfd.add_all_fxn_modes("ex_fxn2")
         >>> exfd
         FaultDomain with faults:
-         -('ex_fxn2', 'no_charge')
-         -('ex_fxn2', 'short')
+         -('exfxnarch.fxns.ex_fxn2', 'no_charge')
+         -('exfxnarch.fxns.ex_fxn2', 'short')
         """
         for fxnname in fxnnames:
-            faults = [(fxnname, mode) for mode in self.fxns[fxnname].m.faultmodes
-                      if hasattr(self.fxns[fxnname], 'm')]
+            fxn = self.fxns[fxnname]
+            faults = [(scope, mode)
+                      for scope, modes in fxn.get_faults(only_present=False).items()
+                      for mode in modes]
             self.add_faults(*faults)
 
     def add_singlecomp_modes(self, *fxns):
@@ -564,26 +565,26 @@ class FaultDomain(object):
         >>> fd.add_singlecomp_modes("affect_dof")
         >>> fd
         FaultDomain with faults:
-         -('affect_dof', 'lf_short')
-         -('affect_dof', 'lf_openc')
-         -('affect_dof', 'lf_ctlup')
-         -('affect_dof', 'lf_ctldn')
-         -('affect_dof', 'lf_ctlbreak')
-         -('affect_dof', 'lf_mechbreak')
-         -('affect_dof', 'lf_mechfriction')
-         -('affect_dof', 'lf_propwarp')
-         -('affect_dof', 'lf_propstuck')
-         -('affect_dof', 'lf_propbreak')
+         -('drone.fxns.affect_dof.ca.comps.lf', 'ctlbreak')
+         -('drone.fxns.affect_dof.ca.comps.lf', 'ctldn')
+         -('drone.fxns.affect_dof.ca.comps.lf', 'ctlup')
+         -('drone.fxns.affect_dof.ca.comps.lf', 'mechbreak')
+         -('drone.fxns.affect_dof.ca.comps.lf', 'mechfriction')
+         -('drone.fxns.affect_dof.ca.comps.lf', 'openc')
+         -('drone.fxns.affect_dof.ca.comps.lf', 'propbreak')
+         -('drone.fxns.affect_dof.ca.comps.lf', 'propstuck')
+         -('drone.fxns.affect_dof.ca.comps.lf', 'propwarp')
+         -('drone.fxns.affect_dof.ca.comps.lf', 'short')
         """
         if not fxns:
             fxns = tuple(self.fxns)
         for fxn in fxns:
             if hasattr(self.fxns[fxn], 'ca'):
-                firstcomp = list(self.fxns[fxn].ca.comps)[0]
-                compfaults = [(fxn, fmode)
-                              for fmode, comp in self.fxns[fxn].ca.m.sub_modes.items()
-                              if firstcomp == comp]
-                self.add_faults(*compfaults)
+                firstcomp = [*self.fxns[fxn].ca.comps.values()][0]
+                fts = [(sc, fmode)
+                       for sc, mds in firstcomp.get_faults(only_present=False).items()
+                       for fmode in mds]
+                self.add_faults(*fts)
 
 
 exfd = FaultDomain(ExFxnArch())
@@ -762,14 +763,14 @@ class FaultSample(BaseSample):
     >>> exfs.add_fault_times([1, 2])
     >>> exfs
     FaultSample of scenarios: 
-     - ex_fxn_no_charge_t1
-     - ex_fxn_no_charge_t2
-     - ex_fxn_short_t1
-     - ex_fxn_short_t2
-     - ex_fxn2_no_charge_t1
-     - ex_fxn2_no_charge_t2
-     - ex_fxn2_short_t1
-     - ex_fxn2_short_t2
+     - exfxnarch_fxns_ex_fxn_no_charge_t1
+     - exfxnarch_fxns_ex_fxn_no_charge_t2
+     - exfxnarch_fxns_ex_fxn_short_t1
+     - exfxnarch_fxns_ex_fxn_short_t2
+     - exfxnarch_fxns_ex_fxn2_no_charge_t1
+     - exfxnarch_fxns_ex_fxn2_no_charge_t2
+     - exfxnarch_fxns_ex_fxn2_short_t1
+     - exfxnarch_fxns_ex_fxn2_short_t2
     """
 
     def __init__(self, faultdomain, phasemap={}, def_mdl_phasemap=True):
@@ -830,12 +831,12 @@ class FaultSample(BaseSample):
         >>> from examples.multirotor.drone_mdl_rural import Drone
         >>> mdl = Drone()
         >>> fd = FaultDomain(mdl)
-        >>> fd.add_fault("affect_dof", "rf_propwarp")
+        >>> fd.add_fault("affect_dof.ca.comps.rf", "propwarp")
         >>> fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
-        >>> fs.add_single_fault_scenario(("affect_dof", "rf_propwarp"), 5)
+        >>> fs.add_single_fault_scenario(("affect_dof.ca.comps.rf", "propwarp"), 5)
         >>> fs
         FaultSample of scenarios: 
-         - affect_dof_rf_propwarp_t5
+         - affect_dof_ca_comps_rf_propwarp_t5
         """
         self._times.add(time)
         scen = SingleFaultScenario.from_fault(faulttup, time, mdl=self.faultdomain.mdl,
@@ -867,17 +868,17 @@ class FaultSample(BaseSample):
         --------
         >>> from examples.multirotor.drone_mdl_rural import Drone
         >>> fd = FaultDomain(Drone())
-        >>> fd.add_fault("affect_dof", "rf_propwarp")
-        >>> fd.add_fault("affect_dof", "lf_propwarp")
+        >>> fd.add_fault("affect_dof.ca.comps.rf", "propwarp")
+        >>> fd.add_fault("affect_dof.ca.comps.lf", "propwarp")
         >>> fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
-        >>> fs.add_joint_fault_scenario((("affect_dof", "rf_propwarp"),("affect_dof", "lf_propwarp")), 5)
+        >>> fs.add_joint_fault_scenario((("affect_dof.ca.comps.rf", "propwarp"),("affect_dof.ca.comps.lf", "propwarp")), 5)
         >>> fs
         FaultSample of scenarios: 
-         - affect_dof_rf_propwarp__affect_dof_lf_propwarp_t5
+         - affect_dof_ca_comps_rf_propwarp__affect_dof_ca_comps_lf_propwarp_t5
         >>> fs.scenarios()[0].sequence[5].faults
-        {'affect_dof': ['rf_propwarp', 'lf_propwarp']}
-        >>> fs.add_single_fault_scenario(("affect_dof", "rf_propwarp"), 5)
-        >>> fs.add_single_fault_scenario(("affect_dof", "lf_propwarp"), 5)
+        {'affect_dof.ca.comps.rf': ['propwarp'], 'affect_dof.ca.comps.lf': ['propwarp']}
+        >>> fs.add_single_fault_scenario(("affect_dof.ca.comps.rf", "propwarp"), 5)
+        >>> fs.add_single_fault_scenario(("affect_dof.ca.comps.lf", "propwarp"), 5)
         >>> fs.scenarios()[0].rate == fs.scenarios()[1].rate*fs.scenarios()[2].rate
         True
         """
@@ -907,28 +908,28 @@ class FaultSample(BaseSample):
         >>> from examples.multirotor.drone_mdl_rural import Drone
         >>> mdl = Drone()
         >>> fd = FaultDomain(mdl)
-        >>> fd.add_fault("affect_dof", "rf_propwarp")
+        >>> fd.add_fault("affect_dof.ca.comps.rf", "propwarp")
         >>> fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
         >>> fs.add_fault_times([1,2,3])
         >>> fs
         FaultSample of scenarios: 
-         - affect_dof_rf_propwarp_t1
-         - affect_dof_rf_propwarp_t2
-         - affect_dof_rf_propwarp_t3
-         >>> fd.add_fault("affect_dof", "lf_propwarp")
-         >>> fd.add_fault("affect_dof", "rr_propwarp")
+         - affect_dof_ca_comps_rf_propwarp_t1
+         - affect_dof_ca_comps_rf_propwarp_t2
+         - affect_dof_ca_comps_rf_propwarp_t3
+         >>> fd.add_fault("affect_dof.ca.comps.lf", "propwarp")
+         >>> fd.add_fault("affect_dof.ca.comps.rr", "propwarp")
          >>> fs = FaultSample(fd)
          >>> fs.add_fault_times([5], n_joint=2)
          >>> fs
          FaultSample of scenarios: 
-          - affect_dof_rf_propwarp__affect_dof_lf_propwarp_t5
-          - affect_dof_rf_propwarp__affect_dof_rr_propwarp_t5
-          - affect_dof_lf_propwarp__affect_dof_rr_propwarp_t5
+          - affect_dof_ca_comps_rf_propwarp__affect_dof_ca_comps_lf_propwarp_t5
+          - affect_dof_ca_comps_rf_propwarp__affect_dof_ca_comps_rr_propwarp_t5
+          - affect_dof_ca_comps_lf_propwarp__affect_dof_ca_comps_rr_propwarp_t5
          >>> fs = FaultSample(fd)
          >>> fs.add_fault_times([5], n_joint=3)
          >>> fs
          FaultSample of scenarios: 
-          - affect_dof_rf_propwarp__affect_dof_lf_propwarp__affect_dof_rr_propwarp_t5
+          - affect_dof_ca_comps_rf_propwarp__affect_dof_ca_comps_lf_propwarp__affect_dof_ca_comps_rr_propwarp_t5
         """
         jointfaults = itertools.combinations(self.faultdomain.faults, n_joint)
         for faulttups in jointfaults:
@@ -977,12 +978,12 @@ class FaultSample(BaseSample):
         >>> from examples.multirotor.drone_mdl_rural import Drone
         >>> mdl = Drone()
         >>> fd = FaultDomain(mdl)
-        >>> fd.add_fault("affect_dof", "rf_propwarp")
+        >>> fd.add_fault("affect_dof.ca.comps.rf", "propwarp")
         >>> fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
         >>> fs.add_fault_phases("off")
         >>> fs
         FaultSample of scenarios: 
-         - affect_dof_rf_propwarp_t4p0
+         - affect_dof_ca_comps_rf_propwarp_t4p0
         """
         if self.phasemap:
             phasetimes = self.phasemap.get_sample_times(*phases_to_sample)
@@ -1084,16 +1085,16 @@ class SampleApproach(BaseSample):
          faultsamples: 
         >>> s.faultdomains['all_faults']
         FaultDomain with faults:
-         -('manage_health', 'lostfunction')
-         -('store_ee', 'nocharge')
-         -('store_ee', 'lowcharge')
-         -('store_ee', 's1p1_short')
-         -('store_ee', 's1p1_degr')
-         -('store_ee', 's1p1_break')
-         -('store_ee', 's1p1_nocharge')
-         -('store_ee', 's1p1_lowcharge')
-         -('dist_ee', 'short')
-         -('dist_ee', 'degr')
+         -('drone.fxns.manage_health', 'lostfunction')
+         -('drone.fxns.store_ee', 'lowcharge')
+         -('drone.fxns.store_ee', 'nocharge')
+         -('drone.fxns.store_ee.ca.comps.s1p1', 'break')
+         -('drone.fxns.store_ee.ca.comps.s1p1', 'degr')
+         -('drone.fxns.store_ee.ca.comps.s1p1', 'lowcharge')
+         -('drone.fxns.store_ee.ca.comps.s1p1', 'nocharge')
+         -('drone.fxns.store_ee.ca.comps.s1p1', 'short')
+         -('drone.fxns.dist_ee', 'break')
+         -('drone.fxns.dist_ee', 'degr')
          -...more
         """
         faultdomain = FaultDomain(self.mdl)
@@ -1136,16 +1137,16 @@ class SampleApproach(BaseSample):
          faultsamples: start_times
         >>> s.faultsamples['start_times']
         FaultSample of scenarios: 
-         - manage_health_lostfunction_t1
-         - manage_health_lostfunction_t3
-         - manage_health_lostfunction_t4
-         - store_ee_nocharge_t1
-         - store_ee_nocharge_t3
-         - store_ee_nocharge_t4
-         - store_ee_lowcharge_t1
-         - store_ee_lowcharge_t3
-         - store_ee_lowcharge_t4
-         - store_ee_s1p1_short_t1
+         - drone_fxns_manage_health_lostfunction_t1
+         - drone_fxns_manage_health_lostfunction_t3
+         - drone_fxns_manage_health_lostfunction_t4
+         - drone_fxns_store_ee_lowcharge_t1
+         - drone_fxns_store_ee_lowcharge_t3
+         - drone_fxns_store_ee_lowcharge_t4
+         - drone_fxns_store_ee_nocharge_t1
+         - drone_fxns_store_ee_nocharge_t3
+         - drone_fxns_store_ee_nocharge_t4
+         - drone_fxns_store_ee_ca_comps_s1p1_break_t1
          - ... (171 total)
         """
         if type(phasemap) is str:
@@ -1964,12 +1965,12 @@ if __name__ == "__main__":
     from examples.multirotor.drone_mdl_rural import Drone
     mdl = Drone()
     fd = FaultDomain(mdl)
-    fd.add_fault("affect_dof", "rf_propwarp")
+    fd.add_fault("affect_dof.ca.comps.rf", "propwarp")
     # fd.add_faults(("affect_dof", "rf_propwarp"), ("affect_dof", "lf_propwarp"))
     # fd.add_all_modes("propwarp")
 
     fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
-    fs.add_single_fault_scenario(("affect_dof", "rf_propwarp"), 5)
+    fs.add_single_fault_scenario(("affect_dof.ca.comps.rf", "propwarp"), 5)
     fs.add_fault_times([1,2,3])
     fs.get_scen_groups("function")
     fs.get_scen_groups("phase")

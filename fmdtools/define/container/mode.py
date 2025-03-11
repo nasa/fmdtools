@@ -35,7 +35,7 @@ import copy
 
 class Fault(BaseContainer, readonly=True):
     """
-    Stores Default Attributes for modes to use in Mode.faultmodes.
+    Stores Default Attributes for individual fault modes.
 
     Fields
     ------
@@ -43,9 +43,13 @@ class Fault(BaseContainer, readonly=True):
         Mode probability or rate per operation
     cost : float
         Individual mode cost (e.g., of repair)
-    phases : dict
+    phases : tuple
         Opportunity vector mapping phases of operation to relative probability.
         i.e., phase_probability = Fault.prob * Fault.phases[phase]
+        Has format ('phasename1', value, 'phasename2', value2)
+    disturbances : tuple
+        Disturbances caused by the fault to aspect(s) of the containing simulable.
+        e.g. ('s.x', 1.0, 's.y', 2.0)
     units : str
         Units on probability. Can be a unit of continuous ('sec', 'min', 'hr', 'day') or
         discrete ('sim') time. Default is 'sim'.
@@ -53,8 +57,14 @@ class Fault(BaseContainer, readonly=True):
 
     prob: float = 1.0
     cost: float = 0.0
-    phases: dict = {}
+    phases: tuple = ()
+    disturbances: tuple = ()
     units: str = 'sim'
+
+    def __init__(self, *args, failrate=1.0, **kwargs):
+        args = self.get_true_fields(*args, force_kwargs=False, **kwargs)
+        args[0] = failrate * args[0]
+        super().__init__(*args)
 
     def calc_rate(self, time, phasemap={}, sim_time=1.0, sim_units='hr', weight=1.0):
         """
@@ -116,7 +126,7 @@ class Fault(BaseContainer, readonly=True):
                 t_factor = t_exposure/sim_exposure_time
             if self.phases:
                 phase = phasemap.find_base_phase(time)
-                opp_factor = self.phases.get(phase, 0.0)
+                opp_factor = dict(self.phases).get(phase, 0.0)
             else:
                 opp_factor = 1.0
             return baserate * opp_factor * t_factor * weight
@@ -140,30 +150,11 @@ class Mode(BaseContainer, readonly=False):
     probtype : str, optional
         Type of probability in the probability model, a per-time 'rate' or
         per-run 'prob'. The default is 'rate'.
-    units : str, optional
-        Type of units ('sec'/'min'/'hr'/'day') used for the rates.
-        Default is 'sim', which is unitless (prob/simulation).
-    phases : dict
-        Phases to inject faults in.
     exclusive : True/False
         Whether fault modes are exclusive of each other or not.
         Default is False (i.e. more than one can be present).
-    longnames : dict
-        Longer names for the faults (if desired). {faultname: longname}
-    faults : set
-        Set of faults present (or not) at any given time.
-    mode : str
-        Name of the current mode. the default is 'nominal'.
-    fm_args : dict
-        Arguments to Mode.init_faultmodes().
-    he_args : tuple
-        Arguments for add_he_rate defining a human error probability model.
-    sfs_args : tuple
-        Arguments for self.init_single_faultstates (franges, {kwargs}).
-    nfs_args : tuple
-        Arguments for self.init_n_faultstates (*args, {kwargs}).
-    fsm_args : tuple
-        Arguments for self.init_faultstates_modes (manual_modes, {kwargs}).
+    default_xx : float
+        Default values for Fault fields (e.g., prob, phases, etc)
 
     These fields are then used in simulation and elsewhere.
 
@@ -171,12 +162,10 @@ class Mode(BaseContainer, readonly=False):
     ------
     faults : set
         Set of faults present (or not) at any given time
+    sub_faults : bool
+        Whether objects contained by the object are faulty.
     mode : str
         Name of the current mode. the default is 'nominal'
-    mode_state_dict: dict
-        Maps modes to states. Assigned by init_faultstates methods.
-    sub_modes: dict
-        Maps modes to internal architecture elements.
     faultmodes : dict
             Dictionary of :class:`Fault` defining possible fault modes and
             their properties
@@ -184,8 +173,8 @@ class Mode(BaseContainer, readonly=False):
     Examples
     --------
     >>> class ExampleMode(Mode):
-    ...    fm_args = {"no_charge": (1e-5, 100, {'standby': 1.0}),
-    ...              "short": (1e-5, 100, {'supply': 1.0})}
+    ...    fault_no_charge = Fault(1e-5, 100, (('standby', 1.0),))
+    ...    fault_short = (1e-5, 100, (('supply', 1.0),))
     ...    opermodes = ("supply", "charge", "standby")
     ...    exclusive = True
     ...    mode: str = "standby"
@@ -194,58 +183,26 @@ class Mode(BaseContainer, readonly=False):
     'standby'
     >>> exm.any_faults()
     False
-    >>> exm.faultmodes
-    {'no_charge': Fault(prob=1e-05, cost=100, phases={'standby': 1.0}, units='sim'), 'short': Fault(prob=1e-05, cost=100, phases={'supply': 1.0}, units='sim')}
+    >>> exm.get_faults()
+    {'no_charge': Fault(prob=1e-05, cost=100, phases=(('standby', 1.0),), disturbances=(), units='sim'), 'short': Fault(prob=1e-05, cost=100, phases=(('supply', 1.0),), disturbances=(), units='sim')}
     """
 
     rolename = "m"
     mode: ClassVar[str] = 'nominal'
     failrate: ClassVar[float] = 1.0
     faults: set = set()
-    faultmodes: dict = {}
-    mode_state_dict: dict = {}
-    sub_modes: dict = {}
-    fm_args = {}
-    he_args = tuple()
-    sfs_args = tuple()
-    nfs_args = tuple()
-    fsm_args = tuple()
+    sub_faults: bool = False
     opermodes = ('nominal',)
-    units = 'sim'
-    units_set = ('sec', 'min', 'hr', 'day', 'sim')
-    phases = {}
     exclusive = False
-    longnames = {}
-    default_track = ('mode', 'faults')
+    default_track = ('mode', 'faults', 'sub_faults')
 
     def __init__(self, *args, s_kwargs={}, **kwargs):
-        if self.he_args:
-            if 'failrate' not in self.__fields__:
-                raise Exception("failrate must be added to " + self.__class__.__name__ +
-                                " Mode definition to calculate failrate from he_args")
-            kwargs['failrate'] = self.add_he_rate(*self.he_args)
         args = self.get_true_fields(*args, **kwargs)
         super().__init__(*args)
         if not self.mode:
             self.mode = 'nominal'
         if not self.faults:
             self.faults = set()
-        if not self.faultmodes:
-            self.faultmodes = dict()
-        if not self.mode_state_dict:
-            self.mode_state_dict = dict()
-
-        if 's' in self.__fields__:
-            self.s.set_atts(**s_kwargs)
-
-        if self.fm_args:
-            self.init_faultmodes(self.fm_args)
-        if self.sfs_args:
-            self.init_single_faultstates(self.sfs_args[0], **self.sfs_args[1])
-        if self.nfs_args:
-            self.init_n_faultstates(self.nfs_args[0], **self.nfs_args[1])
-        if self.fsm_args:
-            self.init_faultstates_modes(self.fsm_args[0], **self.fsm_args[1])
 
     def __repr__(self):
         reprstr = (self.__class__.__name__ +
@@ -256,30 +213,6 @@ class Mode(BaseContainer, readonly=False):
                    ")")
         return reprstr
 
-    def add_he_rate(self, gtp, EPCs={'na': [1, 0]}):
-        """
-        Calculate self.failrate based on a human error probability model.
-
-        Parameters
-        ----------
-        gtp : float
-            Generic Task Probability. (from HEART)
-        EPCs : Dict or list
-            Error producing conditions (and respective factors) for a given task
-            (from HEART). Used in format:
-
-            - Dict {'name':[EPC factor, Effect proportion]} or
-
-            - list [[EPC factor, Effect proportion],[[EPC factor, Effect proportion]]]
-        """
-        if type(EPCs) == dict:
-            EPC_f = np.prod([((epc-1)*x+1) for _, [epc, x] in EPCs.items()])
-        elif type(EPCs) == list:
-            EPC_f = np.prod([((epc-1)*x+1) for [epc, x] in EPCs])
-        else:
-            raise Exception("Invalid type for EPCs: " + str(type(EPCs)))
-        return gtp*EPC_f
-
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Mode
@@ -287,144 +220,47 @@ class Mode(BaseContainer, readonly=False):
     def return_mutables(self):
         return (self.mode, copy.copy(self.faults))
 
-    def init_faultmodes(self, fm_args):
+    def get_fault(self, faultname):
         """
-        Initialize the self.faultmodes dictionary from the parameters of the Mode.
+        Get the Fault object associated with the given faultname.
 
         Parameters
         ----------
-        fm_args : dict or tuple
-                Dictionary/tuple of arguments defining faultmodes, which can have forms:
-                    - tuple ('fault1', 'fault2', 'fault3') (just the respective faults)
-                    - dict {'fault1': args, 'fault2': kwargs}, where args and kwargs are
-                    args or kwargs to Fault (prob, phases, cost, units, etc).
+        faultname : str
+            Name of the fault (if defined as a part of the mode at value fault_name).
+            Can also be parameters of the fault.
+
+        Returns
+        -------
+        fault: Fault
+            Fault container with given fields..
         """
-        default_kwargs = {'prob': 1.0 / max(len(fm_args), 1),
-                          'phases': self.phases,
-                          'units': self.units}
-        for mode in fm_args:
-            if type(fm_args) is tuple:
-                args = ()
-                kwargs = {**default_kwargs}
-            elif type(fm_args[mode]) is dict:
-                args = ()
-                kwargs = {**default_kwargs, **fm_args[mode]}
-            elif type(fm_args[mode]) is tuple:
-                args = fm_args[mode]
-                kwargs = {**default_kwargs}
-            else:
-                raise Exception("Invalid mode definition in " +
-                                str(self.__class__) + ", " + mode +
-                                " modeparams values should be dict or tuple")
-            args = Fault().get_true_fields(*args, **kwargs)
-            args[0] *= self.failrate
-            if type(args[2]) in [tuple, list, set]:
-                args[2] = {ph: 1.0 for ph in args[1] for ph in args[1]}
-            self.faultmodes[mode] = Fault(*args)
+        if isinstance(faultname, str):
+            fault = getattr(self, 'fault_'+faultname)
+        else:
+            fault = faultname
+        if isinstance(fault, Fault):
+            return fault
+        else:
+            defaults = self.get_pref_attrs("default")
+            try:
+                if isinstance(fault, tuple):
+                    return Fault(*fault, **defaults, failrate=self.failrate)
+                elif isinstance(fault, dict):
+                    return Fault(**{**defaults, **fault}, failrate=self.failrate)
+            except Exception as e:
+                raise Exception("Poorly specified fault mode: " + faultname + " in "
+                                + self.__class__.__name__) from e
 
-    def init_single_faultstates(self, franges, **kwargs):
-        """
-        Associate modes with given faultstates as faults.
+    def get_all_faultnames(self):
+        """Get all names of faults."""
+        return tuple([*self.get_pref_attrs("fault")])
 
-        Modes generated for each frange (but not combined).
-
-        Parameters
-        ----------
-        franges : dict, optional
-            Dictionary of form {'state':{val1, val2...}) of ranges for each health state
-            (if used to generate modes). The default is {}.
-        **kwargs : kwargs
-            Entries for the Fault (e.g., phases, etc)
-        """
-        tot_faults = len([f for s in franges.values() for f in s])
-        prob = kwargs.get('prob', 1/tot_faults) * self.failrate
-        loc_kwargs = {**kwargs, 'prob': prob}
-        for state in franges:
-            modes = {state + '_' + str(value): Fault(*loc_kwargs)
-                     for value in franges[state]}
-            modestates = {state + '_' + str(value):
-                          {state: value} for value in franges[state]}
-            self.faultmodes.update(modes)
-            self.mode_state_dict.update(modestates)
-
-    def init_n_faultstates(self, franges, n='all', seed=42, **kwargs):
-        """
-        Associate n faultstate mode combinations as faults.
-
-        Parameters
-        ----------
-        franges : dict, optional
-            Dictionary of form {'state':{val1, val2...}) of ranges for each health state
-                                (if used to generate modes). The default is {}.
-        n : int, optional
-            Number of faultstate combinations to sample. The default is 'all'.
-        seed : int, optional
-            Seed used in selection (if n!='all). The default is 42.
-        **kwargs : kwargs
-            Entries for the Fault (e.g., phases, etc)
-        """
-        nom_fstates = {state:
-                       copy.copy(self.s.__default_vals__[self.s.__fields__.index(state)])
-                       for state in franges}
-        for state in franges:
-            franges[state].add(nom_fstates[state])
-        nomvals = tuple([*nom_fstates.values()])
-        statecombos = [i for i in itertools.product(*franges.values())
-                       if i != nomvals]
-        if type(n) == int and len(statecombos) > 0:
-            rng = np.random.default_rng(seed)
-            full_list = [i for i, _ in enumerate(statecombos)]
-            sample = rng.choice(full_list, size=n, replace=False)
-            statecombos = [statecombos[i] for i in sample]
-
-        prob = kwargs.get('prob', 1/len(statecombos)) * self.failrate
-        loc_kwargs = {**kwargs, 'prob': prob}
-        self.faultmodes.update({'hmode_' + str(i): Fault(**loc_kwargs)
-                                for i in range(len(statecombos))})
-        self.mode_state_dict.update({'hmode_'+str(i):
-                                     {list(franges)[j]: state
-                                      for j, state in enumerate(statecombos[i])}
-                                     for i in range(len(statecombos))})
-
-    def init_faultstate_modes(self, manual_modes, **kwargs):
-        """
-        Associate modes manual_modes with provided faultstates.
-
-        Parameters
-        ----------
-        manual_modes : dict, optional
-            Dictionary/Set of faultmodes with structure, which has the form:
-                - dict {'fault1': [atts], 'fault2': atts}, where atts may be of form:
-                    - states: {state1: val1, state2, val2}
-        **kwargs : kwargs
-            Entries for the Fault (e.g., phases, etc)
-        """
-        p_def = 1/len(manual_modes)
-        for mode, atts in manual_modes.items():
-            if type(atts) is list:
-                states = atts[0]
-                loc_kwargs = {**kwargs, **atts[1]}
-            elif type(atts) is dict:
-                states = atts
-                loc_kwargs = {**kwargs}
-            loc_kwargs['prob'] = loc_kwargs.get('prob', p_def) * self.failrate
-            self.mode_state_dict.update({mode: states})
-            self.faultmodes.update({mode: Fault(**loc_kwargs)})
-
-    def update_modestates(self):
-        """
-        Update states of the model associated with a specific fault mode.
-
-        (see init_faultstates)
-        """
-        num_update = 0
-        for fault in self.faults:
-            if fault in self.mode_state_dict:
-                self.s.put(**self.mode_state_dict[fault])
-                num_update += 1
-                if num_update > 1:
-                    raise Exception("Exclusive fault mode scenarios" +
-                                    " present at the same time")
+    def get_faults(self, *faults):
+        """Get Fault objects for all associated faults."""
+        if not faults:
+            faults = self.get_all_faultnames()
+        return {k: self.get_fault(k) for k in faults}
 
     def set_mode(self, mode):
         """
@@ -440,7 +276,7 @@ class Mode(BaseContainer, readonly=False):
         if self.exclusive:
             if self.any_faults():
                 raise Exception("Cannot set mode from fault state w/o removing faults.")
-            elif mode in self.faultmodes:
+            elif mode in self.get_all_faultnames():
                 self.to_fault(mode)
             else:
                 self._assign_mode(mode)
@@ -507,12 +343,14 @@ class Mode(BaseContainer, readonly=False):
         *fault : str(s)
             name(s) of the fault to add to the black
         """
+        if len(faults) == 1 and isinstance(faults[0], list):
+            faults = faults[0]
         self.faults.update(faults)
         if self.exclusive:
             if len(faults) > 1:
                 raise Exception("Multiple fault modes added to function with" +
                                 " exclusive fault representation")
-            elif len(faults) == 0 and self.mode in self.faultmodes:
+            elif len(faults) == 0 and self.mode in self.get_all_faultnames():
                 raise Exception("In " + str(self.__class__)
                                 + "--no faults but mode is still in faultmode "
                                 + self.mode)
@@ -578,24 +416,32 @@ class Mode(BaseContainer, readonly=False):
         if warnmessage:
             self.warn(warnmessage, "All faults removed.")
 
-    def set_field(self, fieldname, value, as_copy=True):
-        """Extend BaseContainer.assign to not set faultmodes (always the same)."""
-        if fieldname != 'faultmodes' or self.faultmodes != value:
-            BaseContainer.set_field(self, fieldname, value, as_copy=as_copy)
+    def get_fault_disturbances(self, *faults):
+        """Get all disturbances caused by present (or specified) faults."""
+        if not faults:
+            faults = self.faults
+        dists = {}
+        for fault in faults:
+            faultobj = self.get_fault(fault)
+            if faultobj:
+                dists.update(faultobj.disturbances)
+        return dists
 
     def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
         """Add field 'att' to history. Accommodates faults and mode tracking."""
         if att == 'faults':
             fh = History()
-            for faultmode in self.faultmodes:
+            for faultmode in self.get_all_faultnames():
                 fh.init_att(faultmode, False, timerange, track='all', dtype=bool)
             hist['faults'] = fh
         elif att == 'mode':
-            fm_lens = [len(fm) for fm in self.faultmodes]
+            fm_lens = [len(fm) for fm in self.get_all_faultnames()]
             om_lens = [len(m) for m in self.opermodes]
             modelength = max(fm_lens+om_lens)
             str_size = '<U'+str(modelength)
             BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
+        elif att == 'sub_faults':
+            hist.init_att(att, False, timerange, track='all', dtype=bool)
 
     def _assign_mode(self, mode):
         if 'mode' in self.__fields__:
@@ -604,9 +450,149 @@ class Mode(BaseContainer, readonly=False):
             self.mode = mode
 
 
+class HumanErrorMode(Mode):
+    """
+    Mode for Human Errors using HEART-based model.
+
+    Overall failrate of human error determined by given:
+
+    gtp : float
+        Generic task probability
+    epc_XX : tuple/list
+        Error producing condition factors. May be specified as performance shaping
+        factors or tuple (factor, effect proportion).
+
+    Examples
+    --------
+    >>> class ExHMode(HumanErrorMode):
+    ...     gtp : float = 0.01
+    ...     epc_1 : tuple = (2, 0.5)
+    >>> exh = ExHMode()
+    >>> exh.failrate
+    0.015
+    >>> class ExHMode2(HumanErrorMode):
+    ...     gtp : float = 0.01
+    ...     epc_1 : float = 2.0
+    ...     epc_2 : float = 3.0
+    >>> exh2 = ExHMode2()
+    >>> exh2.failrate
+    0.06
+    """
+
+    failrate: float = 1.0
+    gtp: ClassVar[float] = 1.0
+
+    def __init__(self, *args, **kwargs):
+        kwargs['failrate'] = self.calc_he_rate()
+        super().__init__(*args, **kwargs)
+
+    def calc_he_rate(self):
+        """
+        Calculate self.failrate based on a human error probability model.
+
+        This model uses an overall generic task probability (set by self.gtp) as well as
+        error producing conditions (EPCs) to determine the overall failure rate of the
+        task.
+        """
+        EPCs = self.get_pref_attrs("epc")
+        if EPCs:
+            EPC_f = np.prod([((epc[0]-1)*epc[1]+1) if isinstance(epc, tuple) else epc
+                             for _, epc in EPCs.items()])
+            return self.gtp*EPC_f
+        else:
+            return self.gtp
+
+
+class FlexibleMode(Mode):
+    faultmodes: dict = {}
+    fm_args = dict()
+    fs_args = dict()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.faultmodes:
+            self.faultmodes = dict()
+        if self.fm_args:
+            self.init_faultmodes(**self.fm_args)
+        if self.fs_args:
+            self.init_faultspace(**self.fs_args)
+
+    def get_all_faultnames(self):
+        return tuple([*super().get_all_faultnames(), *self.faultmodes])
+
+    def get_fault(self, faultname):
+        if faultname in self.faultmodes:
+            return self.faultmodes[faultname]
+        else:
+            return super().get_fault(faultname)
+
+    def init_faultspace(self, franges, n='all', seed=42, prefix="hmode_", **kwargs):
+        """
+        Associate n-disturbance mode combinations as faults.
+
+        Parameters
+        ----------
+        franges : dict, optional
+            Dictionary of form {'varname': {val1, val2...} of ranges of values for
+            for each disturbance (if used to generate modes). The default is {}.
+        n : int, optional
+            Number of faultstate combinations to sample. The default is 'all'.
+        seed : int, optional
+            Seed used in selection (if n!='all). The default is 42.
+        prefix : str
+            Prefix of fault names. Default is "hmode_"
+        **kwargs : kwargs
+            Entries for the Fault (e.g., phases, etc)
+        """
+        for state, vals in franges.items():
+            if isinstance(vals, tuple):
+                franges[state] = set(np.linspace(*vals))
+            franges[state].add(np.NaN)
+        dist_keys = [*franges.keys()]
+        nomvals = [np.NaN for i in dist_keys]
+        statecombos = [i for i in itertools.product(*franges.values())]
+        # refine state combos given n
+        if type(n) is int and len(statecombos) > 0:
+            rng = np.random.default_rng(seed)
+            full_list = [i for i, _ in enumerate(statecombos)]
+            sample = rng.choice(full_list, size=n, replace=False)
+            statecombos = [statecombos[i] for i in sample]
+
+        prob = kwargs.get('prob', 1/len(statecombos))
+        loc_kwargs = {**kwargs, 'prob': prob}
+
+        for comb_i, statecombo in enumerate(statecombos):
+            disturbance = tuple([(dist_keys[i], sc) for i, sc in enumerate(statecombo)
+                                 if not np.isnan(sc)])
+            if disturbance:
+                mode = {prefix+str(comb_i): {**loc_kwargs, 'disturbances': disturbance}}
+                self.init_faultmodes(**mode)
+
+    def init_faultmodes(self, **faults):
+        """
+        Initialize the self.faultmodes dictionary from the parameters of the Mode.
+
+        Parameters
+        ----------
+        **faults : kwargs
+            Arguments to instantiate for the faultmodes.
+            e.g., faultname=(0.1, 200).
+        """
+        for mode, modeargs in faults.items():
+            fault = super().get_fault(modeargs)
+            self.faultmodes[mode] = fault
+
+    def set_field(self, fieldname, value, as_copy=True):
+        """Extend BaseContainer.assign to not set faultmodes (always the same)."""
+        if fieldname != 'faultmodes' or self.faultmodes != value:
+            BaseContainer.set_field(self, fieldname, value, as_copy=as_copy)
+
+
 class ExampleMode(Mode):
-    fm_args = {"no_charge": (1e-5, 100, {'standby': 1.0}),
-               "short": (1e-5, 100, {'supply': 1.0})}
+    """Example mode for testing/docs."""
+
+    fault_no_charge = Fault(1e-5, 100, (('standby', 1.0),))
+    fault_short = (1e-5, 100, (('supply', 1.0),))
     opermodes = ("supply", "charge", "standby")
     exclusive = True
     mode: str = "standby"
@@ -614,7 +600,7 @@ class ExampleMode(Mode):
 
 if __name__ == "__main__":
     from fmdtools.analyze.phases import PhaseMap
-    exfault = Fault(prob=0.5, phases={'on': 0.9, 'off': 0.1}, units='hr')
+    exfault = Fault(prob=0.5, phases=(('on', 0.9), ('off', 0.1)), units='hr')
     phases = PhaseMap({'on': [0, 5], 'off': [6, 10]})
     rate = exfault.calc_rate(4, phases, sim_time=10.0, sim_units='min')
 

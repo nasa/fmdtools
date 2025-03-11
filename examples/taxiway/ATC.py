@@ -23,7 +23,9 @@ from fmdtools.define.container.mode import Mode
 
 class ATCModes(Mode):
 
-    fm_args = ("lost_ground_perception", "wrong_land_command", "single_wrong_command")
+    fault_lost_ground_perception = ()
+    fault_wrong_land_command = ()
+    fault_single_wrong_command = ()
 
 
 class ATC(Function):

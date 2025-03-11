@@ -356,9 +356,9 @@ class AircraftMode(Mode):
         Aircraft parked at gate
     """
 
-    fm_args = {'crash': (1e-7, {"land", "takeoff", "taxi"}, 1e7),
-               'immobile': (1e-5, {"taxi"}, 1e5),
-               'lost_sight': (1e-5, {"land", "takeoff", "taxi"}, 1e5)}
+    fault_crash = (1e-7, 1e7, (("land", 1.0), ("takeoff", 1.0), ("taxi", 1.0)))
+    fault_immobile = (1e-5, 1e5, (("taxi", 1.0)))
+    fault_lost_sight = (1e-5, 1e5, (("land", 1.0), ("takeoff", 1.0), ("taxi", 1.0)))
     opermodes = ('land', 'takeoff', 'taxi', 'park')
     mode: str = 'park'
 
@@ -556,9 +556,9 @@ class HelicopterState(State):
 
 class HelicopterMode(Mode):
     """ Helicopter Mode--subset of AircraftMode for Helicopters."""
-    fm_args = {'crash': (1e-7, {"land", "takeoff"}, 1e7),
-               'immobile': (1e-5, {"park"}, 1e5),
-               'lost_sight': (1e-5, {"land", "takeoff", "taxi"}, 1e5)}
+    fault_crash = (1e-7, 1e7, (("land", 1.0), ("takeoff", 1.0), ("taxi", 1.0)))
+    fault_immobile = (1e-5, 1e5, (("park", 1.0)))
+    fault_lost_sight = (1e-5, 1e5, (("land", 1.0), ("takeoff", 1.0), ("taxi", 1.0)))
     opermodes = ('land', 'takeoff', 'park')
     mode: str = 'park'
 

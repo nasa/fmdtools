@@ -50,5 +50,3 @@ class ComponentArchitecture(Architecture):
         """
         self.add_sim('comps', name, compclass, *flownames, **kwargs)
 
-    def inject_faults(self, faults):
-        Architecture.inject_faults(self, 'comps', faults)

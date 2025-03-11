@@ -95,30 +95,6 @@ class Function(Block):
         """Return fmdtools type of the model class."""
         return Function
 
-    def return_faultmodes(self):
-        """
-        Get the fault modes present in the simulation (for propagate/model).
-
-        Returns
-        -------
-        ms : list
-            List of faults present.
-        modeprops : dict
-            Dict of corresponding fault mode properties.
-        """
-        if hasattr(self, 'm'):
-            ms = [m for m in self.m.faults.copy() if m != 'nom']
-            modeprops = dict.fromkeys(ms)
-            for mode in ms:
-                modeprops[mode] = self.m.faultmodes.get(mode)
-                if mode not in self.m.faultmodes:
-                    raise Exception("Mode " + mode + " not in m.faultmodes for fxn " +
-                                    self.__class__.__name__+" and may not be tracked.")
-        else:
-            ms = []
-            modeprops = {}
-        return ms, modeprops
-
     def update_seed(self, seed=[]):
         """
         Update seed and propagates update to contained actions/components.
@@ -150,13 +126,6 @@ class Function(Block):
                 raise Exception("Poorly specified Architecture: "
                                 + str(obj.__class__)) from e
 
-    def prop_arch_faults_up(self):
-        """Get faults from contained components and add to .m."""
-        for objname in self.get_roles('arch'):
-            obj = getattr(self, objname)
-            self.m.faults.difference_update(obj.m.sub_modes)
-            self.m.faults.update(obj.get_faults())
-
     def __call__(self, proptype, faults=[], time=0, run_stochastic=False):
         """
         Update the state of the function at a given time and injects faults.
@@ -176,7 +145,8 @@ class Function(Block):
         if hasattr(self, 'r'):
             self.r.run_stochastic = run_stochastic
         # if there is a fault, it is instantiated
-        self.inject_faults(faults)
+        if faults:
+            self.inject_faults(faults)
 
         if time > self.t.time:
             if hasattr(self, 'r'):
@@ -192,9 +162,8 @@ class Function(Block):
             elif not Decimal(str(time)) % Decimal(str(self.t.dt)):
                 self.dynamic_behavior(time)
 
-        self.prop_arch_faults_up()
-
         self.t.time = time
+        self.set_sub_faults()
         if run_stochastic == 'track_pdf':
             if hasattr(self, 'r'):
                 self.r.probdens = self.r.return_probdens()
@@ -258,3 +227,5 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
     exf = ExampleFunction("exf")
+    from fmdtools.sim import propagate
+    res, hist = propagate.one_fault(exf, "exf", "short", 2)

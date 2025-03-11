@@ -41,7 +41,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
-from fmdtools.define.container.mode import Mode
+from fmdtools.define.container.mode import Mode, FlexibleMode
 from fmdtools.define.block.function import Function
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.flow.base import Flow
@@ -199,7 +199,7 @@ class RoverParam(Parameter):
     ground: GroundParam = GroundParam()
     correction: ResCorrection = ResCorrection()
     degradation: DegParam = DegParam()
-    drive_modes: dict = {"mode_args": "set"}
+    drive_modes: dict = {"mode_options": "set"}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, strict_immutability=False, **kwargs)
@@ -464,7 +464,8 @@ class PlanPathMode(Mode):
         Rover has competed the mission
     """
 
-    fm_args = {"no_con": (1e-4, 200), "crash": (1e-4, 200)}
+    fault_no_con = (1e-4, 200)
+    fault_crash = (1e-4, 200)
     opermodes = ("drive", "standby", "em_off", "finished")
     mode: str = "standby"
 
@@ -607,76 +608,59 @@ def rdiff_from_vects(u_self, u_lin):
     return rdiff
 
 
-class DriveMode(Mode):
+class DriveMode(FlexibleMode):
     """
     Instantiate Modes for the Drive Function.
 
     key_phases_by = 'plan_path' defines that the modes may be intantiated for
     certain phases of PlanPath. The phases are defined by opptvect.
-    mode_args: determines if the how the modes in Drivemodes should be
+    mode_options: determines if the how the modes in Drivemodes should be
     formulated (e.g., as a parameter, manually, as set of modes, etc. )
     """
 
-    s: FaultStates = FaultStates()
-    mode_args: tuple = tuple()
-    deg_params: dict = dict
-    fm_args = dict()
+    mode_options: tuple = tuple()
+    default_phases = (('drive', 1.0), ('start', 1.0),)
+    set_franges = {"s.friction": {1.5, 3.0, 10.0},
+                   "s.transfer": {0.5, 0.0},
+                   "s.drift": {-0.2, 0.2}}
+    range_franges = {"s.friction": (0.0, 20, 10),
+                     "s.transfer": (1.0, 0.0, 10),
+                     "s.drift": (-0.5, 0.5, 10)}
 
-    def __init__(self, *args, mode_args=tuple(), deg_params=dict(), **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if "mode_args" in mode_args:
-            self.mode_args = mode_args["mode_args"]
+
+        if type(self.mode_options) is int:
+            self.init_faultspace(self.range_franges, n=self.mode_options)
+        elif type(self.mode_options) is list:
+            self.add_mode_list()
+        elif type(self.mode_options) is dict:
+            self.init_faultmodes(**self.mode_options)
         else:
-            self.mode_args = mode_args
-        ph = {'drive': 1.0, 'start': 1.0}
-        if self.mode_args == "degradation":
-            self.add_degradation_modes(deg_params, ph)
-        elif type(self.mode_args) is int:
-            self.add_n_modes(ph)
-        elif type(self.mode_args) is list:
-            self.add_mode_list(ph)
-        elif type(self.mode_args) is dict:
-            self.init_faultstate_modes(manual_modes=self.mode_args, phases=ph)
-        else:
-            if "manual" in self.mode_args:
-                self.add_manual_modes(ph)
-            if "set" in self.mode_args:
-                franges = {"friction": {1.5, 3.0, 10.0},
-                           "transfer": {0.5, 0.0},
-                           "drift": {-0.2, 0.2}}
-                self.init_n_faultstates(franges, phases=ph)
-            if "range" in self.mode_args:
-                franges = {"friction": {*np.linspace(0.0, 20, 10)},
-                           "transfer": {*np.linspace(1.0, 0.0, 10)},
-                           "drift": {*np.linspace(-0.5, 0.5, 10)}}
-                if "all" in self.mode_args:
-                    self.init_n_faultstates(franges, phases=ph, n="all")
+            if "manual" in self.mode_options:
+                self.add_manual_modes()
+            if "set" in self.mode_options:
+                self.init_faultspace(self.set_franges)
+            if "range" in self.mode_options:
+                if "all" in self.mode_options:
+                    self.init_faultspace(self.range_franges, n="all")
                 else:
-                    self.init_n_faultstates(franges, phases=ph, n=1)
+                    self.init_faultspace(self.range_franges, n=1)
 
-    def add_manual_modes(self, ph, drift=0.0, friction=0.0):
-        manual_modes = {"elec_open": {"transfer": 0.0},
-                        "stuck": {"friction": 10.0+friction},
-                        "stuck_right": {"friction": 3.0+friction, "drift": 0.2+drift},
-                        "stuck_left": {"friction": 3.0+friction, "drift": -0.2+drift}}
-        self.init_faultstate_modes(manual_modes, phases=ph)
+    def add_manual_modes(self, drift=0.0, friction=0.0):
+        self.init_faultmodes(elec_open={"disturbances": (("s.transfer", 0.0),)},
+                             stuck={"disturbances": (("s.friction",  10.0+friction),)},
+                             stuck_right={"disturbances": (("s.friction", 3.0+friction), ("s.drift", 0.2+drift))},
+                             stuck_left={"disturbances": (("s.friction", 3.0+friction), ("s.drift", -0.2+drift))})
 
-    def add_degradation_modes(self, deg_params, ph):
-        self.s.friction = deg_params.friction
-        self.s.drift = deg_params.drift
-        self.add_manual_modes(ph, drift=self.s.drift, friction=self.s.friction)
+    def add_degradation_modes(self, deg_params):
+        self.add_manual_modes(drift=deg_params.drift, friction=deg_params.friction)
 
-    def add_n_modes(self, ph):
-        franges = {"friction": {*np.linspace(0.0, 20, 10)},
-                   "transfer": {*np.linspace(1.0, 0.0, 10)},
-                   "drift": {*np.linspace(-0.5, 0.5, 10)}}
-        self.init_n_faultstates(franges, n=self.mode_args, phases=ph)
-
-    def add_mode_list(self, ph):
+    def add_mode_list(self):
         manual_modes = {"s_" + str(i):
                         {"friction": mode[0], "transfer": mode[1], "drift": mode[2]}
-                        for i, mode in enumerate(self.mode_args)}
-        self.init_faultstate_modes(manual_modes, phases=ph)
+                        for i, mode in enumerate(self.mode_options)}
+        self.init_faultstate_modes(manual_modes)
 
 
 class Drive(Function):
@@ -684,6 +668,8 @@ class Drive(Function):
 
     __slots__ = ("ground", "motor_control", "ee_in", 'fault_sig', 'pos')
     container_m = DriveMode
+    container_p = DegParam
+    container_s = FaultStates
     flow_fault_sig = FaultSig
     flow_ground = Ground
     flow_pos = Pos
@@ -691,20 +677,26 @@ class Drive(Function):
     flow_ee_in = EE
     flownames = {"ee_15": "ee_in"}
 
+    def init_block(self, **kwargs):
+        """Set degradation state to input degradation parameters."""
+        self.s.assign(self.p, "friction", "drift")
+        if self.p.drift != 0.0 and self.p.friction != 0.0:
+            self.m.add_degradation_modes(self.p)
+
     def dynamic_behavior(self, time):
         """Define the drive behavior for a given time step."""
         # calculate left and right motor power
-        self.fault_sig.s.assign(self.m.s, "friction", "transfer", "drift")
-        rpower = (self.m.s.transfer * self.ee_in.s.v * self.motor_control.s.rpower / 15
-                  + self.m.s.drift)
-        lpower = (self.m.s.transfer * self.ee_in.s.v * self.motor_control.s.lpower / 15
-                  - self.m.s.drift)
+        self.fault_sig.s.assign(self.s, "friction", "transfer", "drift")
+        rpower = (self.s.transfer * self.ee_in.s.v * self.motor_control.s.rpower / 15
+                  + self.s.drift)
+        lpower = (self.s.transfer * self.ee_in.s.v * self.motor_control.s.lpower / 15
+                  - self.s.drift)
 
         if self.m.has_fault("elec_open"):
             # Determine EE input based on elec_open if  fault is present
             self.ee_in.s.a = 0
         else:
-            self.ee_in.s.a = (1.0 + self.m.s.friction) * (lpower + rpower) / 12
+            self.ee_in.s.a = (1.0 + self.s.friction) * (lpower + rpower) / 12
 
         if (lpower + rpower) > 100:
             # Set faulty behavior if motor power is beyond a threshold
@@ -745,7 +737,7 @@ class Drive(Function):
             PosState(x=0.0, y=-2.0, vel=2.0, ux=0.0, uy=-1.0)
         """
         # the division by 6 slows down the rover, so it can manage the course
-        self.pos.s.vel = (rpower + lpower) / (5 + (1 + self.m.s.friction))
+        self.pos.s.vel = (rpower + lpower) / (5 + (1 + self.s.friction))
         ang_inc = np.arctan((rpower - lpower) / (rpower + lpower + 0.001))
         ux = np.cos(ang_inc) * self.pos.s.ux - np.sin(ang_inc) * self.pos.s.uy
         uy = np.sin(ang_inc) * self.pos.s.ux + np.cos(ang_inc) * self.pos.s.uy
@@ -771,7 +763,7 @@ class PerceptionMode(Mode):
     exlusive = True: Only one mode can be active at any given time
     """
 
-    fm_args = ("bad_feed",)
+    fault_bad_feed = ()
     opermodes = ("off", "feed")
     mode: str = "off"
     exclusive = True
@@ -862,8 +854,8 @@ class PowerMode(Mode):
         power supply is off
     """
 
-    fm_args = {"no_charge": (1e-5, 100, {"off": 1.0}),
-               "short": (1e-5, 100, {"supply": 1.0})}
+    fault_no_charge = (1e-5, 100, (("off", 1.0),))
+    fault_short = (1e-5, 100, (("supply", 1.0),))
     opermodes = ("supply", "charge", "off")
     mode: str = "off"
     exclusive = True
@@ -904,10 +896,13 @@ class Power(Function):
         self.s.limit(charge=(0, 100))
 
     def short_power(self):
-        """Power in case of a short has normal voltage."""
-        self.ee_5.s.v = 5
-        self.ee_12.s.v = 12
-        self.ee_15.s.v = 15
+        """Short in power supply means now power provided."""
+        if self.s.charge > 0.1:
+            self.ee_5.s.v = 5
+            self.ee_12.s.v = 12
+            self.ee_15.s.v = 15
+        else:
+            self.no_charge_power()
 
     def no_charge_power(self):
         """Battery is out of charge."""
@@ -946,12 +941,8 @@ class Power(Function):
             self.m.set_mode("off")
 
     def short_power_usage(self):
-        """Calculate power usage when there is a short (calculated as double)."""
-        self.s.power = self.s.power * 2
-        if self.s.charge == 0:
-            self.m.set_mode("no_charge")
-        if not self.switch.s.power:
-            self.m.set_mode("off")
+        """Calculate power usage when there is a short (calculated as 10x)."""
+        self.s.power = self.s.power * 10
 
 
 class OverrideMode(Mode):
@@ -1095,9 +1086,9 @@ class Rover(FunctionArchitecture):
                      "auto_control", "fault_sig", p=self.p.correction)
         self.add_fxn("override", Override, "comms", "ee_5", "motor_control",
                      "auto_control")
-        drive_m = {"mode_args": self.p.drive_modes, 'deg_params': self.p.degradation}
+
         self.add_fxn("drive", Drive, "ground", 'pos', "ee_15", "motor_control",
-                     "fault_sig", m=drive_m)
+                     "fault_sig", m=self.p.drive_modes, p=self.p.degradation)
 
     def indicate_finished(self, time):
         """Determine if the rover has completed its mission (successful or not)."""
@@ -1143,7 +1134,7 @@ class Rover(FunctionArchitecture):
             "endpt": list
                 rovers last position (or end point),
         """
-        modes, modeproperties = self.return_faultmodes()
+        modeproperties = self.return_faultmodes()
         classification = str()
         at_finish = True
 
@@ -1153,13 +1144,13 @@ class Rover(FunctionArchitecture):
             at_finish = False
 
         # mission is fault if any fault modes are present
-        if any(modes):
+        if any(modeproperties):
             classification = classification + " faulty"
 
         # missing is nominal in no fault modes are present
         if not classification:
             classification = "nominal mission"
-        num_modes = len(modes)
+        num_modes = len(modeproperties)
 
         end_dist = self.flows['ground'].end_dist(self.flows['pos'].s)
 
@@ -1179,7 +1170,7 @@ class Rover(FunctionArchitecture):
                 "num_modes": num_modes,
                 "end_dist": end_dist,
                 "tot_deviation": tot_deviation,
-                "faults": modes,
+                "faults": [*modeproperties],
                 "classification": classification,
                 "end_x": endpt[0],
                 "end_y": endpt[1],
@@ -1214,6 +1205,8 @@ if __name__ == "__main__":
     from fmdtools.sim.sample import SampleApproach, FaultDomain, FaultSample
 
     mdl = Rover()
+
+
     ec1, hist1 = prop.nominal(mdl)
     fig, ax = hist1.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
                                      time_groups=['nominal'])
@@ -1250,6 +1243,9 @@ if __name__ == "__main__":
     ps_sine = ParameterSample(pd_sine)
     comb_kwargs = {'resolutions': {'ground.amp': 2, "ground.period": 20}}
     ps_sine.add_variable_ranges(comb_kwargs=comb_kwargs)
+    ec_nest, hist_nest, app_nest = prop.nested_sample(mdl, ps_sine, faultdomains={'drive_faults':  (('all_fxnclass_modes', 'Drive'), {})},
+                                                  faultsamples={'drive_faults': (('fault_phases', 'drive_faults', "start"), {})},
+                                                  pool=mp.Pool(5))
 
     res, hist = prop.parameter_sample(mdl, ps_sine)
     comp = tabulate.Comparison(res, ps_sine,

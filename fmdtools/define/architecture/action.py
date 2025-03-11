@@ -348,10 +348,6 @@ class ActionArchitecture(Architecture):
         else:
             raise Exception("Invalid option for initial_action.")
 
-    def inject_faults(self, faults):
-        """Inject faults into the actions contained in the architecture."""
-        Architecture.inject_faults(self, 'acts', faults)
-
     def __call__(self, proptype, time, run_stochastic, dt):
         """
         Propagates behaviors through the ActionArchitecture.
@@ -404,6 +400,7 @@ class ActionArchitecture(Architecture):
                 if num_prop > 10000:
                     raise Exception("Undesired looping in Function ASG for: "+self.name)
             self.active_actions = active_actions
+        self.set_sub_faults()
 
     def as_modelgraph(self, gtype=ActionArchitectureGraph, **kwargs):
         """Create and return the corresponding ModelGraph for the Object."""

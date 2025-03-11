@@ -66,6 +66,7 @@ class Action(Block):
                 self.r.update_stochastic_states()
         if not proptype == 'dynamic' or self.t.time < time:
             self.update_behavior(time, dt)
+        self.set_sub_faults()
         self.t.time = time
 
     def update_behavior(self, time, dt):

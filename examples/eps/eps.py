@@ -58,9 +58,9 @@ class Signal(Flow):
 
 
 class ImportEEModes(Mode):
-    fm_args = {"low_v": (1e-5, 100),
-               "high_v": (5e-6, 100),
-               "no_v": (1e-5, 300)}
+    fault_low_v = (1e-5, 100)
+    fault_high_v = (5e-6, 100)
+    fault_no_v = (1e-5, 300)
 
 
 class ImportEE(Function):
@@ -96,8 +96,8 @@ class ImportEE(Function):
 
 
 class ImportSigModes(Mode):
-    fm_args = {"partial_signal": (1e-5, 750),
-               "no_signal": (1e-6, 750)}
+    fault_partial_signal = (1e-5, 750)
+    fault_no_signal = (1e-6, 750)
 
 
 class ImportSig(Function):
@@ -117,8 +117,8 @@ class ImportSig(Function):
 
 
 class StoreEEModes(Mode):
-    fm_args = {"low_storage": (5e-6, 2000),
-               "no_storage": (5e-6, 2000)}
+    fault_low_storage = (5e-6, 2000)
+    fault_no_storage = (5e-6, 2000)
 
 
 class StoreEE(Function):
@@ -149,11 +149,11 @@ class StoreEE(Function):
 
 
 class SupplyEEModes(Mode):
-    fm_args = {"adverse_resist": (2e-6, 400),
-               "minor_overload": (1e-5, 400),
-               "major_overload": (3e-6, 400),
-               "short": (1e-7, 400),
-               "open_circuit": (5e-8, 200)}
+    fault_adverse_resist = (2e-6, 400)
+    fault_minor_overload = (1e-5, 400)
+    fault_major_overload = (3e-6, 400)
+    fault_short = (1e-7, 400)
+    fault_open_circuit = (5e-8, 200)
 
 
 class SupplyEE(Function):
@@ -193,10 +193,10 @@ class SupplyEE(Function):
 
 
 class DistEEModes(Mode):
-    fm_args = {"adverse_resist": (1e-5, 1500),
-               "poor_alloc": (2e-5, 500),
-               "short": (2e-5, 1500),
-               "open_circuit": (3e-5, 1500)}
+    fault_adverse_resist = (1e-5, 1500)
+    fault_poor_alloc = (2e-5, 500)
+    fault_short = (2e-5, 1500)
+    fault_open_circuit = (3e-5, 1500)
 
 
 class DistEE(Function):
@@ -247,8 +247,8 @@ class DistEE(Function):
 
 
 class ExportHEModes(Mode):
-    fm_args = {"hot_sink": (1e-5, 500),
-               "ineffective_sink": (0.5e-5, 1000)}
+    fault_hot_sink = (1e-5, 500)
+    fault_ineffective_sink = (0.5e-5, 1000)
 
 
 class ExportHE(Function):
@@ -286,11 +286,11 @@ class ExportOE(Function):
 
 
 class EEtoMEModes(Mode):
-    fm_args = {"high_torque": (1e-4, 200),
-               "low_torque": (1e-4, 200),
-               "toohigh_torque": (5e-5, 200),
-               "open_circuit": (5e-5, 200),
-               "short": (5e-5, 200)}
+    fault_high_torque = (1e-4, 200)
+    fault_low_torque = (1e-4, 200)
+    fault_toohigh_torque = (5e-5, 200)
+    fault_open_circuit = (5e-5, 200)
+    fault_short = (5e-5, 200)
 
 
 class EEtoME(Function):
@@ -333,10 +333,10 @@ class EEtoME(Function):
 
 
 class EEtoHEModes(Mode):
-    fm_args = {"low_heat": (2e-6, 200),
-               "high_heat": (1e-7, 200),
-               "toohigh_heat": (5e-7, 200),
-               "open_circuit": (1e-7, 200)}
+    fault_low_heat = (2e-6, 200)
+    fault_high_heat = (1e-7, 200)
+    fault_toohigh_heat = (5e-7, 200)
+    fault_open_circuit = (1e-7, 200)
 
 
 class EEtoHE(Function):
@@ -372,8 +372,8 @@ class EEtoHE(Function):
 
 
 class EEtoOEModes(Mode):
-    fm_args = {"optical_resist": (5e-7, 70),
-               "burnt_out": (2e-6, 100)}
+    fault_optical_resist = (5e-7, 70)
+    fault_burnt_out = (2e-6, 100)
 
 
 class EEtoOE(Function):

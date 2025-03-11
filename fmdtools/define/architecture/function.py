@@ -528,9 +528,6 @@ class FunctionArchitecture(Architecture):
                   '\n' + 'FUNCTIONS:' + fxnstr + '\nFLOWS:' + flowstr)
         return repstr
 
-    def inject_faults(self, faults):
-        Architecture.inject_faults(self, 'fxns', faults)
-
     def base_type(self):
         """Return fmdtools type of the model class."""
         return FunctionArchitecture
@@ -642,31 +639,11 @@ class FunctionArchitecture(Architecture):
         repair_cost : float
             Cost of repairing the fault modes in the given model
         """
-        repmodes, modeprops = self.return_faultmodes()
-        modecost = sum([c['cost'] if c['cost'] > 0.0 else default_cost
-                        for m in modeprops.values() for c in m.values()])
+        fmodes = self.return_faultmodes()
+        modecost = sum([mode['cost'] if mode['cost'] > 0.0 else default_cost
+                        for mode in fmodes.values()])
         repair_cost = np.min([modecost, max_cost])
         return repair_cost
-
-    def return_faultmodes(self):
-        """
-        Return faultmodes present in the model.
-
-        Returns
-        -------
-        modes : dict
-            Fault modes present in the model indexed by function name
-        modeprops : dict
-            Fault mode properties (defined in the function definition).
-            Has structure {fxn:mode:properties}.
-        """
-        modes, modeprops = {}, {}
-        for fxnname, fxn in self.fxns.items():
-            ms, mps = fxn.return_faultmodes()
-            if ms:
-                modeprops[fxnname] = mps
-                modes[fxnname] = ms
-        return modes, modeprops
 
     def get_memory(self):
         """
@@ -701,60 +678,6 @@ class FunctionArchitecture(Architecture):
         for fxn in self.fxns.values():
             probdens *= fxn.return_probdens()
         return probdens
-
-    def set_vars(self, *args, **kwargs):
-        """
-        Set variables in the model to set values (useful for optimization, etc.).
-
-        Parameters
-        ----------
-        varlist : list of lists/tuples
-            List of variables to set, with possible structures:
-                [['fxnname', 'att1'], ['fxnname2', 'comp1', 'att2'], ['flowname', 'att3']]
-                ['fxnname.att1', 'fxnname.comp1.att2', 'flowname.att3']
-        varvalues : list
-            List of values corresponding to varlist
-        kwargs : kwargs
-            attribute-value pairs. If provided, must be passed using ** syntax:
-            mdl.set_vars(**{'fxnname.varname':value})
-        """
-        if len(args) > 0:
-            varlist = args[0]
-            varvalues = args[1]
-            if isinstance(varlist, str):
-                varlist = [varlist]
-            if type(varvalues) in [str, float, int]:
-                varvalues = [varvalues]
-            if len(varlist) != len(varvalues):
-                raise Exception("length of varlist and varvalues do not correspond: "
-                                + str(len(varlist)) + ", "+str(len(varvalues)))
-        else:
-            varlist = []
-            varvalues = []
-        if kwargs:
-            varlist = varlist + [*kwargs.keys()]
-            varvalues = varvalues + [*kwargs.values()]
-        for i, var in enumerate(varlist):
-            if var == 'seed':
-                self.update_seed(seed=varvalues[i])
-            else:
-                if isinstance(var, str):
-                    var = var.split(".")
-                if var[0] in ['functions', 'fxns']:
-                    f = self.fxns[var[1]]
-                    var = var[2:]
-                elif var[0] == 'flows':
-                    f = self.flows[var[1]]
-                    var = var[2:]
-                elif var[0] in self.fxns:
-                    f = self.fxns[var[0]]
-                    var = var[1:]
-                elif var[0] in self.flows:
-                    f = self.flows[var[0]]
-                    var = var[1:]
-                else:
-                    raise Exception(var[0] + " not a function, flow, or seed")
-                set_var(f, var, varvalues[i])
 
     def propagate(self, time, fxnfaults={}, disturbances={}, proptype="both",
                   run_stochastic=False):
@@ -794,6 +717,7 @@ class FunctionArchitecture(Architecture):
             self.prop_static(time, run_stochastic=run_stochastic)
         except Exception as e:
             raise Exception("Error in static propagation at time t=" + str(time)) from e
+        self.set_sub_faults()
 
     def prop_static(self, time, run_stochastic=False):
         """

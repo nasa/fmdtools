@@ -31,6 +31,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import t_key, unpack_x
+from fmdtools.define.object.base import init_obj
 from fmdtools.define.object.coords import BaseCoords
 from fmdtools.define.block.function import ExampleFunction
 from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
@@ -172,16 +173,33 @@ class BaseProblem(object):
         Constraints returned.
     """
 
-    def __init__(self):
-        if not hasattr(self, 'variables'):
-            self.variables = {}
+    def __init__(self, name='', **kwargs):
+        self.name = name
+        self.variables = {}
         self.objectives = {}
         self.constraints = {}
         self.iter_hist = History({"time": [],
                                   "iter": [],
-                                  "variables": History({k: [] for k in self.variables}),
+                                  "variables": History(),
                                   "objectives": History(),
                                   "constraints": History()})
+        self.init_problem(**kwargs)
+
+    def add_variables(self, *variables):
+        """
+        Add variables to the problem.
+
+        Parameters
+        ----------
+        *variables : str
+            Names of variables to call in the problem.
+        """
+        self.variables.update({v: np.nan for v in variables})
+        for v in variables:
+            self.iter_hist['variables'][v] = []
+
+    def init_problem(self, **kwargs):
+        raise Exception(self.__class__.__name__+".init_problem not implemented.")
 
     def name_repr(self):
         """Single-line name representation."""
@@ -320,9 +338,11 @@ class BaseProblem(object):
 
         Examples
         --------
-        >>> exp = SimpleProblem()
-        >>> exp.add_objective("a", "a", negative=True)
-        >>> exp.add_objective("b", "b")
+        >>> class ExpSimp(SimpleProblem):
+        ...     def init_problem(self, **kwargs):
+        ...         self.add_objective("a", "a", negative=True)
+        ...         self.add_objective("b", "b")
+        >>> exp = ExpSimp()
         >>> exp.iter_hist = History({'time': [0,1,2], 'objectives.a': [10, 11, 12], 'objectives.b': [8, 10, 7]})
         >>> h = exp.get_opt_hist()
         >>> h.a
@@ -403,8 +423,6 @@ class SimpleProblem(BaseProblem):
     """
     Simple optimization problem (without any given model constructs).
 
-    ...
-
     Attributes
     ----------
     callables : dict
@@ -412,22 +430,23 @@ class SimpleProblem(BaseProblem):
 
     Examples
     --------
-    >>> ex_sp = SimpleProblem("x0", "x1")
-    >>> f1 = lambda x0, x1: x0 + x1
-    >>> ex_sp.add_objective("f1", f1)
-    >>> g1 = lambda x0, x1: x0 - x1
-    >>> ex_sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
-
+    >>> class ExampleSimpleProblem(SimpleProblem):
+    ...     def init_problem(self, **kwargs):
+    ...         self.add_variables("x0", "x1")
+    ...         f1 = lambda x0, x1: x0 + x1
+    ...         self.add_objective("f1", f1)
+    ...         g1 = lambda x0, x1: x0 - x1
+    ...         self.add_constraint("g1", g1, threshold=3.0, comparator="less")
+    >>> ex_sp = ExampleSimpleProblem()
     >>> ex_sp.f1(1, 1)
     2
     >>> ex_sp.g1(1, 1)
     -3.0
     """
 
-    def __init__(self, *variables):
-        self.variables = {v: np.nan for v in variables}
-        super().__init__()
+    def __init__(self, **kwargs):
         self.callables = {}
+        super().__init__(**kwargs)
 
     def update_objectives(self, *x):
         """Update objectives/constraints by calling callables."""
@@ -467,6 +486,16 @@ class SimpleProblem(BaseProblem):
         """
         self.callables[name] = call
         super().add_constraint(name, name, **kwargs)
+
+
+class ExampleSimpleProblem(SimpleProblem):
+    """Example simple Problem for docs."""
+
+    def init_problem(self, **kwargs):
+        """Initialize the problem."""
+        self.add_variables("x0", "x1")
+        self.add_objective("f1", lambda x0, x1: x0 + x1)
+        self.add_constraint("g1", lambda x0, x1: x0 - x1, threshold=3.0, comparator="less")
 
 
 class ResultObjective(Objective):
@@ -607,8 +636,28 @@ class BaseSimProblem(BaseProblem):
         Whether to get/keep the endresult. Default is False.
     """
 
-    def __init__(self, mdl, prop_method, *args, keep_ec=False, **kwargs):
-        self.mdl = mdl
+    def add_sim(self, mdl, prop_method, *args, keep_ec=False, **kwargs):
+        """
+        Add the base simulation to the Problem.
+
+        Parameters
+        ----------
+        mdl : Block/Architecture class or object
+            Model to simulate.
+        prop_method : str
+            Name of propagate method to simulate the model with.
+        *args : args
+            Arguments to the propagate method.
+        keep_ec : bool, optional
+            Whether to keep the endclass. The default is False.
+        **kwargs : kwargs
+            Keyword arguments to the propagate method.
+        """
+        if 'track' in kwargs:
+            track = kwargs['track']
+        else:
+            track = mdl.track
+        self.mdl = init_obj(objclass=mdl, track=track)
         if type(prop_method) is str:
             self.prop_method = getattr(propagate, prop_method)
         elif callable(prop_method):
@@ -619,7 +668,6 @@ class BaseSimProblem(BaseProblem):
         self.keep_ec = keep_ec
         self.args = args
         self.kwargs = kwargs
-        super().__init__()
 
     def add_result_objective(self, name, varname, **kwargs):
         """
@@ -718,6 +766,10 @@ class BaseSimProblem(BaseProblem):
                 obj.update(self.res)
         self.log_hist()
 
+    def close_pool(self):
+        """Close pool if instantiated in the Problem."""
+        propagate.close_pool({**self.kwargs, 'close_pool': True})
+
 
 class ParameterSimProblem(BaseSimProblem):
     """
@@ -731,12 +783,17 @@ class ParameterSimProblem(BaseSimProblem):
     below, we show basic setup of a parameter problem where objectives get values
     from the sim at particular times.
 
-    >>> exprob = ParameterSimProblem(ExampleFunction(), expd, "nominal")
-    >>> exprob.add_result_objective("f1", "s.x", time=5)
-    >>> exprob.add_result_objective("f2", "s.y", time=5)
-    >>> exprob.add_result_constraint("g1", "s.x", time=10, threshold=10, comparator='greater')
+    >>> class ExampleParameterSimProblem(ParameterSimProblem):
+    ...     def init_problem(self, **kwargs):
+    ...         self.add_sim(ExampleFunction(), "nominal")
+    ...         self.add_parameterdomain(expd)
+    ...         self.add_result_objective("f1", "s.x", time=5)
+    ...         self.add_result_objective("f2", "s.y", time=5)
+    ...         self.add_result_constraint("g1", "s.x", time=10, threshold=10, comparator="greater")
+
+    >>> exprob = ExampleParameterSimProblem()
     >>> exprob
-    ParameterSimProblem with:
+    ExampleParameterSimProblem with:
     VARIABLES
      -y                                                             nan
      -x                                                             nan
@@ -761,44 +818,45 @@ class ParameterSimProblem(BaseSimProblem):
 
     below, we use the endclass as an objective instead of the variable:
 
-    >>> exprob = ParameterSimProblem(ExampleFunction(), expd, "nominal")
-    >>> exprob.add_result_objective("f1", "endclass.xy")
-    >>> exprob.f1(1, 1)
+    >>> class ExampleParameterSimProblemObj(ParameterSimProblem):
+    ...     def init_problem(self, **kwargs):
+    ...         self.add_sim(ExampleFunction(), "nominal")
+    ...         self.add_parameterdomain(expd)
+    ...         self.add_result_objective("f1", "endclass.xy")
+
+    >>> ex_obj_prob = ExampleParameterSimProblemObj()
+    >>> ex_obj_prob.f1(1, 1)
     100.0
-    >>> exprob.f1(1, 2)
+    >>> ex_obj_prob.f1(1, 2)
     200.0
 
     finally, note that this class can work with a variety of methods:
 
-    >>> exprob = ParameterSimProblem(ExampleFunction("ex"), expd, "one_fault", "ex", "short", 2)
-    >>> exprob.add_result_objective("f1", "s.y", time=3)
-    >>> exprob.add_result_objective("f2", "s.y", time=5)
-    >>> exprob.f1(1, 1)
+    >>> class ExampleParameterSimProblemShort(ParameterSimProblem):
+    ...     def init_problem(self, **kwargs):
+    ...         self.add_sim(ExampleFunction(),"one_fault", "examplefunction", "short", 3)
+    ...         self.add_parameterdomain(expd)
+    ...         self.add_result_objective("f1", "s.x", time=3)
+    ...         self.add_result_objective("f2", "s.y", time=5)
+
+    >>> exprobshort = ExampleParameterSimProblemShort()
+    >>> exprobshort.f1(1, 1)
     2.0
-    >>> exprob.f2(1, 1)
-    4.0
+    >>> exprobshort.f2(1, 1)
+    3.0
     """
 
-    def __init__(self, mdl, parameterdomain, prop_method, *args, **kwargs):
+    def add_parameterdomain(self, parameterdomain):
         """
-        Define the Parameter problem model, domain, and simulation.
+        Add a ParameterDomain to the optimization problem.
 
         Parameters
         ----------
-        mdl : Simulable
-            Model to simulate.
         parameterdomain : ParameterDomain
-            ParameterDomain defining variables to optimize over
-        prop_method : str/callable
-            Name of function to call in fmdtools.sim.propagate
-        *args : args
-            Arguments to prop_method.
-        **kwargs : kwargs
-            Keyword arguments to prop_method.
+            Parameter Domain to optimize over.
         """
         self.parameterdomain = parameterdomain
-        self.variables = {v: np.nan for v in self.parameterdomain.variables}
-        super().__init__(mdl, prop_method, *args, **kwargs)
+        self.add_variables(*parameterdomain.variables)
 
     def sim_mdl(self, *x):
         """
@@ -829,6 +887,17 @@ class ParameterSimProblem(BaseSimProblem):
         return all_res[0].flatten(), all_res[1].flatten()
 
 
+class ExampleParameterSimProblem(ParameterSimProblem):
+    """Example ParameterSimProblem class."""
+
+    def init_problem(self, **kwargs):
+        self.add_sim(ExampleFunction(), "nominal")
+        self.add_parameterdomain(expd)
+        self.add_result_objective("f1", "s.x", time=5)
+        self.add_result_objective("f2", "s.y", time=5)
+        self.add_result_constraint("g1", "s.x", time=10, threshold=10, comparator="greater")
+
+
 class ScenarioProblem(BaseSimProblem):
     """
     Base class for optimizing scenario parameters.
@@ -840,9 +909,13 @@ class ScenarioProblem(BaseSimProblem):
         scenarios (where the model is copied instead of re-simulated).
     """
 
-    def __init__(self, mdl, faultdomain=None, phasemap=None, **kwargs):
-        super().__init__(mdl, "prop_one_scen", **kwargs)
+    def __init__(self, **kwargs):
         self.prepped_sims = {}
+        super().__init__(**kwargs)
+
+    def add_sim(self, mdl, **kwargs):
+        """Add a simulation - always uses prop_one_scen method."""
+        super().add_sim(mdl, "prop_one_scen", **kwargs)
 
     def prep_sim(self):
         """Prepare simulation by simulating it until the start of the scenario."""
@@ -916,11 +989,14 @@ class SingleFaultScenarioProblem(ScenarioProblem):
     Examples
     --------
     >>> from fmdtools.define.block.function import ExampleFunction
-    >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefunction", "short"))
-    >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
+    >>> class ExScenProb(SingleFaultScenarioProblem):
+    ...     def init_problem(self, **kwargs):
+    ...         self.add_sim(ExampleFunction(), ("examplefunction", "short"))
+    ...         self.add_result_objective("f1", "s.y", time=5)
+
 
     objective value should be 1.0 (init value) + 3 * time_with_fault
-
+    >>> ex_scenprob = ExScenProb()
     >>> ex_scenprob.f1(5.0)
     4.0
     >>> ex_scenprob.f1(4.0)
@@ -932,7 +1008,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         faulttup = [*self.faultdomain.faults.keys()][0]
         return "SingleScenarioProblem("+faulttup[0]+", "+faulttup[1]+")"
 
-    def __init__(self, mdl, faulttup, phasemap=None, sim_start=0.0, **kwargs):
+    def add_sim(self, mdl, faulttup, phasemap=None, sim_start=0.0, **kwargs):
         """
         Initialize the SingleFaultScenarioProblem with a given fault to optimize.
 
@@ -955,8 +1031,8 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         self.faultdomain = faultdomain
         self.phasemap = phasemap
         self.sim_start = sim_start
-        self.variables = {"time": np.nan}
-        super().__init__(mdl, **kwargs)
+        self.add_variables("time")
+        super().add_sim(mdl, **kwargs)
 
     def get_start_time(self):
         """Get the scenario start time to copy the model at."""
@@ -987,12 +1063,36 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         return scen
 
 
-class DisturbanceProblem(ScenarioProblem):
-    """Class for optimizing disturbances that occur at a set time."""
+class ExScenProb(SingleFaultScenarioProblem):
+    """Example Scenario problem for docs and testing."""
 
-    def __init__(self, mdl, time, *disturbances, **kwargs):
+    def init_problem(self, **kwargs):
+        self.add_sim(ExampleFunction(), ("examplefunction", "short"))
+        self.add_result_objective("f1", "s.y", time=5)
+
+
+class DisturbanceProblem(ScenarioProblem):
+    """
+    Class for optimizing disturbances that occur at a set time.
+
+    Examples
+    --------
+    >>> from fmdtools.define.block.function import ExampleFunction
+    >>> class ExampleDisturbanceProblem(DisturbanceProblem):
+    ...     def init_problem(self, **kwargs):
+    ...         self.add_sim(ExampleFunction(), 3, "s.y")
+    ...         self.add_result_objective("f1", "s.y", time=5)
+
+    >>> ex_dp = ExampleDisturbanceProblem()
+    >>> ex_dp.f1(5.0)
+    5.0
+    >>> ex_dp.f1(4.0)
+    4.0
+    """
+
+    def add_sim(self, mdl, time, *disturbances, **kwargs):
         """
-        Initialize the DisturbanceProblem.
+        Initialize the DisturbanceProblem sim.
 
         Parameters
         ----------
@@ -1004,22 +1104,10 @@ class DisturbanceProblem(ScenarioProblem):
             Names of variables to perturb at time t (which become the variables)
         **kwargs : TYPE
             DESCRIPTION.
-
-        Examples
-        --------
-        >>> from fmdtools.define.block.function import ExampleFunction
-        >>> ex_dp = DisturbanceProblem(ExampleFunction(), 3, "s.y")
-        >>> ex_dp.add_result_objective("f1", "s.y", time=5)
-
-        # objective value should the same as the input value
-        >>> ex_dp.f1(5.0)
-        5.0
-        >>> ex_dp.f1(4.0)
-        4.0
         """
-        self.variables = {d: np.nan for d in disturbances}
         self.time = time
-        super().__init__(mdl, **kwargs)
+        self.add_variables(*disturbances)
+        super().add_sim(mdl, **kwargs)
 
     def get_start_time(self):
         """Get the scenario start time to copy the model at."""
@@ -1051,6 +1139,14 @@ class DisturbanceProblem(ScenarioProblem):
                         name='disturbance',
                         time=t)
         return scen
+
+
+class ExampleDisturbanceProblem(DisturbanceProblem):
+    """Example DisturbanceProblem for testing and docs."""
+
+    def init_problem(self, **kwargs):
+        self.add_sim(ExampleFunction(), 3, "s.y")
+        self.add_result_objective("f1", "s.y", time=5)
 
 
 class BaseConnector(dataobject):
@@ -1170,26 +1266,17 @@ class ProblemArchitecture(BaseProblem):
     x0 and x1 from ex_sp to be inputs to the scenario simulation (time) as well as the
     disturbance simulation variable (s.y).
 
-    >>> ex_sp = SimpleProblem("x0", "x1")
-    >>> f1 = lambda x0, x1: x0 + x1
-    >>> ex_sp.add_objective("f1", f1)
-    >>> g1 = lambda x0, x1: x0 - x1
-    >>> ex_sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
+    >>> class ExampleProblemArchitecture(ProblemArchitecture):
+    ...     def init_problem(self, **kwargs):
+    ...         self.add_connector_variable("x0", "x0")
+    ...         self.add_connector_variable("x1", "x1")
+    ...         self.add_problem("ex_sp", ExampleSimpleProblem, outputs={"x0": ["x0"], "x1": ["x1"]})
+    ...         self.add_problem("ex_scenprob", ExScenProb, inputs={"x0": ["time"]})
+    ...         self.add_problem("ex_dp", ExampleDisturbanceProblem, inputs={"x1": ["s.y"]})
 
-    >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefunction", "short"))
-    >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
-
-    >>> ex_dp = DisturbanceProblem(ExampleFunction(), 3, "s.y")
-    >>> ex_dp.add_result_objective("f1", "s.y", time=5)
-
-    >>> ex_pa = ProblemArchitecture()
-    >>> ex_pa.add_connector_variable("x0", "x0")
-    >>> ex_pa.add_connector_variable("x1", "x1")
-    >>> ex_pa.add_problem("ex_sp", ex_sp, outputs={"x0": ["x0"], "x1": ["x1"]})
-    >>> ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
-    >>> ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
+    >>> ex_pa = ExampleProblemArchitecture()
     >>> ex_pa
-    ProblemArchitecture with:
+    ExampleProblemArchitecture with:
     CONNECTORS
      -x0                                                          [nan]
      -x1                                                          [nan]
@@ -1224,12 +1311,13 @@ class ProblemArchitecture(BaseProblem):
     3.0
     """
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.connectors = {}
         self.problems = {}
         self.problem_graph = nx.DiGraph()
         self.var_mapping = {}
-        super().__init__()
+        super().__init__(**kwargs)
+        self.kwargs = kwargs
 
     def prob_repr(self):
         repstr = ""
@@ -1337,7 +1425,7 @@ class ProblemArchitecture(BaseProblem):
             problem.consistent = False
         else:
             problem.consistent = True
-        self.problems[name] = problem
+        self.problems[name] = init_obj(name, problem)
         self.problem_graph.add_node(name, order=len(self.problems))
 
         for con in inputs:
@@ -1482,28 +1570,10 @@ class ProblemArchitecture(BaseProblem):
 
         Examples
         --------
-        >>> ex_sp = SimpleProblem("x0", "x1")
-        >>> f1 = lambda x0, x1: x0 + x1
-        >>> ex_sp.add_objective("f1", f1)
-        >>> g1 = lambda x0, x1: x0 - x1
-        >>> ex_sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
-
-        >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefunction", "short"))
-        >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
-
-        >>> ex_dp = DisturbanceProblem(ExampleFunction(), 3, "s.y")
-        >>> ex_dp.add_result_objective("f1", "s.y", time=5)
-
-        >>> ex_pa = ProblemArchitecture()
-        >>> ex_pa.add_connector_variable("x0", "x0")
-        >>> ex_pa.add_connector_variable("x1", "x1")
-        >>> ex_pa.add_problem("ex_sp", ex_sp, outputs={"x0": ["x0"], "x1": ["x1"]})
-        >>> ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
-        >>> ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
-
+        >>> ex_pa = ExampleProblemArchitecture()
         >>> ex_pa.update_full_problem(1, 2)
         >>> ex_pa
-        ProblemArchitecture with:
+        ExampleProblemArchitecture with:
         CONNECTORS
          -x0                                                           [1.]
          -x1                                                           [2.]
@@ -1521,7 +1591,7 @@ class ProblemArchitecture(BaseProblem):
          -ex_sp_g1                                                  -4.0000
 
         >>> ex_pa.problems['ex_dp']
-        DisturbanceProblem with:
+        ExampleDisturbanceProblem with:
         VARIABLES
          -s.y                                                        2.0000
         OBJECTIVES
@@ -1561,28 +1631,10 @@ class ProblemArchitecture(BaseProblem):
 
         Examples
         --------
-        >>> ex_sp = SimpleProblem("x0", "x1")
-        >>> f1 = lambda x0, x1: x0 + x1
-        >>> ex_sp.add_objective("f1", f1)
-        >>> g1 = lambda x0, x1: x0 - x1
-        >>> ex_sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
-
-        >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefunction", "short"))
-        >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
-
-        >>> ex_dp = DisturbanceProblem(ExampleFunction(), 3, "s.y")
-        >>> ex_dp.add_result_objective("f1", "s.y", time=5)
-
-        >>> ex_pa = ProblemArchitecture()
-        >>> ex_pa.add_connector_variable("x0", "x0")
-        >>> ex_pa.add_connector_variable("x1", "x1")
-        >>> ex_pa.add_problem("ex_sp", ex_sp, outputs={"x0": ["x0"], "x1": ["x1"]})
-        >>> ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
-        >>> ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
-
+        >>> ex_pa = ExampleProblemArchitecture()
         >>> ex_pa.update_problem("ex_sp", 1, 2)
         >>> ex_pa.problems["ex_sp"]
-        SimpleProblem with:
+        ExampleSimpleProblem with:
         VARIABLES
          -x0                                                         1.0000
          -x1                                                         2.0000
@@ -1744,6 +1796,17 @@ class ProblemArchitecture(BaseProblem):
                        for e, lab in edge_labels.items()}
         nx.draw_networkx_edge_labels(self.problem_graph, pos, edge_labels=edge_labels)
         return fig, ax
+
+
+class ExampleProblemArchitecture(ProblemArchitecture):
+    """Example ProblemProblemArchitecture for docs and testing."""
+
+    def init_problem(self, **kwargs):
+        self.add_connector_variable("x0", "x0")
+        self.add_connector_variable("x1", "x1")
+        self.add_problem("ex_sp", ExampleSimpleProblem, outputs={"x0": ["x0"], "x1": ["x1"]})
+        self.add_problem("ex_scenprob", ExScenProb, inputs={"x0": ["time"]})
+        self.add_problem("ex_dp", ExampleDisturbanceProblem, inputs={"x1": ["s.y"]})
 
 
 class DynamicInterface():
@@ -1919,9 +1982,7 @@ if __name__ == "__main__":
 
     from fmdtools.sim.sample import expd
     from fmdtools.define.block.function import ExampleFunction
-    exprob = ParameterSimProblem(ExampleFunction("ex"), expd, "one_fault", "ex", "short", 2)
-    exprob.add_result_objective("f1", "s.y", time=3)
-    exprob.add_result_objective("f2", "s.y", time=5)
+    exprob = ExampleParameterSimProblem()
     exprob.f1(1, 1)
 
     exprob.f2(1, 1)

@@ -249,8 +249,6 @@ class Architecture(Simulable):
 
         # add modes to overall mode dict
         sim = self.get_flex_role_objs(flex_role)[name]
-        if hasattr(sim, 'm') and hasattr(self, 'm'):
-            self.add_obj_modes(sim)
 
     def init_architecture(self, *args, **kwargs):
         """Use to initialize architecture."""
@@ -323,49 +321,12 @@ class Architecture(Simulable):
                     rand_states[objname] = rand_state
         return rand_states
 
-    def get_faults(self):
-        """Get faults from contained roles."""
-        return {obj.name+"_"+f for obj in self.get_flex_role_objs().values()
-                if hasattr(obj, 'm') for f in obj.m.faults}
-
     def reset(self):
         """Reset the architecture and its contained objects."""
         super().reset()
         for obj in self.get_flex_role_objs().values():
             if hasattr(obj, 'reset'):
                 obj.reset()
-
-    def add_obj_modes(self, obj):
-        """Add modes from an object to faultmodes."""
-        modes_to_add = {obj.name+'_'+f: val
-                        for f, val in obj.m.faultmodes.items()}
-        fmode_intersect = set(modes_to_add).intersection(self.m.sub_modes)
-        if any(fmode_intersect):
-            raise Exception("Action " + obj.name +
-                            " overwrites existing fault modes: "+str(fmode_intersect) +
-                            ". Rename the faults")
-        self.m.sub_modes.update({obj.name+'_'+modename: obj.name
-                                 for modename in obj.m.faultmodes})
-
-    def inject_faults(self, flexible_role, faults):
-        """
-        Inject faults in the ComponentArchitecture/ASG object obj.
-
-        Parameters
-        ----------
-        flexible_role: str
-            Name of role to inject faults in (e.g., fxns, .acts, comps)
-        faults : dict
-            Dict of faults to inject {'fxnname': ['faultname']}.
-        """
-        compdict = getattr(self, flexible_role)
-        for fault in faults:
-            if hasattr(self, 'm') and self.m.sub_modes and fault in self.m.sub_modes:
-                comp = compdict[self.m.sub_modes[fault]]
-                comp.inject_faults(fault[len(comp.name)+1:])
-            elif fault in compdict:
-                comp = compdict[fault]
-                comp.inject_faults(faults[fault])
 
     def copy(self, flows={}, **kwargs):
         """

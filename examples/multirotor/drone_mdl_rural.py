@@ -188,12 +188,12 @@ class BatMode(Mode):
     """
 
     failrate = 1e-4
-    fm_args = {'short': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
-               'degr': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
-               'break': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
-               'nocharge': (0.6, 100, {"taxi": 0.7, "move": 0.2, "land": 0.1}),
-               'lowcharge': (0.4, 100, {"taxi": 0.5, "move": 0.2, "land": 0.3})}
-    units = 'hr'
+    fault_short = (0.2, 100, (("taxi", 0.3), ("move", 0.3), ("land", 0.3)))
+    fault_degr = (0.2, 100, (("taxi", 0.3), ("move", 0.3), ("land", 0.3)))
+    fault_break = (0.2, 100, (("taxi", 0.3), ("move", 0.3), ("land", 0.3)))
+    fault_nocharge = (0.6, 100, (("taxi", 0.7), ("move", 0.2), ("land", 0.1)))
+    fault_lowcharge = (0.4, 100, (("taxi", 0.5), ("move", 0.2), ("land", 0.3)))
+    default_units = 'hr'
 
 
 class BatParam(Parameter):
@@ -347,8 +347,9 @@ class StoreEEMode(Mode):
     """Overall StoreEE mode."""
 
     failrate = 1e-4
-    fm_args = {'nocharge': (0.2, 0, {"taxi": 0.6, "move": 0.2, "land": 0.2}),
-               'lowcharge': (0.7, 0, {"taxi": 0.6, "move": 0.2, "land": 0.2})}
+    fault_nocharge = (0.2, 0)
+    fault_lowcharge = (0.7, 0)
+    default_phases = (("taxi", 0.6), ("move", 0.2), ("land", 0.2))
     units = 'hr'
 
 
@@ -421,9 +422,10 @@ class HoldPayloadMode(Mode):
     """
 
     failrate = 1e-6
-    fm_args = {'break': (0.2, 1000, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
-               'deform': (0.8, 1000, {"taxi": 0.3, "move": 0.3, "land": 0.3})}
-    units = 'hr'
+    fault_break = (0.2, 1000)
+    fault_deform = (0.8, 1000)
+    default_phases = (("taxi", 0.3), ("move", 0.3), ("land", 0.3))
+    default_units = 'hr'
 
 
 class HoldPayload(HoldPayloadDyn):
@@ -444,7 +446,7 @@ class ManageHealthMode(Mode):
     """
 
     failrate = 1e-6
-    fm_args = {'lostfunction': (0.05, 1000, {"taxi": 0.3, "move": 0.3, "land": 0.3})}
+    fault_lostfunction = (0.05, 1000, (("taxi", 0.3), ("move", 0.3), ("land", 0.3)))
     units = 'hr'
 
 
@@ -513,8 +515,8 @@ class CtlDOFMode(Mode):
     """
 
     failrate = 1e-5
-    fm_args = {'noctl': (0.2, 1000, {"taxi": 0.6, "move": 0.3, "land": 0.1}),
-               'degctl': (0.8, 1000, {"taxi": 0.6, "move": 0.3, "land": 0.1})}
+    fault_noctl = (0.2, 1000, (("taxi", 0.6), ("move", 0.3), ("land", 0.1)))
+    fault_degctl = (0.8, 1000, (("taxi", 0.6), ("move", 0.3), ("land", 0.1)))
     mode: str = 'nominal'
     units = 'hr'
 
@@ -551,9 +553,9 @@ class PlanPathMode(Mode):
     """
 
     failrate = 1e-5
-    fm_args = {'noloc': (0.2, 1000),
-               'degloc': (0.8, 1000)}
-    phases = {"taxi": 0.6, "move": 0.3, "land": 0.1}
+    fault_noloc = (0.2, 1000)
+    fault_degloc = (0.8, 1000)
+    default_phases = (("taxi", 0.6), ("move", 0.3), ("land", 0.1))
     opermodes = ('taxi', 'to_nearest', 'to_home', 'emland', 'land', 'move')
     mode: str = 'taxi'
     exclusive = False
@@ -738,10 +740,8 @@ class Drone(FunctionArchitecture):
         ----------
         scen : Scenario
             Fault Scenario
-        viewed : TYPE
-            DESCRIPTION.
-        faulttime : TYPE
-            DESCRIPTION.
+        faulttime : int
+            time when the fault occurs.
 
         Returns
         -------
@@ -924,6 +924,7 @@ if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
     from fmdtools.analyze import phases
     from fmdtools.sim.sample import SampleApproach
+    from fmdtools.define.architecture.function import FunctionArchitectureGraph
 
     # check operational phases
     mdl = Drone()

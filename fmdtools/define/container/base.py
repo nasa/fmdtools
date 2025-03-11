@@ -425,6 +425,11 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         code = "\n".join(code.split("\n    "))
         return remove_para(code)
 
+    def get_pref_attrs(self, prefix, space="_"):
+        """Return dict of Container attributes with 'prefix_' as the var name."""
+        prefix_len = len(prefix) + len(space)
+        return {p[prefix_len:]: self[p] for p in dir(self) if p.startswith(prefix+space)}
+
 def check_container_pick(container, *args, **kwargs):
     """
     Check that a given container class or object will pickle.
