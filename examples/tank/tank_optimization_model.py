@@ -25,7 +25,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from examples.tank.tank_model import TransportLiquidState, Signal, Liquid
-from examples.tank.tank_model import StoreLiquidMode 
+from examples.tank.tank_model import StoreLiquidMode
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State

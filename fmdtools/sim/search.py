@@ -180,7 +180,7 @@ class BaseProblem(object):
         self.constraints = {}
         self.iter_hist = History({"time": [],
                                   "iter": [],
-                                  "variables": History({k: [] for k in self.variables}),
+                                  "variables": History(),
                                   "objectives": History(),
                                   "constraints": History()})
         self.init_problem(**kwargs)
@@ -195,6 +195,8 @@ class BaseProblem(object):
             Names of variables to call in the problem.
         """
         self.variables.update({v: np.nan for v in variables})
+        for v in variables:
+            self.iter_hist['variables'][v] = []
 
     def init_problem(self, **kwargs):
         raise Exception(self.__class__.__name__+".init_problem not implemented.")
@@ -764,6 +766,10 @@ class BaseSimProblem(BaseProblem):
                 obj.update(self.res)
         self.log_hist()
 
+    def close_pool(self):
+        """Close pool if instantiated in the Problem."""
+        propagate.close_pool({**self.kwargs, 'close_pool': True})
+
 
 class ParameterSimProblem(BaseSimProblem):
     """
@@ -850,7 +856,7 @@ class ParameterSimProblem(BaseSimProblem):
             Parameter Domain to optimize over.
         """
         self.parameterdomain = parameterdomain
-        self.variables.update({v: np.nan for v in self.parameterdomain.variables})
+        self.add_variables(*parameterdomain.variables)
 
     def sim_mdl(self, *x):
         """
@@ -1305,12 +1311,13 @@ class ProblemArchitecture(BaseProblem):
     3.0
     """
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.connectors = {}
         self.problems = {}
         self.problem_graph = nx.DiGraph()
         self.var_mapping = {}
-        super().__init__()
+        super().__init__(**kwargs)
+        self.kwargs = kwargs
 
     def prob_repr(self):
         repstr = ""

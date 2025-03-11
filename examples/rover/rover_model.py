@@ -635,7 +635,7 @@ class DriveMode(FlexibleMode):
         elif type(self.mode_options) is list:
             self.add_mode_list()
         elif type(self.mode_options) is dict:
-            self.init_faultstate_modes(manual_modes=self.mode_options)
+            self.init_faultmodes(**self.mode_options)
         else:
             if "manual" in self.mode_options:
                 self.add_manual_modes()
