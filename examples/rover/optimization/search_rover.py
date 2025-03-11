@@ -31,16 +31,18 @@ def line_dist(ind, show_plot=False, print_time=False):
     starttime = time.time()
     mdl = rvr.Rover(p=rvr.RoverParam('turn', x_start=5.0, drive_modes=drive_modes))
     track = {'fxns': {'environment': 'all'}, 'flows': {'ground': 'all'}}
-    endresults, reshist = prop.one_fault(mdl, 'drive', 'custom_fault', time=fault_time,
-                                         staged=True, protect=False, track=track)
-    dist = endresults.endclass['line_dist']
-    enddist = endresults.endclass['end_dist']
-    endpt = endresults.endclass['endpt']
+    disturbances = {'fxns.drive.s.friction': ind[0],
+                    'fxns.drive.s.transfer': ind[1],
+                    'fxns.drive.s.drift': ind[2]}
+    res, hist = prop.sequence(mdl, disturbances={fault_time: disturbances})
+    dist = res.endclass['line_dist']
+    enddist = res.endclass['end_dist']
+    endpt = res.endclass['endpt']
 
     if print_time:
         print("Standard Exec Time: "+str(time.time()-starttime))
     if show_plot:
-        reshist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y')
+        hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y')
     # faultlabel='Faulty Scenarios', faultalpha=1.0)
     return dist, enddist,  endpt
 

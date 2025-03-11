@@ -64,13 +64,15 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         """Test so models with the same seed will run the same/produce same results."""
         for seed in [1, 10, 209840]:
             mdl = Pump(r={'seed': seed})
-            res_1, hist_1 = prop.nominal(mdl, run_stochastic=True, showprogress=False)
+            res_1, hist_1 = prop.nominal(mdl, run_stochastic=True, showprogress=False,
+                                         warn_faults=False)
             res_f1, hist_f1 = prop.single_faults(mdl, run_stochastic=True,
                                                  showprogress=False)
             if seed is None:
                 seed = mdl.r.seed
             mdl2 = Pump(r={'seed': seed})
-            res_2, hist_2 = prop.nominal(mdl2, run_stochastic=True, showprogress=False)
+            res_2, hist_2 = prop.nominal(mdl2, run_stochastic=True, showprogress=False,
+                                         warn_faults=False)
             res_f2, hist_f2 = prop.single_faults(mdl2, run_stochastic=True,
                                                  showprogress=False)
             self.assertTrue(all(hist_1.fxns.move_water.s.eff ==
@@ -91,7 +93,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         ps = ParameterSample()
         ps.add_variable_replicates([], replicates=1000)
         res, hist = prop.parameter_sample(mdl, ps, showprogress=False,
-                                          run_stochastic=True,
+                                          run_stochastic=True, warn_faults=False,
                                           desired_result={})
         ave_effs = []
         std_effs = []
@@ -163,7 +165,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         ps = ParameterSample()
         ps.add_variable_replicates([], replicates=10)
         res, hist = prop.parameter_sample(mdl, ps, run_stochastic=True,
-                                          showprogress=False)
+                                          showprogress=False, warn_faults=False)
         res['rep0_var_0.endclass.cost'] = 10.0
         # an.plot.nominal_vals_1d(app, endres, 'r.seed', metric="nonsense")
         title = "should show at least one red line over range of seeds"
@@ -182,11 +184,11 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         ps2.add_variable_replicates([[0]], replicates=100, name="nodelay")
         ps2.add_variable_replicates([[10]], replicates=100, name="delay10")
         ps2.add_variable_replicates([[15]], replicates=100, name="delay15")
-        nomres, nomhist = prop.parameter_sample(mdl, ps2,
+        nomres, nomhist = prop.parameter_sample(mdl, ps2, warn_faults=False,
                                                 showprogress=False)
 
         res, hist = prop.parameter_sample(mdl, ps2, run_stochastic=True,
-                                          showprogress=False)
+                                          showprogress=False, warn_faults=False)
         res['delay_10_20.endclass.cost'] = 10.0
         title = ("should show at least one red x over range of seeds," +
                  " probs, and delay={1, 10}")
@@ -246,7 +248,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         ps.add_variable_replicates([], 20)
         mdl = Pump()
         res, hist = prop.parameter_sample(mdl, ps, run_stochastic=True,
-                                          showprogress=False)
+                                          warn_faults=False, showprogress=False)
 
         title = "should show bounds and perc of random variables over time"
         hist.plot_line('fxns.move_water.r.s.eff', 'fxns.move_water.s.total_flow',

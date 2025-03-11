@@ -26,7 +26,7 @@ from tests.common import CommonTests
 from fmdtools.define.object.base import check_pickleability
 from fmdtools.sim import propagate as prop
 from fmdtools.sim.sample import ParameterDomain, ParameterSample
-from fmdtools.sim.sample import FaultDomain, FaultSample, ParameterSample
+from fmdtools.sim.sample import FaultDomain, FaultSample
 from fmdtools.analyze.result import load
 from fmdtools.analyze.history import History
 from fmdtools.analyze import tabulate

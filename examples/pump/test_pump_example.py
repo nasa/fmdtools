@@ -47,8 +47,9 @@ class ImportEE_Tests(unittest.TestCase):
     def test_initialization(self):
         """Tests that the connections, faults, etc instantiated correctly."""
         self.assertIs(self.ee_1, self.import_ee.ee_out)
-        self.assertIn('no_v', self.import_ee.m.faultmodes)
-        self.assertIn('inf_v', self.import_ee.m.faultmodes)
+        faultnames = self.import_ee.m.get_all_faultnames()
+        self.assertIn('no_v', faultnames)
+        self.assertIn('inf_v', faultnames)
 
     def test_condfaults_hi(self):
         """Test that behavior under high current results in no_v fault."""
@@ -90,8 +91,9 @@ class MoveWat_Tests(unittest.TestCase):
 
     def test_initialization(self):
         """Tests that the connections, faults, etc instantiated are correct."""
-        self.assertIn('mech_break', self.move_wat.m.faultmodes)
-        self.assertIn('short', self.move_wat.m.faultmodes)
+        faultnames = self.move_wat.m.get_all_faultnames()
+        self.assertIn('mech_break', faultnames)
+        self.assertIn('short', faultnames)
         self.assertEqual(self.move_wat.s.eff, 1.0)
 
     def test_nom(self):
@@ -147,8 +149,8 @@ class Integration_Tests(unittest.TestCase):
         """Tests the output of the model when integrated in a faulty scenario."""
         endfaults, mdlhist = propagate.one_fault(self.mdl, 'export_water', 'block',
                                                  time=10, desired_result='endfaults')
-        self.assertIn('move_water', endfaults['endfaults'])
-        self.assertIn('export_water', endfaults['endfaults'])
+        self.assertIn('move_water.mech_break', endfaults['endfaults'])
+        self.assertIn('export_water.block', endfaults['endfaults'])
         # are the values of the function/flow states what we wanted?
         for t in range(0, int(self.mdl.sp.end_time)):
             if t < 5 or t >= 50:

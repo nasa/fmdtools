@@ -40,7 +40,7 @@ class epsTests(unittest.TestCase, CommonTests):
         """
         res, hist = prop.one_fault(self.mdl, "distribute_ee", "short",
                                    desired_result="endfaults")
-        self.assertEqual(res["endfaults"]["store_ee"], ["no_storage"])
+        self.assertEqual(res["endfaults"], ['store_ee.no_storage', 'distribute_ee.short'])
 
     def test_backward_fault_prop_2(self):
         """Tests that defined fault cases that require reverse propagation propagate
@@ -48,8 +48,7 @@ class epsTests(unittest.TestCase, CommonTests):
         """
         res, hist = prop.one_fault(self.mdl, "ee_to_me", "short",
                                    desired_result="endfaults")
-        self.assertEqual(res["endfaults"]["store_ee"], ["no_storage"])
-        self.assertEqual(res["endfaults"]["distribute_ee"], ["short"])
+        self.assertEqual(res["endfaults"], ['store_ee.no_storage', 'distribute_ee.short', 'ee_to_me.short'])
 
     def test_all_faults(self):
         """Some basic tests for propagating lists of faults in the model--
@@ -57,7 +56,7 @@ class epsTests(unittest.TestCase, CommonTests):
         than repairs"""
         mdl = self.mdl
         res, hist = prop.single_faults(mdl, showprogress=False)
-        actual_num_faults = np.sum([len(f.m.faultmodes) for f in mdl.fxns.values()
+        actual_num_faults = np.sum([len(f.m.get_all_faultnames()) for f in mdl.fxns.values()
                                     if hasattr(f, 'm')])
         self.assertEqual(len(res.nest(1)), actual_num_faults + 1)
         hist_len_is_1 = all([len(v) == 1 for v in hist.values()])
@@ -66,7 +65,7 @@ class epsTests(unittest.TestCase, CommonTests):
                               if 'nominal' not in k])
         # all endresults have positive costs
         self.assertTrue(all_have_costs)
-        repcosts = np.sum([np.sum([m["cost"] for m in f.m.faultmodes.values()])
+        repcosts = np.sum([np.sum([m["cost"] for m in f.m.get_faults().values()])
                            for f in mdl.fxns.values() if hasattr(f, 'm')])
         # fault costs higher than if it was just repairs
         total_simcosts = sum([v for v in res.get_values('.cost').values()])
@@ -75,7 +74,7 @@ class epsTests(unittest.TestCase, CommonTests):
     def test_fault_app(self):
         """Tests that the expected number of scenarios are generated for a given
         approach"""
-        tot_faults = [len(f.m.faultmodes) for f in self.mdl.fxns.values()
+        tot_faults = [len(f.m.get_all_faultnames()) for f in self.mdl.fxns.values()
                       if hasattr(f, 'm')]
         actual_num_faults = int(np.sum(tot_faults))
         for n_joint in [2, 3, actual_num_faults]:
