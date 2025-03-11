@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.analyze &mdash; fmdtools 2.0.7 documentation</title>
+  <title>fmdtools.analyze &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../_static/documentation_options.js?v=20623aea"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -521,6 +521,11 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -2854,23 +2859,25 @@ All other kwargs will be kwargs to Result.get_metric
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.sim.sample</span> <span class="kn">import</span> <span class="n">exfs</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Result</span><span class="p">({</span><span class="n">scen</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39;.endclass&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;rate&#39;</span><span class="p">:</span> <span class="n">scen</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">:</span> <span class="n">i</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">scen</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">exfs</span><span class="o">.</span><span class="n">scenarios</span><span class="p">())})</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exfs</span><span class="p">)</span><span class="o">.</span><span class="n">as_table</span><span class="p">(</span><span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;sum_cost&quot;</span><span class="p">)</span>
-<span class="go">                   average_scenario_rate  sum_cost  expected_cost</span>
-<span class="go">ex_fxn2 short                        0.0        13            0.0</span>
-<span class="go">        no_charge                    0.0         9            0.0</span>
-<span class="go">ex_fxn  short                        0.0         5            0.0</span>
-<span class="go">        no_charge                    0.0         1            0.0</span>
+<span class="go">                                  average_scenario_rate  ...  expected_cost</span>
+<span class="go">exfxnarch.fxns.ex_fxn2 short                        0.0  ...            0.0</span>
+<span class="go">                       no_charge                    0.0  ...            0.0</span>
+<span class="go">exfxnarch.fxns.ex_fxn  short                        0.0  ...            0.0</span>
+<span class="go">                       no_charge                    0.0  ...            0.0</span>
+
+<span class="go">[4 rows x 3 columns]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exfs</span><span class="p">,</span> <span class="n">average_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">],</span> <span class="n">sum_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">],</span> <span class="n">expected_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">],</span> <span class="n">rates</span><span class="o">=</span><span class="s2">&quot;rate&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
-<span class="go">                   average_rate  sum_cost  expected_cost</span>
-<span class="go">ex_fxn2 short               1.5        13             20</span>
-<span class="go">        no_charge           1.5         9             14</span>
-<span class="go">ex_fxn  short               1.5         5              8</span>
-<span class="go">        no_charge           1.5         1              2</span>
+<span class="go">                                  average_rate  sum_cost  expected_cost</span>
+<span class="go">exfxnarch.fxns.ex_fxn2 short               1.5        13             20</span>
+<span class="go">                       no_charge           1.5         9             14</span>
+<span class="go">exfxnarch.fxns.ex_fxn  short               1.5         5              8</span>
+<span class="go">                       no_charge           1.5         1              2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exfs</span><span class="p">,</span> <span class="n">sum_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">],</span> <span class="n">average_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
-<span class="go">                   sum_rate  average_cost</span>
-<span class="go">ex_fxn2 short             3           6.5</span>
-<span class="go">        no_charge         3           4.5</span>
-<span class="go">ex_fxn  short             3           2.5</span>
-<span class="go">        no_charge         3           0.5</span>
+<span class="go">                                  sum_rate  average_cost</span>
+<span class="go">exfxnarch.fxns.ex_fxn2 short             3           6.5</span>
+<span class="go">                       no_charge         3           4.5</span>
+<span class="go">exfxnarch.fxns.ex_fxn  short             3           2.5</span>
+<span class="go">                       no_charge         3           0.5</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -3080,16 +3087,16 @@ Default is lambda x: x == 0.0</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mdl</span> <span class="o">=</span> <span class="n">ExFxnArch</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="p">,</span> <span class="n">hist</span> <span class="o">=</span> <span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">exfs</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result_summary_fmea</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
-<span class="go">                                          degraded  ... expected_cost</span>
-<span class="go">ex_fxn_no_charge_t1              [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
-<span class="go">ex_fxn_no_charge_t2              [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
-<span class="go">ex_fxn_short_t1                  [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
-<span class="go">ex_fxn_short_t2                  [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
-<span class="go">ex_fxn2_no_charge_t1  [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...           0.0</span>
-<span class="go">ex_fxn2_no_charge_t2  [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...           0.0</span>
-<span class="go">ex_fxn2_short_t1      [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...           0.0</span>
-<span class="go">ex_fxn2_short_t2      [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...           0.0</span>
-<span class="go">nominal                                         []  ...           1.0</span>
+<span class="go">                                                         degraded  ... expected_cost</span>
+<span class="go">exfxnarch_fxns_ex_fxn_no_charge_t1              [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn_no_charge_t2              [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn_short_t1                  [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn_short_t2                  [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn2_no_charge_t1  [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...           0.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn2_no_charge_t2  [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...           0.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn2_short_t1      [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...           0.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn2_short_t2      [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...           0.0</span>
+<span class="go">nominal                                                        []  ...           1.0</span>
 
 <span class="go">[9 rows x 5 columns]</span>
 </pre></div>

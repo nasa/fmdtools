@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Human Failure Representation &mdash; fmdtools 2.0.7 documentation</title>
+  <title>Human Failure Representation &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../../_static/fmdtools_ico.ico"/>
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../../../_static/documentation_options.js?v=20623aea"></script>
       <script src="../../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -524,6 +524,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -683,7 +688,7 @@
 </div>
 <p>Visualizing Rover Structure</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">RoverHuman</span><span class="p">()</span>
@@ -692,8 +697,7 @@
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -711,6 +715,7 @@
  &#39;override&#39;: override Override
  - OverrideMode(mode=off, faults=set()),
  &#39;drive&#39;: drive Drive
+ - FaultStates(transfer=1.0, friction=0.0, drift=0.0)
  - DriveMode(mode=nominal, faults=set())}
 </pre></div></div>
 </div>
@@ -818,7 +823,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: &gt;)
+(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -845,7 +850,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: &gt;)
+(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -927,16 +932,16 @@
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultDomain with faults:
- -(&#39;operator&#39;, &#39;look_failed_no_action&#39;)
- -(&#39;operator&#39;, &#39;percieve_failed_no_action&#39;)
- -(&#39;operator&#39;, &#39;percieve_not_visible&#39;)
- -(&#39;operator&#39;, &#39;percieve_wrong_position&#39;)
- -(&#39;operator&#39;, &#39;comprehend_failed_no_action&#39;)
- -(&#39;operator&#39;, &#39;project_failed_turn_left&#39;)
- -(&#39;operator&#39;, &#39;project_failed_turn_right&#39;)
- -(&#39;operator&#39;, &#39;project_failed_slow&#39;)
- -(&#39;operator&#39;, &#39;project_failed_fast&#39;)
- -(&#39;operator&#39;, &#39;project_failed_no_action&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.look&#39;, &#39;failed_no_action&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;, &#39;failed_no_action&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;, &#39;not_visible&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;, &#39;wrong_position&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.comprehend&#39;, &#39;failed_no_action&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.project&#39;, &#39;failed_fast&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.project&#39;, &#39;failed_no_action&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.project&#39;, &#39;failed_slow&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.project&#39;, &#39;failed_turn_left&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.project&#39;, &#39;failed_turn_right&#39;)
  -...more
 </pre></div></div>
 </div>
@@ -957,16 +962,16 @@ FaultDomain with faults:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultSample of scenarios:
- - operator_look_failed_no_action_t56p0
- - operator_percieve_failed_no_action_t56p0
- - operator_percieve_not_visible_t56p0
- - operator_percieve_wrong_position_t56p0
- - operator_comprehend_failed_no_action_t56p0
- - operator_project_failed_turn_left_t56p0
- - operator_project_failed_turn_right_t56p0
- - operator_project_failed_slow_t56p0
- - operator_project_failed_fast_t56p0
- - operator_project_failed_no_action_t56p0
+ - roverhuman_fxns_operator_aa_acts_look_failed_no_action_t56p0
+ - roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t56p0
+ - roverhuman_fxns_operator_aa_acts_percieve_not_visible_t56p0
+ - roverhuman_fxns_operator_aa_acts_percieve_wrong_position_t56p0
+ - roverhuman_fxns_operator_aa_acts_comprehend_failed_no_action_t56p0
+ - roverhuman_fxns_operator_aa_acts_project_failed_fast_t56p0
+ - roverhuman_fxns_operator_aa_acts_project_failed_no_action_t56p0
+ - roverhuman_fxns_operator_aa_acts_project_failed_slow_t56p0
+ - roverhuman_fxns_operator_aa_acts_project_failed_turn_left_t56p0
+ - roverhuman_fxns_operator_aa_acts_project_failed_turn_right_t56p0
  - ... (19 total)
 </pre></div></div>
 </div>
@@ -984,25 +989,25 @@ FaultSample of scenarios:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;look_failed_no_action&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;look_failed_no_action&#39;, rate=1.0, name=&#39;operator_look_failed_no_action_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;percieve_failed_no_action&#39;, rate=0.3333333333333333, name=&#39;operator_percieve_failed_no_action_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;percieve_not_visible&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;percieve_not_visible&#39;, rate=0.3333333333333333, name=&#39;operator_percieve_not_visible_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;percieve_wrong_position&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;percieve_wrong_position&#39;, rate=0.3333333333333333, name=&#39;operator_percieve_wrong_position_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;comprehend_failed_no_action&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;comprehend_failed_no_action&#39;, rate=1.0, name=&#39;operator_comprehend_failed_no_action_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;project_failed_turn_left&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;project_failed_turn_left&#39;, rate=0.2, name=&#39;operator_project_failed_turn_left_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;project_failed_turn_right&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;project_failed_turn_right&#39;, rate=0.2, name=&#39;operator_project_failed_turn_right_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;project_failed_slow&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;project_failed_slow&#39;, rate=0.2, name=&#39;operator_project_failed_slow_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;project_failed_fast&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;project_failed_fast&#39;, rate=0.2, name=&#39;operator_project_failed_fast_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;project_failed_no_action&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;project_failed_no_action&#39;, rate=0.2, name=&#39;operator_project_failed_no_action_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;decide_failed_turn_left&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;decide_failed_turn_left&#39;, rate=0.2, name=&#39;operator_decide_failed_turn_left_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;decide_failed_turn_right&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;decide_failed_turn_right&#39;, rate=0.2, name=&#39;operator_decide_failed_turn_right_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;decide_failed_slow&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;decide_failed_slow&#39;, rate=0.2, name=&#39;operator_decide_failed_slow_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;decide_failed_fast&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;decide_failed_fast&#39;, rate=0.2, name=&#39;operator_decide_failed_fast_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;decide_failed_no_action&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;decide_failed_no_action&#39;, rate=0.2, name=&#39;operator_decide_failed_no_action_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;reach_failed_no_action&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;reach_failed_no_action&#39;, rate=1.0, name=&#39;operator_reach_failed_no_action_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;press_failed_left&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;press_failed_left&#39;, rate=0.3333333333333333, name=&#39;operator_press_failed_left_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;press_failed_right&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;press_failed_right&#39;, rate=0.3333333333333333, name=&#39;operator_press_failed_right_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;operator&#39;: [&#39;press_no_press&#39;]}, disturbances={})}, times=(56.0,), function=&#39;operator&#39;, fault=&#39;press_no_press&#39;, rate=0.3333333333333333, name=&#39;operator_press_no_press_t56p0&#39;, time=56.0, phase=&#39;override&#39;)]
+[SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.look&#39;: [&#39;failed_no_action&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.look&#39;, fault=&#39;failed_no_action&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_look_failed_no_action_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;: [&#39;failed_no_action&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;, fault=&#39;failed_no_action&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;: [&#39;not_visible&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;, fault=&#39;not_visible&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_percieve_not_visible_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;: [&#39;wrong_position&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;, fault=&#39;wrong_position&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_percieve_wrong_position_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.comprehend&#39;: [&#39;failed_no_action&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.comprehend&#39;, fault=&#39;failed_no_action&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_comprehend_failed_no_action_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.project&#39;: [&#39;failed_fast&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.project&#39;, fault=&#39;failed_fast&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_project_failed_fast_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.project&#39;: [&#39;failed_no_action&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.project&#39;, fault=&#39;failed_no_action&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_project_failed_no_action_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.project&#39;: [&#39;failed_slow&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.project&#39;, fault=&#39;failed_slow&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_project_failed_slow_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.project&#39;: [&#39;failed_turn_left&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.project&#39;, fault=&#39;failed_turn_left&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_project_failed_turn_left_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.project&#39;: [&#39;failed_turn_right&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.project&#39;, fault=&#39;failed_turn_right&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_project_failed_turn_right_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.decide&#39;: [&#39;failed_fast&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.decide&#39;, fault=&#39;failed_fast&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_decide_failed_fast_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.decide&#39;: [&#39;failed_no_action&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.decide&#39;, fault=&#39;failed_no_action&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_decide_failed_no_action_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.decide&#39;: [&#39;failed_slow&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.decide&#39;, fault=&#39;failed_slow&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_decide_failed_slow_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.decide&#39;: [&#39;failed_turn_left&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.decide&#39;, fault=&#39;failed_turn_left&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_decide_failed_turn_left_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.decide&#39;: [&#39;failed_turn_right&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.decide&#39;, fault=&#39;failed_turn_right&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_decide_failed_turn_right_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.reach&#39;: [&#39;failed_no_action&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.reach&#39;, fault=&#39;failed_no_action&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_reach_failed_no_action_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.press&#39;: [&#39;failed_left&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.press&#39;, fault=&#39;failed_left&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_press_failed_left_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.press&#39;: [&#39;failed_right&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.press&#39;, fault=&#39;failed_right&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_press_failed_right_t56p0&#39;, time=56.0, phase=&#39;override&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.press&#39;: [&#39;no_press&#39;]}, disturbances={})}, times=(56.0,), function=&#39;roverhuman.fxns.operator.aa.acts.press&#39;, fault=&#39;no_press&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_press_no_press_t56p0&#39;, time=56.0, phase=&#39;override&#39;)]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1018,7 +1023,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00,  4.32it/s]
+SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:02&lt;00:00,  7.65it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1118,241 +1123,241 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
   </thead>
   <tbody>
     <tr>
-      <th>operator_look_failed_no_action_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_look_failed_no_action_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['look_failed_no_action']}</td>
+      <td>[look.failed_no_action]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_percieve_failed_no_action_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t56p0</th>
+      <td>['ground']</td>
       <td>[]</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{}</td>
+      <td>[]</td>
       <td>nominal mission</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
     <tr>
-      <th>operator_percieve_not_visible_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_percieve_not_visible_t56p0</th>
+      <td>['ground']</td>
       <td>[]</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{}</td>
+      <td>[]</td>
       <td>nominal mission</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
     <tr>
-      <th>operator_percieve_wrong_position_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_percieve_wrong_position_t56p0</th>
+      <td>['ground']</td>
       <td>[]</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{}</td>
+      <td>[]</td>
       <td>nominal mission</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
     <tr>
-      <th>operator_comprehend_failed_no_action_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_comprehend_failed_no_action_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'compreh...</td>
+      <td>[percieve.not_visible, comprehend.failed_no_ac...</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_project_failed_turn_left_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
-      <td>['operator']</td>
-      <td>False</td>
-      <td>False</td>
-      <td>14.057688</td>
-      <td>{'operator': ['percieve_not_visible', 'project...</td>
-      <td>incomplete mission faulty</td>
-      <td>14.862043</td>
-      <td>-0.251773</td>
-    </tr>
-    <tr>
-      <th>operator_project_failed_turn_right_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
-      <td>['operator']</td>
-      <td>False</td>
-      <td>False</td>
-      <td>13.693675</td>
-      <td>{'operator': ['percieve_not_visible', 'project...</td>
-      <td>incomplete mission faulty</td>
-      <td>15.363988</td>
-      <td>1.140047</td>
-    </tr>
-    <tr>
-      <th>operator_project_failed_slow_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
-      <td>['operator']</td>
-      <td>True</td>
-      <td>False</td>
-      <td>9.31949</td>
-      <td>{'operator': ['project_failed_slow']}</td>
-      <td>incomplete mission faulty</td>
-      <td>19.740872</td>
-      <td>0.81243</td>
-    </tr>
-    <tr>
-      <th>operator_project_failed_fast_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_project_failed_fast_t56p0</th>
+      <td>['ground', 'pos_signal', 'pos', 'ee_15', 'vide...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>12.955107</td>
-      <td>{'operator': ['percieve_not_visible', 'project...</td>
+      <td>[percieve.not_visible, project.failed_fast]</td>
       <td>incomplete mission faulty</td>
       <td>16.023518</td>
       <td>0.480458</td>
     </tr>
     <tr>
-      <th>operator_project_failed_no_action_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_project_failed_no_action_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'project...</td>
+      <td>[percieve.not_visible, project.failed_no_action]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_decide_failed_turn_left_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_project_failed_slow_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'ee_12...</td>
+      <td>['operator']</td>
+      <td>True</td>
+      <td>False</td>
+      <td>9.31949</td>
+      <td>[project.failed_slow]</td>
+      <td>incomplete mission faulty</td>
+      <td>19.740872</td>
+      <td>0.81243</td>
+    </tr>
+    <tr>
+      <th>roverhuman_fxns_operator_aa_acts_project_failed_turn_left_t56p0</th>
+      <td>['ground', 'pos_signal', 'pos', 'video', 'auto...</td>
+      <td>['operator']</td>
+      <td>False</td>
+      <td>False</td>
+      <td>14.057688</td>
+      <td>[percieve.not_visible, project.failed_turn_left]</td>
+      <td>incomplete mission faulty</td>
+      <td>14.862043</td>
+      <td>-0.251773</td>
+    </tr>
+    <tr>
+      <th>roverhuman_fxns_operator_aa_acts_project_failed_turn_right_t56p0</th>
+      <td>['ground', 'pos_signal', 'pos', 'video', 'auto...</td>
+      <td>['operator']</td>
+      <td>False</td>
+      <td>False</td>
+      <td>13.693675</td>
+      <td>[percieve.not_visible, project.failed_turn_right]</td>
+      <td>incomplete mission faulty</td>
+      <td>15.363988</td>
+      <td>1.140047</td>
+    </tr>
+    <tr>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_fast_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
+      <td>[percieve.not_visible, decide.failed_fast]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_decide_failed_turn_right_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_no_action_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
+      <td>[percieve.not_visible, decide.failed_no_action]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_decide_failed_slow_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_slow_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
+      <td>[percieve.not_visible, decide.failed_slow]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_decide_failed_fast_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_turn_left_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
+      <td>[percieve.not_visible, decide.failed_turn_left]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_decide_failed_no_action_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_turn_right_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
+      <td>[percieve.not_visible, decide.failed_turn_right]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_reach_failed_no_action_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_reach_failed_no_action_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'reach_f...</td>
+      <td>[percieve.not_visible, reach.failed_no_action]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_press_failed_left_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_press_failed_left_t56p0</th>
+      <td>['ground', 'operator']</td>
       <td>['operator']</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{'operator': ['press_failed_left']}</td>
+      <td>[press.failed_left]</td>
       <td>faulty</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
     <tr>
-      <th>operator_press_failed_right_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_press_failed_right_t56p0</th>
+      <td>['ground', 'operator']</td>
       <td>['operator']</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{'operator': ['press_failed_right']}</td>
+      <td>[press.failed_right]</td>
       <td>faulty</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
     <tr>
-      <th>operator_press_no_press_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_press_no_press_t56p0</th>
+      <td>['ground', 'operator']</td>
       <td>['operator']</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{'operator': ['press_no_press']}</td>
+      <td>[press.no_press]</td>
       <td>faulty</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
     <tr>
       <th>nominal</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'ee_12...</td>
+      <td>[]</td>
       <td>[]</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{}</td>
+      <td>[]</td>
       <td>nominal mission</td>
       <td>29.254775</td>
       <td>-0.782764</td>
@@ -1405,241 +1410,241 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
   </thead>
   <tbody>
     <tr>
-      <th>operator_project_failed_turn_left_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_project_failed_turn_left_t56p0</th>
+      <td>['ground', 'pos_signal', 'pos', 'video', 'auto...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>14.057688</td>
-      <td>{'operator': ['percieve_not_visible', 'project...</td>
+      <td>[percieve.not_visible, project.failed_turn_left]</td>
       <td>incomplete mission faulty</td>
       <td>14.862043</td>
       <td>-0.251773</td>
     </tr>
     <tr>
-      <th>operator_project_failed_turn_right_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_project_failed_turn_right_t56p0</th>
+      <td>['ground', 'pos_signal', 'pos', 'video', 'auto...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.693675</td>
-      <td>{'operator': ['percieve_not_visible', 'project...</td>
+      <td>[percieve.not_visible, project.failed_turn_right]</td>
       <td>incomplete mission faulty</td>
       <td>15.363988</td>
       <td>1.140047</td>
     </tr>
     <tr>
-      <th>operator_look_failed_no_action_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_look_failed_no_action_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['look_failed_no_action']}</td>
+      <td>[look.failed_no_action]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_project_failed_no_action_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_reach_failed_no_action_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'project...</td>
+      <td>[percieve.not_visible, reach.failed_no_action]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_reach_failed_no_action_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_turn_right_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'reach_f...</td>
+      <td>[percieve.not_visible, decide.failed_turn_right]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_decide_failed_no_action_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_turn_left_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
+      <td>[percieve.not_visible, decide.failed_turn_left]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_decide_failed_fast_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_slow_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
+      <td>[percieve.not_visible, decide.failed_slow]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_decide_failed_slow_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_no_action_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
+      <td>[percieve.not_visible, decide.failed_no_action]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_decide_failed_turn_right_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_fast_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
+      <td>[percieve.not_visible, decide.failed_fast]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_decide_failed_turn_left_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_project_failed_no_action_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
+      <td>[percieve.not_visible, project.failed_no_action]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_comprehend_failed_no_action_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_comprehend_failed_no_action_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['percieve_not_visible', 'compreh...</td>
+      <td>[percieve.not_visible, comprehend.failed_no_ac...</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>operator_project_failed_fast_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_project_failed_fast_t56p0</th>
+      <td>['ground', 'pos_signal', 'pos', 'ee_15', 'vide...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>12.955107</td>
-      <td>{'operator': ['percieve_not_visible', 'project...</td>
+      <td>[percieve.not_visible, project.failed_fast]</td>
       <td>incomplete mission faulty</td>
       <td>16.023518</td>
       <td>0.480458</td>
     </tr>
     <tr>
-      <th>operator_project_failed_slow_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_project_failed_slow_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'ee_12...</td>
       <td>['operator']</td>
       <td>True</td>
       <td>False</td>
       <td>9.31949</td>
-      <td>{'operator': ['project_failed_slow']}</td>
+      <td>[project.failed_slow]</td>
       <td>incomplete mission faulty</td>
       <td>19.740872</td>
       <td>0.81243</td>
     </tr>
     <tr>
-      <th>operator_percieve_failed_no_action_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t56p0</th>
+      <td>['ground']</td>
       <td>[]</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{}</td>
+      <td>[]</td>
       <td>nominal mission</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
     <tr>
-      <th>operator_percieve_wrong_position_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_percieve_wrong_position_t56p0</th>
+      <td>['ground']</td>
       <td>[]</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{}</td>
+      <td>[]</td>
       <td>nominal mission</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
     <tr>
-      <th>operator_percieve_not_visible_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_percieve_not_visible_t56p0</th>
+      <td>['ground']</td>
       <td>[]</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{}</td>
+      <td>[]</td>
       <td>nominal mission</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
     <tr>
-      <th>operator_press_failed_left_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_press_failed_left_t56p0</th>
+      <td>['ground', 'operator']</td>
       <td>['operator']</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{'operator': ['press_failed_left']}</td>
+      <td>[press.failed_left]</td>
       <td>faulty</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
     <tr>
-      <th>operator_press_failed_right_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_press_failed_right_t56p0</th>
+      <td>['ground', 'operator']</td>
       <td>['operator']</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{'operator': ['press_failed_right']}</td>
+      <td>[press.failed_right]</td>
       <td>faulty</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
     <tr>
-      <th>operator_press_no_press_t56p0</th>
-      <td>['psfs', 'pos_signal', 'pos', 'ee_12', 'ee_5',...</td>
+      <th>roverhuman_fxns_operator_aa_acts_press_no_press_t56p0</th>
+      <td>['ground', 'operator']</td>
       <td>['operator']</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{'operator': ['press_no_press']}</td>
+      <td>[press.no_press]</td>
       <td>faulty</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
     <tr>
       <th>nominal</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'ee_12...</td>
+      <td>[]</td>
       <td>[]</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>{}</td>
+      <td>[]</td>
       <td>nominal mission</td>
       <td>29.254775</td>
       <td>-0.782764</td>
@@ -1665,26 +1670,26 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
 \toprule
  &amp; degraded &amp; faulty &amp; in_bound &amp; at_finish &amp; end_dist &amp; faults &amp; classification &amp; end_x &amp; end_y \\
 \midrule
-operator_look_failed_no_action_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;look_failed_no_action&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_percieve_failed_no_action_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;operator&#39;, &#39;plan_path&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; {} &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
-operator_percieve_not_visible_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;operator&#39;, &#39;plan_path&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; {} &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
-operator_percieve_wrong_position_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;operator&#39;, &#39;plan_path&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; {} &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
-operator_comprehend_failed_no_action_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;comprehend_failed_no_action&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_project_failed_turn_left_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 14.057688 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;project_failed_turn_left&#39;]} &amp; incomplete mission faulty &amp; 14.862043 &amp; -0.251773 \\
-operator_project_failed_turn_right_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.693675 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;project_failed_turn_right&#39;]} &amp; incomplete mission faulty &amp; 15.363988 &amp; 1.140047 \\
-operator_project_failed_slow_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; False &amp; 9.319490 &amp; {&#39;operator&#39;: [&#39;project_failed_slow&#39;]} &amp; incomplete mission faulty &amp; 19.740872 &amp; 0.812430 \\
-operator_project_failed_fast_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 12.955107 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;project_failed_fast&#39;]} &amp; incomplete mission faulty &amp; 16.023518 &amp; 0.480458 \\
-operator_project_failed_no_action_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;project_failed_no_action&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_decide_failed_turn_left_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;decide_failed_turn_left&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_decide_failed_turn_right_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;decide_failed_turn_right&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_decide_failed_slow_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;decide_failed_slow&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_decide_failed_fast_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;decide_failed_fast&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_decide_failed_no_action_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;decide_failed_no_action&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_reach_failed_no_action_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;reach_failed_no_action&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_press_failed_left_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;plan_path&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; {&#39;operator&#39;: [&#39;press_failed_left&#39;]} &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
-operator_press_failed_right_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;plan_path&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; {&#39;operator&#39;: [&#39;press_failed_right&#39;]} &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
-operator_press_no_press_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;plan_path&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; {&#39;operator&#39;: [&#39;press_no_press&#39;]} &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
-nominal &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;operator&#39;, &#39;plan_path&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; {} &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
+roverhuman_fxns_operator_aa_acts_look_failed_no_action_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;look.failed_no_action&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t56p0 &amp; [&#39;ground&#39;] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
+roverhuman_fxns_operator_aa_acts_percieve_not_visible_t56p0 &amp; [&#39;ground&#39;] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
+roverhuman_fxns_operator_aa_acts_percieve_wrong_position_t56p0 &amp; [&#39;ground&#39;] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
+roverhuman_fxns_operator_aa_acts_comprehend_failed_no_action_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;comprehend.failed_no_action&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+roverhuman_fxns_operator_aa_acts_project_failed_fast_t56p0 &amp; [&#39;ground&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 12.955107 &amp; [&#39;percieve.not_visible&#39;, &#39;project.failed_fast&#39;] &amp; incomplete mission faulty &amp; 16.023518 &amp; 0.480458 \\
+roverhuman_fxns_operator_aa_acts_project_failed_no_action_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;project.failed_no_action&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+roverhuman_fxns_operator_aa_acts_project_failed_slow_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;operator&#39;, &#39;plan_path&#39;, &#39;override&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; False &amp; 9.319490 &amp; [&#39;project.failed_slow&#39;] &amp; incomplete mission faulty &amp; 19.740872 &amp; 0.812430 \\
+roverhuman_fxns_operator_aa_acts_project_failed_turn_left_t56p0 &amp; [&#39;ground&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 14.057688 &amp; [&#39;percieve.not_visible&#39;, &#39;project.failed_turn_left&#39;] &amp; incomplete mission faulty &amp; 14.862043 &amp; -0.251773 \\
+roverhuman_fxns_operator_aa_acts_project_failed_turn_right_t56p0 &amp; [&#39;ground&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.693675 &amp; [&#39;percieve.not_visible&#39;, &#39;project.failed_turn_right&#39;] &amp; incomplete mission faulty &amp; 15.363988 &amp; 1.140047 \\
+roverhuman_fxns_operator_aa_acts_decide_failed_fast_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;decide.failed_fast&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+roverhuman_fxns_operator_aa_acts_decide_failed_no_action_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;decide.failed_no_action&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+roverhuman_fxns_operator_aa_acts_decide_failed_slow_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;decide.failed_slow&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+roverhuman_fxns_operator_aa_acts_decide_failed_turn_left_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;decide.failed_turn_left&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+roverhuman_fxns_operator_aa_acts_decide_failed_turn_right_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;decide.failed_turn_right&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+roverhuman_fxns_operator_aa_acts_reach_failed_no_action_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;reach.failed_no_action&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+roverhuman_fxns_operator_aa_acts_press_failed_left_t56p0 &amp; [&#39;ground&#39;, &#39;operator&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; [&#39;press.failed_left&#39;] &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
+roverhuman_fxns_operator_aa_acts_press_failed_right_t56p0 &amp; [&#39;ground&#39;, &#39;operator&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; [&#39;press.failed_right&#39;] &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
+roverhuman_fxns_operator_aa_acts_press_no_press_t56p0 &amp; [&#39;ground&#39;, &#39;operator&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; [&#39;press.no_press&#39;] &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
+nominal &amp; [] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
 \bottomrule
 \end{tabular}
 
@@ -1923,7 +1928,7 @@ ParameterSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 144/144 [00:56&lt;00:00,  2.54it/s]
+SCENARIOS COMPLETE: 100%|██████████| 144/144 [00:32&lt;00:00,  4.47it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1940,7 +1945,7 @@ SCENARIOS COMPLETE: 100%|██████████| 144/144 [00:56&lt;00:00
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: &gt;)
+(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -2136,16 +2141,16 @@ rep0_range_143.endclass.end_x:       0.0
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">RoverHuman</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ground&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;linetype&#39;</span><span class="p">:</span> <span class="s1">&#39;turn&#39;</span><span class="p">}})</span>
-<span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;operator&#39;</span><span class="p">,</span> <span class="s1">&#39;look_failed_no_action&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;operator.aa.acts.look&#39;</span><span class="p">,</span> <span class="s1">&#39;failed_no_action&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span>
@@ -2153,7 +2158,7 @@ rep0_range_143.endclass.end_x:       0.0
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2168,7 +2173,7 @@ endclass.line_dist:                    1
 endclass.num_modes:                    1
 endclass.end_dist:    23.466067426611588
 endclass.tot_deviation: 0.2759017544282031
-endclass.faults: {&#39;operator&#39;: [&#39;look_failed_no_action&#39;]}
+endclass.faults:                array(1)
 endclass.classification: incomplete mission faulty
 endclass.end_x:        13.33333333333334
 endclass.end_y:                      0.0
@@ -2176,7 +2181,7 @@ endclass.endpt:                 array(2)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">traj_fig</span> <span class="o">=</span> <span class="n">plot_map</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">mdlhist</span><span class="p">)</span>
@@ -2191,7 +2196,7 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s1">&#39;flows.pos.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;flows.pos.s.y&#39;</span><span class="p">)</span>
@@ -2199,12 +2204,12 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: &gt;)
+(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -2215,7 +2220,7 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;flows.pos.s.vel&#39;</span><span class="p">,</span> <span class="s1">&#39;flows.pos.s.ux&#39;</span><span class="p">,</span> <span class="s1">&#39;flows.pos.s.uy&#39;</span><span class="p">)</span>
@@ -2223,7 +2228,7 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2243,7 +2248,7 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
@@ -2253,27 +2258,27 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultSample of scenarios:
- - operator_look_failed_no_action_t0
- - operator_look_failed_no_action_t5
- - operator_look_failed_no_action_t10
- - operator_look_failed_no_action_t15
- - operator_look_failed_no_action_t20
- - operator_look_failed_no_action_t25
- - operator_percieve_failed_no_action_t0
- - operator_percieve_failed_no_action_t5
- - operator_percieve_failed_no_action_t10
- - operator_percieve_failed_no_action_t15
+ - roverhuman_fxns_operator_aa_acts_look_failed_no_action_t0
+ - roverhuman_fxns_operator_aa_acts_look_failed_no_action_t5
+ - roverhuman_fxns_operator_aa_acts_look_failed_no_action_t10
+ - roverhuman_fxns_operator_aa_acts_look_failed_no_action_t15
+ - roverhuman_fxns_operator_aa_acts_look_failed_no_action_t20
+ - roverhuman_fxns_operator_aa_acts_look_failed_no_action_t25
+ - roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t0
+ - roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t5
+ - roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t10
+ - roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t15
  - ... (114 total)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ers</span><span class="p">,</span> <span class="n">hists</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
@@ -2285,11 +2290,11 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:24&lt;00:00,  4.59it/s]
+SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:14&lt;00:00,  7.73it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_map</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">hists</span><span class="p">)</span>
@@ -2304,7 +2309,7 @@ SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:24&lt;00:00
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;nocon_trajectories.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
@@ -2312,7 +2317,7 @@ SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:24&lt;00:00
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">hists</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;flows.psfs.s.attention&#39;</span><span class="p">)</span>
@@ -2327,7 +2332,7 @@ SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:24&lt;00:00
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;nocon_attention.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
@@ -2335,7 +2340,7 @@ SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:24&lt;00:00
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">RoverHuman</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ground&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;linetype&#39;</span><span class="p">:</span> <span class="s1">&#39;sine&#39;</span><span class="p">,</span> <span class="s1">&#39;amp&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;period&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="o">/</span><span class="mf">3.14</span><span class="o">*</span><span class="mi">30</span><span class="p">}})</span>
@@ -2343,7 +2348,7 @@ SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:24&lt;00:00
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ers</span><span class="p">,</span> <span class="n">hists</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
@@ -2355,11 +2360,11 @@ SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:24&lt;00:00
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:21&lt;00:00,  5.32it/s]
+SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:12&lt;00:00,  8.79it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_map</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">hists</span><span class="p">)</span>
@@ -2374,7 +2379,7 @@ SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:21&lt;00:00
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;nocon_trajectories_sine.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
@@ -2382,7 +2387,7 @@ SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:21&lt;00:00
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">hists</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;flows.psfs.s.attention&#39;</span><span class="p">)</span>
@@ -2397,7 +2402,7 @@ SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:21&lt;00:00
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;nocon_attention_sine.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Urban Drone Demo &mdash; fmdtools 2.0.7 documentation</title>
+  <title>Urban Drone Demo &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../../_static/documentation_options.js?v=20623aea"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -524,6 +524,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -672,7 +677,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </pre></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">propagate</span>
@@ -689,7 +694,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <h2>Model Overview<a class="headerlink" href="#Model-Overview" title="Link to this heading"></a></h2>
 <p>The drone model is defined in <code class="docutils literal notranslate"><span class="pre">drone_mdl_urban.py</span></code>, along with some visualization functions.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">drone_mdl_urban</span> <span class="kn">import</span> <span class="n">Drone</span>
@@ -697,7 +702,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Drone</span><span class="p">()</span>
@@ -706,7 +711,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <p>This is the model structure:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span> <span class="o">=</span> <span class="n">mdl</span><span class="o">.</span><span class="n">as_modelgraph</span><span class="p">()</span>
@@ -723,7 +728,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <p>We can also view the grid environment using its <code class="docutils literal notranslate"><span class="pre">show</span></code> methods:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">collections</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;all_occupied&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">},</span> <span class="s2">&quot;all_allowed&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">},</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">},</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">}}</span>
@@ -740,7 +745,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <p>Which shows the Start, End, and allowed/unsafe locations in the 1000x1000-m grid. In this display, line thickness corresponds to building height, and hatching corresponds to whether or not the space is occupied. We can also display this using <code class="docutils literal notranslate"><span class="pre">show.coord3d</span></code>:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;environment&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">show_z</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="n">collections</span><span class="o">=</span><span class="n">collections</span><span class="p">)</span>
@@ -759,7 +764,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <h2>Nominal Simulation<a class="headerlink" href="#Nominal-Simulation" title="Link to this heading"></a></h2>
 <p>Below we show how this drone performs in the nominal scenario.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_nom</span><span class="p">,</span> <span class="n">hist_nom</span> <span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
@@ -782,7 +787,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <p>As shown, the flight ends fairly quickly (in 10 minutes), with the drone successively proceeding through points in the flight plan.</p>
 <p>We can also view this flightpath in 3-d space using <code class="docutils literal notranslate"><span class="pre">History.plot_trajectories</span></code>:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">hist_nom</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s1">&#39;dofs.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;dofs.s.y&#39;</span><span class="p">,</span> <span class="s1">&#39;dofs.s.z&#39;</span><span class="p">)</span>
@@ -798,7 +803,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <p>Trajectory plots can be overlaid on top of environment plots. In this case, we defined the method <code class="docutils literal notranslate"><span class="pre">plot_env_with_traj</span></code> and <code class="docutils literal notranslate"><span class="pre">plot_env_with_traj_z</span></code> for this case.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">drone_mdl_urban</span> <span class="kn">import</span> <span class="n">plot_env_with_traj</span><span class="p">,</span> <span class="n">plot_env_with_traj_z</span>
@@ -806,7 +811,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_env_with_traj_z</span><span class="p">(</span><span class="n">hist_nom</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
@@ -814,13 +819,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Figure size 400x400 with 1 Axes&gt;,
- &lt;Axes3D: title={&#39;center&#39;: &#39;trajectory&#39;}, xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
+ &lt;Axes3D: title={&#39;center&#39;: &#39;trajectory&#39;}, xlabel=&#39;x&#39;, ylabel=&#39;y&#39;, zlabel=&#39;z&#39;&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -831,7 +836,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_env_with_traj</span><span class="p">(</span><span class="n">hist_nom</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
@@ -839,7 +844,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -859,7 +864,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <p>As it is, we may also want to adjust the timestep/speed to get more resolution, since the drone only has a few discrete timesteps in the air.</p>
 <p>The results for the simulation are:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_nom</span>
@@ -867,7 +872,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -893,71 +898,73 @@ endclass:
 <p>A number of different faults have been implemented in the system.</p>
 <p>For example, here we inject a mechanical fault in the left-rear rotor during flight:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;affect_dof&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">faultmodes</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;affect_dof&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_faults</span><span class="p">(</span><span class="n">only_present</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;lf_short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf_openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf_ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lf_ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lf_ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;lf_mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lf_mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lf_propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf_propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf_propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr_short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr_openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr_ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lr_ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lr_ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;lr_mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lr_mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lr_propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr_propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr_propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf_short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf_openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf_ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rf_ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rf_ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;rf_mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rf_mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rf_propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf_propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf_propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr_short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr_openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr_ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rr_ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rr_ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;rr_mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rr_mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rr_propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr_propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr_propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;)}
+{&#39;drone.fxns.affect_dof&#39;: {},
+ &#39;drone.fxns.affect_dof.ca&#39;: {},
+ &#39;drone.fxns.affect_dof.ca.comps.lf&#39;: {&#39;ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;)},
+ &#39;drone.fxns.affect_dof.ca.comps.lr&#39;: {&#39;ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;)},
+ &#39;drone.fxns.affect_dof.ca.comps.rf&#39;: {&#39;ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;)},
+ &#39;drone.fxns.affect_dof.ca.comps.rr&#39;: {&#39;ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;),
+  &#39;short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases=(), disturbances=(), units=&#39;sim&#39;)}}
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_fault</span><span class="p">,</span> <span class="n">hist_fault</span> <span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s2">&quot;affect_dof&quot;</span><span class="p">,</span> <span class="s2">&quot;lr_mechbreak&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_fault</span><span class="p">,</span> <span class="n">hist_fault</span> <span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s2">&quot;affect_dof.ca.comps.lr&quot;</span><span class="p">,</span> <span class="s2">&quot;mechbreak&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">hist_fault</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s2">&quot;fxns.store_ee.s.soc&quot;</span><span class="p">,</span>
@@ -977,7 +984,7 @@ endclass:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_env_with_traj_z</span><span class="p">(</span><span class="n">hist_fault</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
@@ -985,13 +992,13 @@ endclass:
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Figure size 400x400 with 1 Axes&gt;,
- &lt;Axes3D: title={&#39;center&#39;: &#39;trajectory&#39;}, xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
+ &lt;Axes3D: title={&#39;center&#39;: &#39;trajectory&#39;}, xlabel=&#39;x&#39;, ylabel=&#39;y&#39;, zlabel=&#39;z&#39;&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1002,7 +1009,7 @@ endclass:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_env_with_traj</span><span class="p">(</span><span class="n">hist_fault</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
@@ -1010,7 +1017,7 @@ endclass:
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1027,7 +1034,7 @@ endclass:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_fault</span>
@@ -1035,7 +1042,7 @@ endclass:
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1056,7 +1063,7 @@ endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000
 </div>
 <p>Here we inject a large list of faults in the system and evaluate their relative consequences in terms of metrics calculated in find_classification:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.phases</span> <span class="kn">import</span> <span class="n">PhaseMap</span><span class="p">,</span> <span class="n">from_hist</span>
@@ -1066,7 +1073,7 @@ endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1076,7 +1083,7 @@ endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">drone_mdl_urban</span> <span class="kn">import</span> <span class="n">make_move_quad</span>
@@ -1086,7 +1093,7 @@ endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1096,7 +1103,7 @@ endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.sample</span> <span class="kn">import</span> <span class="n">FaultDomain</span><span class="p">,</span> <span class="n">FaultSample</span>
@@ -1114,264 +1121,819 @@ endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultSample of scenarios:
- - manage_health_lostfunction_t2
- - manage_health_lostfunction_t2
- - store_ee_nocharge_t2
- - store_ee_nocharge_t2
- - store_ee_lowcharge_t2
- - store_ee_lowcharge_t2
- - store_ee_s1p1_short_t2
- - store_ee_s1p1_short_t2
- - store_ee_s1p1_degr_t2
- - store_ee_s1p1_degr_t2
+ - drone_fxns_manage_health_lostfunction_t2
+ - drone_fxns_manage_health_lostfunction_t2
+ - drone_fxns_store_ee_lowcharge_t2
+ - drone_fxns_store_ee_lowcharge_t2
+ - drone_fxns_store_ee_nocharge_t2
+ - drone_fxns_store_ee_nocharge_t2
+ - drone_fxns_store_ee_ca_comps_s1p1_break_t2
+ - drone_fxns_store_ee_ca_comps_s1p1_break_t2
+ - drone_fxns_store_ee_ca_comps_s1p1_degr_t2
+ - drone_fxns_store_ee_ca_comps_s1p1_degr_t2
  - ... (118 total)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span> <span class="n">hists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-
-SCENARIOS COMPLETE:   0%|          | 0/118 [00:00&lt;?, ?it/s]
-SCENARIOS COMPLETE:   1%|          | 1/118 [00:04&lt;09:41,  4.97s/it]
-SCENARIOS COMPLETE:   2%|▏         | 2/118 [00:10&lt;09:48,  5.07s/it]
-SCENARIOS COMPLETE:   3%|▎         | 3/118 [00:15&lt;09:47,  5.11s/it]
-SCENARIOS COMPLETE:   3%|▎         | 4/118 [00:20&lt;09:52,  5.20s/it]
-SCENARIOS COMPLETE:   4%|▍         | 5/118 [00:26&lt;09:59,  5.30s/it]
-SCENARIOS COMPLETE:   5%|▌         | 6/118 [00:31&lt;09:58,  5.34s/it]
-SCENARIOS COMPLETE:   6%|▌         | 7/118 [00:36&lt;09:33,  5.17s/it]
-SCENARIOS COMPLETE:   7%|▋         | 8/118 [00:41&lt;09:34,  5.23s/it]
-SCENARIOS COMPLETE:   8%|▊         | 9/118 [00:47&lt;09:44,  5.36s/it]
-SCENARIOS COMPLETE:   8%|▊         | 10/118 [00:52&lt;09:33,  5.31s/it]
-SCENARIOS COMPLETE:   9%|▉         | 11/118 [00:57&lt;09:31,  5.35s/it]
-SCENARIOS COMPLETE:  10%|█         | 12/118 [01:02&lt;09:14,  5.23s/it]
-SCENARIOS COMPLETE:  11%|█         | 13/118 [01:08&lt;09:19,  5.33s/it]
-SCENARIOS COMPLETE:  12%|█▏        | 14/118 [01:13&lt;09:08,  5.28s/it]
-SCENARIOS COMPLETE:  13%|█▎        | 15/118 [01:19&lt;09:07,  5.32s/it]
-SCENARIOS COMPLETE:  14%|█▎        | 16/118 [01:24&lt;09:08,  5.38s/it]
-SCENARIOS COMPLETE:  14%|█▍        | 17/118 [01:29&lt;09:02,  5.37s/it]
-SCENARIOS COMPLETE:  15%|█▌        | 18/118 [01:35&lt;08:52,  5.32s/it]
-SCENARIOS COMPLETE:  16%|█▌        | 19/118 [01:40&lt;08:43,  5.28s/it]
-SCENARIOS COMPLETE:  17%|█▋        | 20/118 [01:46&lt;08:49,  5.41s/it]
-SCENARIOS COMPLETE:  18%|█▊        | 21/118 [01:51&lt;08:50,  5.47s/it]
-SCENARIOS COMPLETE:  19%|█▊        | 22/118 [01:57&lt;08:58,  5.61s/it]
-SCENARIOS COMPLETE:  19%|█▉        | 23/118 [02:03&lt;08:55,  5.63s/it]
-SCENARIOS COMPLETE:  20%|██        | 24/118 [02:08&lt;08:36,  5.50s/it]
-SCENARIOS COMPLETE:  21%|██        | 25/118 [02:14&lt;08:36,  5.55s/it]
-SCENARIOS COMPLETE:  22%|██▏       | 26/118 [02:19&lt;08:29,  5.54s/it]
-SCENARIOS COMPLETE:  23%|██▎       | 27/118 [02:25&lt;08:24,  5.54s/it]
-SCENARIOS COMPLETE:  24%|██▎       | 28/118 [02:29&lt;07:46,  5.19s/it]
-SCENARIOS COMPLETE:  25%|██▍       | 29/118 [02:32&lt;06:34,  4.43s/it]
-SCENARIOS COMPLETE:  25%|██▌       | 30/118 [02:34&lt;05:39,  3.86s/it]
-SCENARIOS COMPLETE:  26%|██▋       | 31/118 [02:37&lt;04:59,  3.44s/it]
-SCENARIOS COMPLETE:  27%|██▋       | 32/118 [02:39&lt;04:34,  3.20s/it]
-SCENARIOS COMPLETE:  28%|██▊       | 33/118 [02:42&lt;04:22,  3.09s/it]
-SCENARIOS COMPLETE:  29%|██▉       | 34/118 [02:45&lt;04:08,  2.96s/it]
-SCENARIOS COMPLETE:  30%|██▉       | 35/118 [02:50&lt;05:02,  3.64s/it]
-SCENARIOS COMPLETE:  31%|███       | 36/118 [02:56&lt;05:49,  4.26s/it]
-SCENARIOS COMPLETE:  31%|███▏      | 37/118 [03:01&lt;06:12,  4.60s/it]
-SCENARIOS COMPLETE:  32%|███▏      | 38/118 [03:07&lt;06:32,  4.90s/it]
-SCENARIOS COMPLETE:  33%|███▎      | 39/118 [03:12&lt;06:40,  5.07s/it]
-SCENARIOS COMPLETE:  34%|███▍      | 40/118 [03:17&lt;06:22,  4.90s/it]
-SCENARIOS COMPLETE:  35%|███▍      | 41/118 [03:19&lt;05:24,  4.22s/it]
-SCENARIOS COMPLETE:  36%|███▌      | 42/118 [03:22&lt;04:39,  3.67s/it]
-SCENARIOS COMPLETE:  36%|███▋      | 43/118 [03:24&lt;04:09,  3.32s/it]
-SCENARIOS COMPLETE:  37%|███▋      | 44/118 [03:27&lt;03:47,  3.08s/it]
-SCENARIOS COMPLETE:  38%|███▊      | 45/118 [03:29&lt;03:35,  2.95s/it]
-SCENARIOS COMPLETE:  39%|███▉      | 46/118 [03:32&lt;03:25,  2.85s/it]
-SCENARIOS COMPLETE:  40%|███▉      | 47/118 [03:34&lt;03:14,  2.74s/it]
-SCENARIOS COMPLETE:  41%|████      | 48/118 [03:37&lt;03:06,  2.66s/it]
-SCENARIOS COMPLETE:  42%|████▏     | 49/118 [03:39&lt;03:00,  2.62s/it]
-SCENARIOS COMPLETE:  42%|████▏     | 50/118 [03:42&lt;02:55,  2.59s/it]
-SCENARIOS COMPLETE:  43%|████▎     | 51/118 [03:45&lt;02:53,  2.59s/it]
-SCENARIOS COMPLETE:  44%|████▍     | 52/118 [03:47&lt;02:49,  2.57s/it]
-SCENARIOS COMPLETE:  45%|████▍     | 53/118 [03:50&lt;02:47,  2.57s/it]
-SCENARIOS COMPLETE:  46%|████▌     | 54/118 [03:52&lt;02:45,  2.59s/it]
-SCENARIOS COMPLETE:  47%|████▋     | 55/118 [03:55&lt;02:44,  2.61s/it]
-SCENARIOS COMPLETE:  47%|████▋     | 56/118 [03:58&lt;02:42,  2.62s/it]
-SCENARIOS COMPLETE:  48%|████▊     | 57/118 [04:00&lt;02:38,  2.59s/it]
-SCENARIOS COMPLETE:  49%|████▉     | 58/118 [04:03&lt;02:36,  2.60s/it]
-SCENARIOS COMPLETE:  50%|█████     | 59/118 [04:05&lt;02:32,  2.58s/it]
-SCENARIOS COMPLETE:  51%|█████     | 60/118 [04:08&lt;02:28,  2.56s/it]
-SCENARIOS COMPLETE:  52%|█████▏    | 61/118 [04:10&lt;02:24,  2.53s/it]
-SCENARIOS COMPLETE:  53%|█████▎    | 62/118 [04:13&lt;02:20,  2.52s/it]
-SCENARIOS COMPLETE:  53%|█████▎    | 63/118 [04:15&lt;02:18,  2.51s/it]
-SCENARIOS COMPLETE:  54%|█████▍    | 64/118 [04:18&lt;02:17,  2.55s/it]
-SCENARIOS COMPLETE:  55%|█████▌    | 65/118 [04:20&lt;02:15,  2.55s/it]
-SCENARIOS COMPLETE:  56%|█████▌    | 66/118 [04:23&lt;02:12,  2.54s/it]
-SCENARIOS COMPLETE:  57%|█████▋    | 67/118 [04:25&lt;02:09,  2.53s/it]
-SCENARIOS COMPLETE:  58%|█████▊    | 68/118 [04:28&lt;02:06,  2.52s/it]
-SCENARIOS COMPLETE:  58%|█████▊    | 69/118 [04:30&lt;02:02,  2.51s/it]
-SCENARIOS COMPLETE:  59%|█████▉    | 70/118 [04:33&lt;01:59,  2.48s/it]
-SCENARIOS COMPLETE:  60%|██████    | 71/118 [04:35&lt;01:56,  2.48s/it]
-SCENARIOS COMPLETE:  61%|██████    | 72/118 [04:38&lt;01:54,  2.49s/it]
-SCENARIOS COMPLETE:  62%|██████▏   | 73/118 [04:40&lt;01:53,  2.52s/it]
-SCENARIOS COMPLETE:  63%|██████▎   | 74/118 [04:43&lt;01:51,  2.53s/it]
-SCENARIOS COMPLETE:  64%|██████▎   | 75/118 [04:46&lt;01:48,  2.52s/it]
-SCENARIOS COMPLETE:  64%|██████▍   | 76/118 [04:48&lt;01:45,  2.50s/it]
-SCENARIOS COMPLETE:  65%|██████▌   | 77/118 [04:51&lt;01:43,  2.52s/it]
-SCENARIOS COMPLETE:  66%|██████▌   | 78/118 [04:53&lt;01:42,  2.55s/it]
-SCENARIOS COMPLETE:  66%|██████▌   | 78/118 [04:54&lt;02:31,  3.78s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Error at t=11.2 in scenario SingleFaultScenario(sequence={2.0: Injection(faults={&#39;affect_dof&#39;: [&#39;rf_propstuck&#39;]}, disturbances={})}, times=(2,), function=&#39;affect_dof&#39;, fault=&#39;rf_propstuck&#39;, rate=1.0416666666666668e-07, name=&#39;affect_dof_rf_propstuck_t2&#39;, time=2, phase=&#39;move&#39;)
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
+<div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>                         Traceback (most recent call last)
-Cell <span class="ansi-green-intense-fg ansi-bold">In[22], line 1</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> endresults, hists <span style="color: rgb(98,98,98)">=</span> propagate<span style="color: rgb(98,98,98)">.</span>fault_sample(mdl, fs, staged<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>)
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\fmdtools\sim\propagate.py:631</span>, in <span class="ansi-cyan-fg">fault_sample</span><span class="ansi-blue-intense-fg ansi-bold">(mdl, fs, include_nominal, get_phasemap, **kwargs)</span>
-<span class="ansi-green-fg">    628</span> nomresult, nomhist, nomscen, c_mdl, t_end_nom <span style="color: rgb(98,98,98)">=</span> n_outs
-<span class="ansi-green-fg">    629</span> scenlist <span style="color: rgb(98,98,98)">=</span> fs<span style="color: rgb(98,98,98)">.</span>scenarios()
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 631</span> results, mdlhists <span style="color: rgb(98,98,98)">=</span> scenlist_helper(mdl,
-<span class="ansi-green-fg">    632</span>                                     scenlist,
-<span class="ansi-green-fg">    633</span>                                     c_mdl,
-<span class="ansi-green-fg">    634</span>                                     <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs,
-<span class="ansi-green-fg">    635</span>                                     nomhist<span style="color: rgb(98,98,98)">=</span>nomhist,
-<span class="ansi-green-fg">    636</span>                                     nomresult<span style="color: rgb(98,98,98)">=</span>nomresult)
-<span class="ansi-green-fg">    638</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> include_nominal:
-<span class="ansi-green-fg">    639</span>     process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\fmdtools\sim\propagate.py:803</span>, in <span class="ansi-cyan-fg">scenlist_helper</span><span class="ansi-blue-intense-fg ansi-bold">(mdl, scenlist, c_mdl, **kwargs)</span>
-<span class="ansi-green-fg">    801</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
-<span class="ansi-green-fg">    802</span>             mdl_i <span style="color: rgb(98,98,98)">=</span> c_mdl[<span style="color: rgb(98,98,98)">0</span>]<span style="color: rgb(98,98,98)">.</span>new()
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 803</span>         ec, mh, t_end <span style="color: rgb(98,98,98)">=</span> exec_scen(mdl_i, scen, indiv_id<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">str</span>(i), <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
-<span class="ansi-green-fg">    804</span>         results[name], mdlhists[name] <span style="color: rgb(98,98,98)">=</span> ec, mh
-<span class="ansi-green-fg">    805</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> results, mdlhists
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\fmdtools\sim\propagate.py:839</span>, in <span class="ansi-cyan-fg">exec_scen</span><span class="ansi-blue-intense-fg ansi-bold">(mdl, scen, save_args, indiv_id, **kwargs)</span>
-<span class="ansi-green-fg">    821</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">exec_scen</span>(mdl, scen, save_args<span style="color: rgb(98,98,98)">=</span>{}, indiv_id<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs):
-<span class="ansi-green-fg">    822</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    823</span> <span style="color: rgb(175,0,0)">    Executes a scenario and generates results and classifications given a model and</span>
-<span class="ansi-green-fg">    824</span> <span style="color: rgb(175,0,0)">    nominal model history.</span>
-<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">    837</span> <span style="color: rgb(175,0,0)">        :data:`sim_kwargs` for :func:`prop_one_scen`</span>
-<span class="ansi-green-fg">    838</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 839</span>     result, mdlhist, _, t_end, <span style="color: rgb(98,98,98)">=</span> prop_one_scen(mdl, scen, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
-<span class="ansi-green-fg">    840</span>     save_helper(save_args, result, mdlhist, indiv_id<span style="color: rgb(98,98,98)">=</span>indiv_id, result_id<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">str</span>(scen<span style="color: rgb(98,98,98)">.</span>name))
-<span class="ansi-green-fg">    841</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> result, mdlhist, t_end
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\fmdtools\sim\propagate.py:1105</span>, in <span class="ansi-cyan-fg">prop_one_scen</span><span class="ansi-blue-intense-fg ansi-bold">(mdl, scen, ctimes, nomhist, nomresult, **kwargs)</span>
-<span class="ansi-green-fg">   1103</span>     disturbances <span style="color: rgb(98,98,98)">=</span> {}
-<span class="ansi-green-fg">   1104</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 1105</span>     mdl<span style="color: rgb(98,98,98)">.</span>propagate(t, fxnfaults, disturbances, run_stochastic<span style="color: rgb(98,98,98)">=</span>run_stochastic)
-<span class="ansi-green-fg">   1106</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> e:
-<span class="ansi-green-fg">   1107</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Error in scenario </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(scen)) <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">e</span>
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\fmdtools\define\architecture\function.py:780</span>, in <span class="ansi-cyan-fg">FunctionArchitecture.propagate</span><span class="ansi-blue-intense-fg ansi-bold">(self, time, fxnfaults, disturbances, run_stochastic)</span>
-<span class="ansi-green-fg">    778</span> <span style="color: rgb(95,135,135)"># Step 2: Run Static Propagation Methods</span>
-<span class="ansi-green-fg">    779</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 780</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>prop_static(time, run_stochastic<span style="color: rgb(98,98,98)">=</span>run_stochastic)
-<span class="ansi-green-fg">    781</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> e:
-<span class="ansi-green-fg">    782</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Error in static propagation at time t=</span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(time)) <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">e</span>
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\fmdtools\define\architecture\function.py:809</span>, in <span class="ansi-cyan-fg">FunctionArchitecture.prop_static</span><span class="ansi-blue-intense-fg ansi-bold">(self, time, run_stochastic)</span>
-<span class="ansi-green-fg">    806</span> flows_to_check <span style="color: rgb(98,98,98)">=</span> {<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>staticflows}
-<span class="ansi-green-fg">    807</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> fxnname <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">list</span>(activefxns)<span style="color: rgb(98,98,98)">.</span>copy():
-<span class="ansi-green-fg">    808</span>     <span style="color: rgb(95,135,135)"># Update functions with new values, check to see if new faults or states</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 809</span>     oldmutables <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>fxns[fxnname]<span style="color: rgb(98,98,98)">.</span>return_mutables()
-<span class="ansi-green-fg">    810</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>fxns[fxnname](<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">static</span><span style="color: rgb(175,0,0)">&#39;</span>, time<span style="color: rgb(98,98,98)">=</span>time, run_stochastic<span style="color: rgb(98,98,98)">=</span>run_stochastic)
-<span class="ansi-green-fg">    811</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> oldmutables <span style="color: rgb(98,98,98)">!=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>fxns[fxnname]<span style="color: rgb(98,98,98)">.</span>return_mutables():
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\fmdtools\define\object\base.py:637</span>, in <span class="ansi-cyan-fg">BaseObject.return_mutables</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
-<span class="ansi-green-fg">    625</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">return_mutables</span>(<span style="color: rgb(0,135,0)">self</span>):
-<span class="ansi-green-fg">    626</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    627</span> <span style="color: rgb(175,0,0)">    Return all mutable values in the block.</span>
-<span class="ansi-green-fg">    628</span>
-<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">    634</span> <span style="color: rgb(175,0,0)">        tuple of all mutable roles for the object.</span>
-<span class="ansi-green-fg">    635</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    636</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">tuple</span>([mut<span style="color: rgb(98,98,98)">.</span>return_mutables() <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">hasattr</span>(mut, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">return_mutables</span><span style="color: rgb(175,0,0)">&#39;</span>)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 637</span>                   <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> mut <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> mut <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>find_mutables()])
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\fmdtools\define\object\base.py:622</span>, in <span class="ansi-cyan-fg">BaseObject.find_mutables</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
-<span class="ansi-green-fg">    620</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">find_mutables</span>(<span style="color: rgb(0,135,0)">self</span>):
-<span class="ansi-green-fg">    621</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;Return list of mutable roles.&#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 622</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> [v <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> v <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_roles_as_dict(with_immutable<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>)<span style="color: rgb(98,98,98)">.</span>values()
-<span class="ansi-green-fg">    623</span>             <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> ismethod(v)]
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\fmdtools\define\object\base.py:501</span>, in <span class="ansi-cyan-fg">BaseObject.get_roles_as_dict</span><span class="ansi-blue-intense-fg ansi-bold">(self, with_immutable, with_prefix, flex_prefixes, with_flex, no_flows, *roletypes, **kwargs)</span>
-<span class="ansi-green-fg">    498</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> non_flex_roletypes:
-<span class="ansi-green-fg">    499</span>     non_flex_roletypes <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">none</span><span style="color: rgb(175,0,0)">&#39;</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 501</span> roles <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_roles(<span style="color: rgb(98,98,98)">*</span>non_flex_roletypes,
-<span class="ansi-green-fg">    502</span>                        with_immutable<span style="color: rgb(98,98,98)">=</span>with_immutable,
-<span class="ansi-green-fg">    503</span>                        no_flows<span style="color: rgb(98,98,98)">=</span>no_flows)
-<span class="ansi-green-fg">    504</span> non_flex_roles <span style="color: rgb(98,98,98)">=</span> {role: <span style="color: rgb(0,135,0)">getattr</span>(<span style="color: rgb(0,135,0)">self</span>, role) <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> role <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> roles}
-<span class="ansi-green-fg">    505</span> all_roles <span style="color: rgb(98,98,98)">=</span> {<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>flex_roles, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>non_flex_roles}
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\fmdtools\define\object\base.py:461</span>, in <span class="ansi-cyan-fg">BaseObject.get_roles</span><span class="ansi-blue-intense-fg ansi-bold">(self, with_immutable, no_flows, *roletypes, **kwargs)</span>
-<span class="ansi-green-fg">    459</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;Get all roles.&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    460</span> roletypes <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_default_roletypes(<span style="color: rgb(98,98,98)">*</span>roletypes, no_flows<span style="color: rgb(98,98,98)">=</span>no_flows)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 461</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> [role <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> roletype <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> roletypes
-<span class="ansi-green-fg">    462</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> role <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">getattr</span>(<span style="color: rgb(0,135,0)">self</span>, roletype<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">s</span><span style="color: rgb(175,0,0)">&#39;</span>, [])
-<span class="ansi-green-fg">    463</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> with_immutable <span class="ansi-bold" style="color: rgb(175,0,255)">or</span> role <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>immutable_roles]
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\fmdtools\define\object\base.py:461</span>, in <span class="ansi-cyan-fg">&lt;listcomp&gt;</span><span class="ansi-blue-intense-fg ansi-bold">(.0)</span>
-<span class="ansi-green-fg">    459</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;Get all roles.&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    460</span> roletypes <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_default_roletypes(<span style="color: rgb(98,98,98)">*</span>roletypes, no_flows<span style="color: rgb(98,98,98)">=</span>no_flows)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 461</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> [role <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> roletype <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> roletypes
-<span class="ansi-green-fg">    462</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> role <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">getattr</span>(<span style="color: rgb(0,135,0)">self</span>, roletype<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">s</span><span style="color: rgb(175,0,0)">&#39;</span>, [])
-<span class="ansi-green-fg">    463</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> with_immutable <span class="ansi-bold" style="color: rgb(175,0,255)">or</span> role <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>immutable_roles]
-
-<span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>:
+SCENARIOS COMPLETE: 100%|██████████| 118/118 [01:32&lt;00:00,  1.27it/s]
 </pre></div></div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_env_with_traj_z</span><span class="p">(</span><span class="n">hists</span> <span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 400x400 with 1 Axes&gt;,
+ &lt;Axes3D: title={&#39;center&#39;: &#39;trajectory&#39;}, xlabel=&#39;x&#39;, ylabel=&#39;y&#39;, zlabel=&#39;z&#39;&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_33_1.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_33_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">statsfmea</span> <span class="o">=</span> <span class="n">tabulate</span><span class="o">.</span><span class="n">FMEA</span><span class="p">(</span><span class="n">endresults</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span>
-                          <span class="n">average_metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">,</span> <span class="s1">&#39;unsafe_flight_time&#39;</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">,</span> <span class="s1">&#39;repcost&#39;</span><span class="p">,</span>
-                                       <span class="s1">&#39;landcost&#39;</span><span class="p">,</span> <span class="s1">&#39;body_strikes&#39;</span><span class="p">,</span>
-                                       <span class="s1">&#39;head_strikes&#39;</span><span class="p">,</span> <span class="s1">&#39;property_restrictions&#39;</span><span class="p">],</span>
+                          <span class="n">average_metric</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">,</span> <span class="s1">&#39;unsafe_flight_time&#39;</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">,</span> <span class="s1">&#39;repcost&#39;</span><span class="p">,</span>
+                                            <span class="s1">&#39;landcost&#39;</span><span class="p">,</span> <span class="s1">&#39;body_strikes&#39;</span><span class="p">,</span>
+                                            <span class="s1">&#39;head_strikes&#39;</span><span class="p">,</span> <span class="s1">&#39;property_restrictions&#39;</span><span class="p">],</span>
                           <span class="n">rates</span><span class="o">=</span><span class="s1">&#39;rate&#39;</span><span class="p">)</span>
 <span class="n">fmeatab</span> <span class="o">=</span> <span class="n">statsfmea</span><span class="o">.</span><span class="n">as_table</span><span class="p">(</span><span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;cost&quot;</span><span class="p">)</span>
 <span class="n">fmeatab</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>average_rate</th>
+      <th>average_unsafe_flight_time</th>
+      <th>average_cost</th>
+      <th>average_repcost</th>
+      <th>average_landcost</th>
+      <th>average_body_strikes</th>
+      <th>average_head_strikes</th>
+      <th>average_property_restrictions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">drone.fxns.plan_path.ca.comps.vision</th>
+      <th>undesired_detection</th>
+      <td>5.989583e-03</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>lack_of_detection</th>
+      <td>5.989583e-03</td>
+      <td>281.0</td>
+      <td>28100.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.store_ee</th>
+      <th>lowcharge</th>
+      <td>6.708333e-06</td>
+      <td>281.0</td>
+      <td>28200.0</td>
+      <td>100.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.dist_ee</th>
+      <th>degr</th>
+      <td>2.395833e-06</td>
+      <td>281.0</td>
+      <td>29100.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.store_ee</th>
+      <th>nocharge</th>
+      <td>1.916667e-06</td>
+      <td>281.0</td>
+      <td>28200.0</td>
+      <td>100.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.dist_ee</th>
+      <th>short</th>
+      <td>1.437500e-06</td>
+      <td>281.0</td>
+      <td>29600.0</td>
+      <td>1500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.plan_path</th>
+      <th>degloc</th>
+      <td>1.150000e-06</td>
+      <td>281.0</td>
+      <td>29100.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.ctl_dof</th>
+      <th>degctl</th>
+      <td>1.150000e-06</td>
+      <td>281.0</td>
+      <td>29100.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>ctlup</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>ctldn</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>ctlbreak</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>29100.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>ctlbreak</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>29100.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>ctlbreak</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>29100.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>ctldn</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>ctldn</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>ctlup</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>ctlup</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>ctlbreak</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>29100.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.dist_ee</th>
+      <th>break</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>29600.0</td>
+      <td>1500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>ctlup</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>ctldn</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>mechbreak</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>openc</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>short</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>mechbreak</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>mechbreak</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>mechbreak</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>openc</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>short</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>openc</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>short</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>openc</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>short</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.ctl_dof</th>
+      <th>noctl</th>
+      <td>2.875000e-07</td>
+      <td>281.0</td>
+      <td>29100.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.plan_path</th>
+      <th>noloc</th>
+      <td>2.875000e-07</td>
+      <td>281.0</td>
+      <td>29100.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>mechfriction</th>
+      <td>2.395833e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>mechfriction</th>
+      <td>2.395833e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>mechfriction</th>
+      <td>2.395833e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>mechfriction</th>
+      <td>2.395833e-07</td>
+      <td>281.0</td>
+      <td>28600.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.store_ee.ca.comps.s1p1</th>
+      <th>nocharge</th>
+      <td>1.437500e-07</td>
+      <td>281.0</td>
+      <td>28200.0</td>
+      <td>100.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>propbreak</th>
+      <td>1.437500e-07</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>propbreak</th>
+      <td>1.437500e-07</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>propbreak</th>
+      <td>1.437500e-07</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>propbreak</th>
+      <td>1.437500e-07</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.store_ee.ca.comps.s1p1</th>
+      <th>lowcharge</th>
+      <td>9.583333e-08</td>
+      <td>281.0</td>
+      <td>28200.0</td>
+      <td>100.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>propstuck</th>
+      <td>9.583333e-08</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>propstuck</th>
+      <td>9.583333e-08</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>propstuck</th>
+      <td>9.583333e-08</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>propstuck</th>
+      <td>9.583333e-08</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">drone.fxns.store_ee.ca.comps.s1p1</th>
+      <th>short</th>
+      <td>7.187500e-08</td>
+      <td>281.0</td>
+      <td>28200.0</td>
+      <td>100.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>break</th>
+      <td>7.187500e-08</td>
+      <td>281.0</td>
+      <td>28200.0</td>
+      <td>100.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>degr</th>
+      <td>7.187500e-08</td>
+      <td>281.0</td>
+      <td>28200.0</td>
+      <td>100.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>propwarp</th>
+      <td>4.791667e-08</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>propwarp</th>
+      <td>4.791667e-08</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>propwarp</th>
+      <td>4.791667e-08</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>propwarp</th>
+      <td>4.791667e-08</td>
+      <td>281.0</td>
+      <td>28300.0</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.manage_health</th>
+      <th>lostfunction</th>
+      <td>7.187500e-09</td>
+      <td>281.0</td>
+      <td>29100.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">drone.fxns.hold_payload</th>
+      <th>deform</th>
+      <td>2.875000e-09</td>
+      <td>281.0</td>
+      <td>29600.0</td>
+      <td>1500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>break</th>
+      <td>7.187500e-10</td>
+      <td>281.0</td>
+      <td>29600.0</td>
+      <td>1500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:

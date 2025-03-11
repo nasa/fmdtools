@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.sim &mdash; fmdtools 2.0.7 documentation</title>
+  <title>fmdtools.sim &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../_static/documentation_options.js?v=20623aea"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -521,6 +521,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -2174,10 +2179,10 @@ faults and disturbances.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span><span class="o">.</span><span class="n">add_all</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span>
 <span class="go">FaultDomain with faults:</span>
-<span class="go"> -(&#39;ex_fxn&#39;, &#39;no_charge&#39;)</span>
-<span class="go"> -(&#39;ex_fxn&#39;, &#39;short&#39;)</span>
-<span class="go"> -(&#39;ex_fxn2&#39;, &#39;no_charge&#39;)</span>
-<span class="go"> -(&#39;ex_fxn2&#39;, &#39;short&#39;)</span>
+<span class="go"> -(&#39;exfxnarch.fxns.ex_fxn&#39;, &#39;no_charge&#39;)</span>
+<span class="go"> -(&#39;exfxnarch.fxns.ex_fxn&#39;, &#39;short&#39;)</span>
+<span class="go"> -(&#39;exfxnarch.fxns.ex_fxn2&#39;, &#39;no_charge&#39;)</span>
+<span class="go"> -(&#39;exfxnarch.fxns.ex_fxn2&#39;, &#39;short&#39;)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2196,8 +2201,8 @@ faults and disturbances.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span><span class="o">.</span><span class="n">add_all_fxn_modes</span><span class="p">(</span><span class="s2">&quot;ex_fxn2&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span>
 <span class="go">FaultDomain with faults:</span>
-<span class="go"> -(&#39;ex_fxn2&#39;, &#39;no_charge&#39;)</span>
-<span class="go"> -(&#39;ex_fxn2&#39;, &#39;short&#39;)</span>
+<span class="go"> -(&#39;exfxnarch.fxns.ex_fxn2&#39;, &#39;no_charge&#39;)</span>
+<span class="go"> -(&#39;exfxnarch.fxns.ex_fxn2&#39;, &#39;short&#39;)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2286,16 +2291,16 @@ faults and disturbances.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_singlecomp_modes</span><span class="p">(</span><span class="s2">&quot;affect_dof&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span>
 <span class="go">FaultDomain with faults:</span>
-<span class="go"> -(&#39;affect_dof&#39;, &#39;lf_short&#39;)</span>
-<span class="go"> -(&#39;affect_dof&#39;, &#39;lf_openc&#39;)</span>
-<span class="go"> -(&#39;affect_dof&#39;, &#39;lf_ctlup&#39;)</span>
-<span class="go"> -(&#39;affect_dof&#39;, &#39;lf_ctldn&#39;)</span>
-<span class="go"> -(&#39;affect_dof&#39;, &#39;lf_ctlbreak&#39;)</span>
-<span class="go"> -(&#39;affect_dof&#39;, &#39;lf_mechbreak&#39;)</span>
-<span class="go"> -(&#39;affect_dof&#39;, &#39;lf_mechfriction&#39;)</span>
-<span class="go"> -(&#39;affect_dof&#39;, &#39;lf_propwarp&#39;)</span>
-<span class="go"> -(&#39;affect_dof&#39;, &#39;lf_propstuck&#39;)</span>
-<span class="go"> -(&#39;affect_dof&#39;, &#39;lf_propbreak&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, &#39;ctlbreak&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, &#39;ctldn&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, &#39;ctlup&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, &#39;mechbreak&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, &#39;mechfriction&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, &#39;openc&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, &#39;propbreak&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, &#39;propstuck&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, &#39;propwarp&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, &#39;short&#39;)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2342,14 +2347,14 @@ faults and disturbances.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exfs</span><span class="o">.</span><span class="n">add_fault_times</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exfs</span>
 <span class="go">FaultSample of scenarios:</span>
-<span class="go"> - ex_fxn_no_charge_t1</span>
-<span class="go"> - ex_fxn_no_charge_t2</span>
-<span class="go"> - ex_fxn_short_t1</span>
-<span class="go"> - ex_fxn_short_t2</span>
-<span class="go"> - ex_fxn2_no_charge_t1</span>
-<span class="go"> - ex_fxn2_no_charge_t2</span>
-<span class="go"> - ex_fxn2_short_t1</span>
-<span class="go"> - ex_fxn2_short_t2</span>
+<span class="go"> - exfxnarch_fxns_ex_fxn_no_charge_t1</span>
+<span class="go"> - exfxnarch_fxns_ex_fxn_no_charge_t2</span>
+<span class="go"> - exfxnarch_fxns_ex_fxn_short_t1</span>
+<span class="go"> - exfxnarch_fxns_ex_fxn_short_t2</span>
+<span class="go"> - exfxnarch_fxns_ex_fxn2_no_charge_t1</span>
+<span class="go"> - exfxnarch_fxns_ex_fxn2_no_charge_t2</span>
+<span class="go"> - exfxnarch_fxns_ex_fxn2_short_t1</span>
+<span class="go"> - exfxnarch_fxns_ex_fxn2_short_t2</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -2376,12 +2381,12 @@ The default is {}.</p></li>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">examples.multirotor.drone_mdl_rural</span> <span class="kn">import</span> <span class="n">Drone</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Drone</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s2">&quot;affect_dof&quot;</span><span class="p">,</span> <span class="s2">&quot;rf_propwarp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s2">&quot;affect_dof.ca.comps.rf&quot;</span><span class="p">,</span> <span class="s2">&quot;propwarp&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="n">PhaseMap</span><span class="p">({</span><span class="s2">&quot;on&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;off&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]}))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span><span class="o">.</span><span class="n">add_fault_phases</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span>
 <span class="go">FaultSample of scenarios:</span>
-<span class="go"> - affect_dof_rf_propwarp_t4p0</span>
+<span class="go"> - affect_dof_ca_comps_rf_propwarp_t4p0</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2404,28 +2409,28 @@ The default is {}.</p></li>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">examples.multirotor.drone_mdl_rural</span> <span class="kn">import</span> <span class="n">Drone</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Drone</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s2">&quot;affect_dof&quot;</span><span class="p">,</span> <span class="s2">&quot;rf_propwarp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s2">&quot;affect_dof.ca.comps.rf&quot;</span><span class="p">,</span> <span class="s2">&quot;propwarp&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="n">PhaseMap</span><span class="p">({</span><span class="s2">&quot;on&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;off&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]}))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span><span class="o">.</span><span class="n">add_fault_times</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span>
 <span class="go">FaultSample of scenarios:</span>
-<span class="go"> - affect_dof_rf_propwarp_t1</span>
-<span class="go"> - affect_dof_rf_propwarp_t2</span>
-<span class="go"> - affect_dof_rf_propwarp_t3</span>
-<span class="go"> &gt;&gt;&gt; fd.add_fault(&quot;affect_dof&quot;, &quot;lf_propwarp&quot;)</span>
-<span class="go"> &gt;&gt;&gt; fd.add_fault(&quot;affect_dof&quot;, &quot;rr_propwarp&quot;)</span>
+<span class="go"> - affect_dof_ca_comps_rf_propwarp_t1</span>
+<span class="go"> - affect_dof_ca_comps_rf_propwarp_t2</span>
+<span class="go"> - affect_dof_ca_comps_rf_propwarp_t3</span>
+<span class="go"> &gt;&gt;&gt; fd.add_fault(&quot;affect_dof.ca.comps.lf&quot;, &quot;propwarp&quot;)</span>
+<span class="go"> &gt;&gt;&gt; fd.add_fault(&quot;affect_dof.ca.comps.rr&quot;, &quot;propwarp&quot;)</span>
 <span class="go"> &gt;&gt;&gt; fs = FaultSample(fd)</span>
 <span class="go"> &gt;&gt;&gt; fs.add_fault_times([5], n_joint=2)</span>
 <span class="go"> &gt;&gt;&gt; fs</span>
 <span class="go"> FaultSample of scenarios:</span>
-<span class="go">  - affect_dof_rf_propwarp__affect_dof_lf_propwarp_t5</span>
-<span class="go">  - affect_dof_rf_propwarp__affect_dof_rr_propwarp_t5</span>
-<span class="go">  - affect_dof_lf_propwarp__affect_dof_rr_propwarp_t5</span>
+<span class="go">  - affect_dof_ca_comps_rf_propwarp__affect_dof_ca_comps_lf_propwarp_t5</span>
+<span class="go">  - affect_dof_ca_comps_rf_propwarp__affect_dof_ca_comps_rr_propwarp_t5</span>
+<span class="go">  - affect_dof_ca_comps_lf_propwarp__affect_dof_ca_comps_rr_propwarp_t5</span>
 <span class="go"> &gt;&gt;&gt; fs = FaultSample(fd)</span>
 <span class="go"> &gt;&gt;&gt; fs.add_fault_times([5], n_joint=3)</span>
 <span class="go"> &gt;&gt;&gt; fs</span>
 <span class="go"> FaultSample of scenarios:</span>
-<span class="go">  - affect_dof_rf_propwarp__affect_dof_lf_propwarp__affect_dof_rr_propwarp_t5</span>
+<span class="go">  - affect_dof_ca_comps_rf_propwarp__affect_dof_ca_comps_lf_propwarp__affect_dof_ca_comps_rr_propwarp_t5</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2451,17 +2456,17 @@ independent base rate assumptions to calculate. Default is 1.0.</p></li>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">examples.multirotor.drone_mdl_rural</span> <span class="kn">import</span> <span class="n">Drone</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">Drone</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s2">&quot;affect_dof&quot;</span><span class="p">,</span> <span class="s2">&quot;rf_propwarp&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s2">&quot;affect_dof&quot;</span><span class="p">,</span> <span class="s2">&quot;lf_propwarp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s2">&quot;affect_dof.ca.comps.rf&quot;</span><span class="p">,</span> <span class="s2">&quot;propwarp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s2">&quot;affect_dof.ca.comps.lf&quot;</span><span class="p">,</span> <span class="s2">&quot;propwarp&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="n">PhaseMap</span><span class="p">({</span><span class="s2">&quot;on&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;off&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]}))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span><span class="o">.</span><span class="n">add_joint_fault_scenario</span><span class="p">(((</span><span class="s2">&quot;affect_dof&quot;</span><span class="p">,</span> <span class="s2">&quot;rf_propwarp&quot;</span><span class="p">),(</span><span class="s2">&quot;affect_dof&quot;</span><span class="p">,</span> <span class="s2">&quot;lf_propwarp&quot;</span><span class="p">)),</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span><span class="o">.</span><span class="n">add_joint_fault_scenario</span><span class="p">(((</span><span class="s2">&quot;affect_dof.ca.comps.rf&quot;</span><span class="p">,</span> <span class="s2">&quot;propwarp&quot;</span><span class="p">),(</span><span class="s2">&quot;affect_dof.ca.comps.lf&quot;</span><span class="p">,</span> <span class="s2">&quot;propwarp&quot;</span><span class="p">)),</span> <span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span>
 <span class="go">FaultSample of scenarios:</span>
-<span class="go"> - affect_dof_rf_propwarp__affect_dof_lf_propwarp_t5</span>
+<span class="go"> - affect_dof_ca_comps_rf_propwarp__affect_dof_ca_comps_lf_propwarp_t5</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sequence</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">faults</span>
-<span class="go">{&#39;affect_dof&#39;: [&#39;rf_propwarp&#39;, &#39;lf_propwarp&#39;]}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span><span class="o">.</span><span class="n">add_single_fault_scenario</span><span class="p">((</span><span class="s2">&quot;affect_dof&quot;</span><span class="p">,</span> <span class="s2">&quot;rf_propwarp&quot;</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span><span class="o">.</span><span class="n">add_single_fault_scenario</span><span class="p">((</span><span class="s2">&quot;affect_dof&quot;</span><span class="p">,</span> <span class="s2">&quot;lf_propwarp&quot;</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+<span class="go">{&#39;affect_dof.ca.comps.rf&#39;: [&#39;propwarp&#39;], &#39;affect_dof.ca.comps.lf&#39;: [&#39;propwarp&#39;]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span><span class="o">.</span><span class="n">add_single_fault_scenario</span><span class="p">((</span><span class="s2">&quot;affect_dof.ca.comps.rf&quot;</span><span class="p">,</span> <span class="s2">&quot;propwarp&quot;</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span><span class="o">.</span><span class="n">add_single_fault_scenario</span><span class="p">((</span><span class="s2">&quot;affect_dof.ca.comps.lf&quot;</span><span class="p">,</span> <span class="s2">&quot;propwarp&quot;</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rate</span> <span class="o">==</span> <span class="n">fs</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">rate</span><span class="o">*</span><span class="n">fs</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">rate</span>
 <span class="go">True</span>
 </pre></div>
@@ -2485,12 +2490,12 @@ independent base rate assumptions to calculate. Default is 1.0.</p></li>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">examples.multirotor.drone_mdl_rural</span> <span class="kn">import</span> <span class="n">Drone</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Drone</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s2">&quot;affect_dof&quot;</span><span class="p">,</span> <span class="s2">&quot;rf_propwarp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s2">&quot;affect_dof.ca.comps.rf&quot;</span><span class="p">,</span> <span class="s2">&quot;propwarp&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="n">PhaseMap</span><span class="p">({</span><span class="s2">&quot;on&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;off&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]}))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span><span class="o">.</span><span class="n">add_single_fault_scenario</span><span class="p">((</span><span class="s2">&quot;affect_dof&quot;</span><span class="p">,</span> <span class="s2">&quot;rf_propwarp&quot;</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span><span class="o">.</span><span class="n">add_single_fault_scenario</span><span class="p">((</span><span class="s2">&quot;affect_dof.ca.comps.rf&quot;</span><span class="p">,</span> <span class="s2">&quot;propwarp&quot;</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span>
 <span class="go">FaultSample of scenarios:</span>
-<span class="go"> - affect_dof_rf_propwarp_t5</span>
+<span class="go"> - affect_dof_ca_comps_rf_propwarp_t5</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -3264,16 +3269,16 @@ of the model.</p>
 <span class="go"> faultsamples:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">faultdomains</span><span class="p">[</span><span class="s1">&#39;all_faults&#39;</span><span class="p">]</span>
 <span class="go">FaultDomain with faults:</span>
-<span class="go"> -(&#39;manage_health&#39;, &#39;lostfunction&#39;)</span>
-<span class="go"> -(&#39;store_ee&#39;, &#39;nocharge&#39;)</span>
-<span class="go"> -(&#39;store_ee&#39;, &#39;lowcharge&#39;)</span>
-<span class="go"> -(&#39;store_ee&#39;, &#39;s1p1_short&#39;)</span>
-<span class="go"> -(&#39;store_ee&#39;, &#39;s1p1_degr&#39;)</span>
-<span class="go"> -(&#39;store_ee&#39;, &#39;s1p1_break&#39;)</span>
-<span class="go"> -(&#39;store_ee&#39;, &#39;s1p1_nocharge&#39;)</span>
-<span class="go"> -(&#39;store_ee&#39;, &#39;s1p1_lowcharge&#39;)</span>
-<span class="go"> -(&#39;dist_ee&#39;, &#39;short&#39;)</span>
-<span class="go"> -(&#39;dist_ee&#39;, &#39;degr&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.manage_health&#39;, &#39;lostfunction&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.store_ee&#39;, &#39;lowcharge&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.store_ee&#39;, &#39;nocharge&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, &#39;break&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, &#39;degr&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, &#39;lowcharge&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, &#39;nocharge&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, &#39;short&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.dist_ee&#39;, &#39;break&#39;)</span>
+<span class="go"> -(&#39;drone.fxns.dist_ee&#39;, &#39;degr&#39;)</span>
 <span class="go"> -...more</span>
 </pre></div>
 </div>
@@ -3324,16 +3329,16 @@ If a list, passes to JointFaultSample</p></li>
 <span class="go"> faultsamples: start_times</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">faultsamples</span><span class="p">[</span><span class="s1">&#39;start_times&#39;</span><span class="p">]</span>
 <span class="go">FaultSample of scenarios:</span>
-<span class="go"> - manage_health_lostfunction_t1</span>
-<span class="go"> - manage_health_lostfunction_t3</span>
-<span class="go"> - manage_health_lostfunction_t4</span>
-<span class="go"> - store_ee_nocharge_t1</span>
-<span class="go"> - store_ee_nocharge_t3</span>
-<span class="go"> - store_ee_nocharge_t4</span>
-<span class="go"> - store_ee_lowcharge_t1</span>
-<span class="go"> - store_ee_lowcharge_t3</span>
-<span class="go"> - store_ee_lowcharge_t4</span>
-<span class="go"> - store_ee_s1p1_short_t1</span>
+<span class="go"> - drone_fxns_manage_health_lostfunction_t1</span>
+<span class="go"> - drone_fxns_manage_health_lostfunction_t3</span>
+<span class="go"> - drone_fxns_manage_health_lostfunction_t4</span>
+<span class="go"> - drone_fxns_store_ee_lowcharge_t1</span>
+<span class="go"> - drone_fxns_store_ee_lowcharge_t3</span>
+<span class="go"> - drone_fxns_store_ee_lowcharge_t4</span>
+<span class="go"> - drone_fxns_store_ee_nocharge_t1</span>
+<span class="go"> - drone_fxns_store_ee_nocharge_t3</span>
+<span class="go"> - drone_fxns_store_ee_nocharge_t4</span>
+<span class="go"> - drone_fxns_store_ee_ca_comps_s1p1_break_t1</span>
 <span class="go"> - ... (171 total)</span>
 </pre></div>
 </div>
@@ -3571,7 +3576,7 @@ as the inputs to another.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">BaseProblem</span></span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">BaseProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base optimization problem.</p>
 <dl class="py attribute">
@@ -3629,6 +3634,17 @@ as the inputs to another.</p>
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.add_objective_callable">
 <span class="sig-name descname"><span class="pre">add_objective_callable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem.add_objective_callable" title="Link to this definition"></a></dt>
 <dd><p>Add callable objective function with name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.add_variables">
+<span class="sig-name descname"><span class="pre">add_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem.add_variables" title="Link to this definition"></a></dt>
+<dd><p>Add variables to the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*variables</strong> (<em>str</em>) – Names of variables to call in the problem.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -3704,9 +3720,11 @@ as the inputs to another.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span> <span class="o">=</span> <span class="n">SimpleProblem</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">negative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExpSimp</span><span class="p">(</span><span class="n">SimpleProblem</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">negative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span> <span class="o">=</span> <span class="n">ExpSimp</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">iter_hist</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;objectives.a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span> <span class="s1">&#39;objectives.b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">]})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">exp</span><span class="o">.</span><span class="n">get_opt_hist</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">a</span>
@@ -3716,6 +3734,11 @@ as the inputs to another.</p>
 </pre></div>
 </div>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.init_problem">
+<span class="sig-name descname"><span class="pre">init_problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem.init_problem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.log_hist">
@@ -3799,7 +3822,7 @@ values.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseSimProblem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">BaseSimProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_method</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_ec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">BaseSimProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.BaseProblem" title="fmdtools.sim.search.BaseProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseProblem</span></code></a></p>
 <p>Base optimization problem for optimizing over simulations.</p>
 <dl class="py attribute">
@@ -3868,6 +3891,29 @@ evaluate the objective at a value of x.</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.BaseSimProblem.add_sim">
+<span class="sig-name descname"><span class="pre">add_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_method</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_ec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem.add_sim" title="Link to this definition"></a></dt>
+<dd><p>Add the base simulation to the Problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>Block/Architecture class</em><em> or </em><em>object</em>) – Model to simulate.</p></li>
+<li><p><strong>prop_method</strong> (<em>str</em>) – Name of propagate method to simulate the model with.</p></li>
+<li><p><strong>*args</strong> (<em>args</em>) – Arguments to the propagate method.</p></li>
+<li><p><strong>keep_ec</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to keep the endclass. The default is False.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to the propagate method.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.BaseSimProblem.close_pool">
+<span class="sig-name descname"><span class="pre">close_pool</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem.close_pool" title="Link to this definition"></a></dt>
+<dd><p>Close pool if instantiated in the Problem.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -4016,9 +4062,40 @@ g(x) = value - threshold &gt; 0.0 for ‘less’ constraints.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.DisturbanceProblem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">DisturbanceProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">disturbances</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.DisturbanceProblem" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">DisturbanceProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.DisturbanceProblem" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.ScenarioProblem" title="fmdtools.sim.search.ScenarioProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScenarioProblem</span></code></a></p>
 <p>Class for optimizing disturbances that occur at a set time.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.define.block.function</span> <span class="kn">import</span> <span class="n">ExampleFunction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleDisturbanceProblem</span><span class="p">(</span><span class="n">DisturbanceProblem</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_sim</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span> <span class="o">=</span> <span class="n">ExampleDisturbanceProblem</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="go">5.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mf">4.0</span><span class="p">)</span>
+<span class="go">4.0</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.DisturbanceProblem.add_sim">
+<span class="sig-name descname"><span class="pre">add_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">disturbances</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.DisturbanceProblem.add_sim" title="Link to this definition"></a></dt>
+<dd><p>Initialize the DisturbanceProblem sim.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – Model to optimize.</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – Time to inject the disturbances at.</p></li>
+<li><p><strong>*disturbances</strong> (<em>str</em>) – Names of variables to perturb at time t (which become the variables)</p></li>
+<li><p><strong>**kwargs</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.DisturbanceProblem.gen_scenario">
 <span class="sig-name descname"><span class="pre">gen_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.DisturbanceProblem.gen_scenario" title="Link to this definition"></a></dt>
@@ -4143,6 +4220,67 @@ The default is {}.</p></li>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ExScenProb">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ExScenProb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ExScenProb" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.SingleFaultScenarioProblem" title="fmdtools.sim.search.SingleFaultScenarioProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a></p>
+<p>Example Scenario problem for docs and testing.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ExScenProb.init_problem">
+<span class="sig-name descname"><span class="pre">init_problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ExScenProb.init_problem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ExampleDisturbanceProblem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ExampleDisturbanceProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ExampleDisturbanceProblem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.DisturbanceProblem" title="fmdtools.sim.search.DisturbanceProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></p>
+<p>Example DisturbanceProblem for testing and docs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ExampleDisturbanceProblem.init_problem">
+<span class="sig-name descname"><span class="pre">init_problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ExampleDisturbanceProblem.init_problem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ExampleParameterSimProblem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ExampleParameterSimProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ExampleParameterSimProblem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.ParameterSimProblem" title="fmdtools.sim.search.ParameterSimProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterSimProblem</span></code></a></p>
+<p>Example ParameterSimProblem class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ExampleParameterSimProblem.init_problem">
+<span class="sig-name descname"><span class="pre">init_problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ExampleParameterSimProblem.init_problem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ExampleProblemArchitecture">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ExampleProblemArchitecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ExampleProblemArchitecture" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.ProblemArchitecture" title="fmdtools.sim.search.ProblemArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemArchitecture</span></code></a></p>
+<p>Example ProblemProblemArchitecture for docs and testing.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ExampleProblemArchitecture.init_problem">
+<span class="sig-name descname"><span class="pre">init_problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ExampleProblemArchitecture.init_problem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ExampleSimpleProblem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ExampleSimpleProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ExampleSimpleProblem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.SimpleProblem" title="fmdtools.sim.search.SimpleProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleProblem</span></code></a></p>
+<p>Example simple Problem for docs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ExampleSimpleProblem.init_problem">
+<span class="sig-name descname"><span class="pre">init_problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ExampleSimpleProblem.init_problem" title="Link to this definition"></a></dt>
+<dd><p>Initialize the problem.</p>
 </dd></dl>
 
 </dd></dl>
@@ -4314,7 +4452,7 @@ The default is {}.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ParameterSimProblem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ParameterSimProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameterdomain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_method</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ParameterSimProblem" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ParameterSimProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ParameterSimProblem" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.BaseSimProblem" title="fmdtools.sim.search.BaseSimProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSimProblem</span></code></a></p>
 <p>Optimization problem defining the optimization of model parameters over simulations.</p>
 <p class="rubric">Examples</p>
@@ -4324,12 +4462,18 @@ The default is {}.</p></li>
 </div>
 <p>below, we show basic setup of a parameter problem where objectives get values
 from the sim at particular times.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span> <span class="o">=</span> <span class="n">ParameterSimProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="n">expd</span><span class="p">,</span> <span class="s2">&quot;nominal&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.x&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">add_result_constraint</span><span class="p">(</span><span class="s2">&quot;g1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.x&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s1">&#39;greater&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleParameterSimProblem</span><span class="p">(</span><span class="n">ParameterSimProblem</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_sim</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="s2">&quot;nominal&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_parameterdomain</span><span class="p">(</span><span class="n">expd</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.x&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_constraint</span><span class="p">(</span><span class="s2">&quot;g1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.x&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s2">&quot;greater&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span> <span class="o">=</span> <span class="n">ExampleParameterSimProblem</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span>
-<span class="go">ParameterSimProblem with:</span>
+<span class="go">ExampleParameterSimProblem with:</span>
 <span class="go">VARIABLES</span>
 <span class="go"> -y                                                             nan</span>
 <span class="go"> -x                                                             nan</span>
@@ -4354,24 +4498,47 @@ from the sim at particular times.</p>
 </pre></div>
 </div>
 <p>below, we use the endclass as an objective instead of the variable:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span> <span class="o">=</span> <span class="n">ParameterSimProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="n">expd</span><span class="p">,</span> <span class="s2">&quot;nominal&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;endclass.xy&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleParameterSimProblemObj</span><span class="p">(</span><span class="n">ParameterSimProblem</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_sim</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="s2">&quot;nominal&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_parameterdomain</span><span class="p">(</span><span class="n">expd</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;endclass.xy&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_obj_prob</span> <span class="o">=</span> <span class="n">ExampleParameterSimProblemObj</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_obj_prob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="go">100.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_obj_prob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">200.0</span>
 </pre></div>
 </div>
 <p>finally, note that this class can work with a variety of methods:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span> <span class="o">=</span> <span class="n">ParameterSimProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(</span><span class="s2">&quot;ex&quot;</span><span class="p">),</span> <span class="n">expd</span><span class="p">,</span> <span class="s2">&quot;one_fault&quot;</span><span class="p">,</span> <span class="s2">&quot;ex&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="go">2.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">f2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="go">4.0</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleParameterSimProblemShort</span><span class="p">(</span><span class="n">ParameterSimProblem</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_sim</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span><span class="s2">&quot;one_fault&quot;</span><span class="p">,</span> <span class="s2">&quot;examplefunction&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_parameterdomain</span><span class="p">(</span><span class="n">expd</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.x&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exprobshort</span> <span class="o">=</span> <span class="n">ExampleParameterSimProblemShort</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprobshort</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprobshort</span><span class="o">.</span><span class="n">f2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">3.0</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ParameterSimProblem.add_parameterdomain">
+<span class="sig-name descname"><span class="pre">add_parameterdomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameterdomain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ParameterSimProblem.add_parameterdomain" title="Link to this definition"></a></dt>
+<dd><p>Add a ParameterDomain to the optimization problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>parameterdomain</strong> (<a class="reference internal" href="#fmdtools.sim.sample.ParameterDomain" title="fmdtools.sim.sample.ParameterDomain"><em>ParameterDomain</em></a>) – Parameter Domain to optimize over.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ParameterSimProblem.sim_mdl">
 <span class="sig-name descname"><span class="pre">sim_mdl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ParameterSimProblem.sim_mdl" title="Link to this definition"></a></dt>
@@ -4394,7 +4561,7 @@ from the sim at particular times.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ProblemArchitecture">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ProblemArchitecture</span></span><a class="headerlink" href="#fmdtools.sim.search.ProblemArchitecture" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ProblemArchitecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ProblemArchitecture" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.BaseProblem" title="fmdtools.sim.search.BaseProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseProblem</span></code></a></p>
 <p>Class enabling the representation of combined joint optimization problems.</p>
 <p>Combined optimization problems involve multiple variables and objectives which
@@ -4451,29 +4618,18 @@ problems which we hope to resolve in future work.</p>
 <p>Below we connect three example problems in a single architecture, linking the vars
 x0 and x1 from ex_sp to be inputs to the scenario simulation (time) as well as the
 disturbance simulation variable (s.y).</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span> <span class="o">=</span> <span class="n">SimpleProblem</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">x1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="n">f1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">x1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_constraint</span><span class="p">(</span><span class="s2">&quot;g1&quot;</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s2">&quot;less&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleProblemArchitecture</span><span class="p">(</span><span class="n">ProblemArchitecture</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">,</span> <span class="n">ExampleSimpleProblem</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">],</span> <span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">]})</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_scenprob&quot;</span><span class="p">,</span> <span class="n">ExScenProb</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]})</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_dp&quot;</span><span class="p">,</span> <span class="n">ExampleDisturbanceProblem</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;s.y&quot;</span><span class="p">]})</span>
 </pre></div>
 </div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span> <span class="o">=</span> <span class="n">SingleFaultScenarioProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="p">(</span><span class="s2">&quot;examplefunction&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span> <span class="o">=</span> <span class="n">DisturbanceProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span> <span class="o">=</span> <span class="n">ProblemArchitecture</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">,</span> <span class="n">ex_sp</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">],</span> <span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">]})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_scenprob&quot;</span><span class="p">,</span> <span class="n">ex_scenprob</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_dp&quot;</span><span class="p">,</span> <span class="n">ex_dp</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;s.y&quot;</span><span class="p">]})</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span> <span class="o">=</span> <span class="n">ExampleProblemArchitecture</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span>
-<span class="go">ProblemArchitecture with:</span>
+<span class="go">ExampleProblemArchitecture with:</span>
 <span class="go">CONNECTORS</span>
 <span class="go"> -x0                                                          [nan]</span>
 <span class="go"> -x1                                                          [nan]</span>
@@ -4779,32 +4935,10 @@ The default is ‘’.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span> <span class="o">=</span> <span class="n">SimpleProblem</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">x1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="n">f1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">x1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_constraint</span><span class="p">(</span><span class="s2">&quot;g1&quot;</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s2">&quot;less&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span> <span class="o">=</span> <span class="n">SingleFaultScenarioProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="p">(</span><span class="s2">&quot;examplefunction&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span> <span class="o">=</span> <span class="n">DisturbanceProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span> <span class="o">=</span> <span class="n">ProblemArchitecture</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">,</span> <span class="n">ex_sp</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">],</span> <span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">]})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_scenprob&quot;</span><span class="p">,</span> <span class="n">ex_scenprob</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_dp&quot;</span><span class="p">,</span> <span class="n">ex_dp</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;s.y&quot;</span><span class="p">]})</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">update_full_problem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span> <span class="o">=</span> <span class="n">ExampleProblemArchitecture</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">update_full_problem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span>
-<span class="go">ProblemArchitecture with:</span>
+<span class="go">ExampleProblemArchitecture with:</span>
 <span class="go">CONNECTORS</span>
 <span class="go"> -x0                                                           [1.]</span>
 <span class="go"> -x1                                                           [2.]</span>
@@ -4823,7 +4957,7 @@ The default is ‘’.</p></li>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">problems</span><span class="p">[</span><span class="s1">&#39;ex_dp&#39;</span><span class="p">]</span>
-<span class="go">DisturbanceProblem with:</span>
+<span class="go">ExampleDisturbanceProblem with:</span>
 <span class="go">VARIABLES</span>
 <span class="go"> -s.y                                                        2.0000</span>
 <span class="go">OBJECTIVES</span>
@@ -4852,32 +4986,10 @@ The default is ‘’.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span> <span class="o">=</span> <span class="n">SimpleProblem</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">x1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="n">f1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">x1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_constraint</span><span class="p">(</span><span class="s2">&quot;g1&quot;</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s2">&quot;less&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span> <span class="o">=</span> <span class="n">SingleFaultScenarioProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="p">(</span><span class="s2">&quot;examplefunction&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span> <span class="o">=</span> <span class="n">DisturbanceProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span> <span class="o">=</span> <span class="n">ProblemArchitecture</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">,</span> <span class="n">ex_sp</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">],</span> <span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">]})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_scenprob&quot;</span><span class="p">,</span> <span class="n">ex_scenprob</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_dp&quot;</span><span class="p">,</span> <span class="n">ex_dp</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;s.y&quot;</span><span class="p">]})</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">update_problem</span><span class="p">(</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span> <span class="o">=</span> <span class="n">ExampleProblemArchitecture</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">update_problem</span><span class="p">(</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">problems</span><span class="p">[</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">]</span>
-<span class="go">SimpleProblem with:</span>
+<span class="go">ExampleSimpleProblem with:</span>
 <span class="go">VARIABLES</span>
 <span class="go"> -x0                                                         1.0000</span>
 <span class="go"> -x1                                                         2.0000</span>
@@ -5146,7 +5258,7 @@ The default is ‘’.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ScenarioProblem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ScenarioProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultdomain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ScenarioProblem" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ScenarioProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ScenarioProblem" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.BaseSimProblem" title="fmdtools.sim.search.BaseSimProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSimProblem</span></code></a></p>
 <p>Base class for optimizing scenario parameters.</p>
 <dl class="py attribute">
@@ -5159,6 +5271,12 @@ scenarios (where the model is copied instead of re-simulated).</p>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ScenarioProblem.add_sim">
+<span class="sig-name descname"><span class="pre">add_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ScenarioProblem.add_sim" title="Link to this definition"></a></dt>
+<dd><p>Add a simulation - always uses prop_one_scen method.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -5189,10 +5307,9 @@ scenarios (where the model is copied instead of re-simulated).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.SimpleProblem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">SimpleProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.SimpleProblem" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">SimpleProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.SimpleProblem" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.BaseProblem" title="fmdtools.sim.search.BaseProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseProblem</span></code></a></p>
 <p>Simple optimization problem (without any given model constructs).</p>
-<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.SimpleProblem.callables">
 <span class="sig-name descname"><span class="pre">callables</span></span><a class="headerlink" href="#fmdtools.sim.search.SimpleProblem.callables" title="Link to this definition"></a></dt>
@@ -5205,14 +5322,15 @@ scenarios (where the model is copied instead of re-simulated).</p>
 </dd></dl>
 
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span> <span class="o">=</span> <span class="n">SimpleProblem</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">x1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="n">f1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">x1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_constraint</span><span class="p">(</span><span class="s2">&quot;g1&quot;</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s2">&quot;less&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleSimpleProblem</span><span class="p">(</span><span class="n">SimpleProblem</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_variables</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">f1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">x1</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="n">f1</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">g1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">x1</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_constraint</span><span class="p">(</span><span class="s2">&quot;g1&quot;</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s2">&quot;less&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span> <span class="o">=</span> <span class="n">ExampleSimpleProblem</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="go">2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">g1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="go">-3.0</span>
@@ -5258,7 +5376,7 @@ scenarios (where the model is copied instead of re-simulated).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.SingleFaultScenarioProblem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">SingleFaultScenarioProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.SingleFaultScenarioProblem" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">SingleFaultScenarioProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.SingleFaultScenarioProblem" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.ScenarioProblem" title="fmdtools.sim.search.ScenarioProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScenarioProblem</span></code></a></p>
 <p>Class for optimizing the time of a given fault scenario.</p>
 <dl class="py attribute">
@@ -5297,17 +5415,36 @@ Default is 0.0.</p>
 
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.define.block.function</span> <span class="kn">import</span> <span class="n">ExampleFunction</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span> <span class="o">=</span> <span class="n">SingleFaultScenarioProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="p">(</span><span class="s2">&quot;examplefunction&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExScenProb</span><span class="p">(</span><span class="n">SingleFaultScenarioProblem</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_sim</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="p">(</span><span class="s2">&quot;examplefunction&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>objective value should be 1.0 (init value) + 3 * time_with_fault</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
-<span class="go">4.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mf">4.0</span><span class="p">)</span>
-<span class="go">7.0</span>
-</pre></div>
-</div>
+<p>objective value should be 1.0 (init value) + 3 * time_with_fault
+&gt;&gt;&gt; ex_scenprob = ExScenProb()
+&gt;&gt;&gt; ex_scenprob.f1(5.0)
+4.0
+&gt;&gt;&gt; ex_scenprob.f1(4.0)
+7.0</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.SingleFaultScenarioProblem.add_sim">
+<span class="sig-name descname"><span class="pre">add_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.SingleFaultScenarioProblem.add_sim" title="Link to this definition"></a></dt>
+<dd><p>Initialize the SingleFaultScenarioProblem with a given fault to optimize.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>Model</em>) – Model to simulate/optimize.</p></li>
+<li><p><strong>faulttup</strong> (<em>tuple</em>) – (fxn, fault) defining the fault.</p></li>
+<li><p><strong>phasemap</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><em>PhaseMap</em></a><em>, </em><em>optional</em>) – PhaseMap for fault sampling. The default is None.</p></li>
+<li><p><strong>sim_start</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum start time for the simulation and lower bound on scenario time..
+Default is 0.0.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to prop_one_scen (e.g., track, etc.).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.SingleFaultScenarioProblem.gen_scenario">
 <span class="sig-name descname"><span class="pre">gen_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.SingleFaultScenarioProblem.gen_scenario" title="Link to this definition"></a></dt>

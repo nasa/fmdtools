@@ -173,8 +173,8 @@ class ImportEEMode(Mode):
     Mode may be associated with each function:
         - failrate = X sets the failure rate for the function
         (to be distributed over all modes)
-        - fm_args defines a probability model for each mode, where modes is:
-            - {modename: (%of failures, (% at each phase in mdl.phases), repaircosts)
+        - the arguments for fault_XX defines a probability model for each using the
+        Fault class.
     These failure rates will then be used to generate a list of scenarios for
     propagate.single_faults and FaultSample()
 
@@ -183,9 +183,9 @@ class ImportEEMode(Mode):
     """
 
     failrate = 1e-5
-    fm_args = {'no_v': (0.80, 10000),
-               'inf_v': (0.20, 5000)}
-    phases = {'start': 0, 'on': 1, 'end': 0}
+    fault_no_v = (0.80, 10000)
+    fault_inf_v = (0.20, 5000)
+    default_phases = (('start', 0), ('on', 1), ('end', 0))
 
 
 class ImportEEState(State):
@@ -255,7 +255,8 @@ class ImportWaterMode(Mode):
     """Fault modes for importing water."""
 
     failrate = 1e-5
-    fm_args = {'no_wat': (1.0, 1000), 'less_wat': (1.0, 0.0)}
+    fault_no_wat = (1.0, 1000)
+    fault_less_wat = (1.0, 0.0)
 
 
 class ImportWater(Function):
@@ -280,8 +281,8 @@ class ExportWaterMode(Mode):
     """Fault modes for exporting water."""
 
     failrate = 1e-5
-    fm_args = {'block': (1.0, 5000)}
-    phases = {'start': 1.5, 'on': 1, 'end': 1}
+    fault_block = (1.0, 5000)
+    default_phases = (('start', 1.5), ('on', 1), ('end', 1))
 
 
 class ExportWater(Function):
@@ -302,7 +303,7 @@ class ImportSigMode(Mode):
     """Fault modes for signal input."""
 
     failrate = 1e-6
-    fm_args = {'no_sig': (1.0, 10000, {'start': 1.5, 'on': 1, 'end': 1})}
+    fault_no_sig = (1.0, 10000, (('start', 1.5), ('on', 1), ('end', 1)))
 
 
 class ImportSig(Function):
@@ -356,8 +357,8 @@ class MoveWatMode(Mode):
     """Failure modes involved in moving water."""
 
     failrate = 1e-5
-    fm_args = {'mech_break': (0.6, 5000, {'start': 0.1, 'on': 1.2, 'end': 0.1}),
-               'short': (1.0, 10000, {'start': 1.5, 'on': 1, 'end': 1})}
+    fault_mech_break = (0.6, 5000, (('start', 0.1), ('on', 1.2), ('end', 0.1)))
+    fault_short = (1.0, 10000, (('start', 1.5), ('on', 1), ('end', 1)))
 
 
 class MoveWat(Function):

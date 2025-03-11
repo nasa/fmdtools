@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.architecture &mdash; fmdtools 2.0.7 documentation</title>
+  <title>fmdtools.define.architecture &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../_static/documentation_options.js?v=20623aea"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -521,6 +521,11 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -755,12 +760,6 @@ May alternatively provide already-instanced object.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.add_obj_modes">
-<span class="sig-name descname"><span class="pre">add_obj_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.add_obj_modes" title="Link to this definition"></a></dt>
-<dd><p>Add modes from an object to faultmodes.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.add_sim">
 <span class="sig-name descname"><span class="pre">add_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flex_role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simclass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">flownames</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.add_sim" title="Link to this definition"></a></dt>
 <dd><p>Add a Simulable to the given flex_role.</p>
@@ -864,12 +863,6 @@ May alternatively provide already-instanced object.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.get_faults">
-<span class="sig-name descname"><span class="pre">get_faults</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.get_faults" title="Link to this definition"></a></dt>
-<dd><p>Get faults from contained roles.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.get_flows">
 <span class="sig-name descname"><span class="pre">get_flows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">flownames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_if_empty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.get_flows" title="Link to this definition"></a></dt>
 <dd><p>Return a list of the model flow objects.</p>
@@ -900,20 +893,6 @@ May alternatively provide already-instanced object.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>**kwargs</strong> (<em>kwargs</em>) – Existing roles (if any).</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.inject_faults">
-<span class="sig-name descname"><span class="pre">inject_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flexible_role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.inject_faults" title="Link to this definition"></a></dt>
-<dd><p>Inject faults in the ComponentArchitecture/ASG object obj.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>flexible_role</strong> (<em>str</em>) – Name of role to inject faults in (e.g., fxns, .acts, comps)</p></li>
-<li><p><strong>faults</strong> (<em>dict</em>) – Dict of faults to inject {‘fxnname’: [‘faultname’]}.</p></li>
-</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1022,17 +1001,17 @@ sequence between actions is shown.</p></li>
 the flow relationships between actions is shown.</p></li>
 </ul>
 <p>The ActionArchitecture class is used to represent a sequenced of action taken by an agent. It is a composition of instantiated Action objects, Flow objects, and conditions as shown below:</p>
-<figure class="align-default" id="id7">
+<figure class="align-default" id="id5">
 <a class="reference internal image-reference" href="../_images/demo_model_asg.svg"><img alt="Structure of an ActionArchitecture" src="../_images/demo_model_asg.svg" width="800" /></a>
 <figcaption>
-<p><span class="caption-text">Example Action Architecture connecting action objects with flow objects and conditions.</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+<p><span class="caption-text">Example Action Architecture connecting action objects with flow objects and conditions.</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>In the Human action architecture, a human operator percieves and acts on a hazard and the total number of hazards acted on is recorded in the outcome flow. This can also be represented in <a class="reference internal" href="Development%20Guide.html#term-FRDL"><span class="xref std std-term">FRDL</span></a> using:</p>
-<figure class="align-default" id="id8">
+<figure class="align-default" id="id6">
 <a class="reference internal image-reference" href="examples/asg_demo/demo_model_asg_FRDL.svg"><img alt="Structure of an ActionArchitecture in FRDL" src="examples/asg_demo/demo_model_asg_FRDL.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">Propagation network of example Action Architecture.</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+<p><span class="caption-text">Propagation network of example Action Architecture.</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>For more info on this example, see: <a class="reference internal" href="../examples/asg_demo/readme.html"><span class="doc">The Action Sequence Graph Demo Model</span></a>.</p>
@@ -1212,12 +1191,6 @@ Defaults to self.condition_pass if none are provided.</p></li>
 <dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.initial_action">
 <span class="sig-name descname"><span class="pre">initial_action</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'auto'</span></em><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.initial_action" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.inject_faults">
-<span class="sig-name descname"><span class="pre">inject_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.inject_faults" title="Link to this definition"></a></dt>
-<dd><p>Inject faults into the actions contained in the architecture.</p>
-</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.is_dynamic">
@@ -1409,20 +1382,6 @@ to nx.draw_networkx_nodes. The default is {“label”:{}}.</p>
 <span class="sig-name descname"><span class="pre">flexible_roles</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['flows',</span> <span class="pre">'comps']</span></em><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture.flexible_roles" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture.inject_faults">
-<span class="sig-name descname"><span class="pre">inject_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture.inject_faults" title="Link to this definition"></a></dt>
-<dd><p>Inject faults in the ComponentArchitecture/ASG object obj.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>flexible_role</strong> (<em>str</em>) – Name of role to inject faults in (e.g., fxns, .acts, comps)</p></li>
-<li><p><strong>faults</strong> (<em>dict</em>) – Dict of faults to inject {‘fxnname’: [‘faultname’]}.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture.rolename">
 <span class="sig-name descname"><span class="pre">rolename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ca'</span></em><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture.rolename" title="Link to this definition"></a></dt>
@@ -1454,24 +1413,24 @@ model, where functions are nodes and flows are edges</p></li>
 the containment relationship between function classes and flow classes in the model.</p></li>
 </ul>
 <p>The FunctionArchitecture class is used to define the high-level function-flow structure of a system model. It is a composition of instantiated Function and Flow objects, as shown below:</p>
-<figure class="align-default" id="id9">
+<figure class="align-default" id="id7">
 <a class="reference internal image-reference" href="../_images/FunctionArchitecture.svg"><img alt="Structure of a Model" src="../_images/FunctionArchitecture.svg" width="800" /></a>
 <figcaption>
-<p><span class="caption-text">Example Function Architecture connecting function objects with flow objects.</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
+<p><span class="caption-text">Example Function Architecture connecting function objects with flow objects.</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>In <a class="reference internal" href="Development%20Guide.html#term-FRDL"><span class="xref std std-term">FRDL</span></a>, this object may be represented as:</p>
-<figure class="align-default" id="id10">
+<figure class="align-default" id="id8">
 <a class="reference internal image-reference" href="../_images/FRDL_Function_Example.svg"><img alt="Example Function Represented in FRDL" src="../_images/FRDL_Function_Example.svg" width="800" /></a>
 <figcaption>
-<p><span class="caption-text">Example Function Architecture propagation structure represented in FRDL.</span><a class="headerlink" href="#id10" title="Link to this image"></a></p>
+<p><span class="caption-text">Example Function Architecture propagation structure represented in FRDL.</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>To define a FunctionArchitecture class, it can be helpful to use the following code template:</p>
-<figure class="align-default" id="id11">
+<figure class="align-default" id="id9">
 <a class="reference internal image-reference" href="../_images/fxnarch_structure.svg"><img alt="Structure of a Model" src="../_images/fxnarch_structure.svg" width="800" /></a>
 <figcaption>
-<p><span class="caption-text">Code template for FunctionArchitecture classes.</span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
+<p><span class="caption-text">Code template for FunctionArchitecture classes.</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <dl class="py class">
@@ -1705,20 +1664,6 @@ in assoc_faultmodes/ Default is 0.</p></li>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.inject_faults">
-<span class="sig-name descname"><span class="pre">inject_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.inject_faults" title="Link to this definition"></a></dt>
-<dd><p>Inject faults in the ComponentArchitecture/ASG object obj.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>flexible_role</strong> (<em>str</em>) – Name of role to inject faults in (e.g., fxns, .acts, comps)</p></li>
-<li><p><strong>faults</strong> (<em>dict</em>) – Dict of faults to inject {‘fxnname’: [‘faultname’]}.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.is_dynamic">
 <span class="sig-name descname"><span class="pre">is_dynamic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.is_dynamic" title="Link to this definition"></a></dt>
 <dd><p>Determine if dynamic based on containment of dynamic functions.</p>
@@ -1798,22 +1743,6 @@ random states over time.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.return_faultmodes">
-<span class="sig-name descname"><span class="pre">return_faultmodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.return_faultmodes" title="Link to this definition"></a></dt>
-<dd><p>Return faultmodes present in the model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><ul class="simple">
-<li><p><strong>modes</strong> (<em>dict</em>) – Fault modes present in the model indexed by function name</p></li>
-<li><p><strong>modeprops</strong> (<em>dict</em>) – Fault mode properties (defined in the function definition).
-Has structure {fxn:mode:properties}.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.return_probdens">
 <span class="sig-name descname"><span class="pre">return_probdens</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.return_probdens" title="Link to this definition"></a></dt>
 <dd><p>Return the probability density of the model distributions.</p>
@@ -1834,27 +1763,6 @@ Has structure {fxn:mode:properties}.</p></li>
 <span class="sig-name descname"><span class="pre">set_functionorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functionorder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.set_functionorder" title="Link to this definition"></a></dt>
 <dd><p>Manually set the order of functions to be executed.</p>
 <p>(otherwise it will be executed based on the sequence of add_fxn calls)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.set_vars">
-<span class="sig-name descname"><span class="pre">set_vars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.set_vars" title="Link to this definition"></a></dt>
-<dd><p>Set variables in the model to set values (useful for optimization, etc.).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>varlist</strong> (<em>list</em><em> of </em><em>lists/tuples</em>) – <dl class="simple">
-<dt>List of variables to set, with possible structures:</dt><dd><p>[[‘fxnname’, ‘att1’], [‘fxnname2’, ‘comp1’, ‘att2’], [‘flowname’, ‘att3’]]
-[‘fxnname.att1’, ‘fxnname.comp1.att2’, ‘flowname.att3’]</p>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>varvalues</strong> (<em>list</em>) – List of values corresponding to varlist</p></li>
-<li><p><strong>kwargs</strong> (<em>kwargs</em>) – attribute-value pairs. If provided, must be passed using ** syntax:
-mdl.set_vars(<a href="#id5"><span class="problematic" id="id6">**</span></a>{‘fxnname.varname’:value})</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py attribute">

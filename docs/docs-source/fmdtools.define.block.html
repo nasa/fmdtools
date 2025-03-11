@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.block &mdash; fmdtools 2.0.7 documentation</title>
+  <title>fmdtools.define.block &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../_static/documentation_options.js?v=20623aea"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -521,6 +521,11 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -894,17 +899,6 @@ The default is 1, which just chooses single fault modes.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.block.base.Block.inject_faults">
-<span class="sig-name descname"><span class="pre">inject_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Block.inject_faults" title="Link to this definition"></a></dt>
-<dd><p>Inject faults into the block and its contained architectures.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>faults</strong> (<em>str/list/dict</em><em>, </em><em>optional</em>) – Faults to inject. The default is [].</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Block.is_dynamic">
 <span class="sig-name descname"><span class="pre">is_dynamic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Block.is_dynamic" title="Link to this definition"></a></dt>
 <dd><p>Check if Block has dynamic execution step.</p>
@@ -950,12 +944,6 @@ random states over time.</p></li>
 <dt class="sig sig-object py" id="id1">
 <span class="sig-name descname"><span class="pre">s</span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.block.base.Block.update_contained_modes">
-<span class="sig-name descname"><span class="pre">update_contained_modes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Block.update_contained_modes" title="Link to this definition"></a></dt>
-<dd><p>Add contained faultmodes for the container (from arch).</p>
-</dd></dl>
 
 </dd></dl>
 
@@ -1158,6 +1146,36 @@ Default is True.</p></li>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.get_fault">
+<span class="sig-name descname"><span class="pre">get_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.get_fault" title="Link to this definition"></a></dt>
+<dd><p>Get the faultmode in the given scope of the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.get_faults">
+<span class="sig-name descname"><span class="pre">get_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">with_sub_faults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_base_faults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_present</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.get_faults" title="Link to this definition"></a></dt>
+<dd><p>Get faults associated with the given block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>with_sub_faults</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to get faults from the block. The default is True.</p></li>
+<li><p><strong>with_base_faults</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to get faults from objects contained by the block. The default is
+True.</p></li>
+<li><p><strong>only_present</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to get only present faults (if True) or all possible faults. The
+default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>all_faults</strong> – Dictionary of blocks and faults present in the block. Of structure
+{blockname: faults}</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.get_fxns">
 <span class="sig-name descname"><span class="pre">get_fxns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.get_fxns" title="Link to this definition"></a></dt>
 <dd><p>Get fxns associated with the Simulable (self if Function, self.fxns if Model).</p>
@@ -1173,12 +1191,12 @@ Default is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.get_scen_rate">
-<span class="sig-name descname"><span class="pre">get_scen_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fxnname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.get_scen_rate" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_scen_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.get_scen_rate" title="Link to this definition"></a></dt>
 <dd><p>Get the scenario rate for the given single-fault scenario.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fxnname</strong> (<em>str</em>) – Name of the function with the fault</p></li>
+<li><p><strong>scope</strong> (<em>str</em>) – Name of the block or sub-block with the fault</p></li>
 <li><p><strong>faultmode</strong> (<em>str</em>) – Name of the fault mode</p></li>
 <li><p><strong>time</strong> (<em>int</em>) – Time when the scenario is to occur</p></li>
 <li><p><strong>phasemap</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><em>PhaseMap</em></a><em>, </em><em>optional</em>) – Map of phases/modephases that define operations the mode will be injected
@@ -1216,6 +1234,17 @@ The default is 1.</p></li>
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.init_time_hist">
 <span class="sig-name descname"><span class="pre">init_time_hist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.init_time_hist" title="Link to this definition"></a></dt>
 <dd><p>Add time history to the model (only done at top level).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.inject_faults">
+<span class="sig-name descname"><span class="pre">inject_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.inject_faults" title="Link to this definition"></a></dt>
+<dd><p>Inject faults into the block and its contained architectures.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>faults</strong> (<em>str/list/dict</em><em>, </em><em>optional</em>) – Faults to inject. The default is [].</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1269,9 +1298,27 @@ The default is 1.</p></li>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.return_faultmodes">
+<span class="sig-name descname"><span class="pre">return_faultmodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.return_faultmodes" title="Link to this definition"></a></dt>
+<dd><p>Return all faults as a single dictionary.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.return_probdens">
 <span class="sig-name descname"><span class="pre">return_probdens</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.return_probdens" title="Link to this definition"></a></dt>
 <dd><p>Get the probability density associated with Block and things it contains.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.set_fault_disturbances">
+<span class="sig-name descname"><span class="pre">set_fault_disturbances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.set_fault_disturbances" title="Link to this definition"></a></dt>
+<dd><p>Set Mode-based disturbances (if present).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.set_sub_faults">
+<span class="sig-name descname"><span class="pre">set_sub_faults</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.set_sub_faults" title="Link to this definition"></a></dt>
+<dd><p>Set the mode to have sub_faults if contained objs have faults.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1518,27 +1565,6 @@ graph within the function.</p>
 <dt class="sig sig-object py" id="fmdtools.define.block.function.Function.prop_arch_behaviors">
 <span class="sig-name descname"><span class="pre">prop_arch_behaviors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proptype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.function.Function.prop_arch_behaviors" title="Link to this definition"></a></dt>
 <dd><p>Propagate behaviors into contained architectures.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.block.function.Function.prop_arch_faults_up">
-<span class="sig-name descname"><span class="pre">prop_arch_faults_up</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.function.Function.prop_arch_faults_up" title="Link to this definition"></a></dt>
-<dd><p>Get faults from contained components and add to .m.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.block.function.Function.return_faultmodes">
-<span class="sig-name descname"><span class="pre">return_faultmodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.function.Function.return_faultmodes" title="Link to this definition"></a></dt>
-<dd><p>Get the fault modes present in the simulation (for propagate/model).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><ul class="simple">
-<li><p><strong>ms</strong> (<em>list</em>) – List of faults present.</p></li>
-<li><p><strong>modeprops</strong> (<em>dict</em>) – Dict of corresponding fault mode properties.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">

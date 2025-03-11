@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rover Response Optimization &mdash; fmdtools 2.0.7 documentation</title>
+  <title>Rover Response Optimization &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../../_static/fmdtools_ico.ico"/>
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../../../_static/documentation_options.js?v=20623aea"></script>
       <script src="../../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -524,6 +524,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -666,7 +671,7 @@
 <h1>Rover Response Optimization<a class="headerlink" href="#Rover-Response-Optimization" title="Link to this heading"></a></h1>
 <p>This notebook shows how variables in an fmdtools model can be optimized for resilience.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.sample</span> <span class="kn">import</span> <span class="n">SampleApproach</span><span class="p">,</span> <span class="n">FaultSample</span><span class="p">,</span> <span class="n">FaultDomain</span><span class="p">,</span> <span class="n">ParameterDomain</span>
@@ -681,7 +686,7 @@
 </div>
 <p>Model is in defined rover_model.py</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">examples.rover.rover_model</span> <span class="kn">import</span> <span class="n">Rover</span><span class="p">,</span> <span class="n">RoverParam</span>
@@ -693,17 +698,43 @@
 <p>Here we define the optimization problem for the rover.</p>
 <p>We use a parallel pool, staged execution, and minimal tracking options to lower computational cost as much as possible.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">sp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;end_condition&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
-<span class="n">track</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;functions&#39;</span><span class="p">:{</span><span class="s2">&quot;Environment&quot;</span><span class="p">:</span><span class="s2">&quot;in_bound&quot;</span><span class="p">},</span><span class="s1">&#39;flows&#39;</span><span class="p">:{</span><span class="s2">&quot;Ground&quot;</span><span class="p">:</span><span class="s2">&quot;all&quot;</span><span class="p">}}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">sp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;end_condition&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">},</span> <span class="n">track</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;flows&#39;</span><span class="p">:{</span><span class="s2">&quot;ground&quot;</span><span class="p">:</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">}})</span>
 <span class="c1">#rover_prob = search.ProblemInterface(&quot;rover_problem&quot;, mdl, pool=mp.Pool(5), staged=True, track=track)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">h</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+flows.ground.r.probdens:      array(151)
+flows.ground.s.in_bound:      array(151)
+flows.ground.c.r.probdens:    array(151)
+flows.ground.ga.points.start: array(151)
+flows.ground.ga.points.end:   array(151)
+flows.ground.ga.lines.line:   array(151)
+flows.pos.s.x:                array(151)
+flows.pos.s.y:                array(151)
+flows.pos.s.vel:              array(151)
+flows.pos.s.ux:               array(151)
+flows.pos.s.uy:               array(151)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">p</span>
@@ -711,20 +742,20 @@
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RoverParam(ground=GroundParam(linetype=&#39;sine&#39;, amp=1.0, period=6.283185307179586, radius=20.0, x_start=10.0, y_end=10.0, x_min=0.0, x_max=30.0, x_res=0.1, path_buffer_on=0.2, path_buffer_poor=0.3, path_buffer_near=0.4, dest_buffer_on=1.0, dest_buffer_near=2.0), correction=ResCorrection(ub_f=10.0, lb_f=-1.0, ub_t=10.0, lb_t=0.0, ub_d=2.0, lb_d=-2.0, cor_d=0.0, cor_t=0.0, cor_f=0.0), degradation=DegParam(friction=0.0, drift=0.0), drive_modes={&#39;mode_args&#39;: &#39;set&#39;})
+RoverParam(ground=GroundParam(linetype=&#39;sine&#39;, amp=1.0, period=6.283185307179586, radius=20.0, x_start=10.0, y_end=10.0, x_min=0.0, x_max=30.0, x_res=0.1, path_buffer_on=0.2, path_buffer_poor=0.3, path_buffer_near=0.4, dest_buffer_on=1.0, dest_buffer_near=2.0), correction=ResCorrection(ub_f=10.0, lb_f=-1.0, ub_t=10.0, lb_t=0.0, ub_d=2.0, lb_d=-2.0, cor_d=0.0, cor_t=0.0, cor_f=0.0), degradation=DegParam(friction=0.0, drift=0.0), drive_modes={&#39;mode_options&#39;: &#39;set&#39;})
 </pre></div></div>
 </div>
 <p>Here we will be optimizing over faults in the drive system at 3 points during the drive simulation interval:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">Rover</span><span class="p">())</span>
 <span class="n">phasemap</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">phases</span><span class="o">.</span><span class="n">from_hist</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">)</span>
 <span class="n">fault_domain</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
 <span class="n">fault_domain</span><span class="o">.</span><span class="n">add_all_fxnclass_modes</span><span class="p">(</span><span class="s1">&#39;Drive&#39;</span><span class="p">)</span>
@@ -738,12 +769,12 @@ RoverParam(ground=GroundParam(linetype=&#39;sine&#39;, amp=1.0, period=6.2831853
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_8_0.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_8_0.png" />
+<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_9_0.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_9_0.png" />
 </div>
 </div>
 <p>The variables are the correction factors int the fault management:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span> <span class="o">=</span> <span class="n">ParameterDomain</span><span class="p">(</span><span class="n">RoverParam</span><span class="p">)</span>
@@ -755,7 +786,7 @@ RoverParam(ground=GroundParam(linetype=&#39;sine&#39;, amp=1.0, period=6.2831853
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -767,46 +798,36 @@ ParameterDomain with:
 </pre></div></div>
 </div>
 <p>Now we setup the optimization problem using <code class="docutils literal notranslate"><span class="pre">ParameterSimProblem</span></code></p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rover_prob</span> <span class="o">=</span> <span class="n">ParameterSimProblem</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="s1">&#39;fault_sample&#39;</span><span class="p">,</span> <span class="n">fault_sample</span><span class="p">)</span>
-<span class="n">rover_prob</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-ParameterSimProblem with:
-VARIABLES
- -correction.cor_f                                              nan
- -correction.cor_d                                              nan
- -correction.cor_t                                              nan
-</pre></div></div>
-</div>
 <p>We can define multiple objectives, below we will use the end distanceand total_deviation from find_classification.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rover_prob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="s1">&#39;endclass.end_dist&#39;</span><span class="p">)</span>
-<span class="n">rover_prob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s1">&#39;f2&#39;</span><span class="p">,</span> <span class="s1">&#39;endclass.tot_deviation&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RoverProb</span><span class="p">(</span><span class="n">ParameterSimProblem</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_parameterdomain</span><span class="p">(</span><span class="n">pd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_sim</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s2">&quot;fault_sample&quot;</span><span class="p">,</span> <span class="n">fault_sample</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="s1">&#39;endclass.end_dist&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s1">&#39;f2&#39;</span><span class="p">,</span> <span class="s1">&#39;endclass.tot_deviation&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rover_prob</span> <span class="o">=</span> <span class="n">RoverProb</span><span class="p">()</span>
 <span class="n">rover_prob</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-ParameterSimProblem with:
+RoverProb with:
 VARIABLES
  -correction.cor_f                                              nan
  -correction.cor_d                                              nan
@@ -818,7 +839,7 @@ OBJECTIVES
 </div>
 <p>Here we do some basic timing:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rover_prob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
@@ -830,16 +851,16 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-14.286731719970703
+10.915723085403442
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rover_prob</span>
@@ -847,24 +868,24 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-ParameterSimProblem with:
+RoverProb with:
 VARIABLES
  -correction.cor_f                                           0.6000
  -correction.cor_d                                           0.5000
  -correction.cor_t                                           0.5000
 OBJECTIVES
- -f1                                                      1213.9601
- -f2                                                        18.0247
+ -f1                                                      1201.3735
+ -f2                                                        17.4880
 </pre></div></div>
 </div>
 <p>Alternatively, we can use:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rover_prob</span><span class="o">.</span><span class="n">time_execution</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
@@ -872,16 +893,16 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-14.212275266647339
+10.422291278839111
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rover_prob</span><span class="o">.</span><span class="n">hist</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s2">&quot;flows.pos.s.x&quot;</span><span class="p">,</span> <span class="s2">&quot;flows.pos.s.y&quot;</span><span class="p">)</span>
@@ -892,11 +913,11 @@ OBJECTIVES
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_20_0.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_20_0.png" />
+<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_21_0.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_21_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rover_prob</span>
@@ -904,25 +925,25 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-ParameterSimProblem with:
+RoverProb with:
 VARIABLES
  -correction.cor_f                                           0.7000
  -correction.cor_d                                           0.5000
  -correction.cor_t                                           0.5000
 OBJECTIVES
- -f1                                                      1218.9110
- -f2                                                        17.9397
+ -f1                                                      1206.7123
+ -f2                                                        17.4456
 </pre></div></div>
 </div>
 <section id="Rover-Optimization:">
 <h3>Rover Optimization:<a class="headerlink" href="#Rover-Optimization:" title="Link to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymoo.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
@@ -934,10 +955,13 @@ OBJECTIVES
 </div>
 <p>Covert optimization problem into a pymoo problem</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_var</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rover_prob</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="n">rover_prob</span> <span class="o">=</span> <span class="n">RoverProb</span><span class="p">(</span><span class="n">pool</span><span class="o">=</span><span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">close_pool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">n_var</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rover_prob</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
 <span class="n">x_low</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
 <span class="n">x_up</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
 <span class="k">for</span> <span class="n">bound</span> <span class="ow">in</span> <span class="n">rover_prob</span><span class="o">.</span><span class="n">parameterdomain</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -950,7 +974,7 @@ OBJECTIVES
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">arg</span><span class="o">=</span><span class="p">{}</span>
@@ -959,7 +983,7 @@ OBJECTIVES
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">arg</span>
@@ -967,19 +991,19 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;F&#39;: array([1218.91096448]),
+{&#39;F&#39;: array([1206.7123064]),
  &#39;G&#39;: array([], dtype=float64),
  &#39;H&#39;: array([], dtype=float64)}
 </pre></div></div>
 </div>
 <p>Run optimizaion algorithm..</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">algorithm</span><span class="o">=</span><span class="n">PatternSearch</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">]))</span>
@@ -987,10 +1011,13 @@ OBJECTIVES
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">pymoo_prob</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymoo.termination</span> <span class="kn">import</span> <span class="n">get_termination</span>
+<span class="c1"># early termination</span>
+<span class="n">termination</span> <span class="o">=</span> <span class="n">get_termination</span><span class="p">(</span><span class="s2">&quot;n_eval&quot;</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">pymoo_prob</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">termination</span><span class="o">=</span><span class="n">termination</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1002,87 +1029,13 @@ OBJECTIVES
 =================================================
 n_gen  |  n_eval  |     f_avg     |     f_min
 =================================================
-     1 |        1 |  1.218911E+03 |  1.218911E+03
-     2 |        6 |  1.213298E+03 |  1.207685E+03
-     3 |       12 |  1.190913E+03 |  1.174142E+03
-     4 |       18 |  1.059292E+03 |  9.444427E+02
-     5 |       24 |  9.421836E+02 |  9.399245E+02
-     6 |       31 |  9.387046E+02 |  9.374847E+02
-     7 |       38 |  9.382169E+02 |  9.374847E+02
-     8 |       44 |  9.374847E+02 |  9.374847E+02
-     9 |       49 |  9.371749E+02 |  9.368652E+02
-    10 |       56 |  9.368652E+02 |  9.368652E+02
-    11 |       61 |  9.366039E+02 |  9.363427E+02
-    12 |       67 |  9.355650E+02 |  9.347873E+02
-    13 |       74 |  9.349069E+02 |  9.347873E+02
-    14 |       80 |  9.347504E+02 |  9.347134E+02
-    15 |       87 |  9.347134E+02 |  9.347134E+02
-    16 |       92 |  9.346589E+02 |  9.346045E+02
-    17 |       98 |  9.351353E+02 |  9.346045E+02
-    18 |      104 |  9.346045E+02 |  9.346045E+02
-    19 |      107 |  9.345889E+02 |  9.345733E+02
-    20 |      112 |  9.345392E+02 |  9.345051E+02
-    21 |      118 |  9.391714E+02 |  9.345051E+02
-    22 |      124 |  9.345051E+02 |  9.345051E+02
-    23 |      130 |  9.345051E+02 |  9.345051E+02
-    24 |      136 |  9.345051E+02 |  9.345051E+02
-    25 |      141 |  9.345049E+02 |  9.345048E+02
-    26 |      146 |  9.345505E+02 |  9.345048E+02
-    27 |      150 |  9.345046E+02 |  9.345045E+02
-    28 |      154 |  9.365159E+02 |  9.345045E+02
-    29 |      158 |  9.345043E+02 |  9.345041E+02
-    30 |      162 |  9.365157E+02 |  9.345041E+02
-    31 |      166 |  9.345040E+02 |  9.345039E+02
-    32 |      170 |  9.365158E+02 |  9.345039E+02
-    33 |      175 |  9.345039E+02 |  9.345039E+02
-    34 |      181 |  9.345039E+02 |  9.345039E+02
-    35 |      187 |  9.345039E+02 |  9.345038E+02
-    36 |      193 |  9.345038E+02 |  9.345038E+02
-    37 |      200 |  9.345037E+02 |  9.345037E+02
-    38 |      206 |  9.345504E+02 |  9.345037E+02
-    39 |      210 |  9.345037E+02 |  9.345037E+02
-    40 |      214 |  9.365157E+02 |  9.345037E+02
-    41 |      219 |  9.345037E+02 |  9.345037E+02
-    42 |      225 |  9.345037E+02 |  9.345037E+02
-    43 |      231 |  9.345504E+02 |  9.345037E+02
-    44 |      235 |  9.345037E+02 |  9.345037E+02
-    45 |      239 |  9.365157E+02 |  9.345037E+02
-    46 |      244 |  9.345037E+02 |  9.345037E+02
-    47 |      250 |  9.345037E+02 |  9.345037E+02
-    48 |      257 |  9.345037E+02 |  9.345037E+02
-    49 |      263 |  9.345037E+02 |  9.345037E+02
-    50 |      268 |  9.345037E+02 |  9.345037E+02
-    51 |      273 |  9.345037E+02 |  9.345037E+02
-    52 |      278 |  9.345037E+02 |  9.345037E+02
-    53 |      283 |  9.365625E+02 |  9.345037E+02
-    54 |      289 |  9.345037E+02 |  9.345037E+02
-    55 |      294 |  9.345037E+02 |  9.345037E+02
-    56 |      298 |  9.365157E+02 |  9.345037E+02
-    57 |      302 |  9.345037E+02 |  9.345037E+02
-    58 |      306 |  9.365157E+02 |  9.345037E+02
-    59 |      310 |  9.345037E+02 |  9.345037E+02
-    60 |      314 |  9.365157E+02 |  9.345037E+02
-    61 |      319 |  9.345037E+02 |  9.345037E+02
-    62 |      325 |  9.345037E+02 |  9.345037E+02
-    63 |      331 |  9.345037E+02 |  9.345037E+02
-    64 |      337 |  9.345037E+02 |  9.345037E+02
-    65 |      343 |  9.345504E+02 |  9.345037E+02
-    66 |      348 |  9.345037E+02 |  9.345037E+02
-    67 |      354 |  9.345037E+02 |  9.345037E+02
-    68 |      361 |  9.345037E+02 |  9.345037E+02
-    69 |      367 |  9.345504E+02 |  9.345037E+02
-    70 |      373 |  9.345037E+02 |  9.345037E+02
-    71 |      379 |  9.345037E+02 |  9.345037E+02
-    72 |      384 |  9.345037E+02 |  9.345037E+02
-    73 |      391 |  9.345037E+02 |  9.345037E+02
-    74 |      396 |  9.345037E+02 |  9.345037E+02
-    75 |      401 |  9.345504E+02 |  9.345037E+02
-    76 |      406 |  9.345037E+02 |  9.345037E+02
-    77 |      411 |  9.365157E+02 |  9.345037E+02
+     1 |        1 |  1.206712E+03 |  1.206712E+03
+     2 |        6 |  1.203385E+03 |  1.200057E+03
+     3 |       13 |  1.200057E+03 |  1.200057E+03
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span><span class="o">.</span><span class="n">X</span>
@@ -1090,20 +1043,28 @@ n_gen  |  n_eval  |     f_avg     |     f_min
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([ 0.16970361, -0.78522209,  0.10777078])
+array([0.575, 0.5  , 0.75 ])
 </pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">opt_x</span> <span class="o">=</span> <span class="p">[</span> <span class="mf">0.16970361</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.78522209</span><span class="p">,</span>  <span class="mf">0.10777078</span><span class="p">]</span>
+</pre></div>
+</div>
 </div>
 </section>
 <section id="Results-visualization">
 <h3>Results visualization<a class="headerlink" href="#Results-visualization" title="Link to this heading"></a></h3>
 <p>Here we look at the optimized results and compare with the starting results:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rover_prob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mf">0.16970361</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.78522209</span><span class="p">,</span>  <span class="mf">0.10777078</span><span class="p">)</span>
@@ -1111,16 +1072,16 @@ array([ 0.16970361, -0.78522209,  0.10777078])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-934.5036574329059
+1192.4808142724964
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rover_prob</span><span class="o">.</span><span class="n">hist</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s2">&quot;flows.pos.s.x&quot;</span><span class="p">,</span> <span class="s2">&quot;flows.pos.s.y&quot;</span><span class="p">)</span>
@@ -1129,30 +1090,30 @@ array([ 0.16970361, -0.78522209,  0.10777078])
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-ParameterSimProblem with:
+RoverProb with:
 VARIABLES
  -correction.cor_f                                           0.1697
  -correction.cor_d                                          -0.7852
  -correction.cor_t                                           0.1078
 OBJECTIVES
- -f1                                                       934.5037
- -f2                                                        16.9844
+ -f1                                                      1192.4808
+ -f2                                                        17.9378
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_34_1.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_34_1.png" />
+<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_36_1.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_36_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rover_prob</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">plot_metric_dist</span><span class="p">(</span><span class="s1">&#39;end_dist&#39;</span><span class="p">)</span>
@@ -1163,12 +1124,12 @@ OBJECTIVES
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_35_0.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_35_0.png" />
+<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_37_0.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_37_0.png" />
 </div>
 </div>
 <p>starting solution:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rover_prob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
@@ -1176,16 +1137,16 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1218.9109644843713
+1206.7123064010684
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rover_prob</span><span class="o">.</span><span class="n">hist</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s2">&quot;flows.pos.s.x&quot;</span><span class="p">,</span> <span class="s2">&quot;flows.pos.s.y&quot;</span><span class="p">)</span>
@@ -1194,30 +1155,30 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-ParameterSimProblem with:
+RoverProb with:
 VARIABLES
  -correction.cor_f                                           0.7000
  -correction.cor_d                                           0.5000
  -correction.cor_t                                           0.5000
 OBJECTIVES
- -f1                                                      1218.9110
- -f2                                                        17.9397
+ -f1                                                      1206.7123
+ -f2                                                        17.4456
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_38_1.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_38_1.png" />
+<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_40_1.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_40_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rover_prob</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">plot_metric_dist</span><span class="p">(</span><span class="s1">&#39;end_dist&#39;</span><span class="p">)</span>
@@ -1228,15 +1189,15 @@ OBJECTIVES
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_39_0.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_39_0.png" />
+<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_41_0.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_41_0.png" />
 </div>
 </div>
 <p>As shown, while the optimized correction factors don’t mitigate all scenarios, they do increase the number of scenarios that are mitigated.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rover_prob</span><span class="o">.</span><span class="n">close_pool</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
