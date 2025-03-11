@@ -15,7 +15,7 @@ The goal aerialdrm project is to enable the analysis of the resilience of disast
 ## Requirements
 
 ```
-fmdtools v2.0.6
+fmdtools v2.1
 ```
 
 ## Contributors

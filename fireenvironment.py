@@ -220,7 +220,7 @@ sim_properties={'grass': {'color': 'lightgreen'},
                 'forest': {'color': 'darkgreen'},
                 'scrub': {'color': 'gold'},
                 'burning': {'color': "red", "as_bool": True, 'alpha': 0.5},
-                "base": {"color": "grey"},
+                "base": {"color": "black"},
                 "to_burn": {"color": "yellow", "as_bool": True, "alpha": 0.5},
                 "extinguished": {"color": "grey"}}
 

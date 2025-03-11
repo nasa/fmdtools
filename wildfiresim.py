@@ -10,9 +10,12 @@ from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.rand import Rand
 from fmdtools.sim.sample import ParameterSample
+from fmdtools.sim.search import ParameterSimProblem
+from fmdtools.sim.sample import ParameterDomain
 from fireenvironment import FireEnvironment, FirePropagation, FireMapParam
 from fireenvironment import sim_properties, double_size_p
 from aircraft import Aircraft
+import numpy as np
 
 
 class WildFireSimParameter(Parameter):
@@ -20,10 +23,10 @@ class WildFireSimParameter(Parameter):
 
     firemapparam: FireMapParam = FireMapParam()
 
-    def from_base_loc(x, y, num_strikes):
-        return WildFireSimParameter(firemapparam={**double_size_p,
-                                                  'base_locations': ((x, y), ),
-                                                  'num_strikes': num_strikes})
+    @classmethod
+    def from_base_loc(cls, x, y, p=double_size_p):
+        fmp = {**p.get('firemapparam', {}), 'base_locations': ((x, y), )}
+        return WildFireSimParameter(firemapparam=fmp)
 
 
 class WildfireSim(FunctionArchitecture):
@@ -66,6 +69,44 @@ def create_scen_sample(seed=10, replicates=10):
     return ps
 
 
+class BasePlacementProblem(ParameterSimProblem):
+    """Optimization problem for picking best base location(s)."""
+
+    def init_problem(self, p=def_p, track=None, seed=10, replicates=10,
+                     **kwargs):
+        """
+        Initializes base optimization problem.
+
+        Parameters
+        ----------
+        p : dict, optional
+            Non-default model parameters. The default is def_p.
+        num_strikes : int, optional
+            Number of strikes to optimize over. The default is 4.
+        track : list/dict, optional
+            Track argument for model instantiation. The default is None.
+        seed : int, optional
+            Random seed for generating strike locations. The default is 10.
+        replicates : int, optional
+            Number of strikes to optimize over. The default is 10.
+        **kwargs : kwargs
+            kwargs to propagate.parameter_sample (e.g., pool).
+        """
+        # create model
+        light_mdl = WildfireSim(p=p, track=track)
+        # create parameter domain of base locations
+        pd = ParameterDomain(WildFireSimParameter.from_base_loc)
+        pd.add_variable('x', var_lim=(0, 45))
+        pd.add_variable('y', var_lim=(0, 45))
+        pd.add_constant('p', p)
+        self.add_parameterdomain(pd)
+        # create sample of strike locations
+        ps = create_scen_sample(seed=seed, replicates=replicates)
+        # sim optimizes over strike samples
+        self.add_sim(light_mdl, "parameter_sample", ps, keep_ec=True, **kwargs)
+        self.add_result_objective('perc_burned', 'fxns.firepropagation.s.perc_burned',
+                                  method=np.mean)
+
 
 if __name__ == "__main__":
     from fmdtools.define.architecture.function import FunctionArchitectureGraph
@@ -102,3 +143,6 @@ if __name__ == "__main__":
     # light_mdl = WildfireSim(p=def_p) #  track=None)
 
     # res, hist = prop.parameter_sample(light_mdl, create_scen_sample())
+
+    # psp = BasePlacementProblem()
+    # psp.perc_burned(10, 10)
