@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Defining Fault Sampling Approaches in fmdtools &mdash; fmdtools 2.0.7 documentation</title>
+  <title>Defining Fault Sampling Approaches in fmdtools &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../../_static/documentation_options.js?v=20623aea"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -524,6 +524,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -759,10 +764,13 @@ class Power(Function):
         self.s.limit(charge=(0, 100))
 
     def short_power(self):
-        &#34;&#34;&#34;Power in case of a short has normal voltage.&#34;&#34;&#34;
-        self.ee_5.s.v = 5
-        self.ee_12.s.v = 12
-        self.ee_15.s.v = 15
+        &#34;&#34;&#34;Short in power supply means now power provided.&#34;&#34;&#34;
+        if self.s.charge &gt; 0.1:
+            self.ee_5.s.v = 5
+            self.ee_12.s.v = 12
+            self.ee_15.s.v = 15
+        else:
+            self.no_charge_power()
 
     def no_charge_power(self):
         &#34;&#34;&#34;Battery is out of charge.&#34;&#34;&#34;
@@ -801,12 +809,8 @@ class Power(Function):
             self.m.set_mode(&#34;off&#34;)
 
     def short_power_usage(self):
-        &#34;&#34;&#34;Calculate power usage when there is a short (calculated as double).&#34;&#34;&#34;
-        self.s.power = self.s.power * 2
-        if self.s.charge == 0:
-            self.m.set_mode(&#34;no_charge&#34;)
-        if not self.switch.s.power:
-            self.m.set_mode(&#34;off&#34;)
+        &#34;&#34;&#34;Calculate power usage when there is a short (calculated as 10x).&#34;&#34;&#34;
+        self.s.power = self.s.power * 10
 
 </pre></div></div>
 </div>
@@ -844,8 +848,8 @@ class PowerMode(Mode):
         power supply is off
     &#34;&#34;&#34;
 
-    fm_args = {&#34;no_charge&#34;: (1e-5, 100, {&#34;off&#34;: 1.0}),
-               &#34;short&#34;: (1e-5, 100, {&#34;supply&#34;: 1.0})}
+    fault_no_charge = (1e-5, 100, ((&#34;off&#34;, 1.0),))
+    fault_short = (1e-5, 100, ((&#34;supply&#34;, 1.0),))
     opermodes = (&#34;supply&#34;, &#34;charge&#34;, &#34;off&#34;)
     mode: str = &#34;off&#34;
     exclusive = True
@@ -902,16 +906,16 @@ FaultDomain with faults:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultDomain with faults:
- -(&#39;power&#39;, &#39;no_charge&#39;)
- -(&#39;power&#39;, &#39;short&#39;)
- -(&#39;perception&#39;, &#39;bad_feed&#39;)
- -(&#39;plan_path&#39;, &#39;no_con&#39;)
- -(&#39;plan_path&#39;, &#39;crash&#39;)
- -(&#39;drive&#39;, &#39;hmode_0&#39;)
- -(&#39;drive&#39;, &#39;hmode_1&#39;)
- -(&#39;drive&#39;, &#39;hmode_2&#39;)
- -(&#39;drive&#39;, &#39;hmode_3&#39;)
- -(&#39;drive&#39;, &#39;hmode_4&#39;)
+ -(&#39;rover.fxns.power&#39;, &#39;no_charge&#39;)
+ -(&#39;rover.fxns.power&#39;, &#39;short&#39;)
+ -(&#39;rover.fxns.perception&#39;, &#39;bad_feed&#39;)
+ -(&#39;rover.fxns.plan_path&#39;, &#39;crash&#39;)
+ -(&#39;rover.fxns.plan_path&#39;, &#39;no_con&#39;)
+ -(&#39;rover.fxns.drive&#39;, &#39;hmode_0&#39;)
+ -(&#39;rover.fxns.drive&#39;, &#39;hmode_1&#39;)
+ -(&#39;rover.fxns.drive&#39;, &#39;hmode_2&#39;)
+ -(&#39;rover.fxns.drive&#39;, &#39;hmode_3&#39;)
+ -(&#39;rover.fxns.drive&#39;, &#39;hmode_4&#39;)
  -...more
 </pre></div></div>
 </div>
@@ -933,7 +937,7 @@ FaultDomain with faults:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultDomain with faults:
- -(&#39;power&#39;, &#39;short&#39;)
+ -(&#39;rover.fxns.power&#39;, &#39;short&#39;)
 </pre></div></div>
 </div>
 <p>or:</p>
@@ -954,8 +958,8 @@ FaultDomain with faults:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultDomain with faults:
- -(&#39;power&#39;, &#39;no_charge&#39;)
- -(&#39;power&#39;, &#39;short&#39;)
+ -(&#39;rover.fxns.power&#39;, &#39;no_charge&#39;)
+ -(&#39;rover.fxns.power&#39;, &#39;short&#39;)
 </pre></div></div>
 </div>
 <p>We can then sample this domain using a <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code>:</p>
@@ -986,12 +990,12 @@ FaultDomain with faults:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultSample of scenarios:
- - power_no_charge_t2
- - power_no_charge_t5
- - power_no_charge_t10
- - power_short_t2
- - power_short_t5
- - power_short_t10
+ - rover_fxns_power_no_charge_t2
+ - rover_fxns_power_no_charge_t5
+ - rover_fxns_power_no_charge_t10
+ - rover_fxns_power_short_t2
+ - rover_fxns_power_short_t5
+ - rover_fxns_power_short_t10
 </pre></div></div>
 </div>
 <p>As shown, this adds the list of faults in the faultdomain over the given times.</p>
@@ -1010,12 +1014,12 @@ FaultSample of scenarios:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[SingleFaultScenario(sequence={2.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(2,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t2&#39;, time=2, phase=&#39;&#39;),
- SingleFaultScenario(sequence={5.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(5,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t5&#39;, time=5, phase=&#39;&#39;),
- SingleFaultScenario(sequence={10.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(10,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t10&#39;, time=10, phase=&#39;&#39;),
- SingleFaultScenario(sequence={2.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(2,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t2&#39;, time=2, phase=&#39;&#39;),
- SingleFaultScenario(sequence={5.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(5,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t5&#39;, time=5, phase=&#39;&#39;),
- SingleFaultScenario(sequence={10.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(10,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t10&#39;, time=10, phase=&#39;&#39;)]
+[SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(2,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t2&#39;, time=2, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={5.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(5,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t5&#39;, time=5, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={10.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(10,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t10&#39;, time=10, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(2,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t2&#39;, time=2, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={5.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(5,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t5&#39;, time=5, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={10.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(10,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t10&#39;, time=10, phase=&#39;&#39;)]
 </pre></div></div>
 </div>
 <p>But we know better than this–some of the faults should have zero rate if they are going to occur in phases they don’t apply to!</p>
@@ -1103,10 +1107,10 @@ PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 112.0]}, {&#39;off&
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultSample of scenarios:
- - power_no_charge_t0p0
- - power_short_t0p0
- - power_no_charge_t56p0
- - power_short_t56p0
+ - rover_fxns_power_no_charge_t0p0
+ - rover_fxns_power_short_t0p0
+ - rover_fxns_power_no_charge_t56p0
+ - rover_fxns_power_short_t56p0
 </pre></div></div>
 </div>
 <p>If we look at the rate information, however:</p>
@@ -1124,10 +1128,10 @@ FaultSample of scenarios:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={0.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(0.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=0.0, name=&#39;power_short_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(56.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=0.0, name=&#39;power_no_charge_t56p0&#39;, time=56.0, phase=&#39;supply&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
+[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
+ SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=0.0, name=&#39;rover_fxns_power_short_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=0.0, name=&#39;rover_fxns_power_no_charge_t56p0&#39;, time=56.0, phase=&#39;supply&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
 </pre></div></div>
 </div>
 <p>The rate for scenarios outside the phases is zero!</p>
@@ -1148,8 +1152,8 @@ FaultSample of scenarios:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultSample of scenarios:
- - power_no_charge_t0p0
- - power_short_t56p0
+ - rover_fxns_power_no_charge_t0p0
+ - rover_fxns_power_short_t56p0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1166,8 +1170,8 @@ FaultSample of scenarios:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
+[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
 </pre></div></div>
 </div>
 <p>As shown, now the only scenarios in the <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code> are ones which have nonzero rate.</p>
@@ -1249,13 +1253,13 @@ SampleApproach for rover with:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[SingleFaultScenario(sequence={58.0: Injection(faults={&#39;drive&#39;: [&#39;hmode_1&#39;]}, disturbances={})}, times=(58.0,), function=&#39;drive&#39;, fault=&#39;hmode_1&#39;, rate=0.02857142857142857, name=&#39;drive_hmode_1_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
- SingleFaultScenario(sequence={2.0: Injection(faults={&#39;plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(2.0,), function=&#39;plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;plan_path_no_con_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
- SingleFaultScenario(sequence={2.0: Injection(faults={&#39;plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(2.0,), function=&#39;plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;plan_path_crash_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
- SingleFaultScenario(sequence={58.0: Injection(faults={&#39;plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(58.0,), function=&#39;plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;plan_path_no_con_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
- SingleFaultScenario(sequence={58.0: Injection(faults={&#39;plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(58.0,), function=&#39;plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;plan_path_crash_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
- SingleFaultScenario(sequence={0.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
+[SingleFaultScenario(sequence={58.0: Injection(faults={&#39;drive&#39;: [&#39;hmode_1&#39;]}, disturbances={})}, times=(58.0,), function=&#39;drive&#39;, fault=&#39;hmode_1&#39;, rate=0.027777777777777776, name=&#39;drive_hmode_1_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
+ SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(2.0,), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_crash_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
+ SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(2.0,), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_no_con_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
+ SingleFaultScenario(sequence={58.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(58.0,), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_crash_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
+ SingleFaultScenario(sequence={58.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(58.0,), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_no_con_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
+ SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
 </pre></div></div>
 </div>
 <p>This is mostly useful when we would like to sample different functions in a model differently than others (e.g., using different phases), but still want to propagate the scenarios together as a part of a single sample.</p>
@@ -1276,14 +1280,14 @@ SampleApproach for rover with:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 2/2 [00:00&lt;00:00,  8.89it/s]
+SCENARIOS COMPLETE: 100%|██████████| 2/2 [00:00&lt;00:00,  8.39it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs_pwr</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1293,36 +1297,153 @@ SCENARIOS COMPLETE: 100%|██████████| 2/2 [00:00&lt;00:00,  8
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-power_no_charge_t0p0.endclass.rate: 1e-05
-power_no_charge_t0p0.endclass.cost:    0
-power_no_charge_t0p0.endclass.prob:  1.0
-power_no_charge_t0p0                   0
-power_no_charge_t0p0.endclass.in_bound: True
-power_no_charge_t0p0               False
-power_no_charge_t0p0                   1
-power_no_charge_t0p0                   1
-power_no_charge_t0p0.endclass.end_dist: 28.91724385770989
-power_no_charge_t0p0                 0.0
-power_no_charge_t0p0.endclass.faults: {&#39;power&#39;: [&#39;no_charge&#39;]}
-power_no_charge_t0p0incomplete mission faulty
-power_no_charge_t0p0.endclass.end_x: 0.0
-power_no_charge_t0p0.endclass.end_y: 0.0
-power_no_charge_t0p0.endclass.endpt: array(2)
-power_short_t56p0.endclass.rate:   1e-05
-power_short_t56p0.endclass.cost:       0
-power_short_t56p0.endclass.prob:     1.0
-power_short_t56p0.en                   0
-power_short_t56p0.endclass.in_bound: True
-power_short_t56p0.endclass.at_finish: True
-power_short_t56p0.endclass.line_dist:  1
-power_short_t56p0.endclass.num_modes:  1
-power_short_t56p0.endclass.end_dist: 0.0
-power_short_t56p0.en 0.11859644458085598
-power_short_t56p0.endclass.faults: {&#39;power&#39;: [&#39;short&#39;]}
-power_short_t56p0.en              faulty
-power_short_t56p0.endclass.end_x: 29.254775331608617
-power_short_t56p0.endclass.end_y: -0.7827640334587979
-power_short_t56p0.endclass.endpt: array(2)
+[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist</span><span class="o">.</span><span class="n">rover_fxns_power_short_t56p0</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([ 0.        ,  0.        ,  0.        ,  0.        ,  0.        ,
+        0.26228971,  0.49976748,  0.75073622,  1.02156689,  1.32129469,
+        1.64872275,  1.97931323,  2.28554745,  2.5617033 ,  2.81293761,
+        3.05023699,  3.27790299,  3.50955358,  3.74782502,  4.00173726,
+        4.27958216,  4.58909344,  4.92131254,  5.24511574,  5.53944945,
+        5.80388536,  6.04976253,  6.28347644,  6.51647431,  6.75159711,
+        6.99704083,  7.26107844,  7.55319773,  7.87591486,  8.20846606,
+        8.51950465,  8.79935905,  9.05524795,  9.29420557,  9.52437137,
+        9.75690271,  9.99541657, 10.24718399, 10.5213614 , 10.82691482,
+       11.15775968, 11.48436846, 11.78261477, 12.05194732, 12.29896633,
+       12.53412411, 12.76759447, 13.00158045, 13.24371735, 13.50429217,
+       13.79153424, 14.11009375, 14.4433811 , 14.75940856, 15.04465136,
+       15.30237525, 15.54407263, 15.7756063 , 16.00796687, 16.24490728,
+       16.49506726, 16.76634091, 17.06780748, 17.39659755, 17.72559436,
+       18.02745202, 18.29919904, 18.54970736, 18.78576416, 19.0201945 ,
+       19.25406815, 19.49550135, 19.75267898, 20.03543446, 20.3502719 ,
+       20.68350322, 21.00283298, 21.2912787 , 21.55318904, 21.79568028,
+       22.02826326, 22.26081145, 22.4969189 , 22.74393521, 23.0114501 ,
+       23.30883578, 23.63496159, 23.96603545, 24.27286793, 24.54935844,
+       24.80104437, 25.0390264 , 25.26819146, 25.50091017, 25.74042655,
+       25.99578368, 25.99578368])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist</span><span class="o">.</span><span class="n">rover_fxns_power_short_t56p0</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">power</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">charge</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([100.   ,  99.99 ,  99.98 ,  99.8  ,  99.62 ,  99.44 ,  99.235,
+        99.03 ,  98.825,  98.62 ,  98.415,  98.21 ,  98.005,  97.8  ,
+        97.595,  97.39 ,  97.185,  96.98 ,  96.775,  96.57 ,  96.365,
+        96.16 ,  95.955,  95.75 ,  95.545,  95.34 ,  95.135,  94.93 ,
+        94.725,  94.52 ,  94.315,  94.11 ,  93.905,  93.7  ,  93.495,
+        93.29 ,  93.085,  92.88 ,  92.675,  92.47 ,  92.265,  92.06 ,
+        91.855,  91.65 ,  91.445,  91.24 ,  91.035,  90.83 ,  90.625,
+        90.42 ,  90.215,  90.01 ,  89.805,  89.6  ,  89.395,  89.19 ,
+        88.985,  86.935,  84.885,  82.835,  80.785,  78.735,  76.685,
+        74.635,  72.585,  70.535,  68.485,  66.435,  64.385,  62.335,
+        60.285,  58.235,  56.185,  54.135,  52.085,  50.035,  47.985,
+        45.935,  43.885,  41.835,  39.785,  37.735,  35.685,  33.635,
+        31.585,  29.535,  27.485,  25.435,  23.385,  21.335,  19.285,
+        17.235,  15.185,  13.135,  11.085,   9.035,   6.985,   4.935,
+         2.885,   0.835,   0.   ,   0.   ])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist</span><span class="o">.</span><span class="n">rover_fxns_power_short_t56p0</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">power</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">charge</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([100.   ,  99.99 ,  99.98 ,  99.8  ,  99.62 ,  99.44 ,  99.235,
+        99.03 ,  98.825,  98.62 ,  98.415,  98.21 ,  98.005,  97.8  ,
+        97.595,  97.39 ,  97.185,  96.98 ,  96.775,  96.57 ,  96.365,
+        96.16 ,  95.955,  95.75 ,  95.545,  95.34 ,  95.135,  94.93 ,
+        94.725,  94.52 ,  94.315,  94.11 ,  93.905,  93.7  ,  93.495,
+        93.29 ,  93.085,  92.88 ,  92.675,  92.47 ,  92.265,  92.06 ,
+        91.855,  91.65 ,  91.445,  91.24 ,  91.035,  90.83 ,  90.625,
+        90.42 ,  90.215,  90.01 ,  89.805,  89.6  ,  89.395,  89.19 ,
+        88.985,  86.935,  84.885,  82.835,  80.785,  78.735,  76.685,
+        74.635,  72.585,  70.535,  68.485,  66.435,  64.385,  62.335,
+        60.285,  58.235,  56.185,  54.135,  52.085,  50.035,  47.985,
+        45.935,  43.885,  41.835,  39.785,  37.735,  35.685,  33.635,
+        31.585,  29.535,  27.485,  25.435,  23.385,  21.335,  19.285,
+        17.235,  15.185,  13.135,  11.085,   9.035,   6.985,   4.935,
+         2.885,   0.835,   0.   ,   0.   ])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+rover_fxns_power_no_               1e-05
+rover_fxns_power_no_                   0
+rover_fxns_power_no_                 1.0
+rover_fxns_power_no_                   0
+rover_fxns_power_no_                True
+rover_fxns_power_no_               False
+rover_fxns_power_no_                   1
+rover_fxns_power_no_                   1
+rover_fxns_power_no_   28.91724385770989
+rover_fxns_power_no_                 0.0
+rover_fxns_power_no_            array(1)
+rover_fxns_power_no_incomplete mission faulty
+rover_fxns_power_no_                 0.0
+rover_fxns_power_no_                 0.0
+rover_fxns_power_no_            array(2)
+rover_fxns_power_sho               1e-05
+rover_fxns_power_sho                   0
+rover_fxns_power_sho                 1.0
+rover_fxns_power_sho                   0
+rover_fxns_power_sho                True
+rover_fxns_power_sho               False
+rover_fxns_power_sho                   1
+rover_fxns_power_sho                   1
+rover_fxns_power_sho   3.258651134742929
+rover_fxns_power_sho 0.11859644458085598
+rover_fxns_power_sho            array(1)
+rover_fxns_power_shoincomplete mission faulty
+rover_fxns_power_sho  25.995783679666012
+rover_fxns_power_sho  0.7019136572504056
+rover_fxns_power_sho            array(2)
 nominal.endclass.rate:               1.0
 nominal.endclass.cost:                 0
 nominal.endclass.prob:               1.0
@@ -1333,7 +1454,7 @@ nominal.endclass.line_dist:            1
 nominal.endclass.num_modes:            0
 nominal.endclass.end_dist:           0.0
 nominal.endclass.tot_deviation: 0.11859644458085598
-nominal.endclass.faults:              {}
+nominal.endclass.faults:        array(0)
 nominal.endclass.classification: nominal mission
 nominal.endclass.end_x: 29.254775331608617
 nominal.endclass.end_y: -0.7827640334587979
@@ -1342,7 +1463,7 @@ nominal.endclass.endpt:         array(2)
 </div>
 <p>These responses can be visualized over the given faults:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fmea</span> <span class="o">=</span> <span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">fs_pwr</span><span class="p">,</span> <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;end_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;line_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;tot_deviation&quot;</span><span class="p">])</span>
@@ -1351,7 +1472,7 @@ nominal.endclass.endpt:         array(2)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1374,31 +1495,31 @@ nominal.endclass.endpt:         array(2)
     <tr style="text-align: right;">
       <th></th>
       <th></th>
-      <th>end_dist</th>
-      <th>line_dist</th>
-      <th>tot_deviation</th>
+      <th>average_scenario_rate</th>
+      <th>sum_cost</th>
+      <th>expected_cost</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th rowspan="2" valign="top">power</th>
-      <th>short</th>
-      <td>0.000000</td>
-      <td>1</td>
-      <td>0.118596</td>
+      <th rowspan="2" valign="top">rover.fxns.power</th>
+      <th>no_charge</th>
+      <td>0.00001</td>
+      <td>0</td>
+      <td>0.0</td>
     </tr>
     <tr>
-      <th>no_charge</th>
-      <td>28.917244</td>
-      <td>1</td>
-      <td>0.000000</td>
+      <th>short</th>
+      <td>0.00001</td>
+      <td>0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fmea</span><span class="o">.</span><span class="n">as_plots</span><span class="p">(</span><span class="n">cols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1406,15 +1527,15 @@ nominal.endclass.endpt:         array(2)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Figure size 600x400 with 4 Axes&gt;,
- array([&lt;Axes: title={&#39;center&#39;: &#39;end_dist&#39;}&gt;,
-        &lt;Axes: title={&#39;center&#39;: &#39;line_dist&#39;}, xlabel=&#34;[&#39;function&#39;, &#39;fault&#39;]&#34;&gt;,
-        &lt;Axes: title={&#39;center&#39;: &#39;tot_deviation&#39;}, xlabel=&#34;[&#39;function&#39;, &#39;fault&#39;]&#34;&gt;,
+ array([&lt;Axes: title={&#39;center&#39;: &#39;average_scenario_rate&#39;}&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;sum_cost&#39;}, xlabel=&#34;[&#39;function&#39;, &#39;fault&#39;]&#34;&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;expected_cost&#39;}, xlabel=&#34;[&#39;function&#39;, &#39;fault&#39;]&#34;&gt;,
         &lt;Axes: &gt;], dtype=object))
 </pre></div></div>
 </div>
@@ -1422,12 +1543,12 @@ nominal.endclass.endpt:         array(2)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_rover_FaultSample_Use-Cases_53_1.png" src="../../_images/examples_rover_FaultSample_Use-Cases_53_1.png" />
+<img alt="../../_images/examples_rover_FaultSample_Use-Cases_57_1.png" src="../../_images/examples_rover_FaultSample_Use-Cases_57_1.png" />
 </div>
 </div>
 <p>Or over time/any other variable:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comp</span> <span class="o">=</span> <span class="n">Comparison</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">fs_pwr</span><span class="p">,</span> <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;end_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;line_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;tot_deviation&quot;</span><span class="p">],</span> <span class="n">factors</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">])</span>
@@ -1436,7 +1557,7 @@ nominal.endclass.endpt:         array(2)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1466,14 +1587,14 @@ nominal.endclass.endpt:         array(2)
   <tbody>
     <tr>
       <th>56.0</th>
-      <td>0.000000</td>
-      <td>0.00001</td>
-      <td>0.000001</td>
+      <td>3.258651</td>
+      <td>1.0</td>
+      <td>0.118596</td>
     </tr>
     <tr>
       <th>0.0</th>
-      <td>0.000289</td>
-      <td>0.00001</td>
+      <td>28.917244</td>
+      <td>1.0</td>
       <td>0.000000</td>
     </tr>
   </tbody>
@@ -1481,7 +1602,7 @@ nominal.endclass.endpt:         array(2)
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comp</span><span class="o">.</span><span class="n">as_plots</span><span class="p">(</span><span class="n">cols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1489,7 +1610,7 @@ nominal.endclass.endpt:         array(2)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1505,7 +1626,7 @@ nominal.endclass.endpt:         array(2)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_rover_FaultSample_Use-Cases_56_1.png" src="../../_images/examples_rover_FaultSample_Use-Cases_56_1.png" />
+<img alt="../../_images/examples_rover_FaultSample_Use-Cases_60_1.png" src="../../_images/examples_rover_FaultSample_Use-Cases_60_1.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">

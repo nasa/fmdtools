@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Action Sequence Graph Tutorial &mdash; fmdtools 2.0.7 documentation</title>
+  <title>Action Sequence Graph Tutorial &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../../_static/documentation_options.js?v=20623aea"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -524,6 +524,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -1010,7 +1015,7 @@ build(self, **kwargs)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;demo_model.Human at 0x1ac1c895130&gt;
+&lt;demo_model.Human at 0x237a2461650&gt;
 </pre></div></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">ActionArchitectureGraph</span></code> can also be used to visualize the flow of actions (e.g., which are active, flows vs conditions, etc.).</p>
@@ -1391,7 +1396,7 @@ class ProduceHazard(Function):
 class PassStates(State):
     &#34;&#34;&#34;Whether or not the hazard is ultimately passed or mitigated.&#34;&#34;&#34;
 
-    hazards_mitigated:  int = 0
+    hazards_mitigated: int = 0
     hazards_propagated: int = 0
 
 class PassHazard(Function):
@@ -1417,7 +1422,7 @@ class HazardModel(FunctionArchitecture):
         self.add_flow(&#34;hazard&#34;, Hazard)
         self.add_fxn(&#34;produce_hazard&#34;, ProduceHazard, &#39;hazard&#39;)
         self.add_fxn(&#34;detect_hazard&#34;, DetectHazard, &#39;hazard&#39;)
-        self.add_fxn(&#34;pass_hazard&#34;,  PassHazard, &#39;hazard&#39;)
+        self.add_fxn(&#34;pass_hazard&#34;, PassHazard, &#39;hazard&#39;)
 
 </pre></div></div>
 </div>
@@ -1459,13 +1464,12 @@ fxns.detect_hazard.a           array(61)
 fxns.detect_hazard.a           array(61)
 fxns.detect_hazard.a           array(61)
 fxns.detect_hazard.a           array(61)
+fxns.detect_hazard.a           array(61)
 fxns.detect_hazard.aa.acts.act.m.mode: array(61)
 fxns.detect_hazard.a           array(61)
 fxns.detect_hazard.a           array(61)
-fxns.detect_hazard.m           array(61)
-fxns.detect_hazard.m           array(61)
-fxns.detect_hazard.m.faults.act_failed: array(61)
-fxns.detect_hazard.m.faults.act_unable: array(61)
+fxns.detect_hazard.a           array(61)
+fxns.detect_hazard.m.sub_faults: array(61)
 fxns.pass_hazard.s.hazards_mitigated: array(61)
 fxns.pass_hazard.s.hazards_propagated: array(61)
 time:                          array(61)
@@ -1629,7 +1633,7 @@ time:                          array(61)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_fault</span><span class="p">,</span> <span class="n">mdlhist_fault</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;detect_hazard&#39;</span><span class="p">,</span><span class="s1">&#39;perceive_failed&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">desired_result</span><span class="o">=</span><span class="s1">&#39;graph&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_fault</span><span class="p">,</span> <span class="n">mdlhist_fault</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;detect_hazard.aa.acts.perceive&#39;</span><span class="p">,</span><span class="s1">&#39;failed&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">desired_result</span><span class="o">=</span><span class="s1">&#39;graph&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1637,7 +1641,7 @@ time:                          array(61)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist_fault</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">detect_hazard</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">acts</span><span class="o">.</span><span class="n">act</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist_fault</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">detect_hazard</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">acts</span><span class="o">.</span><span class="n">perceive</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">mode</span>
 </pre></div>
 </div>
 </div>
@@ -1647,9 +1651,14 @@ time:                          array(61)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-m.mode:                        array(61)
-m.faults.failed:               array(61)
-m.faults.unable:               array(61)
+array([&#39;nominal&#39;, &#39;nominal&#39;, &#39;nominal&#39;, &#39;nominal&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+       &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+       &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+       &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+       &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+       &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+       &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;],
+      dtype=&#39;&lt;U7&#39;)
 </pre></div></div>
 </div>
 <p>As shown, this fault results in the hazard not being perceived (and thus the hazard propagating)</p>
@@ -1743,7 +1752,7 @@ m.faults.unable:               array(61)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>3</td>
+      <td>0</td>
       <td>0.0</td>
     </tr>
     <tr>
@@ -1751,7 +1760,7 @@ m.faults.unable:               array(61)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>3</td>
+      <td>0</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1759,7 +1768,7 @@ m.faults.unable:               array(61)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>3</td>
+      <td>0</td>
       <td>2.0</td>
     </tr>
     <tr>
@@ -1767,7 +1776,7 @@ m.faults.unable:               array(61)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>3</td>
+      <td>0</td>
       <td>3.0</td>
     </tr>
     <tr>
@@ -1775,7 +1784,7 @@ m.faults.unable:               array(61)
       <td>True</td>
       <td>True</td>
       <td>True</td>
-      <td>0</td>
+      <td>3</td>
       <td>4.0</td>
     </tr>
     <tr>
@@ -1791,7 +1800,7 @@ m.faults.unable:               array(61)
       <td>True</td>
       <td>True</td>
       <td>True</td>
-      <td>0</td>
+      <td>3</td>
       <td>56.0</td>
     </tr>
     <tr>
@@ -1799,7 +1808,7 @@ m.faults.unable:               array(61)
       <td>True</td>
       <td>True</td>
       <td>True</td>
-      <td>0</td>
+      <td>3</td>
       <td>57.0</td>
     </tr>
     <tr>
@@ -1807,7 +1816,7 @@ m.faults.unable:               array(61)
       <td>True</td>
       <td>True</td>
       <td>True</td>
-      <td>0</td>
+      <td>3</td>
       <td>58.0</td>
     </tr>
     <tr>
@@ -1815,7 +1824,7 @@ m.faults.unable:               array(61)
       <td>True</td>
       <td>True</td>
       <td>True</td>
-      <td>0</td>
+      <td>3</td>
       <td>59.0</td>
     </tr>
     <tr>
@@ -1823,7 +1832,7 @@ m.faults.unable:               array(61)
       <td>True</td>
       <td>True</td>
       <td>True</td>
-      <td>0</td>
+      <td>3</td>
       <td>60.0</td>
     </tr>
   </tbody>
@@ -1963,13 +1972,12 @@ aa.flows.outcome.s.num_actions: array(61)
 aa.acts.perceive.m.mode:       array(61)
 aa.acts.perceive.m.faults.failed: array(61)
 aa.acts.perceive.m.faults.unable: array(61)
+aa.acts.perceive.m.sub_faults: array(61)
 aa.acts.act.m.mode:            array(61)
 aa.acts.act.m.faults.failed:   array(61)
 aa.acts.act.m.faults.unable:   array(61)
-m.faults.perceive_failed:      array(61)
-m.faults.perceive_unable:      array(61)
-m.faults.act_failed:           array(61)
-m.faults.act_unable:           array(61)
+aa.acts.act.m.sub_faults:      array(61)
+m.sub_faults:                  array(61)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1995,13 +2003,12 @@ aa.flows.outcome.s.num_actions: array(61)
 aa.acts.perceive.m.mode:       array(61)
 aa.acts.perceive.m.faults.failed: array(61)
 aa.acts.perceive.m.faults.unable: array(61)
+aa.acts.perceive.m.sub_faults: array(61)
 aa.acts.act.m.mode:            array(61)
 aa.acts.act.m.faults.failed:   array(61)
 aa.acts.act.m.faults.unable:   array(61)
-m.faults.perceive_failed:      array(61)
-m.faults.perceive_unable:      array(61)
-m.faults.act_failed:           array(61)
-m.faults.act_unable:           array(61)
+aa.acts.act.m.sub_faults:      array(61)
+m.sub_faults:                  array(61)
 </pre></div></div>
 </div>
 <p>We can further use <code class="docutils literal notranslate"><span class="pre">draw_from</span></code> to view the state of the ASG. See below:</p>
@@ -2035,7 +2042,7 @@ m.faults.act_unable:           array(61)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endstate_unable</span><span class="p">,</span> <span class="n">mdlhist_unable</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;detect_hazard&#39;</span><span class="p">,</span><span class="s1">&#39;act_unable&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endstate_unable</span><span class="p">,</span> <span class="n">mdlhist_unable</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;detect_hazard.aa.acts.act&#39;</span><span class="p">,</span><span class="s1">&#39;unable&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
                                                  <span class="n">desired_result</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span><span class="s1">&#39;graph.fxns.detect_hazard.aa&#39;</span><span class="p">})</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">mdlhist_unable</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;fxns.pass_hazard.s.hazards_mitigated&#39;</span><span class="p">,</span>
@@ -2089,7 +2096,7 @@ array([{&#39;done&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;perce
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;detect_hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">h</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">acts</span><span class="o">.</span><span class="n">perceive</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist_unable</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">detect_hazard</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">acts</span><span class="o">.</span><span class="n">act</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">faults</span><span class="o">.</span><span class="n">unable</span>
 </pre></div>
 </div>
 </div>
@@ -2099,13 +2106,37 @@ array([{&#39;done&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;perce
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-m.mode:                        array(61)
-m.faults.failed:               array(61)
-m.faults.unable:               array(61)
+array([False, False, False, False,  True,  True,  True,  True,  True,
+        True,  True,  True,  True,  True,  True,  True,  True,  True,
+        True,  True,  True,  True,  True,  True,  True,  True,  True,
+        True,  True,  True,  True,  True,  True,  True,  True,  True,
+        True,  True,  True,  True,  True,  True,  True,  True,  True,
+        True,  True,  True,  True,  True,  True,  True,  True,  True,
+        True,  True,  True,  True,  True,  True,  True])
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;detect_hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">h</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">acts</span><span class="o">.</span><span class="n">perceive</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+m.mode:                        array(61)
+m.faults.failed:               array(61)
+m.faults.unable:               array(61)
+m.sub_faults:                  array(61)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;detect_hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">create_hist</span><span class="p">([</span><span class="mf">0.0</span><span class="p">])</span>
@@ -2113,7 +2144,7 @@ m.faults.unable:               array(61)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2125,7 +2156,7 @@ active_actions:                 array(1)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;detect_hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">track</span>
@@ -2133,7 +2164,7 @@ active_actions:                 array(1)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2142,7 +2173,7 @@ active_actions:                 array(1)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;detect_hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">h</span><span class="o">.</span><span class="n">acts</span><span class="o">.</span><span class="n">perceive</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">faults</span><span class="o">.</span><span class="n">failed</span>
@@ -2150,7 +2181,7 @@ active_actions:                 array(1)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2165,7 +2196,7 @@ array([False, False, False, False, False, False, False, False, False,
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist_unable</span><span class="o">.</span><span class="n">nominal</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">detect_hazard</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">acts</span>
@@ -2173,7 +2204,7 @@ array([False, False, False, False, False, False, False, False, False,
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2181,13 +2212,15 @@ array([False, False, False, False, False, False, False, False, False,
 perceive.m.mode:               array(61)
 perceive.m.faults.failed:      array(61)
 perceive.m.faults.unable:      array(61)
+perceive.m.sub_faults:         array(61)
 act.m.mode:                    array(61)
 act.m.faults.failed:           array(61)
 act.m.faults.unable:           array(61)
+act.m.sub_faults:              array(61)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endstate_unable</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
@@ -2195,7 +2228,7 @@ act.m.faults.unable:           array(61)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2207,11 +2240,11 @@ act.m.faults.unable:           array(61)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_81_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_81_1.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_82_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_82_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.aa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
@@ -2222,11 +2255,11 @@ act.m.faults.unable:           array(61)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_82_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_82_0.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_83_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_83_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.aa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">,</span> <span class="n">rem_ind</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -2237,7 +2270,7 @@ act.m.faults.unable:           array(61)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_83_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_83_0.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_84_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_84_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">

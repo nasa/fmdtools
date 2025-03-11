@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EPS Example Notebook &mdash; fmdtools 2.0.7 documentation</title>
+  <title>EPS Example Notebook &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../../_static/documentation_options.js?v=20623aea"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -524,6 +524,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -723,8 +728,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\history.py:776: UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
-  ax.set_xlim(min_ind, max_ind)
+C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\common.py:549: UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
+  ax.set_xlim(*xlim)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -756,7 +761,8 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\history.py:776: UserW
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">single_faults</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">=</span> <span class="n">EPS</span><span class="p">(</span><span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+<span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">single_faults</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -765,7 +771,7 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\history.py:776: UserW
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 57.22it/s]
+SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 45.16it/s]
 </pre></div></div>
 </div>
 <p>Using <code class="docutils literal notranslate"><span class="pre">analyze.tabulate.result_summary_fmea</span></code>, one can see the degradation effects of this fault on the flows:</p>
@@ -782,7 +788,7 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tab</span> <span class="o">=</span> <span class="n">result_summary_fmea</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
-<span class="n">tab</span>
+<span class="n">tab</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;expected_cost&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -818,292 +824,292 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 
   </thead>
   <tbody>
     <tr>
-      <th>import_ee_low_v_t0p0</th>
+      <th>nominal</th>
       <td>[]</td>
       <td>[]</td>
-      <td>0.00001</td>
-      <td>700.0</td>
-      <td>306.6</td>
-    </tr>
-    <tr>
-      <th>import_ee_high_v_t0p0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.000005</td>
-      <td>2100.0</td>
-      <td>459.9</td>
-    </tr>
-    <tr>
-      <th>import_ee_no_v_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>1550.0</td>
-      <td>678.9</td>
-    </tr>
-    <tr>
-      <th>supply_ee_adverse_resist_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>1650.0</td>
-      <td>144.54</td>
-    </tr>
-    <tr>
-      <th>supply_ee_minor_overload_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>5150.0</td>
-      <td>2255.7</td>
-    </tr>
-    <tr>
-      <th>supply_ee_major_overload_t0p0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.000003</td>
-      <td>2400.0</td>
-      <td>315.36</td>
-    </tr>
-    <tr>
-      <th>supply_ee_short_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
+      <td>1.0</td>
       <td>0.0</td>
-      <td>5150.0</td>
-      <td>22.557</td>
-    </tr>
-    <tr>
-      <th>supply_ee_open_circuit_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
       <td>0.0</td>
-      <td>1450.0</td>
-      <td>3.1755</td>
-    </tr>
-    <tr>
-      <th>store_ee_low_storage_t0p0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.000005</td>
-      <td>2000.0</td>
-      <td>438.0</td>
-    </tr>
-    <tr>
-      <th>store_ee_no_storage_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000005</td>
-      <td>3250.0</td>
-      <td>711.75</td>
-    </tr>
-    <tr>
-      <th>import_signal_partial_signal_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>2000.0</td>
-      <td>876.0</td>
-    </tr>
-    <tr>
-      <th>import_signal_no_signal_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000001</td>
-      <td>2000.0</td>
-      <td>87.6</td>
-    </tr>
-    <tr>
-      <th>distribute_ee_adverse_resist_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>2750.0</td>
-      <td>1204.5</td>
-    </tr>
-    <tr>
-      <th>distribute_ee_poor_alloc_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.00002</td>
-      <td>1750.0</td>
-      <td>1533.0</td>
-    </tr>
-    <tr>
-      <th>distribute_ee_short_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.00002</td>
-      <td>4750.0</td>
-      <td>4161.0</td>
-    </tr>
-    <tr>
-      <th>distribute_ee_open_circuit_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.00003</td>
-      <td>2750.0</td>
-      <td>3613.5</td>
-    </tr>
-    <tr>
-      <th>ee_to_me_high_torque_t0p0</th>
-      <td>['oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0001</td>
-      <td>450.0</td>
-      <td>1971.0</td>
-    </tr>
-    <tr>
-      <th>ee_to_me_low_torque_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.0001</td>
-      <td>4950.0</td>
-      <td>21681.0</td>
-    </tr>
-    <tr>
-      <th>ee_to_me_toohigh_torque_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.00005</td>
-      <td>5050.0</td>
-      <td>11059.5</td>
-    </tr>
-    <tr>
-      <th>ee_to_me_open_circuit_t0p0</th>
-      <td>['oe', 'he']</td>
-      <td>[]</td>
-      <td>0.00005</td>
-      <td>650.0</td>
-      <td>1423.5</td>
-    </tr>
-    <tr>
-      <th>ee_to_me_short_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.00005</td>
-      <td>4950.0</td>
-      <td>10840.5</td>
-    </tr>
-    <tr>
-      <th>ee_to_oe_optical_resist_t0p0</th>
-      <td>['me', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>520.0</td>
-      <td>11.388</td>
-    </tr>
-    <tr>
-      <th>ee_to_oe_burnt_out_t0p0</th>
-      <td>['me', 'he']</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>550.0</td>
-      <td>48.18</td>
-    </tr>
-    <tr>
-      <th>ee_to_he_low_heat_t0p0</th>
-      <td>['me', 'oe']</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>550.0</td>
-      <td>48.18</td>
-    </tr>
-    <tr>
-      <th>ee_to_he_high_heat_t0p0</th>
-      <td>['me', 'oe']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>2500.0</td>
-      <td>10.95</td>
-    </tr>
-    <tr>
-      <th>ee_to_he_toohigh_heat_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>5100.0</td>
-      <td>111.69</td>
     </tr>
     <tr>
       <th>ee_to_he_open_circuit_t0p0</th>
-      <td>['me', 'oe']</td>
-      <td>[]</td>
+      <td>['ee_to_he', 'ee_h', 'he']</td>
+      <td>['ee_to_he']</td>
       <td>0.0</td>
       <td>550.0</td>
       <td>2.409</td>
     </tr>
     <tr>
-      <th>export_he_hot_sink_t0p0</th>
-      <td>['me', 'oe']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>600.0</td>
-      <td>262.8</td>
+      <th>supply_ee_open_circuit_t0p0</th>
+      <td>['supply_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_o', ...</td>
+      <td>['supply_ee']</td>
+      <td>0.0</td>
+      <td>1450.0</td>
+      <td>3.1755</td>
     </tr>
     <tr>
-      <th>export_he_ineffective_sink_t0p0</th>
-      <td>['me', 'oe']</td>
-      <td>[]</td>
-      <td>0.000005</td>
-      <td>1500.0</td>
-      <td>328.5</td>
+      <th>ee_to_he_high_heat_t0p0</th>
+      <td>['supply_ee', 'store_ee', 'ee_to_he', 'ee_2', ...</td>
+      <td>['supply_ee', 'store_ee', 'ee_to_he']</td>
+      <td>0.0</td>
+      <td>2500.0</td>
+      <td>10.95</td>
     </tr>
     <tr>
-      <th>export_waste_h1_hot_sink_t0p0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
+      <th>ee_to_oe_optical_resist_t0p0</th>
+      <td>['ee_to_oe', 'ee_o', 'oe', 'he', 'waste_he_o']</td>
+      <td>['ee_to_oe']</td>
+      <td>0.0</td>
+      <td>520.0</td>
+      <td>11.388</td>
+    </tr>
+    <tr>
+      <th>supply_ee_short_t0p0</th>
+      <td>['supply_ee', 'store_ee', 'distribute_ee', 'ee...</td>
+      <td>['supply_ee', 'store_ee', 'distribute_ee']</td>
+      <td>0.0</td>
+      <td>5150.0</td>
+      <td>22.557</td>
+    </tr>
+    <tr>
+      <th>ee_to_he_low_heat_t0p0</th>
+      <td>['ee_to_he', 'he']</td>
+      <td>['ee_to_he']</td>
+      <td>0.000002</td>
+      <td>550.0</td>
+      <td>48.18</td>
+    </tr>
+    <tr>
+      <th>ee_to_oe_burnt_out_t0p0</th>
+      <td>['ee_to_oe', 'ee_o', 'oe', 'he', 'waste_he_o']</td>
+      <td>['ee_to_oe']</td>
+      <td>0.000002</td>
+      <td>550.0</td>
+      <td>48.18</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_signal_t0p0</th>
+      <td>['import_signal', 'ee_2', 'ee_3', 'ee_m', 'ee_...</td>
+      <td>['import_signal']</td>
+      <td>0.000001</td>
+      <td>2000.0</td>
+      <td>87.6</td>
+    </tr>
+    <tr>
+      <th>ee_to_he_toohigh_heat_t0p0</th>
+      <td>['store_ee', 'distribute_ee', 'ee_to_he', 'ee_...</td>
+      <td>['store_ee', 'distribute_ee', 'ee_to_he']</td>
+      <td>0.0</td>
+      <td>5100.0</td>
+      <td>111.69</td>
+    </tr>
+    <tr>
+      <th>supply_ee_adverse_resist_t0p0</th>
+      <td>['supply_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_o', ...</td>
+      <td>['supply_ee']</td>
+      <td>0.000002</td>
+      <td>1650.0</td>
+      <td>144.54</td>
+    </tr>
+    <tr>
+      <th>export_waste_ho_hot_sink_t0p0</th>
+      <td>['export_waste_ho', 'he', 'waste_he_o']</td>
+      <td>['export_waste_ho']</td>
       <td>0.00001</td>
       <td>500.0</td>
       <td>219.0</td>
     </tr>
     <tr>
       <th>export_waste_h1_ineffective_sink_t0p0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
+      <td>['export_waste_h1', 'he', 'waste_he_1']</td>
+      <td>['export_waste_h1']</td>
       <td>0.000005</td>
       <td>1000.0</td>
       <td>219.0</td>
     </tr>
     <tr>
-      <th>export_waste_ho_hot_sink_t0p0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>500.0</td>
-      <td>219.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_ho_ineffective_sink_t0p0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.000005</td>
-      <td>1000.0</td>
-      <td>219.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_hm_hot_sink_t0p0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
+      <th>export_waste_h1_hot_sink_t0p0</th>
+      <td>['export_waste_h1', 'he', 'waste_he_1']</td>
+      <td>['export_waste_h1']</td>
       <td>0.00001</td>
       <td>500.0</td>
       <td>219.0</td>
     </tr>
     <tr>
       <th>export_waste_hm_ineffective_sink_t0p0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
+      <td>['export_waste_hm', 'he', 'waste_he_m']</td>
+      <td>['export_waste_hm']</td>
       <td>0.000005</td>
       <td>1000.0</td>
       <td>219.0</td>
     </tr>
     <tr>
-      <th>nominal</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <th>export_waste_hm_hot_sink_t0p0</th>
+      <td>['export_waste_hm', 'he', 'waste_he_m']</td>
+      <td>['export_waste_hm']</td>
+      <td>0.00001</td>
+      <td>500.0</td>
+      <td>219.0</td>
+    </tr>
+    <tr>
+      <th>export_waste_ho_ineffective_sink_t0p0</th>
+      <td>['export_waste_ho', 'he', 'waste_he_o']</td>
+      <td>['export_waste_ho']</td>
+      <td>0.000005</td>
+      <td>1000.0</td>
+      <td>219.0</td>
+    </tr>
+    <tr>
+      <th>export_he_hot_sink_t0p0</th>
+      <td>['export_he', 'he']</td>
+      <td>['export_he']</td>
+      <td>0.00001</td>
+      <td>600.0</td>
+      <td>262.8</td>
+    </tr>
+    <tr>
+      <th>import_ee_low_v_t0p0</th>
+      <td>['import_ee', 'ee_1', 'ee_2', 'ee_3', 'ee_m', ...</td>
+      <td>['import_ee']</td>
+      <td>0.00001</td>
+      <td>700.0</td>
+      <td>306.6</td>
+    </tr>
+    <tr>
+      <th>export_he_ineffective_sink_t0p0</th>
+      <td>['export_he', 'he']</td>
+      <td>['export_he']</td>
+      <td>0.000005</td>
+      <td>1500.0</td>
+      <td>328.5</td>
+    </tr>
+    <tr>
+      <th>supply_ee_major_overload_t0p0</th>
+      <td>['supply_ee', 'store_ee', 'ee_2', 'he', 'waste...</td>
+      <td>['supply_ee', 'store_ee']</td>
+      <td>0.000003</td>
+      <td>2600.0</td>
+      <td>341.64</td>
+    </tr>
+    <tr>
+      <th>store_ee_low_storage_t0p0</th>
+      <td>['store_ee']</td>
+      <td>['store_ee']</td>
+      <td>0.000005</td>
+      <td>2000.0</td>
+      <td>438.0</td>
+    </tr>
+    <tr>
+      <th>import_ee_high_v_t0p0</th>
+      <td>['import_ee', 'supply_ee', 'store_ee', 'ee_1',...</td>
+      <td>['import_ee', 'supply_ee', 'store_ee']</td>
+      <td>0.000005</td>
+      <td>2300.0</td>
+      <td>503.7</td>
+    </tr>
+    <tr>
+      <th>import_ee_no_v_t0p0</th>
+      <td>['import_ee', 'ee_1', 'ee_2', 'ee_3', 'ee_m', ...</td>
+      <td>['import_ee']</td>
+      <td>0.00001</td>
+      <td>1550.0</td>
+      <td>678.9</td>
+    </tr>
+    <tr>
+      <th>store_ee_no_storage_t0p0</th>
+      <td>['store_ee', 'ee_3', 'ee_m', 'ee_o', 'ee_h', '...</td>
+      <td>['store_ee']</td>
+      <td>0.000005</td>
+      <td>3250.0</td>
+      <td>711.75</td>
+    </tr>
+    <tr>
+      <th>import_signal_partial_signal_t0p0</th>
+      <td>['import_signal', 'ee_2', 'ee_3', 'ee_m', 'ee_...</td>
+      <td>['import_signal']</td>
+      <td>0.00001</td>
+      <td>2000.0</td>
+      <td>876.0</td>
+    </tr>
+    <tr>
+      <th>distribute_ee_adverse_resist_t0p0</th>
+      <td>['distribute_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_...</td>
+      <td>['distribute_ee']</td>
+      <td>0.00001</td>
+      <td>2750.0</td>
+      <td>1204.5</td>
+    </tr>
+    <tr>
+      <th>ee_to_me_open_circuit_t0p0</th>
+      <td>['ee_to_me', 'ee_m', 'me', 'he', 'waste_he_m']</td>
+      <td>['ee_to_me']</td>
+      <td>0.00005</td>
+      <td>650.0</td>
+      <td>1423.5</td>
+    </tr>
+    <tr>
+      <th>distribute_ee_poor_alloc_t0p0</th>
+      <td>['distribute_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_...</td>
+      <td>['distribute_ee']</td>
+      <td>0.00002</td>
+      <td>1750.0</td>
+      <td>1533.0</td>
+    </tr>
+    <tr>
+      <th>ee_to_me_high_torque_t0p0</th>
+      <td>['ee_to_me', 'ee_m', 'me', 'he', 'waste_he_m']</td>
+      <td>['ee_to_me']</td>
+      <td>0.0001</td>
+      <td>450.0</td>
+      <td>1971.0</td>
+    </tr>
+    <tr>
+      <th>supply_ee_minor_overload_t0p0</th>
+      <td>['supply_ee', 'store_ee', 'distribute_ee', 'ee...</td>
+      <td>['supply_ee', 'store_ee', 'distribute_ee']</td>
+      <td>0.00001</td>
+      <td>5150.0</td>
+      <td>2255.7</td>
+    </tr>
+    <tr>
+      <th>distribute_ee_open_circuit_t0p0</th>
+      <td>['distribute_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_...</td>
+      <td>['distribute_ee']</td>
+      <td>0.00003</td>
+      <td>2750.0</td>
+      <td>3613.5</td>
+    </tr>
+    <tr>
+      <th>distribute_ee_short_t0p0</th>
+      <td>['store_ee', 'distribute_ee', 'ee_3', 'ee_m', ...</td>
+      <td>['store_ee', 'distribute_ee']</td>
+      <td>0.00002</td>
+      <td>4750.0</td>
+      <td>4161.0</td>
+    </tr>
+    <tr>
+      <th>ee_to_me_short_t0p0</th>
+      <td>['store_ee', 'distribute_ee', 'ee_to_me', 'ee_...</td>
+      <td>['store_ee', 'distribute_ee', 'ee_to_me']</td>
+      <td>0.00005</td>
+      <td>4950.0</td>
+      <td>10840.5</td>
+    </tr>
+    <tr>
+      <th>ee_to_me_toohigh_torque_t0p0</th>
+      <td>['store_ee', 'distribute_ee', 'ee_to_me', 'ee_...</td>
+      <td>['store_ee', 'distribute_ee', 'ee_to_me']</td>
+      <td>0.00005</td>
+      <td>5050.0</td>
+      <td>11059.5</td>
+    </tr>
+    <tr>
+      <th>ee_to_me_low_torque_t0p0</th>
+      <td>['store_ee', 'distribute_ee', 'ee_to_me', 'ee_...</td>
+      <td>['store_ee', 'distribute_ee', 'ee_to_me']</td>
+      <td>0.0001</td>
+      <td>4950.0</td>
+      <td>21681.0</td>
     </tr>
   </tbody>
 </table>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cooling Tank Model Optimization &mdash; fmdtools 2.0.7 documentation</title>
+  <title>Cooling Tank Model Optimization &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../../_static/documentation_options.js?v=20623aea"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -524,6 +524,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -738,15 +743,18 @@ flows.tank_sig.s.action:       array(21)
 flows.output_sig.s.indicator:  array(21)
 flows.output_sig.s.action:     array(21)
 fxns.import_coolant.s.amt_open: array(21)
-fxns.import_coolant.m.faults.stuck: array(21)
 fxns.import_coolant.m.faults.blockage: array(21)
+fxns.import_coolant.m.faults.stuck: array(21)
+fxns.import_coolant.m.sub_faults: array(21)
 fxns.store_coolant.s.level:    array(21)
 fxns.store_coolant.s.net_flow: array(21)
 fxns.store_coolant.s.coolingbuffer: array(21)
 fxns.store_coolant.m.faults.leak: array(21)
+fxns.store_coolant.m.sub_faults: array(21)
 fxns.export_coolant.s.amt_open: array(21)
-fxns.export_coolant.m.faults.stuck: array(21)
 fxns.export_coolant.m.faults.blockage: array(21)
+fxns.export_coolant.m.faults.stuck: array(21)
+fxns.export_coolant.m.sub_faults: array(21)
 time:                          array(21)
 </pre></div></div>
 </div>
@@ -824,11 +832,11 @@ time:                          array(21)
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultDomain with faults:
- -(&#39;import_coolant&#39;, &#39;stuck&#39;)
- -(&#39;import_coolant&#39;, &#39;blockage&#39;)
- -(&#39;store_coolant&#39;, &#39;leak&#39;)
- -(&#39;export_coolant&#39;, &#39;stuck&#39;)
- -(&#39;export_coolant&#39;, &#39;blockage&#39;)
+ -(&#39;tank.fxns.import_coolant&#39;, &#39;blockage&#39;)
+ -(&#39;tank.fxns.import_coolant&#39;, &#39;stuck&#39;)
+ -(&#39;tank.fxns.store_coolant&#39;, &#39;leak&#39;)
+ -(&#39;tank.fxns.export_coolant&#39;, &#39;blockage&#39;)
+ -(&#39;tank.fxns.export_coolant&#39;, &#39;stuck&#39;)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -848,11 +856,11 @@ FaultDomain with faults:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultSample of scenarios:
- - import_coolant_stuck_t0p0
- - import_coolant_blockage_t0p0
- - store_coolant_leak_t0p0
- - export_coolant_stuck_t0p0
- - export_coolant_blockage_t0p0
+ - tank_fxns_import_coolant_blockage_t0p0
+ - tank_fxns_import_coolant_stuck_t0p0
+ - tank_fxns_store_coolant_leak_t0p0
+ - tank_fxns_export_coolant_blockage_t0p0
+ - tank_fxns_export_coolant_stuck_t0p0
 </pre></div></div>
 </div>
 <p>We can then verify the faulty results:</p>
@@ -869,7 +877,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 108.70it/s]
+SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 83.23it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -914,15 +922,7 @@ SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 10
   </thead>
   <tbody>
     <tr>
-      <th>import_coolant_stuck_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>import_coolant_blockage_t0p0</th>
+      <th>tank_fxns_import_coolant_blockage_t0p0</th>
       <td>[]</td>
       <td>[]</td>
       <td>0.0</td>
@@ -930,7 +930,15 @@ SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 10
       <td>35000.0</td>
     </tr>
     <tr>
-      <th>store_coolant_leak_t0p0</th>
+      <th>tank_fxns_import_coolant_stuck_t0p0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>tank_fxns_store_coolant_leak_t0p0</th>
       <td>[]</td>
       <td>[]</td>
       <td>0.00001</td>
@@ -938,20 +946,20 @@ SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 10
       <td>1000000.0</td>
     </tr>
     <tr>
-      <th>export_coolant_stuck_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>export_coolant_blockage_t0p0</th>
+      <th>tank_fxns_export_coolant_blockage_t0p0</th>
       <td>[]</td>
       <td>[]</td>
       <td>0.0</td>
       <td>100000.0</td>
       <td>1666.666667</td>
+    </tr>
+    <tr>
+      <th>tank_fxns_export_coolant_stuck_t0p0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>nominal</th>
@@ -993,15 +1001,34 @@ SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 10
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.search</span> <span class="kn">import</span> <span class="n">SimpleProblem</span>
-<span class="n">sp</span> <span class="o">=</span> <span class="n">SimpleProblem</span><span class="p">(</span><span class="s2">&quot;capacity&quot;</span><span class="p">,</span> <span class="s2">&quot;turnup&quot;</span><span class="p">)</span>
-<span class="n">sp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;cd&quot;</span><span class="p">,</span> <span class="n">x_to_descost</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">TankDesignProblem</span><span class="p">(</span><span class="n">SimpleProblem</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_variables</span><span class="p">(</span><span class="s2">&quot;capacity&quot;</span><span class="p">,</span> <span class="s2">&quot;turnup&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;cd&quot;</span><span class="p">,</span> <span class="n">x_to_descost</span><span class="p">)</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">TankDesignProblem</span><span class="p">()</span>
+<span class="n">sp</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+TankDesignProblem with:
+VARIABLES
+ -capacity                                                      nan
+ -turnup                                                        nan
+OBJECTIVES
+ -cd                                                            nan
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
@@ -1034,7 +1061,7 @@ SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 10
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-SimpleProblem with:
+TankDesignProblem with:
 VARIABLES
  -capacity                                                   1.0000
  -turnup                                                     1.0000
@@ -1120,15 +1147,88 @@ ParameterDomain with:
 </pre></div></div>
 </div>
 <p>Which we then use to define the problem:</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
-<span class="n">psp</span> <span class="o">=</span> <span class="n">ParameterSimProblem</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="s2">&quot;fault_sample&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">Pool</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">close_pool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">psp</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;cr&quot;</span><span class="p">,</span> <span class="s2">&quot;endclass.expected_cost&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TankParameterProblem</span><span class="p">(</span><span class="n">ParameterSimProblem</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_sim</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s2">&quot;fault_sample&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_parameterdomain</span><span class="p">(</span><span class="n">pd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;cr&quot;</span><span class="p">,</span> <span class="s2">&quot;endclass.expected_cost&quot;</span><span class="p">)</span>
+
+<span class="n">psp</span> <span class="o">=</span> <span class="n">TankParameterProblem</span><span class="p">()</span>
+<span class="n">psp</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+TankParameterProblem with:
+VARIABLES
+ -capacity                                                      nan
+ -turnup                                                        nan
+ -faultpolicy.0                                                 nan
+ -faultpolicy.1                                                 nan
+ -faultpolicy.2                                                 nan
+ -faultpolicy.3                                                 nan
+ -faultpolicy.4                                                 nan
+ -faultpolicy.5                                                 nan
+ -faultpolicy.6                                                 nan
+ -faultpolicy.7                                                 nan
+ -faultpolicy.8                                                 nan
+ -faultpolicy.9                                                 nan
+ -faultpolicy.10                                                nan
+ -faultpolicy.11                                                nan
+ -faultpolicy.12                                                nan
+ -faultpolicy.13                                                nan
+ -faultpolicy.14                                                nan
+ -faultpolicy.15                                                nan
+ -faultpolicy.16                                                nan
+ -faultpolicy.17                                                nan
+ -faultpolicy.18                                                nan
+ -faultpolicy.19                                                nan
+ -faultpolicy.20                                                nan
+ -faultpolicy.21                                                nan
+ -faultpolicy.22                                                nan
+ -faultpolicy.23                                                nan
+ -faultpolicy.24                                                nan
+ -faultpolicy.25                                                nan
+ -faultpolicy.26                                                nan
+ -faultpolicy.27                                                nan
+ -faultpolicy.28                                                nan
+ -faultpolicy.29                                                nan
+ -faultpolicy.30                                                nan
+ -faultpolicy.31                                                nan
+ -faultpolicy.32                                                nan
+ -faultpolicy.33                                                nan
+ -faultpolicy.34                                                nan
+ -faultpolicy.35                                                nan
+ -faultpolicy.36                                                nan
+ -faultpolicy.37                                                nan
+ -faultpolicy.38                                                nan
+ -faultpolicy.39                                                nan
+ -faultpolicy.40                                                nan
+ -faultpolicy.41                                                nan
+ -faultpolicy.42                                                nan
+ -faultpolicy.43                                                nan
+ -faultpolicy.44                                                nan
+ -faultpolicy.45                                                nan
+ -faultpolicy.46                                                nan
+ -faultpolicy.47                                                nan
+ -faultpolicy.48                                                nan
+ -faultpolicy.49                                                nan
+ -faultpolicy.50                                                nan
+ -faultpolicy.51                                                nan
+ -faultpolicy.52                                                nan
+ -faultpolicy.53                                                nan
+OBJECTIVES
+ -cr                                                            nan
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
@@ -1172,8 +1272,13 @@ ParameterDomain with:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">tot</span><span class="p">(</span><span class="n">c_d</span><span class="p">,</span> <span class="n">c_o</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">c_d</span> <span class="o">+</span> <span class="n">c_o</span>
-<span class="n">tot_sp</span> <span class="o">=</span> <span class="n">SimpleProblem</span><span class="p">(</span><span class="s2">&quot;cd&quot;</span><span class="p">,</span> <span class="s2">&quot;cr&quot;</span><span class="p">)</span>
-<span class="n">tot_sp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;tot_cost&quot;</span><span class="p">,</span> <span class="n">tot</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">TotalProblem</span><span class="p">(</span><span class="n">SimpleProblem</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_variables</span><span class="p">(</span><span class="s2">&quot;cd&quot;</span><span class="p">,</span> <span class="s2">&quot;cr&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;tot_cost&quot;</span><span class="p">,</span> <span class="n">tot</span><span class="p">)</span>
+
+<span class="n">tot_sp</span> <span class="o">=</span> <span class="n">TotalProblem</span><span class="p">()</span>
 <span class="n">tot_sp</span><span class="o">.</span><span class="n">tot_cost</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1192,36 +1297,28 @@ ParameterDomain with:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.search</span> <span class="kn">import</span> <span class="n">ProblemArchitecture</span>
-<span class="n">pa</span> <span class="o">=</span> <span class="n">ProblemArchitecture</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;xd&quot;</span><span class="p">,</span> <span class="s2">&quot;capacity&quot;</span><span class="p">,</span> <span class="s2">&quot;turnup&quot;</span><span class="p">)</span>
-<span class="n">pa</span><span class="o">.</span><span class="n">add_connector_objective</span><span class="p">(</span><span class="s2">&quot;dcost&quot;</span><span class="p">,</span> <span class="s2">&quot;cd&quot;</span><span class="p">)</span>
-<span class="n">pa</span><span class="o">.</span><span class="n">add_connector_objective</span><span class="p">(</span><span class="s2">&quot;rcost&quot;</span><span class="p">,</span> <span class="s2">&quot;cr&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;des&quot;</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;xd&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;capacity&quot;</span><span class="p">,</span> <span class="s2">&quot;turnup&quot;</span><span class="p">),</span> <span class="s2">&quot;dcost&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;cd&quot;</span><span class="p">,</span> <span class="p">)})</span>
-<span class="n">pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;res&quot;</span><span class="p">,</span> <span class="n">psp</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;xd&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;capacity&quot;</span><span class="p">,</span> <span class="s2">&quot;turnup&quot;</span><span class="p">)},</span> <span class="n">outputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rcost&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;cr&quot;</span><span class="p">,</span> <span class="p">)})</span>
-<span class="n">pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;tot&quot;</span><span class="p">,</span> <span class="n">tot_sp</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dcost&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;cd&quot;</span><span class="p">,</span> <span class="p">),</span> <span class="s2">&quot;rcost&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;cr&quot;</span><span class="p">,</span> <span class="p">)})</span>
+<span class="k">class</span> <span class="nc">TankProblemArch</span><span class="p">(</span><span class="n">ProblemArchitecture</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">init_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;xd&quot;</span><span class="p">,</span> <span class="s2">&quot;capacity&quot;</span><span class="p">,</span> <span class="s2">&quot;turnup&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_connector_objective</span><span class="p">(</span><span class="s2">&quot;dcost&quot;</span><span class="p">,</span> <span class="s2">&quot;cd&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_connector_objective</span><span class="p">(</span><span class="s2">&quot;rcost&quot;</span><span class="p">,</span> <span class="s2">&quot;cr&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;des&quot;</span><span class="p">,</span> <span class="n">TankDesignProblem</span><span class="p">(),</span>
+                         <span class="n">outputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;xd&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;capacity&quot;</span><span class="p">,</span> <span class="s2">&quot;turnup&quot;</span><span class="p">),</span> <span class="s2">&quot;dcost&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;cd&quot;</span><span class="p">,</span> <span class="p">)})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;res&quot;</span><span class="p">,</span> <span class="n">TankParameterProblem</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
+                         <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;xd&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;capacity&quot;</span><span class="p">,</span> <span class="s2">&quot;turnup&quot;</span><span class="p">)},</span>
+                         <span class="n">outputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rcost&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;cr&quot;</span><span class="p">,</span> <span class="p">)})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;tot&quot;</span><span class="p">,</span> <span class="n">TotalProblem</span><span class="p">(),</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dcost&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;cd&quot;</span><span class="p">,</span> <span class="p">),</span> <span class="s2">&quot;rcost&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;cr&quot;</span><span class="p">,</span> <span class="p">)})</span>
 </pre></div>
 </div>
 </div>
 <p>We can then visualize/verify the setup of this using:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">show_sequence</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pa</span> <span class="o">=</span> <span class="n">TankProblemArch</span><span class="p">()</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">show_sequence</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1229,11 +1326,11 @@ ParameterDomain with:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_tank_Tank_Optimization_42_0.png" src="../../_images/examples_tank_Tank_Optimization_42_0.png" />
+<img alt="../../_images/examples_tank_Tank_Optimization_40_0.png" src="../../_images/examples_tank_Tank_Optimization_40_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pa</span><span class="o">.</span><span class="n">connectors</span><span class="p">[</span><span class="s1">&#39;xd&#39;</span><span class="p">]</span>
@@ -1241,7 +1338,7 @@ ParameterDomain with:
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1250,7 +1347,7 @@ VariableConnector(name=&#39;xd&#39;, keys=(&#39;capacity&#39;, &#39;turnup&#39;)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pa</span>
@@ -1258,12 +1355,12 @@ VariableConnector(name=&#39;xd&#39;, keys=(&#39;capacity&#39;, &#39;turnup&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-ProblemArchitecture with:
+TankProblemArch with:
 CONNECTORS
  -xd                                                      [nan nan]
  -dcost                                                       [nan]
@@ -1278,14 +1375,14 @@ VARIABLES
  nan nan nan nan nan nan nan nan nan nan nan nan nan nan nan nan nan nan
  nan nan nan nan nan nan nan nan nan nan nan nan nan nan nan nan nan nan]
 OBJECTIVES
- -des_cd                                               8182000.0000
+ -des_cd                                                        nan
  -res_cr                                                        nan
  -tot_tot_cost                                                  nan
 </pre></div></div>
 </div>
 <p>We can also evaluate the objectives in terms of full or partial sets of the variables:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fp_vars</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">TankParam</span><span class="o">.</span><span class="vm">__defaults__</span><span class="p">[</span><span class="s1">&#39;faultpolicy&#39;</span><span class="p">])]</span>
@@ -1294,7 +1391,7 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1303,7 +1400,7 @@ OBJECTIVES
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pa</span>
@@ -1311,12 +1408,12 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-ProblemArchitecture with:
+TankProblemArch with:
 CONNECTORS
  -xd                                                      [0.5 1. ]
  -dcost                                                  [9115750.]
@@ -1337,7 +1434,7 @@ OBJECTIVES
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pa</span><span class="o">.</span><span class="n">tot_tot_cost_full</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">*</span><span class="n">fp_vars</span><span class="p">)</span>
@@ -1345,7 +1442,7 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1355,7 +1452,7 @@ OBJECTIVES
 </div>
 <p>Note that because the simulations are linked, changes to xdes in the <code class="docutils literal notranslate"><span class="pre">cd</span></code> function in turn change the lower-level <code class="docutils literal notranslate"><span class="pre">cost</span></code> function by default.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pa</span><span class="o">.</span><span class="n">des_cd</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -1363,7 +1460,7 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1372,7 +1469,7 @@ OBJECTIVES
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pa</span><span class="o">.</span><span class="n">res_cr</span><span class="p">(</span><span class="o">*</span><span class="n">fp_vars</span><span class="p">)</span>
@@ -1380,16 +1477,16 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1081666.6666666667
+0.0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pa</span><span class="o">.</span><span class="n">tot_tot_cost</span><span class="p">()</span>
@@ -1397,7 +1494,7 @@ OBJECTIVES
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1412,7 +1509,7 @@ OBJECTIVES
 <p>Hulse, D., &amp; Hoyle, C. (2022). Understanding Resilience Optimization Architectures: Alignment and Coupling in Multilevel Decomposition Strategies. Journal of Mechanical Design, 144(11), 111704.</p>
 <p>The optimization of the resilience policy is accomplished using an evolutionary algorithm, defined below:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -1504,7 +1601,26 @@ OBJECTIVES
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="n">pa</span> <span class="o">=</span> <span class="n">TankProblemArch</span><span class="p">()</span> <span class="c1">#pool = Pool(5), close_pool=False)</span>
+<span class="n">pa</span><span class="o">.</span><span class="n">res_cr_full</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">*</span><span class="n">fp_vars</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1081666.6666666667
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">EA</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">res_cr</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="s1">&#39;iters&#39;</span><span class="p">)</span>
@@ -1539,7 +1655,7 @@ OBJECTIVES
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">plot_opt_hist</span><span class="p">()</span>
@@ -1551,7 +1667,7 @@ OBJECTIVES
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\sim\search.py:349: RuntimeWarning: All-NaN slice encountered
+C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\sim\search.py:361: RuntimeWarning: All-NaN slice encountered
   hist[val] = [np.nanmin(arr[:i]) for i in range(1, len(arr)+1)]
 </pre></div></div>
 </div>
@@ -1559,14 +1675,14 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\sim\search.py:349: RuntimeWar
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_tank_Tank_Optimization_57_1.png" src="../../_images/examples_tank_Tank_Optimization_57_1.png" />
+<img alt="../../_images/examples_tank_Tank_Optimization_56_1.png" src="../../_images/examples_tank_Tank_Optimization_56_1.png" />
 </div>
 </div>
 <section id="Alternating-Optimization">
 <h3>Alternating Optimization<a class="headerlink" href="#Alternating-Optimization" title="Link to this heading"></a></h3>
 <p>Which can then be optimized in an alternating or bilevel optimization structure:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
@@ -1636,7 +1752,7 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\sim\search.py:349: RuntimeWar
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">fhist</span><span class="p">,</span> <span class="n">thist</span><span class="p">,</span> <span class="n">xdhist</span> <span class="o">=</span> <span class="n">alternating_opt</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">tot_tot_cost_full</span><span class="p">,</span> <span class="n">pa</span><span class="o">.</span><span class="n">des_cd</span><span class="p">,</span> <span class="n">pa</span><span class="o">.</span><span class="n">res_cr</span><span class="p">,</span> <span class="n">max_alts</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -1892,7 +2008,7 @@ File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\lib
 <p>Additionally, a bilevel optimization would look like this:</p>
 <p>Bilevel optimizations have a lower level which is called repeatedly, see below:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">lower_level</span><span class="p">(</span><span class="n">xdes</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span> <span class="p">{}):</span>
@@ -1908,7 +2024,7 @@ File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\lib
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lower_level</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
@@ -1917,7 +2033,7 @@ File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\lib
 </div>
 <p>This is then called in bilevel_opt:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bilevel_opt</span><span class="p">(</span><span class="n">xdes</span><span class="o">=</span><span class="p">[</span><span class="mi">21</span><span class="p">,</span> <span class="mf">.5</span><span class="p">],</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
@@ -1939,7 +2055,7 @@ File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\lib
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bilevel_opt</span><span class="p">(</span><span class="n">maxiter</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>

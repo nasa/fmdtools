@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>More Human Failure Analyses &mdash; fmdtools 2.0.7 documentation</title>
+  <title>More Human Failure Analyses &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../../_static/fmdtools_ico.ico"/>
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../../../_static/documentation_options.js?v=20623aea"></script>
       <script src="../../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -524,6 +524,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -753,7 +758,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">RoverHuman</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;linetype&#39;</span><span class="p">:</span> <span class="s1">&#39;sine&#39;</span><span class="p">,</span> <span class="s1">&#39;period&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;amp&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;drive_modes&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;mode_args&#39;</span><span class="p">:</span><span class="s1">&#39;manual&#39;</span><span class="p">}})</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">RoverHuman</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;linetype&#39;</span><span class="p">:</span> <span class="s1">&#39;sine&#39;</span><span class="p">,</span> <span class="s1">&#39;period&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;amp&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;drive_modes&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;mode_options&#39;</span><span class="p">:</span><span class="s1">&#39;manual&#39;</span><span class="p">}})</span>
 <span class="n">er</span><span class="p">,</span> <span class="n">hist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_map</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">hist</span><span class="p">)</span>
 </pre></div>
@@ -780,10 +785,10 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;elec_open&#39;: Fault(prob=0.25, cost=0.0, phases={&#39;drive&#39;: 1.0, &#39;start&#39;: 1.0}, units=&#39;sim&#39;),
- &#39;stuck&#39;: Fault(prob=0.25, cost=0.0, phases={&#39;drive&#39;: 1.0, &#39;start&#39;: 1.0}, units=&#39;sim&#39;),
- &#39;stuck_right&#39;: Fault(prob=0.25, cost=0.0, phases={&#39;drive&#39;: 1.0, &#39;start&#39;: 1.0}, units=&#39;sim&#39;),
- &#39;stuck_left&#39;: Fault(prob=0.25, cost=0.0, phases={&#39;drive&#39;: 1.0, &#39;start&#39;: 1.0}, units=&#39;sim&#39;)}
+{&#39;elec_open&#39;: Fault(prob=1.0, cost=0.0, phases=((&#39;drive&#39;, 1.0), (&#39;start&#39;, 1.0)), disturbances=((&#39;s.transfer&#39;, 0.0),), units=&#39;sim&#39;),
+ &#39;stuck&#39;: Fault(prob=1.0, cost=0.0, phases=((&#39;drive&#39;, 1.0), (&#39;start&#39;, 1.0)), disturbances=((&#39;s.friction&#39;, 10.0),), units=&#39;sim&#39;),
+ &#39;stuck_right&#39;: Fault(prob=1.0, cost=0.0, phases=((&#39;drive&#39;, 1.0), (&#39;start&#39;, 1.0)), disturbances=((&#39;s.friction&#39;, 3.0), (&#39;s.drift&#39;, 0.2)), units=&#39;sim&#39;),
+ &#39;stuck_left&#39;: Fault(prob=1.0, cost=0.0, phases=((&#39;drive&#39;, 1.0), (&#39;start&#39;, 1.0)), disturbances=((&#39;s.friction&#39;, 3.0), (&#39;s.drift&#39;, -0.2)), units=&#39;sim&#39;)}
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -803,16 +808,16 @@
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultDomain with faults:
- -(&#39;operator&#39;, &#39;look_failed_no_action&#39;)
- -(&#39;operator&#39;, &#39;percieve_failed_no_action&#39;)
- -(&#39;operator&#39;, &#39;percieve_not_visible&#39;)
- -(&#39;operator&#39;, &#39;percieve_wrong_position&#39;)
- -(&#39;operator&#39;, &#39;comprehend_failed_no_action&#39;)
- -(&#39;operator&#39;, &#39;project_failed_turn_left&#39;)
- -(&#39;operator&#39;, &#39;project_failed_turn_right&#39;)
- -(&#39;operator&#39;, &#39;project_failed_slow&#39;)
- -(&#39;operator&#39;, &#39;project_failed_fast&#39;)
- -(&#39;operator&#39;, &#39;project_failed_no_action&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.look&#39;, &#39;failed_no_action&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;, &#39;failed_no_action&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;, &#39;not_visible&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;, &#39;wrong_position&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.comprehend&#39;, &#39;failed_no_action&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.project&#39;, &#39;failed_fast&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.project&#39;, &#39;failed_no_action&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.project&#39;, &#39;failed_slow&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.project&#39;, &#39;failed_turn_left&#39;)
+ -(&#39;roverhuman.fxns.operator.aa.acts.project&#39;, &#39;failed_turn_right&#39;)
  -...more
 </pre></div></div>
 </div>
@@ -833,16 +838,16 @@ FaultDomain with faults:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 FaultSample of scenarios:
- - operator_look_failed_no_action_t15p0
- - operator_percieve_failed_no_action_t15p0
- - operator_percieve_not_visible_t15p0
- - operator_percieve_wrong_position_t15p0
- - operator_comprehend_failed_no_action_t15p0
- - operator_project_failed_turn_left_t15p0
- - operator_project_failed_turn_right_t15p0
- - operator_project_failed_slow_t15p0
- - operator_project_failed_fast_t15p0
- - operator_project_failed_no_action_t15p0
+ - roverhuman_fxns_operator_aa_acts_look_failed_no_action_t15p0
+ - roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t15p0
+ - roverhuman_fxns_operator_aa_acts_percieve_not_visible_t15p0
+ - roverhuman_fxns_operator_aa_acts_percieve_wrong_position_t15p0
+ - roverhuman_fxns_operator_aa_acts_comprehend_failed_no_action_t15p0
+ - roverhuman_fxns_operator_aa_acts_project_failed_fast_t15p0
+ - roverhuman_fxns_operator_aa_acts_project_failed_no_action_t15p0
+ - roverhuman_fxns_operator_aa_acts_project_failed_slow_t15p0
+ - roverhuman_fxns_operator_aa_acts_project_failed_turn_left_t15p0
+ - roverhuman_fxns_operator_aa_acts_project_failed_turn_right_t15p0
  - ... (19 total)
 </pre></div></div>
 </div>
@@ -860,25 +865,25 @@ FaultSample of scenarios:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;look_failed_no_action&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;look_failed_no_action&#39;, rate=1.0, name=&#39;operator_look_failed_no_action_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;percieve_failed_no_action&#39;, rate=0.3333333333333333, name=&#39;operator_percieve_failed_no_action_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;percieve_not_visible&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;percieve_not_visible&#39;, rate=0.3333333333333333, name=&#39;operator_percieve_not_visible_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;percieve_wrong_position&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;percieve_wrong_position&#39;, rate=0.3333333333333333, name=&#39;operator_percieve_wrong_position_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;comprehend_failed_no_action&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;comprehend_failed_no_action&#39;, rate=1.0, name=&#39;operator_comprehend_failed_no_action_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;project_failed_turn_left&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;project_failed_turn_left&#39;, rate=0.2, name=&#39;operator_project_failed_turn_left_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;project_failed_turn_right&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;project_failed_turn_right&#39;, rate=0.2, name=&#39;operator_project_failed_turn_right_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;project_failed_slow&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;project_failed_slow&#39;, rate=0.2, name=&#39;operator_project_failed_slow_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;project_failed_fast&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;project_failed_fast&#39;, rate=0.2, name=&#39;operator_project_failed_fast_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;project_failed_no_action&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;project_failed_no_action&#39;, rate=0.2, name=&#39;operator_project_failed_no_action_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;decide_failed_turn_left&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;decide_failed_turn_left&#39;, rate=0.2, name=&#39;operator_decide_failed_turn_left_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;decide_failed_turn_right&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;decide_failed_turn_right&#39;, rate=0.2, name=&#39;operator_decide_failed_turn_right_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;decide_failed_slow&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;decide_failed_slow&#39;, rate=0.2, name=&#39;operator_decide_failed_slow_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;decide_failed_fast&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;decide_failed_fast&#39;, rate=0.2, name=&#39;operator_decide_failed_fast_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;decide_failed_no_action&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;decide_failed_no_action&#39;, rate=0.2, name=&#39;operator_decide_failed_no_action_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;reach_failed_no_action&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;reach_failed_no_action&#39;, rate=1.0, name=&#39;operator_reach_failed_no_action_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;press_failed_left&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;press_failed_left&#39;, rate=0.3333333333333333, name=&#39;operator_press_failed_left_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;press_failed_right&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;press_failed_right&#39;, rate=0.3333333333333333, name=&#39;operator_press_failed_right_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;operator&#39;: [&#39;press_no_press&#39;]}, disturbances={})}, times=(15.0,), function=&#39;operator&#39;, fault=&#39;press_no_press&#39;, rate=0.3333333333333333, name=&#39;operator_press_no_press_t15p0&#39;, time=15.0, phase=&#39;start&#39;)]
+[SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.look&#39;: [&#39;failed_no_action&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.look&#39;, fault=&#39;failed_no_action&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_look_failed_no_action_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;: [&#39;failed_no_action&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;, fault=&#39;failed_no_action&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;: [&#39;not_visible&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;, fault=&#39;not_visible&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_percieve_not_visible_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;: [&#39;wrong_position&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.percieve&#39;, fault=&#39;wrong_position&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_percieve_wrong_position_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.comprehend&#39;: [&#39;failed_no_action&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.comprehend&#39;, fault=&#39;failed_no_action&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_comprehend_failed_no_action_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.project&#39;: [&#39;failed_fast&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.project&#39;, fault=&#39;failed_fast&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_project_failed_fast_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.project&#39;: [&#39;failed_no_action&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.project&#39;, fault=&#39;failed_no_action&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_project_failed_no_action_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.project&#39;: [&#39;failed_slow&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.project&#39;, fault=&#39;failed_slow&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_project_failed_slow_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.project&#39;: [&#39;failed_turn_left&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.project&#39;, fault=&#39;failed_turn_left&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_project_failed_turn_left_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.project&#39;: [&#39;failed_turn_right&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.project&#39;, fault=&#39;failed_turn_right&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_project_failed_turn_right_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.decide&#39;: [&#39;failed_fast&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.decide&#39;, fault=&#39;failed_fast&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_decide_failed_fast_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.decide&#39;: [&#39;failed_no_action&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.decide&#39;, fault=&#39;failed_no_action&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_decide_failed_no_action_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.decide&#39;: [&#39;failed_slow&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.decide&#39;, fault=&#39;failed_slow&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_decide_failed_slow_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.decide&#39;: [&#39;failed_turn_left&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.decide&#39;, fault=&#39;failed_turn_left&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_decide_failed_turn_left_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.decide&#39;: [&#39;failed_turn_right&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.decide&#39;, fault=&#39;failed_turn_right&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_decide_failed_turn_right_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.reach&#39;: [&#39;failed_no_action&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.reach&#39;, fault=&#39;failed_no_action&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_reach_failed_no_action_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.press&#39;: [&#39;failed_left&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.press&#39;, fault=&#39;failed_left&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_press_failed_left_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.press&#39;: [&#39;failed_right&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.press&#39;, fault=&#39;failed_right&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_press_failed_right_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.operator.aa.acts.press&#39;: [&#39;no_press&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.operator.aa.acts.press&#39;, fault=&#39;no_press&#39;, rate=1.0, name=&#39;roverhuman_fxns_operator_aa_acts_press_no_press_t15p0&#39;, time=15.0, phase=&#39;start&#39;)]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -894,7 +899,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:03&lt;00:00,  6.26it/s]
+SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:01&lt;00:00, 10.68it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -986,56 +991,56 @@ PSFShortParams(experience=2.0, stress_param=0.0, fatigue_param=1.0)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2121425827}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep0_range_0&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3118789205}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep1_range_1&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1460251320}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep2_range_2&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3448493913}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep3_range_3&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2067320777}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep4_range_4&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2580642624}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep5_range_5&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2475035383}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep6_range_6&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 338745618}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep7_range_7&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 56084742}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep8_range_8&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 689999441}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep9_range_9&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2121425827}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep0_range_10&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3118789205}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep1_range_11&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1460251320}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep2_range_12&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3448493913}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep3_range_13&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2067320777}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep4_range_14&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2580642624}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep5_range_15&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2475035383}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep6_range_16&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 338745618}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep7_range_17&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 56084742}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep8_range_18&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 689999441}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep9_range_19&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2121425827}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep0_range_20&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3118789205}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep1_range_21&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1460251320}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep2_range_22&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3448493913}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep3_range_23&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2067320777}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep4_range_24&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2580642624}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep5_range_25&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2475035383}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep6_range_26&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 338745618}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep7_range_27&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 56084742}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep8_range_28&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 689999441}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep9_range_29&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2121425827}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep0_range_30&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3118789205}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep1_range_31&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1460251320}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep2_range_32&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3448493913}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep3_range_33&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2067320777}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep4_range_34&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2580642624}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep5_range_35&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2475035383}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep6_range_36&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 338745618}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep7_range_37&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 56084742}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep8_range_38&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 689999441}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep9_range_39&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2121425827}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep0_range_40&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3118789205}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep1_range_41&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1460251320}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep2_range_42&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3448493913}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep3_range_43&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2067320777}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep4_range_44&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2580642624}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep5_range_45&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 2475035383}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep6_range_46&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 338745618}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep7_range_47&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 56084742}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep8_range_48&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 689999441}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep9_range_49&#39;)]
+[ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 4192309209}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep0_range_0&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 84679348}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep1_range_1&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3113040197}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep2_range_2&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1129100323}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep3_range_3&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1928702525}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep4_range_4&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 929354092}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep5_range_5&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 103369521}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep6_range_6&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 764900792}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep7_range_7&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 731004170}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep8_range_8&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 1.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1720943563}, sp={}, prob=0.02, inputparams={0: 1.0}, rangeid=&#39;&#39;, name=&#39;rep9_range_9&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 4192309209}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep0_range_10&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 84679348}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep1_range_11&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3113040197}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep2_range_12&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1129100323}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep3_range_13&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1928702525}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep4_range_14&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 929354092}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep5_range_15&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 103369521}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep6_range_16&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 764900792}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep7_range_17&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 731004170}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep8_range_18&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 2.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1720943563}, sp={}, prob=0.02, inputparams={0: 2.0}, rangeid=&#39;&#39;, name=&#39;rep9_range_19&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 4192309209}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep0_range_20&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 84679348}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep1_range_21&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3113040197}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep2_range_22&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1129100323}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep3_range_23&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1928702525}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep4_range_24&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 929354092}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep5_range_25&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 103369521}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep6_range_26&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 764900792}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep7_range_27&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 731004170}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep8_range_28&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 3.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1720943563}, sp={}, prob=0.02, inputparams={0: 3.0}, rangeid=&#39;&#39;, name=&#39;rep9_range_29&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 4192309209}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep0_range_30&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 84679348}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep1_range_31&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3113040197}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep2_range_32&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1129100323}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep3_range_33&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1928702525}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep4_range_34&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 929354092}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep5_range_35&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 103369521}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep6_range_36&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 764900792}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep7_range_37&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 731004170}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep8_range_38&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 4.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1720943563}, sp={}, prob=0.02, inputparams={0: 4.0}, rangeid=&#39;&#39;, name=&#39;rep9_range_39&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 4192309209}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep0_range_40&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 84679348}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep1_range_41&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 3113040197}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep2_range_42&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1129100323}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep3_range_43&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1928702525}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep4_range_44&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 929354092}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep5_range_45&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 103369521}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep6_range_46&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 764900792}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep7_range_47&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 731004170}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep8_range_48&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;experience&#39;: 5.0, &#39;stress_param&#39;: 0.0}, r={&#39;seed&#39;: 1720943563}, sp={}, prob=0.02, inputparams={0: 5.0}, rangeid=&#39;&#39;, name=&#39;rep9_range_49&#39;)]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1052,7 +1057,7 @@ PSFShortParams(experience=2.0, stress_param=0.0, fatigue_param=1.0)
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 497.14it/s]
+SCENARIOS COMPLETE:   0%|          | 0/50 [00:00&lt;?, ?it/s]SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 734.59it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1151,7 +1156,7 @@ PSFParam(fatigue=0.0, stress=0.0)
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:18&lt;00:00,  2.75it/s]
+SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:10&lt;00:00,  4.79it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1213,10 +1218,10 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:18&lt;00:00, 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[SingleFaultScenario(sequence={15.0: Injection(faults={&#39;drive&#39;: [&#39;elec_open&#39;]}, disturbances={})}, times=(15.0,), function=&#39;drive&#39;, fault=&#39;elec_open&#39;, rate=0.25, name=&#39;drive_elec_open_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;drive&#39;: [&#39;stuck&#39;]}, disturbances={})}, times=(15.0,), function=&#39;drive&#39;, fault=&#39;stuck&#39;, rate=0.25, name=&#39;drive_stuck_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;drive&#39;: [&#39;stuck_right&#39;]}, disturbances={})}, times=(15.0,), function=&#39;drive&#39;, fault=&#39;stuck_right&#39;, rate=0.25, name=&#39;drive_stuck_right_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
- SingleFaultScenario(sequence={15.0: Injection(faults={&#39;drive&#39;: [&#39;stuck_left&#39;]}, disturbances={})}, times=(15.0,), function=&#39;drive&#39;, fault=&#39;stuck_left&#39;, rate=0.25, name=&#39;drive_stuck_left_t15p0&#39;, time=15.0, phase=&#39;start&#39;)]
+[SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.drive&#39;: [&#39;elec_open&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.drive&#39;, fault=&#39;elec_open&#39;, rate=1.0, name=&#39;roverhuman_fxns_drive_elec_open_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.drive&#39;: [&#39;stuck&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.drive&#39;, fault=&#39;stuck&#39;, rate=1.0, name=&#39;roverhuman_fxns_drive_stuck_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.drive&#39;: [&#39;stuck_right&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.drive&#39;, fault=&#39;stuck_right&#39;, rate=1.0, name=&#39;roverhuman_fxns_drive_stuck_right_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.drive&#39;: [&#39;stuck_left&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.drive&#39;, fault=&#39;stuck_left&#39;, rate=1.0, name=&#39;roverhuman_fxns_drive_stuck_left_t15p0&#39;, time=15.0, phase=&#39;start&#39;)]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1234,7 +1239,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:18&lt;00:00, 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   4%|▍         | 2/50 [00:03&lt;01:16,  1.59s/it]
+NESTED SCENARIOS COMPLETE:   4%|▍         | 2/50 [00:01&lt;00:42,  1.12it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1242,7 +1247,7 @@ NESTED SCENARIOS COMPLETE:   4%|▍         | 2/50 [00:03&lt;01:16,  1.59s/it]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1250,7 +1255,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   6%|▌         | 3/50 [00:05&lt;01:27,  1.86s/it]
+NESTED SCENARIOS COMPLETE:   6%|▌         | 3/50 [00:03&lt;00:50,  1.07s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1258,7 +1263,7 @@ NESTED SCENARIOS COMPLETE:   6%|▌         | 3/50 [00:05&lt;01:27,  1.86s/it]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1266,7 +1271,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   8%|▊         | 4/50 [00:07&lt;01:31,  2.00s/it]
+NESTED SCENARIOS COMPLETE:   8%|▊         | 4/50 [00:04&lt;00:52,  1.15s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1274,7 +1279,7 @@ NESTED SCENARIOS COMPLETE:   8%|▊         | 4/50 [00:07&lt;01:31,  2.00s/it]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1282,7 +1287,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  10%|█         | 5/50 [00:09&lt;01:32,  2.05s/it]
+NESTED SCENARIOS COMPLETE:  10%|█         | 5/50 [00:05&lt;00:53,  1.19s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1290,7 +1295,7 @@ NESTED SCENARIOS COMPLETE:  10%|█         | 5/50 [00:09&lt;01:32,  2.05s/it]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1298,7 +1303,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  12%|█▏        | 6/50 [00:11&lt;01:31,  2.09s/it]
+NESTED SCENARIOS COMPLETE:  12%|█▏        | 6/50 [00:06&lt;00:53,  1.22s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1306,7 +1311,7 @@ NESTED SCENARIOS COMPLETE:  12%|█▏        | 6/50 [00:11&lt;01:31,  2.09s/it]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1314,7 +1319,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  14%|█▍        | 7/50 [00:14&lt;01:32,  2.14s/it]
+NESTED SCENARIOS COMPLETE:  14%|█▍        | 7/50 [00:08&lt;00:53,  1.24s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1322,7 +1327,7 @@ NESTED SCENARIOS COMPLETE:  14%|█▍        | 7/50 [00:14&lt;01:32,  2.14s/it]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1330,7 +1335,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  16%|█▌        | 8/50 [00:16&lt;01:30,  2.16s/it]
+NESTED SCENARIOS COMPLETE:  16%|█▌        | 8/50 [00:09&lt;00:52,  1.25s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1338,7 +1343,7 @@ NESTED SCENARIOS COMPLETE:  16%|█▌        | 8/50 [00:16&lt;01:30,  2.16s/it]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1346,7 +1351,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  18%|█▊        | 9/50 [00:18&lt;01:28,  2.17s/it]
+NESTED SCENARIOS COMPLETE:  18%|█▊        | 9/50 [00:10&lt;00:51,  1.26s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1354,7 +1359,7 @@ NESTED SCENARIOS COMPLETE:  18%|█▊        | 9/50 [00:18&lt;01:28,  2.17s/it]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1362,7 +1367,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  24%|██▍       | 12/50 [00:23&lt;01:11,  1.88s/it]
+NESTED SCENARIOS COMPLETE:  26%|██▌       | 13/50 [00:14&lt;00:37,  1.01s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1370,7 +1375,7 @@ NESTED SCENARIOS COMPLETE:  24%|██▍       | 12/50 [00:23&lt;01:11,  1.88s/
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1378,7 +1383,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  26%|██▌       | 13/50 [00:26&lt;01:13,  1.97s/it]
+NESTED SCENARIOS COMPLETE:  28%|██▊       | 14/50 [00:15&lt;00:39,  1.08s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1386,7 +1391,7 @@ NESTED SCENARIOS COMPLETE:  26%|██▌       | 13/50 [00:26&lt;01:13,  1.97s/
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1394,7 +1399,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  28%|██▊       | 14/50 [00:28&lt;01:13,  2.03s/it]
+NESTED SCENARIOS COMPLETE:  30%|███       | 15/50 [00:17&lt;00:40,  1.16s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1402,7 +1407,7 @@ NESTED SCENARIOS COMPLETE:  28%|██▊       | 14/50 [00:28&lt;01:13,  2.03s/
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1410,7 +1415,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  30%|███       | 15/50 [00:30&lt;01:12,  2.07s/it]
+NESTED SCENARIOS COMPLETE:  32%|███▏      | 16/50 [00:18&lt;00:40,  1.19s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1418,7 +1423,7 @@ NESTED SCENARIOS COMPLETE:  30%|███       | 15/50 [00:30&lt;01:12,  2.07s/
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1426,7 +1431,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  32%|███▏      | 16/50 [00:32&lt;01:11,  2.10s/it]
+NESTED SCENARIOS COMPLETE:  34%|███▍      | 17/50 [00:19&lt;00:40,  1.22s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1434,7 +1439,7 @@ NESTED SCENARIOS COMPLETE:  32%|███▏      | 16/50 [00:32&lt;01:11,  2.10
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1442,7 +1447,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  34%|███▍      | 17/50 [00:34&lt;01:09,  2.12s/it]
+NESTED SCENARIOS COMPLETE:  36%|███▌      | 18/50 [00:21&lt;00:39,  1.24s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1450,7 +1455,7 @@ NESTED SCENARIOS COMPLETE:  34%|███▍      | 17/50 [00:34&lt;01:09,  2.12
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1458,7 +1463,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  36%|███▌      | 18/50 [00:36&lt;01:08,  2.13s/it]
+NESTED SCENARIOS COMPLETE:  38%|███▊      | 19/50 [00:22&lt;00:38,  1.26s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1466,7 +1471,7 @@ NESTED SCENARIOS COMPLETE:  36%|███▌      | 18/50 [00:36&lt;01:08,  2.13
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1474,7 +1479,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  38%|███▊      | 19/50 [00:39&lt;01:06,  2.15s/it]
+NESTED SCENARIOS COMPLETE:  44%|████▍     | 22/50 [00:25&lt;00:29,  1.07s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1482,7 +1487,7 @@ NESTED SCENARIOS COMPLETE:  38%|███▊      | 19/50 [00:39&lt;01:06,  2.15
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1490,7 +1495,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  42%|████▏     | 21/50 [00:42&lt;00:57,  1.98s/it]
+NESTED SCENARIOS COMPLETE:  46%|████▌     | 23/50 [00:26&lt;00:30,  1.13s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1498,7 +1503,7 @@ NESTED SCENARIOS COMPLETE:  42%|████▏     | 21/50 [00:42&lt;00:57,  1.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1506,7 +1511,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  44%|████▍     | 22/50 [00:44&lt;00:56,  2.02s/it]
+NESTED SCENARIOS COMPLETE:  48%|████▊     | 24/50 [00:27&lt;00:30,  1.17s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1514,7 +1519,7 @@ NESTED SCENARIOS COMPLETE:  44%|████▍     | 22/50 [00:44&lt;00:56,  2.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1522,7 +1527,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  46%|████▌     | 23/50 [00:47&lt;00:55,  2.06s/it]
+NESTED SCENARIOS COMPLETE:  50%|█████     | 25/50 [00:29&lt;00:29,  1.20s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1530,7 +1535,7 @@ NESTED SCENARIOS COMPLETE:  46%|████▌     | 23/50 [00:47&lt;00:55,  2.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1538,7 +1543,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  48%|████▊     | 24/50 [00:49&lt;00:54,  2.08s/it]
+NESTED SCENARIOS COMPLETE:  52%|█████▏    | 26/50 [00:30&lt;00:29,  1.22s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1546,7 +1551,7 @@ NESTED SCENARIOS COMPLETE:  48%|████▊     | 24/50 [00:49&lt;00:54,  2.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1554,7 +1559,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  50%|█████     | 25/50 [00:51&lt;00:52,  2.10s/it]
+NESTED SCENARIOS COMPLETE:  54%|█████▍    | 27/50 [00:31&lt;00:28,  1.24s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1562,7 +1567,7 @@ NESTED SCENARIOS COMPLETE:  50%|█████     | 25/50 [00:51&lt;00:52,  2.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1570,7 +1575,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  52%|█████▏    | 26/50 [00:53&lt;00:51,  2.13s/it]
+NESTED SCENARIOS COMPLETE:  56%|█████▌    | 28/50 [00:32&lt;00:27,  1.25s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1578,7 +1583,7 @@ NESTED SCENARIOS COMPLETE:  52%|█████▏    | 26/50 [00:53&lt;00:51,  
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1586,7 +1591,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  54%|█████▍    | 27/50 [00:55&lt;00:49,  2.14s/it]
+NESTED SCENARIOS COMPLETE:  58%|█████▊    | 29/50 [00:34&lt;00:26,  1.26s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1594,7 +1599,7 @@ NESTED SCENARIOS COMPLETE:  54%|█████▍    | 27/50 [00:55&lt;00:49,  
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1602,7 +1607,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  56%|█████▌    | 28/50 [00:57&lt;00:47,  2.15s/it]
+NESTED SCENARIOS COMPLETE:  72%|███████▏  | 36/50 [00:40&lt;00:13,  1.05it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1610,7 +1615,7 @@ NESTED SCENARIOS COMPLETE:  56%|█████▌    | 28/50 [00:57&lt;00:47,  
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1618,7 +1623,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  58%|█████▊    | 29/50 [01:00&lt;00:45,  2.15s/it]
+NESTED SCENARIOS COMPLETE:  74%|███████▍  | 37/50 [00:42&lt;00:13,  1.06s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1626,7 +1631,7 @@ NESTED SCENARIOS COMPLETE:  58%|█████▊    | 29/50 [01:00&lt;00:45,  
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1634,7 +1639,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  68%|██████▊   | 34/50 [01:08&lt;00:27,  1.70s/it]
+NESTED SCENARIOS COMPLETE:  76%|███████▌  | 38/50 [00:43&lt;00:13,  1.13s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1642,7 +1647,7 @@ NESTED SCENARIOS COMPLETE:  68%|██████▊   | 34/50 [01:08&lt;00:27,
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1650,7 +1655,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  70%|███████   | 35/50 [01:10&lt;00:27,  1.84s/it]
+NESTED SCENARIOS COMPLETE:  78%|███████▊  | 39/50 [00:44&lt;00:12,  1.18s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1658,7 +1663,7 @@ NESTED SCENARIOS COMPLETE:  70%|███████   | 35/50 [01:10&lt;00:27,
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1666,7 +1671,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  72%|███████▏  | 36/50 [01:12&lt;00:26,  1.92s/it]
+NESTED SCENARIOS COMPLETE:  88%|████████▊ | 44/50 [00:49&lt;00:05,  1.03it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1674,7 +1679,7 @@ NESTED SCENARIOS COMPLETE:  72%|███████▏  | 36/50 [01:12&lt;00:2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1682,7 +1687,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  74%|███████▍  | 37/50 [01:14&lt;00:25,  1.98s/it]
+NESTED SCENARIOS COMPLETE:  90%|█████████ | 45/50 [00:51&lt;00:05,  1.06s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1690,7 +1695,7 @@ NESTED SCENARIOS COMPLETE:  74%|███████▍  | 37/50 [01:14&lt;00:2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1698,7 +1703,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  76%|███████▌  | 38/50 [01:16&lt;00:24,  2.03s/it]
+NESTED SCENARIOS COMPLETE:  92%|█████████▏| 46/50 [00:52&lt;00:04,  1.12s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1706,7 +1711,7 @@ NESTED SCENARIOS COMPLETE:  76%|███████▌  | 38/50 [01:16&lt;00:2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1714,7 +1719,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  78%|███████▊  | 39/50 [01:19&lt;00:22,  2.07s/it]
+NESTED SCENARIOS COMPLETE:  94%|█████████▍| 47/50 [00:53&lt;00:03,  1.16s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1722,7 +1727,7 @@ NESTED SCENARIOS COMPLETE:  78%|███████▊  | 39/50 [01:19&lt;00:2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1730,7 +1735,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  92%|█████████▏| 46/50 [01:30&lt;00:06,  1.64s/it]
+NESTED SCENARIOS COMPLETE:  96%|█████████▌| 48/50 [00:54&lt;00:02,  1.20s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1738,7 +1743,7 @@ NESTED SCENARIOS COMPLETE:  92%|█████████▏| 46/50 [01:30&lt;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1746,7 +1751,7 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  94%|█████████▍| 47/50 [01:32&lt;00:05,  1.79s/it]
+NESTED SCENARIOS COMPLETE:  98%|█████████▊| 49/50 [00:56&lt;00:01,  1.21s/it]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1754,39 +1759,7 @@ NESTED SCENARIOS COMPLETE:  94%|█████████▍| 47/50 [01:32&lt;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  96%|█████████▌| 48/50 [01:34&lt;00:03,  1.89s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  98%|█████████▊| 49/50 [01:37&lt;00:01,  1.97s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_no_action&#39;]}
+Faults found during the nominal run [&#39;percieve.failed_no_action&#39;]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1794,15 +1767,55 @@ Faults found during the nominal run {&#39;operator&#39;: [&#39;percieve_failed_n
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE: 100%|██████████| 50/50 [01:39&lt;00:00,  1.99s/it]
+NESTED SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:57&lt;00:00,  1.15s/it]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">apps</span><span class="p">[</span><span class="s1">&#39;hist_0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_scen_groups</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{(): [&#39;roverhuman_fxns_drive_elec_open_t15p0&#39;,
+  &#39;roverhuman_fxns_drive_stuck_t15p0&#39;,
+  &#39;roverhuman_fxns_drive_stuck_right_t15p0&#39;,
+  &#39;roverhuman_fxns_drive_stuck_left_t15p0&#39;]}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">apps</span><span class="p">[</span><span class="s1">&#39;hist_2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">faultsamples</span><span class="p">[</span><span class="s1">&#39;drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.drive&#39;: [&#39;elec_open&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.drive&#39;, fault=&#39;elec_open&#39;, rate=1.0, name=&#39;roverhuman_fxns_drive_elec_open_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.drive&#39;: [&#39;stuck&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.drive&#39;, fault=&#39;stuck&#39;, rate=1.0, name=&#39;roverhuman_fxns_drive_stuck_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.drive&#39;: [&#39;stuck_right&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.drive&#39;, fault=&#39;stuck_right&#39;, rate=1.0, name=&#39;roverhuman_fxns_drive_stuck_right_t15p0&#39;, time=15.0, phase=&#39;start&#39;),
+ SingleFaultScenario(sequence={15.0: Injection(faults={&#39;roverhuman.fxns.drive&#39;: [&#39;stuck_left&#39;]}, disturbances={})}, times=(15.0,), function=&#39;roverhuman.fxns.drive&#39;, fault=&#39;stuck_left&#39;, rate=1.0, name=&#39;roverhuman_fxns_drive_stuck_left_t15p0&#39;, time=15.0, phase=&#39;start&#39;)]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.tabulate</span> <span class="kn">import</span> <span class="n">NestedComparison</span>
-<span class="n">nc</span> <span class="o">=</span> <span class="n">NestedComparison</span><span class="p">(</span><span class="n">f_ecs</span><span class="p">,</span> <span class="n">phs</span><span class="p">,</span> <span class="n">samp_factors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;inputparams.t&#39;</span><span class="p">],</span> <span class="n">samps</span><span class="o">=</span><span class="n">apps</span><span class="p">,</span> <span class="n">samps_factors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fault&#39;</span><span class="p">],</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;end_dist&#39;</span><span class="p">,</span> <span class="s1">&#39;tot_deviation&#39;</span><span class="p">])</span>
+<span class="n">nc</span> <span class="o">=</span> <span class="n">NestedComparison</span><span class="p">(</span><span class="n">f_ecs</span><span class="p">,</span> <span class="n">phs</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;inputparams.t&#39;</span><span class="p">],</span> <span class="n">apps</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;fault&#39;</span><span class="p">],</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;end_dist&#39;</span><span class="p">,</span> <span class="s1">&#39;tot_deviation&#39;</span><span class="p">])</span>
 <span class="n">nc</span><span class="o">.</span><span class="n">sort_by_factor</span><span class="p">(</span><span class="s1">&#39;fault&#39;</span><span class="p">)</span>
 <span class="n">nc</span><span class="o">.</span><span class="n">sort_by_factor</span><span class="p">(</span><span class="s1">&#39;inputparams.t&#39;</span><span class="p">)</span>
 <span class="n">nc</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
@@ -1810,7 +1823,7 @@ NESTED SCENARIOS COMPLETE: 100%|██████████| 50/50 [01:39&lt;
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1841,224 +1854,223 @@ NESTED SCENARIOS COMPLETE: 100%|██████████| 50/50 [01:39&lt;
     <tr>
       <th>0</th>
       <th>stuck_left</th>
-      <td>30.044497</td>
-      <td>0.388610</td>
+      <td>24.035598</td>
+      <td>0.310888</td>
     </tr>
     <tr>
-      <th>1</th>
+      <th rowspan="2" valign="top">1</th>
       <th>stuck_left</th>
-      <td>31.264909</td>
+      <td>24.035598</td>
       <td>0.310888</td>
+    </tr>
+    <tr>
+      <th>stuck_right</th>
+      <td>24.415309</td>
+      <td>0.216505</td>
     </tr>
     <tr>
       <th>0</th>
       <th>stuck_right</th>
-      <td>30.519136</td>
-      <td>0.270632</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <th>stuck_right</th>
-      <td>31.644620</td>
+      <td>24.415309</td>
       <td>0.216505</td>
     </tr>
     <tr>
-      <th>2</th>
+      <th rowspan="2" valign="top">2</th>
       <th>stuck_left</th>
-      <td>33.705732</td>
-      <td>0.155444</td>
+      <td>25.988256</td>
+      <td>0.186533</td>
+    </tr>
+    <tr>
+      <th>stuck_right</th>
+      <td>26.216083</td>
+      <td>0.129903</td>
     </tr>
     <tr>
       <th>3</th>
       <th>stuck_left</th>
-      <td>33.705732</td>
-      <td>0.155444</td>
+      <td>26.964585</td>
+      <td>0.124355</td>
     </tr>
     <tr>
-      <th rowspan="2" valign="top">0</th>
+      <th>0</th>
       <th>elec_open</th>
-      <td>31.752378</td>
-      <td>0.148246</td>
-    </tr>
-    <tr>
-      <th>stuck</th>
-      <td>14.310387</td>
-      <td>0.148246</td>
+      <td>25.401902</td>
+      <td>0.118596</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">1</th>
       <th>stuck</th>
-      <td>18.677621</td>
+      <td>11.448310</td>
       <td>0.118596</td>
     </tr>
     <tr>
       <th>elec_open</th>
-      <td>32.631213</td>
+      <td>25.401902</td>
       <td>0.118596</td>
     </tr>
     <tr>
-      <th>2</th>
-      <th>stuck_right</th>
-      <td>33.895587</td>
-      <td>0.108253</td>
+      <th>0</th>
+      <th>stuck</th>
+      <td>11.448310</td>
+      <td>0.118596</td>
     </tr>
     <tr>
       <th>3</th>
       <th>stuck_right</th>
-      <td>33.895587</td>
-      <td>0.108253</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <th>stuck_left</th>
-      <td>34.926143</td>
-      <td>0.077722</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <th>stuck_left</th>
-      <td>34.926143</td>
-      <td>0.077722</td>
+      <td>27.116470</td>
+      <td>0.086602</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">2</th>
       <th>elec_open</th>
-      <td>34.388884</td>
-      <td>0.059298</td>
+      <td>26.808039</td>
+      <td>0.071158</td>
     </tr>
     <tr>
       <th>stuck</th>
-      <td>27.412088</td>
-      <td>0.059298</td>
+      <td>18.435883</td>
+      <td>0.071158</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <th>stuck_left</th>
+      <td>27.940915</td>
+      <td>0.062178</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <th>stuck_left</th>
+      <td>27.940915</td>
+      <td>0.062178</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">3</th>
       <th>elec_open</th>
-      <td>34.388884</td>
-      <td>0.059298</td>
+      <td>27.511107</td>
+      <td>0.047439</td>
     </tr>
     <tr>
       <th>stuck</th>
-      <td>27.412088</td>
-      <td>0.059298</td>
+      <td>21.929670</td>
+      <td>0.047439</td>
     </tr>
     <tr>
       <th>5</th>
       <th>stuck_right</th>
-      <td>35.021071</td>
-      <td>0.054126</td>
+      <td>28.016857</td>
+      <td>0.043301</td>
     </tr>
     <tr>
       <th>4</th>
       <th>stuck_right</th>
-      <td>35.021071</td>
-      <td>0.054126</td>
+      <td>28.016857</td>
+      <td>0.043301</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">5</th>
       <th>stuck</th>
-      <td>31.779321</td>
-      <td>0.029649</td>
+      <td>25.423457</td>
+      <td>0.023719</td>
     </tr>
     <tr>
       <th>elec_open</th>
-      <td>35.267719</td>
-      <td>0.029649</td>
+      <td>28.214176</td>
+      <td>0.023719</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">4</th>
       <th>stuck</th>
-      <td>31.779321</td>
-      <td>0.029649</td>
+      <td>25.423457</td>
+      <td>0.023719</td>
     </tr>
     <tr>
       <th>elec_open</th>
-      <td>35.267719</td>
-      <td>0.029649</td>
+      <td>28.214176</td>
+      <td>0.023719</td>
     </tr>
     <tr>
       <th rowspan="3" valign="top">9</th>
       <th>stuck_left</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>stuck</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>elec_open</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th rowspan="4" valign="top">8</th>
       <th>stuck_right</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>stuck_left</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>stuck</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>elec_open</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th rowspan="4" valign="top">7</th>
       <th>stuck_right</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>stuck_left</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>stuck</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>elec_open</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th rowspan="4" valign="top">6</th>
       <th>stuck_right</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>stuck_left</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>stuck</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>elec_open</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>9</th>
       <th>stuck_right</th>
-      <td>36.146555</td>
+      <td>28.917244</td>
       <td>0.000000</td>
     </tr>
   </tbody>
@@ -2066,7 +2078,7 @@ NESTED SCENARIOS COMPLETE: 100%|██████████| 50/50 [01:39&lt;
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">as_plots</span><span class="p">(</span><span class="s1">&#39;end_dist&#39;</span><span class="p">,</span> <span class="s1">&#39;tot_deviation&#39;</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
@@ -2077,7 +2089,7 @@ NESTED SCENARIOS COMPLETE: 100%|██████████| 50/50 [01:39&lt;
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_HFAC_Analyses_HFAC_Analyses_32_0.png" src="../../../_images/examples_rover_HFAC_Analyses_HFAC_Analyses_32_0.png" />
+<img alt="../../../_images/examples_rover_HFAC_Analyses_HFAC_Analyses_34_0.png" src="../../../_images/examples_rover_HFAC_Analyses_HFAC_Analyses_34_0.png" />
 </div>
 </div>
 </section>

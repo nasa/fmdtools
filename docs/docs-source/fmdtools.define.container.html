@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.container &mdash; fmdtools 2.0.7 documentation</title>
+  <title>fmdtools.define.container &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../_static/documentation_options.js?v=20623aea"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -521,6 +521,11 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -664,10 +669,10 @@
 <span id="fmdtools-define-container"></span><h1>fmdtools.define.container<a class="headerlink" href="#module-fmdtools.define.container" title="Link to this heading"></a></h1>
 <p>Package defining system variables other base constructs.</p>
 <p>The containers subpackage provides the elemental building puzzle pieces needed (i.e., containers for holding states, modes, etc.) to develop simulations, shown below.</p>
-<figure class="align-default" id="id38">
+<figure class="align-default" id="id36">
 <a class="reference internal image-reference" href="../_images/Containers.svg"><img alt="fmdtools container classes" src="../_images/Containers.svg" width="800" /></a>
 <figcaption>
-<p><span class="caption-text">Container classes in fmdtools and their inheritance.</span><a class="headerlink" href="#id38" title="Link to this image"></a></p>
+<p><span class="caption-text">Container classes in fmdtools and their inheritance.</span><a class="headerlink" href="#id36" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>These classes are provided in the following modules:</p>
@@ -882,6 +887,12 @@ The default is None.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.get_pref_attrs">
+<span class="sig-name descname"><span class="pre">get_pref_attrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.get_pref_attrs" title="Link to this definition"></a></dt>
+<dd><p>Return dict of Container attributes with ‘<a href="#id42"><span class="problematic" id="id43">prefix_</span></a>’ as the var name.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.get_track">
 <span class="sig-name descname"><span class="pre">get_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">track</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.get_track" title="Link to this definition"></a></dt>
 <dd><p>Get tracking params for a given dataobject (State, Mode, Rand, etc).</p>
@@ -1068,10 +1079,10 @@ float in initialization.</p>
 <section id="fmdtools-define-container-mode">
 <h2>fmdtools.define.container.mode<a class="headerlink" href="#fmdtools-define-container-mode" title="Link to this heading"></a></h2>
 <p>The following template shows the basic syntax to use to define modes:</p>
-<figure class="align-default" id="id39">
+<figure class="align-default" id="id37">
 <a class="reference internal image-reference" href="../_images/mode_structure.svg"><img alt="Structure of a Mode Class" src="../_images/mode_structure.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">Mode class template/example.</span><a class="headerlink" href="#id39" title="Link to this image"></a></p>
+<p><span class="caption-text">Mode class template/example.</span><a class="headerlink" href="#id37" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p id="module-fmdtools.define.container.mode">Defines <a class="reference internal" href="#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a> class for defining (faulty and otherwise) <a class="reference internal" href="Development%20Guide.html#term-Mode"><span class="xref std std-term">mode</span></a> s.</p>
@@ -1083,17 +1094,22 @@ held in Blocks.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">ExampleMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">set()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_state_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_modes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'standby'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">ExampleMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a></p>
-<p>Create class ExampleMode instance</p>
+<p>Example mode for testing/docs.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.exclusive">
 <span class="sig-name descname"><span class="pre">exclusive</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.exclusive" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.faultmodes">
-<span class="sig-name descname"><span class="pre">faultmodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.faultmodes" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.fault_no_charge">
+<span class="sig-name descname"><span class="pre">fault_no_charge</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Fault(prob=1e-05,</span> <span class="pre">cost=100,</span> <span class="pre">phases=(('standby',</span> <span class="pre">1.0),),</span> <span class="pre">disturbances=(),</span> <span class="pre">units='sim')</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.fault_no_charge" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.fault_short">
+<span class="sig-name descname"><span class="pre">fault_short</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(1e-05,</span> <span class="pre">100,</span> <span class="pre">(('supply',</span> <span class="pre">1.0),))</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.fault_short" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1102,18 +1118,8 @@ held in Blocks.</p></li>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.fm_args">
-<span class="sig-name descname"><span class="pre">fm_args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'no_charge':</span> <span class="pre">(1e-05,</span> <span class="pre">100,</span> <span class="pre">{'standby':</span> <span class="pre">1.0}),</span> <span class="pre">'short':</span> <span class="pre">(1e-05,</span> <span class="pre">100,</span> <span class="pre">{'supply':</span> <span class="pre">1.0})}</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.fm_args" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.mode">
 <span class="sig-name descname"><span class="pre">mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.mode" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.mode_state_dict">
-<span class="sig-name descname"><span class="pre">mode_state_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.mode_state_dict" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1122,17 +1128,17 @@ held in Blocks.</p></li>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.sub_modes">
-<span class="sig-name descname"><span class="pre">sub_modes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.sub_modes" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.sub_faults">
+<span class="sig-name descname"><span class="pre">sub_faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.sub_faults" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Fault">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">Fault</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Fault" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">Fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">failrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Fault" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
-<p>Stores Default Attributes for modes to use in Mode.faultmodes.</p>
+<p>Stores Default Attributes for individual fault modes.</p>
 <section id="fields">
 <h3>Fields<a class="headerlink" href="#fields" title="Link to this heading"></a></h3>
 <dl class="simple">
@@ -1140,8 +1146,12 @@ held in Blocks.</p></li>
 </dd>
 <dt>cost<span class="classifier">float</span></dt><dd><p>Individual mode cost (e.g., of repair)</p>
 </dd>
-<dt>phases<span class="classifier">dict</span></dt><dd><p>Opportunity vector mapping phases of operation to relative probability.
-i.e., phase_probability = Fault.prob * Fault.phases[phase]</p>
+<dt>phases<span class="classifier">tuple</span></dt><dd><p>Opportunity vector mapping phases of operation to relative probability.
+i.e., phase_probability = Fault.prob * Fault.phases[phase]
+Has format (‘phasename1’, value, ‘phasename2’, value2)</p>
+</dd>
+<dt>disturbances<span class="classifier">tuple</span></dt><dd><p>Disturbances caused by the fault to aspect(s) of the containing simulable.
+e.g. (‘s.x’, 1.0, ‘s.y’, 2.0)</p>
 </dd>
 <dt>units<span class="classifier">str</span></dt><dd><p>Units on probability. Can be a unit of continuous (‘sec’, ‘min’, ‘hr’, ‘day’) or
 discrete (‘sim’) time. Default is ‘sim’.</p>
@@ -1196,8 +1206,13 @@ define the fault rate. The default is ‘hr’.</p></li>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.Fault.disturbances">
+<span class="sig-name descname"><span class="pre">disturbances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Fault.disturbances" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Fault.phases">
-<span class="sig-name descname"><span class="pre">phases</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Fault.phases" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">phases</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Fault.phases" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1211,6 +1226,158 @@ define the fault rate. The default is ‘hr’.</p></li>
 <dd></dd></dl>
 
 </section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">FlexibleMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">set()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_faults</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a></p>
+<p>Create class FlexibleMode instance</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.faultmodes">
+<span class="sig-name descname"><span class="pre">faultmodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.faultmodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.faults">
+<span class="sig-name descname"><span class="pre">faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.faults" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.fm_args">
+<span class="sig-name descname"><span class="pre">fm_args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.fm_args" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.fs_args">
+<span class="sig-name descname"><span class="pre">fs_args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.fs_args" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.get_all_faultnames">
+<span class="sig-name descname"><span class="pre">get_all_faultnames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.get_all_faultnames" title="Link to this definition"></a></dt>
+<dd><p>Get all names of faults.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.get_fault">
+<span class="sig-name descname"><span class="pre">get_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faultname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.get_fault" title="Link to this definition"></a></dt>
+<dd><p>Get the Fault object associated with the given faultname.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>faultname</strong> (<em>str</em>) – Name of the fault (if defined as a part of the mode at value fault_name).
+Can also be parameters of the fault.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fault</strong> – Fault container with given fields..</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.define.container.mode.Fault" title="fmdtools.define.container.mode.Fault">Fault</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.init_faultmodes">
+<span class="sig-name descname"><span class="pre">init_faultmodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.init_faultmodes" title="Link to this definition"></a></dt>
+<dd><p>Initialize the self.faultmodes dictionary from the parameters of the Mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**faults</strong> (<em>kwargs</em>) – Arguments to instantiate for the faultmodes.
+e.g., faultname=(0.1, 200).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.init_faultspace">
+<span class="sig-name descname"><span class="pre">init_faultspace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">franges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hmode_'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.init_faultspace" title="Link to this definition"></a></dt>
+<dd><p>Associate n-disturbance mode combinations as faults.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>franges</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of form {‘varname’: {val1, val2…} of ranges of values for
+for each disturbance (if used to generate modes). The default is {}.</p></li>
+<li><p><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of faultstate combinations to sample. The default is ‘all’.</p></li>
+<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Seed used in selection (if n!=’all). The default is 42.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) – Prefix of fault names. Default is “<a href="#id44"><span class="problematic" id="id45">hmode_</span></a>”</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Entries for the Fault (e.g., phases, etc)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.set_field">
+<span class="sig-name descname"><span class="pre">set_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fieldname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.set_field" title="Link to this definition"></a></dt>
+<dd><p>Extend BaseContainer.assign to not set faultmodes (always the same).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.sub_faults">
+<span class="sig-name descname"><span class="pre">sub_faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.sub_faults" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.HumanErrorMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">HumanErrorMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a></p>
+<p>Mode for Human Errors using HEART-based model.</p>
+<p>Overall failrate of human error determined by given:</p>
+<dl class="simple">
+<dt>gtp<span class="classifier">float</span></dt><dd><p>Generic task probability</p>
+</dd>
+<dt>epc_XX<span class="classifier">tuple/list</span></dt><dd><p>Error producing condition factors. May be specified as performance shaping
+factors or tuple (factor, effect proportion).</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExHMode</span><span class="p">(</span><span class="n">HumanErrorMode</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">gtp</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="gp">... </span>    <span class="n">epc_1</span> <span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exh</span> <span class="o">=</span> <span class="n">ExHMode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exh</span><span class="o">.</span><span class="n">failrate</span>
+<span class="go">0.015</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExHMode2</span><span class="p">(</span><span class="n">HumanErrorMode</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">gtp</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="gp">... </span>    <span class="n">epc_1</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="gp">... </span>    <span class="n">epc_2</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exh2</span> <span class="o">=</span> <span class="n">ExHMode2</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exh2</span><span class="o">.</span><span class="n">failrate</span>
+<span class="go">0.06</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.HumanErrorMode.calc_he_rate">
+<span class="sig-name descname"><span class="pre">calc_he_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.calc_he_rate" title="Link to this definition"></a></dt>
+<dd><p>Calculate self.failrate based on a human error probability model.</p>
+<p>This model uses an overall generic task probability (set by self.gtp) as well as
+error producing conditions (EPCs) to determine the overall failure rate of the
+task.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.HumanErrorMode.failrate">
+<span class="sig-name descname"><span class="pre">failrate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.failrate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.HumanErrorMode.faults">
+<span class="sig-name descname"><span class="pre">faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.faults" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.HumanErrorMode.gtp">
+<span class="sig-name descname"><span class="pre">gtp</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.gtp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.HumanErrorMode.sub_faults">
+<span class="sig-name descname"><span class="pre">sub_faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.sub_faults" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1232,43 +1399,22 @@ is provided, the prob argument in faultparams is a conditional probability
 <dt>probtype<span class="classifier">str, optional</span></dt><dd><p>Type of probability in the probability model, a per-time ‘rate’ or
 per-run ‘prob’. The default is ‘rate’.</p>
 </dd>
-<dt>units<span class="classifier">str, optional</span></dt><dd><p>Type of units (‘sec’/’min’/’hr’/’day’) used for the rates.
-Default is ‘sim’, which is unitless (prob/simulation).</p>
-</dd>
-<dt>phases<span class="classifier">dict</span></dt><dd><p>Phases to inject faults in.</p>
-</dd>
 <dt>exclusive<span class="classifier">True/False</span></dt><dd><p>Whether fault modes are exclusive of each other or not.
 Default is False (i.e. more than one can be present).</p>
 </dd>
-<dt>longnames<span class="classifier">dict</span></dt><dd><p>Longer names for the faults (if desired). {faultname: longname}</p>
-</dd>
-<dt>faults<span class="classifier">set</span></dt><dd><p>Set of faults present (or not) at any given time.</p>
-</dd>
-<dt>mode<span class="classifier">str</span></dt><dd><p>Name of the current mode. the default is ‘nominal’.</p>
-</dd>
-<dt>fm_args<span class="classifier">dict</span></dt><dd><p>Arguments to Mode.init_faultmodes().</p>
-</dd>
-<dt>he_args<span class="classifier">tuple</span></dt><dd><p>Arguments for add_he_rate defining a human error probability model.</p>
-</dd>
-<dt>sfs_args<span class="classifier">tuple</span></dt><dd><p>Arguments for self.init_single_faultstates (franges, {kwargs}).</p>
-</dd>
-<dt>nfs_args<span class="classifier">tuple</span></dt><dd><p>Arguments for self.init_n_faultstates (<a href="#id19"><span class="problematic" id="id20">*</span></a>args, {kwargs}).</p>
-</dd>
-<dt>fsm_args<span class="classifier">tuple</span></dt><dd><p>Arguments for self.init_faultstates_modes (manual_modes, {kwargs}).</p>
+<dt>default_xx<span class="classifier">float</span></dt><dd><p>Default values for Fault fields (e.g., prob, phases, etc)</p>
 </dd>
 </dl>
 <p>These fields are then used in simulation and elsewhere.</p>
 </section>
-<section id="id21">
-<h3>Fields<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<section id="id19">
+<h3>Fields<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>faults<span class="classifier">set</span></dt><dd><p>Set of faults present (or not) at any given time</p>
 </dd>
+<dt>sub_faults<span class="classifier">bool</span></dt><dd><p>Whether objects contained by the object are faulty.</p>
+</dd>
 <dt>mode<span class="classifier">str</span></dt><dd><p>Name of the current mode. the default is ‘nominal’</p>
-</dd>
-<dt>mode_state_dict: dict</dt><dd><p>Maps modes to states. Assigned by init_faultstates methods.</p>
-</dd>
-<dt>sub_modes: dict</dt><dd><p>Maps modes to internal architecture elements.</p>
 </dd>
 <dt>faultmodes<span class="classifier">dict</span></dt><dd><p>Dictionary of <a class="reference internal" href="#fmdtools.define.container.mode.Fault" title="fmdtools.define.container.mode.Fault"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fault</span></code></a> defining possible fault modes and
 their properties</p>
@@ -1276,8 +1422,8 @@ their properties</p>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleMode</span><span class="p">(</span><span class="n">Mode</span><span class="p">):</span>
-<span class="gp">... </span>   <span class="n">fm_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;no_charge&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;standby&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}),</span>
-<span class="gp">... </span>             <span class="s2">&quot;short&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;supply&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})}</span>
+<span class="gp">... </span>   <span class="n">fault_no_charge</span> <span class="o">=</span> <span class="n">Fault</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">((</span><span class="s1">&#39;standby&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),))</span>
+<span class="gp">... </span>   <span class="n">fault_short</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">((</span><span class="s1">&#39;supply&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),))</span>
 <span class="gp">... </span>   <span class="n">opermodes</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;supply&quot;</span><span class="p">,</span> <span class="s2">&quot;charge&quot;</span><span class="p">,</span> <span class="s2">&quot;standby&quot;</span><span class="p">)</span>
 <span class="gp">... </span>   <span class="n">exclusive</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="gp">... </span>   <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;standby&quot;</span>
@@ -1286,8 +1432,8 @@ their properties</p>
 <span class="go">&#39;standby&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span><span class="o">.</span><span class="n">any_faults</span><span class="p">()</span>
 <span class="go">False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span><span class="o">.</span><span class="n">faultmodes</span>
-<span class="go">{&#39;no_charge&#39;: Fault(prob=1e-05, cost=100, phases={&#39;standby&#39;: 1.0}, units=&#39;sim&#39;), &#39;short&#39;: Fault(prob=1e-05, cost=100, phases={&#39;supply&#39;: 1.0}, units=&#39;sim&#39;)}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span><span class="o">.</span><span class="n">get_faults</span><span class="p">()</span>
+<span class="go">{&#39;no_charge&#39;: Fault(prob=1e-05, cost=100, phases=((&#39;standby&#39;, 1.0),), disturbances=(), units=&#39;sim&#39;), &#39;short&#39;: Fault(prob=1e-05, cost=100, phases=((&#39;supply&#39;, 1.0),), disturbances=(), units=&#39;sim&#39;)}</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -1297,26 +1443,6 @@ their properties</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>*fault</strong> (<em>str</em><em>(</em><em>s</em><em>)</em>) – name(s) of the fault to add to the black</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.add_he_rate">
-<span class="sig-name descname"><span class="pre">add_he_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EPCs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'na':</span> <span class="pre">[1,</span> <span class="pre">0]}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.add_he_rate" title="Link to this definition"></a></dt>
-<dd><p>Calculate self.failrate based on a human error probability model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>gtp</strong> (<em>float</em>) – Generic Task Probability. (from HEART)</p></li>
-<li><p><strong>EPCs</strong> (<em>Dict</em><em> or </em><em>list</em>) – <p>Error producing conditions (and respective factors) for a given task
-(from HEART). Used in format:</p>
-<ul>
-<li><p>Dict {‘name’:[EPC factor, Effect proportion]} or</p></li>
-<li><p>list [[EPC factor, Effect proportion],[[EPC factor, Effect proportion]]]</p></li>
-</ul>
-</p></li>
-</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1335,7 +1461,7 @@ their properties</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.default_track">
-<span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('mode',</span> <span class="pre">'faults')</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.default_track" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('mode',</span> <span class="pre">'faults',</span> <span class="pre">'sub_faults')</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.default_track" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1349,24 +1475,45 @@ their properties</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.faultmodes">
-<span class="sig-name descname"><span class="pre">faultmodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.faultmodes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.faults">
 <span class="sig-name descname"><span class="pre">faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.faults" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.fm_args">
-<span class="sig-name descname"><span class="pre">fm_args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.fm_args" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.get_all_faultnames">
+<span class="sig-name descname"><span class="pre">get_all_faultnames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.get_all_faultnames" title="Link to this definition"></a></dt>
+<dd><p>Get all names of faults.</p>
+</dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.fsm_args">
-<span class="sig-name descname"><span class="pre">fsm_args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.fsm_args" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.get_fault">
+<span class="sig-name descname"><span class="pre">get_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faultname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.get_fault" title="Link to this definition"></a></dt>
+<dd><p>Get the Fault object associated with the given faultname.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>faultname</strong> (<em>str</em>) – Name of the fault (if defined as a part of the mode at value fault_name).
+Can also be parameters of the fault.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fault</strong> – Fault container with given fields..</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.define.container.mode.Fault" title="fmdtools.define.container.mode.Fault">Fault</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.get_fault_disturbances">
+<span class="sig-name descname"><span class="pre">get_fault_disturbances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.get_fault_disturbances" title="Link to this definition"></a></dt>
+<dd><p>Get all disturbances caused by present (or specified) faults.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.get_faults">
+<span class="sig-name descname"><span class="pre">get_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.get_faults" title="Link to this definition"></a></dt>
+<dd><p>Get Fault objects for all associated faults.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.has_fault">
@@ -1378,11 +1525,6 @@ their properties</p>
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.he_args">
-<span class="sig-name descname"><span class="pre">he_args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.he_args" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.in_mode">
@@ -1396,110 +1538,14 @@ their properties</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.init_faultmodes">
-<span class="sig-name descname"><span class="pre">init_faultmodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fm_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.init_faultmodes" title="Link to this definition"></a></dt>
-<dd><p>Initialize the self.faultmodes dictionary from the parameters of the Mode.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>fm_args</strong> (<em>dict</em><em> or </em><em>tuple</em>) – <dl>
-<dt>Dictionary/tuple of arguments defining faultmodes, which can have forms:</dt><dd><ul class="simple">
-<li><p>tuple (‘fault1’, ‘fault2’, ‘fault3’) (just the respective faults)</p></li>
-<li><p>dict {‘fault1’: args, ‘fault2’: kwargs}, where args and kwargs are</p></li>
-</ul>
-<p>args or kwargs to Fault (prob, phases, cost, units, etc).</p>
-</dd>
-</dl>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.init_faultstate_modes">
-<span class="sig-name descname"><span class="pre">init_faultstate_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">manual_modes</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.init_faultstate_modes" title="Link to this definition"></a></dt>
-<dd><p>Associate modes manual_modes with provided faultstates.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>manual_modes</strong> (<em>dict</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>Dictionary/Set of faultmodes with structure, which has the form:</dt><dd><ul>
-<li><dl class="simple">
-<dt>dict {‘fault1’: [atts], ‘fault2’: atts}, where atts may be of form:</dt><dd><ul>
-<li><p>states: {state1: val1, state2, val2}</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Entries for the Fault (e.g., phases, etc)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.init_hist_att">
 <span class="sig-name descname"><span class="pre">init_hist_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">att</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;U20'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.init_hist_att" title="Link to this definition"></a></dt>
 <dd><p>Add field ‘att’ to history. Accommodates faults and mode tracking.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.init_n_faultstates">
-<span class="sig-name descname"><span class="pre">init_n_faultstates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">franges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.init_n_faultstates" title="Link to this definition"></a></dt>
-<dd><p>Associate n faultstate mode combinations as faults.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>franges</strong> (<em>dict</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>Dictionary of form {‘state’:{val1, val2…}) of ranges for each health state</dt><dd><p>(if used to generate modes). The default is {}.</p>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of faultstate combinations to sample. The default is ‘all’.</p></li>
-<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Seed used in selection (if n!=’all). The default is 42.</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Entries for the Fault (e.g., phases, etc)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.init_single_faultstates">
-<span class="sig-name descname"><span class="pre">init_single_faultstates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">franges</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.init_single_faultstates" title="Link to this definition"></a></dt>
-<dd><p>Associate modes with given faultstates as faults.</p>
-<p>Modes generated for each frange (but not combined).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>franges</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of form {‘state’:{val1, val2…}) of ranges for each health state
-(if used to generate modes). The default is {}.</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Entries for the Fault (e.g., phases, etc)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.longnames">
-<span class="sig-name descname"><span class="pre">longnames</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.longnames" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.mode">
 <span class="sig-name descname"><span class="pre">mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'nominal'</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.mode" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.mode_state_dict">
-<span class="sig-name descname"><span class="pre">mode_state_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.mode_state_dict" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.nfs_args">
-<span class="sig-name descname"><span class="pre">nfs_args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.nfs_args" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1516,11 +1562,6 @@ their properties</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.opermodes">
 <span class="sig-name descname"><span class="pre">opermodes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('nominal',)</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.opermodes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.phases">
-<span class="sig-name descname"><span class="pre">phases</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.phases" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1578,12 +1619,6 @@ their properties</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.set_field">
-<span class="sig-name descname"><span class="pre">set_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fieldname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.set_field" title="Link to this definition"></a></dt>
-<dd><p>Extend BaseContainer.assign to not set faultmodes (always the same).</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.set_mode">
 <span class="sig-name descname"><span class="pre">set_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.set_mode" title="Link to this definition"></a></dt>
 <dd><p>Set a mode in the block.</p>
@@ -1595,13 +1630,8 @@ their properties</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.sfs_args">
-<span class="sig-name descname"><span class="pre">sfs_args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.sfs_args" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.sub_modes">
-<span class="sig-name descname"><span class="pre">sub_modes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.sub_modes" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.sub_faults">
+<span class="sig-name descname"><span class="pre">sub_faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.sub_faults" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1615,23 +1645,6 @@ their properties</p>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.units">
-<span class="sig-name descname"><span class="pre">units</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'sim'</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.units" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.units_set">
-<span class="sig-name descname"><span class="pre">units_set</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('sec',</span> <span class="pre">'min',</span> <span class="pre">'hr',</span> <span class="pre">'day',</span> <span class="pre">'sim')</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.units_set" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.update_modestates">
-<span class="sig-name descname"><span class="pre">update_modestates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.update_modestates" title="Link to this definition"></a></dt>
-<dd><p>Update states of the model associated with a specific fault mode.</p>
-<p>(see init_faultstates)</p>
-</dd></dl>
-
 </section>
 </dd></dl>
 
@@ -1641,17 +1654,17 @@ their properties</p>
 <p>Defines <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a> class for representing variables that change over time.</p>
 <p>State classes are used to represent mutables properties of the system that change over time.</p>
 <p>State classes are extended and deployed by the user, as shown below:</p>
-<figure class="align-default" id="id40">
+<figure class="align-default" id="id38">
 <a class="reference internal image-reference" href="../_images/State.svg"><img alt="example state class" src="../_images/State.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a> class to hold x/y fields.</span><a class="headerlink" href="#id40" title="Link to this image"></a></p>
+<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a> class to hold x/y fields.</span><a class="headerlink" href="#id38" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>The following template shows the basic syntax used to define states:</p>
-<figure class="align-default" id="id41">
+<figure class="align-default" id="id39">
 <a class="reference internal image-reference" href="../_images/state_structure.svg"><img alt="Structure of a State Class" src="../_images/state_structure.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">State class template/example.</span><a class="headerlink" href="#id41" title="Link to this image"></a></p>
+<p><span class="caption-text">State class template/example.</span><a class="headerlink" href="#id39" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <dl class="py class">
@@ -1918,17 +1931,17 @@ The default is 2 (points to the place in the model)</p></li>
 <span id="fmdtools-define-container-parameter"></span><h2>fmdtools.define.container.parameter<a class="headerlink" href="#module-fmdtools.define.container.parameter" title="Link to this heading"></a></h2>
 <p>Defines <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to represent attributes that do not change.</p>
 <p><a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> classes are used to represent immutable properties of the system. <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> classes are extended and deployed by the user, as shown below:</p>
-<figure class="align-default" id="id42">
+<figure class="align-default" id="id40">
 <a class="reference internal image-reference" href="../_images/Parameter.svg"><img alt="example state class" src="../_images/Parameter.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to hold x/y/z fields.</span><a class="headerlink" href="#id42" title="Link to this image"></a></p>
+<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to hold x/y/z fields.</span><a class="headerlink" href="#id40" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>The following template shows the basic syntax to use to define parameters:</p>
-<figure class="align-default" id="id43">
+<figure class="align-default" id="id41">
 <a class="reference internal image-reference" href="../_images/parameter_structure.svg"><img alt="Structure of a Parameter Class" src="../_images/parameter_structure.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">Parameter class template/example.</span><a class="headerlink" href="#id43" title="Link to this image"></a></p>
+<p><span class="caption-text">Parameter class template/example.</span><a class="headerlink" href="#id41" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <dl class="py class">
@@ -2002,7 +2015,7 @@ self.k_lim or set constraints self.k_set</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.parameter.Parameter.check_pickle">
 <span class="sig-name descname"><span class="pre">check_pickle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.parameter.Parameter.check_pickle" title="Link to this definition"></a></dt>
-<dd><p>Checks to make sure pickled object will get <a href="#id22"><span class="problematic" id="id23">*</span></a>args and <a href="#id24"><span class="problematic" id="id25">**</span></a>kwargs</p>
+<dd><p>Checks to make sure pickled object will get <a href="#id20"><span class="problematic" id="id21">*</span></a>args and <a href="#id22"><span class="problematic" id="id23">**</span></a>kwargs</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2079,7 +2092,7 @@ sample x from ‘randname’ function in numpy.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.define.container.rand.calc_prob_for_shuffle_permutation" title="fmdtools.define.container.rand.calc_prob_for_shuffle_permutation"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_prob_for_shuffle_permutation()</span></code></a>: Calculate probability for random.shuffle
 and random.permutation.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.define.container.rand.calc_prob_for_permuted" title="fmdtools.define.container.rand.calc_prob_for_permuted"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_prob_for_permuted()</span></code></a>: Calculate probability for random.permuted.</p></li>
-<li><p>:func:<a href="#id26"><span class="problematic" id="id27">`</span></a>array</p></li>
+<li><p>:func:<a href="#id24"><span class="problematic" id="id25">`</span></a>array</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.ExampleRand">
@@ -2262,8 +2275,8 @@ these states with methods called from the rng when run_stochastic=True.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id28">
-<span class="sig-name descname"><span class="pre">rng</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Generator</span></em><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id26">
+<span class="sig-name descname"><span class="pre">rng</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Generator</span></em><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2277,8 +2290,8 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id29">
-<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id27">
+<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2746,8 +2759,8 @@ global</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id30">
-<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id28">
+<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2779,8 +2792,8 @@ global</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id31">
-<span class="sig-name descname"><span class="pre">run_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id29">
+<span class="sig-name descname"><span class="pre">run_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2792,33 +2805,33 @@ global_timestep.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">t_loc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="id32">
-<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id33">
-<span class="sig-name descname"><span class="pre">t_loc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">timernames</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id34">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id35">
-<span class="sig-name descname"><span class="pre">timernames</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id36">
-<span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#id36" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id37">
-<span class="sig-name descname"><span class="pre">use_local</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id37" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">use_local</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

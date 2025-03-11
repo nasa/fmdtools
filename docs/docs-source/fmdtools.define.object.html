@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.object &mdash; fmdtools 2.0.7 documentation</title>
+  <title>fmdtools.define.object &mdash; fmdtools 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=9a3ee07e"></script>
+      <script src="../_static/documentation_options.js?v=20623aea"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-7">Version: 2.0.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -521,6 +521,11 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
@@ -882,6 +887,12 @@ Initializing all possible using the ‘all’ option:</p>
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.create_method_subgraph">
 <span class="sig-name descname"><span class="pre">create_method_subgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.create_method_subgraph" title="Link to this definition"></a></dt>
 <dd><p>Create networkx graph of the Block and its methods.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.create_name">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.create_name" title="Link to this definition"></a></dt>
+<dd><p>Create a name for the object (default is class name).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1281,6 +1292,27 @@ attributes.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.set_vars">
+<span class="sig-name descname"><span class="pre">set_vars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.set_vars" title="Link to this definition"></a></dt>
+<dd><p>Set variables in the model to set values (useful for optimization, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>varlist</strong> (<em>list</em><em> of </em><em>lists/tuples</em>) – <dl class="simple">
+<dt>List of variables to set, with possible structures:</dt><dd><p>[[‘fxnname’, ‘att1’], [‘fxnname2’, ‘comp1’, ‘att2’], [‘flowname’, ‘att3’]]
+[‘fxnname.att1’, ‘fxnname.comp1.att2’, ‘flowname.att3’]</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>varvalues</strong> (<em>list</em>) – List of values corresponding to varlist</p></li>
+<li><p><strong>kwargs</strong> (<em>kwargs</em>) – attribute-value pairs. If provided, must be passed using ** syntax:
+mdl.set_vars(<a href="#id3"><span class="problematic" id="id4">**</span></a>{‘fxnname.varname’:value})</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.track">
 <span class="sig-name descname"><span class="pre">track</span></span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.track" title="Link to this definition"></a></dt>
@@ -1335,7 +1367,7 @@ attributes.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.init_obj">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.base.</span></span><span class="sig-name descname"><span class="pre">init_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objclass=&lt;class</span> <span class="pre">'fmdtools.define.object.base.BaseObject'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track='default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.init_obj" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.base.</span></span><span class="sig-name descname"><span class="pre">init_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objclass=&lt;class</span> <span class="pre">'fmdtools.define.object.base.BaseObject'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track='default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.init_obj" title="Link to this definition"></a></dt>
 <dd><p>Initialize an object.</p>
 <p>Enables one to instantiate different types of objects with given
 states/parameters or pass an already-constructured object.</p>
@@ -1649,7 +1681,7 @@ convey the spacial properties of a model.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.copy" title="Link to this definition"></a></dt>
-<dd><p>Copy the Geom with given <a href="#id3"><span class="problematic" id="id4">*</span></a>args and <a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs.</p>
+<dd><p>Copy the Geom with given <a href="#id5"><span class="problematic" id="id6">*</span></a>args and <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1919,8 +1951,8 @@ whether something is on the line would be defined by the parameter:</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">PointParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.PointParam" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
 <p>Parameter defining points. May be extended with buffers.</p>
-<section id="id7">
-<h3>Fields<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<section id="id9">
+<h3>Fields<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>x<span class="classifier">float</span></dt><dd><p>x-location of point.</p>
 </dd>
@@ -1956,8 +1988,8 @@ is on the point would be defined by the parameter:</p>
 <dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
 <p>Parameter defining polygons. May be extended with buffers.</p>
 <p>…</p>
-<section id="id8">
-<h3>Fields<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<section id="id10">
+<h3>Fields<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>shell<span class="classifier">tuple</span></dt><dd><p>tuple of points ((x1, y1), …) defining outer shell.</p>
 </dd>

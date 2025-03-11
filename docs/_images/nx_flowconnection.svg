@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="102.136875pt" height="83.878125pt" viewBox="0 0 102.136875 83.878125" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="102.136875pt" height="84.958125pt" viewBox="0 0 102.136875 84.958125" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2025-01-29T15:25:25.608372</dc:date>
+    <dc:date>2025-03-10T17:11:34.399763</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -21,8 +21,8 @@
  </defs>
  <g id="figure_1">
   <g id="patch_1">
-   <path d="M 0 83.878125 
-L 102.136875 83.878125 
+   <path d="M 0 84.958125 
+L 102.136875 84.958125 
 L 102.136875 0 
 L 0 0 
 z
@@ -30,14 +30,14 @@ z
   </g>
   <g id="axes_1">
    <g id="patch_2">
-    <path d="M 36.671354 49.498125 
-Q 51.066723 49.498125 64.344058 49.498125 
-" clip-path="url(#pd6224ed3ef)" style="fill: none; stroke: #000000; stroke-linecap: round"/>
-    <path d="M 58.344058 46.498125 
-L 64.344058 49.498125 
-L 58.344058 52.498125 
+    <path d="M 36.671354 50.038125 
+Q 51.066723 50.038125 64.344058 50.038125 
+" clip-path="url(#p86cd105294)" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+    <path d="M 58.344058 47.038125 
+L 64.344058 50.038125 
+L 58.344058 53.038125 
 z
-" clip-path="url(#pd6224ed3ef)" style="stroke: #000000; stroke-linecap: round"/>
+" clip-path="url(#p86cd105294)" style="stroke: #000000; stroke-linecap: round"/>
    </g>
    <g id="text_1">
     <!-- FlowEdgeStyle -->
@@ -288,8 +288,8 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="pd6224ed3ef">
-   <rect x="23.168437" y="22.318125" width="55.8" height="54.36"/>
+  <clipPath id="p86cd105294">
+   <rect x="23.168437" y="22.318125" width="55.8" height="55.44"/>
   </clipPath>
  </defs>
 </svg>
