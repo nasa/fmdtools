@@ -31,6 +31,8 @@ dist/
 fmdtools.egg-info/
 fmdtools_hulsed.egg-info
 .coverage.*
+docs/.doctrees/
+docs/.pytest_cache/
 
 LICENSE.bak
 *.pkl
