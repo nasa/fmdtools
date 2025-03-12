@@ -671,22 +671,22 @@
 <p>The analyze package is organized into the modules:</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.analyze.common" title="fmdtools.analyze.common"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.common</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#module-fmdtools.analyze.common" title="fmdtools.analyze.common"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.common</span></code></a></p></td>
 <td><p>Some common methods for analysis used by other modules.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.analyze.result" title="fmdtools.analyze.result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.result</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#module-fmdtools.analyze.result" title="fmdtools.analyze.result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.result</span></code></a></p></td>
 <td><p>Defines how simulation results (histories) structured and processed.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.analyze.history" title="fmdtools.analyze.history"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.history</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#module-fmdtools.analyze.history" title="fmdtools.analyze.history"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.history</span></code></a></p></td>
 <td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">History</span></code>: class and for structuring/analyzing simulation histories.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph" title="fmdtools.analyze.graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph" title="fmdtools.analyze.graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a></p></td>
 <td><p>Package for graph representations and analysis of model structures.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate</span></code></a></p></td>
 <td><p>Translates simulation outputs to pandas tables for display, export, etc.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.analyze.phases" title="fmdtools.analyze.phases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.phases</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#module-fmdtools.analyze.phases" title="fmdtools.analyze.phases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.phases</span></code></a></p></td>
 <td><p>Module for analyzing phases and time-based sampling schemes.</p></td>
 </tr>
 </tbody>
@@ -700,20 +700,20 @@
 <p>Has methods:</p>
 <ul class="simple">
 <li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code>: Convenience wrapper for scipy.bootstrap</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.diff" title="fmdtools.analyze.common.diff"><code class="xref py py-func docutils literal notranslate"><span class="pre">diff()</span></code></a>: Helper function for finding inconsistent states between val1, val2, with
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff" title="fmdtools.analyze.common.diff"><code class="xref py py-func docutils literal notranslate"><span class="pre">diff()</span></code></a>: Helper function for finding inconsistent states between val1, val2, with
 the difftype option</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.join_key" title="fmdtools.analyze.common.join_key"><code class="xref py py-func docutils literal notranslate"><span class="pre">join_key()</span></code></a>: Helper function for Result Class</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.setup_plot" title="fmdtools.analyze.common.setup_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_plot()</span></code></a>: initializes mpl figure</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.plot_err_hist" title="fmdtools.analyze.common.plot_err_hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a>: Plots a line with a given range of uncertainty around it</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.plot_err_lines" title="fmdtools.analyze.common.plot_err_lines"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a>: Plots error lines on the given plot</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.multiplot_legend_title" title="fmdtools.analyze.common.multiplot_legend_title"><code class="xref py py-func docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a>: Helper function for multiplot legends and titles</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.consolidate_legend" title="fmdtools.analyze.common.consolidate_legend"><code class="xref py py-func docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a>: Creates a single legend for a given multiplot where
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key" title="fmdtools.analyze.common.join_key"><code class="xref py py-func docutils literal notranslate"><span class="pre">join_key()</span></code></a>: Helper function for Result Class</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.common.setup_plot" title="fmdtools.analyze.common.setup_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_plot()</span></code></a>: initializes mpl figure</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_hist" title="fmdtools.analyze.common.plot_err_hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a>: Plots a line with a given range of uncertainty around it</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_lines" title="fmdtools.analyze.common.plot_err_lines"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a>: Plots error lines on the given plot</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_legend_title" title="fmdtools.analyze.common.multiplot_legend_title"><code class="xref py py-func docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a>: Helper function for multiplot legends and titles</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.common.consolidate_legend" title="fmdtools.analyze.common.consolidate_legend"><code class="xref py py-func docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a>: Creates a single legend for a given multiplot where
 multiple groups are being compared</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.load_folder" title="fmdtools.analyze.common.load_folder"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_folder()</span></code></a>: Lists files to load in folder.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.file_check" title="fmdtools.analyze.common.file_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_check()</span></code></a>: Check if files exists and whether to overwrite the file</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.auto_filetype" title="fmdtools.analyze.common.auto_filetype"><code class="xref py py-func docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a>: Helper function that automatically determines the filetype
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder" title="fmdtools.analyze.common.load_folder"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_folder()</span></code></a>: Lists files to load in folder.</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check" title="fmdtools.analyze.common.file_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_check()</span></code></a>: Check if files exists and whether to overwrite the file</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.common.auto_filetype" title="fmdtools.analyze.common.auto_filetype"><code class="xref py py-func docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a>: Helper function that automatically determines the filetype
 (npz, csv, or json) of a given filename</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.create_indiv_filename" title="fmdtools.analyze.common.create_indiv_filename"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a>: Helper function that creates an individualized name for
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename" title="fmdtools.analyze.common.create_indiv_filename"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a>: Helper function that creates an individualized name for
 a file given the general filename and an individual id</p></li>
 </ul>
 <dl class="py function">
@@ -1047,7 +1047,7 @@ legend. Default is False.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>err_hist</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – <dl class="simple">
+<li><p><strong>err_hist</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – <dl class="simple">
 <dt>hist of line, low, high values. Has the form ::</dt><dd><p>{‘time’: times, ‘stat’: stat_values, ‘low’: low_values, ‘high’: high_values}</p>
 </dd>
 </dl>
@@ -1164,23 +1164,23 @@ runner.run(suite_for_plots(UnitTests, plottests=False)))</p>
 <p>Defines how simulation results (histories) structured and processed.</p>
 <p>Has classes:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a>: Class for defining simulation results</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a>: Class for defining simulation results</p></li>
 </ul>
 <p>And functions:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.load" title="fmdtools.analyze.result.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a>: Loads a given file to a Result/History</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.load" title="fmdtools.analyze.result.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a>: Loads a given file to a Result/History</p></li>
 </ul>
 <p>Private Methods:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.clean_resultdict_keys" title="fmdtools.analyze.result.clean_resultdict_keys"><code class="xref py py-func docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a>: Helper function for recreating results dictionary keys
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys" title="fmdtools.analyze.result.clean_resultdict_keys"><code class="xref py py-func docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a>: Helper function for recreating results dictionary keys
 (tuples) from a dictionary loaded from a file (where keys are strings)
 (used in csv/json results)</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.get_dict_attr" title="fmdtools.analyze.result.get_dict_attr"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a>: Gets attributes <a href="#id1"><span class="problematic" id="id2">*</span></a>attr from a given nested dict dict_in of class
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr" title="fmdtools.analyze.result.get_dict_attr"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a>: Gets attributes <a href="#id1"><span class="problematic" id="id2">*</span></a>attr from a given nested dict dict_in of class
 des_class</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.fromdict" title="fmdtools.analyze.result.fromdict"><code class="xref py py-func docutils literal notranslate"><span class="pre">fromdict()</span></code></a>: Creates new history/result from given dictionary</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.check_include_errors" title="fmdtools.analyze.result.check_include_errors"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a>: Helper function for Result Class, Cycles through
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.fromdict" title="fmdtools.analyze.result.fromdict"><code class="xref py py-func docutils literal notranslate"><span class="pre">fromdict()</span></code></a>: Creates new history/result from given dictionary</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors" title="fmdtools.analyze.result.check_include_errors"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a>: Helper function for Result Class, Cycles through
 <cite>check_include_error</cite></p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.check_include_error" title="fmdtools.analyze.result.check_include_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_include_error()</span></code></a>: Helper function to raise exceptions for errors</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error" title="fmdtools.analyze.result.check_include_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_include_error()</span></code></a>: Helper function to raise exceptions for errors</p></li>
 <li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">get_sub_include()</span></code>: Determines what attributes of att to include based on the
 provided dict/str/list/set to_include</p></li>
 </ul>
@@ -1354,7 +1354,7 @@ default for all values to get. Default is {}.</p></li>
 <dd class="field-even"><p><strong>group_hist</strong> – Single-level history with structure {group:{scenname.valuename}}</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1380,14 +1380,14 @@ If no nominal or faulty, returns an empty dict {}.</p>
 <dd><p>Find the values of two results which are different.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result to compare against</p>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result to compare against</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>different</strong> – Result with entries corresponding to the difference between the two
 Results.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result">Result</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result">Result</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1399,7 +1399,7 @@ Results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>app</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.SampleApproach" title="fmdtools.sim.sample.SampleApproach"><em>SampleApproach</em></a><em>, </em><em>optional</em>) – Approach to use for weights (via rates). The default is [].</p></li>
+<li><p><strong>app</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.sim.html#fmdtools.sim.sample.SampleApproach" title="fmdtools.sim.sample.SampleApproach"><em>SampleApproach</em></a><em>, </em><em>optional</em>) – Approach to use for weights (via rates). The default is [].</p></li>
 <li><p><strong>with_nominal</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include the nominal scenario in the expectation.
 The default is False.</p></li>
 <li><p><strong>difference_from_nominal</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to calculated the difference of the expectation from nominal.
@@ -1789,20 +1789,20 @@ The default is False.</p></li>
 </section>
 <section id="module-fmdtools.analyze.history">
 <span id="fmdtools-analyze-history"></span><h2>fmdtools.analyze.history<a class="headerlink" href="#module-fmdtools.analyze.history" title="Link to this heading"></a></h2>
-<p>Defines <a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><code class="xref py py-class docutils literal notranslate"><span class="pre">History</span></code></a>: class and for structuring/analyzing simulation histories.</p>
+<p>Defines <a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><code class="xref py py-class docutils literal notranslate"><span class="pre">History</span></code></a>: class and for structuring/analyzing simulation histories.</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><code class="xref py py-class docutils literal notranslate"><span class="pre">History</span></code></a>: Class for defining simulation histories
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><code class="xref py py-class docutils literal notranslate"><span class="pre">History</span></code></a>: Class for defining simulation histories
 (nested dictionaries of arrays or lists)</p></li>
 </ul>
 <p>And functions/methods:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.history.init_dicthist" title="fmdtools.analyze.history.init_dicthist"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a>: Initializes histories for dictionary attributes (if any)</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.init_dicthist" title="fmdtools.analyze.history.init_dicthist"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a>: Initializes histories for dictionary attributes (if any)</p></li>
 <li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">def</span> <span class="pre">prep_hists()</span></code>: Prepare the history for plotting.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.history.</span></span><span class="sig-name descname"><span class="pre">History</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a></p>
 <p>Class for recording and analyzing simulation histories.</p>
 <p>Histories log states of the model over time.</p>
 <p>It can be updated over time t using h.log(obj, t), where obj is an object with
@@ -1911,7 +1911,7 @@ cut or cut the original history variable. Default is False.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>*attrs</strong> (<em>names</em><em> of </em><em>attributes</em>) – Names to check (e.g., <cite>flow_1</cite>, <cite>fxn_2</cite>)</p></li>
-<li><p><strong>nomhist</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a><em>, </em><em>optional</em>) – Nominal history to compare against
+<li><p><strong>nomhist</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a><em>, </em><em>optional</em>) – Nominal history to compare against
 (otherwise uses internal nomhist, if available)</p></li>
 <li><p><strong>operator</strong> (<em>function</em>) – Method of combining multiple degraded values. The default is np.prod</p></li>
 <li><p><strong>difftype</strong> (<em>'bool'/'diff'/float</em>) – <p>Way to calculate the difference:</p>
@@ -1931,7 +1931,7 @@ cut or cut the original history variable. Default is False.</p></li>
 <dd class="field-even"><p><strong>deghist</strong> – History of degraded attributes</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -1951,14 +1951,14 @@ cut or cut the original history variable. Default is False.</p></li>
 <dd><p>Find the values of two histories which are different.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History to compare against</p>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History to compare against</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>different</strong> – History with entries corresponding to the difference between the two
 histories.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1979,7 +1979,7 @@ histories.</p>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result">Result</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result">Result</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -2021,7 +2021,7 @@ The default is “earliest”.</p>
 <dd class="field-even"><p><strong>faults_hist</strong> – History of the attrs and their corresponding faults</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -2043,7 +2043,7 @@ The default is “earliest”.</p>
 <dd class="field-even"><p><strong>has_faults_hist</strong> – History of attrs being faulty/not faulty</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -2081,7 +2081,7 @@ The default is “earliest”.</p>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -2118,7 +2118,7 @@ The default is “earliest”.</p>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -2151,7 +2151,7 @@ The default is “earliest”.</p>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -2182,7 +2182,7 @@ The default is “earliest”.</p>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -2229,7 +2229,7 @@ The default is np.max.</p></li>
 <dd class="field-even"><p><strong>summary</strong> – Corresponding summary metrics from this history</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result">Result</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result">Result</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -2527,7 +2527,7 @@ The default is False.</p></li>
 <dd class="field-even"><p><strong>Hist</strong> – Initialized history structure corresponding to the attribute</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -2544,24 +2544,24 @@ The default is False.</p></li>
 <p>Translates simulation outputs to pandas tables for display, export, etc.</p>
 <p>Uses methods:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.result_summary_fmea" title="fmdtools.analyze.tabulate.result_summary_fmea"><code class="xref py py-func docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a>: Make a table of endclass metrics, along with degraded functions/flows.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.result_summary" title="fmdtools.analyze.tabulate.result_summary"><code class="xref py py-func docutils literal notranslate"><span class="pre">result_summary()</span></code></a>: Make a a table of a summary dictionary from a given model run.</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary_fmea" title="fmdtools.analyze.tabulate.result_summary_fmea"><code class="xref py py-func docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a>: Make a table of endclass metrics, along with degraded functions/flows.</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary" title="fmdtools.analyze.tabulate.result_summary"><code class="xref py py-func docutils literal notranslate"><span class="pre">result_summary()</span></code></a>: Make a a table of a summary dictionary from a given model run.</p></li>
 </ul>
 <p>and classes:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.FMEA" title="fmdtools.analyze.tabulate.FMEA"><code class="xref py py-class docutils literal notranslate"><span class="pre">FMEA</span></code></a>: Class defining FMEA tables (with plotting/tabular export).</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.Comparison" title="fmdtools.analyze.tabulate.Comparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comparison</span></code></a>: Class defining metric comparison (with plot/tab export).</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.NominalEnvelope" title="fmdtools.analyze.tabulate.NominalEnvelope"><code class="xref py py-class docutils literal notranslate"><span class="pre">NominalEnvelope</span></code></a>: Class defining performance envelope (with plot export).</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.FMEA" title="fmdtools.analyze.tabulate.FMEA"><code class="xref py py-class docutils literal notranslate"><span class="pre">FMEA</span></code></a>: Class defining FMEA tables (with plotting/tabular export).</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.Comparison" title="fmdtools.analyze.tabulate.Comparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comparison</span></code></a>: Class defining metric comparison (with plot/tab export).</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.NominalEnvelope" title="fmdtools.analyze.tabulate.NominalEnvelope"><code class="xref py py-class docutils literal notranslate"><span class="pre">NominalEnvelope</span></code></a>: Class defining performance envelope (with plot export).</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.BaseComparison">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.tabulate.</span></span><span class="sig-name descname"><span class="pre">BaseComparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen_groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['cost']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'expected'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.BaseComparison" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.tabulate.BaseTab" title="fmdtools.analyze.tabulate.BaseTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTab</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.BaseTab" title="fmdtools.analyze.tabulate.BaseTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTab</span></code></a></p>
 <p>Base comparison class used for other comparisons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>res</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with the given metrics over a number of scenarios.</p></li>
+<li><p><strong>res</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with the given metrics over a number of scenarios.</p></li>
 <li><p><strong>scen_groups</strong> (<em>dict</em>) – Grouped scenarios.</p></li>
 <li><p><strong>metrics</strong> (<em>list</em>) – metrics in res to tabulate over time. Default is [‘cost’].</p></li>
 <li><p><strong>default_stat</strong> (<em>str</em>) – statistic to take for given metrics my default.
@@ -2726,13 +2726,13 @@ Default is [].</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.Comparison">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.tabulate.</span></span><span class="sig-name descname"><span class="pre">Comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['time']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.Comparison" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.tabulate.BaseComparison" title="fmdtools.analyze.tabulate.BaseComparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseComparison</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.BaseComparison" title="fmdtools.analyze.tabulate.BaseComparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseComparison</span></code></a></p>
 <p>Make a table of the statistic for given metrics over given factors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>res</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with the given metrics over a number of scenarios.</p></li>
-<li><p><strong>samp</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><em>BaseSample</em></a>) – Sample object used to generate the scenarios</p></li>
+<li><p><strong>res</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with the given metrics over a number of scenarios.</p></li>
+<li><p><strong>samp</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.sim.html#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><em>BaseSample</em></a>) – Sample object used to generate the scenarios</p></li>
 <li><p><strong>factors</strong> (<em>list</em>) – Factors (Scenario properties e.g., ‘name’, ‘time’, ‘var’) in samp to take
 statistic over. Default is [‘time’]</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – keyword arguments to BaseComparison</p></li>
@@ -2831,12 +2831,12 @@ set of scenarios for the given factor level.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.FMEA">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.tabulate.</span></span><span class="sig-name descname"><span class="pre">FMEA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('function',</span> <span class="pre">'fault')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'endclass.'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.FMEA" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.tabulate.BaseTab" title="fmdtools.analyze.tabulate.BaseTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTab</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.BaseTab" title="fmdtools.analyze.tabulate.BaseTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTab</span></code></a></p>
 <p>Make a user-definable fmea of the endclasses of a set of fault scenarios.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>res</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result corresponding to the the simulation runs</p></li>
+<li><p><strong>res</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result corresponding to the the simulation runs</p></li>
 <li><p><strong>fs</strong> (<em>sampleapproach/faultsample</em>) – FaultSample used for the underlying probability model of the set of scens.</p></li>
 <li><p><strong>add_res</strong> (<em>dict/Result</em><em>, </em><em>optional</em>) – An additional set of metrics to include in the table. Should have similar
 key structure to res. The default is {}.</p></li>
@@ -2885,13 +2885,13 @@ All other kwargs will be kwargs to Result.get_metric
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.NestedComparison">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.tabulate.</span></span><span class="sig-name descname"><span class="pre">NestedComparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samp_factors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samps_factors</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.NestedComparison" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.tabulate.BaseComparison" title="fmdtools.analyze.tabulate.BaseComparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseComparison</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.BaseComparison" title="fmdtools.analyze.tabulate.BaseComparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseComparison</span></code></a></p>
 <p>Make a nested table of the statistic for samples taken in other samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>res</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with the given metrics over a number of scenarios.</p></li>
-<li><p><strong>samp</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><em>BaseSample</em></a>) – Sample object used to generate the scenarios</p></li>
+<li><p><strong>res</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with the given metrics over a number of scenarios.</p></li>
+<li><p><strong>samp</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.sim.html#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><em>BaseSample</em></a>) – Sample object used to generate the scenarios</p></li>
 <li><p><strong>samp_factors</strong> (<em>list</em>) – Factors (Scenario properties e.g., ‘name’, ‘time’, ‘var’) in samp to take
 statistic over. Default is [‘time’]</p></li>
 <li><p><strong>samps</strong> (<em>dict</em>) – Sample objects used to generate the scenarios. {‘name’: samp}</p></li>
@@ -2944,8 +2944,8 @@ statistic over in the apps. Default is [‘time’]</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ps</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><em>ParameterSample</em></a>) – ParameterSample sample approach simulated in the model.</p></li>
-<li><p><strong>res</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result dict for the set of simulations produced by running the model over ps</p></li>
+<li><p><strong>ps</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.sim.html#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><em>ParameterSample</em></a>) – ParameterSample sample approach simulated in the model.</p></li>
+<li><p><strong>res</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result dict for the set of simulations produced by running the model over ps</p></li>
 <li><p><strong>metric</strong> (<em>str</em>) – Value to get from endclasses for the scenario(s). The default is ‘cost’.</p></li>
 <li><p><strong>x_param</strong> (<em>str</em>) – Parameter range desired to visualize in the operational envelope. Can be any
 property that changes over the nomapp
@@ -3034,8 +3034,8 @@ Default is lambda x: x == 0.0</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>endresult</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with end-state classification</p></li>
-<li><p><strong>mdlhist</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History of model states</p></li>
+<li><p><strong>endresult</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with end-state classification</p></li>
+<li><p><strong>mdlhist</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History of model states</p></li>
 <li><p><strong>*attrs</strong> (<em>str</em>) – Names of attributes to check in the history for degradation/faulty.</p></li>
 </ul>
 </dd>
@@ -3067,8 +3067,8 @@ Default is lambda x: x == 0.0</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>endresult</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result (over scenarios) to get metrics from</p></li>
-<li><p><strong>mdlhist</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History (over scenarios) to get degradations/faults from</p></li>
+<li><p><strong>endresult</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result (over scenarios) to get metrics from</p></li>
+<li><p><strong>mdlhist</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History (over scenarios) to get degradations/faults from</p></li>
 <li><p><strong>*attrs</strong> (<em>strs</em>) – Model constructs to check if faulty/degraded.</p></li>
 <li><p><strong>metrics</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Metrics to include from endresult. The default is ().</p></li>
 </ul>
@@ -3109,17 +3109,17 @@ Default is lambda x: x == 0.0</p></li>
 <p>Module for analyzing phases and time-based sampling schemes.</p>
 <p>Has classes:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhaseMap</span></code></a>: A mapping of phases to times.</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhaseMap</span></code></a>: A mapping of phases to times.</p></li>
 </ul>
 <p>And functions:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.phases.from_hist" title="fmdtools.analyze.phases.from_hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_hist()</span></code></a>: Creates dict of PhaseMaps based on mode progression in history.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.phases.phaseplot" title="fmdtools.analyze.phases.phaseplot"><code class="xref py py-func docutils literal notranslate"><span class="pre">phaseplot()</span></code></a>: Plots the progression of phases over time.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.phases.samplemetric" title="fmdtools.analyze.phases.samplemetric"><code class="xref py py-func docutils literal notranslate"><span class="pre">samplemetric()</span></code></a>: plots a metric for a single fault sampled by a SampleApproach
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.from_hist" title="fmdtools.analyze.phases.from_hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_hist()</span></code></a>: Creates dict of PhaseMaps based on mode progression in history.</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.phaseplot" title="fmdtools.analyze.phases.phaseplot"><code class="xref py py-func docutils literal notranslate"><span class="pre">phaseplot()</span></code></a>: Plots the progression of phases over time.</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.samplemetric" title="fmdtools.analyze.phases.samplemetric"><code class="xref py py-func docutils literal notranslate"><span class="pre">samplemetric()</span></code></a>: plots a metric for a single fault sampled by a SampleApproach
 over time with rates/</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.phases.samplemetrics" title="fmdtools.analyze.phases.samplemetrics"><code class="xref py py-func docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a>: plots a metric for a set of faults sampled by a SampleApproach
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.samplemetrics" title="fmdtools.analyze.phases.samplemetrics"><code class="xref py py-func docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a>: plots a metric for a set of faults sampled by a SampleApproach
 over time with rates on separate plots</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.phases.find_interval_overlap" title="fmdtools.analyze.phases.find_interval_overlap"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_interval_overlap()</span></code></a>: Find overlap between given intervals.</p></li>
+<li><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.find_interval_overlap" title="fmdtools.analyze.phases.find_interval_overlap"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_interval_overlap()</span></code></a>: Find overlap between given intervals.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.phases.PhaseMap">
@@ -3385,7 +3385,7 @@ is used.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hist</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History of states with mode information in them</p></li>
+<li><p><strong>hist</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History of states with mode information in them</p></li>
 <li><p><strong>fxn_modephases</strong> (<em>list</em>) – Functions to associate modephase information from
 (rather than just phase information)</p></li>
 </ul>
@@ -3421,13 +3421,13 @@ phases for future sampling.</p>
 <p>Note that modephases are removed in this process.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>*phasemaps</strong> (<a class="reference internal" href="#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><em>PhaseMap</em></a>) – PhaseMaps with phases to join.</p>
+<dd class="field-odd"><p><strong>*phasemaps</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><em>PhaseMap</em></a>) – PhaseMaps with phases to join.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>joint_phasemap</strong> – Phasemap keyed by tuples for joint phases</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap">PhaseMap</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap">PhaseMap</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -3446,7 +3446,7 @@ phases for future sampling.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>phasemaps</strong> (<em>dict</em><em> or </em><a class="reference internal" href="#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><em>PhaseMap</em></a>) – Dict of phasemaps that the functions of the model progresses through
+<li><p><strong>phasemaps</strong> (<em>dict</em><em> or </em><a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><em>PhaseMap</em></a>) – Dict of phasemaps that the functions of the model progresses through
 (e.g. from phases.from_hist).</p></li>
 <li><p><strong>modephases</strong> (<em>dict</em><em>, </em><em>optional</em>) – dictionary that maps the phases to operational modes, if it is desired to track
 the progression through modes</p></li>
@@ -3481,7 +3481,7 @@ each row</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>faultsamp</strong> (<em>FaultSamp</em>) – Fault sample defining the underlying samples to take with phasemap</p></li>
-<li><p><strong>endclasses</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – A Result with the end classification of each fault (metrics, etc)</p></li>
+<li><p><strong>endclasses</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – A Result with the end classification of each fault (metrics, etc)</p></li>
 <li><p><strong>metric</strong> (<em>str</em><em>, </em><em>optional</em>) – Metric to plot. The default is ‘cost’</p></li>
 <li><p><strong>rad</strong> (<em>str</em><em>, </em><em>optional</em>) – Metric to plot as a radius at each sample. Default is ‘rate’.</p></li>
 <li><p><strong>rad_scale</strong> (<em>float</em><em>, </em><em>optional</em>) – Scale factor for radius. Default is 0.01, which makes the max rad size 1/100 of
@@ -3510,7 +3510,7 @@ the max metric value.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>app</strong> (<em>sampleapproach</em>) – The sample approach used to run the list of faults</p></li>
-<li><p><strong>endclasses</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Results over the scenarios defined in app.</p></li>
+<li><p><strong>endclasses</strong> (<a class="reference internal" href="../fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Results over the scenarios defined in app.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to samplemetric</p></li>
 </ul>
 </dd>

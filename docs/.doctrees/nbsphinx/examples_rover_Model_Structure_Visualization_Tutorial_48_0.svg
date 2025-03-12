@@ -1,289 +1,289 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="3607pt" height="517pt" viewBox="0.00 0.00 3607.38 517.00">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 513)">
-<polygon fill="white" stroke="none" points="-4,4 -4,-513 3603.38,-513 3603.38,4 -4,4"/>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="4487pt" height="496pt" viewBox="0.00 0.00 4487.00 496.00">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 492)">
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-492 4483,-492 4483,4 -4,4"/>
 <!-- rover.fxns.plan_path -->
 <g id="node1" class="node">
 <title>rover.fxns.plan_path</title>
-<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="1760.38,-509 1387.38,-509 1387.38,-469.5 1760.38,-469.5 1760.38,-509"/>
-<text text-anchor="middle" x="1573.88" y="-491.7" font-family="Times New Roman,serif" font-size="14.00">plan_path: PlanPath</text>
-<text text-anchor="middle" x="1573.88" y="-475.95" font-family="Times New Roman,serif" font-size="14.00">Plan the next drive move based on the current state of the rover.</text>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="2201,-488 1719,-488 1719,-450 2201,-450 2201,-488"/>
+<text text-anchor="middle" x="1960" y="-472.8" font-family="Times,serif" font-size="14.00">plan_path: PlanPath</text>
+<text text-anchor="middle" x="1960" y="-457.8" font-family="Times,serif" font-size="14.00">Plan the next drive move based on the current state of the rover.</text>
 </g>
 <!-- rover.fxns.plan_path.m -->
 <g id="node2" class="node">
 <title>rover.fxns.plan_path.m</title>
-<polygon fill="lightgrey" stroke="grey" points="373.75,-339 12,-339 12,-343 0,-343 0,-63 373.75,-63 373.75,-339"/>
-<polyline fill="none" stroke="grey" points="0,-339 12,-339"/>
-<text text-anchor="middle" x="186.88" y="-321.7" font-family="Times New Roman,serif" font-size="14.00">m: PlanPathMode</text>
-<text text-anchor="middle" x="186.88" y="-305.95" font-family="Times New Roman,serif" font-size="14.00">Possible modes for rover path planning.</text>
-<text text-anchor="middle" x="186.88" y="-274.2" font-family="Times New Roman,serif" font-size="14.00">Modes</text>
-<text text-anchor="middle" x="186.88" y="-258.45" font-family="Times New Roman,serif" font-size="14.00">-------</text>
-<text text-anchor="middle" x="186.88" y="-242.7" font-family="Times New Roman,serif" font-size="14.00">no_con : Fault</text>
-<text text-anchor="middle" x="186.88" y="-226.95" font-family="Times New Roman,serif" font-size="14.00">....Inability to send path planning commands</text>
-<text text-anchor="middle" x="186.88" y="-211.2" font-family="Times New Roman,serif" font-size="14.00">crash : Fault</text>
-<text text-anchor="middle" x="186.88" y="-195.45" font-family="Times New Roman,serif" font-size="14.00">....Rover crashed or maximum deviation from the path breached</text>
-<text text-anchor="middle" x="186.88" y="-179.7" font-family="Times New Roman,serif" font-size="14.00">drive : Mode</text>
-<text text-anchor="middle" x="186.88" y="-163.95" font-family="Times New Roman,serif" font-size="14.00">....Rover is in operation and sending position signals</text>
-<text text-anchor="middle" x="186.88" y="-148.2" font-family="Times New Roman,serif" font-size="14.00">standby : Mode</text>
-<text text-anchor="middle" x="186.88" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">....Rover is in standby</text>
-<text text-anchor="middle" x="186.88" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">em_off : Mode</text>
-<text text-anchor="middle" x="186.88" y="-100.95" font-family="Times New Roman,serif" font-size="14.00">....Rover is shut off due to an emergency</text>
-<text text-anchor="middle" x="186.88" y="-85.2" font-family="Times New Roman,serif" font-size="14.00">finished : Mode</text>
-<text text-anchor="middle" x="186.88" y="-69.45" font-family="Times New Roman,serif" font-size="14.00">....Rover has competed the mission</text>
+<polygon fill="lightgrey" stroke="grey" points="476,-324 12,-324 12,-328 0,-328 0,-60 476,-60 476,-324"/>
+<polyline fill="none" stroke="grey" points="0,-324 12,-324 "/>
+<text text-anchor="middle" x="238" y="-308.8" font-family="Times,serif" font-size="14.00">m: PlanPathMode</text>
+<text text-anchor="middle" x="238" y="-293.8" font-family="Times,serif" font-size="14.00">Possible modes for rover path planning.</text>
+<text text-anchor="middle" x="238" y="-262.8" font-family="Times,serif" font-size="14.00">Modes</text>
+<text text-anchor="middle" x="238" y="-247.8" font-family="Times,serif" font-size="14.00">-------</text>
+<text text-anchor="middle" x="238" y="-232.8" font-family="Times,serif" font-size="14.00">no_con : Fault</text>
+<text text-anchor="middle" x="238" y="-217.8" font-family="Times,serif" font-size="14.00">....Inability to send path planning commands</text>
+<text text-anchor="middle" x="238" y="-202.8" font-family="Times,serif" font-size="14.00">crash : Fault</text>
+<text text-anchor="middle" x="238" y="-187.8" font-family="Times,serif" font-size="14.00">....Rover crashed or maximum deviation from the path breached</text>
+<text text-anchor="middle" x="238" y="-172.8" font-family="Times,serif" font-size="14.00">drive : Mode</text>
+<text text-anchor="middle" x="238" y="-157.8" font-family="Times,serif" font-size="14.00">....Rover is in operation and sending position signals</text>
+<text text-anchor="middle" x="238" y="-142.8" font-family="Times,serif" font-size="14.00">standby : Mode</text>
+<text text-anchor="middle" x="238" y="-127.8" font-family="Times,serif" font-size="14.00">....Rover is in standby</text>
+<text text-anchor="middle" x="238" y="-112.8" font-family="Times,serif" font-size="14.00">em_off : Mode</text>
+<text text-anchor="middle" x="238" y="-97.8" font-family="Times,serif" font-size="14.00">....Rover is shut off due to an emergency</text>
+<text text-anchor="middle" x="238" y="-82.8" font-family="Times,serif" font-size="14.00">finished : Mode</text>
+<text text-anchor="middle" x="238" y="-67.8" font-family="Times,serif" font-size="14.00">....Rover has competed the mission</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.fxns.plan_path.m -->
 <g id="edge1" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.fxns.plan_path.m</title>
-<path fill="none" stroke="black" d="M1373.72,-486.8C1193.62,-483.87 921.97,-475.42 686.88,-451.5 550.69,-437.64 504.39,-465.03 382.88,-402 352.23,-386.11 323.51,-363.65 298,-339.48"/>
-<polygon fill="black" stroke="black" points="1373.62,-486.8 1379.69,-482.9 1385.62,-486.99 1379.56,-490.89 1373.62,-486.8"/>
-<text text-anchor="middle" x="728.88" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-<text text-anchor="middle" x="728.88" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">m</text>
+<path fill="none" stroke="black" d="M1706.67,-466.36C1484.29,-463.33 1152.26,-454.94 864,-432 694.75,-418.53 641.9,-448.88 485,-384 448.93,-369.09 413.62,-347.45 381.48,-324.06"/>
+<polygon fill="black" stroke="black" points="1706.84,-466.36 1712.89,-462.44 1718.84,-466.52 1712.78,-470.44 1706.84,-466.36"/>
+<text text-anchor="middle" x="921" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="921" y="-405.8" font-family="Times,serif" font-size="14.00">m</text>
 </g>
 <!-- rover.fxns.plan_path.p -->
 <g id="node3" class="node">
 <title>rover.fxns.plan_path.p</title>
-<polygon fill="lightgrey" stroke="grey" points="737.5,-402 404.25,-402 404.25,-406 392.25,-406 392.25,0 737.5,0 737.5,-402"/>
-<polyline fill="none" stroke="grey" points="392.25,-402 404.25,-402"/>
-<text text-anchor="middle" x="564.88" y="-384.7" font-family="Times New Roman,serif" font-size="14.00">p: ResCorrection</text>
-<text text-anchor="middle" x="564.88" y="-368.95" font-family="Times New Roman,serif" font-size="14.00">Correction parameters given faulty states.</text>
-<text text-anchor="middle" x="564.88" y="-337.2" font-family="Times New Roman,serif" font-size="14.00">Fields</text>
-<text text-anchor="middle" x="564.88" y="-321.45" font-family="Times New Roman,serif" font-size="14.00">------</text>
-<text text-anchor="middle" x="564.88" y="-305.7" font-family="Times New Roman,serif" font-size="14.00">ub_f: float</text>
-<text text-anchor="middle" x="564.88" y="-289.95" font-family="Times New Roman,serif" font-size="14.00">....upper bound of friction</text>
-<text text-anchor="middle" x="564.88" y="-274.2" font-family="Times New Roman,serif" font-size="14.00">lb_f: float</text>
-<text text-anchor="middle" x="564.88" y="-258.45" font-family="Times New Roman,serif" font-size="14.00">....lower bound of friction</text>
-<text text-anchor="middle" x="564.88" y="-242.7" font-family="Times New Roman,serif" font-size="14.00">ub_t: float</text>
-<text text-anchor="middle" x="564.88" y="-226.95" font-family="Times New Roman,serif" font-size="14.00">....upper bound of transfer</text>
-<text text-anchor="middle" x="564.88" y="-211.2" font-family="Times New Roman,serif" font-size="14.00">lb_t: float</text>
-<text text-anchor="middle" x="564.88" y="-195.45" font-family="Times New Roman,serif" font-size="14.00">....lower bound of transfer</text>
-<text text-anchor="middle" x="564.88" y="-179.7" font-family="Times New Roman,serif" font-size="14.00">ub_d: float</text>
-<text text-anchor="middle" x="564.88" y="-163.95" font-family="Times New Roman,serif" font-size="14.00">....upper bound of drift</text>
-<text text-anchor="middle" x="564.88" y="-148.2" font-family="Times New Roman,serif" font-size="14.00">lb_d: float</text>
-<text text-anchor="middle" x="564.88" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">....lower bound of drift</text>
-<text text-anchor="middle" x="564.88" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">cor_d: float</text>
-<text text-anchor="middle" x="564.88" y="-100.95" font-family="Times New Roman,serif" font-size="14.00">....correction factor for drift </text>
-<text text-anchor="middle" x="564.88" y="-85.2" font-family="Times New Roman,serif" font-size="14.00">....(if drift is present, takes values between -1 and 1)</text>
-<text text-anchor="middle" x="564.88" y="-69.45" font-family="Times New Roman,serif" font-size="14.00">cor_t: float</text>
-<text text-anchor="middle" x="564.88" y="-53.7" font-family="Times New Roman,serif" font-size="14.00">....correction factor for transfer </text>
-<text text-anchor="middle" x="564.88" y="-37.95" font-family="Times New Roman,serif" font-size="14.00">....(if transfer is low or hgih: takes values between -1 and 1)</text>
-<text text-anchor="middle" x="564.88" y="-22.2" font-family="Times New Roman,serif" font-size="14.00">cor_f: float</text>
-<text text-anchor="middle" x="564.88" y="-6.45" font-family="Times New Roman,serif" font-size="14.00">....correction for friction (if out of bounds)</text>
+<polygon fill="lightgrey" stroke="grey" points="937.5,-384 506.5,-384 506.5,-388 494.5,-388 494.5,0 937.5,0 937.5,-384"/>
+<polyline fill="none" stroke="grey" points="494.5,-384 506.5,-384 "/>
+<text text-anchor="middle" x="716" y="-368.8" font-family="Times,serif" font-size="14.00">p: ResCorrection</text>
+<text text-anchor="middle" x="716" y="-353.8" font-family="Times,serif" font-size="14.00">Correction parameters given faulty states.</text>
+<text text-anchor="middle" x="716" y="-322.8" font-family="Times,serif" font-size="14.00">Fields</text>
+<text text-anchor="middle" x="716" y="-307.8" font-family="Times,serif" font-size="14.00">------</text>
+<text text-anchor="middle" x="716" y="-292.8" font-family="Times,serif" font-size="14.00">ub_f: float</text>
+<text text-anchor="middle" x="716" y="-277.8" font-family="Times,serif" font-size="14.00">....upper bound of friction</text>
+<text text-anchor="middle" x="716" y="-262.8" font-family="Times,serif" font-size="14.00">lb_f: float</text>
+<text text-anchor="middle" x="716" y="-247.8" font-family="Times,serif" font-size="14.00">....lower bound of friction</text>
+<text text-anchor="middle" x="716" y="-232.8" font-family="Times,serif" font-size="14.00">ub_t: float</text>
+<text text-anchor="middle" x="716" y="-217.8" font-family="Times,serif" font-size="14.00">....upper bound of transfer</text>
+<text text-anchor="middle" x="716" y="-202.8" font-family="Times,serif" font-size="14.00">lb_t: float</text>
+<text text-anchor="middle" x="716" y="-187.8" font-family="Times,serif" font-size="14.00">....lower bound of transfer</text>
+<text text-anchor="middle" x="716" y="-172.8" font-family="Times,serif" font-size="14.00">ub_d: float</text>
+<text text-anchor="middle" x="716" y="-157.8" font-family="Times,serif" font-size="14.00">....upper bound of drift</text>
+<text text-anchor="middle" x="716" y="-142.8" font-family="Times,serif" font-size="14.00">lb_d: float</text>
+<text text-anchor="middle" x="716" y="-127.8" font-family="Times,serif" font-size="14.00">....lower bound of drift</text>
+<text text-anchor="middle" x="716" y="-112.8" font-family="Times,serif" font-size="14.00">cor_d: float</text>
+<text text-anchor="middle" x="716" y="-97.8" font-family="Times,serif" font-size="14.00">....correction factor for drift </text>
+<text text-anchor="middle" x="716" y="-82.8" font-family="Times,serif" font-size="14.00">....(if drift is present, takes values between -1 and 1)</text>
+<text text-anchor="middle" x="716" y="-67.8" font-family="Times,serif" font-size="14.00">cor_t: float</text>
+<text text-anchor="middle" x="716" y="-52.8" font-family="Times,serif" font-size="14.00">....correction factor for transfer </text>
+<text text-anchor="middle" x="716" y="-37.8" font-family="Times,serif" font-size="14.00">....(if transfer is low or hgih: takes values between -1 and 1)</text>
+<text text-anchor="middle" x="716" y="-22.8" font-family="Times,serif" font-size="14.00">cor_f: float</text>
+<text text-anchor="middle" x="716" y="-7.8" font-family="Times,serif" font-size="14.00">....correction for friction (if out of bounds)</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.fxns.plan_path.p -->
 <g id="edge2" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.fxns.plan_path.p</title>
-<path fill="none" stroke="black" d="M1373.79,-485.98C1197.25,-482.5 953.83,-473.71 859.88,-451.5 806.52,-438.89 791.41,-433.98 746.88,-402 743.82,-399.81 740.79,-397.56 737.76,-395.26"/>
-<polygon fill="black" stroke="black" points="1373.75,-485.97 1379.82,-482.09 1385.74,-486.2 1379.67,-490.09 1373.75,-485.97"/>
-<text text-anchor="middle" x="901.88" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-<text text-anchor="middle" x="901.88" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">p</text>
+<path fill="none" stroke="black" d="M1706.7,-467.16C1486.64,-464.7 1185.32,-456.71 1068,-432 1022.82,-422.49 978.73,-403.37 937.87,-379.91"/>
+<polygon fill="black" stroke="black" points="1706.76,-467.16 1712.8,-463.22 1718.76,-467.29 1712.72,-471.22 1706.76,-467.16"/>
+<text text-anchor="middle" x="1125" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="1125" y="-405.8" font-family="Times,serif" font-size="14.00">p</text>
 </g>
 <!-- rover.fxns.plan_path.s -->
 <g id="node4" class="node">
 <title>rover.fxns.plan_path.s</title>
-<polygon fill="lightgrey" stroke="grey" points="963.88,-323.25 767.88,-323.25 767.88,-327.25 755.88,-327.25 755.88,-78.75 963.88,-78.75 963.88,-323.25"/>
-<polyline fill="none" stroke="grey" points="755.88,-323.25 767.88,-323.25"/>
-<text text-anchor="middle" x="859.88" y="-305.95" font-family="Times New Roman,serif" font-size="14.00">s: PlanPathState</text>
-<text text-anchor="middle" x="859.88" y="-290.2" font-family="Times New Roman,serif" font-size="14.00">States used in rover path planning.</text>
-<text text-anchor="middle" x="859.88" y="-258.45" font-family="Times New Roman,serif" font-size="14.00">Fields</text>
-<text text-anchor="middle" x="859.88" y="-242.7" font-family="Times New Roman,serif" font-size="14.00">------</text>
-<text text-anchor="middle" x="859.88" y="-226.95" font-family="Times New Roman,serif" font-size="14.00">u_self: tuple</text>
-<text text-anchor="middle" x="859.88" y="-211.2" font-family="Times New Roman,serif" font-size="14.00">....Position of the ownship.</text>
-<text text-anchor="middle" x="859.88" y="-195.45" font-family="Times New Roman,serif" font-size="14.00">u_lin: tuple</text>
-<text text-anchor="middle" x="859.88" y="-179.7" font-family="Times New Roman,serif" font-size="14.00">....Position of the line.</text>
-<text text-anchor="middle" x="859.88" y="-163.95" font-family="Times New Roman,serif" font-size="14.00">u_lin_dev: tuple</text>
-<text text-anchor="middle" x="859.88" y="-148.2" font-family="Times New Roman,serif" font-size="14.00">....Deviation of ownship from line.</text>
-<text text-anchor="middle" x="859.88" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">rdiff: float</text>
-<text text-anchor="middle" x="859.88" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">....Projected turning around.</text>
-<text text-anchor="middle" x="859.88" y="-100.95" font-family="Times New Roman,serif" font-size="14.00">vel_adj: float</text>
-<text text-anchor="middle" x="859.88" y="-85.2" font-family="Times New Roman,serif" font-size="14.00">....Velocity adjustment (for faults).</text>
+<polygon fill="lightgrey" stroke="grey" points="1224.5,-309 967.5,-309 967.5,-313 955.5,-313 955.5,-75 1224.5,-75 1224.5,-309"/>
+<polyline fill="none" stroke="grey" points="955.5,-309 967.5,-309 "/>
+<text text-anchor="middle" x="1090" y="-293.8" font-family="Times,serif" font-size="14.00">s: PlanPathState</text>
+<text text-anchor="middle" x="1090" y="-278.8" font-family="Times,serif" font-size="14.00">States used in rover path planning.</text>
+<text text-anchor="middle" x="1090" y="-247.8" font-family="Times,serif" font-size="14.00">Fields</text>
+<text text-anchor="middle" x="1090" y="-232.8" font-family="Times,serif" font-size="14.00">------</text>
+<text text-anchor="middle" x="1090" y="-217.8" font-family="Times,serif" font-size="14.00">u_self: tuple</text>
+<text text-anchor="middle" x="1090" y="-202.8" font-family="Times,serif" font-size="14.00">....Position of the ownship.</text>
+<text text-anchor="middle" x="1090" y="-187.8" font-family="Times,serif" font-size="14.00">u_lin: tuple</text>
+<text text-anchor="middle" x="1090" y="-172.8" font-family="Times,serif" font-size="14.00">....Position of the line.</text>
+<text text-anchor="middle" x="1090" y="-157.8" font-family="Times,serif" font-size="14.00">u_lin_dev: tuple</text>
+<text text-anchor="middle" x="1090" y="-142.8" font-family="Times,serif" font-size="14.00">....Deviation of ownship from line.</text>
+<text text-anchor="middle" x="1090" y="-127.8" font-family="Times,serif" font-size="14.00">rdiff: float</text>
+<text text-anchor="middle" x="1090" y="-112.8" font-family="Times,serif" font-size="14.00">....Projected turning around.</text>
+<text text-anchor="middle" x="1090" y="-97.8" font-family="Times,serif" font-size="14.00">vel_adj: float</text>
+<text text-anchor="middle" x="1090" y="-82.8" font-family="Times,serif" font-size="14.00">....Velocity adjustment (for faults).</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.fxns.plan_path.s -->
 <g id="edge3" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.fxns.plan_path.s</title>
-<path fill="none" stroke="black" d="M1373.63,-485.74C1214.46,-482.1 1013.28,-473.22 980.88,-451.5 936.69,-421.88 908.1,-371.34 889.88,-323.47"/>
-<polygon fill="black" stroke="black" points="1373.57,-485.74 1379.66,-481.87 1385.57,-486 1379.48,-489.87 1373.57,-485.74"/>
-<text text-anchor="middle" x="1022.88" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-<text text-anchor="middle" x="1022.88" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">s</text>
+<path fill="none" stroke="black" d="M1706.79,-467.86C1508.65,-465.73 1259.98,-457.82 1219,-432 1174.62,-404.04 1144.45,-355.24 1124.52,-309"/>
+<polygon fill="black" stroke="black" points="1706.86,-467.86 1712.9,-463.92 1718.86,-467.98 1712.82,-471.92 1706.86,-467.86"/>
+<text text-anchor="middle" x="1276" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="1276" y="-405.8" font-family="Times,serif" font-size="14.00">s</text>
 </g>
 <!-- rover.fxns.plan_path.sp -->
 <g id="node5" class="node">
 <title>rover.fxns.plan_path.sp</title>
-<polygon fill="lightgrey" stroke="grey" points="1075.5,-219 994.25,-219 994.25,-223 982.25,-223 982.25,-183 1075.5,-183 1075.5,-219"/>
-<polyline fill="none" stroke="grey" points="982.25,-219 994.25,-219"/>
-<text text-anchor="middle" x="1028.88" y="-195.57" font-family="Times New Roman,serif" font-size="14.00">sp: SimParam</text>
+<polygon fill="lightgrey" stroke="grey" points="1359,-210 1255,-210 1255,-214 1243,-214 1243,-174 1359,-174 1359,-210"/>
+<polyline fill="none" stroke="grey" points="1243,-210 1255,-210 "/>
+<text text-anchor="middle" x="1301" y="-188.3" font-family="Times,serif" font-size="14.00">sp: SimParam</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.fxns.plan_path.sp -->
 <g id="edge4" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.fxns.plan_path.sp</title>
-<path fill="none" stroke="black" d="M1373.69,-483.59C1252.74,-478.92 1117.78,-469.67 1095.88,-451.5 1024.43,-392.22 1024.72,-265.68 1027.45,-219.41"/>
-<polygon fill="black" stroke="black" points="1373.58,-483.58 1379.73,-479.81 1385.57,-484.03 1379.43,-487.8 1373.58,-483.58"/>
-<text text-anchor="middle" x="1137.88" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-<text text-anchor="middle" x="1137.88" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">sp</text>
+<path fill="none" stroke="black" d="M1706.78,-466.53C1556.19,-463.27 1389.25,-454.51 1362,-432 1293.83,-375.68 1295.95,-254.71 1299.31,-210.03"/>
+<polygon fill="black" stroke="black" points="1706.97,-466.53 1713.06,-462.66 1718.97,-466.78 1712.89,-470.66 1706.97,-466.53"/>
+<text text-anchor="middle" x="1419" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="1419" y="-405.8" font-family="Times,serif" font-size="14.00">sp</text>
 </g>
 <!-- rover.fxns.plan_path.t -->
 <g id="node6" class="node">
 <title>rover.fxns.plan_path.t</title>
-<polygon fill="lightgrey" stroke="grey" points="1148.38,-219 1105.38,-219 1105.38,-223 1093.38,-223 1093.38,-183 1148.38,-183 1148.38,-219"/>
-<polyline fill="none" stroke="grey" points="1093.38,-219 1105.38,-219"/>
-<text text-anchor="middle" x="1120.88" y="-195.57" font-family="Times New Roman,serif" font-size="14.00">t: Time</text>
+<polygon fill="lightgrey" stroke="grey" points="1444.5,-210 1389.5,-210 1389.5,-214 1377.5,-214 1377.5,-174 1444.5,-174 1444.5,-210"/>
+<polyline fill="none" stroke="grey" points="1377.5,-210 1389.5,-210 "/>
+<text text-anchor="middle" x="1411" y="-188.3" font-family="Times,serif" font-size="14.00">t: Time</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.fxns.plan_path.t -->
 <g id="edge5" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.fxns.plan_path.t</title>
-<path fill="none" stroke="black" d="M1373.89,-470.01C1281.7,-457.17 1186.23,-436.01 1156.88,-402 1111,-348.85 1114.69,-257.48 1118.61,-219.43"/>
-<polygon fill="black" stroke="black" points="1373.8,-470 1380.28,-466.84 1385.69,-471.61 1379.2,-474.77 1373.8,-470"/>
-<text text-anchor="middle" x="1305.88" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-<text text-anchor="middle" x="1305.88" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">t</text>
+<path fill="none" stroke="black" d="M1706.66,-454.23C1598.87,-442.84 1489.75,-422.03 1454,-384 1407.79,-334.84 1407.39,-247.08 1409.54,-210.14"/>
+<polygon fill="black" stroke="black" points="1706.84,-454.25 1713.21,-450.89 1718.78,-455.48 1712.4,-458.84 1706.84,-454.25"/>
+<text text-anchor="middle" x="1617" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="1617" y="-405.8" font-family="Times,serif" font-size="14.00">t</text>
 </g>
 <!-- rover.flows.auto_control -->
 <g id="node7" class="node">
 <title>rover.flows.auto_control</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="1262.88" cy="-201" rx="96.7" ry="27.93"/>
-<text text-anchor="middle" x="1262.88" y="-203.45" font-family="Times New Roman,serif" font-size="14.00">auto_control: Control</text>
-<text text-anchor="middle" x="1262.88" y="-187.7" font-family="Times New Roman,serif" font-size="14.00">Control flow.</text>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="1581" cy="-192" rx="118.17" ry="26.74"/>
+<text text-anchor="middle" x="1581" y="-195.8" font-family="Times,serif" font-size="14.00">auto_control: Control</text>
+<text text-anchor="middle" x="1581" y="-180.8" font-family="Times,serif" font-size="14.00">Control flow.</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.flows.auto_control -->
 <g id="edge10" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.flows.auto_control</title>
-<path fill="none" stroke="black" d="M1477.38,-464.47C1439.74,-451.22 1398.59,-431.29 1368.88,-402 1317.38,-351.24 1285.15,-270.13 1271.09,-228.52"/>
-<polygon fill="none" stroke="black" points="1477.24,-464.42 1484.2,-462.55 1488.61,-468.26 1481.65,-470.13 1477.24,-464.42"/>
-<text text-anchor="middle" x="1485" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;aggregation&gt;</text>
-<text text-anchor="middle" x="1485" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">control</text>
+<path fill="none" stroke="black" d="M1836.8,-446.78C1792.43,-434.33 1744.39,-414.72 1708,-384 1652.16,-336.86 1611.12,-259.17 1592.35,-218.94"/>
+<polygon fill="none" stroke="black" points="1837.01,-446.84 1843.84,-444.53 1848.59,-449.96 1841.76,-452.26 1837.01,-446.84"/>
+<text text-anchor="middle" x="1844.5" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;aggregation&gt;</text>
+<text text-anchor="middle" x="1844.5" y="-405.8" font-family="Times,serif" font-size="14.00">control</text>
 </g>
 <!-- rover.flows.fault_sig -->
 <g id="node8" class="node">
 <title>rover.flows.fault_sig</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="1460.88" cy="-201" rx="82.91" ry="27.93"/>
-<text text-anchor="middle" x="1460.88" y="-203.45" font-family="Times New Roman,serif" font-size="14.00">fault_sig: FaultSig</text>
-<text text-anchor="middle" x="1460.88" y="-187.7" font-family="Times New Roman,serif" font-size="14.00">Rover fault signal.</text>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="1822" cy="-192" rx="104.8" ry="26.74"/>
+<text text-anchor="middle" x="1822" y="-195.8" font-family="Times,serif" font-size="14.00">fault_sig: FaultSig</text>
+<text text-anchor="middle" x="1822" y="-180.8" font-family="Times,serif" font-size="14.00">Rover fault signal.</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.flows.fault_sig -->
 <g id="edge11" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.flows.fault_sig</title>
-<path fill="none" stroke="black" d="M1561.32,-456.44C1538.82,-399.45 1492.06,-281 1471.25,-228.29"/>
-<polygon fill="none" stroke="black" points="1561.37,-456.57 1567.29,-460.69 1565.78,-467.74 1559.85,-463.62 1561.37,-456.57"/>
-<text text-anchor="middle" x="1598" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;aggregation&gt;</text>
-<text text-anchor="middle" x="1598" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">fault_sig</text>
+<path fill="none" stroke="black" d="M1945.52,-439.14C1918.5,-385.31 1860.83,-270.38 1834.99,-218.89"/>
+<polygon fill="none" stroke="black" points="1945.56,-439.23 1951.83,-442.8 1950.95,-449.96 1944.68,-446.39 1945.56,-439.23"/>
+<text text-anchor="middle" x="1995.5" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;aggregation&gt;</text>
+<text text-anchor="middle" x="1995.5" y="-405.8" font-family="Times,serif" font-size="14.00">fault_sig</text>
 </g>
 <!-- rover.flows.pos_signal -->
 <g id="node9" class="node">
 <title>rover.flows.pos_signal</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="1687.88" cy="-201" rx="126.4" ry="27.93"/>
-<text text-anchor="middle" x="1687.88" y="-203.45" font-family="Times New Roman,serif" font-size="14.00">pos_signal: Pos</text>
-<text text-anchor="middle" x="1687.88" y="-187.7" font-family="Times New Roman,serif" font-size="14.00">Rover position/velocity flow.</text>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="2098" cy="-192" rx="153.38" ry="26.74"/>
+<text text-anchor="middle" x="2098" y="-195.8" font-family="Times,serif" font-size="14.00">pos_signal: Pos</text>
+<text text-anchor="middle" x="2098" y="-180.8" font-family="Times,serif" font-size="14.00">Rover position/velocity flow.</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.flows.pos_signal -->
 <g id="edge13" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.flows.pos_signal</title>
-<path fill="none" stroke="black" d="M1633.45,-460.78C1636.58,-457.95 1639.43,-454.86 1641.88,-451.5 1691.49,-383.29 1692.62,-277.51 1690.03,-228.54"/>
-<polygon fill="none" stroke="black" points="1633.63,-460.64 1631.32,-467.47 1624.12,-467.96 1626.44,-461.14 1633.63,-460.64"/>
-<text text-anchor="middle" x="1700" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;aggregation&gt;</text>
-<text text-anchor="middle" x="1700" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">pos_signal</text>
+<path fill="none" stroke="black" d="M2042.97,-443.27C2047.41,-439.97 2051.48,-436.24 2055,-432 2106.6,-369.9 2105.06,-266.97 2101.01,-219.04"/>
+<polygon fill="none" stroke="black" points="2042.84,-443.35 2039.94,-449.95 2032.73,-449.81 2035.63,-443.21 2042.84,-443.35"/>
+<text text-anchor="middle" x="2128.5" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;aggregation&gt;</text>
+<text text-anchor="middle" x="2128.5" y="-405.8" font-family="Times,serif" font-size="14.00">pos_signal</text>
 </g>
 <!-- rover.flows.video -->
 <g id="node10" class="node">
 <title>rover.flows.video</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="1893.88" cy="-201" rx="61.7" ry="27.93"/>
-<text text-anchor="middle" x="1893.88" y="-203.45" font-family="Times New Roman,serif" font-size="14.00">video: Video</text>
-<text text-anchor="middle" x="1893.88" y="-187.7" font-family="Times New Roman,serif" font-size="14.00">Video flow.</text>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="2343" cy="-192" rx="73.58" ry="26.74"/>
+<text text-anchor="middle" x="2343" y="-195.8" font-family="Times,serif" font-size="14.00">video: Video</text>
+<text text-anchor="middle" x="2343" y="-180.8" font-family="Times,serif" font-size="14.00">Video flow.</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.flows.video -->
 <g id="edge14" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.flows.video</title>
-<path fill="none" stroke="black" d="M1727.18,-464.46C1763.56,-451.67 1798.76,-432.06 1822.88,-402 1865.07,-349.41 1883.22,-269.8 1890.14,-228.68"/>
-<polygon fill="none" stroke="black" points="1727.06,-464.5 1722.62,-470.18 1715.67,-468.26 1720.11,-462.58 1727.06,-464.5"/>
-<text text-anchor="middle" x="1844" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;aggregation&gt;</text>
-<text text-anchor="middle" x="1844" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">video</text>
+<path fill="none" stroke="black" d="M2140.14,-447.07C2156.57,-442.92 2172.76,-437.95 2188,-432 2223.82,-418.01 2235.33,-413.51 2260,-384 2302.21,-333.52 2326.35,-258.28 2336.78,-219"/>
+<polygon fill="none" stroke="black" points="2139.81,-447.15 2134.91,-452.44 2128.14,-449.95 2133.04,-444.66 2139.81,-447.15"/>
+<text text-anchor="middle" x="2298.5" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;aggregation&gt;</text>
+<text text-anchor="middle" x="2298.5" y="-405.8" font-family="Times,serif" font-size="14.00">video</text>
 </g>
 <!-- rover.flows.ground -->
 <g id="node11" class="node">
 <title>rover.flows.ground</title>
-<polygon fill="lightgrey" stroke="grey" stroke-width="0" points="2286.2,-188.48 2286.2,-213.52 2194.63,-231.23 2065.12,-231.23 1973.55,-213.52 1973.55,-188.48 2065.12,-170.77 2194.63,-170.77 2286.2,-188.48"/>
-<text text-anchor="middle" x="2129.88" y="-203.45" font-family="Times New Roman,serif" font-size="14.00">ground: Ground</text>
-<text text-anchor="middle" x="2129.88" y="-187.7" font-family="Times New Roman,serif" font-size="14.00">Ground environment of the rover.</text>
+<polygon fill="lightgrey" stroke="grey" stroke-width="0" points="2827.9,-179.92 2827.9,-204.08 2712.56,-221.17 2549.44,-221.17 2434.1,-204.08 2434.1,-179.92 2549.44,-162.83 2712.56,-162.83 2827.9,-179.92"/>
+<text text-anchor="middle" x="2631" y="-195.8" font-family="Times,serif" font-size="14.00">ground: Ground</text>
+<text text-anchor="middle" x="2631" y="-180.8" font-family="Times,serif" font-size="14.00">Ground environment of the rover.</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.flows.ground -->
 <g id="edge12" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.flows.ground</title>
-<path fill="none" stroke="black" d="M1774,-471.91C1821.73,-466.41 1865.34,-459.57 1887.88,-451.5 1998.66,-411.82 2081.08,-287.83 2114.07,-230.99"/>
-<polygon fill="none" stroke="black" points="1773.94,-471.92 1768.43,-476.56 1762.02,-473.26 1767.53,-468.61 1773.94,-471.92"/>
-<text text-anchor="middle" x="1987" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;aggregation&gt;</text>
-<text text-anchor="middle" x="1987" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">ground</text>
+<path fill="none" stroke="black" d="M2213.43,-455.35C2274.1,-449.98 2329.54,-442.47 2358,-432 2472.4,-389.93 2569.83,-274.91 2610.59,-221.26"/>
+<polygon fill="none" stroke="black" points="2213.19,-455.37 2207.55,-459.86 2201.24,-456.39 2206.87,-451.89 2213.19,-455.37"/>
+<text text-anchor="middle" x="2467.5" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;aggregation&gt;</text>
+<text text-anchor="middle" x="2467.5" y="-405.8" font-family="Times,serif" font-size="14.00">ground</text>
 </g>
 <!-- rover.fxns.plan_path.correct_fault_vel -->
 <g id="node12" class="node">
 <title>rover.fxns.plan_path.correct_fault_vel</title>
-<polygon fill="lightgrey" stroke="grey" points="2579.25,-220.75 2304.5,-220.75 2304.5,-216.75 2300.5,-216.75 2300.5,-212.75 2304.5,-212.75 2304.5,-189.25 2300.5,-189.25 2300.5,-185.25 2304.5,-185.25 2304.5,-181.25 2579.25,-181.25 2579.25,-220.75"/>
-<polyline fill="none" stroke="grey" points="2304.5,-216.75 2308.5,-216.75 2308.5,-212.75 2304.5,-212.75"/>
-<polyline fill="none" stroke="grey" points="2304.5,-189.25 2308.5,-189.25 2308.5,-185.25 2304.5,-185.25"/>
-<text text-anchor="middle" x="2441.88" y="-203.45" font-family="Times New Roman,serif" font-size="14.00">correct_fault_vel: method</text>
-<text text-anchor="middle" x="2441.88" y="-187.7" font-family="Times New Roman,serif" font-size="14.00">Slow down the rover when faults are detected.</text>
+<polygon fill="lightgrey" stroke="grey" points="3196.5,-211 2845.5,-211 2845.5,-207 2841.5,-207 2841.5,-203 2845.5,-203 2845.5,-181 2841.5,-181 2841.5,-177 2845.5,-177 2845.5,-173 3196.5,-173 3196.5,-211"/>
+<polyline fill="none" stroke="grey" points="2845.5,-207 2849.5,-207 2849.5,-203 2845.5,-203 "/>
+<polyline fill="none" stroke="grey" points="2845.5,-181 2849.5,-181 2849.5,-177 2845.5,-177 "/>
+<text text-anchor="middle" x="3021" y="-195.8" font-family="Times,serif" font-size="14.00">correct_fault_vel: method</text>
+<text text-anchor="middle" x="3021" y="-180.8" font-family="Times,serif" font-size="14.00">Slow down the rover when faults are detected.</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.fxns.plan_path.correct_fault_vel -->
 <g id="edge6" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.fxns.plan_path.correct_fault_vel</title>
-<path fill="none" stroke="black" d="M1774.3,-483.25C1956.99,-475.33 2210.77,-454.86 2294.88,-402 2367.11,-356.59 2415.54,-261.78 2433.78,-221.15"/>
-<polygon fill="black" stroke="black" points="1774.17,-483.25 1768.34,-487.5 1762.18,-483.76 1768,-479.51 1774.17,-483.25"/>
-<text text-anchor="middle" x="2302.12" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-<text text-anchor="middle" x="2302.12" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">correct_fault_vel</text>
+<path fill="none" stroke="black" d="M2213.11,-464.58C2432.87,-457.87 2731.86,-438.58 2837,-384 2918.12,-341.89 2984.07,-250.25 3009.6,-211.21"/>
+<polygon fill="black" stroke="black" points="2213.06,-464.58 2207.18,-468.76 2201.06,-464.94 2206.94,-460.76 2213.06,-464.58"/>
+<text text-anchor="middle" x="2845.5" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="2845.5" y="-405.8" font-family="Times,serif" font-size="14.00">correct_fault_vel</text>
 </g>
 <!-- rover.fxns.plan_path.drive_control -->
 <g id="node13" class="node">
 <title>rover.fxns.plan_path.drive_control</title>
-<polygon fill="lightgrey" stroke="grey" points="2930.88,-220.75 2596.88,-220.75 2596.88,-216.75 2592.88,-216.75 2592.88,-212.75 2596.88,-212.75 2596.88,-189.25 2592.88,-189.25 2592.88,-185.25 2596.88,-185.25 2596.88,-181.25 2930.88,-181.25 2930.88,-220.75"/>
-<polyline fill="none" stroke="grey" points="2596.88,-216.75 2600.88,-216.75 2600.88,-212.75 2596.88,-212.75"/>
-<polyline fill="none" stroke="grey" points="2596.88,-189.25 2600.88,-189.25 2600.88,-185.25 2596.88,-185.25"/>
-<text text-anchor="middle" x="2763.88" y="-203.45" font-family="Times New Roman,serif" font-size="14.00">drive_control: method</text>
-<text text-anchor="middle" x="2763.88" y="-187.7" font-family="Times New Roman,serif" font-size="14.00">Control of rpower/lpower signal based on percieved line.</text>
+<polygon fill="lightgrey" stroke="grey" points="3637,-211 3215,-211 3215,-207 3211,-207 3211,-203 3215,-203 3215,-181 3211,-181 3211,-177 3215,-177 3215,-173 3637,-173 3637,-211"/>
+<polyline fill="none" stroke="grey" points="3215,-207 3219,-207 3219,-203 3215,-203 "/>
+<polyline fill="none" stroke="grey" points="3215,-181 3219,-181 3219,-177 3215,-177 "/>
+<text text-anchor="middle" x="3426" y="-195.8" font-family="Times,serif" font-size="14.00">drive_control: method</text>
+<text text-anchor="middle" x="3426" y="-180.8" font-family="Times,serif" font-size="14.00">Control of rpower/lpower signal based on percieved line.</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.fxns.plan_path.drive_control -->
 <g id="edge7" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.fxns.plan_path.drive_control</title>
-<path fill="none" stroke="black" d="M1773.8,-487.62C1931.61,-485.01 2157.07,-476.58 2352.88,-451.5 2458.75,-437.94 2495.69,-455.81 2587.88,-402 2666.97,-355.83 2729,-261.44 2753.05,-221.04"/>
-<polygon fill="black" stroke="black" points="1774.03,-487.62 1768.09,-491.71 1762.03,-487.81 1767.96,-483.71 1774.03,-487.62"/>
-<text text-anchor="middle" x="2594.88" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-<text text-anchor="middle" x="2594.88" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">drive_control</text>
+<path fill="none" stroke="black" d="M2213.62,-466.83C2405.1,-463.9 2674.1,-455.41 2909,-432 3041.62,-418.78 3084.24,-440.37 3205,-384 3296.21,-341.42 3378.85,-250.04 3411.37,-211.13"/>
+<polygon fill="black" stroke="black" points="2213.41,-466.83 2207.47,-470.92 2201.41,-467.01 2207.35,-462.92 2213.41,-466.83"/>
+<text text-anchor="middle" x="3216" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="3216" y="-405.8" font-family="Times,serif" font-size="14.00">drive_control</text>
 </g>
 <!-- rover.fxns.plan_path.dynamic_behavior -->
 <g id="node14" class="node">
 <title>rover.fxns.plan_path.dynamic_behavior</title>
-<polygon fill="lightgrey" stroke="grey" points="3370.38,-291.75 2949.38,-291.75 2949.38,-287.75 2945.38,-287.75 2945.38,-283.75 2949.38,-283.75 2949.38,-118.25 2945.38,-118.25 2945.38,-114.25 2949.38,-114.25 2949.38,-110.25 3370.38,-110.25 3370.38,-291.75"/>
-<polyline fill="none" stroke="grey" points="2949.38,-287.75 2953.38,-287.75 2953.38,-283.75 2949.38,-283.75"/>
-<polyline fill="none" stroke="grey" points="2949.38,-118.25 2953.38,-118.25 2953.38,-114.25 2949.38,-114.25"/>
-<text text-anchor="middle" x="3159.88" y="-274.45" font-family="Times New Roman,serif" font-size="14.00">dynamic_behavior: method</text>
-<text text-anchor="middle" x="3159.88" y="-258.7" font-family="Times New Roman,serif" font-size="14.00">Dynamic Behavior of Planning Module.</text>
-<text text-anchor="middle" x="3159.88" y="-226.95" font-family="Times New Roman,serif" font-size="14.00">Step 1: Assign Operational Mode.</text>
-<text text-anchor="middle" x="3159.88" y="-211.2" font-family="Times New Roman,serif" font-size="14.00">Step 2A: If Operational Mode is Drive determine if the rover has reached</text>
-<text text-anchor="middle" x="3159.88" y="-195.45" font-family="Times New Roman,serif" font-size="14.00">the end point or emergency shut off is required and assign those modes</text>
-<text text-anchor="middle" x="3159.88" y="-179.7" font-family="Times New Roman,serif" font-size="14.00">Step 2B: if none of the situations in step 2 applies, determines the</text>
-<text text-anchor="middle" x="3159.88" y="-163.95" font-family="Times New Roman,serif" font-size="14.00">control signal for left and right motor power, based on percieced line</text>
-<text text-anchor="middle" x="3159.88" y="-148.2" font-family="Times New Roman,serif" font-size="14.00">and current location.</text>
-<text text-anchor="middle" x="3159.88" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">Step 4: if mode is &quot;finished&quot; or &quot;em_off&quot;&quot; sets the left power and</text>
-<text text-anchor="middle" x="3159.88" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">right power control signal to 0.</text>
+<polygon fill="lightgrey" stroke="grey" points="4194.5,-279 3655.5,-279 3655.5,-275 3651.5,-275 3651.5,-271 3655.5,-271 3655.5,-113 3651.5,-113 3651.5,-109 3655.5,-109 3655.5,-105 4194.5,-105 4194.5,-279"/>
+<polyline fill="none" stroke="grey" points="3655.5,-275 3659.5,-275 3659.5,-271 3655.5,-271 "/>
+<polyline fill="none" stroke="grey" points="3655.5,-113 3659.5,-113 3659.5,-109 3655.5,-109 "/>
+<text text-anchor="middle" x="3925" y="-263.8" font-family="Times,serif" font-size="14.00">dynamic_behavior: method</text>
+<text text-anchor="middle" x="3925" y="-248.8" font-family="Times,serif" font-size="14.00">Dynamic Behavior of Planning Module.</text>
+<text text-anchor="middle" x="3925" y="-217.8" font-family="Times,serif" font-size="14.00">Step 1: Assign Operational Mode.</text>
+<text text-anchor="middle" x="3925" y="-202.8" font-family="Times,serif" font-size="14.00">Step 2A: If Operational Mode is Drive determine if the rover has reached</text>
+<text text-anchor="middle" x="3925" y="-187.8" font-family="Times,serif" font-size="14.00">the end point or emergency shut off is required and assign those modes</text>
+<text text-anchor="middle" x="3925" y="-172.8" font-family="Times,serif" font-size="14.00">Step 2B: if none of the situations in step 2 applies, determines the</text>
+<text text-anchor="middle" x="3925" y="-157.8" font-family="Times,serif" font-size="14.00">control signal for left and right motor power, based on percieced line</text>
+<text text-anchor="middle" x="3925" y="-142.8" font-family="Times,serif" font-size="14.00">and current location.</text>
+<text text-anchor="middle" x="3925" y="-127.8" font-family="Times,serif" font-size="14.00">Step 4: if mode is &quot;finished&quot; or &quot;em_off&quot;&quot; sets the left power and</text>
+<text text-anchor="middle" x="3925" y="-112.8" font-family="Times,serif" font-size="14.00">right power control signal to 0.</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.fxns.plan_path.dynamic_behavior -->
 <g id="edge8" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.fxns.plan_path.dynamic_behavior</title>
-<path fill="none" stroke="black" d="M1774.32,-489.08C1989.15,-488.16 2339.93,-481.47 2640.88,-451.5 2774.91,-438.15 2818.64,-460.7 2939.88,-402 2994,-375.79 3044.42,-332.02 3083.31,-292.09"/>
-<polygon fill="black" stroke="black" points="1774.23,-489.08 1768.24,-493.1 1762.23,-489.12 1768.21,-485.1 1774.23,-489.08"/>
-<text text-anchor="middle" x="2945.25" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-<text text-anchor="middle" x="2945.25" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">dynamic_behavior</text>
+<path fill="none" stroke="black" d="M2213.13,-468.73C2478.59,-467.71 2907.71,-460.99 3277,-432 3441.87,-419.06 3491.5,-443.01 3646,-384 3710.16,-359.5 3773.95,-317.49 3824.31,-279.11"/>
+<polygon fill="black" stroke="black" points="2213.01,-468.73 2207.03,-472.75 2201.01,-468.78 2207,-464.75 2213.01,-468.73"/>
+<text text-anchor="middle" x="3652" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="3652" y="-405.8" font-family="Times,serif" font-size="14.00">dynamic_behavior</text>
 </g>
 <!-- rover.fxns.plan_path.faultstates_in_bounds -->
 <g id="node15" class="node">
 <title>rover.fxns.plan_path.faultstates_in_bounds</title>
-<polygon fill="lightgrey" stroke="grey" points="3599.38,-220.75 3388.38,-220.75 3388.38,-216.75 3384.38,-216.75 3384.38,-212.75 3388.38,-212.75 3388.38,-189.25 3384.38,-189.25 3384.38,-185.25 3388.38,-185.25 3388.38,-181.25 3599.38,-181.25 3599.38,-220.75"/>
-<polyline fill="none" stroke="grey" points="3388.38,-216.75 3392.38,-216.75 3392.38,-212.75 3388.38,-212.75"/>
-<polyline fill="none" stroke="grey" points="3388.38,-189.25 3392.38,-189.25 3392.38,-185.25 3388.38,-185.25"/>
-<text text-anchor="middle" x="3493.88" y="-203.45" font-family="Times New Roman,serif" font-size="14.00">faultstates_in_bounds: method</text>
-<text text-anchor="middle" x="3493.88" y="-187.7" font-family="Times New Roman,serif" font-size="14.00">Check if fault-states are in-bounds.</text>
+<polygon fill="lightgrey" stroke="grey" points="4479,-211 4213,-211 4213,-207 4209,-207 4209,-203 4213,-203 4213,-181 4209,-181 4209,-177 4213,-177 4213,-173 4479,-173 4479,-211"/>
+<polyline fill="none" stroke="grey" points="4213,-207 4217,-207 4217,-203 4213,-203 "/>
+<polyline fill="none" stroke="grey" points="4213,-181 4217,-181 4217,-177 4213,-177 "/>
+<text text-anchor="middle" x="4346" y="-195.8" font-family="Times,serif" font-size="14.00">faultstates_in_bounds: method</text>
+<text text-anchor="middle" x="4346" y="-180.8" font-family="Times,serif" font-size="14.00">Check if fault-states are in-bounds.</text>
 </g>
 <!-- rover.fxns.plan_path&#45;&gt;rover.fxns.plan_path.faultstates_in_bounds -->
 <g id="edge9" class="edge">
 <title>rover.fxns.plan_path-&gt;rover.fxns.plan_path.faultstates_in_bounds</title>
-<path fill="none" stroke="black" d="M1773.83,-485.67C2108.63,-480.93 2768.75,-469.6 3000.88,-451.5 3170.24,-438.3 3238.84,-496.7 3379.88,-402 3445.74,-357.78 3478,-261.89 3489.17,-221.04"/>
-<polygon fill="black" stroke="black" points="1773.98,-485.67 1768.04,-489.76 1761.98,-485.84 1767.92,-481.76 1773.98,-485.67"/>
-<text text-anchor="middle" x="3409" y="-438.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-<text text-anchor="middle" x="3409" y="-422.45" font-family="Times New Roman,serif" font-size="14.00">faultstates_in_bounds</text>
+<path fill="none" stroke="black" d="M2213.25,-465.28C2628.31,-460.4 3435.74,-449.06 3721,-432 3936.34,-419.12 4016.29,-490.3 4204,-384 4275.55,-343.48 4321.67,-250.54 4338.66,-211.16"/>
+<polygon fill="black" stroke="black" points="2213.09,-465.28 2207.13,-469.35 2201.09,-465.42 2207.04,-461.35 2213.09,-465.28"/>
+<text text-anchor="middle" x="4239" y="-420.8" font-family="Times,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="4239" y="-405.8" font-family="Times,serif" font-size="14.00">faultstates_in_bounds</text>
 </g>
 </g>
 </svg>
