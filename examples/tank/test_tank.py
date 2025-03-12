@@ -86,22 +86,18 @@ class TankTests(unittest.TestCase, CommonTests):
         self.check_fs_parallel(self.mdl, self.fs1)
 
     def test_comp_mode_inj(self):
-        """ Tests that action modes injected in functions end up in their respective
-        actions."""
+        """ Tests that action modes create sub_faults for containing functions."""
         mdl = Tank()
-        amodes = [aname+"_"+mode for aname, a in mdl.fxns['human'].aa.acts.items()
-                  for mode in a.m.faultmodes]
-        fmodes = [*mdl.fxns['human'].m.faultmodes.keys()]
-        self.assertListEqual(amodes, fmodes)
 
-        anames = {mode: aname for aname, a in mdl.fxns['human'].aa.acts.items()
-                  for mode in a.m.faultmodes}
-        for amode, aname in anames.items():
+        modes = {'human.aa.acts.'+aname: mode
+                 for aname, a in mdl.fxns['human'].aa.acts.items()
+                 for mode in a.m.get_faults()}
+        for modescope, mode in modes.items():
             mdl = Tank()
-            scen = {'human': aname+"_"+amode}
-            mdl.propagate(1, fxnfaults=scen)
-            self.assertIn(aname+"_"+amode, mdl.fxns['human'].m.faults)
-            self.assertIn(amode, mdl.fxns['human'].aa.acts[aname].m.faults)
+            mdl.propagate(1, fxnfaults={modescope: mode})
+            faults = mdl.get_vars(modescope).m.faults
+            self.assertIn(mode, faults)
+            self.assertTrue(mdl.fxns['human'].m.sub_faults)
 
     def test_different_components(self):
         """Tests that model copies have different components."""

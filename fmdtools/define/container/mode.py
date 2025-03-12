@@ -483,8 +483,8 @@ class HumanErrorMode(Mode):
     gtp: ClassVar[float] = 1.0
 
     def __init__(self, *args, **kwargs):
-        kwargs['failrate'] = self.calc_he_rate()
         super().__init__(*args, **kwargs)
+        self.failrate = self.calc_he_rate()
 
     def calc_he_rate(self):
         """

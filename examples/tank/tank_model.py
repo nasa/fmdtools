@@ -262,9 +262,9 @@ class HumanActions(Function):
 
 
 class LookMode(HumanErrorMode):
+    gtp: float = 0.02
     fault_not_visible = (1, )
     default_phases = (('na', 1.0),)
-    gtp: float = 0.02
     epc_x = 4, 0.1
     epc_y = 4, 0.6
     epc_z = 1.1, 0.9
@@ -279,11 +279,11 @@ class Look(Action):
 
 
 class DetectMode(HumanErrorMode):
+    gtp: float = 0.03
     fault_not_detected = ()
     fault_false_high = ()
     fault_false_low = ()
     default_phases = (('na', 1.0),)
-    gtp: float = 0.03
     epc_2 = 11, 0.1
     epc_10 = 10, 0.2
     epc_13 = 4, 0
@@ -319,9 +319,9 @@ class Detect(Action):
 
 
 class ReachMode(HumanErrorMode):
+    gtp: float = 0.09
     fault_unable = (0.5, )
     default_phases = (('na', 1.0),)
-    gtp: float = 0.09
     epc_2 = 11, 0.1
     epc_10 = 10, 0.0
     epc_13 = 4, 0
@@ -354,10 +354,10 @@ class Grasp(Action):
 
 
 class TurnMode(HumanErrorMode):
+    gtp: float = 0.009
     fault_cannot = (1,)
     fault_wrong_valve = (0.5,)
     default_phases = (('na', 1.0),)
-    gtp: float = 0.009
     epc_2 = 11, 0.4
     epc_10 = 10, 0.2
     epc_13 = 4, 0

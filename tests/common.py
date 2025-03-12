@@ -50,7 +50,8 @@ class CommonTests():
             - Two copied models have the same states during fault injection
             - If given the same inputs, a copied model will run the same as the original
         """
-        faultscens = [{fname: [*f.m.get_faults()][0]} for fname, f in mdl.fxns.items()]
+        faultscens = [{fname: [*f.m.get_faults()][0]} for fname, f in mdl.fxns.items()
+                      if f.m.get_faults()]
         for faultscen in faultscens:
             for inj_time in inj_times:
                 for t in range(max_time):
@@ -148,7 +149,8 @@ class CommonTests():
 
         Reset models should simulate the same as newly-created models.
         """
-        faultscens = [{fname: [*f.m.get_faults()][0]} for fname, f in mdl.fxns.items()]
+        faultscens = [{fname: [*f.m.get_faults()][0]} for fname, f in mdl.fxns.items()
+                      if f.m.get_faults()]
         mdls = [mdl.copy() for i in range(len(faultscens)*len(res_times))]
         for faultscen in faultscens:
             for inj_time in res_times:
@@ -178,7 +180,8 @@ class CommonTests():
 
         Tests in a fault injection time copying scenario specifed by inj_times.
         """
-        faultscens = [{fname: [*f.m.get_faults()][0]} for fname, f in mdl.fxns.items()]
+        faultscens = [{fname: [*f.m.get_faults()][0]} for fname, f in mdl.fxns.items()
+                      if f.m.get_faults()]
         for faultscen in faultscens:
             for inj_time in cop_times:
                 for t in range(max_time):
