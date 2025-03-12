@@ -728,7 +728,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/fmdtools/fmdtools/analyze/common.py:549: UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
+C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\common.py:549: UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
   ax.set_xlim(*xlim)
 </pre></div></div>
 </div>
@@ -771,7 +771,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:02&lt;00:00, 14.20it/s]
+SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 44.65it/s]
 </pre></div></div>
 </div>
 <p>Using <code class="docutils literal notranslate"><span class="pre">analyze.tabulate.result_summary_fmea</span></code>, one can see the degradation effects of this fault on the flows:</p>
@@ -872,17 +872,17 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:02&lt;00:00, 
       <td>22.557</td>
     </tr>
     <tr>
-      <th>ee_to_oe_burnt_out_t0p0</th>
-      <td>['ee_to_oe', 'ee_o', 'oe', 'he', 'waste_he_o']</td>
-      <td>['ee_to_oe']</td>
+      <th>ee_to_he_low_heat_t0p0</th>
+      <td>['ee_to_he', 'he']</td>
+      <td>['ee_to_he']</td>
       <td>0.000002</td>
       <td>550.0</td>
       <td>48.18</td>
     </tr>
     <tr>
-      <th>ee_to_he_low_heat_t0p0</th>
-      <td>['ee_to_he', 'he']</td>
-      <td>['ee_to_he']</td>
+      <th>ee_to_oe_burnt_out_t0p0</th>
+      <td>['ee_to_oe', 'ee_o', 'oe', 'he', 'waste_he_o']</td>
+      <td>['ee_to_oe']</td>
       <td>0.000002</td>
       <td>550.0</td>
       <td>48.18</td>
@@ -912,17 +912,17 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:02&lt;00:00, 
       <td>144.54</td>
     </tr>
     <tr>
-      <th>export_waste_h1_ineffective_sink_t0p0</th>
-      <td>['export_waste_h1', 'he', 'waste_he_1']</td>
-      <td>['export_waste_h1']</td>
-      <td>0.000005</td>
-      <td>1000.0</td>
+      <th>export_waste_ho_hot_sink_t0p0</th>
+      <td>['export_waste_ho', 'he', 'waste_he_o']</td>
+      <td>['export_waste_ho']</td>
+      <td>0.00001</td>
+      <td>500.0</td>
       <td>219.0</td>
     </tr>
     <tr>
-      <th>export_waste_hm_ineffective_sink_t0p0</th>
-      <td>['export_waste_hm', 'he', 'waste_he_m']</td>
-      <td>['export_waste_hm']</td>
+      <th>export_waste_h1_ineffective_sink_t0p0</th>
+      <td>['export_waste_h1', 'he', 'waste_he_1']</td>
+      <td>['export_waste_h1']</td>
       <td>0.000005</td>
       <td>1000.0</td>
       <td>219.0</td>
@@ -936,9 +936,9 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:02&lt;00:00, 
       <td>219.0</td>
     </tr>
     <tr>
-      <th>export_waste_ho_ineffective_sink_t0p0</th>
-      <td>['export_waste_ho', 'he', 'waste_he_o']</td>
-      <td>['export_waste_ho']</td>
+      <th>export_waste_hm_ineffective_sink_t0p0</th>
+      <td>['export_waste_hm', 'he', 'waste_he_m']</td>
+      <td>['export_waste_hm']</td>
       <td>0.000005</td>
       <td>1000.0</td>
       <td>219.0</td>
@@ -952,11 +952,11 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:02&lt;00:00, 
       <td>219.0</td>
     </tr>
     <tr>
-      <th>export_waste_ho_hot_sink_t0p0</th>
+      <th>export_waste_ho_ineffective_sink_t0p0</th>
       <td>['export_waste_ho', 'he', 'waste_he_o']</td>
       <td>['export_waste_ho']</td>
-      <td>0.00001</td>
-      <td>500.0</td>
+      <td>0.000005</td>
+      <td>1000.0</td>
       <td>219.0</td>
     </tr>
     <tr>
@@ -976,6 +976,14 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:02&lt;00:00, 
       <td>306.6</td>
     </tr>
     <tr>
+      <th>supply_ee_major_overload_t0p0</th>
+      <td>['supply_ee', 'store_ee', 'ee_2', 'he', 'waste...</td>
+      <td>['supply_ee', 'store_ee']</td>
+      <td>0.000003</td>
+      <td>2400.0</td>
+      <td>315.36</td>
+    </tr>
+    <tr>
       <th>export_he_ineffective_sink_t0p0</th>
       <td>['export_he', 'he']</td>
       <td>['export_he']</td>
@@ -992,12 +1000,12 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:02&lt;00:00, 
       <td>438.0</td>
     </tr>
     <tr>
-      <th>supply_ee_major_overload_t0p0</th>
-      <td>['supply_ee', 'store_ee', 'ee_2', 'ee_3', 'ee_...</td>
-      <td>['supply_ee', 'store_ee']</td>
-      <td>0.000003</td>
-      <td>3650.0</td>
-      <td>479.61</td>
+      <th>import_ee_high_v_t0p0</th>
+      <td>['import_ee', 'store_ee', 'ee_1', 'ee_2']</td>
+      <td>['import_ee', 'store_ee']</td>
+      <td>0.000005</td>
+      <td>2100.0</td>
+      <td>459.9</td>
     </tr>
     <tr>
       <th>import_ee_no_v_t0p0</th>
@@ -1014,14 +1022,6 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:02&lt;00:00, 
       <td>0.000005</td>
       <td>3250.0</td>
       <td>711.75</td>
-    </tr>
-    <tr>
-      <th>import_ee_high_v_t0p0</th>
-      <td>['import_ee', 'store_ee', 'ee_1', 'ee_2', 'ee_...</td>
-      <td>['import_ee', 'store_ee']</td>
-      <td>0.000005</td>
-      <td>3350.0</td>
-      <td>733.65</td>
     </tr>
     <tr>
       <th>import_signal_partial_signal_t0p0</th>
