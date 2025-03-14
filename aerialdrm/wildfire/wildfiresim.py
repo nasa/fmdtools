@@ -12,9 +12,10 @@ from fmdtools.define.container.rand import Rand
 from fmdtools.sim.sample import ParameterSample
 from fmdtools.sim.search import ParameterSimProblem
 from fmdtools.sim.sample import ParameterDomain
-from fireenvironment import FireEnvironment, FirePropagation, FireMapParam
-from fireenvironment import sim_properties, double_size_p
-from aircraft import Aircraft
+
+from aerialdrm.wildfire.fireenvironment import FireEnvironment, FirePropagation, FireMapParam
+from aerialdrm.wildfire.fireenvironment import sim_properties, double_size_p
+from aerialdrm.wildfire.fireaircraft import FireAircraft
 import numpy as np
 
 
@@ -45,7 +46,7 @@ class WildfireSim(FunctionArchitecture):
 
         bases = [i for i in range(len(self.p.firemapparam.base_locations))]
         for base in bases:
-            self.add_fxn("aircraft_"+str(base), Aircraft, "fireenvironment",
+            self.add_fxn("aircraft_"+str(base), FireAircraft, "fireenvironment",
                          p={'base': base})
         self.add_fxn("firepropagation", FirePropagation, "fireenvironment")
 

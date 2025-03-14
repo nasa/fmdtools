@@ -18,6 +18,12 @@ The goal aerialdrm project is to enable the analysis of the resilience of disast
 fmdtools v2.1
 ```
 
+## Installation
+
+```
+   pip install -e "/path/to/aerialdrm" 
+```
+
 ## Contributors
 
 Daniel Hulse

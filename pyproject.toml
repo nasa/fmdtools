@@ -1,0 +1,64 @@
+[project]
+authors = [
+  {name = "fmdtools Developers"},
+]
+maintainers = [
+  {name = "Daniel Hulse", email = "daniel.e.hulse@nasa.gov"}
+]
+classifiers = []
+description = "Aerial disaster response model"
+license = {file="TBD"}
+name = "aerialdrm"
+version="0.2"
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = ["fmdtools >= 2.1.0"]
+
+
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools>=61.0.0"
+]
+
+[tool.setuptools.packages.find]
+include = ["aerialdrm*"]
+
+[tool.coverage.report]
+exclude_also = [
+    "def __repr__",
+    "raise ",
+    "if 0:",
+    "if __name__ == .__main__.:",
+	"def script_"
+    ]
+omit = [
+    # omit everything in /build
+    "/_build/*",
+    "/docs/*",
+    "*.pyc",
+    "*/__pycache__/*",
+    "*/tmp/*",
+    # omit overall test
+    "run_all_tests.py",
+    "*/__init__.py",
+    "*/ipykernel*",
+    "*/Temp/*"
+    ]
+
+[tool.coverage.run]
+omit = [
+    # omit everything in /build
+    "/_build/*",
+    "/docs/*",
+    "*.pyc",
+    "*/__pycache__/*",
+    "*/tmp/*",
+    # omit overall test
+    "run_all_tests.py",
+    "*/__init__.py",
+    "*/ipykernel*",
+    "*/Temp/*"
+    ]
+

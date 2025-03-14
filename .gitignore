@@ -2,10 +2,21 @@
 #ignore python cache files
 __pycache__/*
 .pyc
-
+*.pkl
+*.egg-info
+*.cpython*
 
 #ignore Jupyter checkpoints
 *.ipynb_checkpoints
 
 #ignore DS_Store for macs
 *.DS_Store
+
+#build things
+lib/
+dist/
+fmdtools.egg-info/
+fmdtools_hulsed.egg-info
+.coverage.*
+docs/.doctrees/
+docs/.pytest_cache/
