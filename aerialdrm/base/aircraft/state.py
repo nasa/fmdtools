@@ -9,7 +9,6 @@ from fmdtools.define.container.state import State
 
 
 class AircraftState(State):
-    retardant_status: float = 100  # starting retardant at 100%
     fuel_status: float = 100  # starting fuel at 100%
     goal_x: float = 10.0
     goal_y: float = 10.0
@@ -30,9 +29,16 @@ class AircraftState(State):
     def at_goal(self):
         return self.same(self.gett("goal_x", "goal_y"), "location_x", "location_y")
 
-    def in_range(self):
-        return (abs(self.goal_x - self.location_x) <= 10.0 and
-                abs(self.goal_y - self.location_y) <= 10.0)
+    def in_range(self, dist_range=10.0):
+        return (abs(self.goal_x - self.location_x) <= dist_range and
+                abs(self.goal_y - self.location_y) <= dist_range)
+
+    def calc_dist_to_travel(self, dist_range=10.0):
+        return np.min([dist_range, self.calc_dist()])
+
+    def set_new_loc(self):
+        dist_x, dist_y = self.direction*self.dist
+        return self.inc(location_x=dist_x, location_y=dist_y)
 
 
 if __name__ == "__main__":

@@ -5,9 +5,11 @@ Module for assets (e.g. aircraft, etc.)
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.container.time import Time
 
+
 from aerialdrm.wildfire.fireenvironment import FireEnvironment, double_size_p
 
 from aerialdrm.base.aircraft.aircraft import BaseAircraft
+from aerialdrm.base.aircraft.state import AircraftState
 
 
 
@@ -20,12 +22,17 @@ class AircraftTime(Time):
     timernames = ('resupply', )
 
 
+class FireAircraftState(AircraftState):
+    retardant_status: float = 100  # starting retardant at 100%
+
+
 class FireAircraft(BaseAircraft):
     """Aircraft that mitigates fire propagation and resupplies from bases."""
 
     __slots__ = ('fireenvironment')
     container_m = AircraftModes
     container_t = AircraftTime
+    container_s = FireAircraftState
     flow_fireenvironment = FireEnvironment
 
     def init_block(self, **kwargs):
