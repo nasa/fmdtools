@@ -36,7 +36,7 @@ Simulation techniques in fmdtools represent the state-of-the-art in dynamical sy
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/efficient.svg"> 
 
 ### Efficient Analysis Process
-Readily-deployable analysis methods are built in to fmdtools to enable the rapid and iterative statistical analysis of simulation results. With fmdtools, you can write 2-3 lines of code to visualize model behavior instead of spending hours writing it yourself.
+Readily-deployable analysis methods are built in to fmdtools to enable the rapid and iterative statistical analysis of simulation results. With fmdtools, you can easily leverage our existing methods to understand simulation results instead of spending hours implementing your own.
 
 
 
