@@ -36,9 +36,6 @@ class AircraftState(State):
     def calc_dist_to_travel(self, dist_range=10.0):
         return np.min([dist_range, self.calc_dist()])
 
-    def set_new_loc(self):
-        dist_x, dist_y = self.direction*self.dist
-        return self.inc(location_x=dist_x, location_y=dist_y)
 
 
 if __name__ == "__main__":
