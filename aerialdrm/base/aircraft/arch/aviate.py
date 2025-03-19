@@ -35,20 +35,20 @@ class Aviate(Function):
         Examples
         --------
         >>> t = Trajectories()
-        >>> t.s.put(location_z=100.0, goal_z=100.0, dist_z=0.0, dist=10.0, direction = np.array([1.0, 0.0]))
+        >>> t.s.put(z=100.0, goal_z=100.0, dz=0.0, dx=10.0)
         >>> des_traj = t.create_local("des_traj")
         >>> av = Aviate(trajectories=t)
         >>> av.dynamic_behavior(1)
-        >>> av.trajectories.s.location_x
+        >>> av.trajectories.s.x
         10.0
-        >>> av.trajectories.des_traj.s.put(direction=np.array([0.0, 1.0]))
+        >>> av.trajectories.des_traj.s.put(dx=0.0, dy=10.0)
         >>> av.dynamic_behavior(2)
-        >>> av.trajectories.s.location_y
+        >>> av.trajectories.s.y
         10.0
         """
         if self.electricity.s.voltage_high > 0.0:
             self.m.set_mode('flight')
-        elif self.trajectories.location_z > 0.0:
+        elif self.trajectories.z > 0.0:
             self.m.set_mode('falling')
         else:
             self.m.set_mode("idle")
@@ -67,9 +67,9 @@ class Aviate(Function):
         The trajectory increments to a new location determined by the direction and
         distance of the desired trajectory.
         """
-        self.trajectories.s.assign(self.trajectories.des_traj.s, 'dist', 'dist_z', 'direction')
-        self.trajectories.s.set_new_loc()
-        self.electricity.s.current_high = (self.trajectories.s.dist + abs(self.trajectories.s.dist_z))/12
+        self.trajectories.s.assign(self.trajectories.des_traj.s, 'dx', 'dy', 'dz')
+        self.trajectories.s.increment_position()
+        self.electricity.s.current_high = 2.0
         self.force.s.put(lift_support=1.0)
 
     def falling_behavior(self):
@@ -78,7 +78,7 @@ class Aviate(Function):
 
         The drone falls to the ground, removing all support to the drone.
         """
-        self.trajectories.s.dist_z = -self.trajectories.s.z
+        self.trajectories.s.dz = -self.trajectories.s.z
         self.trajectories.s.dist = 0.0
         self.trajectories.s.z = 0.0
         self.force.s.put(lift_support=0.0)
@@ -87,7 +87,7 @@ class Aviate(Function):
 
     def idle_behavior(self):
         """Behavior when not moving and grounded."""
-        self.trajectories.s.put(dist=0.0, dist_z=0.0, direction=np.array([0, 0]))
+        self.trajectories.s.put(dx=0.0, dy=0.0, dz=0.0)
         self.force.s.put(lift_support=0.0)
         self.s.current_high = 0.0
 

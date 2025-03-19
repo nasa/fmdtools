@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Combined aircraft architecture with all of the subfunctions in /arch."""
-from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.architecture.function import FunctionArchitecture, FunctionArchitectureGraph
 
 
 from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
@@ -50,3 +50,5 @@ if __name__ == "__main__":
     av.trajectories.s
 
     da = AircraftArchitecture()
+    fg = FunctionArchitectureGraph(da)
+    fg.draw()

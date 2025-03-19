@@ -5,22 +5,35 @@ from fmdtools.define.block.function import Function
 
 from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity, Environment
 
-class PerceiveEnvironment(Function):
-    """Placeholder for environment perception"""
 
-    __slots__ = ('environment', 'force', 'electricity', 'trajectories', 'des_traj')
+class PerceiveEnvironment(Function):
+    """Function that percieves the environment."""
+
+    __slots__ = ('environment', 'force', 'electricity', 'trajectories', 'perc_traj')
     flow_environment = Environment
     flow_force = Force
     flow_electricity = Electricity
     flow_trajectories = Trajectories
 
     def init_block(self, **kwargs):
-        self.des_traj = self.trajectories.create_local("des_traj")
+        """Initialize the block with des_traj sub-flow."""
+        self.perc_traj = self.trajectories.create_local("perc_traj")
 
-    def dynamic_behavior(self):
-        if self.electricity.voltage_low > 0.0:
+    def dynamic_behavior(self, time):
+        """
+        Environmental perception behavior - mirrors trajectory.
+
+        Examples
+        --------
+        >>> pe = PerceiveEnvironment()
+        >>> pe.trajectories.s.x=0.5
+        >>> pe.dynamic_behavior(1)
+        >>> pe.perc_traj.s.x
+        0.5
+        """
+        if self.electricity.s.voltage_low > 0.0:
             # perceive current location, goal, etc
-            self.des_traj.s.assign(self.trajectories.s, 'location_x', 'location_y', 'location_z')
+            self.perc_traj.update()
 
 
 if __name__ == "__main__":

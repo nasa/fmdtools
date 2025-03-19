@@ -26,15 +26,14 @@ class BaseAircraft(Function):
             dist = self.s.calc_dist()
             if self.s.in_range():
                 # if in range, clip to goal location
-                self.s.location_x = self.s.goal_x
-                self.s.location_y = self.s.goal_y
+                self.s.x = self.s.goal_x
+                self.s.y = self.s.goal_y
                 self.s.inc(fuel_status=-dist/self.p.max_range)
             else:
                 # otherwise, move in a straight line
+                self.s.update_position(vel=self.p.max_speed)
+                self.s.inc(fuel_status=-self.p.max_speed/self.p.max_range)
                 direction = self.s.find_direction()
-                self.s.inc(location_x=self.p.max_speed*direction[0],
-                           location_y=self.p.max_speed*direction[1],
-                           fuel_status=-self.p.max_speed/self.p.max_range)
 
 
 if __name__ == "__main__":

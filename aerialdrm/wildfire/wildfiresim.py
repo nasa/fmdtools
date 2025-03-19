@@ -122,8 +122,8 @@ if __name__ == "__main__":
     res, hist = prop.nominal(mdl)
     hist.flows.fireenvironment.c.burning
     fig, ax = hist.plot_line('fxns.aircraft_0.s.fuel_status',
-                             'fxns.aircraft_0.s.location_x',
-                             'fxns.aircraft_0.s.location_y',
+                             'fxns.aircraft_0.s.x',
+                             'fxns.aircraft_0.s.y',
                              'fxns.aircraft_0.m.mode',
                              'fxns.firepropagation.s.leading_edge_length',
                              'fxns.firepropagation.s.perc_burned')
@@ -132,11 +132,11 @@ if __name__ == "__main__":
     fig, ax = mdl.flows['fireenvironment'].c.show_from(8, hist.flows.fireenvironment.c,
                                                        properties=sim_properties,
                                                        xlabel="x (km)", ylabel="y (km)")
-    hist.plot_trajectories('s.location_x', 's.location_y', fig=fig, ax=ax)
+    hist.plot_trajectories('s.x', 's.y', fig=fig, ax=ax)
 
     fig, ax = mdl.flows['fireenvironment'].c.show_from(45, hist.flows.fireenvironment.c,
                                                        properties=sim_properties)
-    hist.plot_trajectories('s.location_x', 's.location_y', fig=fig, ax=ax)
+    hist.plot_trajectories('s.x', 's.y', fig=fig, ax=ax)
 
     ani = mdl.flows['fireenvironment'].c.animate(hist.flows.fireenvironment.c,
                                                  properties=sim_properties)

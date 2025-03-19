@@ -7,7 +7,7 @@ from fmdtools.define.flow.multiflow import MultiFlow
 from fmdtools.define.container.parameter import Parameter
 
 
-from aerialdrm.base.aircraft.state import AircraftState
+from aerialdrm.base.aircraft.state import AircraftPosition3
 
 
 class ForceState(State):
@@ -53,30 +53,11 @@ class AicraftControlParameter(Parameter):
     max_vel: float = 10.0
 
 
-class AircraftControlState(AircraftState):
-    """State of Trajectories flow."""
-
-    dist: float = 0.0  # dist to travel/travelled
-    dist_z: float = 0.0  # dist in y/z
-    goal_z: float = 0.0
-    location_z: float = 0.0
-
-    def at_goal(self):
-        """Determine whether the aircraft is at its goal location."""
-        return self.same(self.gett("goal_x", "goal_y", "goal_z"),
-                         "location_x", "location_y", "location_z")
-
-    def set_new_loc(self):
-        """Set the aircraft location given its direction and distance."""
-        dist_x, dist_y = self.direction*self.dist
-        self.inc(location_x=dist_x, location_y=dist_y, location_z=self.dist_z)
-
-
 class Trajectories(MultiFlow):
     """Degrees of freedom of the aircraft."""
 
     __slots__ = ()
-    container_s = AircraftControlState
+    container_s = AircraftPosition3
     container_p = AicraftControlParameter
 
 
