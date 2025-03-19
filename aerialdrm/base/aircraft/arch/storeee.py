@@ -17,6 +17,7 @@ class StoreAndSupplyElectricity(Function):
     __slots__ = ('force', 'electricity')
     flow_force = Force
     flow_electricity = Electricity
+    container_s = StoreEEState
 
     def dynamic_behavior(self, time):
         rate_high = self.electricity.s.mul('current_high', 'voltage_high')

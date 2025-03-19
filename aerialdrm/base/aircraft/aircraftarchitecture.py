@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Combined aircraft architecture with all of the subfunctions in /arch."""
 from fmdtools.define.architecture.function import FunctionArchitecture, FunctionArchitectureGraph
+import fmdtools.sim.propagate as prop
 
 
 from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
@@ -35,6 +36,7 @@ if __name__ == "__main__":
     doctest.testmod(verbose=True)
 
     t = Trajectories()
+    t.create_local('perc_traj')
     cf = ControlFlight(trajectories=t)
     av = Aviate(trajectories=t)
 
@@ -52,3 +54,11 @@ if __name__ == "__main__":
     da = AircraftArchitecture()
     fg = FunctionArchitectureGraph(da)
     fg.draw()
+
+    res, hist = prop.nominal(da)
+
+    hist.plot_trajectories('trajectories.s.x', 'trajectories.s.y')
+    hist.plot_trajectories('trajectories.s.x',
+                           'trajectories.s.y',
+                           'trajectories.s.z',
+                           time_groups='nominal', time_ticks=1.0)

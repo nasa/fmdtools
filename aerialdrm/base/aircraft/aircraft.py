@@ -11,7 +11,7 @@ from aerialdrm.base.aircraft.parameter import AircraftParameter
 
 
 class BaseAircraft(Function):
-    __slots__=()
+    __slots__ = ()
     container_s = AircraftState
     container_p = AircraftParameter
 
@@ -23,17 +23,9 @@ class BaseAircraft(Function):
 
     def fly_to_goal(self):
         if not self.indicate_at_goal():
-            dist = self.s.calc_dist()
-            if self.s.in_range():
-                # if in range, clip to goal location
-                self.s.x = self.s.goal_x
-                self.s.y = self.s.goal_y
-                self.s.inc(fuel_status=-dist/self.p.max_range)
-            else:
-                # otherwise, move in a straight line
-                self.s.update_position(vel=self.p.max_speed)
-                self.s.inc(fuel_status=-self.p.max_speed/self.p.max_range)
-                direction = self.s.find_direction()
+            self.update_position(maxvel=self.p.max_range)
+            dist = self.s.calc_dist_to_travel()
+            self.s.inc(fuel_status=-dist/self.p.max_range)
 
 
 if __name__ == "__main__":

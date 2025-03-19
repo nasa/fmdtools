@@ -31,18 +31,24 @@ class AircraftPosition(State):
         return np.sqrt(vector_dist[0]**2+vector_dist[1]**2)
 
     def at_goal(self):
-        return self.same(self.gett("goal_x", "goal_y"), "x", "y")
+        return self.same(self.get("goal_x", "goal_y"), "x", "y")
 
     def in_range(self, dist_range=10.0):
-        return (abs(self.goal_x - self.x) <= dist_range and
-                abs(self.goal_y - self.y) <= dist_range)
+        return self.calc_dist() <= dist_range
 
     def calc_dist_to_travel(self, dist_range=10.0):
         return np.min([dist_range, self.calc_dist()])
 
-    def update_position(self, vel=10.0):
+    def update_dist_to_travel(self, maxvel=10.0):
+        if self.in_range():
+            vel = self.calc_dist()
+        else:
+            vel = maxvel
         dx, dy = vel * self.find_direction()
         self.put(dx=dx, dy=dy)
+
+    def update_position(self, maxvel=10.0):
+        self.update_dist_to_travel(maxvel=maxvel)
         self.increment_position()
 
     def increment_position(self):
@@ -58,13 +64,18 @@ class AircraftPosition3(AircraftPosition):
 
     def at_goal(self):
         """Determine whether the aircraft is at its goal location."""
-        return self.same(self.gett("goal_x", "goal_y", "goal_z"),
+        return self.same(self.get("goal_x", "goal_y", "goal_z"),
                          "x", "y", "z")
 
-    def update_position(self, vel=10.0, zvel=0.0):
+    def update_position(self, maxvel=10.0, max_zvel=0.0):
         """Update the (3d) aircraft state."""
+        zdist = self.goal_z - self.z
+        if abs(max_zvel) > abs(zdist):
+            zvel = zdist
+        else:
+            zvel = np.sign(zdist)*max_zvel
         self.put(dz=zvel)
-        super().update_position(vel)
+        super().update_position(maxvel)
 
     def increment_position(self):
         self.inc(x=self.dx, y=self.dy, z=self.dz)
