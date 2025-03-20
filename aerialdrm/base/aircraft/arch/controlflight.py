@@ -11,22 +11,37 @@ from aerialdrm.base.aircraft.arch.flows import Environment
 
 
 class ControlState(State):
-    """State of ControlFlight Function planning."""
+    """
+    State of ControlFlight Function planning.
+
+    Parameters
+    ----------
+    flightplan: tuple
+        Set of x/y points the drone is to fly through.
+    height : float
+        Height the drone is to fly at.
+    pt : flat
+        Point within the flight plan that the drone is to fly to.
+    """
 
     flightplan: tuple = ((0.0, 0.0), (25.0, 25.0))
     height: float = 25.0
     pt: int = 0
 
     def get_goal(self):
+        """Get the current goal point (x,y) for the drone."""
         return self.flightplan[self.pt]
 
     def inc_goal(self):
-        self.pt+=1
+        """Increment the current goal."""
+        self.pt += 1
 
     def is_start(self):
+        """Determine whether the drone is as the start of its flightplan."""
         return self.pt == 0
 
     def is_end(self):
+        """Determine whether the drone is at the end of its flightplan."""
         return self.pt >= len(self.flightplan)-1
 
 
@@ -60,7 +75,11 @@ class ControlFlight(Function):
         self.des_traj = self.trajectories.create_local("des_traj")
 
     def static_behavior(self, time):
-        """Propagate static behaviors for flight control."""
+        """
+        Propagate static behaviors for flight control.
+
+        Determines modes and behavior for breaking/idling.
+        """
         if self.force.s.contact_support >= 5.0:
             self.m.add_fault('break')
             self.m.set_mode('idle')
@@ -78,7 +97,7 @@ class ControlFlight(Function):
         Propagate overall modal logic for flight control.
 
         Examples
-        ----------
+        --------
         >>> t = Trajectories()
         >>> perc_traj = t.create_local('perc_traj')
         >>> cf = ControlFlight(trajectories=t)
@@ -114,14 +133,11 @@ class ControlFlight(Function):
                 self.flight_planning()
             self.set_goal()
 
-            if self.m.in_mode('ascend'):
-                self.ascend_behavior()
-            elif self.m.in_mode('descend'):
-                self.descend_behavior()
-            elif self.m.in_mode('flight'):
-                self.flight_behavior()
+            if self.m.in_mode('ascend', 'descend', 'flight'):
+                maxvel = self.des_traj.p.max_vel
             elif self.m.in_mode('idle'):
-                self.idle_behavior()
+                maxvel = 0.0
+        self.des_traj.s.update_position(maxvel=maxvel)
 
     def takeoff_planning(self):
         """Determine flight mode at the start of the flight plan."""
@@ -146,31 +162,15 @@ class ControlFlight(Function):
     def set_goal(self):
         """Set the goal properties of the trajectories flow based on the flight mode."""
         self.des_traj.s.assign(self.trajectories.perc_traj.s, 'x', 'y', 'z')
-        self.des_traj.s.assign(self.s.get_goal(), 'goal_x', 'goal_y')
         if self.m.in_mode('ascend'):
-            self.des_traj.s.goal_z = self.s.height
+            newgoal = [*self.des_traj.s.get('x', 'y'), self.s.height]
         elif self.m.in_mode('descend'):
-            self.des_traj.s.goal_z = 0.0
-        elif self.m.in_mode('flight', 'idle'):
-            self.des_traj.s.goal_z = self.des_traj.s.goal_z
-
-    def descend_behavior(self):
-        """Set dist and direction of the aircraft when descending."""
-        self.des_traj.s.update_position(maxvel=0.0,
-                                        max_zvel=self.des_traj.p.max_vel)
-
-    def ascend_behavior(self):
-        """Set dist and direction of aircraft when ascending."""
-        self.des_traj.s.update_position(maxvel=0.0, max_zvel=self.des_traj.p.max_vel)
-
-    def flight_behavior(self):
-        """Set dist and direction of aircraft when in normal flight."""
-        # assign direction and distance to go
-        self.des_traj.s.update_position(maxvel=self.des_traj.p.max_vel, max_zvel=0.0)
-
-    def idle_behavior(self):
-        """Set dist and direction of aircraft when idling."""
-        self.des_traj.s.update_position(maxvel=0.0)
+            newgoal = [*self.des_traj.s.get('x', 'y'), 0.0]
+        elif self.m.in_mode('flight'):
+            newgoal = [*self.s.get_goal(), self.s.height]
+        elif self.m.in_mode('idle'):
+            newgoal = self.des_traj.s.get_loc()
+        self.des_traj.s.assign(newgoal, 'goal_x', 'goal_y', 'goal_z')
 
 
 if __name__ == "__main__":

@@ -8,6 +8,8 @@ from aerialdrm.base.aircraft.arch.flows import Trajectories, Force
 
 
 class HoldPayloadMode(Mode):
+    """Modes for drone structure."""
+
     fault_break = ()
 
 

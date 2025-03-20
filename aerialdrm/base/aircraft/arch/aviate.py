@@ -4,9 +4,9 @@
 
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.function import Function
-import numpy as np
 
-from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity, Environment
+from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
+from aerialdrm.base.aircraft.arch.flows import Environment
 
 
 class AviateMode(Mode):
@@ -48,6 +48,7 @@ class Aviate(Function):
     container_m = AviateMode
 
     def static_behavior(self, time):
+        """Overall static behavior of drone (determines modes based on states)."""
         if self.force.s.contact_support > 10.0:
             self.m.add_fault('crash')
 

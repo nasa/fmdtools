@@ -16,16 +16,34 @@ from aerialdrm.base.aircraft.arch.holdpayload import HoldPayload
 
 
 class AircraftArchParameter(Parameter):
+    """Overall Parameter Defining the AircraftArchitecture."""
 
     flightplan: tuple = ((0.0, 0.0), (25.0, 25.0))
     height: float = 25.0
 
 
 class AircraftArchitecture(FunctionArchitecture):
+    """
+    Overall drone architecture.
+
+    Involves flows:
+        - force: the flow of force between physical components
+        - electricity: the flow of electrical energy from the power supply to functions
+        - trajectories: the 3d position and velocity of the aircraft
+        - environment: the environment the aircraft inhabits and interacts with
+    And functions:
+        - control_flight : flight planning and control
+        - aviate : the function that moves the drone in the x/y/z
+        - store_and_supply_ee : the aircraft power supply/battery
+        - perceive_environment : drone perception and localization
+        - hold_payload : the structure of the drone
+    """
+
     __slots__ = ()
     container_p = AircraftArchParameter
 
     def init_architecture(self, **kwargs):
+        """Initialize the architecture of the aircraft."""
         self.add_flow('force', Force)
         self.add_flow('electricity', Electricity)
         self.add_flow('trajectories', Trajectories)
@@ -43,6 +61,7 @@ class AircraftArchitecture(FunctionArchitecture):
         self.add_fxn('hold_payload', HoldPayload, 'trajectories', 'force')
 
     def find_classification(self, scen, mdlhists):
+        """Classify the simulation results."""
         return {'faultmodes': {*self.return_faultmodes()}}
 
 

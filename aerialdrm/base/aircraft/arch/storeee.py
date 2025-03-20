@@ -26,6 +26,11 @@ class StoreAndSupplyElectricity(Function):
     container_m = StoreEEMode
 
     def static_behavior(self, time):
+        """
+        Execute power supply static behavior.
+
+        Determine faults as well as electricity voltage/current.
+        """
         if self.force.s.contact_support >= 5.0:
             self.m.add_fault('break')
 
@@ -39,8 +44,12 @@ class StoreAndSupplyElectricity(Function):
             self.electricity.s.voltage_low = float(self.electricity.s.power_low)
             self.electricity.s.voltage_high = False
 
-
     def dynamic_behavior(self, time):
+        """
+        Execute power supply dynamic behavior.
+
+        Determines energy use and thus charge.
+        """
         rate_high = self.electricity.s.mul('current_high', 'voltage_high')
         rate_low = self.electricity.s.mul('current_low', 'voltage_low')
         self.s.inc(charge=-(rate_high+0.1*rate_low))
