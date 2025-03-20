@@ -30,8 +30,11 @@ class ElectricityState(State):
 
     voltage_high: float = 1.0
     current_high: float = 1.0
+    power_high: bool = False
     voltage_low: float = 1.0
     current_low: float = 1.0
+    power_low: bool = True
+
 
 
 class Electricity(Flow):

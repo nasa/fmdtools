@@ -5,7 +5,6 @@
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.state import State
 from fmdtools.define.container.mode import Mode
-import numpy as np
 
 from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
 from aerialdrm.base.aircraft.arch.flows import Environment
@@ -36,6 +35,7 @@ class ControlMode(Mode):
 
     opermodes = ('ascend', 'descend', 'flight', 'idle')
     fault_off = ()
+    fault_break = ()
     mode: str = 'idle'
 
 
@@ -46,7 +46,8 @@ class ControlFlight(Function):
     Determines direction and distance to travel based on location and flightplan.
     """
 
-    __slots__ = ('trajectories', 'perc_traj', 'des_traj', 'force', 'electricity', 'environment')
+    __slots__ = ('trajectories', 'perc_traj', 'des_traj', 'force', 'electricity',
+                 'environment')
     flow_trajectories = Trajectories
     flow_force = Force
     flow_electricity = Electricity
@@ -60,10 +61,17 @@ class ControlFlight(Function):
 
     def static_behavior(self, time):
         """Propagate static behaviors for flight control."""
+        if self.force.s.contact_support >= 5.0:
+            self.m.add_fault('break')
+            self.m.set_mode('idle')
         if self.electricity.s.voltage_low <= 0.0:
             self.m.set_mode('idle')
         else:
             self.electricity.s.current_low = 1.0
+        if self.m.in_mode('idle'):
+            self.electricity.s.power_high = False
+        else:
+            self.electricity.s.power_high = True
 
     def dynamic_behavior(self, time):
         """
@@ -76,6 +84,7 @@ class ControlFlight(Function):
         >>> cf = ControlFlight(trajectories=t)
         >>> cf.m.mode
         'idle'
+        >>> cf.dynamic_behavior(0)
         >>> cf.dynamic_behavior(1)
         >>> cf.m.mode
         'ascend'
@@ -94,48 +103,45 @@ class ControlFlight(Function):
         >>> cf.m.mode
         'idle'
         """
-        self.trajectories.perc_traj.update('goal_x', 'goal_y', 'goal_z',
-                                           to_get='des_traj')
-        if self.s.is_start() and self.t.time>0.0:
-            self.takeoff_planning()
-        elif self.s.is_end():
-            self.landing_planning()
-        else:
-            self.flight_planning()
+        if not self.m.in_mode('off', 'break'):
+            self.trajectories.perc_traj.update('goal_x', 'goal_y', 'goal_z',
+                                               to_get='des_traj')
+            if self.s.is_start() and time > 0.0:
+                self.takeoff_planning()
+            elif self.s.is_end():
+                self.landing_planning()
+            else:
+                self.flight_planning()
+            self.set_goal()
 
-        if self.m.in_mode('ascend'):
-            self.ascend_behavior()
-        elif self.m.in_mode('descend'):
-            self.descend_behavior()
-        elif self.m.in_mode('flight'):
-            self.flight_behavior()
-        elif self.m.in_mode('idle'):
-            self.idle_behavior()
+            if self.m.in_mode('ascend'):
+                self.ascend_behavior()
+            elif self.m.in_mode('descend'):
+                self.descend_behavior()
+            elif self.m.in_mode('flight'):
+                self.flight_behavior()
+            elif self.m.in_mode('idle'):
+                self.idle_behavior()
 
     def takeoff_planning(self):
         """Determine flight mode at the start of the flight plan."""
         if self.m.in_mode('idle'):
             self.m.set_mode('ascend')
-            self.set_goal()
         elif self.m.in_mode('ascend') and self.trajectories.perc_traj.s.z >= self.s.height:
             self.m.set_mode('flight')
             self.s.inc_goal()
-            self.set_goal()
 
     def landing_planning(self):
         """Determine flight mode at the end of the flight plan."""
         if self.m.in_mode('flight') and self.trajectories.perc_traj.s.at_goal():
             self.m.set_mode('descend')
-            self.set_goal()
         elif self.m.in_mode('descend') and self.trajectories.perc_traj.s.z <= 0.0:
             self.m.set_mode('idle')
-            self.set_goal()
 
     def flight_planning(self):
         """Determine flight mode in the middle of the flight plan."""
         if self.trajectories.perc_traj.s.at_goal():
             self.s.inc_goal()
-            self.set_goal()
 
     def set_goal(self):
         """Set the goal properties of the trajectories flow based on the flight mode."""
@@ -151,7 +157,7 @@ class ControlFlight(Function):
     def descend_behavior(self):
         """Set dist and direction of the aircraft when descending."""
         self.des_traj.s.update_position(maxvel=0.0,
-                                        max_zvel=self.trajectories.perc_traj.s.z)
+                                        max_zvel=self.des_traj.p.max_vel)
 
     def ascend_behavior(self):
         """Set dist and direction of aircraft when ascending."""
