@@ -5,7 +5,7 @@ Created on Thu Mar 20 14:55:43 2025
 @author: dhulse
 """
 
-from fmdtools.define.environment import Environment
+from aerialdrm.base.aircraft.arch.flows import AircraftEnvironment
 from fmdtools.define.object.coords import Coords, CoordsParam
 import numpy as np
 
@@ -43,7 +43,8 @@ properties = {'disallowed': {'color': 'blue', 'proplab': 'disallowed', 'alpha': 
 collections = {'suitable': {"label": False, 'color': 'lightgreen'}}
 
 
-class HurricaneEnvironment(Environment):
+class HurricaneEnvironment(AircraftEnvironment):
+
     coords_c = HurricaneCoords
 
 

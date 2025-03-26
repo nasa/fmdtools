@@ -7,7 +7,7 @@ from fmdtools.define.container.state import State
 from fmdtools.define.container.mode import Mode
 
 from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
-from aerialdrm.base.aircraft.arch.flows import Environment
+from aerialdrm.base.aircraft.arch.flows import AircraftEnvironment
 
 
 class ControlState(State):
@@ -66,7 +66,7 @@ class ControlFlight(Function):
     flow_trajectories = Trajectories
     flow_force = Force
     flow_electricity = Electricity
-    flow_environment = Environment
+    flow_environment = AircraftEnvironment
     container_s = ControlState
     container_m = ControlMode
 

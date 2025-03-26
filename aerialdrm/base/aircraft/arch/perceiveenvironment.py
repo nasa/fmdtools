@@ -3,14 +3,14 @@
 
 from fmdtools.define.block.function import Function
 
-from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity, Environment
+from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity, AircraftEnvironment
 
 
 class PerceiveEnvironment(Function):
     """Function that percieves the environment."""
 
     __slots__ = ('environment', 'force', 'electricity', 'trajectories', 'perc_traj')
-    flow_environment = Environment
+    flow_environment = AircraftEnvironment
     flow_force = Force
     flow_electricity = Electricity
     flow_trajectories = Trajectories

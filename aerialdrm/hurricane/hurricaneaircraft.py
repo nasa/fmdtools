@@ -4,13 +4,103 @@ Created on Fri Mar 14 14:10:02 2025
 
 @author: dhulse
 """
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.architecture.function import FunctionArchitectureGraph
+from fmdtools.define.container.parameter import Parameter
+import fmdtools.sim.propagate as prop
 
-from aerialdrm.base.aircraft.aircraftarchitecture import AircraftArchitecture
+
+from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
+from aerialdrm.base.aircraft.arch.aviate import Aviate
+from aerialdrm.base.aircraft.arch.controlflight import ControlFlight
+from aerialdrm.base.aircraft.arch.storeee import StoreAndSupplyElectricity
+from aerialdrm.base.aircraft.arch.perceiveenvironment import PerceiveEnvironment
+from aerialdrm.base.aircraft.arch.holdpayload import HoldPayload
 
 
+from hurricaneenvironment import HurricaneEnvironment, properties, collections
 
+
+class HurricaneAircraftArchParameter(Parameter):
+    """Overall Parameter Defining the AircraftArchitecture."""
+
+    flightplan: tuple = ((0.0, 0.0), (40.0, 0.0), (40.0, 100.0), (100.0, 100.0))
+    height: float = 25.0
+
+
+class HurricaneAircraftArchitecture(FunctionArchitecture):
+    """
+    Overall drone architecture.
+
+    Involves flows:
+        - force: the flow of force between physical components
+        - electricity: the flow of electrical energy from the power supply to functions
+        - trajectories: the 3d position and velocity of the aircraft
+        - environment: the environment the aircraft inhabits and interacts with
+    And functions:
+        - control_flight : flight planning and control
+        - aviate : the function that moves the drone in the x/y/z
+        - store_and_supply_ee : the aircraft power supply/battery
+        - perceive_environment : drone perception and localization
+        - hold_payload : the structure of the drone
+    """
+
+    __slots__ = ()
+    container_p = HurricaneAircraftArchParameter
+
+    def init_architecture(self, **kwargs):
+        """Initialize the architecture of the aircraft."""
+        self.add_flow('force', Force)
+        self.add_flow('electricity', Electricity)
+        self.add_flow('trajectories', Trajectories)
+        self.add_flow('environment', HurricaneEnvironment)
+
+        self.add_fxn('control_flight', ControlFlight,
+                     'trajectories', 'force', 'electricity', 'environment',
+                     s={'flightplan': self.p.flightplan, 'height': self.p.height})
+        self.add_fxn('aviate', Aviate,
+                     'trajectories', 'force', 'electricity', 'environment')
+        self.add_fxn('store_and_supply_ee', StoreAndSupplyElectricity,
+                     'force', 'electricity')
+        self.add_fxn('perceive_environment', PerceiveEnvironment,
+                     'environment', 'force', 'electricity', 'trajectories')
+        self.add_fxn('hold_payload', HoldPayload, 'trajectories', 'force')
+
+    def find_classification(self, scen, mdlhists):
+        """Classify the simulation results."""
+        return {'faultmodes': {*self.return_faultmodes()}}
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
 
 if __name__ == "__main__":
 
 
-    da = AircraftArchitecture()
+    haa = HurricaneAircraftArchitecture()
+
+    res, hist = prop.nominal(haa)
+
+    res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'break', 8, desired_result=['endclass', 'graph'])
+    res.graph.draw()
+
+    fig, ax = haa.flows['environment'].c.show(properties=properties,
+                                              collections=collections)
+
+    hist.plot_trajectories('trajectories.s.x', 'trajectories.s.y', fig=fig, ax=ax)
+
+
+    fig, ax = haa.flows['environment'].c.show_collection('suitable', z=0,
+                                                         **collections['suitable'])
+
+    fig, ax = hist.plot_trajectories('trajectories.s.x',
+                           'trajectories.s.y',
+                           'trajectories.s.z',
+                           time_groups='nominal', time_ticks=1.0, fig=fig, ax=ax)
+
+
+    hist.plot_line('fxns.store_and_supply_ee.s.charge',
+                   'fxns.control_flight.m.mode',
+                   'fxns.aviate.m.mode')
+

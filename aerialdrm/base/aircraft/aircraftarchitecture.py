@@ -7,7 +7,7 @@ import fmdtools.sim.propagate as prop
 
 
 from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
-from aerialdrm.base.aircraft.arch.flows import Environment
+from aerialdrm.base.aircraft.arch.flows import AircraftEnvironment
 from aerialdrm.base.aircraft.arch.aviate import Aviate
 from aerialdrm.base.aircraft.arch.controlflight import ControlFlight
 from aerialdrm.base.aircraft.arch.storeee import StoreAndSupplyElectricity
@@ -47,7 +47,7 @@ class AircraftArchitecture(FunctionArchitecture):
         self.add_flow('force', Force)
         self.add_flow('electricity', Electricity)
         self.add_flow('trajectories', Trajectories)
-        self.add_flow('environment', Environment)
+        self.add_flow('environment', AircraftEnvironment)
 
         self.add_fxn('control_flight', ControlFlight,
                      'trajectories', 'force', 'electricity', 'environment',

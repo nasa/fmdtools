@@ -4,6 +4,7 @@
 from fmdtools.define.container.state import State
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.flow.multiflow import MultiFlow
+from fmdtools.define.environment import Environment
 from fmdtools.define.container.parameter import Parameter
 
 
@@ -44,10 +45,8 @@ class Electricity(Flow):
     container_s = ElectricityState
 
 
-class Environment(Flow):
+class AircraftEnvironment(Environment):
     "Placeholder for environment flow TBD."
-
-    __slots__ = ()
 
 
 class AicraftControlParameter(Parameter):

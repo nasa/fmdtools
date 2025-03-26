@@ -6,7 +6,7 @@ from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.function import Function
 
 from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
-from aerialdrm.base.aircraft.arch.flows import Environment
+from aerialdrm.base.aircraft.arch.flows import AircraftEnvironment
 
 
 class AviateMode(Mode):
@@ -44,7 +44,7 @@ class Aviate(Function):
     flow_trajectories = Trajectories
     flow_force = Force
     flow_electricity = Electricity
-    flow_environment = Environment
+    flow_environment = AircraftEnvironment
     container_m = AviateMode
 
     def static_behavior(self, time):
