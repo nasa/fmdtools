@@ -29,6 +29,7 @@ class Force(Flow):
 class ElectricityState(State):
     """State of electricity - assumes high and low volate lines."""
 
+    charge: float = 100.0
     voltage_high: float = 1.0
     current_high: float = 1.0
     power_high: bool = False

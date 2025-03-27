@@ -18,13 +18,34 @@ from aerialdrm.base.aircraft.arch.perceiveenvironment import PerceiveEnvironment
 from aerialdrm.base.aircraft.arch.holdpayload import HoldPayload
 
 
-from hurricaneenvironment import HurricaneEnvironment, properties, collections
+from aerialdrm.hurricane.hurricaneenvironment import HurricaneEnvironment, properties, collections
+
+
+
+class HurricaneControlFlight(ControlFlight):
+    __slots__ = ()
+    flow_environment = HurricaneEnvironment
+
+    def dynamic_behavior(self, time):
+        if self.electricity.s.charge <= 25.0:
+            if self.s.pt > 0:
+                self.replan_mission()
+            else:
+                self.m.set_mode('descend')
+        super().dynamic_behavior(time)
+
+    def replan_mission(self):
+        curr_pt = self.trajectories.perc_traj.s.get('x', 'y')
+        land_pt = self.environment.c.find_closest(*curr_pt, 'suitable')
+        self.s.flightplan = (tuple(land_pt),)
+        self.s.pt = 0
+
 
 
 class HurricaneAircraftArchParameter(Parameter):
     """Overall Parameter Defining the AircraftArchitecture."""
 
-    flightplan: tuple = ((0.0, 0.0), (40.0, 0.0), (40.0, 100.0), (100.0, 100.0))
+    flightplan: tuple = ((0.0, 0.0), (50.0, 0.0), (50.0, 100.0), (100.0, 100.0))
     height: float = 25.0
 
 
@@ -55,7 +76,7 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
         self.add_flow('trajectories', Trajectories)
         self.add_flow('environment', HurricaneEnvironment)
 
-        self.add_fxn('control_flight', ControlFlight,
+        self.add_fxn('control_flight', HurricaneControlFlight,
                      'trajectories', 'force', 'electricity', 'environment',
                      s={'flightplan': self.p.flightplan, 'height': self.p.height})
         self.add_fxn('aviate', Aviate,
@@ -66,9 +87,26 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
                      'environment', 'force', 'electricity', 'trajectories')
         self.add_fxn('hold_payload', HoldPayload, 'trajectories', 'force')
 
+    def indicate_unsuitable_landing(self):
+        coords = [*self.flows['trajectories'].s.get('x', 'y')]
+        if self.flows['trajectories'].s.z > 0.0:
+            return False
+        else:
+            return coords not in [[*i] for i in [*self.flows['environment'].c.suitable]]
+
     def find_classification(self, scen, mdlhists):
         """Classify the simulation results."""
-        return {'faultmodes': {*self.return_faultmodes()}}
+        endloc = self.flows['trajectories'].s.get('x', 'y')
+        coords = self.flows['environment'].c
+        xs = self.h.flows.trajectories.s.x
+        ys = self.h.flows.trajectories.s.y
+        any_rest = any([coords.get(x, ys[i], 'restricted') for i, x in enumerate(xs)])
+        return {'faultmodes': {*self.return_faultmodes()},
+                'unsuitable_landing': self.indicate_unsuitable_landing(),
+                'disallowed_landing': coords.get(*endloc, 'disallowed'),
+                'occupied_landing': coords.get(*endloc, 'occupied'),
+                'restricted_landing': coords.get(*endloc, 'restricted'),
+                'restricted_flight': any_rest}
 
 
 if __name__ == "__main__":
@@ -77,12 +115,13 @@ if __name__ == "__main__":
 
 if __name__ == "__main__":
 
-
     haa = HurricaneAircraftArchitecture()
 
     res, hist = prop.nominal(haa)
 
-    res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'break', 8, desired_result=['endclass', 'graph'])
+    # res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'break', 8, desired_result=['endclass', 'graph'])
+    res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'depletion', 15, desired_result=['endclass', 'graph'])
+    res, hist = prop.one_fault(haa, 'control_flight', 'loss', 9, desired_result=['endclass', 'graph'])
     res.graph.draw()
 
     fig, ax = haa.flows['environment'].c.show(properties=properties,
@@ -100,7 +139,7 @@ if __name__ == "__main__":
                            time_groups='nominal', time_ticks=1.0, fig=fig, ax=ax)
 
 
-    hist.plot_line('fxns.store_and_supply_ee.s.charge',
+    hist.plot_line('flows.electricity.s.charge',
                    'fxns.control_flight.m.mode',
                    'fxns.aviate.m.mode')
 

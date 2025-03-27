@@ -49,8 +49,9 @@ class ControlMode(Mode):
     """ControlFlight mode."""
 
     opermodes = ('ascend', 'descend', 'flight', 'idle')
+    exclusive = True
     fault_off = ()
-    fault_break = ()
+    fault_loss = ()
     mode: str = 'idle'
 
 
@@ -78,12 +79,11 @@ class ControlFlight(Function):
         """
         Propagate static behaviors for flight control.
 
-        Determines modes and behavior for breaking/idling.
+        Determines modes and behavior for loss/idling.
         """
         if self.force.s.contact_support >= 5.0:
-            self.m.add_fault('break')
-            self.m.set_mode('idle')
-        if self.electricity.s.voltage_low <= 0.0:
+            self.m.add_fault('loss')
+        if self.electricity.s.voltage_low <= 0.0 and not self.m.in_mode('loss'):
             self.m.set_mode('idle')
         else:
             self.electricity.s.current_low = 1.0
@@ -122,7 +122,7 @@ class ControlFlight(Function):
         >>> cf.m.mode
         'idle'
         """
-        if not self.m.in_mode('off', 'break'):
+        if not self.m.in_mode('loss'):
             self.trajectories.perc_traj.update('goal_x', 'goal_y', 'goal_z',
                                                to_get='des_traj')
             if self.s.is_start() and time > 0.0:
@@ -131,13 +131,14 @@ class ControlFlight(Function):
                 self.landing_planning()
             else:
                 self.flight_planning()
-            self.set_goal()
 
-            if self.m.in_mode('ascend', 'descend', 'flight'):
-                maxvel = self.des_traj.p.max_vel
-            elif self.m.in_mode('idle'):
-                maxvel = 0.0
-        self.des_traj.s.update_position(maxvel=maxvel)
+        if not self.m.in_mode('idle', 'loss'):
+            self.set_goal()
+            self.des_traj.s.update_position(maxvel=self.des_traj.p.max_vel)
+        elif self.m.in_mode('idle'):
+            self.des_traj.s.put(dx=0.0, dy=0.0, dz=0.0)
+        else:
+            self.des_traj.s.put(dz=-self.trajectories.s.z)
 
     def takeoff_planning(self):
         """Determine flight mode at the start of the flight plan."""

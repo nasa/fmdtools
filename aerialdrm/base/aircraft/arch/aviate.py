@@ -52,12 +52,20 @@ class Aviate(Function):
         if self.force.s.contact_support > 10.0:
             self.m.add_fault('crash')
 
-        if self.electricity.s.voltage_high > 0.0:
-            self.m.set_mode('flight')
-        elif self.trajectories.s.z > 0.0:
+        if self.trajectories.s.z > 0.0 and self.electricity.s.voltage_high <= 0.0:
             self.m.set_mode('falling')
+        elif self.trajectories.s.z <= 0.0 and self.electricity.s.voltage_high > 0.0:
+            if not self.trajectories.des_traj.s.same(dx=0.0, dy=0.0):
+                self.m.add_fault('crash')
+            elif not self.trajectories.des_traj.s.same(dz=0.0):
+                self.m.set_mode('flight')
+            else:
+                self.m.set_mode('idle')
         else:
-            self.m.set_mode("idle")
+            self.m.set_mode('flight')
+
+        if self.m.has_fault('crash'):
+            self.m.set_mode('idle')
 
     def dynamic_behavior(self, time):
         """Overall dynamic behavior of the drone (flight, falling, and idle)."""
@@ -86,11 +94,11 @@ class Aviate(Function):
 
         The drone falls to the ground, removing all support to the drone.
         """
-        self.trajectories.s.dz = -self.trajectories.s.z
-        self.trajectories.s.z = 0.0
+        if self.trajectories.s.z > 0.0:
+            #self.trajectories.s.assign(self.trajectories.des_traj.s, 'dx', 'dy')
+            self.trajectories.s.dz = -self.trajectories.s.z
+            self.trajectories.s.increment_position()
         self.force.s.put(lift_support=0.0)
-        self.m.add_fault("crash")
-        self.m.set_mode("idle")
 
     def idle_behavior(self):
         """Behavior when not moving and grounded."""
