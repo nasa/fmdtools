@@ -30,11 +30,15 @@ class ControlState(State):
 
     def get_goal(self):
         """Get the current goal point (x,y) for the drone."""
-        return self.flightplan[self.pt]
+        if self.pt < len(self.flightplan):
+            return self.flightplan[self.pt]
+        else:
+            return self.flightplan[-1]
 
     def inc_goal(self):
         """Increment the current goal."""
-        self.pt += 1
+        if self.pt < len(self.flightplan):
+            self.pt += 1
 
     def is_start(self):
         """Determine whether the drone is as the start of its flightplan."""
@@ -107,6 +111,10 @@ class ControlFlight(Function):
 
         Determines modes and behavior for loss/idling.
         """
+        self.set_faultmode()
+        self.set_des_traj()
+
+    def set_faultmode(self):
         if self.force.s.contact_support >= 5.0:
             self.m.add_fault('loss')
         if self.electricity.s.voltage_low <= 0.0 and not self.m.in_mode('loss'):
@@ -118,6 +126,7 @@ class ControlFlight(Function):
         else:
             self.electricity.s.power_high = True
 
+    def set_des_traj(self):
         if not self.m.in_mode('idle', 'loss'):
             self.set_goal()
             self.des_traj.s.update_position(maxvel=self.des_traj.p.max_vel)
@@ -158,7 +167,7 @@ class ControlFlight(Function):
 
     def flight_planning(self):
         """Determine flight mode in the middle of the flight plan."""
-        if self.trajectories.perc_traj.s.at_goal():
+        if self.trajectories.perc_traj.s.at_goal() and not self.s.is_end():
             self.s.inc_goal()
 
     def set_goal(self):

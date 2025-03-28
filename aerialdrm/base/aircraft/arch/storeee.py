@@ -2,14 +2,19 @@
 """Store and supply electricity function."""
 
 from fmdtools.define.block.function import Function
-from fmdtools.define.container.mode import Mode, Fault
+from fmdtools.define.container.mode import Mode
 
 
 from aerialdrm.base.aircraft.arch.flows import Force, Electricity
 
+
 class StoreEEMode(Mode):
+
+    opermodes = ('charged', 'in_use', 'off')
+    mode: str = 'charged'
     fault_break = ()
-    fault_depletion: dict = {'disturbances': (('electricity.s.charge', 25.0), )}
+    fault_depletion: dict = {'disturbances': (('electricity.s.charge', 25.0), ),
+                             'phases': ('in_use', 1.0)}
 
 
 class StoreAndSupplyElectricity(Function):
@@ -47,6 +52,10 @@ class StoreAndSupplyElectricity(Function):
         """
         rate_high = self.electricity.s.mul('current_high', 'voltage_high')
         rate_low = self.electricity.s.mul('current_low', 'voltage_low')
+        if rate_high > 0.0:
+            self.m.set_mode('in_use')
+        else:
+            self.m.set_mode('off')
         self.electricity.s.inc(charge=-(rate_high+0.1*rate_low))
 
 

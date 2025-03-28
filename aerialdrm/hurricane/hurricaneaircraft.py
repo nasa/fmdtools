@@ -29,13 +29,14 @@ class HurricaneControlFlight(ControlFlight):
     __slots__ = ()
     flow_environment = HurricaneEnvironment
 
-    def dynamic_behavior(self, time):
-        if self.electricity.s.charge <= 25.0:
+    def set_faultmode(self):
+        super().set_faultmode()
+        if 0.0 < self.electricity.s.charge <= 25.0:
             if self.s.pt > 0:
                 self.replan_mission()
             elif (not self.m.any_faults() and len(self.s.flightplan) > 1) or self.electricity.s.charge <= 15.0:
-                self.m.set_mode('descend')
-        super().dynamic_behavior(time)
+                if not self.m.any_faults():
+                    self.m.set_mode('descend')
 
     def replan_mission(self):
         ap = AircraftPosition()
@@ -89,6 +90,8 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
 
     __slots__ = ()
     container_p = HurricaneAircraftArchParameter
+    # default_sp = {'end_condition': 'indicate_landed'}
+    default_sp = {'end_time': 35}
 
     def init_architecture(self, **kwargs):
         """Initialize the architecture of the aircraft."""
@@ -118,6 +121,9 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
         else:
             return coords not in [[*i] for i in [*self.flows['environment'].c.suitable]]
 
+    def indicate_landed(self, time):
+        return self.flows['trajectories'].s.z == 0.0 and time > 5.0
+
     def find_classification(self, scen, mdlhists):
         """Classify the simulation results."""
         endloc = self.flows['trajectories'].s.get('x', 'y')
@@ -127,13 +133,17 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
         any_rest = any([coords.get(x, ys[i], 'restricted') for i, x in enumerate(xs)
                         if coords.in_range(x, ys[i])])
         mission_complete = all(endloc == self.p.flightplan[-1])
+        landing_damage = self.fxns['hold_payload'].m.any_faults()
+        crash = self.fxns['aviate'].m.has_fault('crash')
         return {'faultmodes': {*self.return_faultmodes()},
                 'unsuitable_landing': self.indicate_unsuitable_landing(),
                 'disallowed_landing': coords.get(*endloc, 'disallowed', outside=True),
                 'occupied_landing': coords.get(*endloc, 'occupied', outside=True),
                 'restricted_landing': coords.get(*endloc, 'restricted', outside=True),
                 'restricted_flight': any_rest,
-                'mission_complete': mission_complete}
+                'mission_complete': mission_complete,
+                'landing_damage': landing_damage,
+                'crash': crash}
 
 
 def plot_flightpath(mdl, hist):
@@ -143,6 +153,9 @@ def plot_flightpath(mdl, hist):
     end = mdl.p.flightplan[-1]
     ax.scatter([start[0]], [start[1]], label="start", color="green")
     ax.scatter([end[0]], [end[1]], label="end", color="red")
+    lx = [x[-1] for x in [*hist.get_vals('trajectories.s.x')][0]]
+    ly = [y[-1] for y in [*hist.get_vals('trajectories.s.y')][0]]
+    ax.scatter(lx, ly, label="landing", color="black", marker='x')
     fig, ax = hist.plot_trajectories('trajectories.s.x', 'trajectories.s.y',
                                      fig=fig, ax=ax)
     consolidate_legend(ax)
@@ -155,14 +168,15 @@ if __name__ == "__main__":
     doctest.testmod(verbose=True)
 
 if __name__ == "__main__":
-
+    from fmdtools.analyze.phases import PhaseMap
     haa = HurricaneAircraftArchitecture(p={'depletion': 40.0})
 
     res, hist = prop.nominal(haa)
+    pm = PhaseMap(hist)
 
     # res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'break', 8, desired_result=['endclass', 'graph'])
     res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'depletion', 18, desired_result=['endclass', 'graph'])
-    # res, hist = prop.one_fault(haa, 'control_flight', 'loss', 10, desired_result=['endclass', 'graph'])
+    res, hist = prop.one_fault(haa, 'control_flight', 'loss', 19, desired_result=['endclass', 'graph'])
     res.graph.draw()
 
     fig, ax = haa.flows['environment'].c.show(properties=properties,

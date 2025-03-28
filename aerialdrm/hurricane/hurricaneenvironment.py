@@ -34,6 +34,7 @@ class HurricaneCoords(Coords):
         # self.set_rand_pts('disallowed', True, 30)
         self.set_range('restricted', True, xmax=20, ymin=30)
         self.set_range('restricted', True, xmin=60, ymax=70)
+        self.set_range('restricted', True, ymin=110)
         self.set_pts([self.start, self.end], 'occupied', False)
         self.set_pts([self.start, self.end], 'disallowed', False)
 
