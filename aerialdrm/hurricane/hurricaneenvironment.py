@@ -11,8 +11,8 @@ import numpy as np
 
 
 class HurricaneCoordsParam(CoordsParam):
-    x_size: int = 11
-    y_size: int = 11
+    x_size: int = 12
+    y_size: int = 12
     blocksize: float = 10.0
     feature_occupied: tuple = (bool, False)
     feature_disallowed: tuple = (bool, False)
@@ -20,7 +20,7 @@ class HurricaneCoordsParam(CoordsParam):
     collect_suitable: tuple = (("occupied", False, np.equal),
                                "and", ("disallowed", False, np.equal),
                                "and", ("restricted", False, np.equal))
-    point_start: tuple = (0.0, 0.0)
+    point_start: tuple = (10.0, 10.0)
     point_end: tuple = (100.0, 100.0)
 
 
@@ -28,8 +28,10 @@ class HurricaneCoords(Coords):
     container_p = HurricaneCoordsParam
 
     def init_properties(self, **kwargs):
-        self.set_rand_pts('occupied', True, 30)
-        self.set_rand_pts('disallowed', True, 30)
+        self.set_rand_pts('occupied', True, 50)
+        self.set_range('disallowed', True, xmin=30, xmax=60, ymin=70)
+        self.set_range('disallowed', True, xmin=20, xmax=60, ymax=30)
+        # self.set_rand_pts('disallowed', True, 30)
         self.set_range('restricted', True, xmax=20, ymin=30)
         self.set_range('restricted', True, xmin=60, ymax=70)
         self.set_pts([self.start, self.end], 'occupied', False)

@@ -90,7 +90,7 @@ if __name__ == "__main__":
 
     res, hist = prop.nominal(da)
 
-    res, hist = prop.one_fault(da, 'store_and_supply_ee', 'break', 7, desired_result=['endclass', 'graph'])
+    res, hist = prop.one_fault(da, 'store_and_supply_ee', 'depletion', 7, desired_result=['endclass', 'graph'])
     res.graph.draw()
 
     hist.plot_trajectories('trajectories.s.x', 'trajectories.s.y')
@@ -99,6 +99,6 @@ if __name__ == "__main__":
                            'trajectories.s.z',
                            time_groups='nominal', time_ticks=1.0)
 
-    hist.plot_line('fxns.store_and_supply_ee.s.charge',
+    hist.plot_line('flows.electricity.s.charge',
                    'fxns.control_flight.m.mode',
                    'fxns.aviate.m.mode')

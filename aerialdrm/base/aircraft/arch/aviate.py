@@ -7,7 +7,7 @@ from fmdtools.define.block.function import Function
 
 from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
 from aerialdrm.base.aircraft.arch.flows import AircraftEnvironment
-
+import numpy as np
 
 class AviateMode(Mode):
     """Aviate function modes."""
@@ -49,32 +49,37 @@ class Aviate(Function):
 
     def static_behavior(self, time):
         """Overall static behavior of drone (determines modes based on states)."""
-        if self.force.s.contact_support > 10.0:
+        if self.force.s.contact_support >= 10.0:
             self.m.add_fault('crash')
 
-        if self.trajectories.s.z > 0.0 and self.electricity.s.voltage_high <= 0.0:
-            self.m.set_mode('falling')
-        elif self.trajectories.s.z <= 0.0 and self.electricity.s.voltage_high > 0.0:
-            if not self.trajectories.des_traj.s.same(dx=0.0, dy=0.0):
-                self.m.add_fault('crash')
-            elif not self.trajectories.des_traj.s.same(dz=0.0):
+        if self.trajectories.s.z > 0.0:
+            if self.electricity.s.voltage_high <= 0.0:
+                self.m.set_mode('falling')
+            else:
                 self.m.set_mode('flight')
+        else:
+            if self.electricity.s.voltage_high > 0.0:
+                if not self.trajectories.des_traj.s.same(dx=0.0, dy=0.0):
+                    self.m.add_fault('crash')
+                    self.m.set_mode('idle')
+                elif not self.trajectories.des_traj.s.dz <= 0.0:
+                    self.m.set_mode('flight')
+                else:
+                    self.m.set_mode('idle')
             else:
                 self.m.set_mode('idle')
-        else:
-            self.m.set_mode('flight')
 
-        if self.m.has_fault('crash'):
-            self.m.set_mode('idle')
+        if self.m.in_mode("falling", "crash"):
+            self.falling_behavior()
+        elif self.m.in_mode('flight'):
+            self.flight_behavior()
+        elif self.m.in_mode("idle"):
+            self.idle_behavior()
 
     def dynamic_behavior(self, time):
         """Overall dynamic behavior of the drone (flight, falling, and idle)."""
-        if self.m.in_mode('flight'):
-            self.flight_behavior()
-        elif self.m.in_mode("falling", "crash"):
-            self.falling_behavior()
-        elif self.m.in_mode("idle"):
-            self.idle_behavior()
+        self.trajectories.s.increment_position()
+        self.trajectories.s.limit(z=(0.0, np.inf))
 
     def flight_behavior(self):
         """
@@ -84,7 +89,6 @@ class Aviate(Function):
         distance of the desired trajectory.
         """
         self.trajectories.s.assign(self.trajectories.des_traj.s, 'dx', 'dy', 'dz')
-        self.trajectories.s.increment_position()
         self.electricity.s.current_high = 2.0
         self.force.s.put(lift_support=1.0)
 
@@ -97,8 +101,9 @@ class Aviate(Function):
         if self.trajectories.s.z > 0.0:
             #self.trajectories.s.assign(self.trajectories.des_traj.s, 'dx', 'dy')
             self.trajectories.s.dz = -self.trajectories.s.z
-            self.trajectories.s.increment_position()
-        self.force.s.put(lift_support=0.0)
+            self.force.s.put(lift_support=0.0)
+        else:
+            self.idle_behavior()
 
     def idle_behavior(self):
         """Behavior when not moving and grounded."""

@@ -60,6 +60,32 @@ class ControlFlight(Function):
     Flight control function.
 
     Determines direction and distance to travel based on location and flightplan.
+
+    Examples
+    --------
+    >>> t = Trajectories()
+    >>> perc_traj = t.create_local('perc_traj')
+    >>> cf = ControlFlight(trajectories=t)
+    >>> cf.m.mode
+    'idle'
+    >>> cf.propagate(0)
+    >>> cf.propagate(1)
+    >>> cf.m.mode
+    'ascend'
+    >>> cf.trajectories.perc_traj.s.z = cf.s.height
+    >>> cf.propagate(2)
+    >>> cf.m.mode
+    'flight'
+    >>> cf.des_traj.s.get('dx', 'dy')
+    array([7.07106781, 7.07106781])
+    >>> cf.trajectories.perc_traj.s.put(x=25.0, y=25.0)
+    >>> cf.propagate(3)
+    >>> cf.m.mode
+    'descend'
+    >>> cf.trajectories.perc_traj.s.put(z=0.0)
+    >>> cf.propagate(4)
+    >>> cf.m.mode
+    'idle'
     """
 
     __slots__ = ('trajectories', 'perc_traj', 'des_traj', 'force', 'electricity',
@@ -92,46 +118,6 @@ class ControlFlight(Function):
         else:
             self.electricity.s.power_high = True
 
-    def dynamic_behavior(self, time):
-        """
-        Propagate overall modal logic for flight control.
-
-        Examples
-        --------
-        >>> t = Trajectories()
-        >>> perc_traj = t.create_local('perc_traj')
-        >>> cf = ControlFlight(trajectories=t)
-        >>> cf.m.mode
-        'idle'
-        >>> cf.dynamic_behavior(0)
-        >>> cf.dynamic_behavior(1)
-        >>> cf.m.mode
-        'ascend'
-        >>> cf.trajectories.perc_traj.s.z = cf.s.height
-        >>> cf.dynamic_behavior(2)
-        >>> cf.m.mode
-        'flight'
-        >>> cf.des_traj.s.get('dx', 'dy')
-        array([7.07106781, 7.07106781])
-        >>> cf.trajectories.perc_traj.s.put(x=25.0, y=25.0)
-        >>> cf.dynamic_behavior(3)
-        >>> cf.m.mode
-        'descend'
-        >>> cf.trajectories.perc_traj.s.put(z=0.0)
-        >>> cf.dynamic_behavior(4)
-        >>> cf.m.mode
-        'idle'
-        """
-        if not self.m.in_mode('loss'):
-            self.trajectories.perc_traj.update('goal_x', 'goal_y', 'goal_z',
-                                               to_get='des_traj')
-            if self.s.is_start() and time > 0.0:
-                self.takeoff_planning()
-            elif self.s.is_end():
-                self.landing_planning()
-            else:
-                self.flight_planning()
-
         if not self.m.in_mode('idle', 'loss'):
             self.set_goal()
             self.des_traj.s.update_position(maxvel=self.des_traj.p.max_vel)
@@ -139,6 +125,21 @@ class ControlFlight(Function):
             self.des_traj.s.put(dx=0.0, dy=0.0, dz=0.0)
         else:
             self.des_traj.s.put(dz=-self.trajectories.s.z)
+
+    def dynamic_behavior(self, time):
+        """
+        Propagate overall modal logic for flight control.
+        """
+        if not self.m.in_mode('loss'):
+            self.trajectories.perc_traj.update('goal_x', 'goal_y', 'goal_z',
+                                               to_get='des_traj')
+            if self.s.is_start():
+                if time > 0.0:
+                    self.takeoff_planning()
+            elif self.s.is_end():
+                self.landing_planning()
+            else:
+                self.flight_planning()
 
     def takeoff_planning(self):
         """Determine flight mode at the start of the flight plan."""

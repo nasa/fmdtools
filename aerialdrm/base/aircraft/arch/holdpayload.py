@@ -22,12 +22,13 @@ class HoldPayload(Function):
     container_m = HoldPayloadMode
 
     def static_behavior(self, time):
-        if self.trajectories.s.z > 0.0:
-            self.force.s.put(contact_support=0.0)
-        elif self.force.s.lift_support > 0.0 or abs(self.trajectories.s.dz) < 15.0:
+        next_z = self.trajectories.s.z + self.trajectories.s.dz
+        if next_z <= 0.0 and self.trajectories.s.dz < -15.0:
+            self.force.s.put(contact_support=10.0)
+        elif next_z <= 0.0 or self.trajectories.s.z <= 0.0:
             self.force.s.put(contact_support=1.0)
         else:
-            self.force.s.put(contact_support=10.0)
+            self.force.s.put(contact_support=0.0)
 
         if self.force.s.contact_support >= 5.0:
             self.m.add_fault('break')
