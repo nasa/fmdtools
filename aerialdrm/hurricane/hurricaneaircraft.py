@@ -168,11 +168,11 @@ if __name__ == "__main__":
     doctest.testmod(verbose=True)
 
 if __name__ == "__main__":
-    from fmdtools.analyze.phases import PhaseMap
+    from fmdtools.analyze.phases import from_hist
     haa = HurricaneAircraftArchitecture(p={'depletion': 40.0})
 
     res, hist = prop.nominal(haa)
-    pm = PhaseMap(hist)
+    pm = from_hist(hist)
 
     # res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'break', 8, desired_result=['endclass', 'graph'])
     res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'depletion', 18, desired_result=['endclass', 'graph'])
