@@ -391,6 +391,7 @@ class Simulable(BaseObject):
                 if fs_split[0] in roles or fs_split[1] in roles:
                     obj = self.get_vars(faultscope)
                     obj.inject_faults(fault)
+        self.set_sub_faults()
 
     def set_fault_disturbances(self, *faults):
         """Set Mode-based disturbances (if present)."""
