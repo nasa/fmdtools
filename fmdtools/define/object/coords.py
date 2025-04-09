@@ -1479,9 +1479,13 @@ class Coords(BaseCoords):
 
         coll = self.get_collection(prop)
         for i, pt in enumerate(coll):
+            if label == True or label == 'prop' or label == False:
+                lab = prop
+            else:
+                lab = label
             corner = pt - np.array([offset, offset])
             rect = Rectangle(corner, self.p.blocksize, self.p.blocksize,
-                             label=prop, **kwargs)
+                             label=lab, **kwargs)
             ax.add_patch(rect)
             if isinstance(z, str) and z:
                 z_h = self.get(pt[0], pt[1], z)
@@ -1492,16 +1496,12 @@ class Coords(BaseCoords):
             else:
                 z_h = None
             if label:
-                if isinstance(label, str):
-                    lab = rect.get_label()
+                if z_h is not None:
+                    textloc = [*pt,  z_h+text_z_offset]
                 else:
-                    lab = label
-                if not z_h == None:
-                    ax.text(pt[0], pt[1], z_h+text_z_offset, lab,
-                            horizontalalignment="center", verticalalignment="center")
-                else:
-                    ax.text(pt[0], pt[1], lab,
-                            horizontalalignment="center", verticalalignment="center")
+                    textloc = pt
+                ax.text(*textloc, lab,
+                        horizontalalignment="center", verticalalignment="center")
         if legend_kwargs is not False:
             if legend_kwargs is True:
                 legend_kwargs = {}
@@ -1699,5 +1699,7 @@ if __name__ == "__main__":
     ex.st[1]=1
     ex.show({"st": {'hatch': 'xx', 'color': 'red'}},
             collections={"high_v": {"alpha": 0.5, "color": "blue"}})
+    ex.show({"st": {'hatch': 'xx', 'color': 'red'}},
+            collections={"high_v": {"alpha": 0.5, "color": "blue", 'label': "hi"}})
     import doctest
     doctest.testmod(verbose=True)
