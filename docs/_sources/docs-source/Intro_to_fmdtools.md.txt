@@ -29,9 +29,11 @@ marp: true
 # Prerequisites
 
 - Ideally, some pre-existing Python and Git knowledge
-- Anaconda distribution 
+- Python distribution (anaconda or uv)
     - Ideally this is already set up!
-    - Download/install from: https://www.anaconda.com/products/individual
+    - Download/install from:
+        - https://www.anaconda.com/products/individual
+        - https://github.com/astral-sh/uv
 - A git interface
     - [Github Desktop](https://desktop.github.com/) (graphical git environment)
     - [git-scm](https://git-scm.com/) (stand-alone CLI)
@@ -127,8 +129,8 @@ Resilience means taking a **dynamic understanding of risk and safety**
         - `git clone https://github.com/nasa/fmdtools.git`
         - can also use webpage
 - package installation: 
-    - Open Python from anaconda (e.g., open Spyder)
-    - Install with `pip install -e /path/to/fmdtools`
+    - anaconda: Open Python from anaconda (e.g., open Spyder) and install with `pip install -e /path/to/fmdtools`
+    - uv: run `uv pip install .` from fmdtools repository
 
 -----------------
 

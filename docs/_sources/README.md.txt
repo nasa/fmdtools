@@ -36,7 +36,7 @@ Simulation techniques in fmdtools represent the state-of-the-art in dynamical sy
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/efficient.svg"> 
 
 ### Efficient Analysis Process
-Readily-deployable analysis methods are built in to fmdtools to enable the rapid and iterative statistical analysis of simulation results. With fmdtools, you can write 2-3 lines of code to visualize model behavior instead of spending hours writing it yourself.
+Readily-deployable analysis methods are built in to fmdtools to enable the rapid and iterative statistical analysis of simulation results. With fmdtools, you can easily leverage our existing methods to understand simulation results instead of spending hours implementing your own.
 
 
 
@@ -54,22 +54,30 @@ The fmdtools library is developed in Python 3.11 but tested to maintain compatib
 
 Further (functional and integration) tests are performed in the Python 3.11 to ensure that examples run as desired. Thus, it is generally reccommended to use Python 3.11 to keep pace with development, especially when running examples.
 
-### Set up python environment
+### Set up python tooling environment
 
-The fmdtools library was developed to run in an anaconda python environment. If you do not have an existing python environment, first [download and install anaconda.](https://docs.anaconda.com/free/anaconda/install/index.html).
+The fmdtools library was developed to run in a python development environments.
 
-After the base installation, set up a new `Python 3.11` environment for fmdtools and install these external external (non-python) packages in it:
+If you do not have an existing python environment, first [download and install anaconda](https://docs.anaconda.com/free/anaconda/install/index.html) or [uv]().
+
+After the base installation, set up a new `Python 3.11` environment for fmdtools and install these external external packages in it:
 
 ```
+spyder-kernels
+# used for: working with external IDEs
+# license: ()
+# install from: (comes with anaconda) or `uv pip install spyder-kernels`
 jupyter notebook
 # used for: repository notebooks
 # license: (BSD-3) https://jupyter.org/governance/projectlicense.html
-# install from: (should be installed already)
+# install from: (comes with anaconda) or `uv pip install jupyter`
 graphviz
 # used for: plotting graphs using graphviz
 # license: (CPL 1.0) https://graphviz.org/license/ 
-# install from: https://anaconda.org/anaconda/graphviz
+# install from: https://anaconda.org/anaconda/graphviz or https://graphviz.org/download/
 ```
+
+From there, it can be helpful to install an IDE like [VSCode](https://code.visualstudio.com/) or [Spyder](https://www.spyder-ide.org/).
 
 Note: On Windows, some versions `fmdtools` dependencies may require a compiler such as that provided with [Microsoft Studio Build tools](https://visualstudio.microsoft.com/downloads/?q=build+tools) to build, so it (while not required) may be helpful to install it also.
 
@@ -103,7 +111,7 @@ Note that this version reflects the latest version on the ``main`` git branch al
 
 #### Dependencies
 
-fmdtools requires `Python 3.11` (anaconda recommended) and depends directly on the packages below (see requirements.txt). Note that the use of these depencencies is governed by their respective licences, which may be obtained at the provided links.
+fmdtools requires `Python 3.11` and depends directly on the packages below (see requirements.txt). Note that the use of these depencencies is governed by their respective licences, which may be obtained at the provided links.
 
 ```
 scipy

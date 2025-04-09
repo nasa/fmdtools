@@ -55,7 +55,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#getting-started">Getting Started</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#python-version-compatibility">Python version compatibility</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#set-up-python-environment">Set up python environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#set-up-python-tooling-environment">Set up python tooling environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#install-fmdtools">Install fmdtools</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../README.html#editable-development-install">Editable Development Install</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../README.html#dependencies">Dependencies</a></li>
@@ -705,10 +705,15 @@
 <h1>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h1>
 <ul class="simple">
 <li><p>Ideally, some pre-existing Python and Git knowledge</p></li>
-<li><p>Anaconda distribution</p>
+<li><p>Python distribution (anaconda or uv)</p>
 <ul>
 <li><p>Ideally this is already set up!</p></li>
-<li><p>Download/install from: https://www.anaconda.com/products/individual</p></li>
+<li><p>Download/install from:</p>
+<ul>
+<li><p>https://www.anaconda.com/products/individual</p></li>
+<li><p>https://github.com/astral-sh/uv</p></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><p>A git interface</p>
@@ -845,8 +850,8 @@
 </li>
 <li><p>package installation:</p>
 <ul>
-<li><p>Open Python from anaconda (e.g., open Spyder)</p></li>
-<li><p>Install with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">/path/to/fmdtools</span></code></p></li>
+<li><p>anaconda: Open Python from anaconda (e.g., open Spyder) and install with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">/path/to/fmdtools</span></code></p></li>
+<li><p>uv: run <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code> from fmdtools repository</p></li>
 </ul>
 </li>
 </ul>

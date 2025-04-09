@@ -489,7 +489,7 @@ Note that sphinx requires the following requirements, which should be installed 
 	sphinx_rtd_theme
 	pandoc
 
-Pandoc must be installed with anaconda (i.e., using `conda install pandoc`) since it is an external program.
+Pandoc is an external program and thus should be installed from `its website <https://pandoc.org/installing.html>`_ or anaconda.
 
 Style/Formatting
 ----------------

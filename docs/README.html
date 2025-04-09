@@ -55,7 +55,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#python-version-compatibility">Python version compatibility</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#set-up-python-environment">Set up python environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-up-python-tooling-environment">Set up python tooling environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#install-fmdtools">Install fmdtools</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#editable-development-install">Editable Development Install</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dependencies">Dependencies</a></li>
@@ -695,7 +695,7 @@
 </section>
 <section id="efficient-analysis-process">
 <h3>Efficient Analysis Process<a class="headerlink" href="#efficient-analysis-process" title="Link to this heading"></a></h3>
-<p>Readily-deployable analysis methods are built in to fmdtools to enable the rapid and iterative statistical analysis of simulation results. With fmdtools, you can write 2-3 lines of code to visualize model behavior instead of spending hours writing it yourself.</p>
+<p>Readily-deployable analysis methods are built in to fmdtools to enable the rapid and iterative statistical analysis of simulation results. With fmdtools, you can easily leverage our existing methods to understand simulation results instead of spending hours implementing your own.</p>
 </section>
 </section>
 <section id="getting-started">
@@ -723,20 +723,26 @@
 </table>
 <p>Further (functional and integration) tests are performed in the Python 3.11 to ensure that examples run as desired. Thus, it is generally reccommended to use Python 3.11 to keep pace with development, especially when running examples.</p>
 </section>
-<section id="set-up-python-environment">
-<h3>Set up python environment<a class="headerlink" href="#set-up-python-environment" title="Link to this heading"></a></h3>
-<p>The fmdtools library was developed to run in an anaconda python environment. If you do not have an existing python environment, first <a class="reference external" href="https://docs.anaconda.com/free/anaconda/install/index.html">download and install anaconda.</a>.</p>
-<p>After the base installation, set up a new <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.11</span></code> environment for fmdtools and install these external external (non-python) packages in it:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">notebook</span>
+<section id="set-up-python-tooling-environment">
+<h3>Set up python tooling environment<a class="headerlink" href="#set-up-python-tooling-environment" title="Link to this heading"></a></h3>
+<p>The fmdtools library was developed to run in a python development environments.</p>
+<p>If you do not have an existing python environment, first <a class="reference external" href="https://docs.anaconda.com/free/anaconda/install/index.html">download and install anaconda</a> or <a class="reference internal" href="#"><span class="xref myst">uv</span></a>.</p>
+<p>After the base installation, set up a new <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.11</span></code> environment for fmdtools and install these external external packages in it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spyder</span><span class="o">-</span><span class="n">kernels</span>
+<span class="c1"># used for: working with external IDEs</span>
+<span class="c1"># license: ()</span>
+<span class="c1"># install from: (comes with anaconda) or `uv pip install spyder-kernels`</span>
+<span class="n">jupyter</span> <span class="n">notebook</span>
 <span class="c1"># used for: repository notebooks</span>
 <span class="c1"># license: (BSD-3) https://jupyter.org/governance/projectlicense.html</span>
-<span class="c1"># install from: (should be installed already)</span>
+<span class="c1"># install from: (comes with anaconda) or `uv pip install jupyter`</span>
 <span class="n">graphviz</span>
 <span class="c1"># used for: plotting graphs using graphviz</span>
 <span class="c1"># license: (CPL 1.0) https://graphviz.org/license/ </span>
-<span class="c1"># install from: https://anaconda.org/anaconda/graphviz</span>
+<span class="c1"># install from: https://anaconda.org/anaconda/graphviz or https://graphviz.org/download/</span>
 </pre></div>
 </div>
+<p>From there, it can be helpful to install an IDE like <a class="reference external" href="https://code.visualstudio.com/">VSCode</a> or <a class="reference external" href="https://www.spyder-ide.org/">Spyder</a>.</p>
 <p>Note: On Windows, some versions <code class="docutils literal notranslate"><span class="pre">fmdtools</span></code> dependencies may require a compiler such as that provided with <a class="reference external" href="https://visualstudio.microsoft.com/downloads/?q=build+tools">Microsoft Studio Build tools</a> to build, so it (while not required) may be helpful to install it also.</p>
 </section>
 <section id="install-fmdtools">
@@ -760,7 +766,7 @@
 </section>
 <section id="dependencies">
 <h4>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h4>
-<p>fmdtools requires <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.11</span></code> (anaconda recommended) and depends directly on the packages below (see requirements.txt). Note that the use of these depencencies is governed by their respective licences, which may be obtained at the provided links.</p>
+<p>fmdtools requires <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.11</span></code> and depends directly on the packages below (see requirements.txt). Note that the use of these depencencies is governed by their respective licences, which may be obtained at the provided links.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scipy</span>
 <span class="c1"># license: (BSD-new) https://www.scipy.org/scipylib/license.html</span>
 <span class="n">tqdm</span>
