@@ -164,7 +164,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 -----------------
 # Containers - The building blocks of simulations
 ![container example](./figures/powerpoint/container_structures.svg)
-- Containers are used to define various attribtues of Functions and Flows
+- Containers are used to define various attributes of Functions and Flows
 
 -----------------
 # Flow Code Template

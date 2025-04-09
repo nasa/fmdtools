@@ -41,3 +41,11 @@ The list below is a chronological accounting of relevant publications from the f
 - Hulse, D., Zhang, H., & Hoyle, C. (2021, August). [Understanding Resilience Optimization Architectures With an Optimization Problem Repository.](https://ntrs.nasa.gov/api/citations/20210010232/downloads/IDETC2021-70985%20-%20Final.pdf) In International Design Engineering Technical Conferences and Computers and Information in Engineering Conference (Vol. 85383, p. V03AT03A039). American Society of Mechanical Engineers. https://doi.org/10.1115/DETC2021-70985
 
 - Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., & Goebel, K. (2021). [fmdtools: A fault propagation toolkit for resilience assessment in early design.](https://doi.org/10.36001/ijphm.2021.v12i3.2954) International Journal of Prognostics and Health Management, 12(3). https://doi.org/10.36001/ijphm.2021.v12i3.2954
+
+- Andrade, S. R., Spirakis, E., Hulse, D. E., Walsh, H. S., & Davies, M. D. (2021). [The system modeling and analysis of resiliency in stereo (SMARt-stereo).](https://ntrs.nasa.gov/api/citations/20205008170/downloads/AIAAAviation2021_SMARt_STEReO.pdf) In AIAA AVIATION 2021 FORUM (p. 3015). https://doi.org/10.2514/6.2021-3015
+
+- Hulse, D. E. (2020). [A computational framework for resilience-informed design.](https://ir.library.oregonstate.edu/concern/graduate_thesis_or_dissertations/dj52wc60h)
+
+- Hulse, D. E., Andrade, S. R., Spirakis, E., Walsh, H. S., & Davies, M. D. (2020). [SMARt-STEReO: Preliminary Model Description.](https://ntrs.nasa.gov/citations/20205007481)
+
+- Hulse, D., Hoyle, C., Tumer, I. Y., Goebel, K., & Kulkarni, C. (2020, August). [Temporal fault injection considerations in resilience quantification.](https://www.researchgate.net/publication/341554044_Temporal_Fault_Injection_Considerations_in_Resilience_Quantification) In International Design Engineering Technical Conferences and Computers and Information in Engineering Conference (Vol. 84003, p. V11AT11A040). American Society of Mechanical Engineers. https://doi.org/10.1115/DETC2020-22154
