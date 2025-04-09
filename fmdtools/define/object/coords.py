@@ -1297,6 +1297,12 @@ class Coords(BaseCoords):
         False
         >>> ex.in_area(-10, -10, 'start')
         False
+        >>> ex.in_area(10, 20, 'hi_v_not_a')
+        False
+        >>> ex.in_area(10, 10, 'hi_v_not_a')
+        False
+        >>> ex.in_area(10, 0, 'hi_v_not_a')
+        True
         """
         pts = getattr(self, coll)
         try:
@@ -1308,7 +1314,7 @@ class Coords(BaseCoords):
         if coll in self.points:
             return np.all(pt == pts)
         elif coll in self.collections:
-            return pt in pts
+            return list(pt) in [list(i) for i in [*pts]]
         else:
             raise Exception("coll "+coll+" not a point or collection")
 
