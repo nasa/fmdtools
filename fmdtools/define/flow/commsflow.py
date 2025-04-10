@@ -121,7 +121,7 @@ class CommsFlow(MultiFlow):
                 rep_str = rep_str+"\n       "+lo+": "+getattr(self, lo).__repr__()
         return rep_str
 
-    def create_comms(self, name, ports=[], **kwargs):
+    def create_comms(self, name, ports=[], as_copy=False, **kwargs):
         """
         Create an individual view of the CommsFlow (e.g., for a function).
 
@@ -140,11 +140,11 @@ class CommsFlow(MultiFlow):
             A local view of the CommsFlow for the function
         """
         if name not in self.fxns:
-            ins = self.create_local(name)
-            outs = self.create_local(name+"_out")
+            ins = self.create_local(name, as_copy=as_copy)
+            outs = self.create_local(name+"_out", as_copy=as_copy)
             for port in ports:
-                ins.create_local(port)
-                outs.create_local(port)
+                ins.create_local(port, as_copy=as_copy)
+                outs.create_local(port, as_copy=as_copy)
             self.fxns[name] = {"internal": ins,
                                "out": outs,
                                "in": kwargs.get("prev_in", {}),
@@ -270,7 +270,8 @@ class CommsFlow(MultiFlow):
             cop.create_comms(fxn,
                              prev_in=copy.deepcopy(self.fxns[fxn]["in"]),
                              received=copy.deepcopy(self.fxns[fxn]["received"]),
-                             ports=getattr(self.fxns[fxn]['internal'], "locals", []))
+                             ports=getattr(self.fxns[fxn]['internal'], "locals", []),
+                             as_copy=True)
         return cop
 
     def find_mutables(self):

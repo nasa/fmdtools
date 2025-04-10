@@ -1689,7 +1689,7 @@ if __name__ == "__main__":
     ex.show_collection("high_v")
     ex.show_collection("high_v", z="v")
     ex.show_z("st", z="v",
-              collections={"pts": {"color": "blue"},
+              collections={"pts": {"color": "blue", 'text_z_offset': 2.0},
                            "high_v": {"alpha": 0.5, "color": "red"}},
               legend_kwargs=True)
 

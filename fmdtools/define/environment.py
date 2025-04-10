@@ -31,7 +31,7 @@ class Environment(CommsFlow):
     sending and recieving of information. In addition to having normal flow properties,
     they also contain the roles:
 
-    TODO: Properly expand create_local, update, send, recieve, etc to use ga and coords.
+    TODO: Properly expand create_local, update, send, receive, etc to use ga and coords.
 
     Roles
     ---------------
