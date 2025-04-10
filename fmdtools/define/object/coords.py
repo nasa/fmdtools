@@ -1467,15 +1467,12 @@ class Coords(BaseCoords):
         ax : mpl.axis
             Ploted axis object.
         """
-        offset = self.p.blocksize/2
-        if not ax:
-            fig, ax = setup_plot(z=z, figsize=figsize)
-            if isinstance(z, str) and z:
-                ax.set_zlim(getattr(self, z).min(), getattr(self, z).max())
-            ax.set_xlim(-offset, self.p.x_size*self.p.blocksize+offset)
-            ax.set_ylim(-offset, self.p.y_size*self.p.blocksize+offset)
-        else:
-            fig, ax = setup_plot(fig=fig, ax=ax, z=z, figsize=figsize)
+        fig, ax = setup_plot(fig=fig, ax=ax, z=z, figsize=figsize)
+        if isinstance(z, str) and z:
+            ax.set_zlim(getattr(self, z).min(), getattr(self, z).max())
+        offset = self.p.blocksize*0.5
+        ax.set_xlim(-offset, self.p.x_size*self.p.blocksize-offset)
+        ax.set_ylim(-offset, self.p.y_size*self.p.blocksize-offset)
 
         coll = self.get_collection(prop)
         for i, pt in enumerate(coll):
@@ -1483,7 +1480,7 @@ class Coords(BaseCoords):
                 lab = prop
             else:
                 lab = label
-            corner = pt - np.array([offset, offset])
+            corner = pt - np.array([0.5*self.p.blocksize, 0.5*self.p.blocksize])
             rect = Rectangle(corner, self.p.blocksize, self.p.blocksize,
                              label=lab, **kwargs)
             ax.add_patch(rect)
@@ -1516,7 +1513,7 @@ class Coords(BaseCoords):
                     'xlabel': '', 'ylabel': '', 'title': '',
                     'legend_kwargs': kwargs.get('legend_kwargs', True),
                     **coll_kwargs}
-            self.show_collection(coll, fig=fig, ax=ax, **kwar)
+            fig, ax = self.show_collection(coll, fig=fig, ax=ax, **kwar)
 
     def show(self, properties={}, collections={}, coll_overlay=True, fig=None, ax=None,
              figsize=(5, 5), xlabel='x', ylabel='y', title='',
