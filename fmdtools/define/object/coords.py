@@ -1422,7 +1422,7 @@ class Coords(BaseCoords):
         else:
             raise Exception("Not a point or collection")
 
-    def show_collection(self, prop, fig=None, ax=None, label=True, z="",
+    def show_collection(self, prop, fig=None, ax=None, label='prop', z="",
                         xlabel='x', ylabel='y', title='',
                         legend_kwargs=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
         """
@@ -1476,7 +1476,7 @@ class Coords(BaseCoords):
 
         coll = self.get_collection(prop)
         for i, pt in enumerate(coll):
-            if label == True or label == 'prop' or label == False:
+            if label is bool or label == 'prop':
                 lab = prop
             else:
                 lab = label
