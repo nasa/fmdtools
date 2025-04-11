@@ -103,6 +103,7 @@ class ControlFlight(Function):
 
     def init_block(self, **kwargs):
         """Add the desired trajectory local flow to the Function."""
+        self.perc_traj = self.trajectories.create_local("perc_traj")
         self.des_traj = self.trajectories.create_local("des_traj")
 
     def static_behavior(self, time):
@@ -188,9 +189,7 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
 
-    t = Trajectories()
-    t.create_local('perc_traj')
-    cf = ControlFlight(trajectories=t)
+    cf = ControlFlight()
     cf.dynamic_behavior(1)
     cf.trajectories.perc_traj.s.z = cf.s.height
     cf.dynamic_behavior(2)
@@ -198,4 +197,3 @@ if __name__ == "__main__":
     cf.dynamic_behavior(3)
     cf.trajectories.perc_traj.s.put(z=0.0)
     cf.dynamic_behavior(4)
-

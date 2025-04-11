@@ -53,12 +53,24 @@ class HurricaneEnvironment(AircraftEnvironment):
 
 if __name__ == "__main__":
     hc = HurricaneCoords()
-    hc.show(properties=properties, collections=collections)
+    # hc.show(properties=properties, collections=collections)
     # hc.show(collections={'suitable': {}})
-    hc.show_collection("suitable", **collections['suitable'])
+    # hc.show_collection("suitable", **collections['suitable'])
 
     hc.show(properties={'restricted': {'color': 'red', 'proplab': 'restricted'}},
-            collections={'start': {'label': 'start', 'color': 'lightblue'},
-                         'end': {'label': 'end', 'color': 'lightgreen'}})
+            collections={'start': {'color': 'lightblue'},
+                         'end': {'color': 'lightgreen'}})
 
-    he = HurricaneEnvironment()
+    from fmdtools.analyze.common import setup_plot, add_title_xylabs
+    from matplotlib.colors import to_rgba, ListedColormap, TABLEAU_COLORS
+    # fig, ax = setup_plot(fig=None, ax=None)
+    # pallette=[*TABLEAU_COLORS.keys()]
+    # hc._show_properties({}, fig, ax, pallette)
+    # hc._show_collections(collections, fig, ax, pallette, c_offset=0)
+    # add_title_xylabs(ax, title='li', xlabel='x', ylabel='y')
+
+    fig, ax = hc.show(collections={'start': {'color': 'lightblue'},
+                                   'end': {'color': 'lightgreen'}},
+                      coll_overlay=False, border_offset=0.0)
+
+    # he = HurricaneEnvironment()

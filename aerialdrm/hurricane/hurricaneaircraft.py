@@ -164,10 +164,32 @@ def plot_flightpath(mdl, hist):
 
 
 if __name__ == "__main__":
+
+    from fmdtools.analyze.phases import from_hist
+    from fmdtools.sim import propagate
+    from fmdtools.sim.sample import FaultDomain, FaultSample
+
+    ha = HurricaneAircraftArchitecture()
+    res, hist = propagate.nominal(ha)
+    pms = from_hist(hist)
+    pm = pms['store_and_supply_ee']
+
+    fd = FaultDomain(ha)
+    fd.add_fault('store_and_supply_ee', 'depletion', '1', disturbances=(('electricity.s.charge', 1.0), ))
+    fd.add_fault('store_and_supply_ee', 'depletion', '16', disturbances=(('electricity.s.charge', 16.0), ))
+    fd.add_fault('store_and_supply_ee', 'depletion', '25', disturbances=(('electricity.s.charge', 25.0), ))
+
+    fs = FaultSample(fd, phasemap=pm)
+    fs.add_fault_phases('in_use', method='all')
+    fs
+
+    ress, hists = propagate.fault_sample(ha, fs)
+
+    hists.plot_trajectories('trajectories.s.x', 'trajectories.s.y', 'trajectories.s.z')
+
     import doctest
     doctest.testmod(verbose=True)
 
-if __name__ == "__main__":
     from fmdtools.analyze.phases import from_hist
     haa = HurricaneAircraftArchitecture(p={'depletion': 40.0})
 
@@ -198,4 +220,6 @@ if __name__ == "__main__":
                    'fxns.control_flight.m.mode',
                    'fxns.aviate.m.mode')
     plot_flightpath(haa, hist)
+
+
 
