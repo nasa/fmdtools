@@ -39,7 +39,7 @@ import numpy as np
 
 def create_scenname(faulttup, time):
     """Create a scenario name for a given fault scenario."""
-    sn = '_'.join([fm[0]+'_'+fm[1]+'_' for fm in faulttup])+t_key(time)
+    sn = '__'.join(['_'.join(fm) for fm in faulttup])+'_'+t_key(time)
     return'_'.join(sn.split("."))
 
 
@@ -94,6 +94,7 @@ class Injection(BaseScenObj):
     ------
     faults : dict
         Faults to inject with structure {'fxnname': [faults]}
+        or {'fxnname': {'faultname': Fault()}}
     disturbances : dict
         Disturbances to inject with structure {'path.to.state': statevalue}
     """
@@ -164,9 +165,12 @@ class Sequence(UserDict):
                 self[i].update(new_sequence[i])
 
     @classmethod
-    def from_fault(cls, faulttup, time):
+    def from_fault(cls, faulttup, time, **kwargs):
         """Generate sequence from single fault mode faulttup (fxn, mode)."""
-        return cls(faultseq={float(time): {faulttup[0]: [faulttup[1]]}})
+        if kwargs:
+            return cls(faultseq={float(time): {faulttup[0]: {faulttup[1]: kwargs}}})
+        else:
+            return cls(faultseq={float(time): {faulttup[0]: [faulttup[1]]}})
 
 
 class BaseScenario(BaseScenObj):
@@ -233,8 +237,17 @@ class SingleFaultScenario(BaseScenario):
 
     @classmethod
     def from_fault(cls, faulttup, time, mdl=None, weight=1.0, phasemap=None,
-                   starttime=None):
-        """Generate the fault scenario for faulttup at time."""
+                   starttime=None, **kwargs):
+        """
+        Generate the fault scenario for faulttup at time.
+
+        Examples
+        --------
+        >>> SingleFaultScenario.from_fault(('fxn', 'fault'), 10)
+        SingleFaultScenario(sequence={10.0: Injection(faults={'fxn': ['fault']}, disturbances={})}, times=(10,), function='fxn', fault='fault', rate=1.0, name='fxn_fault_t10', time=10, phase='')
+        >>> SingleFaultScenario.from_fault(('fxn', 'fault'), 10, prob=10)
+        SingleFaultScenario(sequence={10.0: Injection(faults={'fxn': {'fault': {'prob': 10}}}, disturbances={})}, times=(10,), function='fxn', fault='fault', rate=1.0, name='fxn_fault_t10', time=10, phase='')
+        """
         if len(faulttup) == 1:
             faulttup = faulttup[0]
         if phasemap:
@@ -243,12 +256,12 @@ class SingleFaultScenario(BaseScenario):
             phase = ''
         if mdl:
             rate = mdl.get_scen_rate(faulttup[0], faulttup[1], time,
-                                     phasemap=phasemap, weight=weight)
+                                     phasemap=phasemap, weight=weight, **kwargs)
         else:
             rate = weight
         if not starttime:
             starttime = time
-        scen = cls(sequence=Sequence.from_fault(faulttup, time),
+        scen = cls(sequence=Sequence.from_fault(faulttup, time, **kwargs),
                    function=faulttup[0],
                    fault=faulttup[1],
                    rate=rate,
@@ -283,7 +296,7 @@ class JointFaultScenario(BaseScenario):
 
     @classmethod
     def from_faults(cls, faulttups, time, mdl=None, phasemap=None, weight=1.0,
-                    baserate='ind', p_cond=1.0, starttime=None):
+                    baserate='ind', p_cond=1.0, starttime=None, **kwargs):
         """Generate JointFaultScenario given fault names, time."""
         if phasemap:
             phase = phasemap.find_base_phase(time)
@@ -294,7 +307,7 @@ class JointFaultScenario(BaseScenario):
         for i, faulttup in enumerate(faulttups):
             if mdl:
                 rate = mdl.get_scen_rate(*faulttup, time,
-                                         phasemap=phasemap, weight=weight)
+                                         phasemap=phasemap, weight=weight, **kwargs)
             else:
                 rate = weight
             rates[faulttup] = rate

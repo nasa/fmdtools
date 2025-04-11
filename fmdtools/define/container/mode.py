@@ -62,9 +62,20 @@ class Fault(BaseContainer, readonly=True):
     units: str = 'sim'
 
     def __init__(self, *args, failrate=1.0, **kwargs):
-        args = self.get_true_fields(*args, force_kwargs=False, **kwargs)
+        args = self.get_true_fields(*args, force_kwargs=True, **kwargs)
         args[0] = failrate * args[0]
         super().__init__(*args)
+
+    @classmethod
+    def valid_fault(cls, fault):
+        """Check if the external fault is a valid fault (has same keys)."""
+        if isinstance(fault, cls):
+            return True
+        else:
+            for kwarg in fault:
+                if kwarg not in cls.__fields__:
+                    return False
+            return True
 
     def calc_rate(self, time, phasemap={}, sim_time=1.0, sim_units='hr', weight=1.0):
         """
@@ -220,7 +231,7 @@ class Mode(BaseContainer, readonly=False):
     def return_mutables(self):
         return (self.mode, copy.copy(self.faults))
 
-    def get_fault(self, faultname):
+    def get_fault(self, faultname, **kwargs):
         """
         Get the Fault object associated with the given faultname.
 
@@ -233,7 +244,15 @@ class Mode(BaseContainer, readonly=False):
         Returns
         -------
         fault: Fault
-            Fault container with given fields..
+            Fault container with given fields.
+
+        Examples
+        --------
+        >>> exm = ExampleMode()
+        >>> exm.get_fault('short')
+        Fault(prob=1e-05, cost=100, phases=(('supply', 1.0),), disturbances=(), units='sim')
+        >>> exm.get_fault('short', prob=0.1)
+        Fault(prob=0.1, cost=100, phases=(('supply', 1.0),), disturbances=(), units='sim')
         """
         if isinstance(faultname, str):
             fault = getattr(self, 'fault_'+faultname)
@@ -245,9 +264,12 @@ class Mode(BaseContainer, readonly=False):
             defaults = self.get_pref_attrs("default")
             try:
                 if isinstance(fault, tuple):
-                    return Fault(*fault, **defaults, failrate=self.failrate)
+                    arg = fault
+                    kwar = {**defaults, 'failrate': self.failrate, **kwargs}
                 elif isinstance(fault, dict):
-                    return Fault(**{**defaults, **fault}, failrate=self.failrate)
+                    arg = ()
+                    kwar = {**defaults, **fault, 'failrate': self.failrate, **kwargs}
+                return Fault(*arg, **kwar)
             except Exception as e:
                 raise Exception("Poorly specified fault mode: " + faultname + " in "
                                 + self.__class__.__name__) from e
@@ -342,10 +364,24 @@ class Mode(BaseContainer, readonly=False):
         ----------
         *fault : str(s)
             name(s) of the fault to add to the black
+
+        Examples
+        --------
+        >>> exm = ExampleMode()
+        >>> exm.get_fault('low')
+        Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.charge': 20.0}, units='sim')
+        >>> exm.add_fault(dict(low={'disturbances': {'s.charge': 40.0}}))
+        >>> exm
+        ExampleMode(mode=low, faults={'low'})
+        >>> exm.get_fault('low')
+        Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.charge': 40.0}, units='sim')
         """
-        if len(faults) == 1 and isinstance(faults[0], list):
+        if len(faults) == 1 and (isinstance(faults[0], list) or isinstance(faults[0], dict)):
             faults = faults[0]
         self.faults.update(faults)
+        if isinstance(faults, dict):
+            for faultname, fault in faults.items():
+                setattr(self, 'fault_'+faultname, fault)
         if self.exclusive:
             if len(faults) > 1:
                 raise Exception("Multiple fault modes added to function with" +
@@ -355,7 +391,7 @@ class Mode(BaseContainer, readonly=False):
                                 + "--no faults but mode is still in faultmode "
                                 + self.mode)
             elif faults:
-                self._assign_mode(faults[0])
+                self._assign_mode(*faults)
 
     def replace_fault(self, fault_to_replace, fault_to_add):
         """
@@ -520,11 +556,11 @@ class FlexibleMode(Mode):
     def get_all_faultnames(self):
         return tuple([*super().get_all_faultnames(), *self.faultmodes])
 
-    def get_fault(self, faultname):
+    def get_fault(self, faultname, **kwargs):
         if faultname in self.faultmodes:
             return self.faultmodes[faultname]
         else:
-            return super().get_fault(faultname)
+            return super().get_fault(faultname, **kwargs)
 
     def init_faultspace(self, franges, n='all', seed=42, prefix="hmode_", **kwargs):
         """
@@ -593,6 +629,7 @@ class ExampleMode(Mode):
 
     fault_no_charge = Fault(1e-5, 100, (('standby', 1.0),))
     fault_short = (1e-5, 100, (('supply', 1.0),))
+    fault_low: dict = {'disturbances': {'s.charge': 20.0}}
     opermodes = ("supply", "charge", "standby")
     exclusive = True
     mode: str = "standby"

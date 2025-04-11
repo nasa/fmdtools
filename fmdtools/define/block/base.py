@@ -22,10 +22,11 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import set_var, gen_timerange
+from fmdtools.define.base import set_var, gen_timerange, is_iter
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
+from fmdtools.define.container.mode import Fault
 from fmdtools.analyze.result import Result
 
 import itertools
@@ -318,7 +319,7 @@ class Simulable(BaseObject):
             fxns = {self.name: self}
         return fxns
 
-    def get_fault(self, scope, faultmode):
+    def get_fault(self, scope, faultmode, **kwargs):
         """Get the faultmode in the given scope of the model."""
         name = self.get_full_name()
         if name.endswith(scope) or scope in ['self', 'global']:
@@ -327,13 +328,13 @@ class Simulable(BaseObject):
             if scope.startswith(name):
                 scope = scope[len(name)+1:]
             obj = self.get_vars(scope)
-        fm = obj.m.get_fault(faultmode)
+        fm = obj.m.get_fault(faultmode, **kwargs)
         if not fm:
             raise Exception("faultmode "+faultmode+" not in "+str(obj.m.__class__))
         else:
             return fm
 
-    def get_scen_rate(self, scope, faultmode, time, phasemap={}, weight=1.0):
+    def get_scen_rate(self, scope, faultmode, time, phasemap={}, weight=1.0, **kwargs):
         """
         Get the scenario rate for the given single-fault scenario.
 
@@ -351,13 +352,15 @@ class Simulable(BaseObject):
         weight : int, optional
             Scenario weight (e.g., if more than one scenario is sampled for the fault).
             The default is 1.
+        **kwargs : kwargs
+            Non-default keyword arguments for Fault/Mode.
 
         Returns
         -------
         rate: float
             Rate of the scenario
         """
-        fm = self.get_fault(scope, faultmode)
+        fm = self.get_fault(scope, faultmode, **kwargs)
         sim_time = self.sp.start_time - self.sp.end_time + self.sp.dt
         rate = fm.calc_rate(time, phasemap=phasemap, sim_time=sim_time,
                             sim_units=self.sp.units, weight=weight)
@@ -374,7 +377,8 @@ class Simulable(BaseObject):
         """
         if isinstance(faults, str):
             faults = [faults]
-        if faults and isinstance(faults, list):
+        if faults and (isinstance(faults, list)
+                       or Fault.valid_fault([*faults.values()][0])):
             faults = {self.name: faults}
         full_name = self.get_full_name()
         for faultscope, fault in faults.items():
@@ -395,8 +399,10 @@ class Simulable(BaseObject):
 
     def set_fault_disturbances(self, *faults):
         """Set Mode-based disturbances (if present)."""
-        if len(faults) == 1 and isinstance(faults[0], list):
+        if len(faults) == 1 and is_iter(faults[0]):
             faults = faults[0]
+        if isinstance(faults, dict):
+            faults = [*faults.keys()]
         if hasattr(self, 'm'):
             disturbances = self.m.get_fault_disturbances(*faults)
             if disturbances:
