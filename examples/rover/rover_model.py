@@ -844,6 +844,8 @@ class PowerMode(Mode):
         Battery is out of charge.
     short: Fault
         There is a short.
+    depletion: Fault
+        The battery is depleted to a given percent
     supply: Mode
         supply power
     charge: Mode
@@ -856,6 +858,7 @@ class PowerMode(Mode):
 
     fault_no_charge = (1e-5, 100, (("off", 1.0),))
     fault_short = (1e-5, 100, (("supply", 1.0),))
+    fault_depleted: dict = {'disturbances': {'s.charge': 20.0}}
     opermodes = ("supply", "charge", "off")
     mode: str = "off"
     exclusive = True
@@ -876,7 +879,7 @@ class Power(Function):
         """Determine power use based on mode."""
         if self.m.in_mode("off"):
             self.off_power()
-        elif self.m.in_mode("supply"):
+        elif self.m.in_mode("supply", "depleted"):
             self.supply_power()
         elif self.m.in_mode("short"):
             self.short_power()
@@ -925,9 +928,10 @@ class Power(Function):
             self.ee_12.s.v = 12
             self.ee_15.s.v = 15
         else:
-            self.m.set_mode("no_charge")
+            self.m.to_fault("no_charge")
         if not self.switch.s.power:
-            self.m.set_mode("off")
+            if not self.m.any_faults():
+                self.m.set_mode("off")
 
     def power_usage(self):
         """Calculate the power usage in general."""
@@ -1206,6 +1210,7 @@ if __name__ == "__main__":
 
     mdl = Rover()
 
+    ec, hist = prop.one_fault(mdl, 'power', 'depleted', time=1)
 
     ec1, hist1 = prop.nominal(mdl)
     fig, ax = hist1.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
