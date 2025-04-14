@@ -461,6 +461,79 @@ class FaultDomain(object):
         else:
             self.faults[(fxnname, faultmode, ind)] = fault
 
+    def add_fault_space(self, fxnname, faultmode, dist_ranges, n='all', seed=42,
+                        prefix="", **kwargs):
+        """
+        Create a parametric space of disturbances for a given fault.
+
+        Parameters
+        ----------
+        fxnname : str
+            Name of the simulable to inject the fault in.
+        faultmode : str
+            Name of the fault mode (at simulable.m) to sample/parameterize. The fault
+            must have been defined as a field in the Mode class.
+        dist_ranges : dict
+            Ranges for the mode disturbances, e.g. {'s.x': (0, 5)} to elicit ranges
+            or {'s.x': {1,2,3}} for defined sets
+        n : int, optional
+            Max number of modes to generate. If more than this, the modes are sampled
+            randomply. The default is 'all'.
+        seed : int, optional
+            Seed for sampling the modes (if limited). The default is 42.
+        prefix : str, optional
+            Prefix to differentiate different fault spaces. Default is ''.
+        **kwargs : kwargs
+            Keyword arguments to apply accross the faults.
+
+        Examples
+        --------
+        >>> exfd2 = FaultDomain(ExFxnArch())
+        >>> exfd2.add_fault_space('ex_fxn', 'low', {'s.charge': (0, 10, 11)})
+        >>> exfd2
+        FaultDomain with faults:
+         -('ex_fxn', 'low', '0')
+         -('ex_fxn', 'low', '1')
+         -('ex_fxn', 'low', '2')
+         -('ex_fxn', 'low', '3')
+         -('ex_fxn', 'low', '4')
+         -('ex_fxn', 'low', '5')
+         -('ex_fxn', 'low', '6')
+         -('ex_fxn', 'low', '7')
+         -('ex_fxn', 'low', '8')
+         -('ex_fxn', 'low', '9')
+         -...more
+         >>> [f.disturbances[0][1] for f in exfd2.faults.values()]
+         [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+        """
+        # determine overall state combinations to sample from
+        for state, vals in dist_ranges.items():
+            if isinstance(vals, tuple):
+                dist_ranges[state] = set(np.linspace(*vals))
+            # nans added for nominal states to be included in combinations
+            # (to remove at mode creation)
+            dist_ranges[state].add(np.NaN)  # used to represent nominal state
+        dist_keys = [*dist_ranges.keys()]
+        statecombos = [i for i in itertools.product(*dist_ranges.values())]
+
+        # refine state combos given limited number to sample
+        if type(n) is int and len(statecombos) > 0:
+            rng = np.random.default_rng(seed)
+            full_list = [i for i, _ in enumerate(statecombos)]
+            sample = rng.choice(full_list, size=n, replace=False)
+            statecombos = [statecombos[i] for i in sample]
+
+        # calculate notional probability given number of samples
+        prob = kwargs.get('prob', 1/len(statecombos))
+        loc_kwargs = {**kwargs, 'prob': prob}
+
+        for comb_i, statecombo in enumerate(statecombos):
+            disturbance = tuple([(dist_keys[i], sc) for i, sc in enumerate(statecombo)
+                                 if not np.isnan(sc)])
+            if disturbance:
+                kwar = {**loc_kwargs, 'disturbances': disturbance}
+                self.add_fault(fxnname, faultmode, ind=prefix+str(comb_i), **kwar)
+
     def add_faults(self, *faults):
         """
         Add multiple faults to the FaultDomain.

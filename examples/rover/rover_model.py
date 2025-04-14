@@ -608,59 +608,69 @@ def rdiff_from_vects(u_self, u_lin):
     return rdiff
 
 
-class DriveMode(FlexibleMode):
-    """
-    Instantiate Modes for the Drive Function.
 
-    key_phases_by = 'plan_path' defines that the modes may be intantiated for
-    certain phases of PlanPath. The phases are defined by opptvect.
-    mode_options: determines if the how the modes in Drivemodes should be
-    formulated (e.g., as a parameter, manually, as set of modes, etc. )
-    """
+class DriveMode(Mode):
 
-    mode_options: tuple = tuple()
-    default_phases = (('drive', 1.0), ('start', 1.0),)
-    set_franges = {"s.friction": {1.5, 3.0, 10.0},
-                   "s.transfer": {0.5, 0.0},
-                   "s.drift": {-0.2, 0.2}}
-    range_franges = {"s.friction": (0.0, 20, 10),
-                     "s.transfer": (1.0, 0.0, 10),
-                     "s.drift": (-0.5, 0.5, 10)}
+    fault_elec_open = {"disturbances": (("s.transfer", 0.0),)}
+    fault_stuck: dict = {"disturbances": (("s.friction",  10.0),)},
+    fault_stuck_right: dict = {"disturbances": (("s.friction", 3.0), ("s.drift", 0.2))},
+    fault_stuck_left: dict = {"disturbances": (("s.friction", 3.0), ("s.drift", -0.2))}
+    fault_custom: dict = {}
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-        if type(self.mode_options) is int:
-            self.init_faultspace(self.range_franges, n=self.mode_options)
-        elif type(self.mode_options) is list:
-            self.add_mode_list()
-        elif type(self.mode_options) is dict:
-            self.init_faultmodes(**self.mode_options)
-        else:
-            if "manual" in self.mode_options:
-                self.add_manual_modes()
-            if "set" in self.mode_options:
-                self.init_faultspace(self.set_franges)
-            if "range" in self.mode_options:
-                if "all" in self.mode_options:
-                    self.init_faultspace(self.range_franges, n="all")
-                else:
-                    self.init_faultspace(self.range_franges, n=1)
+# class DriveMode(FlexibleMode):
+#     """
+#     Instantiate Modes for the Drive Function.
 
-    def add_manual_modes(self, drift=0.0, friction=0.0):
-        self.init_faultmodes(elec_open={"disturbances": (("s.transfer", 0.0),)},
-                             stuck={"disturbances": (("s.friction",  10.0+friction),)},
-                             stuck_right={"disturbances": (("s.friction", 3.0+friction), ("s.drift", 0.2+drift))},
-                             stuck_left={"disturbances": (("s.friction", 3.0+friction), ("s.drift", -0.2+drift))})
+#     key_phases_by = 'plan_path' defines that the modes may be intantiated for
+#     certain phases of PlanPath. The phases are defined by opptvect.
+#     mode_options: determines if the how the modes in Drivemodes should be
+#     formulated (e.g., as a parameter, manually, as set of modes, etc. )
+#     """
 
-    def add_degradation_modes(self, deg_params):
-        self.add_manual_modes(drift=deg_params.drift, friction=deg_params.friction)
+#     mode_options: tuple = tuple()
+#     default_phases = (('drive', 1.0), ('start', 1.0),)
+#     set_franges = {"s.friction": {1.5, 3.0, 10.0},
+#                    "s.transfer": {0.5, 0.0},
+#                    "s.drift": {-0.2, 0.2}}
+#     range_franges = {"s.friction": (0.0, 20, 10),
+#                      "s.transfer": (1.0, 0.0, 10),
+#                      "s.drift": (-0.5, 0.5, 10)}
 
-    def add_mode_list(self):
-        manual_modes = {"s_" + str(i):
-                        {"friction": mode[0], "transfer": mode[1], "drift": mode[2]}
-                        for i, mode in enumerate(self.mode_options)}
-        self.init_faultstate_modes(manual_modes)
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+
+#         if type(self.mode_options) is int:
+#             self.init_faultspace(self.range_franges, n=self.mode_options)
+#         elif type(self.mode_options) is list:
+#             self.add_mode_list()
+#         elif type(self.mode_options) is dict:
+#             self.init_faultmodes(**self.mode_options)
+#         else:
+#             if "manual" in self.mode_options:
+#                 self.add_manual_modes()
+#             if "set" in self.mode_options:
+#                 self.init_faultspace(self.set_franges)
+#             if "range" in self.mode_options:
+#                 if "all" in self.mode_options:
+#                     self.init_faultspace(self.range_franges, n="all")
+#                 else:
+#                     self.init_faultspace(self.range_franges, n=1)
+
+#     def add_manual_modes(self, drift=0.0, friction=0.0):
+#         self.init_faultmodes(elec_open={"disturbances": (("s.transfer", 0.0),)},
+#                              stuck={"disturbances": (("s.friction",  10.0+friction),)},
+#                              stuck_right={"disturbances": (("s.friction", 3.0+friction), ("s.drift", 0.2+drift))},
+#                              stuck_left={"disturbances": (("s.friction", 3.0+friction), ("s.drift", -0.2+drift))})
+
+#     def add_degradation_modes(self, deg_params):
+#         self.add_manual_modes(drift=deg_params.drift, friction=deg_params.friction)
+
+#     def add_mode_list(self):
+#         manual_modes = {"s_" + str(i):
+#                         {"friction": mode[0], "transfer": mode[1], "drift": mode[2]}
+#                         for i, mode in enumerate(self.mode_options)}
+#         self.init_faultstate_modes(manual_modes)
 
 
 class Drive(Function):
