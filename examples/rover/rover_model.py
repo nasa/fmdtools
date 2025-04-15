@@ -645,7 +645,8 @@ class Drive(Function):
         """Set degradation state to input degradation parameters."""
         self.s.assign(self.p, "friction", "drift")
         if self.p.drift != 0.0 and self.p.friction != 0.0:
-            self.m.add_degradation_modes(friction=self.p.friction, drift=self.p.drift)
+            self.m.update_degradation_modes(friction=self.p.friction,
+                                            drift=self.p.drift)
 
     def dynamic_behavior(self, time):
         """Define the drive behavior for a given time step."""
