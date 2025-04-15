@@ -1297,6 +1297,12 @@ class Coords(BaseCoords):
         False
         >>> ex.in_area(-10, -10, 'start')
         False
+        >>> ex.in_area(10, 20, 'hi_v_not_a')
+        False
+        >>> ex.in_area(10, 10, 'hi_v_not_a')
+        False
+        >>> ex.in_area(10, 0, 'hi_v_not_a')
+        True
         """
         pts = getattr(self, coll)
         try:
@@ -1308,7 +1314,7 @@ class Coords(BaseCoords):
         if coll in self.points:
             return np.all(pt == pts)
         elif coll in self.collections:
-            return pt in pts
+            return list(pt) in [list(i) for i in [*pts]]
         else:
             raise Exception("coll "+coll+" not a point or collection")
 
@@ -1416,7 +1422,7 @@ class Coords(BaseCoords):
         else:
             raise Exception("Not a point or collection")
 
-    def show_collection(self, prop, fig=None, ax=None, label=True, z="",
+    def show_collection(self, prop, fig=None, ax=None, label='prop', z="",
                         xlabel='x', ylabel='y', title='',
                         legend_kwargs=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
         """
@@ -1461,21 +1467,22 @@ class Coords(BaseCoords):
         ax : mpl.axis
             Ploted axis object.
         """
-        offset = self.p.blocksize/2
-        if not ax:
-            fig, ax = setup_plot(z=z, figsize=figsize)
-            if isinstance(z, str) and z:
-                ax.set_zlim(getattr(self, z).min(), getattr(self, z).max())
-            ax.set_xlim(-offset, self.p.x_size*self.p.blocksize+offset)
-            ax.set_ylim(-offset, self.p.y_size*self.p.blocksize+offset)
-        else:
-            fig, ax = setup_plot(fig=fig, ax=ax, z=z, figsize=figsize)
+        fig, ax = setup_plot(fig=fig, ax=ax, z=z, figsize=figsize)
+        if isinstance(z, str) and z:
+            ax.set_zlim(getattr(self, z).min(), getattr(self, z).max())
+        offset = self.p.blocksize*0.5
+        ax.set_xlim(-offset, self.p.x_size*self.p.blocksize-offset)
+        ax.set_ylim(-offset, self.p.y_size*self.p.blocksize-offset)
 
         coll = self.get_collection(prop)
         for i, pt in enumerate(coll):
-            corner = pt - np.array([offset, offset])
+            if label is bool or label == 'prop':
+                lab = prop
+            else:
+                lab = label
+            corner = pt - np.array([0.5*self.p.blocksize, 0.5*self.p.blocksize])
             rect = Rectangle(corner, self.p.blocksize, self.p.blocksize,
-                             label=prop, **kwargs)
+                             label=lab, **kwargs)
             ax.add_patch(rect)
             if isinstance(z, str) and z:
                 z_h = self.get(pt[0], pt[1], z)
@@ -1486,16 +1493,12 @@ class Coords(BaseCoords):
             else:
                 z_h = None
             if label:
-                if isinstance(label, str):
-                    lab = rect.get_label()
+                if z_h is not None:
+                    textloc = [*pt,  z_h+text_z_offset]
                 else:
-                    lab = label
-                if not z_h == None:
-                    ax.text(pt[0], pt[1], z_h+text_z_offset, lab,
-                            horizontalalignment="center", verticalalignment="center")
-                else:
-                    ax.text(pt[0], pt[1], lab,
-                            horizontalalignment="center", verticalalignment="center")
+                    textloc = pt
+                ax.text(*textloc, lab,
+                        horizontalalignment="center", verticalalignment="center")
         if legend_kwargs is not False:
             if legend_kwargs is True:
                 legend_kwargs = {}
@@ -1510,7 +1513,7 @@ class Coords(BaseCoords):
                     'xlabel': '', 'ylabel': '', 'title': '',
                     'legend_kwargs': kwargs.get('legend_kwargs', True),
                     **coll_kwargs}
-            self.show_collection(coll, fig=fig, ax=ax, **kwar)
+            fig, ax = self.show_collection(coll, fig=fig, ax=ax, **kwar)
 
     def show(self, properties={}, collections={}, coll_overlay=True, fig=None, ax=None,
              figsize=(5, 5), xlabel='x', ylabel='y', title='',
@@ -1686,12 +1689,14 @@ if __name__ == "__main__":
     ex.show_collection("high_v")
     ex.show_collection("high_v", z="v")
     ex.show_z("st", z="v",
-              collections={"pts": {"color": "blue"},
+              collections={"pts": {"color": "blue", 'text_z_offset': 2.0},
                            "high_v": {"alpha": 0.5, "color": "red"}},
               legend_kwargs=True)
 
     ex.st[1]=1
     ex.show({"st": {'hatch': 'xx', 'color': 'red'}},
             collections={"high_v": {"alpha": 0.5, "color": "blue"}})
+    ex.show({"st": {'hatch': 'xx', 'color': 'red'}},
+            collections={"high_v": {"alpha": 0.5, "color": "blue", 'label': "hi"}})
     import doctest
     doctest.testmod(verbose=True)

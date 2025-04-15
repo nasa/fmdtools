@@ -104,9 +104,9 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         """
         true_args = list([copy.copy(i) for i in self.__default_vals__])
         for i, n in enumerate(self.__fields__):
-            if force_kwargs:
+            if force_kwargs and n in kwargs:
                 true_args[i] = kwargs[n]
-            if i < len(args):
+            elif i < len(args):
                 true_args[i] = args[i]
             elif n in kwargs:
                 true_args[i] = kwargs[n]

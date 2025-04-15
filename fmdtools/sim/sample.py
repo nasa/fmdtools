@@ -427,7 +427,7 @@ class FaultDomain(object):
         modestr = "FaultDomain with faults:" + "\n -" + "\n -".join(faultlist)
         return modestr
 
-    def add_fault(self, fxnname, faultmode):
+    def add_fault(self, fxnname, faultmode, ind='', **kwargs):
         """
         Add a fault to the FaultDomain.
 
@@ -437,9 +437,102 @@ class FaultDomain(object):
             Name of the simulable to inject in
         faultmode : str
             Name of the faultmode to inject.
+        ind : str
+            If multiple of the same modes are to be in the FaultDomain, an index for
+            those modes.
+
+        Examples
+        --------
+        >>> exfd2 = FaultDomain(ExFxnArch())
+        >>> exfd2.add_fault('ex_fxn', 'low', '10', disturbances={'s.charge': 10.0})
+        >>> exfd2.add_fault('ex_fxn', 'low', '15', disturbances={'s.charge': 15.0})
+        >>> exfd2.add_fault('ex_fxn', 'low')
+        >>> exfd2
+        FaultDomain with faults:
+         -('ex_fxn', 'low', '10')
+         -('ex_fxn', 'low', '15')
+         -('ex_fxn', 'low')
+        >>> [*exfd2.faults.values()]
+        [Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.charge': 10.0}, units='sim'), Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.charge': 15.0}, units='sim'), Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.charge': 20.0}, units='sim')]
         """
-        fault = self.mdl.get_fault(fxnname, faultmode)
-        self.faults[(fxnname, faultmode)] = fault
+        fault = self.mdl.get_fault(fxnname, faultmode, **kwargs)
+        if not ind:
+            self.faults[(fxnname, faultmode)] = fault
+        else:
+            self.faults[(fxnname, faultmode, ind)] = fault
+
+    def add_fault_space(self, fxnname, faultmode, dist_ranges, n='all', seed=42,
+                        prefix="", **kwargs):
+        """
+        Create a parametric space of disturbances for a given fault.
+
+        Parameters
+        ----------
+        fxnname : str
+            Name of the simulable to inject the fault in.
+        faultmode : str
+            Name of the fault mode (at simulable.m) to sample/parameterize. The fault
+            must have been defined as a field in the Mode class.
+        dist_ranges : dict
+            Ranges for the mode disturbances, e.g. {'s.x': (0, 5)} to elicit ranges
+            or {'s.x': {1,2,3}} for defined sets
+        n : int, optional
+            Max number of modes to generate. If more than this, the modes are sampled
+            randomply. The default is 'all'.
+        seed : int, optional
+            Seed for sampling the modes (if limited). The default is 42.
+        prefix : str, optional
+            Prefix to differentiate different fault spaces. Default is ''.
+        **kwargs : kwargs
+            Keyword arguments to apply accross the faults.
+
+        Examples
+        --------
+        >>> exfd2 = FaultDomain(ExFxnArch())
+        >>> exfd2.add_fault_space('ex_fxn', 'low', {'s.charge': (0, 10, 11)})
+        >>> exfd2
+        FaultDomain with faults:
+         -('ex_fxn', 'low', '0')
+         -('ex_fxn', 'low', '1')
+         -('ex_fxn', 'low', '2')
+         -('ex_fxn', 'low', '3')
+         -('ex_fxn', 'low', '4')
+         -('ex_fxn', 'low', '5')
+         -('ex_fxn', 'low', '6')
+         -('ex_fxn', 'low', '7')
+         -('ex_fxn', 'low', '8')
+         -('ex_fxn', 'low', '9')
+         -...more
+         >>> [f.disturbances[0][1] for f in exfd2.faults.values()]
+         [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+        """
+        # determine overall state combinations to sample from
+        for state, vals in dist_ranges.items():
+            if isinstance(vals, tuple):
+                dist_ranges[state] = set(np.linspace(*vals))
+            # nans added for nominal states to be included in combinations
+            # (to remove at mode creation)
+            dist_ranges[state].add(np.NaN)  # used to represent nominal state
+        dist_keys = [*dist_ranges.keys()]
+        statecombos = [i for i in itertools.product(*dist_ranges.values())]
+
+        # refine state combos given limited number to sample
+        if type(n) is int and len(statecombos) > 0:
+            rng = np.random.default_rng(seed)
+            full_list = [i for i, _ in enumerate(statecombos)]
+            sample = rng.choice(full_list, size=n, replace=False)
+            statecombos = [statecombos[i] for i in sample]
+
+        # calculate notional probability given number of samples
+        prob = kwargs.get('prob', 1/len(statecombos))
+        loc_kwargs = {**kwargs, 'prob': prob}
+
+        for comb_i, statecombo in enumerate(statecombos):
+            disturbance = tuple([(dist_keys[i], sc) for i, sc in enumerate(statecombo)
+                                 if not np.isnan(sc)])
+            if disturbance:
+                kwar = {**loc_kwargs, 'disturbances': disturbance}
+                self.add_fault(fxnname, faultmode, ind=prefix+str(comb_i), **kwar)
 
     def add_faults(self, *faults):
         """
@@ -471,8 +564,10 @@ class FaultDomain(object):
         >>> exfd.add_all()
         >>> exfd
         FaultDomain with faults:
+         -('exfxnarch.fxns.ex_fxn', 'low')
          -('exfxnarch.fxns.ex_fxn', 'no_charge')
          -('exfxnarch.fxns.ex_fxn', 'short')
+         -('exfxnarch.fxns.ex_fxn2', 'low')
          -('exfxnarch.fxns.ex_fxn2', 'no_charge')
          -('exfxnarch.fxns.ex_fxn2', 'short')
         """
@@ -513,8 +608,10 @@ class FaultDomain(object):
         >>> exfd.add_all_fxnclass_modes("ExampleFunction")
         >>> exfd
         FaultDomain with faults:
+         -('ex_fxn', 'low')
          -('ex_fxn', 'no_charge')
          -('ex_fxn', 'short')
+         -('ex_fxn2', 'low')
          -('ex_fxn2', 'no_charge')
          -('ex_fxn2', 'short')
         """
@@ -539,6 +636,7 @@ class FaultDomain(object):
         >>> exfd.add_all_fxn_modes("ex_fxn2")
         >>> exfd
         FaultDomain with faults:
+         -('exfxnarch.fxns.ex_fxn2', 'low')
          -('exfxnarch.fxns.ex_fxn2', 'no_charge')
          -('exfxnarch.fxns.ex_fxn2', 'short')
         """
@@ -588,7 +686,12 @@ class FaultDomain(object):
 
 
 exfd = FaultDomain(ExFxnArch())
-exfd.add_all()
+exfd.add_all_modes("no_charge", "short")
+
+exfd2 = FaultDomain(ExFxnArch())
+exfd2.add_fault('ex_fxn', 'low', '10', disturbances={'s.charge': 10.0})
+exfd2.add_fault('ex_fxn', 'low', '15', disturbances={'s.charge': 15.0})
+exfd2.add_fault('ex_fxn', 'low')
 
 
 class BaseSample():
@@ -765,10 +868,10 @@ class FaultSample(BaseSample):
     FaultSample of scenarios: 
      - exfxnarch_fxns_ex_fxn_no_charge_t1
      - exfxnarch_fxns_ex_fxn_no_charge_t2
-     - exfxnarch_fxns_ex_fxn_short_t1
-     - exfxnarch_fxns_ex_fxn_short_t2
      - exfxnarch_fxns_ex_fxn2_no_charge_t1
      - exfxnarch_fxns_ex_fxn2_no_charge_t2
+     - exfxnarch_fxns_ex_fxn_short_t1
+     - exfxnarch_fxns_ex_fxn_short_t2
      - exfxnarch_fxns_ex_fxn2_short_t1
      - exfxnarch_fxns_ex_fxn2_short_t2
     """
@@ -813,7 +916,7 @@ class FaultSample(BaseSample):
         """Get all sampled scenarios."""
         return [*self._scenarios]
 
-    def add_single_fault_scenario(self, faulttup, time, weight=1.0):
+    def add_single_fault_scenario(self, faulttup, time, weight=1.0, **kwargs):
         """
         Add a single fault scenario to the list of scenarios.
 
@@ -825,6 +928,8 @@ class FaultSample(BaseSample):
             Time of the fault scenario.
         weight : float, optional
             Weighting factor for the scenario rate. The default is 1.0.
+        kwargs : kwargs
+            Non-default arguments for the fault (e.g., disturbances etc.)
 
         Examples
         --------
@@ -837,10 +942,17 @@ class FaultSample(BaseSample):
         >>> fs
         FaultSample of scenarios: 
          - affect_dof_ca_comps_rf_propwarp_t5
+        >>> fs2 = FaultSample(exfd2)
+        >>> fs2.add_single_fault_scenario(('ex_fxn', 'low', '15'), 5)
+        >>> fs2.scenarios()
+        [SingleFaultScenario(sequence={5.0: Injection(faults={'ex_fxn': {'low': {'prob': 1.0, 'cost': 0.0, 'phases': (), 'disturbances': {'s.charge': 15.0}, 'units': 'sim'}}}, disturbances={})}, times=(5,), function='ex_fxn', fault='low', rate=1.0, name='ex_fxn_low_15_t5', time=5, phase='na')]
         """
         self._times.add(time)
+        if len(faulttup) > 2:
+            kwargs = {**self.faultdomain.faults[faulttup].asdict(), **kwargs}
         scen = SingleFaultScenario.from_fault(faulttup, time, mdl=self.faultdomain.mdl,
-                                              weight=weight, phasemap=self.phasemap)
+                                              weight=weight, phasemap=self.phasemap,
+                                              **kwargs)
         self._scenarios.append(scen)
 
     def add_joint_fault_scenario(self, faulttups, time, weight=1.0, baserate='ind',
@@ -1982,3 +2094,4 @@ if __name__ == "__main__":
 
     import doctest
     doctest.testmod(verbose=True)
+    # doctest.testmod()

@@ -372,7 +372,7 @@ def exec_nom_helper(mdl, scen, name, mdl_kwargs={}, **kwargs):
     return result, mdlhist
 
 
-def one_fault(mdl, *fxnfault, time=0, **kwargs):
+def one_fault(mdl, *fxnfault, time=0, f_kw={}, **kwargs):
     """
     Run one fault in the model at a specified time.
 
@@ -387,6 +387,8 @@ def one_fault(mdl, *fxnfault, time=0, **kwargs):
     time : float, optional
         Time to inject fault. Must be in the range of model times
         (i.e. in range(0, end, mdl.sp.dt)). The default is 0.
+    f_kw : dict
+        Non-default fault keyword args.
     **kwargs : kwargs
         Additional keyword arguments, may include:
 
@@ -412,13 +414,8 @@ def one_fault(mdl, *fxnfault, time=0, **kwargs):
         fxnname, fault, time = fxnfault
     else:
         fxnname, fault = mdl.name, fxnfault[0]
-    seq = Sequence(faultseq={time: {fxnname: [fault]}})
 
-    scen = SingleFaultScenario(sequence=seq,
-                               fault=fault,
-                               function=fxnname,
-                               time=time,
-                               rate=mdl.get_scen_rate(fxnname, fault, time))
+    scen = SingleFaultScenario.from_fault((fxnname, fault), time, mdl=mdl, **f_kw)
     result, mdlhists = sequence(mdl, scen=scen, **kwargs)
     return result.flatten(), mdlhists.flatten()
 
@@ -1008,14 +1005,7 @@ def list_init_faults(mdl, times):
             else:
                 faultmodes = {}
             for mode in faultmodes:
-                rate = mdl.get_scen_rate(fxnname, mode, time)
-                newscen = SingleFaultScenario(sequence={time:
-                                                        {'faults': {fxnname: mode}}},
-                                              function=fxnname,
-                                              fault=mode,
-                                              rate=rate,
-                                              time=time,
-                                              name=fxnname+'_'+mode+'_'+t_key(time))
+                newscen = SingleFaultScenario.from_fault((fxnname, mode), time, mdl)
                 faultlist.append(newscen)
     return faultlist
 

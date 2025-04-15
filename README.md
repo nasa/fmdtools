@@ -248,7 +248,7 @@ To cite a particular version of the fmdtools, you may use:
 }
 ```
 
-To cite a particular fmdtools example or published research methodology, use the relevant reference provided in the in accompanying README file for the example.
+To cite a particular fmdtools example use the relevant reference provided in the in accompanying README file for the example. To cite a given published research methodology embodied by fmdtools, see our [publication list](PUBLICATIONS.md).
 
 ## License/Notices
 

@@ -41,7 +41,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
-from fmdtools.define.container.mode import Mode, FlexibleMode
+from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.function import Function
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.flow.base import Flow
@@ -608,59 +608,23 @@ def rdiff_from_vects(u_self, u_lin):
     return rdiff
 
 
-class DriveMode(FlexibleMode):
-    """
-    Instantiate Modes for the Drive Function.
+class DriveMode(Mode):
+    """Mode for the drive function, including custom fault modes."""
 
-    key_phases_by = 'plan_path' defines that the modes may be intantiated for
-    certain phases of PlanPath. The phases are defined by opptvect.
-    mode_options: determines if the how the modes in Drivemodes should be
-    formulated (e.g., as a parameter, manually, as set of modes, etc. )
-    """
-
-    mode_options: tuple = tuple()
     default_phases = (('drive', 1.0), ('start', 1.0),)
-    set_franges = {"s.friction": {1.5, 3.0, 10.0},
-                   "s.transfer": {0.5, 0.0},
-                   "s.drift": {-0.2, 0.2}}
-    range_franges = {"s.friction": (0.0, 20, 10),
-                     "s.transfer": (1.0, 0.0, 10),
-                     "s.drift": (-0.5, 0.5, 10)}
+    fault_elec_open = {"disturbances": (("s.transfer", 0.0),)}
+    fault_stuck: dict = {"disturbances": (("s.friction",  10.0),)}
+    fault_stuck_right: dict = {"disturbances": (("s.friction", 3.0), ("s.drift", 0.2))}
+    fault_stuck_left: dict = {"disturbances": (("s.friction", 3.0), ("s.drift", -0.2))}
+    fault_custom: dict = {}
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        if type(self.mode_options) is int:
-            self.init_faultspace(self.range_franges, n=self.mode_options)
-        elif type(self.mode_options) is list:
-            self.add_mode_list()
-        elif type(self.mode_options) is dict:
-            self.init_faultmodes(**self.mode_options)
-        else:
-            if "manual" in self.mode_options:
-                self.add_manual_modes()
-            if "set" in self.mode_options:
-                self.init_faultspace(self.set_franges)
-            if "range" in self.mode_options:
-                if "all" in self.mode_options:
-                    self.init_faultspace(self.range_franges, n="all")
-                else:
-                    self.init_faultspace(self.range_franges, n=1)
-
-    def add_manual_modes(self, drift=0.0, friction=0.0):
-        self.init_faultmodes(elec_open={"disturbances": (("s.transfer", 0.0),)},
-                             stuck={"disturbances": (("s.friction",  10.0+friction),)},
-                             stuck_right={"disturbances": (("s.friction", 3.0+friction), ("s.drift", 0.2+drift))},
-                             stuck_left={"disturbances": (("s.friction", 3.0+friction), ("s.drift", -0.2+drift))})
-
-    def add_degradation_modes(self, deg_params):
-        self.add_manual_modes(drift=deg_params.drift, friction=deg_params.friction)
-
-    def add_mode_list(self):
-        manual_modes = {"s_" + str(i):
-                        {"friction": mode[0], "transfer": mode[1], "drift": mode[2]}
-                        for i, mode in enumerate(self.mode_options)}
-        self.init_faultstate_modes(manual_modes)
+    def update_degradation_modes(self, drift=0.0, friction=0.0):
+        """Update mode parameters based on degradation parameters."""
+        self.fault_stuck = {"disturbances": (("s.friction",  10.0+friction),)}
+        self.fault_stuck_right = {"disturbances": (("s.friction", 3.0+friction),
+                                                   ("s.drift", 0.2+drift))}
+        self.fault_stuck_left = {"disturbances": (("s.friction", 3.0+friction),
+                                                  ("s.drift", -0.2+drift))}
 
 
 class Drive(Function):
@@ -681,7 +645,8 @@ class Drive(Function):
         """Set degradation state to input degradation parameters."""
         self.s.assign(self.p, "friction", "drift")
         if self.p.drift != 0.0 and self.p.friction != 0.0:
-            self.m.add_degradation_modes(self.p)
+            self.m.update_degradation_modes(friction=self.p.friction,
+                                            drift=self.p.drift)
 
     def dynamic_behavior(self, time):
         """Define the drive behavior for a given time step."""
@@ -844,6 +809,8 @@ class PowerMode(Mode):
         Battery is out of charge.
     short: Fault
         There is a short.
+    depletion: Fault
+        The battery is depleted to a given percent
     supply: Mode
         supply power
     charge: Mode
@@ -856,6 +823,7 @@ class PowerMode(Mode):
 
     fault_no_charge = (1e-5, 100, (("off", 1.0),))
     fault_short = (1e-5, 100, (("supply", 1.0),))
+    fault_depleted: dict = {'disturbances': {'s.charge': 20.0}}
     opermodes = ("supply", "charge", "off")
     mode: str = "off"
     exclusive = True
@@ -876,7 +844,7 @@ class Power(Function):
         """Determine power use based on mode."""
         if self.m.in_mode("off"):
             self.off_power()
-        elif self.m.in_mode("supply"):
+        elif self.m.in_mode("supply", "depleted"):
             self.supply_power()
         elif self.m.in_mode("short"):
             self.short_power()
@@ -925,9 +893,10 @@ class Power(Function):
             self.ee_12.s.v = 12
             self.ee_15.s.v = 15
         else:
-            self.m.set_mode("no_charge")
+            self.m.to_fault("no_charge")
         if not self.switch.s.power:
-            self.m.set_mode("off")
+            if not self.m.any_faults():
+                self.m.set_mode("off")
 
     def power_usage(self):
         """Calculate the power usage in general."""
@@ -1028,14 +997,6 @@ class Operator(Function):
         self.set_power(t)
 
 
-def gen_model_params(x, scen):
-    """Generate model parameters for the scenario."""
-    params = {"drive_modes": {"custom_fault": {"friction": x[scen][0][0],
-                                               "drift": x[scen][0][1],
-                                               "transfer": x[scen][0][2]}}}
-    return params
-
-
 class Rover(FunctionArchitecture):
     """
     Overall rover functional architecture.
@@ -1101,7 +1062,7 @@ class Rover(FunctionArchitecture):
 
     def find_classification(self, scen, mdlhist):
         """
-        calculates metrics that need to be tracked for the simulation
+        Calculate metric that need to be tracked for the simulation.
 
         Returns
         ----------
@@ -1206,6 +1167,7 @@ if __name__ == "__main__":
 
     mdl = Rover()
 
+    ec, hist = prop.one_fault(mdl, 'power', 'depleted', time=1)
 
     ec1, hist1 = prop.nominal(mdl)
     fig, ax = hist1.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',

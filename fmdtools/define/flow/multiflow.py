@@ -122,7 +122,7 @@ class MultiFlow(Flow):
         return MultiFlow
 
     def create_local(self, name, attrs="all", p='global', s='global', track=['s'],
-                     **kwargs):
+                     as_copy=False, **kwargs):
         """
         Create a local view of the Flow.
 
@@ -141,6 +141,8 @@ class MultiFlow(Flow):
         s : dict
             Initial values for the states. Default is 'global', which uses the
             same initial states as the multiflow
+        as_copy : bool
+            Whether to copy the local flow if it already exists.
 
         Returns
         -------
@@ -149,7 +151,10 @@ class MultiFlow(Flow):
         """
         if hasattr(self, name):
             oldflow = getattr(self, name)
-            newflow = oldflow.copy(glob=self)
+            if as_copy:
+                newflow = oldflow.copy(glob=self)
+            else:
+                newflow = oldflow
         else:
             kwar = {}
             if p == 'global' and hasattr(self, 'p'):
@@ -163,7 +168,8 @@ class MultiFlow(Flow):
             kwar = {**kwar, **kwargs}
             newflow = self.__class__(name=name, glob=self, track=track, **kwar)
         setattr(self, name, newflow)
-        self.locals.append(name)
+        if name not in self.locals:
+            self.locals.append(name)
         if hasattr(self, 'h') and self.h:
             self.create_hist([*self.h.values()][0])
         return newflow
@@ -263,7 +269,7 @@ class MultiFlow(Flow):
         cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track)
         for loc in self.locals:
             local = getattr(self, loc)
-            cop.create_local(local.name, **local.copy_mut_containers())
+            cop.create_local(local.name, **local.copy_mut_containers(), as_copy=True)
         return cop
 
     def create_hist(self, timerange):

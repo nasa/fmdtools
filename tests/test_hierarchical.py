@@ -7,7 +7,7 @@ function architecture, which in turn contains a function.
 from fmdtools.define.container.state import ExampleState
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.function import Function
-from fmdtools.define.architecture.function import FunctionArchitecture, ExFxnArch
+from fmdtools.define.architecture.function import ExFxnArch
 
 from fmdtools.sim import propagate
 
@@ -39,21 +39,16 @@ class define_Tests(unittest.TestCase):
 
     def test_fault_injection(self):
         """Check that faults get injected into contained functionarch."""
-        self.mdl.inject_faults({'overfxn': {'ex_fxn': 'no_charge'}})
-        self.assertEqual(self.mdl.m.faults, {'ex_fxn_no_charge'})
+        self.mdl.inject_faults({'overfxn.fa.fxns.ex_fxn': 'no_charge'})
+        self.assertTrue(self.mdl.m.sub_faults)
         self.assertEqual(self.mdl.fa.fxns['ex_fxn'].m.mode, "no_charge")
-
-    def test_top_level_injection(self):
-        """Check that faults also get injected into top level."""
-        self.mdl.inject_faults("test_fault")
-        self.assertEqual(self.mdl.m.faults, {'test_fault'})
 
     def test_prop_method(self):
         """Check that faults get injected using propagate.one_fault"""
         res, hist = propagate.one_fault(self.mdl,
-                                        "overfxn", "ex_fxn_no_charge", time=5.0)
-        self.assertFalse(hist.faulty.m.faults.ex_fxn_no_charge[4])
-        self.assertTrue(hist.faulty.m.faults.ex_fxn_no_charge[5])
+                                        "overfxn.fa.fxns.ex_fxn", "no_charge", time=5.0)
+        self.assertFalse(hist.faulty.m.sub_faults[4])
+        self.assertTrue(hist.faulty.m.sub_faults[5])
         self.assertFalse(hist.faulty.fa.fxns.ex_fxn.m.faults.no_charge[4])
         self.assertTrue(hist.faulty.fa.fxns.ex_fxn.m.faults.no_charge[5])
 
@@ -61,18 +56,9 @@ class define_Tests(unittest.TestCase):
 if __name__ == '__main__':
 
     oa = OverFxn()
-    res, hist = propagate.one_fault(oa, "overfxn", "ex_fxn_no_charge", time=5.0)
-    #works:
-    hist.faulty.m.faults.ex_fxn_no_charge
-    #doesn't work:
-    hist.faulty.fa.fxns.ex_fxn.m.faults.no_charge
+    res, hist = propagate.one_fault(oa, "overfxn.fa.fxns.ex_fxn", "no_charge", time=5.0)
 
     # oa.inject_faults(['ex_fxn_no_charge'])
     # oa.inject_faults({'overfxn': {'ex_fxn': 'no_charge'}})
 
     unittest.main()
-    
-    # test manual propagation
-    
-    # test propagation method(s)
-

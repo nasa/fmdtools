@@ -14,5 +14,6 @@ TABLE OF CONTENTS
  examples/Examples
  docs-source/fmdtools
  CONTRIBUTORS
+ PUBLICATIONS
  
  :ref:`genindex`
