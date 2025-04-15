@@ -25,57 +25,54 @@ from fmdtools.analyze.phases import from_hist
 
 import multiprocessing as mp
 
+
+set_ranges = {"s.friction": {1.5, 3.0, 10.0},
+              "s.transfer": {0.5, 0.0},
+              "s.drift": {-0.2, 0.2}}
+
+dist_ranges = ranges = {"s.friction": (0.0, 20, 10),
+                        "s.transfer": (1.0, 0.0, 10),
+                        "s.drift": (-0.5, 0.5, 10)}
+
+p_test = {'ground': {'linetype': 'turn',
+                     'buffer_on': 0.5,
+                     'buffer_poor': 0.8,
+                     'buffer_near': 1.0}}
+
 if __name__ == "__main__":
     mdl = Rover()
     p = RoverParam()
     endresults, mdlhist = prop.nominal(mdl)
     pm = from_hist(mdlhist)
+    mdl_test = Rover(p=p_test, sp={'end_condition': ''})
 
     # range modes
-    mdl_range = Rover(p={"drive_modes": {"mode_args": 'range-manual-all'},
-                     'ground':{'linetype': 'turn', 'buffer_on': 0.5, 'buffer_poor': 0.8, 'buffer_near': 1.0}},
-                  sp={'end_condition': ''})
-    fd_range = FaultDomain(mdl_range)
-    fd_range.add_all_fxnclass_modes('Drive')
-    # fd_range.add_fault('drive', 'hmode_5')
-    # fd_range.add_fault('drive', 'hmode_995')
-    # fd_range.add_fault('drive', 'elec_open')
-    # faults = [('drive', 'hmode_'+str(i)) for i in range(800)]
-    # fd_range.add_faults(*faults)
+    fd_range = FaultDomain(mdl_test)
+    fd_range.add_fault_space('drive', 'custom', dist_ranges)
+
     fs_range = FaultSample(fd_range, pm['plan_path'])
     fs_range.add_fault_phases('drive')
-    results_range, mdlhists_range = prop.fault_sample(mdl_range, fs_range, pool=mp.Pool(4),
+    results_range, mdlhists_range = prop.fault_sample(mdl_test, fs_range, pool=mp.Pool(4),
                                                       staged=True)
 
     # set modes
-    mdl_id = Rover(p={"drive_modes": {"mode_args": "set"}})
-    pd_id = FaultDomain(mdl_id)
-    pd_id.add_all_fxn_modes('drive')
+    pd_id = FaultDomain(mdl_test)
+    pd_id.add_fault_space('drive', 'custom', set_ranges)
 
     ps_id = FaultSample(pd_id, phasemap=pm['plan_path'])
     ps_id.add_fault_phases('drive', args=(3,))
 
-    ec_id, hist_id = prop.fault_sample(mdl, ps_id, pool=mp.Pool(4), staged=True)
-    #  manual modes
-    mdl_id = Rover(p={"drive_modes": {"mode_args": "manual"}})
-    endresults, mdlhist = prop.one_fault(mdl_id, "drive", "elec_open",
-                                         time=1, staged=False)
+    ec_id, hist_id = prop.fault_sample(mdl_test, ps_id, pool=mp.Pool(4), staged=True)
 
-    # 100 drive faults
-    mdl_100 = Rover(p={"drive_modes": {"mode_args": 100}})
-    endresults, mdlhist = prop.one_fault(mdl_100, "drive", "hmode_34",
+    #  manual modes
+    endresults, mdlhist = prop.one_fault(mdl_test, "drive", "elec_open",
                                          time=1, staged=False)
 
     # custom fault
-    x = [1.0, 0.0, 1.0]
-    mdl = Rover(p={"drive_modes":
-                   {"custom_fault":
-                    {"friction": x[0], "drift": x[1], "transfer": x[2]}}})
+    f_kw = {'disturbances': {'s.friction': 1.0, 's.transfer': 0.0, 's.drift': 1.0}}
 
-    _, mdlhist = prop.nominal(mdl)
-
-    endresults, reshist = prop.one_fault(mdl, "drive", "custom_fault",
-                                         time=15, staged=True)
+    endresults, reshist = prop.one_fault(mdl, "drive", "custom", time=15,
+                                         staged=True, f_kw=f_kw)
 
     line_dist = endresults.endclass.line_dist
     end_loc = (reshist.faulty.flows.pos.s.x[-1], reshist.faulty.flows.pos.s.y[-1])
