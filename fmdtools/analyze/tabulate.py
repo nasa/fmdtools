@@ -71,10 +71,10 @@ def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
                                                              degraded  ... expected_cost
     exfxnarch_fxns_ex_fxn_no_charge_t1              ['ex_fxn', 'exf']  ...           0.0
     exfxnarch_fxns_ex_fxn_no_charge_t2              ['ex_fxn', 'exf']  ...           0.0
-    exfxnarch_fxns_ex_fxn_short_t1                  ['ex_fxn', 'exf']  ...           0.0
-    exfxnarch_fxns_ex_fxn_short_t2                  ['ex_fxn', 'exf']  ...           0.0
     exfxnarch_fxns_ex_fxn2_no_charge_t1  ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
     exfxnarch_fxns_ex_fxn2_no_charge_t2  ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
+    exfxnarch_fxns_ex_fxn_short_t1                  ['ex_fxn', 'exf']  ...           0.0
+    exfxnarch_fxns_ex_fxn_short_t2                  ['ex_fxn', 'exf']  ...           0.0
     exfxnarch_fxns_ex_fxn2_short_t1      ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
     exfxnarch_fxns_ex_fxn2_short_t2      ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
     nominal                                                        []  ...           1.0
@@ -450,23 +450,23 @@ class FMEA(BaseTab):
     >>> FMEA(res, exfs).as_table(sort_by="sum_cost")
                                       average_scenario_rate  ...  expected_cost
     exfxnarch.fxns.ex_fxn2 short                        0.0  ...            0.0
-                           no_charge                    0.0  ...            0.0
     exfxnarch.fxns.ex_fxn  short                        0.0  ...            0.0
-                           no_charge                    0.0  ...            0.0
+    exfxnarch.fxns.ex_fxn2 no_charge                    0.0  ...            0.0
+    exfxnarch.fxns.ex_fxn  no_charge                    0.0  ...            0.0
     <BLANKLINE>
     [4 rows x 3 columns]
     >>> FMEA(res, exfs, average_metric=["rate"], sum_metric=["cost"], expected_metric=["cost"], rates="rate").as_table()
                                       average_rate  sum_cost  expected_cost
     exfxnarch.fxns.ex_fxn2 short               1.5        13             20
-                           no_charge           1.5         9             14
-    exfxnarch.fxns.ex_fxn  short               1.5         5              8
-                           no_charge           1.5         1              2
+    exfxnarch.fxns.ex_fxn  short               1.5         9             14
+    exfxnarch.fxns.ex_fxn2 no_charge           1.5         5              8
+    exfxnarch.fxns.ex_fxn  no_charge           1.5         1              2
     >>> FMEA(res, exfs, sum_metric=["rate"], average_metric=["cost"]).as_table()
                                       sum_rate  average_cost
     exfxnarch.fxns.ex_fxn2 short             3           6.5
-                           no_charge         3           4.5
-    exfxnarch.fxns.ex_fxn  short             3           2.5
-                           no_charge         3           0.5
+    exfxnarch.fxns.ex_fxn  short             3           4.5
+    exfxnarch.fxns.ex_fxn2 no_charge         3           2.5
+    exfxnarch.fxns.ex_fxn  no_charge         3           0.5
     """
 
     def __init__(self, res, fs, add_res={}, group_by=('function', 'fault'),
