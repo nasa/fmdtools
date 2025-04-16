@@ -918,10 +918,10 @@ FaultDomain with faults:
  -(&#39;rover.fxns.perception&#39;, &#39;bad_feed&#39;)
  -(&#39;rover.fxns.plan_path&#39;, &#39;crash&#39;)
  -(&#39;rover.fxns.plan_path&#39;, &#39;no_con&#39;)
- -(&#39;rover.fxns.drive&#39;, &#39;hmode_0&#39;)
- -(&#39;rover.fxns.drive&#39;, &#39;hmode_1&#39;)
- -(&#39;rover.fxns.drive&#39;, &#39;hmode_2&#39;)
- -(&#39;rover.fxns.drive&#39;, &#39;hmode_3&#39;)
+ -(&#39;rover.fxns.drive&#39;, &#39;custom&#39;)
+ -(&#39;rover.fxns.drive&#39;, &#39;elec_open&#39;)
+ -(&#39;rover.fxns.drive&#39;, &#39;stuck&#39;)
+ -(&#39;rover.fxns.drive&#39;, &#39;stuck_left&#39;)
  -...more
 </pre></div></div>
 </div>
@@ -1231,7 +1231,7 @@ FaultSample of scenarios:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sa</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">Rover</span><span class="p">(),</span> <span class="n">phasemaps</span><span class="o">=</span><span class="n">phases</span><span class="p">)</span>
 <span class="c1"># adding fault domains</span>
-<span class="n">sa</span><span class="o">.</span><span class="n">add_faultdomain</span><span class="p">(</span><span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="s2">&quot;fault&quot;</span><span class="p">,</span> <span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="s2">&quot;hmode_1&quot;</span><span class="p">)</span>
+<span class="n">sa</span><span class="o">.</span><span class="n">add_faultdomain</span><span class="p">(</span><span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="s2">&quot;fault&quot;</span><span class="p">,</span> <span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="s2">&quot;custom&quot;</span><span class="p">)</span>
 <span class="n">sa</span><span class="o">.</span><span class="n">add_faultdomain</span><span class="p">(</span><span class="s2">&quot;plan_path&quot;</span><span class="p">,</span> <span class="s2">&quot;all_fxn_modes&quot;</span><span class="p">,</span> <span class="s2">&quot;plan_path&quot;</span><span class="p">)</span>
 <span class="n">sa</span><span class="o">.</span><span class="n">add_faultdomain</span><span class="p">(</span><span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="s2">&quot;all_fxn_modes&quot;</span><span class="p">,</span> <span class="s2">&quot;power&quot;</span><span class="p">)</span>
 <span class="n">sa</span><span class="o">.</span><span class="n">add_faultsample</span><span class="p">(</span><span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="s2">&quot;fault_phases&quot;</span><span class="p">,</span> <span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="s2">&quot;plan_path&quot;</span><span class="p">)</span>
@@ -1274,7 +1274,7 @@ SampleApproach for rover with:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[SingleFaultScenario(sequence={58.0: Injection(faults={&#39;drive&#39;: [&#39;hmode_1&#39;]}, disturbances={})}, times=(58.0,), function=&#39;drive&#39;, fault=&#39;hmode_1&#39;, rate=0.027777777777777776, name=&#39;drive_hmode_1_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
+[SingleFaultScenario(sequence={58.0: Injection(faults={&#39;drive&#39;: [&#39;custom&#39;]}, disturbances={})}, times=(58.0,), function=&#39;drive&#39;, fault=&#39;custom&#39;, rate=1.0, name=&#39;drive_custom_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
  SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(2.0,), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_crash_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
  SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(2.0,), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_no_con_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
  SingleFaultScenario(sequence={58.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(58.0,), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_crash_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
@@ -1303,7 +1303,7 @@ SampleApproach for rover with:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 4/4 [00:00&lt;00:00,  9.20it/s]
+SCENARIOS COMPLETE: 100%|██████████| 4/4 [00:00&lt;00:00, 10.00it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1558,12 +1558,6 @@ nominal.endclass.endpt:         array(2)
   <tbody>
     <tr>
       <th rowspan="3" valign="top">rover.fxns.power</th>
-      <th>no_charge</th>
-      <td>0.00001</td>
-      <td>0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
       <th>depleted</th>
       <td>1.00000</td>
       <td>0</td>
@@ -1571,6 +1565,12 @@ nominal.endclass.endpt:         array(2)
     </tr>
     <tr>
       <th>short</th>
+      <td>0.00001</td>
+      <td>0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>no_charge</th>
       <td>0.00001</td>
       <td>0</td>
       <td>0.0</td>
@@ -1857,7 +1857,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 6/6 [00:00&lt;00:00, 16.22it/s]
+SCENARIOS COMPLETE: 100%|██████████| 6/6 [00:00&lt;00:00, 17.33it/s]
 </pre></div></div>
 </div>
 <p>You can see the effects of the different types of faults below. As shown, the battery charge is lowered to three different levels at three different times, leading to the simulation ending at different times as the rover loses charge:</p>

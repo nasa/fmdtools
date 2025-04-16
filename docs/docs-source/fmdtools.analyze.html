@@ -2862,23 +2862,23 @@ All other kwargs will be kwargs to Result.get_metric
 <span class="gp">&gt;&gt;&gt; </span><span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exfs</span><span class="p">)</span><span class="o">.</span><span class="n">as_table</span><span class="p">(</span><span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;sum_cost&quot;</span><span class="p">)</span>
 <span class="go">                                  average_scenario_rate  ...  expected_cost</span>
 <span class="go">exfxnarch.fxns.ex_fxn2 short                        0.0  ...            0.0</span>
-<span class="go">                       no_charge                    0.0  ...            0.0</span>
 <span class="go">exfxnarch.fxns.ex_fxn  short                        0.0  ...            0.0</span>
-<span class="go">                       no_charge                    0.0  ...            0.0</span>
+<span class="go">exfxnarch.fxns.ex_fxn2 no_charge                    0.0  ...            0.0</span>
+<span class="go">exfxnarch.fxns.ex_fxn  no_charge                    0.0  ...            0.0</span>
 
 <span class="go">[4 rows x 3 columns]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exfs</span><span class="p">,</span> <span class="n">average_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">],</span> <span class="n">sum_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">],</span> <span class="n">expected_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">],</span> <span class="n">rates</span><span class="o">=</span><span class="s2">&quot;rate&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
 <span class="go">                                  average_rate  sum_cost  expected_cost</span>
 <span class="go">exfxnarch.fxns.ex_fxn2 short               1.5        13             20</span>
-<span class="go">                       no_charge           1.5         9             14</span>
-<span class="go">exfxnarch.fxns.ex_fxn  short               1.5         5              8</span>
-<span class="go">                       no_charge           1.5         1              2</span>
+<span class="go">exfxnarch.fxns.ex_fxn  short               1.5         9             14</span>
+<span class="go">exfxnarch.fxns.ex_fxn2 no_charge           1.5         5              8</span>
+<span class="go">exfxnarch.fxns.ex_fxn  no_charge           1.5         1              2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exfs</span><span class="p">,</span> <span class="n">sum_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">],</span> <span class="n">average_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
 <span class="go">                                  sum_rate  average_cost</span>
 <span class="go">exfxnarch.fxns.ex_fxn2 short             3           6.5</span>
-<span class="go">                       no_charge         3           4.5</span>
-<span class="go">exfxnarch.fxns.ex_fxn  short             3           2.5</span>
-<span class="go">                       no_charge         3           0.5</span>
+<span class="go">exfxnarch.fxns.ex_fxn  short             3           4.5</span>
+<span class="go">exfxnarch.fxns.ex_fxn2 no_charge         3           2.5</span>
+<span class="go">exfxnarch.fxns.ex_fxn  no_charge         3           0.5</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -3091,10 +3091,10 @@ Default is lambda x: x == 0.0</p></li>
 <span class="go">                                                         degraded  ... expected_cost</span>
 <span class="go">exfxnarch_fxns_ex_fxn_no_charge_t1              [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
 <span class="go">exfxnarch_fxns_ex_fxn_no_charge_t2              [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
-<span class="go">exfxnarch_fxns_ex_fxn_short_t1                  [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
-<span class="go">exfxnarch_fxns_ex_fxn_short_t2                  [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
 <span class="go">exfxnarch_fxns_ex_fxn2_no_charge_t1  [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...           0.0</span>
 <span class="go">exfxnarch_fxns_ex_fxn2_no_charge_t2  [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...           0.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn_short_t1                  [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn_short_t2                  [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...           0.0</span>
 <span class="go">exfxnarch_fxns_ex_fxn2_short_t1      [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...           0.0</span>
 <span class="go">exfxnarch_fxns_ex_fxn2_short_t2      [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...           0.0</span>
 <span class="go">nominal                                                        []  ...           1.0</span>
