@@ -637,6 +637,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#fmdtools-at-osu">fmdtools at OSU</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../PUBLICATIONS.html">fmdtools Publication List</a></li>
 </ul>
 
         </div>
@@ -1103,6 +1104,11 @@ held in Blocks.</p></li>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.fault_low">
+<span class="sig-name descname"><span class="pre">fault_low</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.fault_low" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.fault_no_charge">
 <span class="sig-name descname"><span class="pre">fault_no_charge</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Fault(prob=1e-05,</span> <span class="pre">cost=100,</span> <span class="pre">phases=(('standby',</span> <span class="pre">1.0),),</span> <span class="pre">disturbances=(),</span> <span class="pre">units='sim')</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.fault_no_charge" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -1225,99 +1231,13 @@ define the fault rate. The default is ‘hr’.</p></li>
 <span class="sig-name descname"><span class="pre">units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Fault.units" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.Fault.valid_fault">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">valid_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Fault.valid_fault" title="Link to this definition"></a></dt>
+<dd><p>Check if the external fault is a valid fault (has same keys).</p>
+</dd></dl>
+
 </section>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">FlexibleMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">set()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_faults</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a></p>
-<p>Create class FlexibleMode instance</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.faultmodes">
-<span class="sig-name descname"><span class="pre">faultmodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.faultmodes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.faults">
-<span class="sig-name descname"><span class="pre">faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.faults" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.fm_args">
-<span class="sig-name descname"><span class="pre">fm_args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.fm_args" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.fs_args">
-<span class="sig-name descname"><span class="pre">fs_args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.fs_args" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.get_all_faultnames">
-<span class="sig-name descname"><span class="pre">get_all_faultnames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.get_all_faultnames" title="Link to this definition"></a></dt>
-<dd><p>Get all names of faults.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.get_fault">
-<span class="sig-name descname"><span class="pre">get_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faultname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.get_fault" title="Link to this definition"></a></dt>
-<dd><p>Get the Fault object associated with the given faultname.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>faultname</strong> (<em>str</em>) – Name of the fault (if defined as a part of the mode at value fault_name).
-Can also be parameters of the fault.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fault</strong> – Fault container with given fields..</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.define.container.mode.Fault" title="fmdtools.define.container.mode.Fault">Fault</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.init_faultmodes">
-<span class="sig-name descname"><span class="pre">init_faultmodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.init_faultmodes" title="Link to this definition"></a></dt>
-<dd><p>Initialize the self.faultmodes dictionary from the parameters of the Mode.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>**faults</strong> (<em>kwargs</em>) – Arguments to instantiate for the faultmodes.
-e.g., faultname=(0.1, 200).</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.init_faultspace">
-<span class="sig-name descname"><span class="pre">init_faultspace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">franges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hmode_'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.init_faultspace" title="Link to this definition"></a></dt>
-<dd><p>Associate n-disturbance mode combinations as faults.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>franges</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of form {‘varname’: {val1, val2…} of ranges of values for
-for each disturbance (if used to generate modes). The default is {}.</p></li>
-<li><p><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of faultstate combinations to sample. The default is ‘all’.</p></li>
-<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Seed used in selection (if n!=’all). The default is 42.</p></li>
-<li><p><strong>prefix</strong> (<em>str</em>) – Prefix of fault names. Default is “<a href="#id44"><span class="problematic" id="id45">hmode_</span></a>”</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Entries for the Fault (e.g., phases, etc)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.set_field">
-<span class="sig-name descname"><span class="pre">set_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fieldname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.set_field" title="Link to this definition"></a></dt>
-<dd><p>Extend BaseContainer.assign to not set faultmodes (always the same).</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.mode.FlexibleMode.sub_faults">
-<span class="sig-name descname"><span class="pre">sub_faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.mode.FlexibleMode.sub_faults" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -1445,6 +1365,17 @@ their properties</p>
 <dd class="field-odd"><p><strong>*fault</strong> (<em>str</em><em>(</em><em>s</em><em>)</em>) – name(s) of the fault to add to the black</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span> <span class="o">=</span> <span class="n">ExampleMode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span><span class="o">.</span><span class="n">get_fault</span><span class="p">(</span><span class="s1">&#39;low&#39;</span><span class="p">)</span>
+<span class="go">Fault(prob=1.0, cost=0.0, phases=(), disturbances={&#39;s.charge&#39;: 20.0}, units=&#39;sim&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;disturbances&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;s.charge&#39;</span><span class="p">:</span> <span class="mf">40.0</span><span class="p">}}))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span>
+<span class="go">ExampleMode(mode=low, faults={&#39;low&#39;})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span><span class="o">.</span><span class="n">get_fault</span><span class="p">(</span><span class="s1">&#39;low&#39;</span><span class="p">)</span>
+<span class="go">Fault(prob=1.0, cost=0.0, phases=(), disturbances={&#39;s.charge&#39;: 40.0}, units=&#39;sim&#39;)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1487,7 +1418,7 @@ their properties</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.get_fault">
-<span class="sig-name descname"><span class="pre">get_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faultname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.get_fault" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faultname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.get_fault" title="Link to this definition"></a></dt>
 <dd><p>Get the Fault object associated with the given faultname.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1495,12 +1426,20 @@ their properties</p>
 Can also be parameters of the fault.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fault</strong> – Fault container with given fields..</p>
+<dd class="field-even"><p><strong>fault</strong> – Fault container with given fields.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#fmdtools.define.container.mode.Fault" title="fmdtools.define.container.mode.Fault">Fault</a></p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span> <span class="o">=</span> <span class="n">ExampleMode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span><span class="o">.</span><span class="n">get_fault</span><span class="p">(</span><span class="s1">&#39;short&#39;</span><span class="p">)</span>
+<span class="go">Fault(prob=1e-05, cost=100, phases=((&#39;supply&#39;, 1.0),), disturbances=(), units=&#39;sim&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span><span class="o">.</span><span class="n">get_fault</span><span class="p">(</span><span class="s1">&#39;short&#39;</span><span class="p">,</span> <span class="n">prob</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="go">Fault(prob=0.1, cost=100, phases=((&#39;supply&#39;, 1.0),), disturbances=(), units=&#39;sim&#39;)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">

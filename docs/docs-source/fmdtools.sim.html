@@ -637,6 +637,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#fmdtools-at-osu">fmdtools at OSU</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../PUBLICATIONS.html">fmdtools Publication List</a></li>
 </ul>
 
         </div>
@@ -1121,7 +1122,7 @@ nominal runs. Default is True.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.one_fault">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">one_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">fxnfault</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.one_fault" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">one_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">fxnfault</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_kw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.one_fault" title="Link to this definition"></a></dt>
 <dd><p>Run one fault in the model at a specified time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1132,6 +1133,7 @@ nominal runs. Default is True.</p></li>
 - ‘faultmode’ when a Block/Function is provided</p></li>
 <li><p><strong>time</strong> (<em>float</em><em>, </em><em>optional</em>) – Time to inject fault. Must be in the range of model times
 (i.e. in range(0, end, mdl.sp.dt)). The default is 0.</p></li>
+<li><p><strong>f_kw</strong> (<em>dict</em>) – Non-default fault keyword args.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <p>Additional keyword arguments, may include:</p>
 <ul>
 <li><dl class="simple">
@@ -1613,7 +1615,8 @@ faults and disturbances.</p></li>
 <section id="fields">
 <h3>Fields<a class="headerlink" href="#fields" title="Link to this heading"></a></h3>
 <dl class="simple">
-<dt>faults<span class="classifier">dict</span></dt><dd><p>Faults to inject with structure {‘fxnname’: [faults]}</p>
+<dt>faults<span class="classifier">dict</span></dt><dd><p>Faults to inject with structure {‘fxnname’: [faults]}
+or {‘fxnname’: {‘faultname’: Fault()}}</p>
 </dd>
 <dt>disturbances<span class="classifier">dict</span></dt><dd><p>Disturbances to inject with structure {‘path.to.state’: statevalue}</p>
 </dd>
@@ -1658,7 +1661,7 @@ faults and disturbances.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.scenario.JointFaultScenario.from_faults">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baserate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ind'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_cond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.JointFaultScenario.from_faults" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baserate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ind'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_cond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.JointFaultScenario.from_faults" title="Link to this definition"></a></dt>
 <dd><p>Generate JointFaultScenario given fault names, time.</p>
 </dd></dl>
 
@@ -1872,7 +1875,7 @@ faults and disturbances.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.scenario.Sequence.from_fault">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.Sequence.from_fault" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.Sequence.from_fault" title="Link to this definition"></a></dt>
 <dd><p>Generate sequence from single fault mode faulttup (fxn, mode).</p>
 </dd></dl>
 
@@ -1918,8 +1921,15 @@ faults and disturbances.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.scenario.SingleFaultScenario.from_fault">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.SingleFaultScenario.from_fault" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.SingleFaultScenario.from_fault" title="Link to this definition"></a></dt>
 <dd><p>Generate the fault scenario for faulttup at time.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SingleFaultScenario</span><span class="o">.</span><span class="n">from_fault</span><span class="p">((</span><span class="s1">&#39;fxn&#39;</span><span class="p">,</span> <span class="s1">&#39;fault&#39;</span><span class="p">),</span> <span class="mi">10</span><span class="p">)</span>
+<span class="go">SingleFaultScenario(sequence={10.0: Injection(faults={&#39;fxn&#39;: [&#39;fault&#39;]}, disturbances={})}, times=(10,), function=&#39;fxn&#39;, fault=&#39;fault&#39;, rate=1.0, name=&#39;fxn_fault_t10&#39;, time=10, phase=&#39;&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SingleFaultScenario</span><span class="o">.</span><span class="n">from_fault</span><span class="p">((</span><span class="s1">&#39;fxn&#39;</span><span class="p">,</span> <span class="s1">&#39;fault&#39;</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span> <span class="n">prob</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">SingleFaultScenario(sequence={10.0: Injection(faults={&#39;fxn&#39;: {&#39;fault&#39;: {&#39;prob&#39;: 10}}}, disturbances={})}, times=(10,), function=&#39;fxn&#39;, fault=&#39;fault&#39;, rate=1.0, name=&#39;fxn_fault_t10&#39;, time=10, phase=&#39;&#39;)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2179,8 +2189,10 @@ faults and disturbances.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span><span class="o">.</span><span class="n">add_all</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span>
 <span class="go">FaultDomain with faults:</span>
+<span class="go"> -(&#39;exfxnarch.fxns.ex_fxn&#39;, &#39;low&#39;)</span>
 <span class="go"> -(&#39;exfxnarch.fxns.ex_fxn&#39;, &#39;no_charge&#39;)</span>
 <span class="go"> -(&#39;exfxnarch.fxns.ex_fxn&#39;, &#39;short&#39;)</span>
+<span class="go"> -(&#39;exfxnarch.fxns.ex_fxn2&#39;, &#39;low&#39;)</span>
 <span class="go"> -(&#39;exfxnarch.fxns.ex_fxn2&#39;, &#39;no_charge&#39;)</span>
 <span class="go"> -(&#39;exfxnarch.fxns.ex_fxn2&#39;, &#39;short&#39;)</span>
 </pre></div>
@@ -2201,6 +2213,7 @@ faults and disturbances.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span><span class="o">.</span><span class="n">add_all_fxn_modes</span><span class="p">(</span><span class="s2">&quot;ex_fxn2&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span>
 <span class="go">FaultDomain with faults:</span>
+<span class="go"> -(&#39;exfxnarch.fxns.ex_fxn2&#39;, &#39;low&#39;)</span>
 <span class="go"> -(&#39;exfxnarch.fxns.ex_fxn2&#39;, &#39;no_charge&#39;)</span>
 <span class="go"> -(&#39;exfxnarch.fxns.ex_fxn2&#39;, &#39;short&#39;)</span>
 </pre></div>
@@ -2221,8 +2234,10 @@ faults and disturbances.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span><span class="o">.</span><span class="n">add_all_fxnclass_modes</span><span class="p">(</span><span class="s2">&quot;ExampleFunction&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exfd</span>
 <span class="go">FaultDomain with faults:</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;)</span>
 <span class="go"> -(&#39;ex_fxn&#39;, &#39;no_charge&#39;)</span>
 <span class="go"> -(&#39;ex_fxn&#39;, &#39;short&#39;)</span>
+<span class="go"> -(&#39;ex_fxn2&#39;, &#39;low&#39;)</span>
 <span class="go"> -(&#39;ex_fxn2&#39;, &#39;no_charge&#39;)</span>
 <span class="go"> -(&#39;ex_fxn2&#39;, &#39;short&#39;)</span>
 </pre></div>
@@ -2245,16 +2260,74 @@ faults and disturbances.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.FaultDomain.add_fault">
-<span class="sig-name descname"><span class="pre">add_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fxnname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultDomain.add_fault" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fxnname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultDomain.add_fault" title="Link to this definition"></a></dt>
 <dd><p>Add a fault to the FaultDomain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fxnname</strong> (<em>str</em>) – Name of the simulable to inject in</p></li>
 <li><p><strong>faultmode</strong> (<em>str</em>) – Name of the faultmode to inject.</p></li>
+<li><p><strong>ind</strong> (<em>str</em>) – If multiple of the same modes are to be in the FaultDomain, an index for
+those modes.</p></li>
 </ul>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfd2</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">ExFxnArch</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd2</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s1">&#39;ex_fxn&#39;</span><span class="p">,</span> <span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="n">disturbances</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;s.charge&#39;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd2</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s1">&#39;ex_fxn&#39;</span><span class="p">,</span> <span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="n">disturbances</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;s.charge&#39;</span><span class="p">:</span> <span class="mf">15.0</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd2</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="s1">&#39;ex_fxn&#39;</span><span class="p">,</span> <span class="s1">&#39;low&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd2</span>
+<span class="go">FaultDomain with faults:</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;, &#39;10&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;, &#39;15&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="o">*</span><span class="n">exfd2</span><span class="o">.</span><span class="n">faults</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+<span class="go">[Fault(prob=1.0, cost=0.0, phases=(), disturbances={&#39;s.charge&#39;: 10.0}, units=&#39;sim&#39;), Fault(prob=1.0, cost=0.0, phases=(), disturbances={&#39;s.charge&#39;: 15.0}, units=&#39;sim&#39;), Fault(prob=1.0, cost=0.0, phases=(), disturbances={&#39;s.charge&#39;: 20.0}, units=&#39;sim&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.sample.FaultDomain.add_fault_space">
+<span class="sig-name descname"><span class="pre">add_fault_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fxnname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_ranges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultDomain.add_fault_space" title="Link to this definition"></a></dt>
+<dd><p>Create a parametric space of disturbances for a given fault.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fxnname</strong> (<em>str</em>) – Name of the simulable to inject the fault in.</p></li>
+<li><p><strong>faultmode</strong> (<em>str</em>) – Name of the fault mode (at simulable.m) to sample/parameterize. The fault
+must have been defined as a field in the Mode class.</p></li>
+<li><p><strong>dist_ranges</strong> (<em>dict</em>) – Ranges for the mode disturbances, e.g. {‘s.x’: (0, 5)} to elicit ranges
+or {‘s.x’: {1,2,3}} for defined sets</p></li>
+<li><p><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – Max number of modes to generate. If more than this, the modes are sampled
+randomply. The default is ‘all’.</p></li>
+<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Seed for sampling the modes (if limited). The default is 42.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em><em>, </em><em>optional</em>) – Prefix to differentiate different fault spaces. Default is ‘’.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to apply accross the faults.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfd2</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">ExFxnArch</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd2</span><span class="o">.</span><span class="n">add_fault_space</span><span class="p">(</span><span class="s1">&#39;ex_fxn&#39;</span><span class="p">,</span> <span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;s.charge&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfd2</span>
+<span class="go">FaultDomain with faults:</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;, &#39;0&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;, &#39;1&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;, &#39;2&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;, &#39;3&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;, &#39;4&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;, &#39;5&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;, &#39;6&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;, &#39;7&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;, &#39;8&#39;)</span>
+<span class="go"> -(&#39;ex_fxn&#39;, &#39;low&#39;, &#39;9&#39;)</span>
+<span class="go"> -...more</span>
+<span class="go"> &gt;&gt;&gt; [f.disturbances[0][1] for f in exfd2.faults.values()]</span>
+<span class="go"> [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -2349,10 +2422,10 @@ faults and disturbances.</p></li>
 <span class="go">FaultSample of scenarios:</span>
 <span class="go"> - exfxnarch_fxns_ex_fxn_no_charge_t1</span>
 <span class="go"> - exfxnarch_fxns_ex_fxn_no_charge_t2</span>
-<span class="go"> - exfxnarch_fxns_ex_fxn_short_t1</span>
-<span class="go"> - exfxnarch_fxns_ex_fxn_short_t2</span>
 <span class="go"> - exfxnarch_fxns_ex_fxn2_no_charge_t1</span>
 <span class="go"> - exfxnarch_fxns_ex_fxn2_no_charge_t2</span>
+<span class="go"> - exfxnarch_fxns_ex_fxn_short_t1</span>
+<span class="go"> - exfxnarch_fxns_ex_fxn_short_t2</span>
 <span class="go"> - exfxnarch_fxns_ex_fxn2_short_t1</span>
 <span class="go"> - exfxnarch_fxns_ex_fxn2_short_t2</span>
 </pre></div>
@@ -2475,7 +2548,7 @@ independent base rate assumptions to calculate. Default is 1.0.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.FaultSample.add_single_fault_scenario">
-<span class="sig-name descname"><span class="pre">add_single_fault_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultSample.add_single_fault_scenario" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_single_fault_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultSample.add_single_fault_scenario" title="Link to this definition"></a></dt>
 <dd><p>Add a single fault scenario to the list of scenarios.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2483,6 +2556,7 @@ independent base rate assumptions to calculate. Default is 1.0.</p></li>
 <li><p><strong>faulttup</strong> (<em>tuple</em>) – Fault to add (‘blockname’, ‘faultname’).</p></li>
 <li><p><strong>time</strong> (<em>float</em>) – Time of the fault scenario.</p></li>
 <li><p><strong>weight</strong> (<em>float</em><em>, </em><em>optional</em>) – Weighting factor for the scenario rate. The default is 1.0.</p></li>
+<li><p><strong>kwargs</strong> (<em>kwargs</em>) – Non-default arguments for the fault (e.g., disturbances etc.)</p></li>
 </ul>
 </dd>
 </dl>
@@ -2496,6 +2570,10 @@ independent base rate assumptions to calculate. Default is 1.0.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span>
 <span class="go">FaultSample of scenarios:</span>
 <span class="go"> - affect_dof_ca_comps_rf_propwarp_t5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fs2</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">exfd2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fs2</span><span class="o">.</span><span class="n">add_single_fault_scenario</span><span class="p">((</span><span class="s1">&#39;ex_fxn&#39;</span><span class="p">,</span> <span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fs2</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
+<span class="go">[SingleFaultScenario(sequence={5.0: Injection(faults={&#39;ex_fxn&#39;: {&#39;low&#39;: {&#39;prob&#39;: 1.0, &#39;cost&#39;: 0.0, &#39;phases&#39;: (), &#39;disturbances&#39;: {&#39;s.charge&#39;: 15.0}, &#39;units&#39;: &#39;sim&#39;}}}, disturbances={})}, times=(5,), function=&#39;ex_fxn&#39;, fault=&#39;low&#39;, rate=1.0, name=&#39;ex_fxn_low_15_t5&#39;, time=5, phase=&#39;na&#39;)]</span>
 </pre></div>
 </div>
 </dd></dl>

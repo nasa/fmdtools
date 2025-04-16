@@ -637,6 +637,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#fmdtools-at-osu">fmdtools at OSU</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../PUBLICATIONS.html">fmdtools Publication List</a></li>
 </ul>
 
         </div>
@@ -1147,7 +1148,7 @@ Default is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.get_fault">
-<span class="sig-name descname"><span class="pre">get_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.get_fault" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.get_fault" title="Link to this definition"></a></dt>
 <dd><p>Get the faultmode in the given scope of the model.</p>
 </dd></dl>
 
@@ -1191,7 +1192,7 @@ default is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.get_scen_rate">
-<span class="sig-name descname"><span class="pre">get_scen_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.get_scen_rate" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_scen_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.get_scen_rate" title="Link to this definition"></a></dt>
 <dd><p>Get the scenario rate for the given single-fault scenario.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1203,6 +1204,7 @@ default is True.</p></li>
 during (and maps to the opportunity vector phases). The default is {}.</p></li>
 <li><p><strong>weight</strong> (<em>int</em><em>, </em><em>optional</em>) – Scenario weight (e.g., if more than one scenario is sampled for the fault).
 The default is 1.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Non-default keyword arguments for Fault/Mode.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
