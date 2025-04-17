@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Development Guide &mdash; fmdtools 2.1.0 documentation</title>
+  <title>Development Guide &mdash; fmdtools 2.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=20623aea"></script>
+      <script src="../_static/documentation_options.js?v=841abef3"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-0">Version: 2.1.0</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-1">Version: 2.1.1</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -1047,7 +1047,7 @@
         <span class="n">release</span> <span class="o">=</span> <span class="s2">&quot;!f() { git checkout main &amp;&amp; git up &amp;&amp; git tl </span><span class="se">\&quot;</span><span class="s2">$1</span><span class="se">\&quot;</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2">$2</span><span class="se">\&quot;</span><span class="s2"> &amp;&amp; git pp </span><span class="se">\&quot;</span><span class="s2">$1</span><span class="se">\&quot;</span><span class="s2"> &amp;&amp; git po </span><span class="se">\&quot;</span><span class="s2">$1</span><span class="se">\&quot;</span><span class="s2">; }; f&quot;</span>
         <span class="n">fb</span> <span class="o">=</span> <span class="s2">&quot;!f() { git fetch origin &amp;&amp; git fetch public; }; f&quot;</span>
         <span class="n">mm</span> <span class="o">=</span> <span class="s2">&quot;!git merge main dev&quot;</span>
-        <span class="n">sync</span><span class="o">-</span><span class="n">into</span><span class="o">-</span><span class="n">dev</span> <span class="o">=</span> <span class="s2">&quot;!f() { git checkout dev &amp;&amp; git fb &amp;&amp; git pull origin dev &amp;&amp; git pull public dev &amp;&amp; mm; }; f&quot;</span>
+        <span class="n">sync</span><span class="o">-</span><span class="n">into</span><span class="o">-</span><span class="n">dev</span> <span class="o">=</span> <span class="s2">&quot;!f() { git checkout dev &amp;&amp; git fb &amp;&amp; git pull origin dev &amp;&amp; mm; }; f&quot;</span>
 </pre></div>
 </div>
 <p>Adding this block to your repository’s git config file (e.g., <code class="docutils literal notranslate"><span class="pre">.git/config</span></code>) adds custom git commands which can be used to simplify the release process. Specifically:</p>
