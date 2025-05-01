@@ -87,9 +87,9 @@ def mod_prefix():
     import os
     wd = os.getcwd()
     if 'graph' in wd:
-        return '../../../docs-source/figures/frdl/'
+        return '../../../docs-source/figures/frdl/primitives/'
     else:
-        return 'docs-source/figures/frdl/'
+        return 'docs-source/figures/frdl/primitives/'
 
 
 class BaseStyle(dataobject, copy_default=True):

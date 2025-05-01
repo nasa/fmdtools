@@ -27,15 +27,15 @@ The style module defines graph attributes (nodes and edges) are visually represe
 
 Generally, it is the intent of fmdtools to comply with the :term:`FRDL` specification as much as possible, however, graphviz and networkx limit our ability to comply fully. Below we show how each :term:`FRDL` construct is visually represented in fmdtools:
 
-.. |frdl_flowcon| image:: ../docs-source/figures/frdl/spec/flowconnection.svg
-.. |nx_flowc| image:: ../docs-source/figures/frdl/nx/flowconnection.svg
-.. |gv_flowc| image:: ../docs-source/figures/frdl/gv/flowconnection.svg
-.. |frdl_activ| image:: ../docs-source/figures/frdl/spec/activation.svg
-.. |nx_activ| image:: ../docs-source/figures/frdl/nx/activation.svg
-.. |gv_activ| image:: ../docs-source/figures/frdl/gv/activation.svg
-.. |frdl_prop| image:: ../docs-source/figures/frdl/spec/propagation.svg
-.. |nx_conn| image:: ../docs-source/figures/frdl/nx/connection.svg
-.. |gv_conn| image:: ../docs-source/figures/frdl/gv/connection.svg
+.. |frdl_flowcon| image:: ../docs-source/figures/frdl/primitives/flowconnection.svg
+.. |nx_flowc| image:: ../docs-source/figures/frdl/primitives/nx/flowconnection.svg
+.. |gv_flowc| image:: ../docs-source/figures/frdl/primitives/nx/flowconnection.svg
+.. |frdl_activ| image:: ../docs-source/figures/frdl/primitives/activation.svg
+.. |nx_activ| image:: ../docs-source/figures/frdl/primitives/nx/activation.svg
+.. |gv_activ| image:: ../docs-source/figures/frdl/primitives/nx/activation.svg
+.. |frdl_prop| image:: ../docs-source/figures/frdl/primitives/propagation.svg
+.. |nx_conn| image:: ../docs-source/figures/frdl/primitives/nx/connection.svg
+.. |gv_conn| image:: ../docs-source/figures/frdl/primitives/nx/connection.svg
 
 **Edges**
 
@@ -51,28 +51,28 @@ Generally, it is the intent of fmdtools to comply with the :term:`FRDL` specific
  | Weak Connection    + N/A            + |gv_conn| + |nx_conn| |
  +--------------------+----------------+-----------+-----------+ 
  
- .. |frdl_flow| image:: ../docs-source/figures/frdl/spec/flow.svg
- .. |nx_flow| image:: ../docs-source/figures/frdl/nx/flow.svg
- .. |gv_flow| image:: ../docs-source/figures/frdl/gv/flow.svg
- .. |frdl_mflow| image:: ../docs-source/figures/frdl/spec/multiflow.svg
- .. |nx_mflow| image:: ../docs-source/figures/frdl/nx/multiflow.svg
- .. |gv_mflow| image:: ../docs-source/figures/frdl/gv/multiflow.svg
- .. |frdl_cflow| image:: ../docs-source/figures/frdl/spec/commsflow.svg
- .. |nx_cflow| image:: ../docs-source/figures/frdl/nx/commsflow.svg
- .. |gv_cflow| image:: ../docs-source/figures/frdl/gv/commsflow.svg
- .. |frdl_fxn| image:: ../docs-source/figures/frdl/spec/function.svg
- .. |nx_fxn| image:: ../docs-source/figures/frdl/nx/function.svg
- .. |gv_fxn| image:: ../docs-source/figures/frdl/gv/function.svg
- .. |frdl_act| image:: ../docs-source/figures/frdl/spec/action.svg
- .. |nx_act| image:: ../docs-source/figures/frdl/nx/action.svg
- .. |gv_act| image:: ../docs-source/figures/frdl/gv/action.svg
- .. |frdl_com| image:: ../docs-source/figures/frdl/spec/component.svg
- .. |nx_com| image:: ../docs-source/figures/frdl/nx/component.svg
- .. |gv_com| image:: ../docs-source/figures/frdl/gv/component.svg
- .. |nx_con| image:: ../docs-source/figures/frdl/nx/container.svg
- .. |gv_con| image:: ../docs-source/figures/frdl/gv/container.svg
- .. |nx_arch| image:: ../docs-source/figures/frdl/nx/architecture.svg
- .. |gv_arch| image:: ../docs-source/figures/frdl/gv/architecture.svg
+ .. |frdl_flow| image:: ../docs-source/figures/frdl/primitives/flow.svg
+ .. |nx_flow| image:: ../docs-source/figures/frdl/primitives/nx/flow.svg
+ .. |gv_flow| image:: ../docs-source/figures/frdl/primitives/nx/flow.svg
+ .. |frdl_mflow| image:: ../docs-source/figures/frdl/primitives/multiflow.svg
+ .. |nx_mflow| image:: ../docs-source/figures/frdl/primitives/nx/multiflow.svg
+ .. |gv_mflow| image:: ../docs-source/figures/frdl/primitives/nx/multiflow.svg
+ .. |frdl_cflow| image:: ../docs-source/figures/frdl/primitives/commsflow.svg
+ .. |nx_cflow| image:: ../docs-source/figures/frdl/primitives/nx/commsflow.svg
+ .. |gv_cflow| image:: ../docs-source/figures/frdl/primitives/nx/commsflow.svg
+ .. |frdl_fxn| image:: ../docs-source/figures/frdl/primitives/function.svg
+ .. |nx_fxn| image:: ../docs-source/figures/frdl/primitives/nx/function.svg
+ .. |gv_fxn| image:: ../docs-source/figures/frdl/primitives/nx/function.svg
+ .. |frdl_act| image:: ../docs-source/figures/frdl/primitives/action.svg
+ .. |nx_act| image:: ../docs-source/figures/frdl/primitives/nx/action.svg
+ .. |gv_act| image:: ../docs-source/figures/frdl/primitives/nx/action.svg
+ .. |frdl_com| image:: ../docs-source/figures/frdl/primitives/component.svg
+ .. |nx_com| image:: ../docs-source/figures/frdl/primitives/nx/component.svg
+ .. |gv_com| image:: ../docs-source/figures/frdl/primitives/nx/component.svg
+ .. |nx_con| image:: ../docs-source/figures/frdl/primitives/nx/container.svg
+ .. |gv_con| image:: ../docs-source/figures/frdl/primitives/nx/container.svg
+ .. |nx_arch| image:: ../docs-source/figures/frdl/primitives/nx/architecture.svg
+ .. |gv_arch| image:: ../docs-source/figures/frdl/primitives/nx/architecture.svg
  
  **Nodes**
  
@@ -110,9 +110,9 @@ While this is the intent of the graph package, there are some inherent limitatio
 
 See the following examples for "typical" representation of an architecture. In this example, activation arrows were added to the Graph structure, which is possible when working with the base :class:`Graph` class, but often is not added in :Class:`ModelGraphs` because the information has not been defined in underlying model constructs.
 
- .. |frdl_dec| image:: ../docs-source/figures/frdl/spec/funcdecomp.svg
- .. |nx_dec| image:: ../docs-source/figures/frdl/nx/funcdecomp.svg
- .. |gv_dec| image:: ../docs-source/figures/frdl/gv/funcdecomp.svg
+ .. |frdl_dec| image:: ../docs-source/figures/frdl/primitives/funcdecomp.svg
+ .. |nx_dec| image:: ../docs-source/figures/frdl/primitives/nx/funcdecomp.svg
+ .. |gv_dec| image:: ../docs-source/figures/frdl/primitives/nx/funcdecomp.svg
 
  +--------------------+----------------+-----------+-----------+
  | Use-case           +  FRDL          + graphviz  + networkx  |

@@ -1,0 +1,68 @@
+<mxfile host="Electron" modified="2025-04-30T00:02:53.724Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.2.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="FXJeACoCQ61IKmYYp7_T" version="24.2.5" type="device">
+  <diagram name="Page-1" id="lnRidg4wMnt31IgLa4f1">
+    <mxGraphModel dx="-349" dy="308" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Qg2ECHO1EQoZcpr1RvW1-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="Qg2ECHO1EQoZcpr1RvW1-3" target="Qg2ECHO1EQoZcpr1RvW1-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Qg2ECHO1EQoZcpr1RvW1-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Qg2ECHO1EQoZcpr1RvW1-3" target="Qg2ECHO1EQoZcpr1RvW1-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1260" y="535" />
+              <mxPoint x="1260" y="478" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Qg2ECHO1EQoZcpr1RvW1-3" value="Connect functions and flows with connection, activation, and propagation arrows" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="510" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="Qg2ECHO1EQoZcpr1RvW1-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="Qg2ECHO1EQoZcpr1RvW1-5" target="Qg2ECHO1EQoZcpr1RvW1-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Qg2ECHO1EQoZcpr1RvW1-5" value="Identify functions and flows" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="468" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Qg2ECHO1EQoZcpr1RvW1-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="Qg2ECHO1EQoZcpr1RvW1-8" target="Qg2ECHO1EQoZcpr1RvW1-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Qg2ECHO1EQoZcpr1RvW1-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Qg2ECHO1EQoZcpr1RvW1-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1260" y="502" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="1260" y="535" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Qg2ECHO1EQoZcpr1RvW1-8" value="Annotate functions and flows, with corresponding type, behavior, and propagation information" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="580" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="Qg2ECHO1EQoZcpr1RvW1-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Qg2ECHO1EQoZcpr1RvW1-10" target="Qg2ECHO1EQoZcpr1RvW1-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1260" y="685" />
+              <mxPoint x="1260" y="615" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Qg2ECHO1EQoZcpr1RvW1-10" value="Analyze behaviors and their propagations through the model" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="670" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Qg2ECHO1EQoZcpr1RvW1-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Qg2ECHO1EQoZcpr1RvW1-8" target="Qg2ECHO1EQoZcpr1RvW1-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1220" y="625" as="sourcePoint" />
+            <mxPoint x="1220" y="535" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1260" y="615" />
+              <mxPoint x="1260" y="478" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Qg2ECHO1EQoZcpr1RvW1-12" value="Model Refinement" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;rotation=-90;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="566" width="140" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
