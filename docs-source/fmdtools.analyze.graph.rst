@@ -20,6 +20,8 @@ fmdtools.analyze.graph.label
    :undoc-members:
    :show-inheritance:
 
+.. _fmdtools_graph_style:
+
 fmdtools.analyze.graph.style
 --------------------------------
 
