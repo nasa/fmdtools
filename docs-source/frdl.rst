@@ -297,12 +297,35 @@ At its most detailed, a model hierarchy will include:
 - Action architecture diagrams to specify the behavior of functions with logical behavior (e.g., users, operators, and control algorithms)
 - Component architecture diagrams needed to show how functions are embodied as well as the architectural details (e.g., redundancies, behaviors, etc.) used to achieve these functions
 
-
 Analysis
-'''''''''''
+''''''''
 
+FRDL can be used to analyze behavioral interactions to improve the understanding of system behavior and analyze hazardous scenarios. However, analyzing nominal scenario(s)--scenarios where the system is behaving as designed--can assist with model refinement, help ``catch'' design hazards, and support hazard analysis by giving one an idea of the system context (e.g., state and behavior information) of the hazards at particular times, phases, and states of system operation.
 
+To analyze a nominal scenario, the procedure is to:
+0.) Begin at the starting block defined by the `Dynamics Tag`_ with a starting identifier.
+1.) Determine what the initial state, condition, behavior, and activity (active or inactive) of the block will be at the given time with its given conditions.
+2.) Run through conditions in the block that cause outgoing activations as well as propagations from the block to identify how this will affect other blocks.
+3.) Run through steps 1-2 for each of the active blocks.
+4.) Increment to the next meaningful timestep and run through steps 1-3 for the blocks with continuous behavior over time timestep.
+5.) End when all functions are inactive or at the ending time defined by the `Dynamics Tag`_ defined in the ending block.
 
+The hazard analysis procedure builds on nominal scenario analysis by injecting hazardous conditions in the relevant model entities and seeing how these conditions affect the behaviors, states, and conditions of the system. The hazard analysis prodedure is thus to:
+0.) Instantiate the hazardous condition or conditions in the relevant model entities (e.g., functions, actions, flows, etc.) at the relevant time(s) of interest to the scenario
+1.) Identify how the hazardous condition(s) will directly effect the entity (including modified behaviors, damage, harm, etc),
+2.) Determine how this conditions and its effects with propagate to entities connected via defined relationships, 
+3.) Repeat steps 1-3 for all affected entities over time until the system wide effects have been exhaustively elicited. Note that while the hazard analysis procedure starts from a nominal analysis of the system, it may diverge significantly in terms of behavior, causing it to end at different times than originally specified.
+
+These effects can be placed in the ``effects''-related columns of a hazard table to support a wide range of hazard analysis processes (e.g., FHA, FMEA, etc). 
+
+FRDL may also be used to perform causal analysis for hazards to determine mechanisms by which a hazardous scenarios and conditions may arise. This procedure is to:
+0.) Identify the relevant block(s) where the hazardous condition is to arise.
+1.) Identify any causal factors related to the condition within the block.
+2.) Identify any flow or activation conditions which could cause those conditions to arise.
+3.) For each block that connects to the given flow or activations with the relevant conditions, determine whether a condition in the block could cause the condition, and, if so, run through steps 1-3 for the block.
+4.) Continue until the causes have been exhaustively explored and/or all of the remaining initiating conditions are at the system boundary. 
+
+These conditions and mechanisms may be placed in the ``causes`` and ``mechanisms``-related columns of a hazard table.
 
 Guide
 ^^^^^
