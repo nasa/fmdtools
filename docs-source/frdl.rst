@@ -52,6 +52,8 @@ Blocks
 
 Blocks in FRDL are behavioral elements of the system, meaning they are expected to perform a given behavior. Behavior is any operation, such as an equation, modification, or constraint that the block imposes on the system. For example, ``flying,`` ``transfering heat,`` and ``set x to one`` may all be considered behaviors which blocks would embody. Blocks may further be annotated by `Block Annotations`_ to describe structural and behavioral properties of the block. FRDL supports three major block classes, shown above and described below.
 
+Block draw.io shapes are defined :download:`here <../frdl/primitives/blocks.drawio>`.
+
 Components
 ''''''''''
 
@@ -77,6 +79,8 @@ Block Annotations
    :alt: FRDL Block Annotations
 
 Annotations may be used to clarify known properties of the block. An overview of these annotations (described next) is provided above. While it is not required to use any of these annotations, they are provided as a part of the language to better inform analyses with relevant information.
+
+Block annotations draw.io templates are defined :download:`here <../frdl/primitives/block_annotations.draw.io>`.
 
 Dynamics Tag
 ''''''''''''
@@ -124,6 +128,8 @@ There are three main types of flow, shown above. Base flows represent directly c
 
 Flows have additional variations, including `MultiFlow`_ and `CommsFlow`_s, described next.
 
+Flow draw.io templates are defined :download:`here <../frdl/primitives/flows.draw.io>`.
+
 MultiFlow
 '''''''''
 
@@ -139,6 +145,7 @@ Relationships
 
 Relationships are edges connecting nodes in a model graph that specify how nodes (blocks and flows) relate to each other. When used in larger UML or SysML ecosystem, edges can specify a wide range of logical and behavioral concepts. For the purpose of architecture modelling, FRDL relies on connection, activation, and propagation edges (shown below) to specify behavioral interactions.
 
+Draw.io templates for the relationship types are defined :download:`here <../frdl/primitives/relationships.draw.io>`.
 
 Connection
 ''''''''''
@@ -383,7 +390,7 @@ As shown, the FRDL functional architecturehas three flows connecting four functi
 Correspondence with other methods
 ---------------------------------
 
-This section provides some comparison between FRDL-based models and similar models for hazard analysis in the literature.
+This section provides some comparison between FRDL-based models and similar models for hazard analysis in the literature. Source draw.io files for these diagrams are defined :download:`here <../frdl/diagrams/reference_architectures.draw.io>`.
 
 
 Versus F/FA
@@ -527,14 +534,59 @@ FRDL-based models, on the other hand, only show one level of functional abstract
 Examples
 --------
 
+Below are some examples that illustrate some basic modelling concepts.
+
 Bread Making
 ''''''''''''
+
+To illustrate how FRDL can better clarify the dynamic behavior of a system in the context of analysis, consider the process of baking bread. The source draw.io file for this example is provided :download:`here <../frdl/examples/bread/bread_making.drawio>`. In a typical EMS-based failure model, the designer may represent the system with the following structure.
+
+
+.. figure:: figures/frdl/examples/bread/fbed_diagram.svg
+   :width: 800
+   :alt: EMS model of the baking bread.
+
+The behavior of this model, as noted in the diagram, is ambiguous because it is not clear whether the process is continous or discrete. In the discrete interpretation, a baker may place a single loaf of bread in the oven, after which they take the bread out. As a result, we can assume that (in the context of failure propagation), if there is a failure to break bread, the main effect will be that the bread to be exported will be unbaked. This well-represented in the spacio-temporal representation of how flows connect flows. In the continuous interpretation, on the other hand, the dough is continuously placed on a conveyor belt that moves the bread through the oven and exports it when it has been baked. As a result, in the context of failure analysis, if there is a failure to bake bread (caused, for example, by a loss of power to the unit), we may also not be able to import bread and incoming dough may be stopped prior to entering the oven.
+
+In FRDL, these two interpretations would lead to models with different propagation arrows as well as flow tags. The discrete case would be represented as shown below:
+
+.. figure:: figures/frdl/examples/bread/frdl_discrete.svg
+   :width: 800
+   :alt: FRDL model of the baking a loaf of bread.
+
+As shown, this model is specified with dynamics tags that specify that:
+- The behavior starts with importing dough, which activates the ``bake bread from dough'' function when the dough is ready;
+- The ``bake bread from dough`` function in turn draws electricity from the ``Import EE'' function in the form of current until it is done;
+- When the loaf is bread, it activates the ``Export Bread`` function, ending the scenario.
+
+As a result, a failure in the ``Bake bread from dough'' function *could* lead to uncooked dough being exported, the baking never finishing (and thus bread never being exported), and/or adverse current draw, depending on the specific fault mode.
+
+In contrast, the continous case would be represented as shown below:
+
+.. figure:: figures/frdl/examples/bread/frdl_continuous.svg
+   :width: 800
+   :alt: FRDL model of the continuous baking of bread.
+
+While the structure of this model is similar to the previous flow, the interpretation is quite different because of the seperated dough/bread flows as well as the different dynamics tags and propagation arrows. Specifically, this model specifies that:
+- The behavior once again starts with the "Import Dough" function, except that this function remains active until the end of the scenario, representing the continouus importing of bread.
+- The "Bake Bread from Dough" function is initially activated by dough being put in the function, and now recieves more bread whenever it is ready for more dough. It also is represented as active until the end of the scenario.
+- When bread is ready from the "Bake Bread from Dough" function, it leaves the function and gets exported, activating the "Export Bread." This function ends the scenario after 100 time-steps. 
+
+As a result, a failure in the ``Bread bread from dough'' function *could* not only lead to uncooked dough being exported (as well as the other effects for the discrete case), it could also lead to a blockage of incoming dough, which could ruin the batch if not attended to.
+
+This case shows how the detailed specification of behavioral interactions provided by the FRDL-based model can help provide a more concrete idea of how failures will propagate in a system.
+
 
 Circuit 
 '''''''
 
+The source draw.io file for this example is provided :download:`here <../frdl/examples/circuit/circuit_models.drawio>`.
+
 Action Sequence Graphs
 ''''''''''''''''''''''
 
+
+
 Others
 ''''''
+
