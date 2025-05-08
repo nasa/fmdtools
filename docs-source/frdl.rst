@@ -330,52 +330,211 @@ These conditions and mechanisms may be placed in the ``causes`` and ``mechanisms
 Guide
 ^^^^^
 
+The guide provides further guidance on `Concepts`_ underlying FRDL, its `Correspondence with other methods`_, and `Examples`_ clarifying the use of FRDL.
+
 Concepts
 --------
+
+This section describes some relevant concepts for interpreting the FRDL ontology, including the 
 
 Function/Action Relationship
 ''''''''''''''''''''''''''''
 
 .. figure:: figures/frdl/concepts/functions_vs_actions.svg
    :width: 800
-   :alt: FRDL Block Classes
+   :alt: Actions live "within" functions
+
+The relationship between functions and actions is illustrated above. Actions represent **logical behaviors** and are meant to live within the function that controls the system such that the function has ownership of the actions. As such, `Action Architectures`_ can be viewed as living within the functions that control the system (whether they represent operators, avionics, etc.).
 
 Function/Component Relationship
 '''''''''''''''''''''''''''''''
 
 .. figure:: figures/frdl/concepts/functions_vs_components.svg
    :width: 800
-   :alt: FRDL Block Classes
+   :alt: Components are aggregated by functions
+
+The relationship between functions and components is illustrated above. Components represent the physical embodiment of functional behaviors, but do not map one-to-one to functions. Generally, functions can be thought of as high-level behaviors (e.g., acceleration, force-balance, energy balance, etc.) and thus can involve a few different components when embodied. For example, supporting a payload may require a number of structural components as a part of an overall assembly, whose overall functionality is defined by a force balance equation. Conversely, the wheels of a vehicle (illustrated above) may contribute to a range of different functions, including supporting the vehicle, turning the vehicle, and moving the vehicle forward.
+
+As such, components should not be viewed as being ``owned'' by functions, but aggregated by them. This ``shared aggregation'' relationship is the same relationship that flows have with functions, where components can be present in the definition of multiple functions, but are not owned by them.
+
+Flows as Nodes
+''''''''''''''
+
+.. figure:: figures/frdl/concepts/edges_vs_nodes.svg
+   :width: 800
+   :alt: Concept of flows being represented as nodes rather than edges.
+
+One of the unique features of the FRDL ontology is the representation of flows as nodes. As illustrated above, this is different than most other graphical languages (such as EMS models, function-flow block diagrams, SysML block and activity diagrams, STAMP models), which usually represent nodes as edges, rather than blocks.
 
 
-Object Orientation
-''''''''''''''''''
+FRDL represents the flows between blocks as nodes for a few reasons:
+0.) It enables flows to "live on their own" as objects that can be further broken down in terms of structure. In this sense, a flow can represent not only a specific condition that causes a change in a connected block, but the *means* by which the changes propagate, which may have its own structure (e.g., variables, values, sub-flows, etc.). When flows are represented as edges, these behavioral interactions may need to be specified in multiple places on the same diagram, leading to ambiguities (is a given flow arrow the same as a different flow arrow with the same label or a copy?).
+1.) It enables the representation of complex interactions that take place between more than two blocks at the same time, such as communications and interacting in a shared environment.
+2.) It enables the scalable representation of multiple **types of interactions** to be represented on a single graph diagram, making it more possible to comprehensively represent these interactions in a tractable way that comports to analysis.
 
-Flows as Nodes vs edges
+These properties of FRDL's bipartite graph representation are illustrated in the example below. 
 
-Functions, Actions, and Components
+.. figure:: figures/frdl/concepts/edges_vs_nodes.svg
+   :width: 800
+   :alt: Concept of flows being represented as nodes rather than edges.
+
+As shown, the FRDL functional architecturehas three flows connecting four functions (no propagation annotations are provided to keep the illustration generic). The equivalent unipartite representation of this architecture is shown at the right, and has nine flows connecting the functions. Because flows are not grouped, each function has more connections that must be tracked down during analysis (Function 1 has 5 arrows going out of it instead of 2 connections). This is further complicated by the fact that several of these flows are essentially duplicates connecting different pairs of functions, leading to ambiguities in practice, because it may be difficult to tell whether the flows are equivalent. Additionally, flow arrows cross twice instead of just once, meaning the representation becomes less clear as the number of interactions increase.
 
 Correspondence with other methods
 ---------------------------------
 
+This section provides some comparison between FRDL-based models and similar models for hazard analysis in the literature.
+
+
 Versus F/FA
+'''''''''''
 
-Versus STPA
+ARP-926C defines two types of "Function Flow Block Diagrams" which may be used in the context of "top-down" and "bottom-up" functional hazard analysis. To assist with "top-down" assessment, it provides the below diagram, in which the input and output functions (i.e., required and provided functionality) of a given function are listed at the left and right side of the function name. It further delineates types of functions to be input and provided. This is shown below, with the equivalent FRDL model.
 
-Versus SysML
+.. image:: figures/frdl/diagrams/frdl_ficd_singleprop.svg
+   :width: 45%
+   :align: right
+   
+.. image:: figures/frdl/diagrams/ffa_singlefunction.svg
+   :width: 45%
 
-Versus Functional Basis
+As shown, these models represent the overall function of a system and its interactions with its environment somewhat differently. While the function-in-context diagram provides more definition of the high-level behavioral interactions the function has with its environment, the F/FA diagram provides more clearly outlines what is needed by the function and what it produces. However, the F/FA diagram goes no further than that and many of the details inherent to the FRDL model are left out, leading to potential ambiguities.
 
-Versus ARP-4761B
+
+For "bottom-up" assessment, the Function-flow block diagram of the type shown is specified to be used for F/FA. This diagram uses function chains (funcitons connected via arrows) to specify whether functions are to be performed by the system in parallel (at the same time) or sequence (one after the other). An example is provided below, along with a similar (but not equivalent) FRDL model.
+
+.. image:: figures/frdl/diagrams/frdl_fad_singleprop.svg
+   :width: 45%
+   :align: right
+   
+.. image:: figures/frdl/diagrams/ffa_fbd.svg
+   :width: 45%
+
+As shown, these models represent the internal behavior of a function in much different ways. In the F/FA model, functions are represented as sequential operations with unknown interactions and very primitive sequencing rules. In the FRDL model, on the other hand, the interactions between functions are specified and there is less of a defined "order" to functions.
+
+The important difference between these models is the somewhat different implications of the graphical representations on hazard analysis. In the F/FA diagram, all the diagram implies is that a failure in one function will cause a failure in a succeeding systems (or the high-level function represented by the diagram). This is both a simplistic representation and interpretation of how behavior propagates in systems. For example, a water distribution system may have a set of operations that it performs on the water in a defined sequence, but failures later in the sequence could easily propagate to earlier operations (e.g., a clogged outflow pipe may not only prevent water from being supplied, but it could also fill up and preceeding storage tanks and potentially burst the pipes). This sort of behavioral propagation is well-suited for representation in FRDL-based functional architectures, because propagation arrows can imply bi-directional interactions between functions via flows.
+
+
+Versus STAMP/STPA
+'''''''''''''''''
+
+The Systems-Theoretic Accident Model and Process (STAMP) is generic model of how accidents occur in complex systems, which has been developed in to the Systems-Theoretic Process Analysis (STPA) methodology for analyzing hazardous behaviors in systems. The key concept of STAMP is that accidents in complex engineered systems by definition occur because of failures in the control structure. As such, STAMP focusses on representing the control structure of complex engineered systems, as shown below with a similar (but not necessarily equivalent) FRDL model.
+
+.. image:: figures/frdl/diagrams/frdl_fad_singleprop.svg
+   :width: 45%
+   :align: right
+   
+.. image:: figures/frdl/diagrams/stamp_model.svg
+   :width: 45%
+
+As shown, the generic STAMP model defines the system as a control structure in which the controller/operator performs control actions and recieves feedback from a system it is trying to control. These interactions are shown via arrows. The FRDL method is compatible with this perspective because of its emphasis on dynamic behavioral interactions. However, there are some differences in the FRDL ontology that are worth noting:
+- First, FRDL is meant to be be applied to *both* the control of the system and its *physical interactions*. As a result, technical functions may further be decomposed, rather than solely representing the system as a control architecture. For example, in the above diagram Function B and C are listed as seperate functions which STAMP might otherwise consider a single process, regaurdless of the potentially hazardous behavioral interactions between the functions.
+- Second, FRDL represents interactions as nodes rather than edges, which, as explained in `Flows as Nodes`_, can enable a more scalable representation of many different types of system interactions. STAMP diagrams, on the other hand, can become difficult to make sense of at scale due to its edge-based representation of interactions. 
+- Finally, FRDL's annotations enable more detail to be represented about system behavior, which better enables the representation of system hierarchy/abstraction, 
+
+Generally, FRDL is proposed to support STPA-style analysis of system control structure while also enabling the analysis of the physical parts of the system. In doing so, it prevents model fragmentation--instead providing a unified language that makes `Developing a Model Hierarchy`_ that is coherent and self-consistent possible.
+
+Versus SysML/UML
+''''''''''''''''
+
+The Systems Modelling Language (SysML) is language for representing system structure and behavior that has gotten a significant amount of traction within the model-based systems engineering (MBSE) community. As such, there have been efforts to apply hazard analysis in the context of SysML models since it is the goal of these diagrams to comprise the "definitive single source of knowledge" about a system. While FRDL aims to encourage MBSE, and may even be considered an annotated extension of the Unified Modelling Language (UML) which SysML is based on, the scope of SysML and FRDL are not necessarily complementary.
+
+One of the challenges with comparing FRDL with SysML is that there isn't necessarily a single use or methodology for representing systems for hazard analysis in the context of a SysML model. Generally, SysML models are applied to the system using component rather than functional information, meaning that hazard analysis is often more component-oriented than based on the notion of function. When functional abstractions are used, there is not always a consensus on how they should be applied. Nevertheless, the following shows a comparison between SysML Internal Block Diagrams and FRDL Functional Architectures, as well as SysML Activity diagrams and FRDL Action Architectures.
+
+Functional Architectures Versus Internal Block Diagrams
+.......................................................
+
+The Internal Block Diagram (IBD) represented in SysML is provided below, along with an analgous FRDL functional architecture.
+
+.. image:: figures/frdl/diagrams/frdl_fad_singleprop.svg
+   :width: 45%
+   :align: right
+   
+.. image:: figures/frdl/diagrams/sysml_ibd.svg
+   :width: 45%
+
+As shown, the internal block diagram is able to replicate the structure of the FRDL diagram fairly well, however, there are a few important differences:
+1.) The IBD represents flows as edges instead of nodes. As described in `Flows as Nodes`_, this makes the representation prone to scalability issues as flows of the same instance go to multiple functions. While this is not a major issue in the architecture above, it can be when a wide range of interactions between many different functions need to be represented (which is often the case in complex systems).
+
+2.) From the perspective of behavioral analysis, the representation of interactions in the IBD is simultaneously over-constrained and ambiguous--with flows represented with a defined directionality that may not comport to the direction of system behavioral interactions. For example, the material flow is expected to go in a single direction through the physical process appied by `Function C`, meaning that the flow is given a single-directional arrow. This misses how (as represented in the FRDL model) if the material is not used (e.g., because it is jammed in place), this could cause behavioral interactions through that flow to the external system (e.g., by compressing the material or causing the material input stream to overload/spill). This representation of directionality additionally causes the signal flows to need to be broken into two to preserve the bidirectionality of interactions.
+
+3.) The IBD requires the use of proxy ports to specify that flows are a part of a block, which creates a number of redundant representations of flows that are not relevant for analysis at the system level. While the labels defined by these ports are helpful for defining flow types as well as providing some indicator of how the flows are referred to locally as opposed to globally, they do not necessarily add anything from an analysis point of view not already specified in the FRDL model.
+
+4.) While the FRDL model defines a rough execution sequence of the architecture via annotations, the IBD does not provide the means to do this, which can make it difficult to analyze the dynamics of function activation.
+
+Action Architectures Versus Activity Diagrams
+.............................................
+
+Below shows an FRDL Action Architecture along with an analgous SysML Activity Diagram.
+
+.. image:: figures/frdl/diagrams/frdl_actionarchitecture.svg
+   :width: 45%
+   :align: right
+   
+.. image:: figures/frdl/diagrams/sysml_act.svg
+   :width: 45% 
+
+These representations of system logical behavior are quite similar. However, the main difference is that object flows in SysML are represented as edges, mreaning that an object must be duplicated multiple times, even if it is the same object. This can make it difficult to trace out causal dependencies as well as the FRDL Activity diagram, since it isn't necessarily clear what object flows are the same instances.
+
+Versus Energy-Materials-Signals Models
+''''''''''''''''''''''''''''''''''''''
+
+The FRDL ontology and methodology is itself a descendent of a line of research using Functional Models, which are known by a number of names, including Energy-Materials-Signals models and Functional Basis of Engineering Design (FBED) models. Below provides a brief comparison between FRDL models and their FBED equivalents.
+
+To represent the system at a high level, FBED reccomends to make a single-function diagram of the system with all energy, material, and signal inputs going in and out of the function. FRDL aims to replace with the function-in-context diagram, shown below, to better represent interactions between the functionality provided by the system and its operators and environment.
+
+.. image:: figures/frdl/diagrams/frdl_ficd_singleprop.svg
+   :width: 45%
+   :align: right
+   
+.. image:: figures/frdl/diagrams/fbed_singlefunction.svg
+   :width: 45%
+
+to represent the architecture of a system, FBED further represents decomposing the system into smaller functions (noun-verb pairs) while connecting functions via flows of energy, materials and signals. This is shown with the equivalent function architecutre diagram below.
+
+.. image:: figures/frdl/diagrams/frdl_fad_singleprop.svg
+   :width: 45%
+   :align: right
+   
+.. image:: figures/frdl/diagrams/fbed_decomp.svg
+   :width: 45%
+
+As shown in both sets of diagrams, while both methods enable the representation of interactions of high-level functionality via flows, there are a few major differences in the representation that are of note:
+
+1.) FBED flows imply a spacio-temporal order to functions that imply a sequence similar to that in F/FA diagrams. While this representation is better informed by flow information (which provides a means by which functions interact), it can be similarly deceptive because the flow of arrows may not necessarily imply the propagation of change. Additionally, this representation is ambigous when representing time, especially in terms of differentiating between discrete and continous interactions/behaviors (e.g., is the signal being sent out at the same interval/time as energy and material?).
+2.) Because FBED represents flows as edges, it is subject to the scalability issues described in `Flows as Nodes`_. 
+3.) FBED's focus on energy, materials, and signals makes it difficult to represent composite objects that may not fit easily into each class.
+4.) FBED lacks the annotations that FRDL offers, meaning that it offers less depth in terms of representing system structure and behavior which may be used to inform analysis.
+
+
+Versus Hierarchical Models
+''''''''''''''''''''''''''
+
+Finally, hierarchical functional decomposition diagrams are commonly used in practice to represent the breakdown of functions into sub-functions. These are often used for safety analysis, and are even used as references in the guide for the Functional Hazard Analysis in the SAE ARP-4761B standard. These models are essentially the same as SysML Block Definition Diagrams (BDD), defining the logical structure of functions as including sub-functions which themselves may include sub-sub-functions and sub-sub-sub-functions. A comparison of these hierarchical models with an FRDL-based functional architecture is provided below.
+
+.. image:: figures/frdl/diagrams/frdl_fad_singleprop.svg
+   :width: 45%
+   :align: right
+   
+.. image:: figures/frdl/diagrams/hierarchical_decomp.svg
+   :width: 45%
+
+As shown, these representations of system architecture are very different. This is because the hierarchical model lacks any notion of behavior, flows, or anything that might define system interactions. Instead, we are merely shown that sub-functions are included within the logical definition of the overall function. While this can be helpful for navigating multiple levels of decomposition, it does not provide much information that could directly inform analysis. In fact, when interpreted literally, the model often provides an overly-simplistic idea of how failures arise, in which failures in a sub-function are expected to be failures in the overall function. However, this simplistic notion, in which a functional decomposition can be interpreted as a kind of fault tree, is often discouraged because it leaves out important concepts like behavioral interactions between sub-functions as well as the ability for these functions to compensate or control for each other in various ways (e.g., as redundancies).
+
+FRDL-based models, on the other hand, only show one level of functional abstraction at a time to show the details of behavioral interactions that arise between functions. This makes them both a compatible and complementary type of diagram to the hierarchical decomposition diagram, since they fundamentally represent different things--with the hierarchical decomposition showing the *logical composition* of a function hierarchy and the FRDL functional architecture showing the *behavioral interactions* between functions at a single level of hierarchy.
 
 
 Examples
 --------
 
 Bread Making
+''''''''''''
 
-Circuit (move to eps folder)
+Circuit 
+'''''''
 
-ASG 
+Action Sequence Graphs
+''''''''''''''''''''''
 
 Others
+''''''

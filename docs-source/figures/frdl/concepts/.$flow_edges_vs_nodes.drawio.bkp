@@ -1,0 +1,45 @@
+<mxfile host="Electron" modified="2025-04-30T00:02:18.419Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.2.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="NFxERJAzhqJJ4skYtMxw" version="24.2.5" type="device">
+  <diagram name="Page-1" id="eldxemjTOXqr4nki1Cvp">
+    <mxGraphModel dx="-158" dy="426" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="zVapKWelTl5GZzij6Aum-1" value="&lt;b&gt;Flows as Edges&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="110" width="345" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zVapKWelTl5GZzij6Aum-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="zVapKWelTl5GZzij6Aum-4" target="zVapKWelTl5GZzij6Aum-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zVapKWelTl5GZzij6Aum-3" value="Flow 1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="zVapKWelTl5GZzij6Aum-2">
+          <mxGeometry x="-0.131" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zVapKWelTl5GZzij6Aum-4" value="Function A" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1132.5" y="140" width="97.5" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zVapKWelTl5GZzij6Aum-5" value="Function B" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="140" width="102.5" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zVapKWelTl5GZzij6Aum-6" value="&lt;b&gt;Flows as Nodes&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="200" width="345" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zVapKWelTl5GZzij6Aum-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=diamondThin;startFill=0;endArrow=none;endFill=0;" edge="1" parent="1" source="zVapKWelTl5GZzij6Aum-8" target="zVapKWelTl5GZzij6Aum-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zVapKWelTl5GZzij6Aum-8" value="Function A" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1132.5" y="230" width="97.5" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zVapKWelTl5GZzij6Aum-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;startArrow=diamondThin;startFill=0;endArrow=none;endFill=0;" edge="1" parent="1" source="zVapKWelTl5GZzij6Aum-10" target="zVapKWelTl5GZzij6Aum-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zVapKWelTl5GZzij6Aum-10" value="Function B" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="230" width="102.5" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zVapKWelTl5GZzij6Aum-11" value="Flow 1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1262.5" y="230" width="60" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
