@@ -1,6 +1,9 @@
-FRDL Version 0.7
-================
+.. _frdl:
 
+FRDL 
+====
+
+Functional Reasoning Design Language, Version 0.7
 
 Overview
 ^^^^^^^^
@@ -580,13 +583,29 @@ This case shows how the detailed specification of behavioral interactions provid
 Circuit 
 '''''''
 
+To illustrated how FRDL can better represent coupled technical behaviors in conventional engineered systems, this section provides an example of representing an electric power system. An EMS-based model of this system could look as shown below:
+
+.. figure:: figures/frdl/examples/bread/fbed_circuit.svg
+   :width: 800
+   :alt: EMS model of an electric power system.
+
+As shown, the goal of this system is to reculate the supply of electrical energy, which it exports from the ``Export EE'' function to external loads. In the process, some of the electrical energy is converted into waste heat. Because this model applies the spacio-temporal view of functional flow inherent to the EMS, representation, reasoning about failures using the direction of the arrows could lead to incorrect or incomplete results. For example, in the fault scenario in which there is a short in the Store EE function, the shown graph implies that the electrical energy output would degrade, meaning that EE can no longer be modulated and exported to external electrical loads. This leaves out that the short in the Store EE function would also cause adverse current draw, from the ``Import EE'' source, which could damage the upstream source and wiring.
+
+In contrast, an FRDL function architecture diatram of this system is shown below.
+
+.. figure:: figures/frdl/examples/bread/frdl_circuit.svg
+   :width: 800
+   :alt: FRDL model of an electric power system.
+
+As shown, this model provides more detail about how the flow of electricity propagates behaviors thoughout the system. In particular, both the forward flow of voltage from the source to the sinks and the reverse flow of current from the sinks to the source are provided. Similarly, there is now a more informed representation of the dynamics of the system--that the functions are activated and deactivated by the new voltage applied initially by the "Import EE" function. Thus, analyzing a short in the "Store EE" function in this model would lead to a more-informed idea of how behavior would propagate in the circuit--not just propagating forward (via the voltage activations) to degrade the supply of electricity to the load, but also propagating backwards via current activations.
+
 The source draw.io file for this example is provided :download:`here <../frdl/examples/circuit/circuit_models.drawio>`.
 
-Action Sequence Graphs
-''''''''''''''''''''''
+
+Further Examples
+''''''''''''''''
+
+Further examples are provided in the fmdtools examples repository (see :ref:`fmdtools_examples_repo`). The fmdtools library uses an adaptation of FRDL to represent the structures of simulation classes (see :ref:`fmdtools_graph_style`). As such, architecture visualizations in the examples repository can be readily interpreted as (un-annotated) FRDL models. Additionally, one goal of the examples repository (in progress) is to provide fully-annotated FRDL diagrams to help describe each model. 
 
 
-
-Others
-''''''
 

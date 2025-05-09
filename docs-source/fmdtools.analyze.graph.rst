@@ -1,5 +1,5 @@
 fmdtools.analyze.graph 
-===========================
+======================
 .. automodule:: fmdtools.analyze.graph
 
 The graph sub-package is used to graphically represent models and has the following modules:
