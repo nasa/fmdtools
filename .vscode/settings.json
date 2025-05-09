@@ -9,5 +9,13 @@
     "python.testing.pytestPath": "/",
     "python.testing.pytestArgs": [
         "--continue-on-collection-errors"
+    ],
+    "cSpell.words": [
+        "FBED",
+        "fmdtools",
+        "FRDL",
+        "MBSE",
+        "reccomends",
+        "unipartite"
     ]
 }

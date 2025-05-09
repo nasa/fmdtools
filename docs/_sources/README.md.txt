@@ -39,6 +39,7 @@ Simulation techniques in fmdtools represent the state-of-the-art in dynamical sy
 Readily-deployable analysis methods are built in to fmdtools to enable the rapid and iterative statistical analysis of simulation results. With fmdtools, you can easily leverage our existing methods to understand simulation results instead of spending hours implementing your own.
 
 
+The fmdtools documentation repository is also home to the Functional Reasoning Design Language specification, a graphical language that may be used to represent the structure of behavioral interactions in a system to inform hazard analysis.
 
 ## Getting Started
 

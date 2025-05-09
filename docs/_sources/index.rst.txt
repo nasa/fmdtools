@@ -13,7 +13,7 @@ TABLE OF CONTENTS
  docs-source/Development Guide
  examples/Examples
  docs-source/fmdtools
- CONTRIBUTORS
- PUBLICATIONS
+ docs-source/Contributions
+ docs-source/frdl
  
  :ref:`genindex`

@@ -36,7 +36,7 @@ The ActionArchitecture class is used to represent a sequenced of action taken by
 
 In the Human action architecture, a human operator percieves and acts on a hazard and the total number of hazards acted on is recorded in the outcome flow. This can also be represented in :term:`FRDL` using:
 
-.. figure:: ../examples/asg_demo/demo_model_asg_FRDL.svg
+.. figure:: ../examples/asg_demo/demo_model_asg_frdl.svg
    :width: 600
    :alt: Structure of an ActionArchitecture in FRDL
    
