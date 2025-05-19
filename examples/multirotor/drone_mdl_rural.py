@@ -956,7 +956,6 @@ if __name__ == "__main__":
 
     # check single lowcharge fault from approach
     h = History(nominal=mdlhists.nominal,
-                faulty=mdlhists.store_ee_lowcharge_t5p0)
+                faulty=mdlhists.drone_fxns_store_ee_lowcharge_t5p0)
     fig, ax = plot_env_with_traj_z(h, mdl)
     fig, ax = plot_env_with_traj(mdlhists, mdl)
-
