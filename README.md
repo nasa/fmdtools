@@ -106,7 +106,7 @@ This may then be installed using:
 Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` you can checkout the tag corresponding to the version you want, e.g.:
 
 ```
-   git checkout v2.1.1
+   git checkout v2.1.2
 ```
 
 
@@ -240,12 +240,12 @@ To cite fmdtools in general, you may cite our explanatory publication:
 To cite a particular version of the fmdtools, you may use:
 
 ```
-@software{nasa2024fmdtools,
+@software{nasa2025fmdtools,
   author = {{NASA}},
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
-  version = {2.1.1},
-  date = {2024-11-13},
+  version = {2.1.2},
+  date = {2025-5-19},
 }
 ```
 
