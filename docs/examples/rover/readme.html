@@ -1,0 +1,1663 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overview &mdash; fmdtools 2.1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3e23499"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Rover Model Explanation and Preliminaries" href="Rover_Setup_Notebook.html" />
+    <link rel="prev" title="Action Sequence Graph Tutorial" href="../asg_demo/Action_Sequence_Graph.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo-main.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#about">About</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#flexible-modelling-paradigm">Flexible Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#getting-started">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#python-version-compatibility">Python version compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#set-up-python-tooling-environment">Set up python tooling environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#install-fmdtools">Install fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../README.html#editable-development-install">Editable Development Install</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../README.html#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#citing-this-repository">Citing this repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#license-notices">License/Notices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs-source/Development%20Guide.html">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#why-fmdtools">Why fmdtools?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-2">Version: 2.1.2</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#why-fmdtools-pros">Why fmdtools? Pros:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#activity-download-and-install-fmdtools">Activity: Download and Install fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#containers-the-building-blocks-of-simulations">Containers - The building blocks of simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#flow-code-template">Flow Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#simulation-concepts-static-undirected-propagation">Simulation Concepts: Static/Undirected Propagation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#simulation-concepts-propagation-over-time">Simulation Concepts: Propagation over Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#simulation-concepts-types-of-simulations">Simulation Concepts: Types of Simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#simulation-concepts-sampling-approaches">Simulation Concepts: Sampling Approaches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#simulation-concepts-things-to-consider">Simulation Concepts: Things to Consider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#activity-simulate-the-model">Activity: Simulate the Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#analysis-modules">Analysis Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#analysis-activity">Analysis Activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#conclusions-summary">Conclusions/Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#further-reading-links">Further Reading/Links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#glossary">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Development%20Guide.html#make-and-frdl-diagram-first">Make and FRDL Diagram First</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Development%20Guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Development%20Guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Development%20Guide.html#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Development%20Guide.html#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Development%20Guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Development%20Guide.html#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Development%20Guide.html#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#pump">Pump</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../pump/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../pump/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/readme.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Tutorial_complete.html#5.)-Saving-Work">5.) Saving Work</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../pump/Pump_Example_Notebook.html">Pump Example Notebook</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Pump_Example_Notebook.html#Initial-Model-Checks">Initial Model Checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Pump_Example_Notebook.html#History">History</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Pump_Example_Notebook.html#Propagating-and-Viewing-Results-for-Individual-Faults">Propagating and Viewing Results for Individual Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Pump_Example_Notebook.html#Visualization-of-resilience-metrics">Visualization of resilience metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Pump_Example_Notebook.html#Running-a-List-of-Faults">Running a List of Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Pump_Example_Notebook.html#Running-a-Fault-Sampling-Approach">Running a Fault Sampling Approach</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../pump/Parallelism_Tutorial.html">Using Parallel Computing in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Parallelism_Tutorial.html#Model-Checks">Model Checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Parallelism_Tutorial.html#Using-Parallelism-in-Simulation">Using Parallelism in Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Parallelism_Tutorial.html#Performance-Comparison">Performance Comparison</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Parallelism_Tutorial.html#Comparison:-Lower-Tracking-Time-Resolution">Comparison: Lower Tracking Time Resolution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Parallelism_Tutorial.html#Comparison-Conclusions:">Comparison Conclusions:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Parallelism_Tutorial.html#Further-Computational-Cost-Reduction-via-Profiling">Further Computational Cost Reduction via Profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../pump/Optimization.html">Optimization using the ProblemInterface class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Problem-Setup">Problem Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Problem-interfaces">Problem interfaces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Optimization:">Optimization:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../multirotor/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/readme.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Initial-Network-Model">Initial Network Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Static-Model">Static Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Dynamic-Model">Dynamic Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Hierarchical-Model">Hierarchical Model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../multirotor/Urban_Drone_Demo.html">Urban Drone Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Urban_Drone_Demo.html#Model-Overview">Model Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Urban_Drone_Demo.html#Nominal-Simulation">Nominal Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Urban_Drone_Demo.html#Resilience-model">Resilience model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../multirotor/Multirotor_Optimization.html">Integrated Resilience Optimization Architectures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Multirotor_Optimization.html#Design-Model">Design Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Multirotor_Optimization.html#Operational-Model">Operational Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Multirotor_Optimization.html#Resilience-Model">Resilience Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Multirotor_Optimization.html#Combined-Simulation/Optimization">Combined Simulation/Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#tank">Tank</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tank/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/readme.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#History">History</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Optimization">Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#eps">EPS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../eps/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../eps/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../eps/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../eps/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../eps/readme.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../asg_demo/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../asg_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../asg_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../asg_demo/readme.html#notebooks">Notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Fault-Simulation">Fault Simulation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="../Examples.html#rover">Rover</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#references">References</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notices">Notices</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html">Defining and Visualizing fmdtools Model Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Basics">Basics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Graph-Views">Graph Views</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Object-Graphs">Object Graphs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Full-Model-Containment-Graph">Full Model Containment Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Run-Order">Run Order</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Behavior/Fault-Visualization">Behavior/Fault Visualization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="FaultSample_Use-Cases.html">Defining Fault Sampling Approaches in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="FaultSample_Use-Cases.html#Basics">Basics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="FaultSample_Use-Cases.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="FaultSample_Use-Cases.html#Setting-up-a-FaultSample">Setting up a FaultSample</a></li>
+<li class="toctree-l4"><a class="reference internal" href="FaultSample_Use-Cases.html#Propagating-Faults">Propagating Faults</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ParameterSample_Use-Cases.html">Defining Parameter Samples in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ParameterSample_Use-Cases.html#Quantifying-probabilities">Quantifying probabilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ParameterSample_Use-Cases.html#Nested-Scenario-Sampling">Nested Scenario Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="HFAC_Analyses/HFAC_Analyses.html">More Human Failure Analyses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HFAC_Analyses/IDETC_Human_Paper_Analysis.html">Human Failure Representation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-behavioral-simulation">Testing behavioral simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-Faults">Testing Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Examining-Performance-Shaping-Factors">Examining Performance Shaping Factors</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="degradation_modelling/Degradation_Modelling_Notebook.html">Degradation Modelling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="degradation_modelling/Degradation_Modelling_Notebook.html#Drive-Degradation">Drive Degradation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="degradation_modelling/Degradation_Modelling_Notebook.html#Human-Degradation">Human Degradation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="degradation_modelling/Degradation_Modelling_Notebook.html#Combined-Degradation">Combined Degradation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fault_sampling/Rover_Mode_Notebook.html#Analysis">Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="optimization/Search_Comparison.html">Faulty State-Space Search Method Comparison</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="optimization/Search_Comparison.html#Performance-Comparison">Performance Comparison</a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Fault-Space-Formulation">Comparing Solutions over weights - Fault-Space Formulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Result-Space-Formulation">Comparing Solutions over weights - Result-Space Formulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="optimization/Rover_Response_Optimization.html">Rover Response Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="optimization/Rover_Response_Optimization.html#Optimization">Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/readme.html">MultiFlow Demo Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../multiflow_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multiflow_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multiflow_demo/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multiflow_demo/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../taxiway/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/readme.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs-source/fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.define.html">fmdtools.define</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.architecture.html#fmdtools-define-architecture-base">fmdtools.define.architecture.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.architecture.html#fmdtools-define-architecture-action">fmdtools.define.architecture.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.architecture.html#fmdtools-define-architecture-component">fmdtools.define.architecture.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.architecture.html#fmdtools-define-architecture-function">fmdtools.define.architecture.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.architecture.html#fmdtools-define-architecture-geom">fmdtools.define.architecture.geom</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.block.html">fmdtools.define.block</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.block.html#module-fmdtools.define.block.function">fmdtools.define.block.function</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.container.html">fmdtools.define.container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.container.html#module-fmdtools.define.container.base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.container.html#fmdtools-define-container-mode">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.container.html#module-fmdtools.define.container.parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.flow.html#fmdtools-define-flow-multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.flow.html#fmdtools-define-flow-commsflow">fmdtools.define.flow.commsflow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.object.html">fmdtools.define.object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.object.html#module-fmdtools.define.object.base">fmdtools.define.object.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.object.html#module-fmdtools.define.object.timer">fmdtools.define.object.timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.object.html#module-fmdtools.define.object.geom">fmdtools.define.object.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.round_float"><code class="docutils literal notranslate"><span class="pre">round_float()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.set_arg_as_type"><code class="docutils literal notranslate"><span class="pre">set_arg_as_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.environment.Environment"><code class="docutils literal notranslate"><span class="pre">Environment</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample"><code class="docutils literal notranslate"><span class="pre">fault_sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample_from"><code class="docutils literal notranslate"><span class="pre">fault_sample_from()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.gen_sampleapproach"><code class="docutils literal notranslate"><span class="pre">gen_sampleapproach()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nested_sample"><code class="docutils literal notranslate"><span class="pre">nested_sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_mult_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.parameter_sample"><code class="docutils literal notranslate"><span class="pre">parameter_sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.process_nominal"><code class="docutils literal notranslate"><span class="pre">process_nominal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenObj"><code class="docutils literal notranslate"><span class="pre">BaseScenObj</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario"><code class="docutils literal notranslate"><span class="pre">BaseScenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.scenario.Injection"><code class="docutils literal notranslate"><span class="pre">Injection</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario"><code class="docutils literal notranslate"><span class="pre">JointFaultScenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.scenario.ParameterScenario"><code class="docutils literal notranslate"><span class="pre">ParameterScenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.scenario.Scenario"><code class="docutils literal notranslate"><span class="pre">Scenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.scenario.Sequence"><code class="docutils literal notranslate"><span class="pre">Sequence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.scenario.SingleFaultScenario"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.scenario.create_scenname"><code class="docutils literal notranslate"><span class="pre">create_scenname()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#module-fmdtools.sim.sample">fmdtools.sim.sample</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.BaseSample"><code class="docutils literal notranslate"><span class="pre">BaseSample</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.ExNestedParam"><code class="docutils literal notranslate"><span class="pre">ExNestedParam</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.FaultDomain"><code class="docutils literal notranslate"><span class="pre">FaultDomain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.FaultSample"><code class="docutils literal notranslate"><span class="pre">FaultSample</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.JointFaultSample"><code class="docutils literal notranslate"><span class="pre">JointFaultSample</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.ParameterDomain"><code class="docutils literal notranslate"><span class="pre">ParameterDomain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.ParameterHistSample"><code class="docutils literal notranslate"><span class="pre">ParameterHistSample</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.ParameterResultSample"><code class="docutils literal notranslate"><span class="pre">ParameterResultSample</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.ParameterSample"><code class="docutils literal notranslate"><span class="pre">ParameterSample</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.SampleApproach"><code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.combine_orthogonal"><code class="docutils literal notranslate"><span class="pre">combine_orthogonal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.combine_random"><code class="docutils literal notranslate"><span class="pre">combine_random()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.pass_var"><code class="docutils literal notranslate"><span class="pre">pass_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.same_mode"><code class="docutils literal notranslate"><span class="pre">same_mode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.sample_times_even"><code class="docutils literal notranslate"><span class="pre">sample_times_even()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.sample_times_quad"><code class="docutils literal notranslate"><span class="pre">sample_times_quad()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.x_to_kwargs"><code class="docutils literal notranslate"><span class="pre">x_to_kwargs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.BaseConnector"><code class="docutils literal notranslate"><span class="pre">BaseConnector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.BaseObjCon"><code class="docutils literal notranslate"><span class="pre">BaseObjCon</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.BaseProblem"><code class="docutils literal notranslate"><span class="pre">BaseProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.BaseSimProblem"><code class="docutils literal notranslate"><span class="pre">BaseSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.Constraint"><code class="docutils literal notranslate"><span class="pre">Constraint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ObjectiveConnector"><code class="docutils literal notranslate"><span class="pre">ObjectiveConnector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ResponseCoords"><code class="docutils literal notranslate"><span class="pre">ResponseCoords</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ResultConstraint"><code class="docutils literal notranslate"><span class="pre">ResultConstraint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ResultObjective"><code class="docutils literal notranslate"><span class="pre">ResultObjective</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ScenarioProblem"><code class="docutils literal notranslate"><span class="pre">ScenarioProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.SimpleProblem"><code class="docutils literal notranslate"><span class="pre">SimpleProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.SingleFaultScenarioProblem"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.VariableConnector"><code class="docutils literal notranslate"><span class="pre">VariableConnector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.obj_name"><code class="docutils literal notranslate"><span class="pre">obj_name()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html">fmdtools.analyze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.analyze.graph.html">fmdtools.analyze.graph</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.label">fmdtools.analyze.graph.label</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.graph.html#fmdtools-analyze-graph-style">fmdtools.analyze.graph.style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.graph.html#fmdtools-analyze-graph-base">fmdtools.analyze.graph.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.model">fmdtools.analyze.graph.model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.add_title_xylabs"><code class="docutils literal notranslate"><span class="pre">add_title_xylabs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_average"><code class="docutils literal notranslate"><span class="pre">calc_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_expected"><code class="docutils literal notranslate"><span class="pre">calc_expected()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_metric"><code class="docutils literal notranslate"><span class="pre">calc_metric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_metric_ci"><code class="docutils literal notranslate"><span class="pre">calc_metric_ci()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_percent"><code class="docutils literal notranslate"><span class="pre">calc_percent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_rate"><code class="docutils literal notranslate"><span class="pre">calc_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_sum"><code class="docutils literal notranslate"><span class="pre">calc_sum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.calc_total"><code class="docutils literal notranslate"><span class="pre">calc_total()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.clear_prev_figure"><code class="docutils literal notranslate"><span class="pre">clear_prev_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.metric_preamble"><code class="docutils literal notranslate"><span class="pre">metric_preamble()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_helper"><code class="docutils literal notranslate"><span class="pre">multiplot_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.phase_overlay"><code class="docutils literal notranslate"><span class="pre">phase_overlay()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_hist"><code class="docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.prep_animation_title"><code class="docutils literal notranslate"><span class="pre">prep_animation_title()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.set_empty_multiplots"><code class="docutils literal notranslate"><span class="pre">set_empty_multiplots()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.setup_plot"><code class="docutils literal notranslate"><span class="pre">setup_plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.suite_for_plots"><code class="docutils literal notranslate"><span class="pre">suite_for_plots()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.to_include_keys"><code class="docutils literal notranslate"><span class="pre">to_include_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.unpack_plot_values"><code class="docutils literal notranslate"><span class="pre">unpack_plot_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.load_csv"><code class="docutils literal notranslate"><span class="pre">load_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.load_json"><code class="docutils literal notranslate"><span class="pre">load_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History"><code class="docutils literal notranslate"><span class="pre">History</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.history.init_dicthist"><code class="docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.history.prep_hists"><code class="docutils literal notranslate"><span class="pre">prep_hists()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.BaseComparison"><code class="docutils literal notranslate"><span class="pre">BaseComparison</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.BaseTab"><code class="docutils literal notranslate"><span class="pre">BaseTab</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.Comparison"><code class="docutils literal notranslate"><span class="pre">Comparison</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.FMEA"><code class="docutils literal notranslate"><span class="pre">FMEA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.NestedComparison"><code class="docutils literal notranslate"><span class="pre">NestedComparison</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.NominalEnvelope"><code class="docutils literal notranslate"><span class="pre">NominalEnvelope</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary"><code class="docutils literal notranslate"><span class="pre">result_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary_fmea"><code class="docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap"><code class="docutils literal notranslate"><span class="pre">PhaseMap</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.find_interval_overlap"><code class="docutils literal notranslate"><span class="pre">find_interval_overlap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.from_hist"><code class="docutils literal notranslate"><span class="pre">from_hist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.join_phasemaps"><code class="docutils literal notranslate"><span class="pre">join_phasemaps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.phaseplot"><code class="docutils literal notranslate"><span class="pre">phaseplot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.samplemetric"><code class="docutils literal notranslate"><span class="pre">samplemetric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.samplemetrics"><code class="docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs-source/Contributions.html">Contributions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/Contributions.html#contributors">Contributors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#nasa-contributors">NASA Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#external-contributors">External Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#alumni-and-interns">Alumni and Interns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#fmdtools-at-osu">fmdtools at OSU</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/Contributions.html#fmdtools-publication-list">fmdtools Publication List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/Contributions.html#how-to-contribute">How to Contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#repository-structure">Repository Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#git-structure-and-setup">Git Structure and Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#git-development-workflow">Git Development Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#release-process">Release Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#headers">Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/Contributions.html#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs-source/frdl.html">FRDL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/frdl.html#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#what-can-you-use-frdl-for">What can you use FRDL for?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#why-frdl">Why FRDL?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#relationship-with-fmdtools">Relationship with fmdtools</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/frdl.html#specification">Specification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#primitives">Primitives</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#blocks">Blocks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#flows">Flows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#relationships">Relationships</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#annotations">Annotations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#architectures">Architectures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#functional-architectures">Functional Architectures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#action-architectures">Action Architectures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#component-architectures">Component Architectures</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#modelling">Modelling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#analysis">Analysis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs-source/frdl.html#guide">Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#concepts">Concepts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#function-action-relationship">Function/Action Relationship</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#function-component-relationship">Function/Component Relationship</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#flows-as-nodes">Flows as Nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#correspondence-with-other-methods">Correspondence with other methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#versus-f-fa">Versus F/FA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#versus-stamp-stpa">Versus STAMP/STPA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#versus-sysml-uml">Versus SysML/UML</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#examples">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#bread-making">Bread Making</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#circuit">Circuit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/frdl.html#further-examples">Further Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../Examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Overview</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/nasa/fmdtools/blob/main/examples/rover/readme.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h1>
+<p>Model of a autonomous/semi-autonomous line-following rover and its interactions with its environment.</p>
+<section id="models">
+<h2>Models<a class="headerlink" href="#models" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><cite>rover_model.py</cite> defines the functions and flows used in the analysis.</p></li>
+<li><p><cite>rover_degradation.py</cite> extends the model to include degradated states.</p></li>
+<li><p><cite>rover_model_human.py</cite> extends the model to include human faults and response.</p></li>
+</ul>
+</section>
+<section id="scripts-and-tests">
+<h2>Scripts and tests:<a class="headerlink" href="#scripts-and-tests" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><cite>opt_rover.py</cite> defines some optimization setup(s) with the rover. Requires the <cite>deap</cite> package (see notices below).</p></li>
+<li><p><cite>rover_mode_space.py</cite> is a script for testing synthetic mode generation</p></li>
+<li><p><cite>test_rover.py</cite> provides some tests of rover behavior</p></li>
+</ul>
+</section>
+<section id="notebooks">
+<h2>Notebooks<a class="headerlink" href="#notebooks" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="Rover_Setup_Notebook.html"><span class="doc">Rover Setup Notebook</span></a> , which introduces the model and basic usages.</p></li>
+<li><p><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html"><span class="doc">Defining and Visualizing fmdtools Model Structures</span></a> is helpful for understanding how a given model simulates over time. It covers the class  <code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code> and containing methods.</p></li>
+<li><p><a class="reference internal" href="ParameterSample_Use-Cases.html"><span class="doc">Defining Parameter Samples in fmdtools</span></a> , which covers simulating the model at different parameters in nominal/faulty scenarios. This includes:</p>
+<ul>
+<li><p>Setting up a nominal parameter sampling approach using <a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterSample</span></code></a> and simulating it with <a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.parameter_sample" title="fmdtools.sim.propagate.parameter_sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">parameter_sample()</span></code></a> and <a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nested_sample" title="fmdtools.sim.propagate.nested_sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">nested_sample()</span></code></a> methods for nominal and faulty simulations.</p></li>
+<li><p>Using analysis classes like <a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.NominalEnvelope" title="fmdtools.analyze.tabulate.NominalEnvelope"><code class="xref py py-func docutils literal notranslate"><span class="pre">NominalEnvelope()</span></code></a> and <a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.Comparison" title="fmdtools.analyze.tabulate.Comparison"><code class="xref py py-func docutils literal notranslate"><span class="pre">Comparison()</span></code></a> to visualize quantities of interest for the simulation over a range of nominal parameters.</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="FaultSample_Use-Cases.html"><span class="doc">Defining Fault Sampling Approaches in fmdtools</span></a> covers how to set up a fault sampling approach and use it to simulate a large number of hazardous scenarios in a model. This includes:</p>
+<ul>
+<li><p>Adding fault and operational modes to Model functions using the class <a class="reference internal" href="../../docs-source/fmdtools.define.container.html#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a> and explanation of the <cite>phases</cite> and <cite>exclusive</cite> options.</p></li>
+<li><p>Using <a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.from_hist" title="fmdtools.analyze.phases.from_hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_hist()</span></code></a> to setting a <a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.sample.SampleApproach" title="fmdtools.sim.sample.SampleApproach"><code class="xref py py-class docutils literal notranslate"><span class="pre">SampleApproach</span></code></a> up which samples individual faults based on the phases of the model and/or function defined by their operational modes.</p></li>
+<li><p>Using <a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><code class="xref py py-func docutils literal notranslate"><span class="pre">PhaseMap()</span></code></a> to visualize the phases and modes of a model over time and to visualize the consequences of each fault scenario in the approach within each phase.</p></li>
+<li><p>Using the <cite>defaultsamp</cite> option to control how many time-steps in each phase are sampled (and when).</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="HFAC_Analyses/HFAC_Analyses.html"><span class="doc">HFAC Analyses</span></a> and <a class="reference internal" href="HFAC_Analyses/IDETC_Human_Paper_Analysis.html"><span class="doc">IDETC_Human_Paper_Analysis</span></a> showcase fmdtools human factors modeling capabilities (action sequence graphs, performance shaping factors, etc.).</p></li>
+<li><p><a class="reference internal" href="degradation_modelling/Degradation_Modelling_Notebook.html"><span class="doc">Degradation Modelling Notebook</span></a> shows how degradation models can be used to sample resilience model parameters.</p></li>
+<li><p><a class="reference internal" href="fault_sampling/Rover_Mode_Notebook.html"><span class="doc">Rover Mode Notebook</span></a> shows how fault scenarios can be exhaustively generated to augment hazard identification.</p></li>
+<li><p><a class="reference internal" href="optimization/Search_Comparison.html"><span class="doc">Search_Comparison</span></a> shows an (in-development) method for searching the faulty state-space to find a unique set of hazardous scenarios.</p></li>
+<li><p><a class="reference internal" href="optimization/Rover_Response_Optimization.html"><span class="doc">Rover Response Optimization</span></a> further demonstrates the optimization of parameters over a set of fault scenarios using <a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.search.ProblemArchitecture" title="fmdtools.sim.search.ProblemArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemArchitecture</span></code></a>.</p></li>
+</ul>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Irshad, L., &amp; Hulse, D. (2022). Can Resilience Assessments Inform Early Design Human Factors Decision-making?. IFAC-PapersOnLine, 55(29), 61-66.</p></li>
+<li><p>Irshad, L, &amp; Hulse, D. “Resilience Modeling in Complex Engineered Systems With Human-Machine Interactions.” Proceedings of the ASME 2022 International Design Engineering Technical Conferences and Computers and Information in Engineering Conference. Volume 2: 42nd Computers and Information in Engineering Conference (CIE). St. Louis, Missouri, USA. August 14–17, 2022. V002T02A024. ASME. <a class="reference external" href="https://doi.org/10.1115/DETC2022-89531">https://doi.org/10.1115/DETC2022-89531</a></p></li>
+<li><p>Hulse, D., and Irshad, L. (December 12, 2022). “Synthetic Fault Mode Generation for Resilience Analysis and Failure Mechanism Discovery.” ASME. J. Mech. Des. March 2023; 145(3): 031707. <a class="reference external" href="https://doi.org/10.1115/1.4056320">https://doi.org/10.1115/1.4056320</a></p></li>
+<li><ol class="upperalpha simple" start="4">
+<li><p>Hulse and L. Irshad, “Using Degradation Modeling to Identify Fragile Operational Conditions in Human- and Component-driven Resilience Assessment,” 2022 IEEE/AIAA 41st Digital Avionics Systems Conference (DASC), Portsmouth, VA, USA, 2022, pp. 1-10, doi: 10.1109/DASC55683.2022.9925877.</p></li>
+</ol>
+</li>
+<li><p>Girshfeld, I., Hulse, D., &amp; Irshad, L. (2023). Uncovering Hazards Using a Multi-Objective Optimization to Explore the Faulty State-Space. In AIAA SCITECH 2023 Forum (p. 2578).</p></li>
+<li><p>Irshad, L., &amp; Hulse, D. (2023). On the Use of Resilience Models as Digital Twins for Operational Support and In-time Decision Making. In AIAA AVIATION 2023 Forum (p. 3559).</p></li>
+</ul>
+</section>
+<section id="notices">
+<h2>Notices<a class="headerlink" href="#notices" title="Link to this heading"></a></h2>
+<p><cite>opt_rover.py</cite> uses the <cite>deap</cite> package, which is governed by the terms of the LGPL.</p>
+<p><cite>deap</cite> may be installed directly from its source using <cite>pip install deap</cite> or downloaded directly from its source repo at <cite>https://github.com/DEAP/deap</cite>.</p>
+<p>To comply with the terms of the LGPL, we have provided the LGPL and GPL licenses below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>               GNU LESSER GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+
+  This version of the GNU Lesser General Public License incorporates
+the terms and conditions of version 3 of the GNU General Public
+License, supplemented by the additional permissions listed below.
+
+  0. Additional Definitions.
+
+  As used herein, &quot;this License&quot; refers to version 3 of the GNU Lesser
+General Public License, and the &quot;GNU GPL&quot; refers to version 3 of the GNU
+General Public License.
+
+  &quot;The Library&quot; refers to a covered work governed by this License,
+other than an Application or a Combined Work as defined below.
+
+  An &quot;Application&quot; is any work that makes use of an interface provided
+by the Library, but which is not otherwise based on the Library.
+Defining a subclass of a class defined by the Library is deemed a mode
+of using an interface provided by the Library.
+
+  A &quot;Combined Work&quot; is a work produced by combining or linking an
+Application with the Library.  The particular version of the Library
+with which the Combined Work was made is also called the &quot;Linked
+Version&quot;.
+
+  The &quot;Minimal Corresponding Source&quot; for a Combined Work means the
+Corresponding Source for the Combined Work, excluding any source code
+for portions of the Combined Work that, considered in isolation, are
+based on the Application, and not on the Linked Version.
+
+  The &quot;Corresponding Application Code&quot; for a Combined Work means the
+object code and/or source code for the Application, including any data
+and utility programs needed for reproducing the Combined Work from the
+Application, but excluding the System Libraries of the Combined Work.
+
+  1. Exception to Section 3 of the GNU GPL.
+
+  You may convey a covered work under sections 3 and 4 of this License
+without being bound by section 3 of the GNU GPL.
+
+  2. Conveying Modified Versions.
+
+  If you modify a copy of the Library, and, in your modifications, a
+facility refers to a function or data to be supplied by an Application
+that uses the facility (other than as an argument passed when the
+facility is invoked), then you may convey a copy of the modified
+version:
+
+   a) under this License, provided that you make a good faith effort to
+   ensure that, in the event an Application does not supply the
+   function or data, the facility still operates, and performs
+   whatever part of its purpose remains meaningful, or
+
+   b) under the GNU GPL, with none of the additional permissions of
+   this License applicable to that copy.
+
+  3. Object Code Incorporating Material from Library Header Files.
+
+  The object code form of an Application may incorporate material from
+a header file that is part of the Library.  You may convey such object
+code under terms of your choice, provided that, if the incorporated
+material is not limited to numerical parameters, data structure
+layouts and accessors, or small macros, inline functions and templates
+(ten or fewer lines in length), you do both of the following:
+
+   a) Give prominent notice with each copy of the object code that the
+   Library is used in it and that the Library and its use are
+   covered by this License.
+
+   b) Accompany the object code with a copy of the GNU GPL and this license
+   document.
+
+  4. Combined Works.
+
+  You may convey a Combined Work under terms of your choice that,
+taken together, effectively do not restrict modification of the
+portions of the Library contained in the Combined Work and reverse
+engineering for debugging such modifications, if you also do each of
+the following:
+
+   a) Give prominent notice with each copy of the Combined Work that
+   the Library is used in it and that the Library and its use are
+   covered by this License.
+
+   b) Accompany the Combined Work with a copy of the GNU GPL and this license
+   document.
+
+   c) For a Combined Work that displays copyright notices during
+   execution, include the copyright notice for the Library among
+   these notices, as well as a reference directing the user to the
+   copies of the GNU GPL and this license document.
+
+   d) Do one of the following:
+
+       0) Convey the Minimal Corresponding Source under the terms of this
+       License, and the Corresponding Application Code in a form
+       suitable for, and under terms that permit, the user to
+       recombine or relink the Application with a modified version of
+       the Linked Version to produce a modified Combined Work, in the
+       manner specified by section 6 of the GNU GPL for conveying
+       Corresponding Source.
+
+       1) Use a suitable shared library mechanism for linking with the
+       Library.  A suitable mechanism is one that (a) uses at run time
+       a copy of the Library already present on the user&#39;s computer
+       system, and (b) will operate properly with a modified version
+       of the Library that is interface-compatible with the Linked
+       Version.
+
+   e) Provide Installation Information, but only if you would otherwise
+   be required to provide such information under section 6 of the
+   GNU GPL, and only to the extent that such information is
+   necessary to install and execute a modified version of the
+   Combined Work produced by recombining or relinking the
+   Application with a modified version of the Linked Version. (If
+   you use option 4d0, the Installation Information must accompany
+   the Minimal Corresponding Source and Corresponding Application
+   Code. If you use option 4d1, you must provide the Installation
+   Information in the manner specified by section 6 of the GNU GPL
+   for conveying Corresponding Source.)
+
+  5. Combined Libraries.
+
+  You may place library facilities that are a work based on the
+Library side by side in a single library together with other library
+facilities that are not Applications and are not covered by this
+License, and convey such a combined library under terms of your
+choice, if you do both of the following:
+
+   a) Accompany the combined library with a copy of the same work based
+   on the Library, uncombined with any other library facilities,
+   conveyed under the terms of this License.
+
+   b) Give prominent notice with the combined library that part of it
+   is a work based on the Library, and explaining where to find the
+   accompanying uncombined form of the same work.
+
+  6. Revised Versions of the GNU Lesser General Public License.
+
+  The Free Software Foundation may publish revised and/or new versions
+of the GNU Lesser General Public License from time to time. Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.
+
+  Each version is given a distinguishing version number. If the
+Library as you received it specifies that a certain numbered version
+of the GNU Lesser General Public License &quot;or any later version&quot;
+applies to it, you have the option of following the terms and
+conditions either of that published version or of any later version
+published by the Free Software Foundation. If the Library as you
+received it does not specify a version number of the GNU Lesser
+General Public License, you may choose any version of the GNU Lesser
+General Public License ever published by the Free Software Foundation.
+
+  If the Library as you received it specifies that a proxy can decide
+whether future versions of the GNU Lesser General Public License shall
+apply, that proxy&#39;s public statement of acceptance of any version is
+permanent authorization for you to choose that version for the
+Library.
+
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. &lt;https://fsf.org/&gt;
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+                            Preamble
+
+  The GNU General Public License is a free, copyleft license for
+software and other kinds of works.
+
+  The licenses for most software and other practical works are designed
+to take away your freedom to share and change the works.  By contrast,
+the GNU General Public License is intended to guarantee your freedom to
+share and change all versions of a program--to make sure it remains free
+software for all its users.  We, the Free Software Foundation, use the
+GNU General Public License for most of our software; it applies also to
+any other work released this way by its authors.  You can apply it to
+your programs, too.
+
+  When we speak of free software, we are referring to freedom, not
+price.  Our General Public Licenses are designed to make sure that you
+have the freedom to distribute copies of free software (and charge for
+them if you wish), that you receive source code or can get it if you
+want it, that you can change the software or use pieces of it in new
+free programs, and that you know you can do these things.
+
+  To protect your rights, we need to prevent others from denying you
+these rights or asking you to surrender the rights.  Therefore, you have
+certain responsibilities if you distribute copies of the software, or if
+you modify it: responsibilities to respect the freedom of others.
+
+  For example, if you distribute copies of such a program, whether
+gratis or for a fee, you must pass on to the recipients the same
+freedoms that you received.  You must make sure that they, too, receive
+or can get the source code.  And you must show them these terms so they
+know their rights.
+
+  Developers that use the GNU GPL protect your rights with two steps:
+(1) assert copyright on the software, and (2) offer you this License
+giving you legal permission to copy, distribute and/or modify it.
+
+  For the developers&#39; and authors&#39; protection, the GPL clearly explains
+that there is no warranty for this free software.  For both users&#39; and
+authors&#39; sake, the GPL requires that modified versions be marked as
+changed, so that their problems will not be attributed erroneously to
+authors of previous versions.
+
+  Some devices are designed to deny users access to install or run
+modified versions of the software inside them, although the manufacturer
+can do so.  This is fundamentally incompatible with the aim of
+protecting users&#39; freedom to change the software.  The systematic
+pattern of such abuse occurs in the area of products for individuals to
+use, which is precisely where it is most unacceptable.  Therefore, we
+have designed this version of the GPL to prohibit the practice for those
+products.  If such problems arise substantially in other domains, we
+stand ready to extend this provision to those domains in future versions
+of the GPL, as needed to protect the freedom of users.
+
+  Finally, every program is threatened constantly by software patents.
+States should not allow patents to restrict development and use of
+software on general-purpose computers, but in those that do, we wish to
+avoid the special danger that patents applied to a free program could
+make it effectively proprietary.  To prevent this, the GPL assures that
+patents cannot be used to render the program non-free.
+
+  The precise terms and conditions for copying, distribution and
+modification follow.
+
+                       TERMS AND CONDITIONS
+
+  0. Definitions.
+
+  &quot;This License&quot; refers to version 3 of the GNU General Public License.
+
+  &quot;Copyright&quot; also means copyright-like laws that apply to other kinds of
+works, such as semiconductor masks.
+
+  &quot;The Program&quot; refers to any copyrightable work licensed under this
+License.  Each licensee is addressed as &quot;you&quot;.  &quot;Licensees&quot; and
+&quot;recipients&quot; may be individuals or organizations.
+
+  To &quot;modify&quot; a work means to copy from or adapt all or part of the work
+in a fashion requiring copyright permission, other than the making of an
+exact copy.  The resulting work is called a &quot;modified version&quot; of the
+earlier work or a work &quot;based on&quot; the earlier work.
+
+  A &quot;covered work&quot; means either the unmodified Program or a work based
+on the Program.
+
+  To &quot;propagate&quot; a work means to do anything with it that, without
+permission, would make you directly or secondarily liable for
+infringement under applicable copyright law, except executing it on a
+computer or modifying a private copy.  Propagation includes copying,
+distribution (with or without modification), making available to the
+public, and in some countries other activities as well.
+
+  To &quot;convey&quot; a work means any kind of propagation that enables other
+parties to make or receive copies.  Mere interaction with a user through
+a computer network, with no transfer of a copy, is not conveying.
+
+  An interactive user interface displays &quot;Appropriate Legal Notices&quot;
+to the extent that it includes a convenient and prominently visible
+feature that (1) displays an appropriate copyright notice, and (2)
+tells the user that there is no warranty for the work (except to the
+extent that warranties are provided), that licensees may convey the
+work under this License, and how to view a copy of this License.  If
+the interface presents a list of user commands or options, such as a
+menu, a prominent item in the list meets this criterion.
+
+  1. Source Code.
+
+  The &quot;source code&quot; for a work means the preferred form of the work
+for making modifications to it.  &quot;Object code&quot; means any non-source
+form of a work.
+
+  A &quot;Standard Interface&quot; means an interface that either is an official
+standard defined by a recognized standards body, or, in the case of
+interfaces specified for a particular programming language, one that
+is widely used among developers working in that language.
+
+  The &quot;System Libraries&quot; of an executable work include anything, other
+than the work as a whole, that (a) is included in the normal form of
+packaging a Major Component, but which is not part of that Major
+Component, and (b) serves only to enable use of the work with that
+Major Component, or to implement a Standard Interface for which an
+implementation is available to the public in source code form.  A
+&quot;Major Component&quot;, in this context, means a major essential component
+(kernel, window system, and so on) of the specific operating system
+(if any) on which the executable work runs, or a compiler used to
+produce the work, or an object code interpreter used to run it.
+
+  The &quot;Corresponding Source&quot; for a work in object code form means all
+the source code needed to generate, install, and (for an executable
+work) run the object code and to modify the work, including scripts to
+control those activities.  However, it does not include the work&#39;s
+System Libraries, or general-purpose tools or generally available free
+programs which are used unmodified in performing those activities but
+which are not part of the work.  For example, Corresponding Source
+includes interface definition files associated with source files for
+the work, and the source code for shared libraries and dynamically
+linked subprograms that the work is specifically designed to require,
+such as by intimate data communication or control flow between those
+subprograms and other parts of the work.
+
+  The Corresponding Source need not include anything that users
+can regenerate automatically from other parts of the Corresponding
+Source.
+
+  The Corresponding Source for a work in source code form is that
+same work.
+
+  2. Basic Permissions.
+
+  All rights granted under this License are granted for the term of
+copyright on the Program, and are irrevocable provided the stated
+conditions are met.  This License explicitly affirms your unlimited
+permission to run the unmodified Program.  The output from running a
+covered work is covered by this License only if the output, given its
+content, constitutes a covered work.  This License acknowledges your
+rights of fair use or other equivalent, as provided by copyright law.
+
+  You may make, run and propagate covered works that you do not
+convey, without conditions so long as your license otherwise remains
+in force.  You may convey covered works to others for the sole purpose
+of having them make modifications exclusively for you, or provide you
+with facilities for running those works, provided that you comply with
+the terms of this License in conveying all material for which you do
+not control copyright.  Those thus making or running the covered works
+for you must do so exclusively on your behalf, under your direction
+and control, on terms that prohibit them from making any copies of
+your copyrighted material outside their relationship with you.
+
+  Conveying under any other circumstances is permitted solely under
+the conditions stated below.  Sublicensing is not allowed; section 10
+makes it unnecessary.
+
+  3. Protecting Users&#39; Legal Rights From Anti-Circumvention Law.
+
+  No covered work shall be deemed part of an effective technological
+measure under any applicable law fulfilling obligations under article
+11 of the WIPO copyright treaty adopted on 20 December 1996, or
+similar laws prohibiting or restricting circumvention of such
+measures.
+
+  When you convey a covered work, you waive any legal power to forbid
+circumvention of technological measures to the extent such circumvention
+is effected by exercising rights under this License with respect to
+the covered work, and you disclaim any intention to limit operation or
+modification of the work as a means of enforcing, against the work&#39;s
+users, your or third parties&#39; legal rights to forbid circumvention of
+technological measures.
+
+  4. Conveying Verbatim Copies.
+
+  You may convey verbatim copies of the Program&#39;s source code as you
+receive it, in any medium, provided that you conspicuously and
+appropriately publish on each copy an appropriate copyright notice;
+keep intact all notices stating that this License and any
+non-permissive terms added in accord with section 7 apply to the code;
+keep intact all notices of the absence of any warranty; and give all
+recipients a copy of this License along with the Program.
+
+  You may charge any price or no price for each copy that you convey,
+and you may offer support or warranty protection for a fee.
+
+  5. Conveying Modified Source Versions.
+
+  You may convey a work based on the Program, or the modifications to
+produce it from the Program, in the form of source code under the
+terms of section 4, provided that you also meet all of these conditions:
+
+    a) The work must carry prominent notices stating that you modified
+    it, and giving a relevant date.
+
+    b) The work must carry prominent notices stating that it is
+    released under this License and any conditions added under section
+    7.  This requirement modifies the requirement in section 4 to
+    &quot;keep intact all notices&quot;.
+
+    c) You must license the entire work, as a whole, under this
+    License to anyone who comes into possession of a copy.  This
+    License will therefore apply, along with any applicable section 7
+    additional terms, to the whole of the work, and all its parts,
+    regardless of how they are packaged.  This License gives no
+    permission to license the work in any other way, but it does not
+    invalidate such permission if you have separately received it.
+
+    d) If the work has interactive user interfaces, each must display
+    Appropriate Legal Notices; however, if the Program has interactive
+    interfaces that do not display Appropriate Legal Notices, your
+    work need not make them do so.
+
+  A compilation of a covered work with other separate and independent
+works, which are not by their nature extensions of the covered work,
+and which are not combined with it such as to form a larger program,
+in or on a volume of a storage or distribution medium, is called an
+&quot;aggregate&quot; if the compilation and its resulting copyright are not
+used to limit the access or legal rights of the compilation&#39;s users
+beyond what the individual works permit.  Inclusion of a covered work
+in an aggregate does not cause this License to apply to the other
+parts of the aggregate.
+
+  6. Conveying Non-Source Forms.
+
+  You may convey a covered work in object code form under the terms
+of sections 4 and 5, provided that you also convey the
+machine-readable Corresponding Source under the terms of this License,
+in one of these ways:
+
+    a) Convey the object code in, or embodied in, a physical product
+    (including a physical distribution medium), accompanied by the
+    Corresponding Source fixed on a durable physical medium
+    customarily used for software interchange.
+
+    b) Convey the object code in, or embodied in, a physical product
+    (including a physical distribution medium), accompanied by a
+    written offer, valid for at least three years and valid for as
+    long as you offer spare parts or customer support for that product
+    model, to give anyone who possesses the object code either (1) a
+    copy of the Corresponding Source for all the software in the
+    product that is covered by this License, on a durable physical
+    medium customarily used for software interchange, for a price no
+    more than your reasonable cost of physically performing this
+    conveying of source, or (2) access to copy the
+    Corresponding Source from a network server at no charge.
+
+    c) Convey individual copies of the object code with a copy of the
+    written offer to provide the Corresponding Source.  This
+    alternative is allowed only occasionally and noncommercially, and
+    only if you received the object code with such an offer, in accord
+    with subsection 6b.
+
+    d) Convey the object code by offering access from a designated
+    place (gratis or for a charge), and offer equivalent access to the
+    Corresponding Source in the same way through the same place at no
+    further charge.  You need not require recipients to copy the
+    Corresponding Source along with the object code.  If the place to
+    copy the object code is a network server, the Corresponding Source
+    may be on a different server (operated by you or a third party)
+    that supports equivalent copying facilities, provided you maintain
+    clear directions next to the object code saying where to find the
+    Corresponding Source.  Regardless of what server hosts the
+    Corresponding Source, you remain obligated to ensure that it is
+    available for as long as needed to satisfy these requirements.
+
+    e) Convey the object code using peer-to-peer transmission, provided
+    you inform other peers where the object code and Corresponding
+    Source of the work are being offered to the general public at no
+    charge under subsection 6d.
+
+  A separable portion of the object code, whose source code is excluded
+from the Corresponding Source as a System Library, need not be
+included in conveying the object code work.
+
+  A &quot;User Product&quot; is either (1) a &quot;consumer product&quot;, which means any
+tangible personal property which is normally used for personal, family,
+or household purposes, or (2) anything designed or sold for incorporation
+into a dwelling.  In determining whether a product is a consumer product,
+doubtful cases shall be resolved in favor of coverage.  For a particular
+product received by a particular user, &quot;normally used&quot; refers to a
+typical or common use of that class of product, regardless of the status
+of the particular user or of the way in which the particular user
+actually uses, or expects or is expected to use, the product.  A product
+is a consumer product regardless of whether the product has substantial
+commercial, industrial or non-consumer uses, unless such uses represent
+the only significant mode of use of the product.
+
+  &quot;Installation Information&quot; for a User Product means any methods,
+procedures, authorization keys, or other information required to install
+and execute modified versions of a covered work in that User Product from
+a modified version of its Corresponding Source.  The information must
+suffice to ensure that the continued functioning of the modified object
+code is in no case prevented or interfered with solely because
+modification has been made.
+
+  If you convey an object code work under this section in, or with, or
+specifically for use in, a User Product, and the conveying occurs as
+part of a transaction in which the right of possession and use of the
+User Product is transferred to the recipient in perpetuity or for a
+fixed term (regardless of how the transaction is characterized), the
+Corresponding Source conveyed under this section must be accompanied
+by the Installation Information.  But this requirement does not apply
+if neither you nor any third party retains the ability to install
+modified object code on the User Product (for example, the work has
+been installed in ROM).
+
+  The requirement to provide Installation Information does not include a
+requirement to continue to provide support service, warranty, or updates
+for a work that has been modified or installed by the recipient, or for
+the User Product in which it has been modified or installed.  Access to a
+network may be denied when the modification itself materially and
+adversely affects the operation of the network or violates the rules and
+protocols for communication across the network.
+
+  Corresponding Source conveyed, and Installation Information provided,
+in accord with this section must be in a format that is publicly
+documented (and with an implementation available to the public in
+source code form), and must require no special password or key for
+unpacking, reading or copying.
+
+  7. Additional Terms.
+
+  &quot;Additional permissions&quot; are terms that supplement the terms of this
+License by making exceptions from one or more of its conditions.
+Additional permissions that are applicable to the entire Program shall
+be treated as though they were included in this License, to the extent
+that they are valid under applicable law.  If additional permissions
+apply only to part of the Program, that part may be used separately
+under those permissions, but the entire Program remains governed by
+this License without regard to the additional permissions.
+
+  When you convey a copy of a covered work, you may at your option
+remove any additional permissions from that copy, or from any part of
+it.  (Additional permissions may be written to require their own
+removal in certain cases when you modify the work.)  You may place
+additional permissions on material, added by you to a covered work,
+for which you have or can give appropriate copyright permission.
+
+  Notwithstanding any other provision of this License, for material you
+add to a covered work, you may (if authorized by the copyright holders of
+that material) supplement the terms of this License with terms:
+
+    a) Disclaiming warranty or limiting liability differently from the
+    terms of sections 15 and 16 of this License; or
+
+    b) Requiring preservation of specified reasonable legal notices or
+    author attributions in that material or in the Appropriate Legal
+    Notices displayed by works containing it; or
+
+    c) Prohibiting misrepresentation of the origin of that material, or
+    requiring that modified versions of such material be marked in
+    reasonable ways as different from the original version; or
+
+    d) Limiting the use for publicity purposes of names of licensors or
+    authors of the material; or
+
+    e) Declining to grant rights under trademark law for use of some
+    trade names, trademarks, or service marks; or
+
+    f) Requiring indemnification of licensors and authors of that
+    material by anyone who conveys the material (or modified versions of
+    it) with contractual assumptions of liability to the recipient, for
+    any liability that these contractual assumptions directly impose on
+    those licensors and authors.
+
+  All other non-permissive additional terms are considered &quot;further
+restrictions&quot; within the meaning of section 10.  If the Program as you
+received it, or any part of it, contains a notice stating that it is
+governed by this License along with a term that is a further
+restriction, you may remove that term.  If a license document contains
+a further restriction but permits relicensing or conveying under this
+License, you may add to a covered work material governed by the terms
+of that license document, provided that the further restriction does
+not survive such relicensing or conveying.
+
+  If you add terms to a covered work in accord with this section, you
+must place, in the relevant source files, a statement of the
+additional terms that apply to those files, or a notice indicating
+where to find the applicable terms.
+
+  Additional terms, permissive or non-permissive, may be stated in the
+form of a separately written license, or stated as exceptions;
+the above requirements apply either way.
+
+  8. Termination.
+
+  You may not propagate or modify a covered work except as expressly
+provided under this License.  Any attempt otherwise to propagate or
+modify it is void, and will automatically terminate your rights under
+this License (including any patent licenses granted under the third
+paragraph of section 11).
+
+  However, if you cease all violation of this License, then your
+license from a particular copyright holder is reinstated (a)
+provisionally, unless and until the copyright holder explicitly and
+finally terminates your license, and (b) permanently, if the copyright
+holder fails to notify you of the violation by some reasonable means
+prior to 60 days after the cessation.
+
+  Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+  Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, you do not qualify to receive new licenses for the same
+material under section 10.
+
+  9. Acceptance Not Required for Having Copies.
+
+  You are not required to accept this License in order to receive or
+run a copy of the Program.  Ancillary propagation of a covered work
+occurring solely as a consequence of using peer-to-peer transmission
+to receive a copy likewise does not require acceptance.  However,
+nothing other than this License grants you permission to propagate or
+modify any covered work.  These actions infringe copyright if you do
+not accept this License.  Therefore, by modifying or propagating a
+covered work, you indicate your acceptance of this License to do so.
+
+  10. Automatic Licensing of Downstream Recipients.
+
+  Each time you convey a covered work, the recipient automatically
+receives a license from the original licensors, to run, modify and
+propagate that work, subject to this License.  You are not responsible
+for enforcing compliance by third parties with this License.
+
+  An &quot;entity transaction&quot; is a transaction transferring control of an
+organization, or substantially all assets of one, or subdividing an
+organization, or merging organizations.  If propagation of a covered
+work results from an entity transaction, each party to that
+transaction who receives a copy of the work also receives whatever
+licenses to the work the party&#39;s predecessor in interest had or could
+give under the previous paragraph, plus a right to possession of the
+Corresponding Source of the work from the predecessor in interest, if
+the predecessor has it or can get it with reasonable efforts.
+
+  You may not impose any further restrictions on the exercise of the
+rights granted or affirmed under this License.  For example, you may
+not impose a license fee, royalty, or other charge for exercise of
+rights granted under this License, and you may not initiate litigation
+(including a cross-claim or counterclaim in a lawsuit) alleging that
+any patent claim is infringed by making, using, selling, offering for
+sale, or importing the Program or any portion of it.
+
+  11. Patents.
+
+  A &quot;contributor&quot; is a copyright holder who authorizes use under this
+License of the Program or a work on which the Program is based.  The
+work thus licensed is called the contributor&#39;s &quot;contributor version&quot;.
+
+  A contributor&#39;s &quot;essential patent claims&quot; are all patent claims
+owned or controlled by the contributor, whether already acquired or
+hereafter acquired, that would be infringed by some manner, permitted
+by this License, of making, using, or selling its contributor version,
+but do not include claims that would be infringed only as a
+consequence of further modification of the contributor version.  For
+purposes of this definition, &quot;control&quot; includes the right to grant
+patent sublicenses in a manner consistent with the requirements of
+this License.
+
+  Each contributor grants you a non-exclusive, worldwide, royalty-free
+patent license under the contributor&#39;s essential patent claims, to
+make, use, sell, offer for sale, import and otherwise run, modify and
+propagate the contents of its contributor version.
+
+  In the following three paragraphs, a &quot;patent license&quot; is any express
+agreement or commitment, however denominated, not to enforce a patent
+(such as an express permission to practice a patent or covenant not to
+sue for patent infringement).  To &quot;grant&quot; such a patent license to a
+party means to make such an agreement or commitment not to enforce a
+patent against the party.
+
+  If you convey a covered work, knowingly relying on a patent license,
+and the Corresponding Source of the work is not available for anyone
+to copy, free of charge and under the terms of this License, through a
+publicly available network server or other readily accessible means,
+then you must either (1) cause the Corresponding Source to be so
+available, or (2) arrange to deprive yourself of the benefit of the
+patent license for this particular work, or (3) arrange, in a manner
+consistent with the requirements of this License, to extend the patent
+license to downstream recipients.  &quot;Knowingly relying&quot; means you have
+actual knowledge that, but for the patent license, your conveying the
+covered work in a country, or your recipient&#39;s use of the covered work
+in a country, would infringe one or more identifiable patents in that
+country that you have reason to believe are valid.
+
+  If, pursuant to or in connection with a single transaction or
+arrangement, you convey, or propagate by procuring conveyance of, a
+covered work, and grant a patent license to some of the parties
+receiving the covered work authorizing them to use, propagate, modify
+or convey a specific copy of the covered work, then the patent license
+you grant is automatically extended to all recipients of the covered
+work and works based on it.
+
+  A patent license is &quot;discriminatory&quot; if it does not include within
+the scope of its coverage, prohibits the exercise of, or is
+conditioned on the non-exercise of one or more of the rights that are
+specifically granted under this License.  You may not convey a covered
+work if you are a party to an arrangement with a third party that is
+in the business of distributing software, under which you make payment
+to the third party based on the extent of your activity of conveying
+the work, and under which the third party grants, to any of the
+parties who would receive the covered work from you, a discriminatory
+patent license (a) in connection with copies of the covered work
+conveyed by you (or copies made from those copies), or (b) primarily
+for and in connection with specific products or compilations that
+contain the covered work, unless you entered into that arrangement,
+or that patent license was granted, prior to 28 March 2007.
+
+  Nothing in this License shall be construed as excluding or limiting
+any implied license or other defenses to infringement that may
+otherwise be available to you under applicable patent law.
+
+  12. No Surrender of Others&#39; Freedom.
+
+  If conditions are imposed on you (whether by court order, agreement or
+otherwise) that contradict the conditions of this License, they do not
+excuse you from the conditions of this License.  If you cannot convey a
+covered work so as to satisfy simultaneously your obligations under this
+License and any other pertinent obligations, then as a consequence you may
+not convey it at all.  For example, if you agree to terms that obligate you
+to collect a royalty for further conveying from those to whom you convey
+the Program, the only way you could satisfy both those terms and this
+License would be to refrain entirely from conveying the Program.
+
+  13. Use with the GNU Affero General Public License.
+
+  Notwithstanding any other provision of this License, you have
+permission to link or combine any covered work with a work licensed
+under version 3 of the GNU Affero General Public License into a single
+combined work, and to convey the resulting work.  The terms of this
+License will continue to apply to the part which is the covered work,
+but the special requirements of the GNU Affero General Public License,
+section 13, concerning interaction through a network will apply to the
+combination as such.
+
+  14. Revised Versions of this License.
+
+  The Free Software Foundation may publish revised and/or new versions of
+the GNU General Public License from time to time.  Such new versions will
+be similar in spirit to the present version, but may differ in detail to
+address new problems or concerns.
+
+  Each version is given a distinguishing version number.  If the
+Program specifies that a certain numbered version of the GNU General
+Public License &quot;or any later version&quot; applies to it, you have the
+option of following the terms and conditions either of that numbered
+version or of any later version published by the Free Software
+Foundation.  If the Program does not specify a version number of the
+GNU General Public License, you may choose any version ever published
+by the Free Software Foundation.
+
+  If the Program specifies that a proxy can decide which future
+versions of the GNU General Public License can be used, that proxy&#39;s
+public statement of acceptance of a version permanently authorizes you
+to choose that version for the Program.
+
+  Later license versions may give you additional or different
+permissions.  However, no additional obligations are imposed on any
+author or copyright holder as a result of your choosing to follow a
+later version.
+
+  15. Disclaimer of Warranty.
+
+  THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
+APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
+HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM &quot;AS IS&quot; WITHOUT WARRANTY
+OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
+IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
+ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+  16. Limitation of Liability.
+
+  IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS
+THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
+GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE
+USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF
+DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
+PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
+EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.
+
+  17. Interpretation of Sections 15 and 16.
+
+  If the disclaimer of warranty and limitation of liability provided
+above cannot be given local legal effect according to their terms,
+reviewing courts shall apply local law that most closely approximates
+an absolute waiver of all civil liability in connection with the
+Program, unless a warranty or assumption of liability accompanies a
+copy of the Program in return for a fee.
+
+                     END OF TERMS AND CONDITIONS
+
+            How to Apply These Terms to Your New Programs
+
+  If you develop a new program, and you want it to be of the greatest
+possible use to the public, the best way to achieve this is to make it
+free software which everyone can redistribute and change under these terms.
+
+  To do so, attach the following notices to the program.  It is safest
+to attach them to the start of each source file to most effectively
+state the exclusion of warranty; and each file should have at least
+the &quot;copyright&quot; line and a pointer to where the full notice is found.
+
+    &lt;one line to give the program&#39;s name and a brief idea of what it does.&gt;
+    Copyright (C) &lt;year&gt;  &lt;name of author&gt;
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
+
+Also add information on how to contact you by electronic and paper mail.
+
+  If the program does terminal interaction, make it output a short
+notice like this when it starts in an interactive mode:
+
+    &lt;program&gt;  Copyright (C) &lt;year&gt;  &lt;name of author&gt;
+    This program comes with ABSOLUTELY NO WARRANTY; for details type `show w&#39;.
+    This is free software, and you are welcome to redistribute it
+    under certain conditions; type `show c&#39; for details.
+
+The hypothetical commands `show w&#39; and `show c&#39; should show the appropriate
+parts of the General Public License.  Of course, your program&#39;s commands
+might be different; for a GUI interface, you would use an &quot;about box&quot;.
+
+  You should also get your employer (if you work as a programmer) or school,
+if any, to sign a &quot;copyright disclaimer&quot; for the program, if necessary.
+For more information on this, and how to apply and follow the GNU GPL, see
+&lt;https://www.gnu.org/licenses/&gt;.
+
+  The GNU General Public License does not permit incorporating your program
+into proprietary programs.  If your program is a subroutine library, you
+may consider it more useful to permit linking proprietary applications with
+the library.  If this is what you want to do, use the GNU Lesser General
+Public License instead of this License.  But first, please read
+&lt;https://www.gnu.org/licenses/why-not-lgpl.html&gt;.
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../asg_demo/Action_Sequence_Graph.html" class="btn btn-neutral float-left" title="Action Sequence Graph Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Rover_Setup_Notebook.html" class="btn btn-neutral float-right" title="Rover Model Explanation and Preliminaries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, United States Government as represented by the Administrator of the National Aeronautics and Space Administration. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
