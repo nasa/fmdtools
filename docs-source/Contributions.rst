@@ -107,7 +107,7 @@ Releases are made to fmdtools to push new features and bugfixes to the open-sour
 
 * It's important to test prior to release to ensure (1) bugs aren't being released that could have been caught easily with a test (2) test results are accurate to the current version of the code and (3) the documentation stays up to date with the release. Currently, this is managed via Bamboo CI, which automatically builds releases on the /dev branch.
 
-* Releases are made to the fmdtools GitHub repository using the ``Draft a new release`` button on the `Releases <https://github.com/nasa/fmdtools/releases>`_ page. Once this release is generated, GitHub Actions uploads it to the ` fmdtools PyPi repo <https://pypi.org/project/fmdtools/>`_ automatically.
+* Releases are made to the fmdtools GitHub repository using the ``Draft a new release`` button on the `Releases <https://github.com/nasa/fmdtools/releases>`_ page. Once this release is generated, GitHub Actions uploads it to the `fmdtools PyPi repo <https://pypi.org/project/fmdtools>`_ automatically.
 
 To ensure all of the steps of the release process are performed, follow the :download:`Release Checklist <release_checklist.csv>`, see below:
 
