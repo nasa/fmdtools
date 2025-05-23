@@ -20,6 +20,7 @@ from aerialdrm.base.aircraft.arch.holdpayload import HoldPayload
 
 
 from aerialdrm.hurricane.hurricaneenvironment import HurricaneEnvironment, properties, collections
+from aerialdrm.hurricane.hurricaneenvironment import HurricaneConditions
 
 
 from aerialdrm.base.aircraft.state import AircraftPosition
@@ -31,12 +32,20 @@ class HurricaneControlFlight(ControlFlight):
 
     def set_faultmode(self):
         super().set_faultmode()
+
         if 0.0 < self.electricity.s.charge <= 25.0:
             if self.s.pt > 0:
                 self.replan_mission()
             elif (not self.m.any_faults() and len(self.s.flightplan) > 1) or self.electricity.s.charge <= 15.0:
                 if not self.m.any_faults():
                     self.m.set_mode('descend')
+        dists = self.environment.ga.calc_dist_to_threats('speed')
+        min_dist = min([*dists.values()])
+        print(min_dist)
+        if min_dist < 20.0 and not self.m.any_faults():
+            self.m.set_mode('pause')
+        elif self.m.in_mode('pause'):
+            self.m.set_mode('flight')
 
     def replan_mission(self):
         ap = AircraftPosition()
@@ -60,6 +69,15 @@ class HurricaneControlFlight(ControlFlight):
 
         self.s.flightplan = (tuple(land_pt),)
         self.s.pt = 0
+
+
+class HurricaneAviate(Aviate):
+    __slots__ = ()
+
+    def dynamic_behavior(self, time):
+        super().dynamic_behavior(time)
+        self.environment.ga.points['self'].s.assign(self.trajectories.s, 'x', 'y', 'z')
+
 
 
 class HurricaneAircraftArchParameter(Parameter):
@@ -101,10 +119,11 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
                       s={'x': self.p.startpt[0], 'y': self.p.startpt[1]})
         self.add_flow('environment', HurricaneEnvironment)
 
+        self.add_fxn('conditions', HurricaneConditions, 'environment')
         self.add_fxn('control_flight', HurricaneControlFlight,
                      'trajectories', 'force', 'electricity', 'environment',
                      s={'flightplan': self.p.flightplan, 'height': self.p.height})
-        self.add_fxn('aviate', Aviate,
+        self.add_fxn('aviate', HurricaneAviate,
                      'trajectories', 'force', 'electricity', 'environment')
         m = {'fault_depletion':
              {'disturbances': (('electricity.s.charge', self.p.depletion), )}}
@@ -170,13 +189,15 @@ if __name__ == "__main__":
     from fmdtools.sim.sample import FaultDomain, FaultSample
 
     ha = HurricaneAircraftArchitecture()
+    fg = FunctionArchitectureGraph(ha)
+    fg.draw()
     res, hist = propagate.nominal(ha)
     pms = from_hist(hist)
     pm = pms['store_and_supply_ee']
 
     fd = FaultDomain(ha)
-    fd.add_fault('store_and_supply_ee', 'depletion', '1', disturbances=(('electricity.s.charge', 1.0), ))
-    fd.add_fault('store_and_supply_ee', 'depletion', '16', disturbances=(('electricity.s.charge', 16.0), ))
+    # fd.add_fault('store_and_supply_ee', 'depletion', '1', disturbances=(('electricity.s.charge', 1.0), ))
+    # fd.add_fault('store_and_supply_ee', 'depletion', '16', disturbances=(('electricity.s.charge', 16.0), ))
     fd.add_fault('store_and_supply_ee', 'depletion', '25', disturbances=(('electricity.s.charge', 25.0), ))
 
     fs = FaultSample(fd, phasemap=pm)
@@ -213,7 +234,12 @@ if __name__ == "__main__":
     fig, ax = hist.plot_trajectories('trajectories.s.x',
                                      'trajectories.s.y',
                                      'trajectories.s.z',
-                                     time_groups='nominal', time_ticks=1.0, fig=fig, ax=ax)
+                                     time_groups='nominal', time_ticks=2.0, fig=fig, ax=ax)
+
+    fig, ax = hist.plot_trajectories('environment.ga.points.uav.s.x',
+                                     'environment.ga.points.uav.s.y',
+                                     'environment.ga.points.uav.s.z',
+                                     time_groups='nominal', time_ticks=2.0, fig=fig, ax=ax)
 
 
     hist.plot_line('flows.electricity.s.charge',

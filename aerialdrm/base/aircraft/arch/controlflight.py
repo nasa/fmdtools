@@ -52,7 +52,7 @@ class ControlState(State):
 class ControlMode(Mode):
     """ControlFlight mode."""
 
-    opermodes = ('ascend', 'descend', 'flight', 'idle')
+    opermodes = ('ascend', 'descend', 'flight', 'idle', 'pause')
     exclusive = True
     fault_off = ()
     fault_loss = ()
@@ -168,7 +168,7 @@ class ControlFlight(Function):
 
     def flight_planning(self):
         """Determine flight mode in the middle of the flight plan."""
-        if self.trajectories.perc_traj.s.at_goal() and not self.s.is_end():
+        if self.trajectories.perc_traj.s.at_goal() and not self.s.is_end() and not self.m.in_mode('pause'):
             self.s.inc_goal()
 
     def set_goal(self):
@@ -180,7 +180,7 @@ class ControlFlight(Function):
             newgoal = [*self.des_traj.s.get('x', 'y'), 0.0]
         elif self.m.in_mode('flight'):
             newgoal = [*self.s.get_goal(), self.s.height]
-        elif self.m.in_mode('idle'):
+        elif self.m.in_mode('idle', 'pause'):
             newgoal = self.des_traj.s.get_loc()
         self.des_traj.s.assign(newgoal, 'goal_x', 'goal_y', 'goal_z')
 

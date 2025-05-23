@@ -6,7 +6,11 @@ Created on Thu Mar 20 14:55:43 2025
 """
 
 from aerialdrm.base.aircraft.arch.flows import AircraftEnvironment
+from aerialdrm.base.aircraft.state import AircraftPosition3
 from fmdtools.define.object.coords import Coords, CoordsParam
+from fmdtools.define.architecture.geom import GeomArchitecture
+from fmdtools.define.object.geom import GeomPoint, PointParam
+from fmdtools.define.block.function import Function
 import numpy as np
 
 
@@ -46,9 +50,69 @@ properties = {'disallowed': {'color': 'blue', 'proplab': 'disallowed', 'alpha': 
 collections = {'suitable': {"label": False, 'color': 'lightgreen'}}
 
 
+class ThreatState(AircraftPosition3):
+
+    buffer_speed: float = 10.0
+
+    def update_speed(self):
+        self.buffer_speed = self.get_vel()
+
+
+class ThreatParam(PointParam):
+
+    buffer_envelope: float = 1.0
+
+
+class Threat(GeomPoint):
+    container_p = ThreatParam
+    container_s = ThreatState
+
+    def update_position(self):
+        self.s.update_position(self.s.buffer_speed)
+
+
+from shapely import distance
+
+class HurricaneThreats(GeomArchitecture):
+
+    def init_architecture(self, **kwargs):
+        self.add_point('self', Threat)
+        s = {'buffer_speed': 5.0, 'x': 100, 'y': 0.0, 'z': 25.0,
+             'goal_x': 0.0, 'goal_y': 100.0, 'goal_z': 25.0}
+        self.add_point("uav", Threat, s=s)
+
+    def update_positions(self):
+        for threatname, threat in self.points.items():
+            if threatname != 'self':
+                threat.update_position()
+
+    def calc_dist_to_threats(self, shape='envelope'):
+        dists = {}
+        self_envelope = self.points['self'].get_shape(shape)
+        for threatname, threat in self.points.items():
+            if threatname != 'self':
+                threat_envelope = threat.get_shape(shape)
+                dists[threatname] = distance(self_envelope, threat_envelope)
+        return dists
+
 class HurricaneEnvironment(AircraftEnvironment):
 
     coords_c = HurricaneCoords
+    arch_ga = HurricaneThreats
+
+    def show(self, *args, **kwargs):
+        fig, ax = self.c.show(properties=properties, collections=collections,
+                              coll_overlay=False)
+        self.ga.show(fig=fig, ax=ax)
+        return fig, ax
+
+
+class HurricaneConditions(Function):
+    __slots__ = ('environment', )
+    flow_environment = HurricaneEnvironment
+
+    def dynamic_behavior(self, time):
+        self.environment.ga.update_positions()
 
 
 if __name__ == "__main__":
@@ -74,3 +138,19 @@ if __name__ == "__main__":
                       coll_overlay=False, border_offset=0.0)
 
     # he = HurricaneEnvironment()
+    ht = HurricaneThreats()
+    ht.show()
+
+    he = HurricaneEnvironment()
+    he.show()
+    he.ga.update_positions()
+    he.show()
+    he.ga.update_positions()
+    he.show()
+
+    hc = HurricaneConditions(track=['environment'])
+    from fmdtools.sim import propagate
+    res, hist = propagate.nominal(hc)
+
+    hist.plot_trajectories('environment.ga.points.uav.s.x',
+                           'environment.ga.points.uav.s.y')
