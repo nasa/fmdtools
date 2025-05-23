@@ -77,6 +77,25 @@ class Geom(BaseObject):
             setattr(self, buffer, self.shape.buffer(rad))
         self.init_track(track=track)
 
+    def get_shape(self, shapename='shape'):
+        shape = self.shapely_class(*self.get_args())
+        if shapename == 'shape':
+            return shape
+        else:
+            argname = 'buffer_'+shape
+            if hasattr(self.p, argname):
+                arg = self.p[argname]
+            elif hasattr(self.s, argname):
+                arg = self.s[argname]
+            else:
+                raise Exception(argname+" not in "+"Geom's "+str(self.s.__class__)
+                                +" or "+str(self.p.__class__))
+            return shape.buffer(arg)
+
+    def get_paramstates(self):
+        """Create dict of parameters and states."""
+        return {**self.p.asdict(), **self.s.asdict()}
+
     def at(self, pt, buffername='shape'):
         """
         Determine whether the point x, y is within the buffer 'buffername'.
@@ -327,6 +346,10 @@ class GeomPoint(Geom):
 
     container_p = PointParam
     shapely_class = Point
+
+    def get_args(self):
+        combodict = self.get_paramstates()
+        return [combodict[i] for i in ['x', 'y', 'z'] if i in combodict]
 
 
 class ExGeomState(State):
