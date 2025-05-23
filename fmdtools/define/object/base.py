@@ -644,7 +644,8 @@ class BaseObject(object):
         hist : History
             A history of each recorded block property over the given timerange.
         """
-        if hasattr(self, 'h') and self.h and len([*self.h.values()][0]) == len(timerange):
+        # removed condition: len([*self.h.values()][0]) == len(timerange)
+        if hasattr(self, 'h') and self.h:
             return self.h
         else:
             track = self.track
