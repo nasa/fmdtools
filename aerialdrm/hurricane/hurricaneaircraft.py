@@ -41,7 +41,7 @@ class HurricaneControlFlight(ControlFlight):
                     self.m.set_mode('descend')
         dists = self.environment.ga.calc_dist_to_threats('speed')
         min_dist = min([*dists.values()])
-        print(min_dist)
+
         if min_dist < 20.0 and not self.m.any_faults():
             self.m.set_mode('pause')
         elif self.m.in_mode('pause'):
