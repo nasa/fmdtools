@@ -13,7 +13,7 @@ import fmdtools.sim.propagate as prop
 
 from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
 from aerialdrm.base.aircraft.arch.aviate import Aviate
-from aerialdrm.base.aircraft.arch.controlflight import ControlFlight
+from aerialdrm.base.aircraft.arch.controlflight import ControlFlight, ControlState
 from aerialdrm.base.aircraft.arch.storeee import StoreAndSupplyElectricity
 from aerialdrm.base.aircraft.arch.perceiveenvironment import PerceiveEnvironment
 from aerialdrm.base.aircraft.arch.holdpayload import HoldPayload
@@ -25,10 +25,14 @@ from aerialdrm.hurricane.hurricaneenvironment import HurricaneConditions
 
 from aerialdrm.base.aircraft.state import AircraftPosition
 
+class HurricaneControlState(ControlState):
+    closest_dist: float = 100.0
+
 
 class HurricaneControlFlight(ControlFlight):
     __slots__ = ()
     flow_environment = HurricaneEnvironment
+    container_s = HurricaneControlState
 
     def set_faultmode(self):
         super().set_faultmode()
@@ -39,10 +43,10 @@ class HurricaneControlFlight(ControlFlight):
             elif (not self.m.any_faults() and len(self.s.flightplan) > 1) or self.electricity.s.charge <= 15.0:
                 if not self.m.any_faults():
                     self.m.set_mode('descend')
-        dists = self.environment.ga.calc_dist_to_threats('speed')
-        min_dist = min([*dists.values()])
+        dists = self.environment.ga.calc_dist_to_threats()
+        self.s.closest_dist = min([*dists.values()])
 
-        if min_dist < 20.0 and not self.m.any_faults():
+        if self.s.closest_dist <= 0.0 and not self.m.any_faults():
             self.m.set_mode('pause')
         elif self.m.in_mode('pause'):
             self.m.set_mode('flight')
@@ -165,7 +169,7 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
                 'crash': crash}
 
 
-def plot_flightpath(mdl, hist):
+def plot_flightpath(mdl, hist, **kwargs):
     fig, ax = mdl.flows['environment'].c.show(properties=properties,
                                               collections=collections)
     start = mdl.p.flightplan[0]
@@ -176,7 +180,7 @@ def plot_flightpath(mdl, hist):
     ly = [y[-1] for y in [*hist.get_vals('trajectories.s.y')][0]]
     ax.scatter(lx, ly, label="landing", color="black", marker='x')
     fig, ax = hist.plot_trajectories('trajectories.s.x', 'trajectories.s.y',
-                                     fig=fig, ax=ax)
+                                     fig=fig, ax=ax, **kwargs)
     consolidate_legend(ax)
     return fig, ax
 
@@ -192,6 +196,7 @@ if __name__ == "__main__":
     fg = FunctionArchitectureGraph(ha)
     fg.draw()
     res, hist = propagate.nominal(ha)
+    ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 10)
     pms = from_hist(hist)
     pm = pms['store_and_supply_ee']
 

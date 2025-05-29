@@ -11,6 +11,8 @@ from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.define.object.geom import GeomPoint, PointParam
 from fmdtools.define.block.function import Function
+
+from shapely import distance
 import numpy as np
 
 
@@ -61,6 +63,7 @@ class ThreatState(AircraftPosition3):
 class ThreatParam(PointParam):
 
     buffer_envelope: float = 1.0
+    buffer_safety: float = 25.0
 
 
 class Threat(GeomPoint):
@@ -70,8 +73,6 @@ class Threat(GeomPoint):
     def update_position(self):
         self.s.update_position(self.s.buffer_speed)
 
-
-from shapely import distance
 
 class HurricaneThreats(GeomArchitecture):
 
@@ -86,12 +87,12 @@ class HurricaneThreats(GeomArchitecture):
             if threatname != 'self':
                 threat.update_position()
 
-    def calc_dist_to_threats(self, shape='envelope'):
+    def calc_dist_to_threats(self, self_shape='envelope', threat_shape='safety'):
         dists = {}
-        self_envelope = self.points['self'].get_shape(shape)
+        self_envelope = self.points['self'].get_shape(self_shape)
         for threatname, threat in self.points.items():
             if threatname != 'self':
-                threat_envelope = threat.get_shape(shape)
+                threat_envelope = threat.get_shape(threat_shape)
                 dists[threatname] = distance(self_envelope, threat_envelope)
         return dists
 
