@@ -288,6 +288,10 @@ class Geom(BaseObject):
         consolidate_legend(ax, **kwargs)
         return fig, ax
 
+    def assign_from(self, hist, t, *states):
+        """Update Geom state from a given history and time."""
+        self.s.assign(hist.s.get_slice(t), *states)
+
 
 class PointParam(Parameter):
     """

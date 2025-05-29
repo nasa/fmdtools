@@ -208,6 +208,31 @@ class GeomArchitecture(Architecture):
             fig, ax = self.geoms()[geomname].show(ax=ax, fig=fig, z=z, **local_kwargs)
         return fig, ax
 
+    def show_from(self, hist, t, **kwargs):
+        """
+        Show the GeomArch at the given time in the provided history.
+
+        Parameters
+        ----------
+        hist : History
+            History of states for the GeomArchitecture.
+        t : int
+            Time in the history to show the state of the GeomArchitecture at.
+        **kwargs : kwargs
+            Keyword arguments to GeomArchitecture.show().
+
+        Returns
+        -------
+        fig : figure
+            Matplotlib figure object
+        ax : axis
+            Corresponding matplotlib axis
+        """
+        for flex_role in self.flexible_roles:
+            for geomname, geom in self.get_flex_role_objs(flex_role).items():
+                geom.assign_from(hist.get(flex_role+"."+geomname), t)
+        return self.show(**kwargs)
+
 
 class ExGeomArch(GeomArchitecture):
     """Example Geometric Architecture for testing etc."""
