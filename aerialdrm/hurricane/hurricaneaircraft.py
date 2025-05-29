@@ -28,11 +28,15 @@ from aerialdrm.base.aircraft.state import AircraftPosition
 class HurricaneControlState(ControlState):
     closest_dist: float = 100.0
 
+class HurricaneControlParameter(Parameter):
+    with_proxthreat: bool = True
+
 
 class HurricaneControlFlight(ControlFlight):
     __slots__ = ()
     flow_environment = HurricaneEnvironment
     container_s = HurricaneControlState
+    container_p = HurricaneControlParameter
 
     def set_faultmode(self):
         super().set_faultmode()
@@ -43,13 +47,14 @@ class HurricaneControlFlight(ControlFlight):
             elif (not self.m.any_faults() and len(self.s.flightplan) > 1) or self.electricity.s.charge <= 15.0:
                 if not self.m.any_faults():
                     self.m.set_mode('descend')
+
         dists = self.environment.ga.calc_dist_to_threats()
         self.s.closest_dist = min([*dists.values()])
-
-        if self.s.closest_dist <= 0.0 and not self.m.any_faults():
-            self.m.set_mode('pause')
-        elif self.m.in_mode('pause'):
-            self.m.set_mode('flight')
+        if self.p.with_proxthreat:
+            if self.s.closest_dist <= 0.0 and not self.m.any_faults():
+                self.m.set_mode('pause')
+            elif self.m.in_mode('pause'):
+                self.m.set_mode('flight')
 
     def replan_mission(self):
         ap = AircraftPosition()
@@ -91,6 +96,7 @@ class HurricaneAircraftArchParameter(Parameter):
     flightplan: tuple = ((10.0, 10.0), (50.0, 10.0), (50.0, 100.0), (100.0, 100.0))
     height: float = 25.0
     depletion: float = 25.0
+    with_proxthreat: bool = True
 
 
 class HurricaneAircraftArchitecture(FunctionArchitecture):
@@ -126,7 +132,8 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
         self.add_fxn('conditions', HurricaneConditions, 'environment')
         self.add_fxn('control_flight', HurricaneControlFlight,
                      'trajectories', 'force', 'electricity', 'environment',
-                     s={'flightplan': self.p.flightplan, 'height': self.p.height})
+                     s={'flightplan': self.p.flightplan, 'height': self.p.height},
+                     p={'with_proxthreat': self.p.with_proxthreat})
         self.add_fxn('aviate', HurricaneAviate,
                      'trajectories', 'force', 'electricity', 'environment')
         m = {'fault_depletion':
