@@ -36,6 +36,17 @@ Relationship with fmdtools
 
 FRDL has been developed as a specification for fmdtools models, such that a functional architecture developed in FRDL can be directly implemented as an fmdtools :class:`FunctionArchitecture`. While this correspondence is supported by the fmdtools data model, the display of these structures often veers from the FRDL specification (see: :ref:`fmdtools_graph_style`) due to limitations in the graphical libraries fmdtools uses to display architectures. Additionally, fmdtools does not currently support defining/displaying the annotations in frdl, showing only the graph structures instead. One of the development goals for fmdtools is thus to bring these features of FRDL into the library, as well as provide an interface for translating externally-supplied FRDL models into fmdtools Architecture classes.
 
+Intro to FRDL
+-------------
+
+A helpful brief introduction to FRDL is provided in the `Intro to FRDL <Intro_to_frdl.md>`_ presentation (:download:`download slides as pdf <Intro_to_frdl.pdf>`).
+
+.. toctree::
+   :hidden:
+   
+   Intro_to_frdl.md
+
+
 Specification
 ^^^^^^^^^^^^^
 
@@ -579,7 +590,7 @@ To illustrate how FRDL can better clarify the dynamic behavior of a system in th
 
 .. figure:: figures/frdl/examples/bread/fbed_diagram.svg
    :width: 500
-   :alt: EMS model of the baking bread.
+   :alt: EMS model of baking bread.
 
 The behavior of this model, as noted in the diagram, is ambiguous because it is not clear whether the process is continuous or discrete. In the discrete interpretation, a baker may place a single loaf of bread in the oven, after which they take the bread out. As a result, we can assume that (in the context of failure propagation), if there is a failure to break bread, the main effect will be that the bread to be exported will be unbaked. This well-represented in the spacio-temporal representation of how flows connect flows. In the continuous interpretation, on the other hand, the dough is continuously placed on a conveyor belt that moves the bread through the oven and exports it when it has been baked. As a result, in the context of failure analysis, if there is a failure to bake bread (caused, for example, by a loss of power to the unit), we may also not be able to import bread and incoming dough may be stopped prior to entering the oven.
 
@@ -611,7 +622,78 @@ While the structure of this model is similar to the previous flow, the interpret
 
 As a result, a failure in the ``Bread bread from dough`` function *could* not only lead to uncooked dough being exported (as well as the other effects for the discrete case), it could also lead to a blockage of incoming dough, which could ruin the batch if not attended to.
 
-This case shows how the detailed specification of behavioral interactions provided by the FRDL-based model can help provide a more concrete idea of how failures will propagate in a system.
+For example, consider the failure condition of a stuck conveyor, shown below in the continuous model.
+
+.. figure:: figures/frdl/examples/bread/conveyor_stuck_1.svg
+   :width: 500
+   :alt: Stuck conveyor in function diagram
+
+The analysis of causes and effects are shown below:
+
+Effects Analysis
+''''''''''''''''
+
+For the first step of effects analysis, the potential effects on flows are identified as shown below:
+
+.. figure:: figures/frdl/examples/bread/conveyor_stuck_2.svg
+   :width: 500
+   :alt: Effects analysis step 1
+
+As shown, there are potential effects for each flow--both expected (change in flow of bread/dough) and potentially unexpected (adverse current draw).
+
+For the second step, the effects on function behaviors are identified:
+
+.. figure:: figures/frdl/examples/bread/conveyor_stuck_3.svg
+   :width: 500
+   :alt: Effects analysis step 2
+
+As shown, this gets us to the system boundary of the model in terms of input/output functions. We can also identify some some effects to the instantiating function from the passing of time (dough likely to burn).
+
+This process can continue as long as there are more potential effects to uncover. We continue tracing the effects for one more step below:
+
+.. figure:: figures/frdl/examples/bread/conveyor_stuck_4.svg
+   :width: 500
+   :alt: Effects analysis step 3
+
+As shown, if the electricity draw is too high, a circuit would be blown, which would essentially stop the machine. 
+
+One thing to note is that the more of these steps are undergone, the less directly plausible the effects are expected to be--in this case the effect of "elements turned off" relies on the circuit being blown, which itself relies on the current draw being high enough to blow the circuit. It is thus important to keep track of these sorts of assumptions as the analysis is performed, so there is an idea of which effects are more or less likely/plausible.
+
+Causal Analysis
+'''''''''''''''
+
+For the first step of causal analysis, the potential effects on flows are shown below:
+
+.. figure:: figures/frdl/examples/bread/conveyor_stuck_cause1.svg
+   :width: 500
+   :alt: Causal analysis step 1.
+
+As shown, causes are identified for each flow. We can note the plausibility of these causal mechanisms (dough jamming seeming less likely than a power supply cut).
+
+For the second step, these causes can be further traced to functions:
+
+.. figure:: figures/frdl/examples/bread/conveyor_stuck_cause2.svg
+   :width: 500
+   :alt: Causal analysis step 2.
+
+This is about as far as the analysis can go for causal analysis with this diagram. That said, many more potential causes (and effects) could be delineated if the Function-in-Context Diagram shown here was further broken up into a Function Architecture Diagram, since more details about how the conveyor works would be provided.
+
+Summary
+'''''''
+
+The results of the FRDL-based hazard analysis procedure for the "Mechanical Conveyor Stuck" condition are shown below.
+
++-------------------------+-----------------------------+--------------------------------------------------------------------------------+-----------------------------------------------------+
+| Function                + Failure Condition           +     Effects                                                                    +       Causes                                        |
++-------------------------+-----------------------------+--------------------------------------------------------------------------------+-----------------------------------------------------+
+| Break Bread from Dough  + Mechanical Conveyor Stuck   + Adverse current draw, potential to blow circuit and shut off conveyor          + Power supply cut from power line                    |
+|                         +                             +                                                                                +                                                     |
+|                         +                             + Dough not moved in, causing blocked production and potential to overflow input + Dough jamming conveyor, adverse dough consistency   |
+|                         +                             +                                                                                +                                                     |
+|                         +                             + Bread not moved out                                                            + Bread blocking conveyor, piled up loaves at export  |
++-------------------------+-----------------------------+--------------------------------------------------------------------------------+-----------------------------------------------------+
+
+This table just shows the results of this procedure. At this point, it could be given further columns (e.g., severity, occurrence, detection, phases, assumptions, etc.) depending on what is desired by the relevant hazard analysis standard or process (e.g., FMEA, FHA, HARA, etc.), which would proceed as usual.
 
 
 Circuit 
