@@ -149,4 +149,4 @@ For causes, run through this process in reverse. See [FRDL/Specification/Usage/A
 
 - ["Defining A Modelling Language to Support Functional Hazard Assessment"](https://ntrs.nasa.gov/citations/20240006675) is the conference paper that initially defined the FRDL and describes some of the rationale for its development
     - Conference presentation [here](https://ntrs.nasa.gov/citations/20240010880)
-    - A revised journal draft that is up-to-date with FRDL 0.7 (which is in review) may be provided upon request
+    - A revised journal draft that is up-to-date with FRDL 0.7.1 (which is in review) may be provided upon request

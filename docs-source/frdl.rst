@@ -3,7 +3,7 @@
 FRDL 
 ====
 
-Functional Reasoning Design Language, Version 0.7
+Functional Reasoning Design Language, Version 0.7.1
 
 Overview
 ^^^^^^^^

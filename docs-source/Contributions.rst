@@ -47,7 +47,7 @@ Development of fmdtools uses a two-track development model, in which contributio
 
 - An internal bitbucket, ``origin``, where NASA coordination, development, and continuous integration takes place,
 - A public GitHub, ``public``, where collaboration with outside developers takes place (and where documentation is hosted), and 
-- A PyPI repository, which contains stable versions of fmdtools which can be readily installed via ``pip``. This repository is automatically updated when a new version is released on GithHub.
+- A PyPI repository, which contains stable versions of fmdtools which can be readily installed via ``pip``. This repository is automatically updated when a new version is released on GitHub.
 - The fmdtools GitHub Pages site, which updates from the ``gh-pages`` branch.
 
 The fmdtools team is responsible for coordinating the development between the internal and external git repositories. Managing multiple repositories can best be coordinated by:
@@ -171,7 +171,7 @@ In modules and scripts, it is best practice to use the following format for the 
 	"""
 	<One-line software description here>
 
-	<Futher module-level docstring information, if needed>
+	<Further module-level docstring information, if needed>
 
 	Copyright © 2024, United States Government, as represented by the Administrator
 	of the National Aeronautics and Space Administration. All rights reserved.
