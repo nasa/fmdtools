@@ -681,25 +681,23 @@ This is about as far as the analysis can go for causal analysis with this diagra
 Summary
 '''''''
 
-The results of the FRDL-based hazard analysis procedure for the "Mechanical Conveyor Stuck" condition are shown below.
+The results of the FRDL-based hazard analysis procedure for the "Short" condition are shown below. 
 
 +-------------------------+-----------------------------+--------------------------------------------------------------------------------+-----------------------------------------------------+
 | Function                + Failure Condition           +     Effects                                                                    +       Causes                                        |
 +-------------------------+-----------------------------+--------------------------------------------------------------------------------+-----------------------------------------------------+
-| Break Bread from Dough  + Mechanical Conveyor Stuck   + Adverse current draw, potential to blow circuit and shut off conveyor          + Power supply cut from power line                    |
+| Bake  Bread from Dough  + Mechanical Conveyor Stuck   + Adverse current draw, potential to blow circuit and shut off conveyor          + Power supply cut from power line                    |
 |                         +                             +                                                                                +                                                     |
 |                         +                             + Dough not moved in, causing blocked production and potential to overflow input + Dough jamming conveyor, adverse dough consistency   |
 |                         +                             +                                                                                +                                                     |
 |                         +                             + Bread not moved out                                                            + Bread blocking conveyor, piled up loaves at export  |
 +-------------------------+-----------------------------+--------------------------------------------------------------------------------+-----------------------------------------------------+
 
-This table just shows the results of this procedure. At this point, it could be given further columns (e.g., severity, occurrence, detection, phases, assumptions, etc.) depending on what is desired by the relevant hazard analysis standard or process (e.g., FMEA, FHA, HARA, etc.), which would proceed as usual.
-
 
 Circuit 
 """""""
 
-To illustrated how FRDL can better represent coupled technical behaviors in conventional engineered systems, this section provides an example of representing an electric power system. An EMS-based model of this system could look as shown below:
+To illustrated how FRDL can better represent coupled technical behaviors in conventional engineered systems, this section provides an example of representing an electric power system. The source draw.io file for this example is provided :download:`here <../docs-source/figures/frdl/examples/circuit/circuit_models.drawio>`. An EMS-based model of this system could look as shown below:
 
 .. figure:: figures/frdl/examples/circuit/fbed_circuit.svg
    :width: 500
@@ -715,8 +713,84 @@ In contrast, an FRDL function architecture diagram of this system is shown below
 
 As shown, this model provides more detail about how the flow of electricity propagates behaviors throughout the system. In particular, both the forward flow of voltage from the source to the sinks and the reverse flow of current from the sinks to the source are provided. Similarly, there is now a more informed representation of the dynamics of the system--that the functions are activated and deactivated by the new voltage applied initially by the ``Import EE`` function. Thus, analyzing a short in the ``Store EE`` function in this model would lead to a more-informed idea of how behavior would propagate in the circuit--not just propagating forward (via the voltage activations) to degrade the supply of electricity to the load, but also propagating backwards via current activations.
 
-The source draw.io file for this example is provided :download:`here <../docs-source/figures/frdl/examples/circuit/circuit_models.drawio>`.
+Below this is illustrated in the hazard analysis of a short in the "Modulate EE" function, shown below:
 
+.. figure:: figures/frdl/examples/circuit/frdl_circuit_0.svg
+   :width: 500
+   :alt: FRDL model of an electric power system with a short in the Modulate EE function.
+
+The next subsections show how the FRDL-based hazard analysis procedure can be used to analyze the effects and causes of this hazard, resulting in a summary capturing the corresponding hazard table information.
+
+Effects Analysis
+''''''''''''''''
+
+In the first step of the analysis procedure, the effect on flows is evaluated:
+
+.. figure:: figures/frdl/examples/circuit/frdl_circuit_1.svg
+   :width: 500
+   :alt: Effects analysis of the short scenario, step 1.
+
+As shown, the output of "Modulate EE" produces no voltage, since the power is now moving through the "Modulate EE" function. This further results in increased current draw though the power input.
+
+In the second step, further effects on functions are evaluated:
+
+.. figure:: figures/frdl/examples/circuit/frdl_circuit_2.svg
+   :width: 500
+   :alt: Effects analysis of the short scenario, step 2.
+
+As shown, the high current draw can cause a depletion of energy storage, as well as a burn-out of the upstream power supply. It also results in a lack of electrical energy exported.
+
+This results in further changes to electricity flows, shown below:
+
+.. figure:: figures/frdl/examples/circuit/frdl_circuit_3.svg
+   :width: 500
+   :alt: Effects analysis of the short scenario, step 3.
+
+As shown, because the upstream circuitry has been burnt out, it no longer provides voltage. 
+
+This results in further downstream effects, combined in a single diagram below for brevity:
+
+.. figure:: figures/frdl/examples/circuit/frdl_circuit_4.svg
+   :width: 500
+   :alt: Effects analysis of the short scenario, step 4.
+
+Causal Analysis
+'''''''''''''''
+
+The causal analysis for the circuit is much simpler. The first step is shown below:
+
+.. figure:: figures/frdl/examples/circuit/frdl_circuit_cause1.svg
+   :width: 500
+   :alt: Causal analysis of the short scenario, step 1.
+
+As shown, the main identified flow effect is too high of voltage being applied, causing increased heat from the underlying component, resulting in the circuit melting and their being a short.
+
+This condition is further propagated in step 2, below:
+
+.. figure:: figures/frdl/examples/circuit/frdl_circuit_cause2.svg
+   :width: 500
+   :alt: Causal analysis of the short scenario, step 2.
+
+As shown, the increased voltage can result from too high of a voltage input to the entire circuit, or the voltage being provided from the "Store EE" function at too high a level. This causal analysis was fairly simple, but it shows some potential flaws in our model--we predict that the "Modulate EE" function could heat up or down depending on its current draw, but the only heat moving through the model is exported from the "Convert EE to HE" function.
+
+If these functions are co-located, it is likely that heat could additionally flow between them, resulting in similar faults throughout the system. It could also be the case that this heat is adequately evacuated effectively via the "Export HE" function, heat-related short faults. Addressing this could mean adding more heat flows to support the analysis, an exercise that is left to the reader.
+
+Summary
+'''''''
+
+The results of the FRDL-based hazard analysis procedure for the "Mechanical Conveyor Stuck" condition are shown below.
+
++-------------------------+-----------------------------+--------------------------------------------------------------------------------+-----------------------------------------------------+
+| Function                + Failure Condition           +     Effects                                                                    +       Causes                                        |
++-------------------------+-----------------------------+--------------------------------------------------------------------------------+-----------------------------------------------------+
+| Modulate Electricity    + Short                       + Voltage out reduced (likely to zero), meaning no EE exported                   +  Input voltage too high (from source or battery)    |
+|                         +                             +                                                                                +                                                     |
+|                         +                             + High current draw, draining the "Store EE" function and blowing upstream fuse  +                                                     |
+|                         +                             +                                                                                +                                                     |
+|                         +                             + Said blown fuse reduces input voltage to zero, resulting in an open circuit    +                                                     |
++-------------------------+-----------------------------+--------------------------------------------------------------------------------+-----------------------------------------------------+
+
+As shown, an array of effects were identified using the procedure, as well one main cause.
 
 Further Examples
 """"""""""""""""
