@@ -76,7 +76,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-2">Version: 2.1.2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -646,6 +646,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#what-can-you-use-frdl-for">What can you use FRDL for?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#why-frdl">Why FRDL?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#relationship-with-fmdtools">Relationship with fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#intro-to-frdl">Intro to FRDL</a><ul class="simple">
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#specification">Specification</a><ul>
@@ -720,7 +723,7 @@
              
   <section id="frdl">
 <span id="id1"></span><h1>FRDL<a class="headerlink" href="#frdl" title="Link to this heading"></a></h1>
-<p>Functional Reasoning Design Language, Version 0.7</p>
+<p>Functional Reasoning Design Language, Version 0.7.1</p>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>FRDL stands for the Functional Reasoning Design Language, which is a graphical language for describing the functional architecture of a system. A functional architecture (often known as a <a class="reference external" href="https://en.wikipedia.org/wiki/Function_model">functional model</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Functional_decomposition">functional decomposition</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Functional_flow_block_diagram">function-flow block diagram</a>)  describes the high-level functionalities (or, functions) that are to be embodied by a system, along with the interactions between these functionalities. Diagrams of functional architectures (like those enabled by FRDL) enable <em>functional reasoning</em> by providing a means to abstract away irrelevent aspects of system structure and behavior while focusing on the key (that is, functional) elements. Functional reasoning can support a range of design and analysis activities by encouraging clear reasoning about how a system operates and what it is supposed to do at a high level. This can facilitate many important design and analysis activities, including <a class="reference external" href="https://link.springer.com/book/10.1007/978-1-84628-319-2">product design (and especially redesign)</a>, behavioral simulation, and <a class="reference external" href="https://en.wikipedia.org/wiki/Failure_mode,_effects,_and_criticality_analysis">hazard analysis</a>.</p>
@@ -742,6 +745,12 @@
 <section id="relationship-with-fmdtools">
 <h3>Relationship with fmdtools<a class="headerlink" href="#relationship-with-fmdtools" title="Link to this heading"></a></h3>
 <p>FRDL has been developed as a specification for fmdtools models, such that a functional architecture developed in FRDL can be directly implemented as an fmdtools <code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitecture</span></code>. While this correspondence is supported by the fmdtools data model, the display of these structures often veers from the FRDL specification (see: <a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-graph-style"><span class="std std-ref">fmdtools.analyze.graph.style</span></a>) due to limitations in the graphical libraries fmdtools uses to display architectures. Additionally, fmdtools does not currently support defining/displaying the annotations in frdl, showing only the graph structures instead. One of the development goals for fmdtools is thus to bring these features of FRDL into the library, as well as provide an interface for translating externally-supplied FRDL models into fmdtools Architecture classes.</p>
+</section>
+<section id="intro-to-frdl">
+<h3>Intro to FRDL<a class="headerlink" href="#intro-to-frdl" title="Link to this heading"></a></h3>
+<p>A helpful brief introduction to FRDL is provided in the <a class="reference external" href="Intro_to_frdl.md">Intro to FRDL</a> presentation (<code class="xref download docutils literal notranslate"><span class="pre">download</span> <span class="pre">slides</span> <span class="pre">as</span> <span class="pre">pdf</span></code>).</p>
+<div class="toctree-wrapper compound">
+</div>
 </section>
 </section>
 <section id="specification">
@@ -970,12 +979,12 @@
 <p>FRDL can be used to analyze behavioral interactions to improve the understanding of system behavior and analyze hazardous scenarios. However, analyzing nominal scenario(s)–scenarios where the system is behaving as designed–can assist with model refinement, help catch design hazards, and support hazard analysis by giving one an idea of the system context (e.g., state and behavior information) of the hazards at particular times, phases, and states of system operation.</p>
 <p>To analyze a nominal scenario, the procedure is to:</p>
 <ol class="arabic simple">
-<li><p>Begin at the starting block defined by the <a href="#id2"><span class="problematic" id="id3">`Dynamics Tag`_</span></a> with a starting identifier.</p></li>
+<li><p>Begin at the starting block defined by the <a href="#id6"><span class="problematic" id="id7">`Dynamics Tag`_</span></a> with a starting identifier.</p></li>
 <li><p>Determine what the initial state, condition, behavior, and activity (active or inactive) of the block will be at the given time with its given conditions.</p></li>
 <li><p>Run through conditions in the block that cause outgoing activations as well as propagations from the block to identify how this will affect other blocks.</p></li>
 <li><p>Run through steps 2-3 for each of the active blocks.</p></li>
 <li><p>Increment to the next meaningful time-step and run through steps 2-4 for the blocks with continuous behavior over time time-step.</p></li>
-<li><p>End when all functions are inactive or at the ending time defined by the <a href="#id4"><span class="problematic" id="id5">`Dynamics Tag`_</span></a> defined in the ending block.</p></li>
+<li><p>End when all functions are inactive or at the ending time defined by the <a href="#id8"><span class="problematic" id="id9">`Dynamics Tag`_</span></a> defined in the ending block.</p></li>
 </ol>
 <p>The hazard analysis procedure builds on nominal scenario analysis by injecting hazardous conditions in the relevant model entities and seeing how these conditions affect the behaviors, states, and conditions of the system. The hazard analysis procedure is thus to:</p>
 <ol class="arabic simple">
@@ -1157,7 +1166,7 @@
 <h4>Bread Making<a class="headerlink" href="#bread-making" title="Link to this heading"></a></h4>
 <p>To illustrate how FRDL can better clarify the dynamic behavior of a system in the context of analysis, consider the process of baking bread. The source draw.io file for this example is provided <a class="reference download internal" download="" href="../_downloads/17e6e276ba963e643711b513a0107e6c/bread_making.drawio"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>. In a typical EMS-based failure model, the designer may represent the system with the following structure.</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/fbed_diagram.svg"><img alt="EMS model of the baking bread." src="../_images/fbed_diagram.svg" width="500" /></a>
+<a class="reference internal image-reference" href="../_images/fbed_diagram.svg"><img alt="EMS model of baking bread." src="../_images/fbed_diagram.svg" width="500" /></a>
 </figure>
 <p>The behavior of this model, as noted in the diagram, is ambiguous because it is not clear whether the process is continuous or discrete. In the discrete interpretation, a baker may place a single loaf of bread in the oven, after which they take the bread out. As a result, we can assume that (in the context of failure propagation), if there is a failure to break bread, the main effect will be that the bread to be exported will be unbaked. This well-represented in the spacio-temporal representation of how flows connect flows. In the continuous interpretation, on the other hand, the dough is continuously placed on a conveyor belt that moves the bread through the oven and exports it when it has been baked. As a result, in the context of failure analysis, if there is a failure to bake bread (caused, for example, by a loss of power to the unit), we may also not be able to import bread and incoming dough may be stopped prior to entering the oven.</p>
 <p>In FRDL, these two interpretations would lead to models with different propagation arrows as well as flow tags. The discrete case would be represented as shown below:</p>
@@ -1182,11 +1191,77 @@
 <li><p>When bread is ready from the <code class="docutils literal notranslate"><span class="pre">Bake</span> <span class="pre">Bread</span> <span class="pre">from</span> <span class="pre">Dough</span></code> function, it leaves the function and gets exported, activating the <code class="docutils literal notranslate"><span class="pre">Export</span> <span class="pre">Bread</span></code> function. This function ends the scenario after 100 time-steps.</p></li>
 </ul>
 <p>As a result, a failure in the <code class="docutils literal notranslate"><span class="pre">Bread</span> <span class="pre">bread</span> <span class="pre">from</span> <span class="pre">dough</span></code> function <em>could</em> not only lead to uncooked dough being exported (as well as the other effects for the discrete case), it could also lead to a blockage of incoming dough, which could ruin the batch if not attended to.</p>
-<p>This case shows how the detailed specification of behavioral interactions provided by the FRDL-based model can help provide a more concrete idea of how failures will propagate in a system.</p>
+<p>For example, consider the failure condition of a stuck conveyor, shown below in the continuous model.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_1.svg"><img alt="Stuck conveyor in function diagram" src="../_images/conveyor_stuck_1.svg" width="500" /></a>
+</figure>
+<p>The analysis of causes and effects are shown below:</p>
+<section id="effects-analysis">
+<h5>Effects Analysis<a class="headerlink" href="#effects-analysis" title="Link to this heading"></a></h5>
+<p>For the first step of effects analysis, the potential effects on flows are identified as shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_2.svg"><img alt="Effects analysis step 1" src="../_images/conveyor_stuck_2.svg" width="500" /></a>
+</figure>
+<p>As shown, there are potential effects for each flow–both expected (change in flow of bread/dough) and potentially unexpected (adverse current draw).</p>
+<p>For the second step, the effects on function behaviors are identified:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_3.svg"><img alt="Effects analysis step 2" src="../_images/conveyor_stuck_3.svg" width="500" /></a>
+</figure>
+<p>As shown, this gets us to the system boundary of the model in terms of input/output functions. We can also identify some some effects to the instantiating function from the passing of time (dough likely to burn).</p>
+<p>This process can continue as long as there are more potential effects to uncover. We continue tracing the effects for one more step below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_4.svg"><img alt="Effects analysis step 3" src="../_images/conveyor_stuck_4.svg" width="500" /></a>
+</figure>
+<p>As shown, if the electricity draw is too high, a circuit would be blown, which would essentially stop the machine.</p>
+<p>One thing to note is that the more of these steps are undergone, the less directly plausible the effects are expected to be–in this case the effect of “elements turned off” relies on the circuit being blown, which itself relies on the current draw being high enough to blow the circuit. It is thus important to keep track of these sorts of assumptions as the analysis is performed, so there is an idea of which effects are more or less likely/plausible.</p>
+</section>
+<section id="causal-analysis">
+<h5>Causal Analysis<a class="headerlink" href="#causal-analysis" title="Link to this heading"></a></h5>
+<p>For the first step of causal analysis, the potential effects on flows are shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_cause1.svg"><img alt="Causal analysis step 1." src="../_images/conveyor_stuck_cause1.svg" width="500" /></a>
+</figure>
+<p>As shown, causes are identified for each flow. We can note the plausibility of these causal mechanisms (dough jamming seeming less likely than a power supply cut).</p>
+<p>For the second step, these causes can be further traced to functions:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_cause2.svg"><img alt="Causal analysis step 2." src="../_images/conveyor_stuck_cause2.svg" width="500" /></a>
+</figure>
+<p>This is about as far as the analysis can go for causal analysis with this diagram. That said, many more potential causes (and effects) could be delineated if the Function-in-Context Diagram shown here was further broken up into a Function Architecture Diagram, since more details about how the conveyor works would be provided.</p>
+</section>
+<section id="summary">
+<h5>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h5>
+<p>The results of the FRDL-based hazard analysis procedure for the “Short” condition are shown below.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td rowspan="2"><p>Function</p></td>
+<td rowspan="2"><p>Failure Condition</p></td>
+<td rowspan="2"><p>Effects</p></td>
+<td rowspan="2"><p>Causes</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="6"><p>Bake  Bread from Dough</p></td>
+<td rowspan="6"><p>Mechanical Conveyor Stuck</p></td>
+<td rowspan="6"><p>Adverse current draw, potential to blow circuit and shut off conveyor</p>
+<p>Dough not moved in, causing blocked production and potential to overflow input</p>
+<p>Bread not moved out</p>
+</td>
+<td rowspan="6"><p>Power supply cut from power line</p>
+<p>Dough jamming conveyor, adverse dough consistency</p>
+<p>Bread blocking conveyor, piled up loaves at export</p>
+</td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+</tbody>
+</table>
+</section>
 </section>
 <section id="circuit">
 <h4>Circuit<a class="headerlink" href="#circuit" title="Link to this heading"></a></h4>
-<p>To illustrated how FRDL can better represent coupled technical behaviors in conventional engineered systems, this section provides an example of representing an electric power system. An EMS-based model of this system could look as shown below:</p>
+<p>To illustrated how FRDL can better represent coupled technical behaviors in conventional engineered systems, this section provides an example of representing an electric power system. The source draw.io file for this example is provided <a class="reference download internal" download="" href="../_downloads/1fc491a462b0cbe2a86f10fa469dbe59/circuit_models.drawio"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>. An EMS-based model of this system could look as shown below:</p>
 <figure class="align-default">
 <a class="reference internal image-reference" href="../_images/fbed_circuit.svg"><img alt="EMS model of an electric power system." src="../_images/fbed_circuit.svg" width="500" /></a>
 </figure>
@@ -1196,7 +1271,75 @@
 <a class="reference internal image-reference" href="../_images/frdl_circuit.svg"><img alt="FRDL model of an electric power system." src="../_images/frdl_circuit.svg" width="500" /></a>
 </figure>
 <p>As shown, this model provides more detail about how the flow of electricity propagates behaviors throughout the system. In particular, both the forward flow of voltage from the source to the sinks and the reverse flow of current from the sinks to the source are provided. Similarly, there is now a more informed representation of the dynamics of the system–that the functions are activated and deactivated by the new voltage applied initially by the <code class="docutils literal notranslate"><span class="pre">Import</span> <span class="pre">EE</span></code> function. Thus, analyzing a short in the <code class="docutils literal notranslate"><span class="pre">Store</span> <span class="pre">EE</span></code> function in this model would lead to a more-informed idea of how behavior would propagate in the circuit–not just propagating forward (via the voltage activations) to degrade the supply of electricity to the load, but also propagating backwards via current activations.</p>
-<p>The source draw.io file for this example is provided <a class="reference download internal" download="" href="../_downloads/1fc491a462b0cbe2a86f10fa469dbe59/circuit_models.drawio"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>.</p>
+<p>Below this is illustrated in the hazard analysis of a short in the “Modulate EE” function, shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_0.svg"><img alt="FRDL model of an electric power system with a short in the Modulate EE function." src="../_images/frdl_circuit_0.svg" width="500" /></a>
+</figure>
+<p>The next subsections show how the FRDL-based hazard analysis procedure can be used to analyze the effects and causes of this hazard, resulting in a summary capturing the corresponding hazard table information.</p>
+<section id="id3">
+<h5>Effects Analysis<a class="headerlink" href="#id3" title="Link to this heading"></a></h5>
+<p>In the first step of the analysis procedure, the effect on flows is evaluated:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_1.svg"><img alt="Effects analysis of the short scenario, step 1." src="../_images/frdl_circuit_1.svg" width="500" /></a>
+</figure>
+<p>As shown, the output of “Modulate EE” produces no voltage, since the power is now moving through the “Modulate EE” function. This further results in increased current draw though the power input.</p>
+<p>In the second step, further effects on functions are evaluated:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_2.svg"><img alt="Effects analysis of the short scenario, step 2." src="../_images/frdl_circuit_2.svg" width="500" /></a>
+</figure>
+<p>As shown, the high current draw can cause a depletion of energy storage, as well as a burn-out of the upstream power supply. It also results in a lack of electrical energy exported.</p>
+<p>This results in further changes to electricity flows, shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_3.svg"><img alt="Effects analysis of the short scenario, step 3." src="../_images/frdl_circuit_3.svg" width="500" /></a>
+</figure>
+<p>As shown, because the upstream circuitry has been burnt out, it no longer provides voltage.</p>
+<p>This results in further downstream effects, combined in a single diagram below for brevity:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_4.svg"><img alt="Effects analysis of the short scenario, step 4." src="../_images/frdl_circuit_4.svg" width="500" /></a>
+</figure>
+</section>
+<section id="id4">
+<h5>Causal Analysis<a class="headerlink" href="#id4" title="Link to this heading"></a></h5>
+<p>The causal analysis for the circuit is much simpler. The first step is shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_cause1.svg"><img alt="Causal analysis of the short scenario, step 1." src="../_images/frdl_circuit_cause1.svg" width="500" /></a>
+</figure>
+<p>As shown, the main identified flow effect is too high of voltage being applied, causing increased heat from the underlying component, resulting in the circuit melting and their being a short.</p>
+<p>This condition is further propagated in step 2, below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_cause2.svg"><img alt="Causal analysis of the short scenario, step 2." src="../_images/frdl_circuit_cause2.svg" width="500" /></a>
+</figure>
+<p>As shown, the increased voltage can result from too high of a voltage input to the entire circuit, or the voltage being provided from the “Store EE” function at too high a level. This causal analysis was fairly simple, but it shows some potential flaws in our model–we predict that the “Modulate EE” function could heat up or down depending on its current draw, but the only heat moving through the model is exported from the “Convert EE to HE” function.</p>
+<p>If these functions are co-located, it is likely that heat could additionally flow between them, resulting in similar faults throughout the system. It could also be the case that this heat is adequately evacuated effectively via the “Export HE” function, heat-related short faults. Addressing this could mean adding more heat flows to support the analysis, an exercise that is left to the reader.</p>
+</section>
+<section id="id5">
+<h5>Summary<a class="headerlink" href="#id5" title="Link to this heading"></a></h5>
+<p>The results of the FRDL-based hazard analysis procedure for the “Mechanical Conveyor Stuck” condition are shown below.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td rowspan="2"><p>Function</p></td>
+<td rowspan="2"><p>Failure Condition</p></td>
+<td rowspan="2"><p>Effects</p></td>
+<td rowspan="2"><p>Causes</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="6"><p>Modulate Electricity</p></td>
+<td rowspan="6"><p>Short</p></td>
+<td rowspan="6"><p>Voltage out reduced (likely to zero), meaning no EE exported</p>
+<p>High current draw, draining the “Store EE” function and blowing upstream fuse</p>
+<p>Said blown fuse reduces input voltage to zero, resulting in an open circuit</p>
+</td>
+<td rowspan="6"><p>Input voltage too high (from source or battery)</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+</tbody>
+</table>
+<p>As shown, an array of effects were identified using the procedure, as well one main cause.</p>
+</section>
 </section>
 <section id="further-examples">
 <h4>Further Examples<a class="headerlink" href="#further-examples" title="Link to this heading"></a></h4>

@@ -74,7 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="docs-source/Intro_to_fmdtools.html#version-2-1-2">Version: 2.1.2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="docs-source/Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -644,6 +644,9 @@
 <li class="toctree-l3"><a class="reference internal" href="docs-source/frdl.html#what-can-you-use-frdl-for">What can you use FRDL for?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs-source/frdl.html#why-frdl">Why FRDL?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs-source/frdl.html#relationship-with-fmdtools">Relationship with fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs-source/frdl.html#intro-to-frdl">Intro to FRDL</a><ul class="simple">
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="docs-source/frdl.html#specification">Specification</a><ul>
@@ -905,10 +908,10 @@
 </li>
       <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.geom.GeomArchitecture.add_poly">add_poly() (fmdtools.define.architecture.geom.GeomArchitecture method)</a>
 </li>
-      <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.ProblemArchitecture.add_problem">add_problem() (fmdtools.sim.search.ProblemArchitecture method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.ProblemArchitecture.add_problem">add_problem() (fmdtools.sim.search.ProblemArchitecture method)</a>
+</li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.sample.ParameterResultSample.add_res_reps">add_res_reps() (fmdtools.sim.sample.ParameterResultSample method)</a>
 </li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.sample.ParameterResultSample.add_res_scenario">add_res_scenario() (fmdtools.sim.sample.ParameterResultSample method)</a>
@@ -1009,14 +1012,6 @@
 </li>
       <li><a href="docs-source/fmdtools.define.html#fmdtools.define.base.array_x">array_x() (in module fmdtools.define.base)</a>
 </li>
-      <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.LineParam.as_args">as_args() (fmdtools.define.object.geom.LineParam method)</a>
-
-      <ul>
-        <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.PointParam.as_args">(fmdtools.define.object.geom.PointParam method)</a>
-</li>
-        <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.PolyParam.as_args">(fmdtools.define.object.geom.PolyParam method)</a>
-</li>
-      </ul></li>
       <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.base.Architecture.as_copy">as_copy (fmdtools.define.architecture.base.Architecture attribute)</a>
 
       <ul>
@@ -1058,6 +1053,8 @@
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.base.BaseContainer.asdict">asdict() (fmdtools.define.container.base.BaseContainer method)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.base.BaseContainer.assign">assign() (fmdtools.define.container.base.BaseContainer method)</a>
+</li>
+      <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.Geom.assign_from">assign_from() (fmdtools.define.object.geom.Geom method)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.assign_roles">assign_roles() (fmdtools.define.object.base.BaseObject method)</a>
 </li>
@@ -2331,6 +2328,14 @@
       </ul></li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.get_all_roles">get_all_roles() (fmdtools.define.object.base.BaseObject method)</a>
 </li>
+      <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.GeomLine.get_args">get_args() (fmdtools.define.object.geom.GeomLine method)</a>
+
+      <ul>
+        <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.GeomPoint.get_args">(fmdtools.define.object.geom.GeomPoint method)</a>
+</li>
+        <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.GeomPoly.get_args">(fmdtools.define.object.geom.GeomPoly method)</a>
+</li>
+      </ul></li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.get_att_roletype">get_att_roletype() (fmdtools.define.object.base.BaseObject method)</a>
 </li>
       <li><a href="docs-source/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.GraphInteractor.get_closest_point">get_closest_point() (fmdtools.analyze.graph.base.GraphInteractor method)</a>
@@ -2497,6 +2502,8 @@
 </li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.scenario.ParameterScenario.get_params">get_params() (fmdtools.sim.scenario.ParameterScenario method)</a>
 </li>
+      <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.Geom.get_paramstates">get_paramstates() (fmdtools.define.object.geom.Geom method)</a>
+</li>
       <li><a href="docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History.get_percentile_errhist">get_percentile_errhist() (fmdtools.analyze.history.History method)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.get_pfunc_for_dist">get_pfunc_for_dist() (in module fmdtools.define.container.rand)</a>
@@ -2550,6 +2557,8 @@
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.get_scipy_pmf">get_scipy_pmf() (in module fmdtools.define.container.rand)</a>
 </li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.sample.ParameterDomain.get_set_constraints">get_set_constraints() (fmdtools.sim.sample.ParameterDomain method)</a>
+</li>
+      <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.Geom.get_shape">get_shape() (fmdtools.define.object.geom.Geom method)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.base.SimParam.get_shift">get_shift() (fmdtools.define.block.base.SimParam method)</a>
 </li>
@@ -4332,8 +4341,6 @@
         <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitectureGraph.set_node_styles">(fmdtools.define.architecture.action.ActionArchitectureGraph method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.analyze.graph.html#fmdtools.analyze.graph.model.ExtModelGraph.set_nx_states">set_nx_states() (fmdtools.analyze.graph.model.ExtModelGraph method)</a>
 
       <ul>
@@ -4348,6 +4355,8 @@
         <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.function.FunctionArchitectureTypeGraph.set_nx_states">(fmdtools.define.architecture.function.FunctionArchitectureTypeGraph method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.Graph.set_pos">set_pos() (fmdtools.analyze.graph.base.Graph method)</a>
 
       <ul>
@@ -4407,6 +4416,8 @@
 </li>
       </ul></li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.coords.Coords.show_collection">show_collection() (fmdtools.define.object.coords.Coords method)</a>
+</li>
+      <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.geom.GeomArchitecture.show_from">show_from() (fmdtools.define.architecture.geom.GeomArchitecture method)</a>
 </li>
       <li><a href="docs-source/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.EdgeStyle.show_gv">show_gv() (fmdtools.analyze.graph.style.EdgeStyle method)</a>
 

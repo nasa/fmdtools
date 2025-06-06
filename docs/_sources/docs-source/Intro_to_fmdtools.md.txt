@@ -7,7 +7,7 @@ marp: true
 
 # Intro to resilience modeling, simulation, and visualization in Python with fmdtools.
 ### Author: Daniel Hulse 
-### Version: 2.1.2
+### Version: 2.1.3
 
 -----------------
 
@@ -93,7 +93,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
     - if you have a simulink/modelica model, you may just want to use built-in tools
 
 - You want to use this in production 
-    - fmdtools is Class E Software and thus mainly suitable for research (or, at least, we don't gaurantee it)
+    - fmdtools is Class E Software and thus mainly suitable for research (or, at least, we don't guarantee it)
     - Somewhat dynamic development history
 
 -----------------
@@ -338,7 +338,7 @@ See docs for: [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs-source/f
     - Systems-of-Systems modeling
     - Modeling Stochastic Behavior
     - ... and more
-- [Model Development Guide](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#model-development-best-practices): Has best practices for developing models in a strategic way (especially helpful for compelx models)
+- [Model Development Guide](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#model-development-best-practices): Has best practices for developing models in a strategic way (especially helpful for complex models)
 - Overview Paper: 
     - [Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., & Goebel, K. (2021). fmdtools: A fault propagation toolkit for resilience assessment in early design. International Journal of Prognostics and Health Management, 12(3).](http://papers.phmsociety.org/index.php/ijphm/article/view/2954)
  
