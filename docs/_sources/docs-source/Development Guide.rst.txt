@@ -20,13 +20,13 @@ The impetus for developing fmdtools was a lack of existing open-source tools to 
 
 - **Enabling a Model/Simulation-based hazard analysis paradigm** by allowing the iterative, consistent analysis of resilience through the design, implementation, and V\&V processes. The traditional hazard assessment process is a manual, expert-driven approach that is inefficient to iterate on or change as a the design changes or assumptions are validated (or invalidated). In contrast, because all assumptions in fmdtools are represented as code, they can easily be modified as assumptions change while maintaining the overall integrity of the analysis. Furthermore, simulations in fmdtools can be efficiently and consistently be varied to analyze a system in more detail or in different configurations.
 
-While this libary primarily provides code structures, a major objective of this library is further to enable these techniques to be used in a graphical simulation tool for hazard assessment.
+While this library primarily provides code structures, a major objective of this library is further to enable these techniques to be used in a graphical simulation tool for hazard assessment.
 
 
 Introductory Tutorial
 ^^^^^^^^^^^^^^^^^^^^^
 
-**The best place to start** to getting acquanted with basic syntax and functionality is the `Intro to fmdtools <Intro_to_fmdtools.md>`_ workshop (:download:`download slides as pdf <Intro_to_fmdtools.pdf>`), which uses the `Pump` example to introduce the overall structure and use of fmdtools. Other models are further helpful to demonstrate the full variety of methods/approaches supported in fmdtools and their applcation for more advanced use-cases.
+**The best place to start** to getting acquainted with basic syntax and functionality is the `Intro to fmdtools <Intro_to_fmdtools.md>`_ workshop (:download:`download slides as pdf <Intro_to_fmdtools.pdf>`), which uses the `Pump` example to introduce the overall structure and use of fmdtools. Other models are further helpful to demonstrate the full variety of methods/approaches supported in fmdtools and their application for more advanced use-cases.
 
 .. toctree::
    :hidden:
@@ -90,7 +90,7 @@ You can use the glossary as a reference to understand basic simulation and analy
 		A specific task to be performed by an :term:`agent` used to represent human/autonomous operations. May be specified by extending the :class:`~fmdtools.define.block.action.Action` class and added to a :class:`~fmdtools.define.block.function.Function` as a part of an Action Sequence Graph :class:`~fmdtools.define.architecture.action.ActionArchitecture`.
 	
 	Rate
-		The expected occurence (frequency) of a given :term:`mode`, which may be specified in a number of ways in the :class:`fmdtools.define.container.mode.Mode` class.
+		The expected occurrence (frequency) of a given :term:`mode`, which may be specified in a number of ways in the :class:`fmdtools.define.container.mode.Mode` class.
 		
 	Cost
 		A metric used to define severity of a scenario. While cost is defined in a monetary sense, it should often be defined holistically to account for indirect costs and externalities (e.g., safety, disruption, etc). One of the default outputs from :meth:`fmdtools.define.block.base.Simulable.find_classification()` for models or blocks.
@@ -130,13 +130,13 @@ You can use the glossary as a reference to understand basic simulation and analy
 		The state of a :class:`~fmdtools.define.block.base.Simulable` at the final time-step of a simulation.
 	
 	FMEA
-		A table outlining the risks of hazardous :term:`scenario` s in terms of their rate, severity, and expected risk. By default, the :mod:`~fmdtools.analyze.tabulate` module produces cost-based FMEAS, with the metrics of interest being :term:`rate`, :term:`cost`, and :term:`expected cost`, however these functions can be tailored to the metrics of interest.
+		A table outlining the risks of hazardous :term:`scenario` s in terms of their rate, severity, and expected risk. By default, the :mod:`~fmdtools.analyze.tabulate` module produces cost-based FMEAs, with the metrics of interest being :term:`rate`, :term:`cost`, and :term:`expected cost`, however these functions can be tailored to the metrics of interest.
 	
 	Behavior Over Time
 		How a the states of a system unfold over time. Defined using :term:`behavior`.
 	
 	Model History
-		A history of model states over a set of timesteps defined in :class:`~fmdtools.analyze.history.History`. Returned in fmdtools as a nested dictionary from methods in :mod:`~fmdtools.sim.propagate`.
+		A history of model states over a set of time steps defined in :class:`~fmdtools.analyze.history.History`. Returned in fmdtools as a nested dictionary from methods in :mod:`~fmdtools.sim.propagate`.
 
 	FRDL
 		See: :term:`Functional Reasoning Design Language`.
@@ -176,7 +176,7 @@ Make and FRDL Diagram First
 
 The FRDL ontology (see: :ref:`frdl`) was designed to help define system functional architectures in a way that comports with simulation in fmdtools.
 
-As such, as a part of planning what a model is supposed to represent, it can be helpful to define the system in FRDL first, to fully outline the scope, behaviors, and key interactions of the model will be. This diagram can help make key system architecture decisions as well, keep track of what the overal goal-state of the model is to be, and help keep track of certain interaction details that can be helpful when explaining and debugging simulations.
+As such, as a part of planning what a model is supposed to represent, it can be helpful to define the system in FRDL first, to fully outline the scope, behaviors, and key interactions of the model will be. This diagram can help make key system architecture decisions as well, keep track of what the overall goal-state of the model is to be, and help keep track of certain interaction details that can be helpful when explaining and debugging simulations.
 
 
 Don't copy, inherit and functionalize
@@ -223,7 +223,7 @@ Documentation can best be thought of as a *contract that your code should fulfil
 Don't get ahead of yourself--try to get a running simulation first
 ------------------------------------------------------------------
 
-In the model development process, it can often be tempting to try to model every single mode or behavior in immense detail from the get-go. This is motivated by a desire to acheive realism, but can lead to issues from a project management and integration perspective. A model does not have much meaning outside a simulation or analysis, and, as such, development needs to be motivated *first* by getting a working simulation and *then* by adding detail. These simulations are the key feedback loop for determining whether model code is embodying desired behavior. 
+In the model development process, it can often be tempting to try to model every single mode or behavior in immense detail from the get-go. This is motivated by a desire to achieve realism, but can lead to issues from a project management and integration perspective. A model does not have much meaning outside a simulation or analysis, and, as such, development needs to be motivated *first* by getting a working simulation and *then* by adding detail. These simulations are the key feedback loop for determining whether model code is embodying desired behavior. 
 
 A very basic model development process should thus proceed:
 
@@ -252,7 +252,7 @@ Finally, do not create tests solely to create tests. Tests should have a specifi
 Edit your code
 --------------
 
-The nature of writing code is a messy process--often we spend a considerable amount of time getting code to a place where it "works" (i.e., runs) and leave it as-is. The problem with doing this over and over is that it neglects the syntax, documetation, and structural aspects of coding and thus contributes to technical debt. One of the best ways to avoid this from impacting development too much is to edit code after writing it.
+The nature of writing code is a messy process--often we spend a considerable amount of time getting code to a place where it "works" (i.e., runs) and leave it as-is. The problem with doing this over and over is that it neglects the syntax, documentation, and structural aspects of coding and thus contributes to technical debt. One of the best ways to avoid this from impacting development too much is to edit code after writing it.
 
 Editing is the process of reviewing the code, recognizing potential (functional and stylistic) problems, and ultimately revising the code to resolve these problems. In this process, all of the following concerns should be considered:
 
@@ -276,7 +276,7 @@ fmdtools was originally developed around a very simple use-case of modeling phys
 - Flows define *shared data structures*, meaning interacting variables and
 - Functions define *behaviors*, meaning things to be done to flows.
 
-These functions and flows are connected via containment relationships in an undirected graph, meaning that functions can be run in any order within a time-step to enable faults to propogate throughout the model graph. This is a very general representation, but also leads to pit-falls if the model is too complex, since this behavior needs to be convergent within each timestep. The following gives some advice for conventions to follow in models based on their size/scope.
+These functions and flows are connected via containment relationships in an undirected graph, meaning that functions can be run in any order within a time-step to enable faults to propagate throughout the model graph. This is a very general representation, but also leads to pit-falls if the model is too complex, since this behavior needs to be convergent within each timestep. The following gives some advice for conventions to follow in models based on their size/scope.
 
 **Small Models**
 
@@ -305,7 +305,7 @@ Moderate-size system models are models which have a control/planning system (e.g
 		* Control_System 					(Controls, Planning, Perception, etc)
 		* Distribute_Energy, Hold_X, etc 	(Internal components, etc)
 
-A good example of this are the Drone and Rover models. Models like this are simply more complex and thus require more care and attention to avoid the accumulation of technical debt. It may be desireable for some of the more complex functions to be specified tested in isolation, and developed in their own files. Finally, flows such as `Environment` may require developing custom visualization methods (maps, etc) to show the how the system interacts with its environment.
+A good example of this are the Drone and Rover models. Models like this are simply more complex and thus require more care and attention to avoid the accumulation of technical debt. It may be desirable for some of the more complex functions to be specified tested in isolation, and developed in their own files. Finally, flows such as `Environment` may require developing custom visualization methods (maps, etc) to show the how the system interacts with its environment.
 
 
 **System of Systems Models**
@@ -319,9 +319,9 @@ Systems of Systems models involve the interaction of multiple systems in a singl
 		* Communication(s) 				(agent interactions with each other
 	* functions
 		* Asset/Agent(s)					(individual system models)
-		* AgentController(s)				(coordinator which issues commans to each system)
+		* AgentController(s)				(coordinator which issues commands to each system)
 
-Note that, unlike other model types, System of Systems models very often will have multiple copies of functions and flows instantiated in the model. As a result, it is important to use dedicated model structures to the overall structure from being intractible. Specifically, multiple copies of flows can be handled using the `MultiFlow` class while Communications between agents can be handled using the `CommsFlow` class. The `ModelTypeGraph` graph representation can be used to represent the model as just the types involved (rather than all instantiations). In general, it can be helpful to create tests/analyses for individual agents in addition to the overall system.
+Note that, unlike other model types, System of Systems models very often will have multiple copies of functions and flows instantiated in the model. As a result, it is important to use dedicated model structures to the overall structure from being intractable. Specifically, multiple copies of flows can be handled using the `MultiFlow` class while Communications between agents can be handled using the `CommsFlow` class. The `ModelTypeGraph` graph representation can be used to represent the model as just the types involved (rather than all instantiations). In general, it can be helpful to create tests/analyses for individual agents in addition to the overall system.
 
 Use model constructs to simplify your code
 ------------------------------------------
@@ -333,7 +333,7 @@ The fmdtools codebase is quite large, and, as a result, it can be tempting to di
 * :class:`~fmdtools.define.container.parameter.Parameter` and parameter-generating functions are helpful for understanding the model operating envelope. In general, try to avoid having parameters that duplicate each other in some way.
 * Randomness can be used throughout, but use the specified interfaces (:class:`~fmdtools.define.container.rand.Rand`, etc.) so that a single seed is used to generate all of the rngs in the model. Not using these interfaces can lead to not being able to replicate results consistently.
 * A variety of custom attributes can be added to :class:`~fmdtools.define.block.function.Function` and :class:`~fmdtools.define.flow.base.Flow`, but not every custom attribute is going to work with staged execution and parallelism options. In general, use containers to represent things that change and parameters to represent things that don't change. If you want to do something fancy with data structures, you may need to re-implement :class:`~fmdtools.define.block.base` methods for copying and returning states to `propagate`.
-* If there's something that you'd like to do in an fmdtools model that is difficult with existing model structures, consider filing a bug report before implementing an ad-hoc solution. Alternatively, try devoping your solution as a *feature* rather than a hack to solve a single use-case. If the features is in our scope and well-developed, we may try to incorporate it in our next release.
+* If there's something that you'd like to do in an fmdtools model that is difficult with existing model structures, consider filing a bug report before implementing an ad-hoc solution. Alternatively, try developing your solution as a *feature* rather than a hack to solve a single use-case. If the features is in our scope and well-developed, we may try to incorporate it in our next release.
 
 Style advice
 ------------

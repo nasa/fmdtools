@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-2">Version: 2.1.2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -647,6 +647,9 @@
 <li class="toctree-l3"><a class="reference internal" href="frdl.html#what-can-you-use-frdl-for">What can you use FRDL for?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="frdl.html#why-frdl">Why FRDL?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="frdl.html#relationship-with-fmdtools">Relationship with fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="frdl.html#intro-to-frdl">Intro to FRDL</a><ul class="simple">
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="frdl.html#specification">Specification</a><ul>
@@ -1664,15 +1667,14 @@ representing allocations.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">Geom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a></p>
 <p>Base class for defining geometries.</p>
-<p>Geometry objects are essentially wrappers around various shapely classes used to
+<p>Geometry objects are essentially interfaces for various shapely classes used to
 convey the spacial properties of a model.</p>
-<p>…</p>
 <section id="roles">
 <h3>Roles<a class="headerlink" href="#roles" title="Link to this heading"></a></h3>
 <dl class="simple">
-<dt>s<span class="classifier">State</span></dt><dd><p>State defining mutable geom properties (e.g., allocation, color, etc)</p>
+<dt>s<span class="classifier">State</span></dt><dd><p>State defining mutable properties (e.g., allocations, shapely class inputs)</p>
 </dd>
-<dt>p<span class="classifier">Param</span></dt><dd><p>Parameter defining immutable geom characteristics (e.g., shapely inputs, buffer)</p>
+<dt>p<span class="classifier">Param</span></dt><dd><p>Parameter defining immutable properties (e.g., shapely inputs, buffer)</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -1693,9 +1695,9 @@ convey the spacial properties of a model.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span> <span class="o">=</span> <span class="n">ExPoint</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="go">[&#39;shape&#39;, &#39;on&#39;]</span>
+<span class="go">[&#39;shape&#39;, &#39;on&#39;, &#39;around&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
-<span class="go">[&#39;on&#39;]</span>
+<span class="go">[&#39;on&#39;, &#39;around&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 <span class="go">[]</span>
 </pre></div>
@@ -1703,14 +1705,20 @@ convey the spacial properties of a model.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.assign_from">
+<span class="sig-name descname"><span class="pre">assign_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.assign_from" title="Link to this definition"></a></dt>
+<dd><p>Update Geom state from a given history and time.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.at">
-<span class="sig-name descname"><span class="pre">at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffername</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.at" title="Link to this definition"></a></dt>
-<dd><p>Determine whether the point x, y is within the buffer ‘buffername’.</p>
+<span class="sig-name descname"><span class="pre">at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.at" title="Link to this definition"></a></dt>
+<dd><p>Determine whether the point x, y is within the buffer ‘shapename’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>*pt</strong> (<em>tuple</em>) – Locations of x, y, z coordinates.</p></li>
-<li><p><strong>buffername</strong> (<em>str</em>) – Name of buffer property</p></li>
+<li><p><strong>shapename</strong> (<em>str</em>) – Name of buffer property</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1738,6 +1746,30 @@ convey the spacial properties of a model.</p>
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.copy" title="Link to this definition"></a></dt>
 <dd><p>Copy the Geom with given <a href="#id5"><span class="problematic" id="id6">*</span></a>args and <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.get_paramstates">
+<span class="sig-name descname"><span class="pre">get_paramstates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.get_paramstates" title="Link to this definition"></a></dt>
+<dd><p>Create dict of parameters and states.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.get_shape">
+<span class="sig-name descname"><span class="pre">get_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shapename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.get_shape" title="Link to this definition"></a></dt>
+<dd><p>Get the shapely object defining the class and buffers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>shapename</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the shape. The default is ‘shape’, which produces the base shape,
+other names return the buffer shapes for that shape.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Shapely object for the shape.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>shapely.geometry</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1791,13 +1823,13 @@ The default is False.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.vect_at_shape">
-<span class="sig-name descname"><span class="pre">vect_at_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffername</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_forward</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.vect_at_shape" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">vect_at_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_forward</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.vect_at_shape" title="Link to this definition"></a></dt>
 <dd><p>Get the vector (x, y) at a given shape (e.g., direction of a line at pt).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pt</strong> (<em>tuple/lost</em>) – Point closest to shape</p></li>
-<li><p><strong>buffername</strong> (<em>str</em>) – Name of shape/buffer. Default is ‘shape’.</p></li>
+<li><p><strong>shapename</strong> (<em>str</em>) – Name of shape/buffer. Default is ‘shape’.</p></li>
 <li><p><strong>dist_forward</strong> (<em>float</em>) – Distance forward along line segment to project. Give a negative number to
 reverse directions.</p></li>
 </ul>
@@ -1817,13 +1849,13 @@ reverse directions.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.vect_to_shape">
-<span class="sig-name descname"><span class="pre">vect_to_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffername</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.vect_to_shape" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">vect_to_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.vect_to_shape" title="Link to this definition"></a></dt>
 <dd><p>Gets the vector (x, y) to a given shape.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pt</strong> (<em>tuple/list</em>) – Point to get vector from</p></li>
-<li><p><strong>buffername</strong> (<em>str</em>) – Name of shape/buffer. Default is ‘shape’.</p></li>
+<li><p><strong>shapename</strong> (<em>str</em>) – Name of shape/buffer. Default is ‘shape’.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1854,6 +1886,7 @@ reverse directions.</p></li>
 of point).</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExLine</span><span class="p">(</span><span class="n">GeomLine</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 <span class="gp">... </span>   <span class="n">container_p</span> <span class="o">=</span> <span class="n">ExLineParam</span>
 <span class="gp">... </span>   <span class="n">container_s</span> <span class="o">=</span> <span class="n">ExGeomState</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span> <span class="o">=</span> <span class="n">ExLine</span><span class="p">()</span>
@@ -1865,13 +1898,13 @@ of point).</p>
 <span class="go">False</span>
 </pre></div>
 </div>
-<p>Additionally, note the underlying shapely attribute at .shape:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<p>Additionally, note the underlying shapely objects returned by get_shape():</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">get_shape</span><span class="p">())</span>
 <span class="go">&lt;class &#39;shapely.geometry.linestring.LineString&#39;&gt;</span>
 </pre></div>
 </div>
 <p>As well as the buffer (on):</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">on</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">get_shape</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">))</span>
 <span class="go">&lt;class &#39;shapely.geometry.polygon.Polygon&#39;&gt;</span>
 </pre></div>
 </div>
@@ -1879,6 +1912,18 @@ of point).</p>
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomLine.container_p">
 <span class="sig-name descname"><span class="pre">container_p</span></span><a class="headerlink" href="#fmdtools.define.object.geom.GeomLine.container_p" title="Link to this definition"></a></dt>
 <dd><p>alias of <a class="reference internal" href="#fmdtools.define.object.geom.LineParam" title="fmdtools.define.object.geom.LineParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">LineParam</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomLine.get_args">
+<span class="sig-name descname"><span class="pre">get_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.GeomLine.get_args" title="Link to this definition"></a></dt>
+<dd><p>Create arguments for shapely LineString class based on fields.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exl</span> <span class="o">=</span> <span class="n">ExLine</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exl</span><span class="o">.</span><span class="n">get_args</span><span class="p">()</span>
+<span class="go">(((0.0, 0.0), (1.0, 1.0)),)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1898,6 +1943,7 @@ of point).</p>
 of point).</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExPoint</span><span class="p">(</span><span class="n">GeomPoint</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 <span class="gp">... </span>   <span class="n">container_p</span> <span class="o">=</span> <span class="n">ExPointParam</span>
 <span class="gp">... </span>   <span class="n">container_s</span> <span class="o">=</span> <span class="n">ExGeomState</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span> <span class="o">=</span> <span class="n">ExPoint</span><span class="p">()</span>
@@ -1909,20 +1955,40 @@ of point).</p>
 <span class="go">True</span>
 </pre></div>
 </div>
-<p>Additionally, note the underlying shapely attribute at .shape:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<p>Additionally, note the underlying shapely attributes returned by get_shape:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">get_shape</span><span class="p">())</span>
 <span class="go">&lt;class &#39;shapely.geometry.point.Point&#39;&gt;</span>
 </pre></div>
 </div>
 <p>as well as the buffer (on):</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">on</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">get_shape</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">))</span>
 <span class="go">&lt;class &#39;shapely.geometry.polygon.Polygon&#39;&gt;</span>
+</pre></div>
+</div>
+<p>Finally, note how geom characteristics defined as states can change:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">at</span><span class="p">((</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="s1">&#39;around&#39;</span><span class="p">)</span> <span class="c1"># outside the default area of `around` buffer</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">buffer_around</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="c1"># set to a larger radius to capture the point</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">at</span><span class="p">((</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="s1">&#39;around&#39;</span><span class="p">)</span>
+<span class="go">True</span>
 </pre></div>
 </div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomPoint.container_p">
 <span class="sig-name descname"><span class="pre">container_p</span></span><a class="headerlink" href="#fmdtools.define.object.geom.GeomPoint.container_p" title="Link to this definition"></a></dt>
 <dd><p>alias of <a class="reference internal" href="#fmdtools.define.object.geom.PointParam" title="fmdtools.define.object.geom.PointParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointParam</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomPoint.get_args">
+<span class="sig-name descname"><span class="pre">get_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.GeomPoint.get_args" title="Link to this definition"></a></dt>
+<dd><p>Get shape arguments from Point parameter/state.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span> <span class="o">=</span> <span class="n">ExPoint</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">get_args</span><span class="p">()</span>
+<span class="go">(1.0, 1.0)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1942,6 +2008,7 @@ of point).</p>
 contain a state for the given status (e.g., occupied, red/blue, etc.).</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExPoly</span><span class="p">(</span><span class="n">GeomPoly</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 <span class="gp">... </span>   <span class="n">container_p</span> <span class="o">=</span> <span class="n">ExPolyParam</span>
 <span class="gp">... </span>   <span class="n">container_s</span> <span class="o">=</span> <span class="n">ExGeomState</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">egp</span> <span class="o">=</span> <span class="n">ExPoly</span><span class="p">()</span>
@@ -1951,8 +2018,8 @@ contain a state for the given status (e.g., occupied, red/blue, etc.).</p>
 <span class="go">False</span>
 </pre></div>
 </div>
-<p>Additionally, note the underlying shapely attribute at .shape:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">egp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<p>Additionally, note the underlying shapely objects returned by get_shape():</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">egp</span><span class="o">.</span><span class="n">get_shape</span><span class="p">())</span>
 <span class="go">&lt;class &#39;shapely.geometry.polygon.Polygon&#39;&gt;</span>
 </pre></div>
 </div>
@@ -1960,6 +2027,17 @@ contain a state for the given status (e.g., occupied, red/blue, etc.).</p>
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomPoly.container_p">
 <span class="sig-name descname"><span class="pre">container_p</span></span><a class="headerlink" href="#fmdtools.define.object.geom.GeomPoly.container_p" title="Link to this definition"></a></dt>
 <dd><p>alias of <a class="reference internal" href="#fmdtools.define.object.geom.PolyParam" title="fmdtools.define.object.geom.PolyParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolyParam</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomPoly.get_args">
+<span class="sig-name descname"><span class="pre">get_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.GeomPoly.get_args" title="Link to this definition"></a></dt>
+<dd><p>Create arguments for shapely Polygon class based on fields.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExPoly</span><span class="p">()</span><span class="o">.</span><span class="n">get_args</span><span class="p">()</span>
+<span class="go">(((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)),))</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1988,17 +2066,10 @@ whether something is on the line would be defined by the parameter:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExLineParam</span><span class="p">(</span><span class="n">LineParam</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">xys</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
 <span class="gp">... </span>    <span class="n">buffer_on</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exlp</span> <span class="o">=</span> <span class="n">ExLineParam</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exlp</span><span class="o">.</span><span class="n">as_args</span><span class="p">()</span>
-<span class="go">(((0.0, 0.0), (1.0, 1.0)),)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ExLineParam</span><span class="p">()</span>
+<span class="go">ExLineParam(xys=((0.0, 0.0), (1.0, 1.0)), buffer_on=1.0)</span>
 </pre></div>
 </div>
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.LineParam.as_args">
-<span class="sig-name descname"><span class="pre">as_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.LineParam.as_args" title="Link to this definition"></a></dt>
-<dd><p>Create arguments for shapely LineString class based on fields.</p>
-</dd></dl>
-
 </section>
 </dd></dl>
 
@@ -2006,7 +2077,7 @@ whether something is on the line would be defined by the parameter:</p>
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.PointParam">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">PointParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.PointParam" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
-<p>Parameter defining points. May be extended with buffers.</p>
+<p>Parameter defining points. Extend with ‘buffer_att’ to create buffer shapes.</p>
 <section id="id9">
 <h3>Fields<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
 <dl class="simple">
@@ -2024,17 +2095,10 @@ is on the point would be defined by the parameter:</p>
 <span class="gp">... </span>   <span class="n">buffer_on</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
 </pre></div>
 </div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">expa</span> <span class="o">=</span> <span class="n">ExPointParam</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">expa</span><span class="o">.</span><span class="n">as_args</span><span class="p">()</span>
-<span class="go">([1.0, 1.0],)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExPointParam</span><span class="p">()</span>
+<span class="go">ExPointParam(x=1.0, y=1.0, buffer_on=1.0)</span>
 </pre></div>
 </div>
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.PointParam.as_args">
-<span class="sig-name descname"><span class="pre">as_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.PointParam.as_args" title="Link to this definition"></a></dt>
-<dd><p>Create arguments for shapely Point class based on fields.</p>
-</dd></dl>
-
 </section>
 </dd></dl>
 
@@ -2043,7 +2107,6 @@ is on the point would be defined by the parameter:</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">PolyParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.PolyParam" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
 <p>Parameter defining polygons. May be extended with buffers.</p>
-<p>…</p>
 <section id="id10">
 <h3>Fields<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
 <dl class="simple">
@@ -2055,19 +2118,13 @@ is on the point would be defined by the parameter:</p>
 <p class="rubric">Examples</p>
 <p>The following PolyParam defines a hollow right triangle:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExPolyParam</span><span class="p">(</span><span class="n">PolyParam</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">shell</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
-<span class="gp">... </span>    <span class="n">holes</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(((</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)),</span> <span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">expp</span> <span class="o">=</span> <span class="n">ExPolyParam</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">expp</span><span class="o">.</span><span class="n">as_args</span><span class="p">()</span>
-<span class="go">(((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)),))</span>
+<span class="gp">... </span>   <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+<span class="gp">... </span>   <span class="n">shell</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+<span class="gp">... </span>   <span class="n">holes</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(((</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)),</span> <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ExPolyParam</span><span class="p">()</span>
+<span class="go">ExPolyParam(shell=((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), holes=(((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)),))</span>
 </pre></div>
 </div>
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.PolyParam.as_args">
-<span class="sig-name descname"><span class="pre">as_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.PolyParam.as_args" title="Link to this definition"></a></dt>
-<dd><p>Create arguments for shapely Polygon class based on fields.</p>
-</dd></dl>
-
 </section>
 </dd></dl>
 

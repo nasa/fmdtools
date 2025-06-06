@@ -51,13 +51,16 @@ class GeomArchitecture(Architecture):
 
     >>> ega = ExGeomArch()
     >>> ega.geoms()['ex_point'].s
-    ExGeomState(occupied=False)
+    ExGeomState(occupied=False, buffer_around=1.0)
     >>> ega.h
     points.ex_point.s.occupied:   array(101)
+    points.ex_point.s.buffer_around: array(101)
     lines.ex_line.s.occupied:     array(101)
+    lines.ex_line.s.buffer_around: array(101)
     polys.ex_poly.s.occupied:     array(101)
+    polys.ex_poly.s.buffer_around: array(101)
     >>> ega.return_mutables()
-    ((False,), (False,), (False,), (-0.1, 0, 0.0, 1))
+    ((False, 1.0), (False, 1.0), (False, 1.0), (-0.1, 0, 0.0, 1))
     """
 
     container_p = Parameter
@@ -153,11 +156,11 @@ class GeomArchitecture(Architecture):
         --------
         >>> exga = ExGeomArch()
         >>> exga.all_at(1.0, 1.0)
-        {'ex_point': ['shape', 'on'], 'ex_line': ['shape', 'on'], 'ex_poly': ['shape']}
+        {'ex_point': ['shape', 'on', 'around'], 'ex_line': ['shape', 'on', 'around'], 'ex_poly': ['shape', 'around']}
         >>> exga.all_at(0.0, 0.0)
-        {'ex_line': ['shape', 'on'], 'ex_poly': ['shape']}
+        {'ex_line': ['shape', 'on', 'around'], 'ex_poly': ['shape', 'around']}
         >>> exga.all_at(0.4, 0.3)
-        {'ex_point': ['on'], 'ex_line': ['on']}
+        {'ex_point': ['on', 'around'], 'ex_line': ['on', 'around'], 'ex_poly': ['around']}
         """
         all_at = {}
         for geomname, geom in self.geoms().items():
@@ -204,6 +207,31 @@ class GeomArchitecture(Architecture):
             local_kwargs = {**kwargs, 'geomlabel': geomname, **geom_kwargs}
             fig, ax = self.geoms()[geomname].show(ax=ax, fig=fig, z=z, **local_kwargs)
         return fig, ax
+
+    def show_from(self, hist, t, **kwargs):
+        """
+        Show the GeomArch at the given time in the provided history.
+
+        Parameters
+        ----------
+        hist : History
+            History of states for the GeomArchitecture.
+        t : int
+            Time in the history to show the state of the GeomArchitecture at.
+        **kwargs : kwargs
+            Keyword arguments to GeomArchitecture.show().
+
+        Returns
+        -------
+        fig : figure
+            Matplotlib figure object
+        ax : axis
+            Corresponding matplotlib axis
+        """
+        for flex_role in self.flexible_roles:
+            for geomname, geom in self.get_flex_role_objs(flex_role).items():
+                geom.assign_from(hist.get(flex_role+"."+geomname), t)
+        return self.show(**kwargs)
 
 
 class ExGeomArch(GeomArchitecture):

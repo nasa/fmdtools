@@ -4,7 +4,7 @@ Module Reference
 .. image:: figures/uml/module_organization.svg
    :width: 800
 
-The fmdtools package is split into three subpackages for design, simulation, and analysis. As shown above. Thus, working with fmdtools often means:
+The fmdtools package is split into three sub-packages for design, simulation, and analysis. As shown above. Thus, working with fmdtools often means:
 
 #. Creating a model file which extends classes from :mod:`~fmdtools.define`,
 #. Simulating and analyzing that model in a script or notebook using the :mod:`~fmdtools.sim`, and

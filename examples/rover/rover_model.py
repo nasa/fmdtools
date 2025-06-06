@@ -227,6 +227,7 @@ class DestState(State):
 class Dest(GeomPoint):
     """Start/end/point."""
 
+    __slots__ = ()
     container_p = DestParam
     container_s = DestState
 
@@ -252,8 +253,10 @@ class GroundGeomArch(GeomArchitecture):
 
 
 class GroundState(State):
-    """state defining if rover is in bound"""
+    """State defining if rover is in bounds."""
+
     in_bound: bool = True
+
 
 class Ground(Environment):
     """Ground environment of the rover."""
@@ -272,7 +275,8 @@ class Ground(Environment):
 
     def end_dist(self, pos_state):
         """Calculate minimum distance between the end point and the rover."""
-        return self.ga.points['end'].on.distance(Point(pos_state.get("x", "y")))
+        on_shape = self.ga.points['end'].get_shape('on')
+        return on_shape.distance(Point(pos_state.get("x", "y")))
 
     def max_line_dist(self, pos_hist):
         """Calculate the maximum distance the rover has deviated from its path."""
@@ -280,7 +284,7 @@ class Ground(Environment):
         yhist = pos_hist.y
         max_dist = 0.0
         for i, x in enumerate(xhist):
-            dist = self.ga.lines['line'].shape.distance(Point(x, yhist[i]))
+            dist = self.ga.lines['line'].get_shape().distance(Point(x, yhist[i]))
             if dist > max_dist:
                 max_dist = dist
         return max_dist
@@ -289,6 +293,7 @@ class Ground(Environment):
 class PathLine(GeomLine):
     """Rover Line."""
 
+    __slots__ = ()
     container_p = PathParam
 
 

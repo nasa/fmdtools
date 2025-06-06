@@ -22,6 +22,7 @@ from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 
 from recordclass import dataobject, astuple, asdict
+from collections import UserDict
 import copy
 import pickle
 import numpy as np
@@ -218,13 +219,13 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
             else:
                 # if kwarg states provided, assign keys to values
                 fielddict = {k: getattr(obj, v) for k, v in fielddict.items()}
-        elif isinstance(obj, dict):
+        elif isinstance(obj, dict) or isinstance(obj, UserDict):
             if not fielddict:
                 fielddict = {s: obj[s] for s in fields if s in obj}
             else:
                 fielddict = {k: obj[v] for k, v in fielddict.items() if v in obj}
         else:
-            raise Exception("Invalid type to assign from: "+obj.__class__)
+            raise Exception("Invalid type to assign from: "+str(obj.__class__))
         return fielddict
 
     def assign(self, obj, *fields, as_copy=True, **fielddict):

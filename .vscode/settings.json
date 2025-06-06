@@ -13,9 +13,14 @@
     "cSpell.words": [
         "FBED",
         "fmdtools",
+        "FMEA",
         "FRDL",
         "MBSE",
+        "networkx",
         "reccomends",
+        "Simulable",
+        "timestep",
+        "toctree",
         "unipartite"
     ]
 }

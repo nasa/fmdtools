@@ -80,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-2">Version: 2.1.2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -650,6 +650,9 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#what-can-you-use-frdl-for">What can you use FRDL for?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#why-frdl">Why FRDL?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#relationship-with-fmdtools">Relationship with fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs-source/frdl.html#intro-to-frdl">Intro to FRDL</a><ul class="simple">
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/frdl.html#specification">Specification</a><ul>
@@ -747,7 +750,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <h2>Initial Network Model<a class="headerlink" href="#Initial-Network-Model" title="Link to this heading"></a></h2>
 <p>In our initial model, all we have is the flows, functions, and connections between them. These are set up in a model class as shown:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.define.architecture.function</span> <span class="kn">import</span> <span class="n">FunctionArchitecture</span>
@@ -783,7 +786,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <h2>Setting Node Positions<a class="headerlink" href="#Setting-Node-Positions" title="Link to this heading"></a></h2>
 <p>As shown below, it can be difficult to make sense of a model structure using the default graph layout. We might instead want to see something that more closely approximates a flow chart of the system.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.define.architecture.function</span> <span class="kn">import</span> <span class="n">FunctionArchitectureGraph</span><span class="p">,</span> <span class="n">FunctionArchitectureFxnGraph</span>
@@ -800,7 +803,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <img alt="../../_images/examples_multirotor_Demonstration_5_0.svg" src="../../_images/examples_multirotor_Demonstration_5_0.svg" /></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span>
@@ -808,7 +811,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -823,7 +826,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span>
@@ -831,7 +834,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -841,7 +844,7 @@ NodeView((&#39;drone.flows.force_st&#39;, &#39;drone.flows.force_lin&#39;, &#39;
 </div>
 <p>To set node positions, we can use <code class="docutils literal notranslate"><span class="pre">Graph.move_nodes</span></code>, which lets one drag the nodes to their desired locations. Node that while these node positions become attributes of the object (for future display) it is good practice to save node locations when one is done in the script so you don’t have to move them every time.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %matplotlib qt5</span>
@@ -850,7 +853,7 @@ NodeView((&#39;drone.flows.force_st&#39;, &#39;drone.flows.force_lin&#39;, &#39;
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># %matplotlib inline</span>
@@ -858,7 +861,7 @@ NodeView((&#39;drone.flows.force_st&#39;, &#39;drone.flows.force_lin&#39;, &#39;
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span><span class="o">.</span><span class="n">pos</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;drone.fxns.store_ee&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.85</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.63</span><span class="p">],</span>
@@ -880,7 +883,7 @@ NodeView((&#39;drone.flows.force_st&#39;, &#39;drone.flows.force_lin&#39;, &#39;
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[65]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
@@ -896,7 +899,7 @@ NodeView((&#39;drone.flows.force_st&#39;, &#39;drone.flows.force_lin&#39;, &#39;
 </div>
 <p>Note that a variety of views of the model graph can be used for analysis/visualization. Below we use the ModelFxnGraph</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fg</span> <span class="o">=</span> <span class="n">FunctionArchitectureFxnGraph</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
@@ -925,7 +928,7 @@ NodeView((&#39;drone.flows.force_st&#39;, &#39;drone.flows.force_lin&#39;, &#39;
 <p>A network model can be used to compute network metrics and visualize network vulnerabilities.</p>
 <p>We can calculate network metrics using calc_aspl, calc_modularity, and calc_robustness_coefficient in the <code class="docutils literal notranslate"><span class="pre">networks</span></code> module.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[67]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aspl</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">calc_aspl</span><span class="p">()</span>
@@ -945,12 +948,12 @@ NodeView((&#39;drone.flows.force_st&#39;, &#39;drone.flows.force_lin&#39;, &#39;
 <div class="highlight"><pre>
 ASPL: 1.14
 Modularity: 0.00
-Robustness Coefficient: 99.06
+Robustness Coefficient: 99.18
 </pre></div></div>
 </div>
 <p>Next, we visualize network vulnerabilities using find_bridging_nodes and find_high_degree_nodes.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[68]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig_bridging_nodes</span><span class="p">,</span> <span class="n">ax_bridging_nodes</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">plot_bridging_nodes</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">withlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -967,7 +970,7 @@ Robustness Coefficient: 99.06
 </div>
 <p>As shown, no bridging notes are found. This is somewhat expected, since functiongraph functions are for the most part all connected to the same flows.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[69]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig_high_degree_nodes</span><span class="p">,</span> <span class="n">ax_high_degree_nodes</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">plot_high_degree_nodes</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">withlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -985,7 +988,7 @@ Robustness Coefficient: 99.06
 <p>However, some functions do have more connected to them than others. In this case-, path planning and control, along with the structure.</p>
 <p>High degree nodes (along with their degrees) and bridging nodes are also obtainable as lists.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[70]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Bridging Nodes:&#39;</span><span class="p">,</span> <span class="n">fg</span><span class="o">.</span><span class="n">find_bridging_nodes</span><span class="p">())</span>
@@ -1004,7 +1007,7 @@ High Degree Nodes: [(&#39;drone.fxns.ctl_dof&#39;, 6), (&#39;drone.fxns.plan_pat
 </div>
 <p>Finally, we can plot the degree distribution of the network using degree_dist.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[71]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">plot_degree_dist</span><span class="p">()</span>
@@ -1021,7 +1024,7 @@ High Degree Nodes: [(&#39;drone.fxns.ctl_dof&#39;, 6), (&#39;drone.fxns.plan_pat
 </div>
 <p>The above analysis includes only function nodes. It is also possible to treat the entire model graph (containing both functions and flows) as a unipartite-like graph and perform similar analysis on both function and flow nodes.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[72]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aspl</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">calc_aspl</span><span class="p">()</span>
@@ -1041,11 +1044,11 @@ High Degree Nodes: [(&#39;drone.fxns.ctl_dof&#39;, 6), (&#39;drone.fxns.plan_pat
 <div class="highlight"><pre>
 ASPL, functions and flows: 2.30
 Modularity, functions and flows: 0.32
-Robustness Coefficient, functions and flows: 85.54
+Robustness Coefficient, functions and flows: 85.26
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[73]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig_bridging_nodes</span><span class="p">,</span> <span class="n">ax_bridging_nodes</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">plot_bridging_nodes</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">withlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1068,7 +1071,7 @@ Robustness Coefficient, functions and flows: 85.54
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[74]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Bridging Nodes:&#39;</span><span class="p">,</span><span class="n">mg</span><span class="o">.</span><span class="n">find_bridging_nodes</span><span class="p">())</span>
@@ -1086,7 +1089,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[75]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">plot_degree_dist</span><span class="p">()</span>
@@ -1102,7 +1105,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 </div>
 <p>The SFF model can be simulated with options for simulation time, infection (failure) rate, and recovery (fix) rate. The start node can be selected or chosen randomly. Plotting includes an option for error bars. This models the system’s response to a failure using an analogy of an epidemic spreading through a network.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[76]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">sff_model</span><span class="p">(</span><span class="n">endtime</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">pi</span><span class="o">=</span><span class="mf">.3</span><span class="p">,</span><span class="n">pr</span><span class="o">=</span><span class="mf">.1</span><span class="p">,</span><span class="n">start_node</span><span class="o">=</span><span class="s1">&#39;drone.fxns.affect_dof&#39;</span><span class="p">,</span><span class="n">error_bar_option</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
@@ -1124,7 +1127,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 <p>In this demonstration, we will use a static representation of the system model to displaygraph views of fault scenarios and produce a static FMEA</p>
 <p>The static model is located in <code class="docutils literal notranslate"><span class="pre">drone_mdl_static.py</span></code>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[77]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">drone_mdl_static</span> <span class="kn">import</span> <span class="n">Drone</span> <span class="k">as</span> <span class="n">Drone_Static</span>
@@ -1133,7 +1136,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 </div>
 <p>This model has function definitions for single-timestep behavior. Thus, we can simulate it with methods in <code class="docutils literal notranslate"><span class="pre">sim.propagate</span></code>. In this case, we run all single-fault scenarios.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[78]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim</span> <span class="kn">import</span> <span class="n">propagate</span>
@@ -1147,12 +1150,12 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 20/20 [00:00&lt;00:00, 79.35it/s]
+SCENARIOS COMPLETE: 100%|██████████| 20/20 [00:00&lt;00:00, 149.24it/s]
 </pre></div></div>
 </div>
 <p>Here we produce a scenario-based FMEA to show which scenarios are most important in the model:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[79]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze</span> <span class="kn">import</span> <span class="n">tabulate</span>
@@ -1162,7 +1165,7 @@ SCENARIOS COMPLETE: 100%|██████████| 20/20 [00:00&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[79]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1365,7 +1368,7 @@ SCENARIOS COMPLETE: 100%|██████████| 20/20 [00:00&lt;00:00, 
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[80]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">static_fmea</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;expected_cost&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to_latex</span><span class="p">())</span>
@@ -1409,7 +1412,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 <p>We can in turn visualize these faults on the graph representation of the system. Here we will focus on the break of one of the rotors in the AffectDOF function, the effects of which are shown below:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[81]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">static_mdl</span> <span class="o">=</span> <span class="n">Drone_Static</span><span class="p">()</span>
@@ -1434,7 +1437,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 <p>In the dynamic model, we add time ranges and dynamic behaviors to generate behavior-over-time graphs and dynamic/phase-based FMEAs.</p>
 <p>This model is located in <code class="docutils literal notranslate"><span class="pre">drone_mdl_dynamic.py</span></code>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[82]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">examples.multirotor.drone_mdl_dynamic</span> <span class="kn">import</span> <span class="n">Drone</span> <span class="k">as</span> <span class="n">Drone_Dynamic</span>
@@ -1443,7 +1446,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 <p>Here we can see how the system operates over time in the nominal case:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[83]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note: because of the complicated functions, the model must be re-instantiated for each function in order to work in this case</span>
@@ -1454,7 +1457,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[84]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;fxns.store_ee.s.soc&#39;</span><span class="p">,</span>
@@ -1476,7 +1479,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 <p>As shown below, in the case of the break in the AffectDOF function, the system crashes:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[85]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dynamic_mdl</span> <span class="o">=</span> <span class="n">Drone_Dynamic</span><span class="p">()</span>
@@ -1485,7 +1488,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[86]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;flows.dofs.s.x&#39;</span><span class="p">,</span><span class="s1">&#39;flows.dofs.s.y&#39;</span><span class="p">,</span><span class="s1">&#39;flows.dofs.s.z&#39;</span><span class="p">,</span> <span class="s1">&#39;fxns.store_ee.s.soc&#39;</span><span class="p">,</span>
@@ -1506,7 +1509,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 <p>Finally, we can see how the cost function of this scenario changes over time. As shown, when the fault is injected early, it has a lower cost because it crashes at the landing pad and not in a dangerous area. When it is injected at the end, the cost is minimal because the drone has already landed.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[87]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.sample</span> <span class="kn">import</span> <span class="n">FaultDomain</span><span class="p">,</span> <span class="n">FaultSample</span>
@@ -1520,7 +1523,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[88]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_comp_endclasses</span><span class="p">,</span> <span class="n">quad_comp_mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_quad_comp</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1532,11 +1535,11 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 17.84it/s]
+SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 36.49it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[89]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_comp_mdlhists</span><span class="o">.</span><span class="n">affect_dof_mechbreak_t17p0</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">dofs</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -1544,7 +1547,7 @@ SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[89]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1553,7 +1556,7 @@ SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[90]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze</span> <span class="kn">import</span> <span class="n">phases</span>
@@ -1570,7 +1573,7 @@ SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[91]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_comp_endclasses</span>
@@ -1578,7 +1581,7 @@ SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[91]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1633,7 +1636,7 @@ nominal.endclass.expected_cost:      0.0
 <p>In the hierarchical model, we can use the simulation to compare system architectures. First by seeing how faults effect the behaviors in each architechture, then by seing how it affects the overall system resilience.</p>
 <p>This model is located in <code class="docutils literal notranslate"><span class="pre">drone_mdl_hierarchical.py</span></code>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[92]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">examples.multirotor.drone_mdl_hierarchical</span> <span class="kn">import</span> <span class="n">Drone</span> <span class="k">as</span> <span class="n">Drone_Hierarchical</span>
@@ -1642,7 +1645,7 @@ nominal.endclass.expected_cost:      0.0
 </div>
 <p>First, we can model how the quadrotor architecture behaves under faults–in this case, identically to the monolythic model:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[93]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hierarchical_model</span> <span class="o">=</span> <span class="n">Drone_Hierarchical</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;arch&#39;</span><span class="p">:</span><span class="s1">&#39;quad&#39;</span><span class="p">})</span>
@@ -1651,7 +1654,7 @@ nominal.endclass.expected_cost:      0.0
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[94]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;flows.dofs.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;flows.dofs.s.y&#39;</span><span class="p">,</span> <span class="s1">&#39;flows.dofs.s.z&#39;</span><span class="p">,</span> <span class="s1">&#39;fxns.store_ee.s.soc&#39;</span><span class="p">,</span>
@@ -1668,7 +1671,7 @@ nominal.endclass.expected_cost:      0.0
 </div>
 <p>Then we can see how the octorotor architecture performs in the same case:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[95]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hierarchical_model</span> <span class="o">=</span> <span class="n">Drone_Hierarchical</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;arch&#39;</span><span class="p">:</span><span class="s1">&#39;oct&#39;</span><span class="p">})</span>
@@ -1677,7 +1680,7 @@ nominal.endclass.expected_cost:      0.0
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[96]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;flows.dofs.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;flows.dofs.s.y&#39;</span><span class="p">,</span> <span class="s1">&#39;flows.dofs.s.z&#39;</span><span class="p">,</span> <span class="s1">&#39;fxns.store_ee.s.soc&#39;</span><span class="p">,</span>
@@ -1700,7 +1703,7 @@ nominal.endclass.expected_cost:      0.0
 <p>Next, we can compare how each architecture mitigates the set of faults that originiate in each function: ### Quadcopter Resilience</p>
 <p>Here we quantify the expected costs of faults originiating in the quadcopter architecture:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[97]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl_quad</span> <span class="o">=</span> <span class="n">Drone_Hierarchical</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;arch&#39;</span><span class="p">:</span><span class="s1">&#39;quad&#39;</span><span class="p">})</span>
@@ -1710,7 +1713,7 @@ nominal.endclass.expected_cost:      0.0
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[97]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1769,7 +1772,7 @@ nominal.endclass.expected_cost:      0.0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[98]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fd_quad</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">mdl_quad</span><span class="p">)</span>
@@ -1779,7 +1782,7 @@ nominal.endclass.expected_cost:      0.0
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[98]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1799,7 +1802,7 @@ FaultDomain with faults:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[99]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs_quad</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">fd_quad</span><span class="p">,</span> <span class="n">phasemap</span> <span class="o">=</span> <span class="n">PhaseMap</span><span class="p">(</span><span class="n">mdl_quad</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">phases</span><span class="p">))</span>
@@ -1809,7 +1812,7 @@ FaultDomain with faults:
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[99]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1829,23 +1832,89 @@ FaultSample of scenarios:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[100]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_endclasses</span><span class="p">,</span> <span class="n">quad_mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_quad</span><span class="p">,</span> <span class="n">fs_quad</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00,  9.38it/s]
+SCENARIOS COMPLETE:  70%|███████   | 35/50 [00:01&lt;00:00, 19.24it/s]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>                         Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[100], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> quad_endclasses, quad_mdlhists <span style="color: rgb(98,98,98)">=</span> propagate<span style="color: rgb(98,98,98)">.</span>fault_sample(mdl_quad, fs_quad, staged<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>)
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\Users\dhulse\AppData\Local\anaconda3\envs\fmdtools\Lib\site-packages\fmdtools\sim\propagate.py:638</span>, in <span class="ansi-cyan-fg">fault_sample</span><span class="ansi-blue-intense-fg ansi-bold">(mdl, fs, include_nominal, get_phasemap, **kwargs)</span>
+<span class="ansi-green-fg">    635</span> nomresult, nomhist, nomscen, c_mdl, t_end_nom <span style="color: rgb(98,98,98)">=</span> n_outs
+<span class="ansi-green-fg">    636</span> scenlist <span style="color: rgb(98,98,98)">=</span> fs<span style="color: rgb(98,98,98)">.</span>scenarios()
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 638</span> results, mdlhists <span style="color: rgb(98,98,98)">=</span> scenlist_helper(mdl,
+<span class="ansi-green-fg">    639</span>                                     scenlist,
+<span class="ansi-green-fg">    640</span>                                     c_mdl,
+<span class="ansi-green-fg">    641</span>                                     <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs,
+<span class="ansi-green-fg">    642</span>                                     nomhist<span style="color: rgb(98,98,98)">=</span>nomhist,
+<span class="ansi-green-fg">    643</span>                                     nomresult<span style="color: rgb(98,98,98)">=</span>nomresult)
+<span class="ansi-green-fg">    645</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> include_nominal:
+<span class="ansi-green-fg">    646</span>     process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\Users\dhulse\AppData\Local\anaconda3\envs\fmdtools\Lib\site-packages\fmdtools\sim\propagate.py:807</span>, in <span class="ansi-cyan-fg">scenlist_helper</span><span class="ansi-blue-intense-fg ansi-bold">(mdl, scenlist, c_mdl, **kwargs)</span>
+<span class="ansi-green-fg">    805</span> name <span style="color: rgb(98,98,98)">=</span> scen<span style="color: rgb(98,98,98)">.</span>name
+<span class="ansi-green-fg">    806</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> staged:
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 807</span>     mdl_i <span style="color: rgb(98,98,98)">=</span> c_mdl[scen<span style="color: rgb(98,98,98)">.</span>time]<span style="color: rgb(98,98,98)">.</span>copy()
+<span class="ansi-green-fg">    808</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">    809</span>     mdl_i <span style="color: rgb(98,98,98)">=</span> c_mdl[<span style="color: rgb(98,98,98)">0</span>]<span style="color: rgb(98,98,98)">.</span>new()
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\Users\dhulse\AppData\Local\anaconda3\envs\fmdtools\Lib\site-packages\fmdtools\define\architecture\base.py:348</span>, in <span class="ansi-cyan-fg">Architecture.copy</span><span class="ansi-blue-intense-fg ansi-bold">(self, flows, **kwargs)</span>
+<span class="ansi-green-fg">    331</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">copy</span>(<span style="color: rgb(0,135,0)">self</span>, flows<span style="color: rgb(98,98,98)">=</span>{}, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs):
+<span class="ansi-green-fg">    332</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    333</span> <span style="color: rgb(175,0,0)">    Copy the architecture at the current state.</span>
+<span class="ansi-green-fg">    334</span>
+<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
+<span class="ansi-green-fg">    343</span> <span style="color: rgb(175,0,0)">        Copy of the curent architecture.</span>
+<span class="ansi-green-fg">    344</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    345</span>     cargs <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">dict</span>(p<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">getattr</span>(<span style="color: rgb(0,135,0)">self</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">p</span><span style="color: rgb(175,0,0)">&#39;</span>, {}),
+<span class="ansi-green-fg">    346</span>                  sp<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">getattr</span>(<span style="color: rgb(0,135,0)">self</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">sp</span><span style="color: rgb(175,0,0)">&#39;</span>, {}),
+<span class="ansi-green-fg">    347</span>                  track<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">getattr</span>(<span style="color: rgb(0,135,0)">self</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">track</span><span style="color: rgb(175,0,0)">&#39;</span>, {}),
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 348</span>                  h<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>h<span style="color: rgb(98,98,98)">.</span>copy(),
+<span class="ansi-green-fg">    349</span>                  t<span style="color: rgb(98,98,98)">=</span>kwargs<span style="color: rgb(98,98,98)">.</span>get(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">t</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>t<span style="color: rgb(98,98,98)">.</span>copy()),
+<span class="ansi-green-fg">    350</span>                  as_copy<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>)
+<span class="ansi-green-fg">    351</span>     <span style="color: rgb(95,135,135)"># send role dicts in to be copied via as_copy param.</span>
+<span class="ansi-green-fg">    352</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> flex_role <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>flexible_roles:
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\Users\dhulse\AppData\Local\anaconda3\envs\fmdtools\Lib\site-packages\fmdtools\analyze\history.py:202</span>, in <span class="ansi-cyan-fg">History.copy</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
+<span class="ansi-green-fg">    200</span>         newhist[k] <span style="color: rgb(98,98,98)">=</span> v<span style="color: rgb(98,98,98)">.</span>copy()
+<span class="ansi-green-fg">    201</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 202</span>         newhist[k] <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>copy(v)
+<span class="ansi-green-fg">    203</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> newhist
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\Users\dhulse\AppData\Local\anaconda3\envs\fmdtools\Lib\site-packages\numpy\lib\function_base.py:962</span>, in <span class="ansi-cyan-fg">copy</span><span class="ansi-blue-intense-fg ansi-bold">(a, order, subok)</span>
+<span class="ansi-green-fg">    873</span> <span style="color: rgb(175,0,255)">@array_function_dispatch</span>(_copy_dispatcher)
+<span class="ansi-green-fg">    874</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">copy</span>(a, order<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">K</span><span style="color: rgb(175,0,0)">&#39;</span>, subok<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>):
+<span class="ansi-green-fg">    875</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    876</span> <span style="color: rgb(175,0,0)">    Return an array copy of the given object.</span>
+<span class="ansi-green-fg">    877</span>
+<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
+<span class="ansi-green-fg">    960</span>
+<span class="ansi-green-fg">    961</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 962</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> array(a, order<span style="color: rgb(98,98,98)">=</span>order, subok<span style="color: rgb(98,98,98)">=</span>subok, copy<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>)
+
+<span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_tab</span><span class="o">=</span><span class="n">quad_endclasses</span><span class="o">.</span><span class="n">create_simple_fmea</span><span class="p">()</span>
@@ -1854,8 +1923,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
@@ -2194,7 +2262,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 </div>
 <p>Based on this model, we can calculate some metrics that quantify how resilient the system was to the set of faults, such as the cost of resilience:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_res</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">quad_tab</span><span class="p">[</span><span class="s1">&#39;expected_cost&#39;</span><span class="p">])</span>
@@ -2203,8 +2271,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -2213,7 +2280,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 </div>
 <p>The overall rate of crashes:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_crashes</span> <span class="o">=</span> <span class="n">quad_tab</span><span class="p">[</span><span class="n">quad_tab</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">100000</span><span class="p">]</span>
@@ -2223,8 +2290,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -2233,7 +2299,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 </div>
 <p>The number of crashes:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_num_crashes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">quad_crashes</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span>
@@ -2242,8 +2308,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -2252,7 +2317,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 </div>
 <p>The percentage of crashes:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_perc_crashes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">quad_crashes</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">quad_tab</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span>
@@ -2261,8 +2326,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -2273,7 +2337,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 <h3>Octocopter Resilience<a class="headerlink" href="#Octocopter-Resilience" title="Link to this heading"></a></h3>
 <p>Here we quantify the expected costs of faults originiating in the octocopter architecture:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl_oct</span> <span class="o">=</span> <span class="n">Drone_Hierarchical</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;arch&#39;</span><span class="p">:</span><span class="s1">&#39;oct&#39;</span><span class="p">})</span>
@@ -2282,8 +2346,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -2381,7 +2444,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fd_oct</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">mdl_oct</span><span class="p">)</span>
@@ -2391,8 +2454,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:05&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -2411,7 +2473,7 @@ FaultDomain with faults:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs_oct</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">fd_oct</span><span class="p">,</span> <span class="n">phasemap</span> <span class="o">=</span> <span class="n">PhaseMap</span><span class="p">(</span><span class="n">mdl_oct</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">phases</span><span class="p">))</span>
@@ -2421,8 +2483,7 @@ FaultDomain with faults:
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -2441,7 +2502,7 @@ FaultSample of scenarios:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_endclasses</span><span class="p">,</span> <span class="n">oct_mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_oct</span><span class="p">,</span> <span class="n">fs_oct</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -2453,11 +2514,11 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:11&lt;00:00,  7.52it/s]
+SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:05&lt;00:00, 15.65it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_tab</span> <span class="o">=</span> <span class="n">oct_endclasses</span><span class="o">.</span><span class="n">create_simple_fmea</span><span class="p">()</span>
@@ -2466,8 +2527,7 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:11&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
@@ -2567,7 +2627,7 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:11&lt;00:00, 
 </div>
 <p>Based on this model, we can calculate some metrics that quantify how resilient the system was to the set of faults, such as the cost of resilience:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_res</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">oct_tab</span><span class="p">[</span><span class="s1">&#39;expected_cost&#39;</span><span class="p">])</span>
@@ -2576,8 +2636,7 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:11&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -2586,7 +2645,7 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:11&lt;00:00, 
 </div>
 <p>The overall rate of crashes:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_crashes</span> <span class="o">=</span> <span class="n">oct_tab</span><span class="p">[</span><span class="n">oct_tab</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">100000</span><span class="p">]</span>
@@ -2596,8 +2655,7 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:11&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -2606,7 +2664,7 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:11&lt;00:00, 
 </div>
 <p>Number of crashes:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_num_crashes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oct_crashes</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span>
@@ -2615,8 +2673,7 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:11&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -2625,7 +2682,7 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:11&lt;00:00, 
 </div>
 <p>Percent of crashes:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_perc_crashes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oct_crashes</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">oct_tab</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span>
@@ -2634,8 +2691,7 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:11&lt;00:00, 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>

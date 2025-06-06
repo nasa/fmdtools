@@ -48,7 +48,7 @@ The following template shows the basic syntax used to define simple flows in a s
 fmdtools.define.flow.multiflow
 --------------------------------
 
-MultiFlow can be used to represent signals and perceptions in which a flow may have independent copies on the side of the source and perceiver. MultiFlow enables the representation of indepdendent flow copies using the structure shown below:
+MultiFlow can be used to represent signals and perceptions in which a flow may have independent copies on the side of the source and perceiver. MultiFlow enables the representation of independent flow copies using the structure shown below:
 
 .. figure:: figures/drawio/MultiFlow.svg
    :width: 800

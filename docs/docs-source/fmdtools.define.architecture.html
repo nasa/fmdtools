@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-2">Version: 2.1.2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -647,6 +647,9 @@
 <li class="toctree-l3"><a class="reference internal" href="frdl.html#what-can-you-use-frdl-for">What can you use FRDL for?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="frdl.html#why-frdl">Why FRDL?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="frdl.html#relationship-with-fmdtools">Relationship with fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="frdl.html#intro-to-frdl">Intro to FRDL</a><ul class="simple">
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="frdl.html#specification">Specification</a><ul>
@@ -2287,13 +2290,16 @@ is provided, calls method_layout, where method is the string provided</p></li>
 geoms. We can then access the individual geoms in the geoms dict, e.g.,:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span> <span class="o">=</span> <span class="n">ExGeomArch</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span><span class="o">.</span><span class="n">geoms</span><span class="p">()[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span>
-<span class="go">ExGeomState(occupied=False)</span>
+<span class="go">ExGeomState(occupied=False, buffer_around=1.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span><span class="o">.</span><span class="n">h</span>
 <span class="go">points.ex_point.s.occupied:   array(101)</span>
+<span class="go">points.ex_point.s.buffer_around: array(101)</span>
 <span class="go">lines.ex_line.s.occupied:     array(101)</span>
+<span class="go">lines.ex_line.s.buffer_around: array(101)</span>
 <span class="go">polys.ex_poly.s.occupied:     array(101)</span>
+<span class="go">polys.ex_poly.s.buffer_around: array(101)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span><span class="o">.</span><span class="n">return_mutables</span><span class="p">()</span>
-<span class="go">((False,), (False,), (False,), (-0.1, 0, 0.0, 1))</span>
+<span class="go">((False, 1.0), (False, 1.0), (False, 1.0), (-0.1, 0, 0.0, 1))</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -2359,11 +2365,11 @@ geoms. We can then access the individual geoms in the geoms dict, e.g.,:</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exga</span> <span class="o">=</span> <span class="n">ExGeomArch</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exga</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="go">{&#39;ex_point&#39;: [&#39;shape&#39;, &#39;on&#39;], &#39;ex_line&#39;: [&#39;shape&#39;, &#39;on&#39;], &#39;ex_poly&#39;: [&#39;shape&#39;]}</span>
+<span class="go">{&#39;ex_point&#39;: [&#39;shape&#39;, &#39;on&#39;, &#39;around&#39;], &#39;ex_line&#39;: [&#39;shape&#39;, &#39;on&#39;, &#39;around&#39;], &#39;ex_poly&#39;: [&#39;shape&#39;, &#39;around&#39;]}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exga</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-<span class="go">{&#39;ex_line&#39;: [&#39;shape&#39;, &#39;on&#39;], &#39;ex_poly&#39;: [&#39;shape&#39;]}</span>
+<span class="go">{&#39;ex_line&#39;: [&#39;shape&#39;, &#39;on&#39;, &#39;around&#39;], &#39;ex_poly&#39;: [&#39;shape&#39;, &#39;around&#39;]}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exga</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
-<span class="go">{&#39;ex_point&#39;: [&#39;on&#39;], &#39;ex_line&#39;: [&#39;on&#39;]}</span>
+<span class="go">{&#39;ex_point&#39;: [&#39;on&#39;, &#39;around&#39;], &#39;ex_line&#39;: [&#39;on&#39;, &#39;around&#39;], &#39;ex_poly&#39;: [&#39;around&#39;]}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2453,6 +2459,28 @@ The default is {‘all’: {}}.</p></li>
 <li><p><strong>z</strong> (<em>bool/number</em><em>, </em><em>optional</em>) – If plotting on a 3d axis, set z to a number which will be the z-level.
 The default is False.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Overall kwargs to show.geom for all geoms.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>fig</strong> (<em>figure</em>) – Matplotlib figure object</p></li>
+<li><p><strong>ax</strong> (<em>axis</em>) – Corresponding matplotlib axis</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.show_from">
+<span class="sig-name descname"><span class="pre">show_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.show_from" title="Link to this definition"></a></dt>
+<dd><p>Show the GeomArch at the given time in the provided history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hist</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History of states for the GeomArchitecture.</p></li>
+<li><p><strong>t</strong> (<em>int</em>) – Time in the history to show the state of the GeomArchitecture at.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to GeomArchitecture.show().</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
