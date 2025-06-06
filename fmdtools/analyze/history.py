@@ -314,7 +314,8 @@ class History(Result):
             else:
                 try:
                     if reshape_to:
-                        att = np.resize(att, (reshape_to,))
+                        new_shape = tuple([reshape_to, *att.shape[1:]])
+                        att = np.resize(att, new_shape)
                     if end_ind is None:
                         ei = len(att)
                     else:
