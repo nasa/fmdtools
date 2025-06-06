@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">379 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">319<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">60<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">318<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">61<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">49<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_cb0e7a8cec84cab4_tabulate_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.8.0">coverage.py v7.8.0</a>,
-            created at 2025-05-19 17:00 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.8.2">coverage.py v7.8.2</a>,
+            created at 2025-06-05 18:13 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -122,7 +122,7 @@
     <p class="pln"><span class="n"><a id="t40" href="#t40">40</a></span><span class="t"><span class="str">specific language governing permissions and limitations under the License.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t41" href="#t41">41</a></span><span class="t"><span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t42" href="#t42">42</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t43" href="#t43">43</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">t_key</span><span class="op">,</span> <span class="nam">nest_dict</span><span class="op">,</span> <span class="nam">is_numeric</span><span class="op">,</span> <span class="nam">is_bool</span><span class="op">,</span> <span class="nam">nan_to_x</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t43" href="#t43">43</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">t_key</span><span class="op">,</span> <span class="nam">nest_dict</span><span class="op">,</span> <span class="nam">is_numeric</span><span class="op">,</span> <span class="nam">is_bool</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t44" href="#t44">44</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">analyze</span><span class="op">.</span><span class="nam">common</span> <span class="key">import</span> <span class="nam">to_include_keys</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t45" href="#t45">45</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">analyze</span><span class="op">.</span><span class="nam">common</span> <span class="key">import</span> <span class="nam">calc_metric</span><span class="op">,</span> <span class="nam">calc_metric_ci</span><span class="op">,</span> <span class="nam">join_key</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t46" href="#t46">46</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">analyze</span><span class="op">.</span><span class="nam">common</span> <span class="key">import</span> <span class="nam">get_sub_include</span><span class="op">,</span> <span class="nam">unpack_plot_values</span>&nbsp;</span><span class="r"></span></p>
@@ -477,7 +477,7 @@
     <p class="run"><span class="n"><a id="t395" href="#t395">395</a></span><span class="t">        <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">res</span><span class="op">)</span> <span class="op">==</span> <span class="num">1</span> <span class="key">and</span> <span class="nam">at</span> <span class="key">in</span> <span class="nam">res</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t396" href="#t396">396</a></span><span class="t">            <span class="key">return</span> <span class="nam">res</span><span class="op">[</span><span class="nam">at</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t397" href="#t397">397</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t398" href="#t398">398</a></span><span class="t">            <span class="key">return</span> <span class="nam">res</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t398" href="#t398">398</a></span><span class="t">            <span class="key">return</span> <span class="nam">res</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t399" href="#t399">399</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t400" href="#t400">400</a></span><span class="t">    <span class="key">def</span> <span class="nam">all_with</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">attr</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t401" href="#t401">401</a></span><span class="t">        <span class="str">"""Get all values with the attribute attr."""</span>&nbsp;</span><span class="r"></span></p>
@@ -1215,8 +1215,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_cb0e7a8cec84cab4_tabulate_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.8.0">coverage.py v7.8.0</a>,
-            created at 2025-05-19 17:00 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.8.2">coverage.py v7.8.2</a>,
+            created at 2025-06-05 18:13 -0700
         </p>
     </div>
 </footer>

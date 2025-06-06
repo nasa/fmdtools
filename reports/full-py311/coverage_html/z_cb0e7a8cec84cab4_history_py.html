@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">410 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">283<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">127<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">284<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">126<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">13<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_cb0e7a8cec84cab4_phases_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.8.0">coverage.py v7.8.0</a>,
-            created at 2025-05-19 17:00 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.8.2">coverage.py v7.8.2</a>,
+            created at 2025-06-05 18:13 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -334,9 +334,9 @@
     <p class="run"><span class="n"><a id="t252" href="#t252">252</a></span><span class="t">                <span class="key">elif</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">hist</span><span class="op">,</span> <span class="nam">np</span><span class="op">.</span><span class="nam">ndarray</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t253" href="#t253">253</a></span><span class="t">                    <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t254" href="#t254">254</a></span><span class="t">                        <span class="nam">hist</span><span class="op">[</span><span class="nam">t_ind</span><span class="op">]</span> <span class="op">=</span> <span class="nam">val</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t255" href="#t255">255</a></span><span class="t">                    <span class="key">except</span> <span class="nam">Exception</span> <span class="key">as</span> <span class="nam">e</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t256" href="#t256">256</a></span><span class="t">                        <span class="nam">obj_str</span> <span class="op">=</span> <span class="str">"Error logging obj "</span><span class="op">+</span><span class="nam">obj</span><span class="op">.</span><span class="nam">__class__</span><span class="op">.</span><span class="nam">__name__</span><span class="op">+</span><span class="str">": "</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t257" href="#t257">257</a></span><span class="t">                        <span class="key">if</span> <span class="nam">t_ind</span> <span class="op">>=</span> <span class="nam">len</span><span class="op">(</span><span class="nam">hist</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t255" href="#t255">255</a></span><span class="t">                    <span class="key">except</span> <span class="nam">Exception</span> <span class="key">as</span> <span class="nam">e</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t256" href="#t256">256</a></span><span class="t">                        <span class="nam">obj_str</span> <span class="op">=</span> <span class="str">"Error logging obj "</span><span class="op">+</span><span class="nam">obj</span><span class="op">.</span><span class="nam">__class__</span><span class="op">.</span><span class="nam">__name__</span><span class="op">+</span><span class="str">": "</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t257" href="#t257">257</a></span><span class="t">                        <span class="key">if</span> <span class="nam">t_ind</span> <span class="op">>=</span> <span class="nam">len</span><span class="op">(</span><span class="nam">hist</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t258" href="#t258">258</a></span><span class="t">                            <span class="key">raise</span> <span class="nam">Exception</span><span class="op">(</span><span class="nam">obj_str</span> <span class="op">+</span> <span class="str">"Time beyond range of model"</span> <span class="op">+</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t259" href="#t259">259</a></span><span class="t">                                            <span class="str">"history--check staged execution "</span> <span class="op">+</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t260" href="#t260">260</a></span><span class="t">                                            <span class="str">"and simulation time settings"</span> <span class="op">+</span>&nbsp;</span><span class="r"></span></p>
@@ -383,7 +383,7 @@
     <p class="pln"><span class="n"><a id="t301" href="#t301">301</a></span><span class="t"><span class="str">        [0, 1, 2, 3]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t302" href="#t302">302</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t303" href="#t303">303</a></span><span class="t">        <span class="key">if</span> <span class="nam">newcopy</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t304" href="#t304">304</a></span><span class="t">            <span class="nam">hist</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t304" href="#t304">304</a></span><span class="t">            <span class="nam">hist</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t305" href="#t305">305</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t306" href="#t306">306</a></span><span class="t">            <span class="nam">hist</span> <span class="op">=</span> <span class="nam">self</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t307" href="#t307">307</a></span><span class="t">        <span class="key">for</span> <span class="nam">name</span><span class="op">,</span> <span class="nam">att</span> <span class="key">in</span> <span class="nam">hist</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -392,7 +392,7 @@
     <p class="pln"><span class="n"><a id="t310" href="#t310">310</a></span><span class="t">            <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t311" href="#t311">311</a></span><span class="t">                <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t312" href="#t312">312</a></span><span class="t">                    <span class="key">if</span> <span class="nam">end_ind</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t313" href="#t313">313</a></span><span class="t">                        <span class="nam">hist</span><span class="op">[</span><span class="nam">name</span><span class="op">]</span> <span class="op">=</span> <span class="nam">att</span><span class="op">[</span><span class="nam">start_ind</span><span class="op">:</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t313" href="#t313">313</a></span><span class="t">                        <span class="nam">hist</span><span class="op">[</span><span class="nam">name</span><span class="op">]</span> <span class="op">=</span> <span class="nam">att</span><span class="op">[</span><span class="nam">start_ind</span><span class="op">:</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t314" href="#t314">314</a></span><span class="t">                    <span class="key">elif</span> <span class="nam">start_ind</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t315" href="#t315">315</a></span><span class="t">                        <span class="nam">hist</span><span class="op">[</span><span class="nam">name</span><span class="op">]</span> <span class="op">=</span> <span class="nam">att</span><span class="op">[</span><span class="op">:</span><span class="nam">end_ind</span><span class="op">+</span><span class="num">1</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t316" href="#t316">316</a></span><span class="t">                    <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1282,8 +1282,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_cb0e7a8cec84cab4_phases_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.8.0">coverage.py v7.8.0</a>,
-            created at 2025-05-19 17:00 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.8.2">coverage.py v7.8.2</a>,
+            created at 2025-06-05 18:13 -0700
         </p>
     </div>
 </footer>
