@@ -51,9 +51,12 @@ class Environment(CommsFlow):
     >>> env.create_hist([1.0])
     c.r.probdens:                   array(1)
     c.st:                           array(1)
-    ga.points.ex_point:             array(1)
-    ga.lines.ex_line:               array(1)
-    ga.polys.ex_poly:               array(1)
+    ga.points.ex_point.s.occupied:  array(1)
+    ga.points.ex_point.s.buffer_around: array(1)
+    ga.lines.ex_line.s.occupied:    array(1)
+    ga.lines.ex_line.s.buffer_around: array(1)
+    ga.polys.ex_poly.s.occupied:    array(1)
+    ga.polys.ex_poly.s.buffer_around: array(1)
     """
 
     slots = ["c", "r", "ga"]

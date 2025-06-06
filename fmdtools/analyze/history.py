@@ -268,7 +268,7 @@ class History(Result):
                             raise Exception(obj_str + "Value too large to represent: "
                                             + att + "=" + str(val)) from e
 
-    def cut(self, end_ind=None, start_ind=None, newcopy=False):
+    def cut(self, end_ind=None, start_ind=None, newcopy=False, reshape_to=None):
         """
         Cut the history to a given index.
 
@@ -283,6 +283,9 @@ class History(Result):
         newcopy: bool, optional
             Tells whether to creat a new history variable with the information what was
             cut or cut the original history variable. Default is False.
+        reshape_to: int, optional
+            Size of array to cut from, if different from current size. Default is None,
+            which does not reshape the array.
 
         Examples
         --------
@@ -306,15 +309,19 @@ class History(Result):
             hist = self
         for name, att in hist.items():
             if isinstance(att, History):
-                hist[name] = hist[name].cut(end_ind, start_ind, newcopy=False)
+                hist[name] = hist[name].cut(end_ind, start_ind,
+                                            newcopy=False, reshape_to=reshape_to)
             else:
                 try:
+                    if reshape_to:
+                        att = np.resize(att, (reshape_to,))
                     if end_ind is None:
-                        hist[name] = att[start_ind:]
-                    elif start_ind is None:
-                        hist[name] = att[:end_ind+1]
+                        ei = len(att)
                     else:
-                        hist[name] = att[start_ind:end_ind+1]
+                        ei = end_ind+1
+                    if start_ind is None:
+                        start_ind = 0
+                    hist[name] = att[start_ind:ei]
                 except TypeError as e:
                     raise Exception("Invalid history for name " + name +
                                     " in history "+str(hist.data)) from e
