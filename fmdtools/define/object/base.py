@@ -646,7 +646,8 @@ class BaseObject(object):
         """
         if hasattr(self, 'h') and self.h:
             len_timerange = len(timerange)
-            self.h = self.h.cut(reshape_to=len_timerange)
+            if len_timerange != len([*self.h.values()][0]):
+                self.h = self.h.cut(reshape_to=len_timerange)
             return self.h
         else:
             track = self.track

@@ -19,6 +19,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.flow.commsflow import CommsFlow
+from fmdtools.define.block.base import SimParam
 from fmdtools.define.object.coords import Coords, ExampleCoords
 from fmdtools.define.architecture.geom import GeomArchitecture, ExGeomArch
 
@@ -61,25 +62,27 @@ class Environment(CommsFlow):
 
     slots = ["c", "r", "ga"]
     container_r = Rand
+    container_sp = SimParam
+    default_sp = {}
     coords_c = Coords
     arch_ga = GeomArchitecture
     roletypes = ['container', 'coords', 'arch']
     default_track = ('s', 'i', 'c', 'ga')
     all_possible = ('s', 'i', 'c', 'r', 'ga')
 
-    def __init__(self, name='', root='', glob=[], p={}, s={}, r={}, c={}, ga={},
+    def __init__(self, name='', root='', glob=[], p={}, s={}, r={}, sp={}, c={}, ga={},
                  track='default'):
-        super().__init__(name=name, root=root, glob=glob, p=p, s=s, track=track)
+        super().__init__(name=name, root=root, glob=glob, p=p, s=s, sp=sp, track=track)
         # NOTE: p and s also init here because if not, they are overritten
         # may need to change in the future
-        self.init_roletypes('container', "coords", "arch", r=r, p=p, s=s)
+        self.init_roletypes('container', "coords", "arch", r=r, p=p, s=s, sp=sp)
         if 'p' not in c and getattr(self.coords_c, 'container_p', None) == getattr(self, 'container_p', None):
             c = {**c, 'p': p}
         if 'p' not in ga and getattr(self.arch_ga, 'container_p', None) == getattr(self, 'container_p', None):
             ga = {**ga, 'p': p}
         r_kwargs = {'run_stochastic': self.r.run_stochastic, 'seed': self.r.seed}
         c = {**{'r': r_kwargs}, **c}
-        ga = {**{'r': r_kwargs}, **ga}
+        ga = {**{'r': r_kwargs, 'sp': self.sp}, **ga}
         self.init_roletypes('coords', 'arch', c=c, ga=ga)
 
     def base_type(self):
@@ -118,7 +121,8 @@ class Environment(CommsFlow):
         cop = super().copy(glob=glob, p=p, s=s)
         cop.r.assign(self.r)
         cop.c = self.c.copy()
-        cop.ga = self.ga.copy()
+        cop.sp = self.sp
+        cop.ga = self.ga.copy(sp=self.sp)
         if hasattr(self, 'h'):
             cop.h = self.h.copy()
         return cop

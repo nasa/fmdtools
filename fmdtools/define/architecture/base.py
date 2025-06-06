@@ -167,6 +167,8 @@ class Architecture(Simulable):
         # sync rands, if present
         if hasattr(self, 'r') and hasattr(objclass, "container_r"):
             kwargs = {**{'r': {"seed": self.r.seed}}, **kwargs}
+        if hasattr(objclass, "container_sp"):
+            kwargs = {**{'sp': self.sp.asdict()}, **kwargs}
         obj = init_obj(name=name, objclass=objclass, track=track,
                        as_copy=as_copy, root=self.get_full_name()+"."+flex_role,
                        **kwargs)
@@ -241,14 +243,10 @@ class Architecture(Simulable):
             Flows, dicts for non-default values to p, s, etc.
         """
         flows = self.get_flows(*flownames, all_if_empty=False)
-        fkwargs = {**{'sp': self.sp.asdict()}, **kwargs}
         if not self.sp.use_local:
-            fkwargs = {**{'t': {'dt': self.sp.dt}}, **fkwargs}
+            kwargs = {**{'t': {'dt': self.sp.dt}}, **kwargs}
 
-        self.add_flex_role_obj(flex_role, name, objclass=simclass, flows=flows, **fkwargs)
-
-        # add modes to overall mode dict
-        sim = self.get_flex_role_objs(flex_role)[name]
+        self.add_flex_role_obj(flex_role, name, objclass=simclass, flows=flows, **kwargs)
 
     def init_architecture(self, *args, **kwargs):
         """Use to initialize architecture."""

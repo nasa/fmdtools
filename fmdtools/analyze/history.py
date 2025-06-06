@@ -313,7 +313,7 @@ class History(Result):
                                             newcopy=False, reshape_to=reshape_to)
             else:
                 try:
-                    if reshape_to:
+                    if reshape_to and reshape_to != att.shape[0]:
                         new_shape = tuple([reshape_to, *att.shape[1:]])
                         att = np.resize(att, new_shape)
                     if end_ind is None:
