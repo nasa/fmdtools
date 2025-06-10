@@ -59,7 +59,7 @@ Further (functional and integration) tests are performed in the Python 3.11 to e
 
 The fmdtools library was developed to run in a python development environments.
 
-If you do not have an existing python environment, first [download and install anaconda](https://docs.anaconda.com/free/anaconda/install/index.html) or [uv]().
+If you do not have an existing python environment, first [download and install anaconda](https://docs.anaconda.com/free/anaconda/install/index.html) or [uv](https://docs.astral.sh/uv/).
 
 After the base installation, set up a new `Python 3.11` environment for fmdtools and install these external external packages in it:
 

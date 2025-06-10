@@ -5,7 +5,7 @@ marp: true
 # Intro to Hazard Analysis with the Functional Reasoning Design Language (FRDL)
 
 ---
-
+<style scoped>section{font-size:27px;}</style>
 # Why Perform Hazard Analysis? - The Need for Safety
 
 - Complex Safety-Critical Systems, like Aircraft, Nuclear Power Plants, and Human Spaceflight systems have a high expectations of safety and many potential points of failure
@@ -18,6 +18,7 @@ marp: true
 
 
 ---
+<style scoped>section{font-size:27px;}</style>
 
 # How do you perform hazard analysis? Depends on the process or standard!
 
@@ -55,6 +56,7 @@ Based on this, one may prescribe **mitigations** to reduce hazard risks
 *Exercise:* Construct a hazard table for a system of your choice. It could be a physical product, a vehicle, software, a task/process, or anything else you can think of.
 
 --- 
+<style scoped>section{font-size:27px;}</style>
 
 # What is FRDL (and why use it for hazard analysis)?
 
@@ -71,15 +73,15 @@ Based on this, one may prescribe **mitigations** to reduce hazard risks
 
 ---
 
-# What does an FRDL diagram look like?
+# <!-- fit --> What does an FRDL diagram look like? (see [FRDL spec](https://nasa.github.io/fmdtools/docs-source/frdl.html#specification))
 
 
 ![generic model, width:1150px](./figures/frdl/diagrams/frdl_fad_singleprop_explanation.svg)
 
- See [fmdtools specification.](https://nasa.github.io/fmdtools/docs-source/frdl.html#specification)
+
 
 ---
-
+<style scoped>section{font-size:29px;}</style>
 # How do you analyze hazards with and FRDL diagram?
 
 0.) Imagine how the system is supposed to work nominally
@@ -118,7 +120,7 @@ For causes, run through this process in reverse. See [FRDL/Specification/Usage/A
 
 
 ---
-
+<style scoped>section{font-size:27px;}</style>
 # Some Takeaways
 
 - Analyzing behavior in FRDL means working **directly with the diagram** to determine hazard effects, as opposed to just coming up with the effects out of your head

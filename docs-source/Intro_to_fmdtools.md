@@ -2,6 +2,7 @@
 title: Intro to fmdtools
 description: Intro to resilience modeling, simulation, and visualization in Python with fmdtools.
 marp: true
+
 ---
 ![fmdtools logo - hindenberg](./figures/logo/logo-hindenberg.png)
 
@@ -12,6 +13,8 @@ marp: true
 -----------------
 
 # Overview
+
+<style scoped>section{font-size:27px;}</style>
 
 - **Overview of fmdtools**
     - Purpose
@@ -51,11 +54,11 @@ Resilience means taking a **dynamic understanding of risk and safety**
 ![resilience importance width:1000px](./figures/powerpoint/resilience_importance.svg)
 
 -----------------
-# Enabling proactive design process
+
+#  <!-- fit --> Enabling a proactive design process - especially when we don't have data
 
 ![width:900px](./figures/powerpoint/resilience_design.svg)
 
-- Especially relevant to **new systems** when **we don’t have data** 
 
 -----------------
 
@@ -74,9 +77,9 @@ Resilience means taking a **dynamic understanding of risk and safety**
 # Why fmdtools? Pros:
 
 - Highly Expressive, modular model representation.
-    - faults from any component can propagate to any other connected component via **undirected propagation**
+    - faults from any component can propagate to any other connected component 
     - highly-extensible code-based behavior representation
-    - class structure enables **complex models** representing human behavior and systems of systems
+    - modularity enables **complex models** and modelling use-cases
 - Research-oriented:
     - Written in/relies on the Python stack
     - Open source/free software
@@ -108,17 +111,15 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 
 [Repository] (https://github.com/nasa/fmdtools/)
-- `/fmdtools`: installable package
+- `/fmdtools`: installable package directory
 - `/examples`: example models with demonstrative notebooks and tests
-- `/docs`: resources for [documentation](https://nasa.github.io/fmdtools/)
+- `/docs`: [HTML Documentation](https://nasa.github.io/fmdtools/) (source files at `/docs-source`)
 - `/tests`: stand-alone tests (and testing rigs)
-- `README.md`: Basic package description 
-- `CONTRIBUTORS.md`: Credit for contributions
-- `requirements.txt`: List of requirements
-- ... and other configuration files
+- Basic information: `README.md`, `CONTRIBUTORS.md`, `PUBLICATIONS.md`, `LICENSE`, `fmdtools_Individual_CLA.pdf`, etc.
+- Config/test files: `requirements.txt`, `pyproject.toml`, `conf.py`, `index.rst`, etc.
 
 -----------------
-
+<style scoped>section{font-size:27px;}</style>
 # Activity: Download and Install fmdtools
 
 - repo link: https://github.com/nasa/fmdtools/
@@ -136,30 +137,50 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 # Analysis Workflow/Structure
 
-![Analysis Workflow](./figures/powerpoint/workflow.svg)
+![Analysis Workflow width:950px](./figures/powerpoint/workflow.svg)
 
 -----------------
 
 # Defining a Model
-
+<style scoped>section{font-size:25px;}</style>
 - What do we want out of a model?
     - What behaviors and how much fidelity do we need?
-    - What functions/components and interactions make up the system?
-        - Single function or multiple functions?
-        - Is it controlled? Are there multiple agents?
+    - What **functions/components** and interactions make up the system?
+        - One function or multiple functions?
+        - Is it a **controlled system**? Are there multiple **agents**?
 - What type of simulation do we want to run?
     - Single-timestep vs multi-timestep vs network 
 - What scenarios do we want to study and how?
-    - Failure modes and faulty behaviors
-    - Disturbances and changes in parameters
+    - **Failure modes** and faulty behaviors
+    - **Disturbances** and changes in parameters
     - What are the possible effects of hazards and how bad are they? 
-        - By what metrics?
+        - By what **metrics**?
 
 -----------------
 
 # Defining a Model
 
-![formalism example](./figures/powerpoint/formalism_example.svg)
+![formalism example, width:1000](./figures/powerpoint/formalism_example.svg)
+
+-----------------
+
+# Concept: Static Propagation
+
+![Static Propagation](./figures/drawio/propagation.svg)
+
+In a single timestep, functions with `static_behavior()` methods simulate until behaviors converge (i.e., no new state values)
+
+-----------------
+
+# Concept: Propagation over Time
+
+<style scoped> { columns: 2; } </style>
+
+- Model increments (simulated + history updated) over each time-step until a **defined final time-step** or **specified indicator returns true**. 
+
+- Functions with `dynamic_behavior()` run once in defined order
+
+![Dynamic Propagation width:600px](./figures/drawio/propagationovertime.svg)
 
 -----------------
 # Containers - The building blocks of simulations
@@ -178,7 +199,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 ![Function Code Template](./figures/powerpoint/fxnblock_structure.svg)
 
 -----------------
-# Model Code Template
+# Function Architecture Code Template
 
 ![Model Code Template](./figures/powerpoint/fxnarch_structure.svg)
 
@@ -189,7 +210,6 @@ Notice the definitions and structure:
 - **States**: `WaterStates`, `EEStates`, `SignalStates`
 - **Flows**: `Water`, `EE`, `Signal`
 - **Functions**: `ImportEE`, `ImportWater`, `ExportWater`, `MoveWater`, `ImportSignal`
-    - **Flows**
     - **Modes** (e.g., `ImportEEMode`, `ImportSigMode`)
         - Mode probability model
         - Actual modes in `fm_args` entry
@@ -220,24 +240,6 @@ Open `/examples/pump/Tutorial_unfilled.ipynb`:
 
 -----------------
 
-# Simulation Concepts: Static/Undirected Propagation
-
-![Static Propagation](./figures/drawio/propagation.svg)
-
-In a single timestep:
-- Functions with `static_behavior()` methods simulate until behaviors converge (i.e., no new state values)
-- Functions with `dynamic_behavior()` run once in defined order
-
------------------
-
-# Simulation Concepts: Propagation over Time
-
-![Dynamic Propagation](./figures/drawio/propagationovertime.svg)
-
-- Model increments (simulated + history updated) over each time-step until a **defined final time-step** or **specified indicator returns true**. 
-
------------------
-
 # Simulation Concepts: Types of Simulations
 
 ![Dynamic Propagation, width:1000px](./figures/powerpoint/simulation_types.svg)
@@ -264,8 +266,7 @@ See docs for: [`fmdtools.sim.fault_sample`](https://nasa.github.io/fmdtools/docs
 
 # Simulation Concepts: Things to Consider
 
-**Static/Dynamic propagation:** How function states propagate to each other in a single time-step and multiple time-steps
-- Undirected graph representation—states can effect all other connected states, and vice versa, in any order
+**Static/Dynamic propagation:** How function states propagate to each other in a single time-step and multiple time-steps?
 
 **Stochastic Propagation:** Whether and how stochastic states are instantiated over time
 - e.g. do we run with the “default” values of parameters, or do we sample from a random number generator?
@@ -279,13 +280,10 @@ See docs for: [`fmdtools.sim.fault_sample`](https://nasa.github.io/fmdtools/docs
 # Activity: Simulate the Model
 
 Run fault propagation methods:
-- `propagate.nominal()`
-- `propagate.one_fault()`
-- `propagate.fault_sample()`
+- `propagate.nominal()`,  `propagate.one_fault()`, `propagate.fault_sample()`
 
 What do the results look like? Explore data structures:
-- `analyze.result.Result`
-- `analyze.result.History`
+- `analyze.result.Result`, `analyze.result.History`
 
 Explore:
 - What happens when you change `FaultSample` parameters?
@@ -294,11 +292,11 @@ Explore:
 
 -----------------
 
-# Analysis Modules
+# Analysis Modules - see docs for [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html)
 
-![Analyze Modules width:960px](./figures/powerpoint/analyze_module_structure.svg)
+![Analyze Modules width:1000px](./figures/powerpoint/analyze_module_structure.svg)
 
-See docs for: [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html)
+
 
 -----------------
 
@@ -332,12 +330,8 @@ See docs for: [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs-source/f
 
 # Further Reading/Links
 
-- More advanced topics ([see examples](../examples/Examples.rst)):
-    - Search and optimization
-    - Human/AI Modeling
-    - Systems-of-Systems modeling
-    - Modeling Stochastic Behavior
-    - ... and more
+- More advanced topics ([see examples](../examples/Examples.rst)), including Search and optimization, Human, Systems-of-Systems modeling, and Modeling Stochastic Behavior
+
 - [Model Development Guide](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#model-development-best-practices): Has best practices for developing models in a strategic way (especially helpful for complex models)
 - Overview Paper: 
     - [Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., & Goebel, K. (2021). fmdtools: A fault propagation toolkit for resilience assessment in early design. International Journal of Prognostics and Health Management, 12(3).](http://papers.phmsociety.org/index.php/ijphm/article/view/2954)
