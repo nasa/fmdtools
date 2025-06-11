@@ -1,0 +1,1448 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FRDL &mdash; fmdtools 2.1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=179ab080"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Intro to Hazard Analysis with the Functional Reasoning Design Language (FRDL)" href="Intro_to_frdl.html" />
+    <link rel="prev" title="Contributions" href="Contributions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo-main.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#about">About</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-modelling-paradigm">Flexible Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#getting-started">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#python-version-compatibility">Python version compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#set-up-python-tooling-environment">Set up python tooling environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#install-fmdtools">Install fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../README.html#editable-development-install">Editable Development Install</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../README.html#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#citing-this-repository">Citing this repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Development%20Guide.html">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#why-fmdtools">Why fmdtools?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#enabling-a-proactive-design-process-especially-when-we-don-t-have-data"><!-- fit --> Enabling a proactive design process - especially when we don’t have data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-pros">Why fmdtools? Pros:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#activity-download-and-install-fmdtools">Activity: Download and Install fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#concept-static-propagation">Concept: Static Propagation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#concept-propagation-over-time">Concept: Propagation over Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#containers-the-building-blocks-of-simulations">Containers - The building blocks of simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#flow-code-template">Flow Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#function-architecture-code-template">Function Architecture Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-types-of-simulations">Simulation Concepts: Types of Simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-sampling-approaches">Simulation Concepts: Sampling Approaches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-things-to-consider">Simulation Concepts: Things to Consider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#activity-simulate-the-model">Activity: Simulate the Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#analysis-modules-see-docs-for-fmdtools-analyze">Analysis Modules - see docs for <code class="docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#analysis-activity">Analysis Activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#conclusions-summary">Conclusions/Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#further-reading-links">Further Reading/Links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#glossary">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#make-and-frdl-diagram-first">Make and FRDL Diagram First</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/Examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#pump">Pump</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/pump/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Tutorial_complete.html#5.)-Saving-Work">5.) Saving Work</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html">Pump Example Notebook</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Initial-Model-Checks">Initial Model Checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#History">History</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Propagating-and-Viewing-Results-for-Individual-Faults">Propagating and Viewing Results for Individual Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Visualization-of-resilience-metrics">Visualization of resilience metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Running-a-List-of-Faults">Running a List of Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Running-a-Fault-Sampling-Approach">Running a Fault Sampling Approach</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html">Using Parallel Computing in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Model-Checks">Model Checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Using-Parallelism-in-Simulation">Using Parallelism in Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Performance-Comparison">Performance Comparison</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Comparison:-Lower-Tracking-Time-Resolution">Comparison: Lower Tracking Time Resolution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Comparison-Conclusions:">Comparison Conclusions:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Further-Computational-Cost-Reduction-via-Profiling">Further Computational Cost Reduction via Profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Optimization.html">Optimization using the ProblemInterface class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Problem-Setup">Problem Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Problem-interfaces">Problem interfaces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Optimization:">Optimization:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Initial-Network-Model">Initial Network Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Static-Model">Static Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Dynamic-Model">Dynamic Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Hierarchical-Model">Hierarchical Model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html">Urban Drone Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Model-Overview">Model Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Nominal-Simulation">Nominal Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Resilience-model">Resilience model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html">Integrated Resilience Optimization Architectures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Design-Model">Design Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Operational-Model">Operational Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Resilience-Model">Resilience Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Combined-Simulation/Optimization">Combined Simulation/Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#History">History</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Optimization">Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/eps/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/asg_demo/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#notebooks">Notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html#Fault-Simulation">Fault Simulation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#references">References</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#notices">Notices</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/Model_Structure_Visualization_Tutorial.html">Defining and Visualizing fmdtools Model Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Model_Structure_Visualization_Tutorial.html#Basics">Basics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Model_Structure_Visualization_Tutorial.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Model_Structure_Visualization_Tutorial.html#Graph-Views">Graph Views</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Model_Structure_Visualization_Tutorial.html#Object-Graphs">Object Graphs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Model_Structure_Visualization_Tutorial.html#Full-Model-Containment-Graph">Full Model Containment Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Model_Structure_Visualization_Tutorial.html#Run-Order">Run Order</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Model_Structure_Visualization_Tutorial.html#Behavior/Fault-Visualization">Behavior/Fault Visualization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/FaultSample_Use-Cases.html">Defining Fault Sampling Approaches in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/FaultSample_Use-Cases.html#Basics">Basics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/FaultSample_Use-Cases.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/FaultSample_Use-Cases.html#Setting-up-a-FaultSample">Setting up a FaultSample</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/FaultSample_Use-Cases.html#Propagating-Faults">Propagating Faults</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/ParameterSample_Use-Cases.html">Defining Parameter Samples in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/ParameterSample_Use-Cases.html#Quantifying-probabilities">Quantifying probabilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/ParameterSample_Use-Cases.html#Nested-Scenario-Sampling">Nested Scenario Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/HFAC_Analyses/HFAC_Analyses.html">More Human Failure Analyses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html">Human Failure Representation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-behavioral-simulation">Testing behavioral simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-Faults">Testing Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Examining-Performance-Shaping-Factors">Examining Performance Shaping Factors</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html">Degradation Modelling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html#Drive-Degradation">Drive Degradation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html#Human-Degradation">Human Degradation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html#Combined-Degradation">Combined Degradation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html#Analysis">Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html">Faulty State-Space Search Method Comparison</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html#Performance-Comparison">Performance Comparison</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Fault-Space-Formulation">Comparing Solutions over weights - Fault-Space Formulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Result-Space-Formulation">Comparing Solutions over weights - Result-Space Formulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/optimization/Rover_Response_Optimization.html">Rover Response Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Rover_Response_Optimization.html#Optimization">Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multiflow_demo/readme.html">MultiFlow Demo Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/readme.html">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html">fmdtools.define</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-base">fmdtools.define.architecture.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-action">fmdtools.define.architecture.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-component">fmdtools.define.architecture.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-function">fmdtools.define.architecture.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-geom">fmdtools.define.architecture.geom</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.block.html">fmdtools.define.block</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.function">fmdtools.define.block.function</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-mode">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-commsflow">fmdtools.define.flow.commsflow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.object.html">fmdtools.define.object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.base">fmdtools.define.object.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.timer">fmdtools.define.object.timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.geom">fmdtools.define.object.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.round_float"><code class="docutils literal notranslate"><span class="pre">round_float()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.set_arg_as_type"><code class="docutils literal notranslate"><span class="pre">set_arg_as_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.environment.Environment"><code class="docutils literal notranslate"><span class="pre">Environment</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.fault_sample"><code class="docutils literal notranslate"><span class="pre">fault_sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.fault_sample_from"><code class="docutils literal notranslate"><span class="pre">fault_sample_from()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.gen_sampleapproach"><code class="docutils literal notranslate"><span class="pre">gen_sampleapproach()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nested_sample"><code class="docutils literal notranslate"><span class="pre">nested_sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.pack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_mult_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.parameter_sample"><code class="docutils literal notranslate"><span class="pre">parameter_sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.process_nominal"><code class="docutils literal notranslate"><span class="pre">process_nominal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.BaseScenObj"><code class="docutils literal notranslate"><span class="pre">BaseScenObj</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario"><code class="docutils literal notranslate"><span class="pre">BaseScenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.Injection"><code class="docutils literal notranslate"><span class="pre">Injection</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario"><code class="docutils literal notranslate"><span class="pre">JointFaultScenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.ParameterScenario"><code class="docutils literal notranslate"><span class="pre">ParameterScenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.Scenario"><code class="docutils literal notranslate"><span class="pre">Scenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.Sequence"><code class="docutils literal notranslate"><span class="pre">Sequence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.SingleFaultScenario"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.create_scenname"><code class="docutils literal notranslate"><span class="pre">create_scenname()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.sample">fmdtools.sim.sample</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.BaseSample"><code class="docutils literal notranslate"><span class="pre">BaseSample</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ExNestedParam"><code class="docutils literal notranslate"><span class="pre">ExNestedParam</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.FaultDomain"><code class="docutils literal notranslate"><span class="pre">FaultDomain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.FaultSample"><code class="docutils literal notranslate"><span class="pre">FaultSample</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.JointFaultSample"><code class="docutils literal notranslate"><span class="pre">JointFaultSample</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ParameterDomain"><code class="docutils literal notranslate"><span class="pre">ParameterDomain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ParameterHistSample"><code class="docutils literal notranslate"><span class="pre">ParameterHistSample</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ParameterResultSample"><code class="docutils literal notranslate"><span class="pre">ParameterResultSample</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ParameterSample"><code class="docutils literal notranslate"><span class="pre">ParameterSample</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.SampleApproach"><code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.combine_orthogonal"><code class="docutils literal notranslate"><span class="pre">combine_orthogonal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.combine_random"><code class="docutils literal notranslate"><span class="pre">combine_random()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.pass_var"><code class="docutils literal notranslate"><span class="pre">pass_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.same_mode"><code class="docutils literal notranslate"><span class="pre">same_mode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.sample_times_even"><code class="docutils literal notranslate"><span class="pre">sample_times_even()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.sample_times_quad"><code class="docutils literal notranslate"><span class="pre">sample_times_quad()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.x_to_kwargs"><code class="docutils literal notranslate"><span class="pre">x_to_kwargs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.BaseConnector"><code class="docutils literal notranslate"><span class="pre">BaseConnector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.BaseObjCon"><code class="docutils literal notranslate"><span class="pre">BaseObjCon</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.BaseProblem"><code class="docutils literal notranslate"><span class="pre">BaseProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.BaseSimProblem"><code class="docutils literal notranslate"><span class="pre">BaseSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.Constraint"><code class="docutils literal notranslate"><span class="pre">Constraint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector"><code class="docutils literal notranslate"><span class="pre">ConstraintConnector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExScenProb"><code class="docutils literal notranslate"><span class="pre">ExScenProb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleDisturbanceProblem"><code class="docutils literal notranslate"><span class="pre">ExampleDisturbanceProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ExampleParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ExampleProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem"><code class="docutils literal notranslate"><span class="pre">ExampleSimpleProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint"><code class="docutils literal notranslate"><span class="pre">HistoryConstraint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryObjective"><code class="docutils literal notranslate"><span class="pre">HistoryObjective</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ObjectiveConnector"><code class="docutils literal notranslate"><span class="pre">ObjectiveConnector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ParameterSimProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ResponseCoords"><code class="docutils literal notranslate"><span class="pre">ResponseCoords</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ResultConstraint"><code class="docutils literal notranslate"><span class="pre">ResultConstraint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ResultObjective"><code class="docutils literal notranslate"><span class="pre">ResultObjective</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ScenarioProblem"><code class="docutils literal notranslate"><span class="pre">ScenarioProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.SimpleProblem"><code class="docutils literal notranslate"><span class="pre">SimpleProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.SingleFaultScenarioProblem"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.VariableConnector"><code class="docutils literal notranslate"><span class="pre">VariableConnector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.obj_name"><code class="docutils literal notranslate"><span class="pre">obj_name()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.graph.html">fmdtools.analyze.graph</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.label">fmdtools.analyze.graph.label</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-style">fmdtools.analyze.graph.style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-base">fmdtools.analyze.graph.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.model">fmdtools.analyze.graph.model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.add_title_xylabs"><code class="docutils literal notranslate"><span class="pre">add_title_xylabs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_average"><code class="docutils literal notranslate"><span class="pre">calc_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_expected"><code class="docutils literal notranslate"><span class="pre">calc_expected()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_metric"><code class="docutils literal notranslate"><span class="pre">calc_metric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_metric_ci"><code class="docutils literal notranslate"><span class="pre">calc_metric_ci()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_percent"><code class="docutils literal notranslate"><span class="pre">calc_percent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_rate"><code class="docutils literal notranslate"><span class="pre">calc_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_sum"><code class="docutils literal notranslate"><span class="pre">calc_sum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.calc_total"><code class="docutils literal notranslate"><span class="pre">calc_total()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.clear_prev_figure"><code class="docutils literal notranslate"><span class="pre">clear_prev_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.metric_preamble"><code class="docutils literal notranslate"><span class="pre">metric_preamble()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.multiplot_helper"><code class="docutils literal notranslate"><span class="pre">multiplot_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.phase_overlay"><code class="docutils literal notranslate"><span class="pre">phase_overlay()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.plot_err_hist"><code class="docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.prep_animation_title"><code class="docutils literal notranslate"><span class="pre">prep_animation_title()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.set_empty_multiplots"><code class="docutils literal notranslate"><span class="pre">set_empty_multiplots()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.setup_plot"><code class="docutils literal notranslate"><span class="pre">setup_plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.suite_for_plots"><code class="docutils literal notranslate"><span class="pre">suite_for_plots()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.to_include_keys"><code class="docutils literal notranslate"><span class="pre">to_include_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.unpack_plot_values"><code class="docutils literal notranslate"><span class="pre">unpack_plot_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.load_csv"><code class="docutils literal notranslate"><span class="pre">load_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.load_json"><code class="docutils literal notranslate"><span class="pre">load_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.History"><code class="docutils literal notranslate"><span class="pre">History</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.init_dicthist"><code class="docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.prep_hists"><code class="docutils literal notranslate"><span class="pre">prep_hists()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.BaseComparison"><code class="docutils literal notranslate"><span class="pre">BaseComparison</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.BaseTab"><code class="docutils literal notranslate"><span class="pre">BaseTab</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.Comparison"><code class="docutils literal notranslate"><span class="pre">Comparison</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.FMEA"><code class="docutils literal notranslate"><span class="pre">FMEA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.NestedComparison"><code class="docutils literal notranslate"><span class="pre">NestedComparison</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.NominalEnvelope"><code class="docutils literal notranslate"><span class="pre">NominalEnvelope</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary"><code class="docutils literal notranslate"><span class="pre">result_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary_fmea"><code class="docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap"><code class="docutils literal notranslate"><span class="pre">PhaseMap</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.find_interval_overlap"><code class="docutils literal notranslate"><span class="pre">find_interval_overlap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.from_hist"><code class="docutils literal notranslate"><span class="pre">from_hist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.join_phasemaps"><code class="docutils literal notranslate"><span class="pre">join_phasemaps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.phaseplot"><code class="docutils literal notranslate"><span class="pre">phaseplot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.samplemetric"><code class="docutils literal notranslate"><span class="pre">samplemetric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.samplemetrics"><code class="docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Contributions.html">Contributions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Contributions.html#contributors">Contributors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#nasa-contributors">NASA Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#external-contributors">External Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#alumni-and-interns">Alumni and Interns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#fmdtools-at-osu">fmdtools at OSU</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Contributions.html#fmdtools-publication-list">fmdtools Publication List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Contributions.html#how-to-contribute">How to Contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#repository-structure">Repository Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#git-structure-and-setup">Git Structure and Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#git-development-workflow">Git Development Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#release-process">Release Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#headers">Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FRDL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-can-you-use-frdl-for">What can you use FRDL for?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-frdl">Why FRDL?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relationship-with-fmdtools">Relationship with fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#intro-to-frdl">Intro to FRDL</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html">Intro to Hazard Analysis with the Functional Reasoning Design Language (FRDL)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#why-perform-hazard-analysis-the-need-for-safety">Why Perform Hazard Analysis? - The Need for Safety</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#how-do-you-perform-hazard-analysis-depends-on-the-process-or-standard">How do you perform hazard analysis? Depends on the process or standard!</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#what-a-generic-hazard-assessment-process-looks-like">What a generic hazard assessment process looks like:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#constructing-a-hazard-table-at-its-most-basic">Constructing a hazard table (at its most basic)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#what-is-frdl-and-why-use-it-for-hazard-analysis">What is FRDL (and why use it for hazard analysis)?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#what-does-an-frdl-diagram-look-like-see-frdl-spec"><!-- fit --> What does an FRDL diagram look like? (see FRDL spec)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#how-do-you-analyze-hazards-with-and-frdl-diagram">How do you analyze hazards with and FRDL diagram?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-step-1">Example - Step 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-step-2">Example - Step 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-step-1-again">Example - Step 1 (again)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-step-2-again">Example - Step 2 (again)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#some-takeaways">Some Takeaways</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#more-examples">More Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#more-helpful-information">More Helpful Information</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#specification">Specification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#primitives">Primitives</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#blocks">Blocks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#flows">Flows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#relationships">Relationships</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#annotations">Annotations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#architectures">Architectures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#functional-architectures">Functional Architectures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#action-architectures">Action Architectures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#component-architectures">Component Architectures</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#modelling">Modelling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analysis">Analysis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#guide">Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#concepts">Concepts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#function-action-relationship">Function/Action Relationship</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#function-component-relationship">Function/Component Relationship</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#flows-as-nodes">Flows as Nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#correspondence-with-other-methods">Correspondence with other methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#versus-f-fa">Versus F/FA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#versus-stamp-stpa">Versus STAMP/STPA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#versus-sysml-uml">Versus SysML/UML</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bread-making">Bread Making</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit">Circuit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-examples">Further Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">FRDL</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/nasa/fmdtools/blob/main/docs-source/frdl.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="frdl">
+<span id="id1"></span><h1>FRDL<a class="headerlink" href="#frdl" title="Link to this heading"></a></h1>
+<p>Functional Reasoning Design Language, Version 0.7.1</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>FRDL stands for the Functional Reasoning Design Language, which is a graphical language for describing the functional architecture of a system. A functional architecture (often known as a <a class="reference external" href="https://en.wikipedia.org/wiki/Function_model">functional model</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Functional_decomposition">functional decomposition</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Functional_flow_block_diagram">function-flow block diagram</a>)  describes the high-level functionalities (or, functions) that are to be embodied by a system, along with the interactions between these functionalities. Diagrams of functional architectures (like those enabled by FRDL) enable <em>functional reasoning</em> by providing a means to abstract away irrelevent aspects of system structure and behavior while focusing on the key (that is, functional) elements. Functional reasoning can support a range of design and analysis activities by encouraging clear reasoning about how a system operates and what it is supposed to do at a high level. This can facilitate many important design and analysis activities, including <a class="reference external" href="https://link.springer.com/book/10.1007/978-1-84628-319-2">product design (and especially redesign)</a>, behavioral simulation, and <a class="reference external" href="https://en.wikipedia.org/wiki/Failure_mode,_effects,_and_criticality_analysis">hazard analysis</a>.</p>
+<section id="what-can-you-use-frdl-for">
+<h3>What can you use FRDL for?<a class="headerlink" href="#what-can-you-use-frdl-for" title="Link to this heading"></a></h3>
+<p>As a language, FRDL can be used to support a range of activities where functional reasoning can be helpful, and is thus meant as a drop-in replacement to many existing functional modelling languages (such as block diagrams, energy-materials-signals models, etc.). However, the main focus of FRDL has been improving hazard analysis through its explicit representation of behavioral interactions. In the context of hazard analysis, FRDL models can be used to identify potential causes and effects of hazardous conditions, by tracing the interactions between functions that could induce or be affected by these conditions.</p>
+</section>
+<section id="why-frdl">
+<h3>Why FRDL?<a class="headerlink" href="#why-frdl" title="Link to this heading"></a></h3>
+<p>FRDL was developed to improve the analytical rigor of the diagrams that analysts typically use to perform hazard analysis to better support causal reasoning. Compared to other languages, it has a few key features and advantages:</p>
+<ul class="simple">
+<li><p>FRDL encourages <strong>functional reasoning</strong>, which is a key and long-appreciated part of hazard analysis. While existing hazard analysis approaches reccomend using a “functional” representations early in design, they often do not provide well-defined idea of what a “function” is, which can lead to confusion and ultimately poor reasoning. FRDL resolves this issue by providing a <em>way of thinking</em> about function which comports well with design-theoretic notions of function as well as the ethos that functions should have well-defined physical meaning.</p></li>
+<li><p>FRDL encourages (or rather, requires) the <strong>consideration of behavioral interactions</strong>. These behavioral interactions are key for understanding both (1) how hazards in one part of a system can propagate to other parts and (2) how hazarous conditions arise in the first place. Without this explicit representation of behavioral interactions, analysts are left to either (1) use very simplistic reasoning based on what their models do represent (e.g., the assumption that if a function within another function fails, the containing function must also fail) or (2) rely on their own mental models of system behavior (which at the very least lack traceability and justification, and at the very most could be undetectably flawed).</p></li>
+<li><p>FRDL offers a <strong>scalable representation of system complexity</strong> that enables the representation of diverse interactions in highly complex systems. Unlike other methods–such as block diagrams, which encode interactions as arrows, these interactions are represented in FRDL as nodes, making it possible to more scalably represent diverse interactions in a system that affect more than one function. This approach also encourages the grouping of like interactions, as well as the representation of wide-reaching interactions (such as communications or environmental conditions) in complex systems.</p></li>
+<li><p>FRDL explicitly supports annotations to enable more detailed information to be used in analysis when it is available. Specifically, FRDL annotations can be used to better represent the dynamics of behavior (e.g., when functionality is active versus inactive) to inform the analysis of system resilience.</p></li>
+<li><p>FRDL’s representation of system architectures aligns directly with the fmdtools simulation library, meaning that hazard models in FRDL can be directly implemented in simulation. This is an advantage over typical function-oriented simulation techniques, where the original functional model can look much different structurally than the simulation architecture.</p></li>
+</ul>
+</section>
+<section id="relationship-with-fmdtools">
+<h3>Relationship with fmdtools<a class="headerlink" href="#relationship-with-fmdtools" title="Link to this heading"></a></h3>
+<p>FRDL has been developed as a specification for fmdtools models, such that a functional architecture developed in FRDL can be directly implemented as an fmdtools <code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitecture</span></code>. While this correspondence is supported by the fmdtools data model, the display of these structures often veers from the FRDL specification (see: <a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-graph-style"><span class="std std-ref">fmdtools.analyze.graph.style</span></a>) due to limitations in the graphical libraries fmdtools uses to display architectures. Additionally, fmdtools does not currently support defining/displaying the annotations in frdl, showing only the graph structures instead. One of the development goals for fmdtools is thus to bring these features of FRDL into the library, as well as provide an interface for translating externally-supplied FRDL models into fmdtools Architecture classes.</p>
+</section>
+<section id="intro-to-frdl">
+<h3>Intro to FRDL<a class="headerlink" href="#intro-to-frdl" title="Link to this heading"></a></h3>
+<p>A helpful brief introduction to FRDL is provided in the <a class="reference internal" href="Intro_to_frdl.html"><span class="doc">Intro to FRDL</span></a> presentation (<a class="reference download internal" download="" href="../_downloads/d0e0ff45879c5967780d0e24efe79d81/Intro_to_frdl.pdf"><code class="xref download docutils literal notranslate"><span class="pre">download</span> <span class="pre">slides</span> <span class="pre">as</span> <span class="pre">pdf</span></code></a>).</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+<section id="specification">
+<h2>Specification<a class="headerlink" href="#specification" title="Link to this heading"></a></h2>
+<p>FRDL represents System <a class="reference internal" href="#architectures">Architectures</a> by composing node and edge <a class="reference internal" href="#primitives">Primitives</a> into an overall graph of system interactions with a defined <a class="reference internal" href="#analysis">Analysis</a> interpretation.</p>
+<section id="primitives">
+<h3>Primitives<a class="headerlink" href="#primitives" title="Link to this heading"></a></h3>
+<p>Primitives are the nodes and edges used to create <a class="reference internal" href="#architectures">Architectures</a>, including:</p>
+<section id="blocks">
+<h4>Blocks<a class="headerlink" href="#blocks" title="Link to this heading"></a></h4>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/blocks.svg"><img alt="FRDL Block Classes" src="../_images/blocks.svg" style="width: 450px;" />
+</a>
+</figure>
+<p>Blocks in FRDL are behavioral elements of the system, meaning they are expected to perform a given behavior. Behavior is any operation, such as an equation, modification, or constraint that the block imposes on the system. For example, <code class="docutils literal notranslate"><span class="pre">Fly</span></code>, <code class="docutils literal notranslate"><span class="pre">Transfer</span> <span class="pre">Heat</span></code>, and <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">X</span> <span class="pre">to</span> <span class="pre">One</span></code> may all be considered behaviors which blocks would embody. Blocks may further be annotated with <a class="reference internal" href="#annotations">Annotations</a> to describe structural and behavioral properties of the block. FRDL supports three major block classes, shown above and described below.</p>
+<p>Block draw.io shapes are defined <a class="reference download internal" download="" href="../_downloads/6747cb76c53136d50f2fc36dc64f38fb/blocks.drawio"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>.</p>
+<section id="components">
+<h5>Components<a class="headerlink" href="#components" title="Link to this heading"></a></h5>
+<p>Components refer to concrete parts that physically make up a system. These components may have multiple behaviors that interact in different ways. For example, an engine, a wheel, and a brake would all be different components of a car. Components may be used in the context of <a class="reference internal" href="#component-architectures">Component Architectures</a> to represent the embodyment of a function in real-world parts. Components correspond directly to the fmdtools <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.component.Component" title="fmdtools.define.block.component.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a> class.</p>
+</section>
+<section id="actions">
+<h5>Actions<a class="headerlink" href="#actions" title="Link to this heading"></a></h5>
+<p>Actions refer to discrete, logical steps preformed in controlling a system to accomplish an overall task. For example, <code class="docutils literal notranslate"><span class="pre">Turn</span> <span class="pre">On</span></code>/<code class="docutils literal notranslate"><span class="pre">Turn</span> <span class="pre">Off</span></code> and <code class="docutils literal notranslate"><span class="pre">Turn</span> <span class="pre">Left</span></code>/<code class="docutils literal notranslate"><span class="pre">Turn</span> <span class="pre">Right</span></code> are both actions that a user might perform on the system in order to use it. Actions are logical behaviors, and thus should be thought of as software (e.g., control logic) or human reasoning. Actions correspond directly to the fmdtools <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.action.Action" title="fmdtools.define.block.action.Action"><code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code></a> class.</p>
+</section>
+<section id="functions">
+<h5>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h5>
+<p>Functions describe <em>generic abstract functionality</em> that the system is to be embody. As opposed to what a system “is” (e.g., a collection of parts), functions describe what a system “does.” Functions may be labeled as verbs acting on nouns (e.g., <code class="docutils literal notranslate"><span class="pre">process</span> <span class="pre">ore</span> <span class="pre">into</span> <span class="pre">iron</span></code>), verbs (e.g., <code class="docutils literal notranslate"><span class="pre">navigate</span></code>), or a set of tasks (e.g., <code class="docutils literal notranslate"><span class="pre">store</span> <span class="pre">and</span> <span class="pre">supply</span> <span class="pre">energy</span></code>). As primarily behavioral elements, functions can additionally be thought of as comprising one or multiple governing equations of the system.  Functions correspond directly to the fmdtools <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a> class.</p>
+<p>Because functions are hybrid elements, they can be embodied by physical components (see: <a class="reference internal" href="#function-action-relationship">Function/Action Relationship</a>), logical actions (see: <a class="reference internal" href="#function-component-relationship">Function/Component Relationship</a>), more elemental functions, and architectures.</p>
+</section>
+</section>
+<section id="flows">
+<h4>Flows<a class="headerlink" href="#flows" title="Link to this heading"></a></h4>
+<p>Flows represent the means by which blocks may interact, and may be thought of as shared variables, inputs/outputs, or a shared environment. For example, in a circuit, electricity represents the flow between elements of the circuit.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/types_of_flow.svg"><img alt="FRDL Flow classes." src="../_images/types_of_flow.svg" style="width: 800px;" />
+</a>
+</figure>
+<p>There are three main types of flow, shown above. Base flows represent directly coupled links between functions (i.e., an aggregation), meaning that properties of the flow in one block directly correspond to the properties of the flow in another. Flows correspond directly to the <a class="reference internal" href="fmdtools.define.flow.html#fmdtools.define.flow.base.Flow" title="fmdtools.define.flow.base.Flow"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flow</span></code></a> class in fmdtools.</p>
+<p>Flows have additional variations, including <a class="reference internal" href="#multiflows">MultiFlows</a> and <a class="reference internal" href="#commsflows">CommsFlows</a>, described next.</p>
+<p>Flow draw.io templates are defined <a class="reference download internal" download="" href="../_downloads/90239355d18c47079dd90aec6ce4a2c1/flows.drawio"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>.</p>
+<section id="multiflows">
+<h5>MultiFlows<a class="headerlink" href="#multiflows" title="Link to this heading"></a></h5>
+<p>MultiFlows are flows with some level of multiplicity, which may be used when blocks <em>may</em> have their own individual “views” of the flow. In other words, MultiFlow objects may contain multiple Flow instances with in itself, each of the same type or class. One block’s MultiFlow properties thus may not necessarily correspond to the properties of another block’s MultiFlow. MultiFlows correspond directly to the <a class="reference internal" href="fmdtools.define.flow.html#fmdtools.define.flow.multiflow.MultiFlow" title="fmdtools.define.flow.multiflow.MultiFlow"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFlow</span></code></a> class in fmdtools.</p>
+</section>
+<section id="commsflows">
+<h5>CommsFlows<a class="headerlink" href="#commsflows" title="Link to this heading"></a></h5>
+<p>CommsFlows are <a class="reference internal" href="#multiflows">MultiFlows</a> that make up a communications network (or mesh) between different blocks. CommsFlows thus specify a given structure for sending/receiving flow properties to any or all other connected blocks. CommsFlows correspond directly to the <a class="reference internal" href="fmdtools.define.flow.html#fmdtools.define.flow.commsflow.CommsFlow" title="fmdtools.define.flow.commsflow.CommsFlow"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommsFlow</span></code></a> class in fmdtools.</p>
+</section>
+</section>
+<section id="relationships">
+<h4>Relationships<a class="headerlink" href="#relationships" title="Link to this heading"></a></h4>
+<p>Relationships are edges connecting nodes in a model graph that specify how nodes (blocks and flows) relate to each other. For the purpose of architecture modelling, FRDL relies on connection, activation, and propagation edges (shown below) to specify behavioral interactions. When used in a larger MBSE ecosystem (e.g. connected to UML or represented in fmdtools graphs), edges designed as a part of those ontologies can further specify a wide range of logical and behavioral concepts.</p>
+<p>Draw.io templates for the relationship types are defined <a class="reference download internal" download="" href="../_downloads/c82955219f32a01da30625c170d4b5c6/relationships.drawio"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>.</p>
+<section id="connection">
+<h5>Connection<a class="headerlink" href="#connection" title="Link to this heading"></a></h5>
+<figure class="align-default">
+<img alt="Connection" src="../_images/flowconnection.svg" />
+</figure>
+<p>Connection arrows (shown above) specify that a flow is to be considered jointly a part of two or more blocks. In doing so, the flow “connects” the blocks. This connection is equivalent to a <strong>shared association</strong> in UML/SysML, meaning that the flow is considered a part of all blocks it is connected to, but is not owned by any of them.</p>
+<p>While connection arrows specify this joint connection, they do not in and of themselves specify a behavioral interaction between connected blocks. Instead they specify that a given flow is a <em>means</em> by which the blocks could interact.</p>
+<p>Connections may be annotated with Connection Type labels (as shown) defining the relationship between the block and the flow, to be placed in the middle of the edge. They may also be (optionally) annotated with local flow names for the flow when used within the block, if needed, to be placed at end of the edge close to the block.</p>
+</section>
+<section id="activation">
+<h5>Activation<a class="headerlink" href="#activation" title="Link to this heading"></a></h5>
+<figure class="align-default">
+<img alt="Activation" src="../_images/activation.svg" />
+</figure>
+<p>Activation arrows (shown above) specify that a condition in one block causes a condition in (or, “activates”) another block. Activation arrows can be annotated with text specifying the condition that causes the activation. Activation arrows can be used in <a class="reference internal" href="#action-architectures">Action Architectures</a> to specify sequences of tasks that complete one after the other (similar to a activity diagram or finite state machine).</p>
+</section>
+<section id="propagation">
+<h5>Propagation<a class="headerlink" href="#propagation" title="Link to this heading"></a></h5>
+<figure class="align-default">
+<img alt="Propagation" src="../_images/propagation1.svg" />
+</figure>
+<p>Propagation arrows (shown above) represent the propagation of behavior between <a class="reference internal" href="#blocks">Blocks</a> via <a class="reference internal" href="#flows">Flows</a>. In this way, propagation arrows represent the composition of Connection and Activation relationships, specifying both (1) the means by which blocks interact and (2) the specific conditions that cause activation (new or modified behavior or states) of the connected block or flow. Propagation arrows specify the directionality of propagation using two different conventions:</p>
+<ul class="simple">
+<li><p><strong>Unidirectional Propagation</strong>, which provides a single arrow in the direction of propagation. Conditions causing changes in behavior in the direction of the arrow may be overlaid on top of the arrow, while conditions which cause changes in the reverse direction of the arrow may be specified with an <code class="docutils literal notranslate"><span class="pre">(r)</span></code> at the end of the text. This enables the tractable representation of coupled interactions where there is a defined sequence (e.g., energy flows in one direction from a battery to a light bulb) but interactions may flow in both directions (e.g., a bulb burning out cuts power use).</p></li>
+<li><p><strong>N-Directional Propagation</strong>, which provides arrows in both directions. This convention can be used to specify polycentric behavioral interactions where there is not single obvious direction of flow (e.g., communications). In this convention, the direction of propagation is instead defined for each condition annotation using the convention shown above. When a condition in a block causes a propagation via the flow, it is written as <code class="docutils literal notranslate"><span class="pre">[Condition]&gt;o</span></code>, while a propagated condition in a flow that causes the activation of a block is written as <code class="docutils literal notranslate"><span class="pre">(Condition)&gt;[]</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="annotations">
+<h4>Annotations<a class="headerlink" href="#annotations" title="Link to this heading"></a></h4>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/block_annotations.svg"><img alt="FRDL Annotations" src="../_images/block_annotations.svg" style="width: 600px;" />
+</a>
+</figure>
+<p>Annotations may be used to clarify known properties of objects, such as blocks and flows. An overview of these annotations (described next) is provided above. While it is not required to use any of these annotations, they are provided as a part of the language to better inform analyses with relevant information.</p>
+<p>Annotation draw.io templates are defined <a class="reference download internal" download="" href="../_downloads/2805f11c2cbd34041d04909804dc3932/annotations.drawio"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>.</p>
+<section id="dynamics-tags">
+<h5>Dynamics Tags<a class="headerlink" href="#dynamics-tags" title="Link to this heading"></a></h5>
+<p>From left to right, dynamics tags specify:</p>
+<ul class="simple">
+<li><p>the <strong>start time or condition</strong>, which may be <code class="docutils literal notranslate"><span class="pre">i</span></code> or <code class="docutils literal notranslate"><span class="pre">o</span></code> to specify that it starts when an input or output condition is activated (if activations are numbered their ID may be provided here also), <code class="docutils literal notranslate"><span class="pre">s</span></code> to specify that it starts at scenario start, and a value (e.g., <code class="docutils literal notranslate"><span class="pre">10s</span></code>) to specify a given time.</p></li>
+<li><p>the <strong>change interval</strong>, which may be <cite>dt</cite> if unspecified/continuous or a given value (e.g., <code class="docutils literal notranslate"><span class="pre">5s</span></code>) if there is a given time-step for the behavior</p></li>
+<li><p>the <strong>end time or condition</strong>, which may be <code class="docutils literal notranslate"><span class="pre">i</span></code> or <code class="docutils literal notranslate"><span class="pre">o</span></code> to specify that it starts when an input or output condition is activated (if activations are numbered an ID may be provided here), <code class="docutils literal notranslate"><span class="pre">e</span></code> to specify that it ends at the end of the scenario, and a number (e.g., <code class="docutils literal notranslate"><span class="pre">120s</span></code>) to specify a given end time.</p></li>
+</ul>
+<p>An additional arrow symbol at the upper left of the tag specifies that the block starts the scenario, while a fork symbol at the upper right of the tag specifies that the block ends the scenario.</p>
+<p>Dynamics tags are placed in the upper left corner of <a class="reference internal" href="#blocks">Blocks</a>.</p>
+</section>
+<section id="type-annotations">
+<h5>Type Annotations<a class="headerlink" href="#type-annotations" title="Link to this heading"></a></h5>
+<p>Type annotations help provide class information from the block or flow level which may help describe the block. Type annotations are especially relevant to Functions, where they can help explain the expected embodiment(s) of the function (e.g. <code class="docutils literal notranslate"><span class="pre">&lt;Battery&gt;</span></code> for a <code class="docutils literal notranslate"><span class="pre">Supply</span> <span class="pre">Power</span></code> function) and/or what is expected from the function. They may also be interpreted as references to classes which the object may inherit from or instantiate. These annotations may be placed immediately below the name of the object (block or flow).</p>
+</section>
+<section id="architecture-tags">
+<h5>Architecture Tags<a class="headerlink" href="#architecture-tags" title="Link to this heading"></a></h5>
+<p>Architecture tags specify whether a block contains within itself a Component, Action, or Function architecture, or some combination, by listing each letter (<code class="docutils literal notranslate"><span class="pre">C</span></code>, <code class="docutils literal notranslate"><span class="pre">A</span></code>, and/or <code class="docutils literal notranslate"><span class="pre">F</span></code>) in the tag. These are primarily to be used when there are additional architecture diagrams which may be referenced to describe the block. Architecture tags are placed in the lower-left corner of <a class="reference internal" href="#blocks">Blocks</a>.</p>
+</section>
+<section id="ontology-tags">
+<h5>Ontology Tags<a class="headerlink" href="#ontology-tags" title="Link to this heading"></a></h5>
+<p>Ontology tags refer to the scope the block takes and its role within that scope. The scopes include:</p>
+<ul class="simple">
+<li><p>Internal (<code class="docutils literal notranslate"><span class="pre">I</span></code>), meaning that the block is a part of the designed/operated system. Within this scope, the “required” role (<code class="docutils literal notranslate"><span class="pre">R</span></code>) specifies that the block is a user/operator requirement, the “supporting” role (<code class="docutils literal notranslate"><span class="pre">S</span></code>) specifies that the block supports a required block, while the “constraining” role (<code class="docutils literal notranslate"><span class="pre">C</span></code>) specifies that the block is a technical constraint placed on the system  (e.g., laws of physics that must be followed regardless of whether they are desired).</p></li>
+<li><p>External (<code class="docutils literal notranslate"><span class="pre">E</span></code>), meaning that the block is external to the system. Within this scope, the “defined” role (<code class="docutils literal notranslate"><span class="pre">D</span></code>) specifies that the block is a well-defined interface and not likely to vary, the “variable” role (<code class="docutils literal notranslate"><span class="pre">V</span></code>)  specifies that the block may vary outside of the control of the user/operator, and the “adversarial” role (<code class="docutils literal notranslate"><span class="pre">A</span></code>)  specifies that the block is taking actions against the interest/functioning of the system.</p></li>
+</ul>
+<p>Ontology tags are placed in the lower right corners of <a class="reference internal" href="#blocks">Blocks</a>.</p>
+</section>
+</section>
+</section>
+<section id="architectures">
+<h3>Architectures<a class="headerlink" href="#architectures" title="Link to this heading"></a></h3>
+<p>Architectures are compositions of <a class="reference internal" href="#primitives">Primitives</a> that may be used to analyze the interactions between blocks. Architectures are used to represent the structure and interaction/propagation behavior of blocks via flows and activations.</p>
+<p>A complete architecture diagram has:</p>
+<ul class="simple">
+<li><p>A full accounting of <a class="reference internal" href="#blocks">Blocks</a> of the diagram type (Function, Action, or Component) at the desired level of abstraction, with the appropriate <a class="reference internal" href="#annotations">Annotations</a> desired for the analysis;</p></li>
+<li><p><a class="reference internal" href="#flows">Flows</a> that connect each of the functions, if any; and</p></li>
+<li><p><a class="reference internal" href="#relationships">Relationships</a> (<a class="reference internal" href="#propagation">Propagation</a> or <a class="reference internal" href="#activation">Activation</a> and <a class="reference internal" href="#connection">Connection</a> arrows) that relate <a class="reference internal" href="#blocks">Blocks</a> and <a class="reference internal" href="#flows">Flows</a> with each other.</p></li>
+</ul>
+<p>There are three major types of architectures–<a class="reference internal" href="#functional-architectures">Functional Architectures</a>, <a class="reference internal" href="#action-architectures">Action Architectures</a>, and <a class="reference internal" href="#component-architectures">Component Architectures</a>, described next.</p>
+<section id="functional-architectures">
+<h4>Functional Architectures<a class="headerlink" href="#functional-architectures" title="Link to this heading"></a></h4>
+<p>Functional Architectures specify the interactions between the abstract functionalities (or, functions) to be embodied by the system.  While functional architectures can be developed using a range of conventions, two major diagram conventions are provided for managing scope: The <a class="reference internal" href="#function-in-context-diagram">Function-In-Context Diagram</a> and the <a class="reference internal" href="#function-architecture-diagram">Function Architecture Diagram</a> described next.</p>
+<section id="diagram-types">
+<h5>Diagram Types<a class="headerlink" href="#diagram-types" title="Link to this heading"></a></h5>
+<section id="function-in-context-diagram">
+<h6>Function-in-Context Diagram<a class="headerlink" href="#function-in-context-diagram" title="Link to this heading"></a></h6>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_ficd_singleprop.svg"><img alt="Function in Context Diagram" src="../_images/frdl_ficd_singleprop.svg" style="width: 700px;" />
+</a>
+</figure>
+<p>The Function-in-Context Diagram describes the system as a single function that interacts with a number of external functions representing the external socio-technical environment of the system. For example, in the above diagram, the function <code class="docutils literal notranslate"><span class="pre">Function</span> <span class="pre">Name</span></code> is controled by signal input via <code class="docutils literal notranslate"><span class="pre">External</span> <span class="pre">Signals</span></code> from <code class="docutils literal notranslate"><span class="pre">Control</span> <span class="pre">Function</span> <span class="pre">Name</span></code> and takes in Material and Signal flow inputs. It then produces <code class="docutils literal notranslate"><span class="pre">External</span> <span class="pre">Energy</span></code> (evacuated as waste) as well as an output material.</p>
+</section>
+<section id="function-architecture-diagram">
+<h6>Function Architecture Diagram<a class="headerlink" href="#function-architecture-diagram" title="Link to this heading"></a></h6>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_fad_singleprop.svg"><img alt="Function Architecture Diagram" src="../_images/frdl_fad_singleprop.svg" style="width: 600px;" />
+</a>
+</figure>
+<p>The Function architecture diagram describes the decomposition of the overall system function into further functions. For example, in the above image, the function <code class="docutils literal notranslate"><span class="pre">Function</span> <span class="pre">A</span></code> produces <code class="docutils literal notranslate"><span class="pre">Control</span> <span class="pre">Signal</span></code>, which controls the energy supplied by <code class="docutils literal notranslate"><span class="pre">Function</span> <span class="pre">B</span></code> that in term modifies the material in <code class="docutils literal notranslate"><span class="pre">Function</span> <span class="pre">C</span></code>, which also produces a <code class="docutils literal notranslate"><span class="pre">waste</span> <span class="pre">energy</span> <span class="pre">out</span></code> flow.</p>
+</section>
+</section>
+<section id="conventions">
+<h5>Conventions<a class="headerlink" href="#conventions" title="Link to this heading"></a></h5>
+<p>Functional Architectures can be represented using a range of conventions for representing behavioral interactions, depending on what is desired by the analysis. In general, the goal should be clarity, which, when there are many interactions, often means trying to represent each behavioral interaction with the minimum information required so as not to clutter the diagram. When there are few interactions, however, using a more detailed representation may be helpful for explaining an interaction in detail.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td rowspan="2"><p>Diagram Example</p></td>
+<td rowspan="2"><p>Separate Connections and Activations</p></td>
+<td rowspan="2"><p>N-Directional Propagations</p></td>
+<td rowspan="2"><p>Single-Directional Propagations</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="2"><p>Function-In Context Diagram</p></td>
+<td rowspan="2"><p><img alt="frdl_ficd_separate" src="../_images/frdl_ficd_separate.svg" /></p></td>
+<td rowspan="2"><p><img alt="frdl_ficd_nprop" src="../_images/frdl_ficd_nprop.svg" /></p></td>
+<td rowspan="2"><p><img alt="frdl_ficd_separate" src="../_images/frdl_ficd_separate.svg" /></p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="2"><p>Function Architecture Diagram</p></td>
+<td rowspan="2"><p><img alt="frdl_ficd_separate" src="../_images/frdl_ficd_separate.svg" /></p></td>
+<td rowspan="2"><p><img alt="frdl_fad_nprop" src="../_images/frdl_fad_nprop.svg" /></p></td>
+<td rowspan="2"><p><img alt="frdl_fad_singleprop" src="../_images/frdl_fad_singleprop.svg" /></p></td>
+</tr>
+<tr class="row-even"></tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>The table above shows three different possible conventions for representing behavioral interactions using the relationships provided by FRDL, applied to two example architecture diagrams:</p>
+<ul class="simple">
+<li><p><strong>Separate Connections and Activations</strong>, in which the flow connections and activations are provided as separate arrows (rather than aggregated as combined propagation arrows). Generally, this representation is to be avoided unless the relationships are not possible to be represented with a propagation arrow, or there is a desired to show specific details that would not be clear otherwise. This approach is to be avoided because it creates many more opportunities for edges to overlap with each other, making a model difficult to read the diagram clearly as more blocks and relationships are added.</p></li>
+<li><p><strong>N-Directional Propagations</strong>, in which the edges are represented using N-Directional Propagation arrows. In general, this approach is to be avoided and instead N-Directional propagation arrows are only to be used for interactions that are truly multi-directional (e.g., communications or interactions with a dynamic shared environment). This is to avoid placing too many annotations on the diagram, which can make it difficult to read.</p></li>
+<li><p><strong>Single-Directional Propagations</strong>, in which the edges are represented using single-directional propagation arrows. This convention is more concise than the others, while preserving the same propagation information, and even the possibility for bi-directional propagations via the <code class="docutils literal notranslate"><span class="pre">(r)</span></code> reverse propagation labels. This approach is thus preferred unless N-directional propagations are present or there are specific details about flow connections and activations that would be helpful to portray individually for communication purposes.</p></li>
+</ul>
+</section>
+</section>
+<section id="action-architectures">
+<h4>Action Architectures<a class="headerlink" href="#action-architectures" title="Link to this heading"></a></h4>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_actionarchitecture.svg"><img alt="Action Architecture Diagram" src="../_images/frdl_actionarchitecture.svg" style="width: 600px;" />
+</a>
+</figure>
+<p>Action architectures specify the sequence and interactions between logical actions performed by the system. They may be considered as similar to state machine diagrams as well as activity diagrams, except with the explicit specification of the means of interaction via flows. For example, in the diagram above, the system starts at <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">1</span></code>, which affects <code class="docutils literal notranslate"><span class="pre">Flow</span> <span class="pre">2</span></code>, then proceeds to <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">2</span></code> which modifies <code class="docutils literal notranslate"><span class="pre">Flow</span> <span class="pre">2</span></code>, and then either (if <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">2</span></code> fails) proceeds to <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">4</span></code> followed by <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">1</span></code>, or (if <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">2</span></code> Completes) proceeds to <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">3</span></code>, which uses <code class="docutils literal notranslate"><span class="pre">Flow</span> <span class="pre">2</span></code>.</p>
+<p>In general, action architectures may be represented using separate connections and activations, rather than propagation arrows. This is because actions are meant to represent discrete events in which one action leads into the next (which activate based on sequence), rather than continuously-interacting functionality (which activate via physical constraints).</p>
+</section>
+<section id="component-architectures">
+<h4>Component Architectures<a class="headerlink" href="#component-architectures" title="Link to this heading"></a></h4>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_componentarchitecture.svg"><img alt="Component Architecture Diagram" src="../_images/frdl_componentarchitecture.svg" style="width: 600px;" />
+</a>
+</figure>
+<p>Component architectures specify the interactions between components in a system. While component architectures can be modelled with a variety of conventions, in the FRDL methodology they are generally used to represent the interactions between components fulfilling a particular function (though more uses are possible). This is to help manage the complexity of interactions, since components (and component architectures) can fulfill a range of functions with complex, multidisciplinary behaviors that may be difficult to represent all on a single diagram. Instead, different component component architecture diagrams should be constructed for each function, which each show the component interactions involved in fulfilling that function. Then, the propagation behavior for component faults can be traced first to the immediate effects at each function level (where the component is present), and at the function architecture level across the system.</p>
+</section>
+</section>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h3>
+<p>FRDL can be used to analyze behavioral interactions in a system, focusing mainly on the analysis of hazards. The procedure used to model and analyze hazards in a system using FRDL is described here.</p>
+<section id="modelling">
+<h4>Modelling<a class="headerlink" href="#modelling" title="Link to this heading"></a></h4>
+<p>Modelling is meant to be an iterative process in which the model is developed and revised as information (e.g., behaviors, design decisions, elicited hazards) is elicited and modified. For a given architecture, the following procedure may be used:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/modelling_process.svg"><img alt="FRDL Modelling Process" src="../_images/modelling_process.svg" style="width: 400px;" />
+</a>
+</figure>
+<p>In this approach, the modeller first identifies functions and flows, stitches them together with relationships, and then annotates them with detailed type, behavior, and propagation information.</p>
+<p>Analysis of the model will often lead to refinement of the model. This is an important part of the modelling process in a couple ways:</p>
+<ul class="simple">
+<li><p>First, analysis can uncover functions or interactions that were specified in ways that lead to fallacious results.</p></li>
+<li><p>Second, analysis of specific scenarios can help the modeller identify functions, flows, and relationships (and details of each of these) that may not have been present in their initial mental model of the system.</p></li>
+</ul>
+<p>As such, it is expected that analysis should lead to model refinement as a key component of ensuring that it achieves and maintains an acceptable level of analytical rigor.</p>
+<section id="developing-a-model-hierarchy">
+<h5>Developing a Model Hierarchy<a class="headerlink" href="#developing-a-model-hierarchy" title="Link to this heading"></a></h5>
+<p>FRDL is meant to enable modelling activities to proceed throughout the system development process as the system becomes more detailed. The three tools for this are model refinement (described earlier), <a class="reference internal" href="#annotations">Annotations</a>, and model hierarchy. A model hierarchy is a set of models that represent aspects of the same system at different levels of abstraction. These levels of abstraction enable the system design to include more detail over time, while keeping the same high-level representations needed to tractably understand and analyze the system as a whole.</p>
+<p>At its most detailed, a model hierarchy will include:</p>
+<ul class="simple">
+<li><p>A <a class="reference internal" href="#function-in-context-diagram">Function-in-Context Diagram</a> (developed first) showing how the system will interact user(s) and the environment;</p></li>
+<li><p>A <a class="reference internal" href="#function-architecture-diagram">Function Architecture Diagram</a> (developed second) breaking the system into its high-level functions and showing the interactions between these functions;</p></li>
+<li><p>Subsequent <a class="reference internal" href="#function-architecture-diagram">Function Architecture Diagram</a> s needed to provide more detail for any of the high-level functions;</p></li>
+<li><p><a class="reference internal" href="#action-architectures">Action Architectures</a> needed to specify the dynamic behavior of functions with logical behavior (e.g., users, operators, and control algorithms); and</p></li>
+<li><p><a class="reference internal" href="#component-architectures">Component Architectures</a> needed to show how functions are embodied as well as the architectural details (e.g., redundancies, behaviors, etc.) used to achieve these functions</p></li>
+</ul>
+</section>
+</section>
+<section id="analysis">
+<h4>Analysis<a class="headerlink" href="#analysis" title="Link to this heading"></a></h4>
+<p>FRDL can be used to analyze behavioral interactions to improve the understanding of system behavior and analyze hazardous scenarios. However, analyzing nominal scenario(s)–scenarios where the system is behaving as designed–can assist with model refinement, help catch design hazards, and support hazard analysis by giving one an idea of the system context (e.g., state and behavior information) of the hazards at particular times, phases, and states of system operation.</p>
+<p>To analyze a nominal scenario, the procedure is to:</p>
+<ol class="arabic simple">
+<li><p>Begin at the starting block defined by the <a href="#id6"><span class="problematic" id="id7">`Dynamics Tag`_</span></a> with a starting identifier.</p></li>
+<li><p>Determine what the initial state, condition, behavior, and activity (active or inactive) of the block will be at the given time with its given conditions.</p></li>
+<li><p>Run through conditions in the block that cause outgoing activations as well as propagations from the block to identify how this will affect other blocks.</p></li>
+<li><p>Run through steps 2-3 for each of the active blocks.</p></li>
+<li><p>Increment to the next meaningful time-step and run through steps 2-4 for the blocks with continuous behavior over time time-step.</p></li>
+<li><p>End when all functions are inactive or at the ending time defined by the <a href="#id8"><span class="problematic" id="id9">`Dynamics Tag`_</span></a> defined in the ending block.</p></li>
+</ol>
+<p>The hazard analysis procedure builds on nominal scenario analysis by injecting hazardous conditions in the relevant model entities and seeing how these conditions affect the behaviors, states, and conditions of the system. The hazard analysis procedure is thus to:</p>
+<ol class="arabic simple">
+<li><p>Instantiate the hazardous condition or conditions in the relevant model entities (e.g., functions, actions, flows, etc.) at the relevant time(s) of interest to the scenario</p></li>
+<li><p>Identify how the hazardous condition(s) will directly effect the entity (including modified behaviors, damage, harm, etc),</p></li>
+<li><p>Determine how this conditions and its effects with propagate to entities connected via defined relationships,</p></li>
+<li><p>Repeat steps 2-4 for all affected entities over time until the system wide effects have been exhaustively elicited. Note that while the hazard analysis procedure starts from a nominal analysis of the system, it may diverge significantly in terms of behavior, causing it to end at different times than originally specified.</p></li>
+</ol>
+<p>These effects can be placed in the effects-related fields of a hazard table to support a wide range of hazard analysis processes (e.g., FHA, FMEA, etc).</p>
+<p>FRDL may also be used to perform causal analysis for hazards to determine mechanisms by which a hazardous scenarios and conditions may arise. This procedure is to:</p>
+<ol class="arabic simple">
+<li><p>Identify the relevant block(s) where the hazardous condition is to arise.</p></li>
+<li><p>Identify any causal factors related to the condition within the block.</p></li>
+<li><p>Identify any flow or activation conditions which could cause those conditions to arise.</p></li>
+<li><p>For each block that connects to the given flow or activations with the relevant conditions, determine whether a condition in the block could cause the condition, and, if so, run through steps 2-4 for the block.</p></li>
+<li><p>Continue until the causes have been exhaustively explored and/or all of the remaining initiating conditions are at the system boundary.</p></li>
+</ol>
+<p>These conditions and mechanisms may be placed in the causes and mechanisms-related fields of a hazard table.</p>
+</section>
+</section>
+</section>
+<section id="guide">
+<h2>Guide<a class="headerlink" href="#guide" title="Link to this heading"></a></h2>
+<p>The guide provides further guidance on <a class="reference internal" href="#concepts">Concepts</a> underlying FRDL, its <a class="reference internal" href="#correspondence-with-other-methods">Correspondence with other methods</a>, and <a class="reference internal" href="#examples">Examples</a> clarifying the use of FRDL.</p>
+<section id="concepts">
+<h3>Concepts<a class="headerlink" href="#concepts" title="Link to this heading"></a></h3>
+<p>This section describes some relevant concepts for interpreting the FRDL ontology, including the</p>
+<section id="function-action-relationship">
+<h4>Function/Action Relationship<a class="headerlink" href="#function-action-relationship" title="Link to this heading"></a></h4>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/functions_vs_actions.svg"><img alt="Actions live &quot;within&quot; functions" src="../_images/functions_vs_actions.svg" style="width: 400px;" />
+</a>
+</figure>
+<p>The relationship between functions and actions is illustrated above. Actions represent <strong>logical behaviors</strong> and are meant to live within the function(s) that control the system. These controlling functions thus contain or “own” the actions. As such, <a class="reference internal" href="#action-architectures">Action Architectures</a> can be viewed as living within the functions that control the system (whether they represent operators, avionics, etc.).</p>
+</section>
+<section id="function-component-relationship">
+<h4>Function/Component Relationship<a class="headerlink" href="#function-component-relationship" title="Link to this heading"></a></h4>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/functions_vs_components.svg"><img alt="Components are aggregated by functions" src="../_images/functions_vs_components.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>The relationship between functions and components is illustrated above. Components represent the physical embodiment of functional behaviors, but do not always map directly to functions in a one-to-one manner. Generally, functions can be thought of as high-level behaviors (e.g., acceleration, force-balance, energy balance, etc.) and thus can involve a few different components when embodied. For example, supporting a payload may require a number of structural components, whose overall functionality would be defined using force balance equation(s) over entire assemblies. Conversely, the wheels of a vehicle (illustrated above) may contribute to a range of different functions, including supporting the vehicle, turning the vehicle, and moving the vehicle forward.</p>
+<p>As such, components should not be viewed as being owned by functions, but aggregated by them. This <em>shared aggregation</em> relationship is the same relationship that flows have with functions, where components can be present in the definition of multiple functions, but are not owned by them.</p>
+</section>
+<section id="flows-as-nodes">
+<h4>Flows as Nodes<a class="headerlink" href="#flows-as-nodes" title="Link to this heading"></a></h4>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/edges_vs_nodes.svg"><img alt="Concept of flows being represented as nodes rather than edges." src="../_images/edges_vs_nodes.svg" style="width: 600px;" />
+</a>
+</figure>
+<p>One of the unique features of the FRDL ontology is the representation of flows as nodes. As illustrated above, this is different than most other graphical languages (such as EMS models, function-flow block diagrams, SysML block and activity diagrams, STAMP models), which usually represent nodes as edges, rather than nodes.</p>
+<p>FRDL represents the flows between blocks as nodes for a few reasons:</p>
+<ol class="arabic simple">
+<li><p>It enables flows to “live on their own” as objects that can be further broken down in terms of structure. In this sense, a flow can represent not only a specific condition that causes a change in a connected block, but the <em>means</em> by which the changes propagate, which may have its own structure (e.g., variables, values, sub-flows, etc.). When flows are represented as edges, these behavioral interactions may need to be specified in multiple places on the same diagram, leading to ambiguities (is a given flow arrow the same as a different flow arrow with the same label or a copy?).</p></li>
+<li><p>This enables the conceptual separation of <em>conditions which cause activation</em> from the <em>means</em> by which activations propagate. This separation is helpful in the context of hazard analysis, where off-nominal interaction behaviors be entirely different than nominal interaction behaviors, but generally still use the same flow connections.</p></li>
+<li><p>It enables the representation of complex interactions that take place between more than two blocks at the same time, such as communications and interacting in a shared environment.</p></li>
+<li><p>It enables the scalable representation of multiple <strong>types of interactions</strong> to be represented on a single graph diagram, making it more possible to comprehensively represent these interactions in a tractable way that comports to analysis.</p></li>
+</ol>
+<p>These properties of FRDL’s bipartite graph representation are illustrated in the example below.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/flow_edge_scalability.svg"><img alt="Concept of bipartite graphs being more scalable than unipartite graphs." src="../_images/flow_edge_scalability.svg" style="width: 800px;" />
+</a>
+</figure>
+<p>As shown, the FRDL functional architecture (at left) has three flows connecting four functions (no propagation annotations are provided to keep the illustration generic). The equivalent unipartite representation of this architecture is (shown at right), and has nine flows connecting the functions. Because flows are not grouped, each function has more connections that must be tracked down during analysis (Function 1 has 5 arrows going out of it instead of 2 connections). This is further complicated by the fact that several of these flows are essentially duplicates connecting different pairs of functions, leading to ambiguities in practice, because it may be difficult to tell whether the flows are actually the same objects. Additionally, flow arrows cross twice instead of just once, meaning the representation becomes less clear as the number of interactions increase.</p>
+</section>
+</section>
+<section id="correspondence-with-other-methods">
+<h3>Correspondence with other methods<a class="headerlink" href="#correspondence-with-other-methods" title="Link to this heading"></a></h3>
+<p>This section provides some comparison between FRDL-based models and similar models for hazard analysis in the literature. Source draw.io files for these diagrams are defined <a class="reference download internal" download="" href="../_downloads/7e8c192c6ed5b484d7e42c9a1a5d06ae/reference_architectures.drawio"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>.</p>
+<section id="versus-f-fa">
+<h4>Versus F/FA<a class="headerlink" href="#versus-f-fa" title="Link to this heading"></a></h4>
+<p>The <a class="reference external" href="https://www.sae.org/standards/content/arp926c">Fault/Failure Analysis Procedure defined in ARP-926C</a> defines two types of diagrams which may be used in the context of “top-down” and “bottom-up” functional hazard analysis. To assist with “top-down” assessment, it provides the below diagram, in which the input and output functions (i.e., required and provided functionality) of a given function are listed at the left and right side of the function name. It further delineates types of functions to be input and provided. This is shown below, with the equivalent FRDL model.</p>
+<a class="reference internal image-reference" href="../_images/frdl_ficd_singleprop.svg"><img alt="../_images/frdl_ficd_singleprop.svg" class="align-right" src="../_images/frdl_ficd_singleprop.svg" style="width: 45%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/ffa_singlefunction.svg"><img alt="../_images/ffa_singlefunction.svg" src="../_images/ffa_singlefunction.svg" style="width: 49%;" />
+</a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>As shown, these models represent the overall function of a system and its interactions with its environment somewhat differently. While the function-in-context diagram provides more definition of the high-level behavioral interactions the function has with its environment, the F/FA diagram provides more clearly outlines what is needed by the function and what it produces. However, the F/FA diagram goes no further than that and many of the details inherent to the FRDL model are left out, leading to potential ambiguities.</p>
+<p>For “bottom-up” assessment, a Function-flow block diagram of the type shown is specified to be used for F/FA. This diagram uses function chains (functions connected via arrows) to specify whether functions are to be performed by the system in parallel (at the same time) or sequence (one after the other). An example is provided below (at left), along with a similar (but not equivalent) FRDL model (at right).</p>
+<a class="reference internal image-reference" href="../_images/frdl_fad_singleprop.svg"><img alt="../_images/frdl_fad_singleprop.svg" class="align-right" src="../_images/frdl_fad_singleprop.svg" style="width: 40%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/ffa_fbd.svg"><img alt="../_images/ffa_fbd.svg" src="../_images/ffa_fbd.svg" style="width: 55%;" />
+</a>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<p>As shown, these models represent the internal behavior of a function in much different ways. In the F/FA model, functions are represented as sequential operations with unknown interactions and very primitive sequencing rules. In the FRDL model, on the other hand, the interactions between functions are specified as as flows connected by propagation arrows and thus there is less of a defined “order” to functions.</p>
+<p>The important difference between these models is the somewhat different implications of the graphical representations on hazard analysis. In the F/FA diagram, order implied by flow arrows implies is that a failure in one function will cause a failure in a succeeding systems (or the high-level function represented by the diagram). This is a simplistic representation and interpretation of how behavior propagates in systems. For example, a water distribution system may have a set of functions that it performs on the water in a defined sequence, but failures later in the sequence could easily propagate to earlier functions. For example, a clogged outflow pipe may not only prevent water from being supplied, but it could also fill up and preceding storage tanks and potentially burst the pipes. This sort of behavioral propagation is well-suited for representation in FRDL-based functional architectures, because propagation arrows can imply bi-directional interactions between functions via flows.</p>
+</section>
+<section id="versus-stamp-stpa">
+<h4>Versus STAMP/STPA<a class="headerlink" href="#versus-stamp-stpa" title="Link to this heading"></a></h4>
+<p>The <a class="reference external" href="http://sunnyday.mit.edu/accidents/safetyscience-single.pdf">Systems-Theoretic Accident Model and Process (STAMP)</a> is generic model of how accidents occur in complex systems, which has been developed in to the <a class="reference external" href="http://psas.scripts.mit.edu/home/books-and-handbooks/">Systems-Theoretic Process Analysis (STPA)</a> methodology for analyzing hazardous behaviors in systems. The key concept of STAMP is that accidents in complex engineered systems–by definition–occur because of failures in the control structure. As such, STAMP focusses on representing the control structure of complex engineered systems, as shown below (at left) with a similar (thought not necessarily equivalent) FRDL model (at right).</p>
+<a class="reference internal image-reference" href="../_images/frdl_fad_singleprop.svg"><img alt="../_images/frdl_fad_singleprop.svg" class="align-right" src="../_images/frdl_fad_singleprop.svg" style="width: 55%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/stamp_model.svg"><img alt="../_images/stamp_model.svg" src="../_images/stamp_model.svg" style="width: 41%;" />
+</a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>As shown, the generic STAMP model defines the system as a control structure in which the controller/operator performs control actions and receives feedback from a system it is trying to control. These interactions are shown via arrows. The FRDL method is compatible with this perspective because of its emphasis on dynamic behavioral interactions. However, there are some differences in the FRDL ontology that are worth noting:</p>
+<ul class="simple">
+<li><p>First, FRDL is meant to be be applied to <em>both</em> the control of the system and its <em>physical interactions</em>. As a result, the technical functions of the system may further be decomposed, rather than solely representing the system as a control architecture. For example, in the above diagram Function B and C are listed as separate functions which STAMP might otherwise consider a single process, regardless of the potentially hazardous behavioral interactions between the functions.</p></li>
+<li><p>Second, FRDL represents interactions as nodes rather than edges, which, as explained in <a class="reference internal" href="#flows-as-nodes">Flows as Nodes</a>, can enable a more scalable representation of many different types of system interactions. STAMP diagrams, on the other hand, can become difficult to make sense of at scale due to its edge-based representation of interactions.</p></li>
+<li><p>Finally, FRDL’s annotations enable more detail to be represented about system behavior, which better enables the representation of system hierarchy/abstraction,</p></li>
+</ul>
+<p>Generally, FRDL is proposed to support STPA-style analysis of system control structure while also enabling the analysis of the physical parts of the system. In doing so, it prevents model fragmentation as well as complexity explosion–instead providing a unified language that makes <a class="reference internal" href="#developing-a-model-hierarchy">Developing a Model Hierarchy</a> that is coherent and self-consistent possible.</p>
+</section>
+<section id="versus-sysml-uml">
+<h4>Versus SysML/UML<a class="headerlink" href="#versus-sysml-uml" title="Link to this heading"></a></h4>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Systems_modeling_language">Systems Modelling Language (SysML)</a> is language for representing system structure and behavior that has gotten a significant amount of traction within the model-based systems engineering (MBSE) community. As such, there have been efforts to apply hazard analysis in the context of SysML models since it is the goal of these diagrams to comprise the “definitive single source of knowledge” about a system. While FRDL aims to encourage MBSE, and may even be considered an annotated extension of the <a class="reference external" href="https://en.wikipedia.org/wiki/Unified_Modeling_Language">Unified Modelling Language (UML)</a> which SysML is based on, the scope of SysML and FRDL are not necessarily complementary.</p>
+<p>One of the challenges with comparing FRDL with SysML is that there isn’t necessarily a single use or methodology for representing systems for hazard analysis in the context of a SysML model. Generally (though not always), SysML models are applied to the system using component rather than functional information, meaning that hazard analysis is often more component-oriented than based on the notion of function. When functional abstractions are used, there is not always a consensus on how they should be applied (<a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S2212827114007410">this paper</a> provides some examples, though there are others). Nevertheless, the following shows a comparison between SysML Internal Block Diagrams and FRDL Functional Architectures, as well as SysML Activity diagrams and FRDL Action Architectures.</p>
+<section id="functional-architectures-versus-internal-block-diagrams">
+<h5>Functional Architectures Versus Internal Block Diagrams<a class="headerlink" href="#functional-architectures-versus-internal-block-diagrams" title="Link to this heading"></a></h5>
+<p>The Internal Block Diagram (IBD) represented in SysML is provided below at left, along with an analogous FRDL functional architecture at right.</p>
+<a class="reference internal image-reference" href="../_images/frdl_fad_singleprop.svg"><img alt="../_images/frdl_fad_singleprop.svg" class="align-right" src="../_images/frdl_fad_singleprop.svg" style="width: 45%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/sysml_ibd.svg"><img alt="../_images/sysml_ibd.svg" src="../_images/sysml_ibd.svg" style="width: 45%;" />
+</a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>As shown, the internal block diagram is able to replicate the structure of the FRDL diagram fairly well, however, there are a few important differences:</p>
+<ol class="arabic simple">
+<li><p>The IBD represents flows as edges instead of nodes. As described in <a class="reference internal" href="#flows-as-nodes">Flows as Nodes</a>, this makes the representation prone to scalability issues as flows of the same instance go to multiple functions. While this is not a major issue in the architecture above, it can be when a wide range of interactions between many different functions need to be represented (which is often the case in complex systems).</p></li>
+<li><p>From the perspective of behavioral analysis, the representation of interactions in the IBD is simultaneously over-constrained and ambiguous–with flows represented with a defined directionality that may not comport to the direction of system behavioral interactions. For example, the material flow is expected to go in a single direction through the physical process appied by <cite>Function C</cite>, meaning that the flow is given a single-directional arrow. This misses how (as represented in the FRDL model) if the material is not used (e.g., because it is jammed in place), this could cause behavioral interactions through that flow to the external system (e.g., by compressing the material or causing the material input stream to overload/spill). This representation of directionality additionally causes the signal flows to need to be broken into two to preserve the bidirectionality of interactions.</p></li>
+<li><p>The IBD requires the use of proxy ports to specify that flows are a part of a block, which creates a number of redundant representations of flows that are not relevant for analysis at the system level. While the labels defined by these ports are helpful for defining flow types as well as providing some indicator of how the flows are referred to locally as opposed to globally, they do not necessarily add anything from an analysis point of view not already specified in the FRDL model.</p></li>
+<li><p>While the FRDL model defines a rough execution sequence of the architecture via annotations, the IBD does not provide the means to do this, which can make it difficult to analyze the dynamics of function activation.</p></li>
+</ol>
+</section>
+<section id="action-architectures-versus-activity-diagrams">
+<h5>Action Architectures Versus Activity Diagrams<a class="headerlink" href="#action-architectures-versus-activity-diagrams" title="Link to this heading"></a></h5>
+<p>Below shows an FRDL Action Architecture (left) along with an analogous SysML Activity Diagram (right).</p>
+<a class="reference internal image-reference" href="../_images/frdl_actionarchitecture.svg"><img alt="../_images/frdl_actionarchitecture.svg" class="align-right" src="../_images/frdl_actionarchitecture.svg" style="width: 45%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/sysml_act.svg"><img alt="../_images/sysml_act.svg" src="../_images/sysml_act.svg" style="width: 45%;" />
+</a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>These representations of system logical behavior are quite similar. However, the main difference is that object flows in SysML are represented as edges, meaning that an object must be duplicated multiple times, even if it is the same object. This can make it difficult to trace out causal dependencies as easily as the FRDL Activity diagram, since it isn’t necessarily clear what object flows are to be interpreted as the same instance.</p>
+</section>
+<section id="versus-energy-materials-signals-models">
+<h5>Versus Energy-Materials-Signals Models<a class="headerlink" href="#versus-energy-materials-signals-models" title="Link to this heading"></a></h5>
+<p>The FRDL ontology and methodology is itself a descendent of <a class="reference external" href="https://doi.org/10.1115/1.4065630">research into using Functional Models for hazard analysis</a>. Functional models used this research are known by a number of names in the literature, including Energy-Materials-Signals models, Pahl-Beitz Models, and <a class="reference external" href="https://doi.org/10.1007/s00163-001-0008-3">Functional Basis of Engineering Design (FBED)</a> models. Below provides a brief comparison between FRDL models and their FBED equivalents.</p>
+<p>To represent the system at a high level, FBED reccomends to make a single-function diagram of the system with all energy, material, and signal inputs going in and out of the function (shown at left). FRDL aims to replace with the function-in-context diagram, shown below (at right), to better represent interactions between the functionality provided by the system and its operators and environment.</p>
+<a class="reference internal image-reference" href="../_images/frdl_ficd_singleprop.svg"><img alt="../_images/frdl_ficd_singleprop.svg" class="align-right" src="../_images/frdl_ficd_singleprop.svg" style="width: 45%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/fbed_single.svg"><img alt="../_images/fbed_single.svg" src="../_images/fbed_single.svg" style="width: 45%;" />
+</a>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<p>to represent the architecture of a system, FBED further reccomends decomposing the single function of the system into smaller functions (noun-verb pairs) and connecting functions via flows of energy, materials and signals. This is shown below (at left) with the equivalent function architecture diagram (at right).</p>
+<a class="reference internal image-reference" href="../_images/frdl_fad_singleprop.svg"><img alt="../_images/frdl_fad_singleprop.svg" class="align-right" src="../_images/frdl_fad_singleprop.svg" style="width: 45%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/fbed_decomp.svg"><img alt="../_images/fbed_decomp.svg" src="../_images/fbed_decomp.svg" style="width: 45%;" />
+</a>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<p>As shown in the diagrams, while both methods enable the representation of interactions of high-level functionality via flows, there are a few major differences in the representation that are of note:</p>
+<ol class="arabic simple">
+<li><p>FBED flows imply a spacio-temporal order to functions that imply a sequence similar to that in F/FA diagrams. While this representation is better informed by flow information (which provides a means by which functions interact), it can be similarly deceptive because the flow of arrows may not necessarily imply the propagation of change. Additionally, this representation is ambiguous when representing time, especially in terms of differentiating between discrete and continuous interactions/behaviors (e.g., is the signal being sent out at the same interval/time as energy and material?).</p></li>
+<li><p>Because FBED represents flows as edges, it is subject to the scalability issues described in <a class="reference internal" href="#flows-as-nodes">Flows as Nodes</a>.</p></li>
+<li><p>FBED’s focus on energy, materials, and signals makes it difficult to represent composite objects that may not fit easily into each class.</p></li>
+<li><p>FBED lacks the annotations that FRDL offers, meaning that it provides less depth in terms of representing system structure and behavior which may be used to inform analysis.</p></li>
+</ol>
+<p>Further examples comparing FRDL-based functional architectures with EMS-based models are provided in <a class="reference internal" href="#examples">Examples</a>.</p>
+</section>
+<section id="versus-hierarchical-models">
+<h5>Versus Hierarchical Models<a class="headerlink" href="#versus-hierarchical-models" title="Link to this heading"></a></h5>
+<p>Finally, hierarchical functional decomposition diagrams are commonly used in practice to represent the breakdown of functions into sub-functions. These are often used for safety analysis, and are even used as references in the guide for the Functional Hazard Analysis in the <a class="reference external" href="https://www.sae.org/standards/content/arp4761/">SAE ARP4761A</a> standard. These models are essentially the same as SysML Block Definition Diagrams (BDD), defining the logical structure of functions as including sub-functions which themselves may include sub-sub-functions and sub-sub-sub-functions. A comparison of these hierarchical models with an FRDL-based functional architecture is provided below.</p>
+<a class="reference internal image-reference" href="../_images/frdl_fad_singleprop.svg"><img alt="../_images/frdl_fad_singleprop.svg" class="align-right" src="../_images/frdl_fad_singleprop.svg" style="width: 43%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/hierarchical_decomp.svg"><img alt="../_images/hierarchical_decomp.svg" src="../_images/hierarchical_decomp.svg" style="width: 51%;" />
+</a>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<p>As shown, these representations of system architecture are very different. This is because the hierarchical model lacks any notion of behavior, flows, or any definition of <em>behavioral interactions</em>. Instead, we are merely shown that sub-functions are included within the logical definition of the overall function. While this can be helpful for navigating multiple levels of decomposition, it does not provide much information that could directly inform analysis. In fact, when interpreted literally, the model often provides an overly-simplistic idea of how failures arise, in which failures in a sub-function are expected to be failures in the overall function. However, this notion leaves out important concepts like behavioral interactions as well as the ability for functions to compensate or control for each other in various ways (e.g., as redundancies).</p>
+<p>FRDL-based models, on the other hand, only show one level of functional abstraction at a time in order to represent the details of behavioral interactions that arise between functions. This makes them both a compatible and complementary type of diagram to the hierarchical decomposition diagram, since they fundamentally represent different things–with the hierarchical decomposition showing the <em>logical composition</em> of a function hierarchy and the FRDL functional architecture showing the <em>behavioral interactions</em> between functions at a single level of hierarchy.</p>
+</section>
+</section>
+</section>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
+<p>Below are some examples that illustrate some basic FRDL modelling concepts.</p>
+<section id="bread-making">
+<h4>Bread Making<a class="headerlink" href="#bread-making" title="Link to this heading"></a></h4>
+<p>To illustrate how FRDL can better clarify the dynamic behavior of a system in the context of analysis, consider the process of baking bread. The source draw.io file for this example is provided <a class="reference download internal" download="" href="../_downloads/17e6e276ba963e643711b513a0107e6c/bread_making.drawio"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>. In a typical EMS-based failure model, the designer may represent the system with the following structure.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/fbed_diagram.svg"><img alt="EMS model of baking bread." src="../_images/fbed_diagram.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>The behavior of this model, as noted in the diagram, is ambiguous because it is not clear whether the process is continuous or discrete. In the discrete interpretation, a baker may place a single loaf of bread in the oven, after which they take the bread out. As a result, we can assume that (in the context of failure propagation), if there is a failure to break bread, the main effect will be that the bread to be exported will be unbaked. This well-represented in the spacio-temporal representation of how flows connect flows. In the continuous interpretation, on the other hand, the dough is continuously placed on a conveyor belt that moves the bread through the oven and exports it when it has been baked. As a result, in the context of failure analysis, if there is a failure to bake bread (caused, for example, by a loss of power to the unit), we may also not be able to import bread and incoming dough may be stopped prior to entering the oven.</p>
+<p>In FRDL, these two interpretations would lead to models with different propagation arrows as well as flow tags. The discrete case would be represented as shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_discrete.svg"><img alt="FRDL model of the baking a loaf of bread." src="../_images/frdl_discrete.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>As shown, this model is specified with dynamics tags that specify that:</p>
+<ul class="simple">
+<li><p>The behavior starts with importing dough, which activates the <code class="docutils literal notranslate"><span class="pre">bake</span> <span class="pre">bread</span> <span class="pre">from</span> <span class="pre">dough</span></code> function when the dough is ready;</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">bake</span> <span class="pre">bread</span> <span class="pre">from</span> <span class="pre">dough</span></code> function in turn draws electricity from the <code class="docutils literal notranslate"><span class="pre">Import</span> <span class="pre">EE</span></code> function in the form of current until it is done;</p></li>
+<li><p>When the loaf is bread, it activates the <code class="docutils literal notranslate"><span class="pre">Export</span> <span class="pre">Bread</span></code> function, ending the scenario.</p></li>
+</ul>
+<p>As a result, a failure in the <code class="docutils literal notranslate"><span class="pre">Bake</span> <span class="pre">bread</span> <span class="pre">from</span> <span class="pre">dough</span></code> function <em>could</em> lead to uncooked dough being exported, the baking never finishing (and thus bread never being exported), and/or adverse current draw, depending on the specific fault mode.</p>
+<p>In contrast, the continuous case would be represented as shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_continuous.svg"><img alt="FRDL model of the continuous baking of bread." src="../_images/frdl_continuous.svg" style="width: 800px;" />
+</a>
+</figure>
+<p>While the structure of this model is similar to the previous flow, the interpretation is quite different because of the separated dough/bread flows as well as the different dynamics tags and propagation arrows. Specifically, this model specifies that:</p>
+<ul class="simple">
+<li><p>The behavior once again starts with the <code class="docutils literal notranslate"><span class="pre">Import</span> <span class="pre">Dough</span></code> function, except that this function remains active until the end of the scenario, representing the continuous importing of bread.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Bake</span> <span class="pre">Bread</span> <span class="pre">from</span> <span class="pre">Dough</span></code> function is initially activated by dough being put in the function, and now receives more bread whenever it is ready for more dough. It also is represented as active until the end of the scenario.</p></li>
+<li><p>When bread is ready from the <code class="docutils literal notranslate"><span class="pre">Bake</span> <span class="pre">Bread</span> <span class="pre">from</span> <span class="pre">Dough</span></code> function, it leaves the function and gets exported, activating the <code class="docutils literal notranslate"><span class="pre">Export</span> <span class="pre">Bread</span></code> function. This function ends the scenario after 100 time-steps.</p></li>
+</ul>
+<p>As a result, a failure in the <code class="docutils literal notranslate"><span class="pre">Bread</span> <span class="pre">bread</span> <span class="pre">from</span> <span class="pre">dough</span></code> function <em>could</em> not only lead to uncooked dough being exported (as well as the other effects for the discrete case), it could also lead to a blockage of incoming dough, which could ruin the batch if not attended to.</p>
+<p>For example, consider the failure condition of a stuck conveyor, shown below in the continuous model.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_1.svg"><img alt="Stuck conveyor in function diagram" src="../_images/conveyor_stuck_1.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>The analysis of causes and effects are shown below:</p>
+<section id="effects-analysis">
+<h5>Effects Analysis<a class="headerlink" href="#effects-analysis" title="Link to this heading"></a></h5>
+<p>For the first step of effects analysis, the potential effects on flows are identified as shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_2.svg"><img alt="Effects analysis step 1" src="../_images/conveyor_stuck_2.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>As shown, there are potential effects for each flow–both expected (change in flow of bread/dough) and potentially unexpected (adverse current draw).</p>
+<p>For the second step, the effects on function behaviors are identified:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_3.svg"><img alt="Effects analysis step 2" src="../_images/conveyor_stuck_3.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>As shown, this gets us to the system boundary of the model in terms of input/output functions. We can also identify some some effects to the instantiating function from the passing of time (dough likely to burn).</p>
+<p>This process can continue as long as there are more potential effects to uncover. We continue tracing the effects for one more step below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_4.svg"><img alt="Effects analysis step 3" src="../_images/conveyor_stuck_4.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>As shown, if the electricity draw is too high, a circuit would be blown, which would essentially stop the machine.</p>
+<p>One thing to note is that the more of these steps are undergone, the less directly plausible the effects are expected to be–in this case the effect of “elements turned off” relies on the circuit being blown, which itself relies on the current draw being high enough to blow the circuit. It is thus important to keep track of these sorts of assumptions as the analysis is performed, so there is an idea of which effects are more or less likely/plausible.</p>
+</section>
+<section id="causal-analysis">
+<h5>Causal Analysis<a class="headerlink" href="#causal-analysis" title="Link to this heading"></a></h5>
+<p>For the first step of causal analysis, the potential effects on flows are shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_cause1.svg"><img alt="Causal analysis step 1." src="../_images/conveyor_stuck_cause1.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>As shown, causes are identified for each flow. We can note the plausibility of these causal mechanisms (dough jamming seeming less likely than a power supply cut).</p>
+<p>For the second step, these causes can be further traced to functions:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_cause2.svg"><img alt="Causal analysis step 2." src="../_images/conveyor_stuck_cause2.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>This is about as far as the analysis can go for causal analysis with this diagram. That said, many more potential causes (and effects) could be delineated if the Function-in-Context Diagram shown here was further broken up into a Function Architecture Diagram, since more details about how the conveyor works would be provided.</p>
+</section>
+<section id="summary">
+<h5>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h5>
+<p>The results of the FRDL-based hazard analysis procedure for the “Short” condition are shown below.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td rowspan="2"><p>Function</p></td>
+<td rowspan="2"><p>Failure Condition</p></td>
+<td rowspan="2"><p>Effects</p></td>
+<td rowspan="2"><p>Causes</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="6"><p>Bake  Bread from Dough</p></td>
+<td rowspan="6"><p>Mechanical Conveyor Stuck</p></td>
+<td rowspan="6"><p>Adverse current draw, potential to blow circuit and shut off conveyor</p>
+<p>Dough not moved in, causing blocked production and potential to overflow input</p>
+<p>Bread not moved out</p>
+</td>
+<td rowspan="6"><p>Power supply cut from power line</p>
+<p>Dough jamming conveyor, adverse dough consistency</p>
+<p>Bread blocking conveyor, piled up loaves at export</p>
+</td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="circuit">
+<h4>Circuit<a class="headerlink" href="#circuit" title="Link to this heading"></a></h4>
+<p>To illustrated how FRDL can better represent coupled technical behaviors in conventional engineered systems, this section provides an example of representing an electric power system. The source draw.io file for this example is provided <a class="reference download internal" download="" href="../_downloads/1fc491a462b0cbe2a86f10fa469dbe59/circuit_models.drawio"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>. An EMS-based model of this system could look as shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/fbed_circuit.svg"><img alt="EMS model of an electric power system." src="../_images/fbed_circuit.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>As shown, the goal of this system is to regulate the supply of electrical energy, which it exports from the <code class="docutils literal notranslate"><span class="pre">Export</span> <span class="pre">EE</span></code> function to external loads. In the process, some of the electrical energy is converted into waste heat. Because this model applies the spacio-temporal view of functional flow inherent to the EMS, representation, reasoning about failures using the direction of the arrows could lead to incorrect or incomplete results. For example, in the fault scenario in which there is a short in the Store EE function, the shown graph implies that the electrical energy output would degrade, meaning that EE can no longer be modulated and exported to external electrical loads. This leaves out that the short in the Store EE function would also cause adverse current draw, from the <code class="docutils literal notranslate"><span class="pre">Import</span> <span class="pre">EE</span></code> source, which could damage the upstream source and wiring.</p>
+<p>In contrast, an FRDL function architecture diagram of this system is shown below.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit.svg"><img alt="FRDL model of an electric power system." src="../_images/frdl_circuit.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>As shown, this model provides more detail about how the flow of electricity propagates behaviors throughout the system. In particular, both the forward flow of voltage from the source to the sinks and the reverse flow of current from the sinks to the source are provided. Similarly, there is now a more informed representation of the dynamics of the system–that the functions are activated and deactivated by the new voltage applied initially by the <code class="docutils literal notranslate"><span class="pre">Import</span> <span class="pre">EE</span></code> function. Thus, analyzing a short in the <code class="docutils literal notranslate"><span class="pre">Store</span> <span class="pre">EE</span></code> function in this model would lead to a more-informed idea of how behavior would propagate in the circuit–not just propagating forward (via the voltage activations) to degrade the supply of electricity to the load, but also propagating backwards via current activations.</p>
+<p>Below this is illustrated in the hazard analysis of a short in the “Modulate EE” function, shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_0.svg"><img alt="FRDL model of an electric power system with a short in the Modulate EE function." src="../_images/frdl_circuit_0.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>The next subsections show how the FRDL-based hazard analysis procedure can be used to analyze the effects and causes of this hazard, resulting in a summary capturing the corresponding hazard table information.</p>
+<section id="id3">
+<h5>Effects Analysis<a class="headerlink" href="#id3" title="Link to this heading"></a></h5>
+<p>In the first step of the analysis procedure, the effect on flows is evaluated:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_1.svg"><img alt="Effects analysis of the short scenario, step 1." src="../_images/frdl_circuit_1.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>As shown, the output of “Modulate EE” produces no voltage, since the power is now moving through the “Modulate EE” function. This further results in increased current draw though the power input.</p>
+<p>In the second step, further effects on functions are evaluated:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_2.svg"><img alt="Effects analysis of the short scenario, step 2." src="../_images/frdl_circuit_2.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>As shown, the high current draw can cause a depletion of energy storage, as well as a burn-out of the upstream power supply. It also results in a lack of electrical energy exported.</p>
+<p>This results in further changes to electricity flows, shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_3.svg"><img alt="Effects analysis of the short scenario, step 3." src="../_images/frdl_circuit_3.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>As shown, because the upstream circuitry has been burnt out, it no longer provides voltage.</p>
+<p>This results in further downstream effects, combined in a single diagram below for brevity:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_4.svg"><img alt="Effects analysis of the short scenario, step 4." src="../_images/frdl_circuit_4.svg" style="width: 500px;" />
+</a>
+</figure>
+</section>
+<section id="id4">
+<h5>Causal Analysis<a class="headerlink" href="#id4" title="Link to this heading"></a></h5>
+<p>The causal analysis for the circuit is much simpler. The first step is shown below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_cause1.svg"><img alt="Causal analysis of the short scenario, step 1." src="../_images/frdl_circuit_cause1.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>As shown, the main identified flow effect is too high of voltage being applied, causing increased heat from the underlying component, resulting in the circuit melting and their being a short.</p>
+<p>This condition is further propagated in step 2, below:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/frdl_circuit_cause2.svg"><img alt="Causal analysis of the short scenario, step 2." src="../_images/frdl_circuit_cause2.svg" style="width: 500px;" />
+</a>
+</figure>
+<p>As shown, the increased voltage can result from too high of a voltage input to the entire circuit, or the voltage being provided from the “Store EE” function at too high a level. This causal analysis was fairly simple, but it shows some potential flaws in our model–we predict that the “Modulate EE” function could heat up or down depending on its current draw, but the only heat moving through the model is exported from the “Convert EE to HE” function.</p>
+<p>If these functions are co-located, it is likely that heat could additionally flow between them, resulting in similar faults throughout the system. It could also be the case that this heat is adequately evacuated effectively via the “Export HE” function, heat-related short faults. Addressing this could mean adding more heat flows to support the analysis, an exercise that is left to the reader.</p>
+</section>
+<section id="id5">
+<h5>Summary<a class="headerlink" href="#id5" title="Link to this heading"></a></h5>
+<p>The results of the FRDL-based hazard analysis procedure for the “Mechanical Conveyor Stuck” condition are shown below.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td rowspan="2"><p>Function</p></td>
+<td rowspan="2"><p>Failure Condition</p></td>
+<td rowspan="2"><p>Effects</p></td>
+<td rowspan="2"><p>Causes</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="6"><p>Modulate Electricity</p></td>
+<td rowspan="6"><p>Short</p></td>
+<td rowspan="6"><p>Voltage out reduced (likely to zero), meaning no EE exported</p>
+<p>High current draw, draining the “Store EE” function and blowing upstream fuse</p>
+<p>Said blown fuse reduces input voltage to zero, resulting in an open circuit</p>
+</td>
+<td rowspan="6"><p>Input voltage too high (from source or battery)</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+</tbody>
+</table>
+<p>As shown, an array of effects were identified using the procedure, as well one main cause.</p>
+</section>
+</section>
+<section id="further-examples">
+<h4>Further Examples<a class="headerlink" href="#further-examples" title="Link to this heading"></a></h4>
+<p>Further examples are provided in the fmdtools examples repository (see <a class="reference internal" href="../examples/Examples.html#fmdtools-examples-repo"><span class="std std-ref">Examples</span></a>). The fmdtools library uses an adaptation of FRDL to represent the structures of simulation classes (see <a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-graph-style"><span class="std std-ref">fmdtools.analyze.graph.style</span></a>). As such, architecture visualizations in the examples repository can be readily interpreted as (un-annotated) FRDL models. Additionally, one goal of the examples repository (in progress) is to provide fully-annotated FRDL diagrams to help describe each model.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Contributions.html" class="btn btn-neutral float-left" title="Contributions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Intro_to_frdl.html" class="btn btn-neutral float-right" title="Intro to Hazard Analysis with the Functional Reasoning Design Language (FRDL)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, United States Government as represented by the Administrator of the National Aeronautics and Space Administration. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

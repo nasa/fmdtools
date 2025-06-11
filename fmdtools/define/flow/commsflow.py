@@ -4,6 +4,7 @@
 Representation of flows with the capability for representing a communications network.
 
 Defines:
+
 - :class:`CommsFlow` class which represents communications networks.
 - :class:`CommsFlowGraph` class which represents `CommsFlow` in a ModelGraph structure.
 
