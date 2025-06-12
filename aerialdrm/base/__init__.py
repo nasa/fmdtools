@@ -6,7 +6,6 @@ Created on Thu Mar 13 17:17:22 2025
 """
 
 import aerialdrm.base.aircraft as aircraft
-import aerialdrm.base.environment as environment
 
 
-__all__ = ['aircraft', 'environment']
+__all__ = ['aircraft']

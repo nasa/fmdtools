@@ -18,9 +18,9 @@ class ControlState(State):
     ----------
     flightplan: tuple
         Set of x/y points the drone is to fly through.
-    height : float
+    height: float
         Height the drone is to fly at.
-    pt : flat
+    pt: int
         Point within the flight plan that the drone is to fly to.
     """
 
