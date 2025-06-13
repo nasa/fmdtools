@@ -57,17 +57,17 @@ class HurricaneControlFlight(ControlFlight):
                 self.m.set_mode('flight')
 
     def replan_mission(self):
-        ap = AircraftPosition()
-        ap.assign(self.trajectories.perc_traj.s)
-
+        ap = AircraftPosition() # just a calculator! 
+        ap.assign(self.trajectories.perc_traj.s) # initialize this state as current perceived state. 
+# DO WE NEED A PERCEPTION /= REALITY FAULT?
         start = self.s.flightplan[0]
         ap.assign(start, 'goal_x', 'goal_y')
         start_dist = ap.calc_dist()
-
+#
         end = self.s.flightplan[-1]
         ap.assign(end, 'goal_x', 'goal_y')
         end_dist = ap.calc_dist()
-
+# 20 below arbitrary (?)perhaps play with value/
         if start_dist > 20 and end_dist > 20:
             curr_pt = self.trajectories.perc_traj.s.get('x', 'y')
             land_pt = self.environment.c.find_closest(*curr_pt, 'suitable')
@@ -75,7 +75,8 @@ class HurricaneControlFlight(ControlFlight):
             land_pt = start
         else:
             land_pt = end
-
+# closest suitable spot DNE MOST optimal suitable spot. perhaps should prioritize suitable spot farthest closest to the goal?
+# in this case, must consider: 1. feasibility 2. distance to goal
         self.s.flightplan = (tuple(land_pt),)
         self.s.pt = 0
 
@@ -93,7 +94,17 @@ class HurricaneAircraftArchParameter(Parameter):
     """Overall Parameter Defining the AircraftArchitecture."""
 
     startpt: tuple = (10.0, 10.0)
-    flightplan: tuple = ((10.0, 10.0), (50.0, 10.0), (50.0, 100.0), (100.0, 100.0))
+    flightplan: tuple = ((10.0, 10.0), (50.0, 10.0), (50.0, 100.0), (100.0, 100.0)) 
+# static, fixed plan; should be fully revamped in order to support A* algorithm. 
+# A* considerations:
+# managing safe distances from all aerial obstacles in nominal flight (some inverse relationship to distance?) (envelope)
+# ^ dynamically calculated at each timestep?
+# should battery die, where the aircraft will land <- minimize risk(cost?)
+# potential coriolis consideration, given large enough aircraft?
+# 
+# Potential implementation strategy:
+# 1. discretize (gridify?) space.
+# 2. Define heuristic: distance between 
     height: float = 25.0
     depletion: float = 25.0
     with_proxthreat: bool = True
