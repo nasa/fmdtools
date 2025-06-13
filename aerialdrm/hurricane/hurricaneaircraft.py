@@ -102,9 +102,14 @@ class HurricaneAircraftArchParameter(Parameter):
 # should battery die, where the aircraft will land <- minimize risk(cost?)
 # potential coriolis consideration, given large enough aircraft?
 # 
-# Potential implementation strategy:
+# Potential implementation strategy: 
 # 1. discretize (gridify?) space.
-# 2. Define heuristic: distance between 
+# 2. connect all grid points to neighbors? Maybe do more than the 8 directions, like how about every grid point within 3 units? for smoother directions
+# 3. entirely remove all grid points which are disallowed?
+# 4. Dynamic cost redefinition based on if the aircraft breaks at that point
+# 5. Define heuristic: distance between grid, goal. <- is this improvable?
+# 6. define minHeap structure, implement A* priorityQueue 
+# 7. copy over some A* implementation 
     height: float = 25.0
     depletion: float = 25.0
     with_proxthreat: bool = True
