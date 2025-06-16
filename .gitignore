@@ -38,3 +38,4 @@ docs/.pytest_cache/
 LICENSE.bak
 *.pkl
 fmdtools.code-workspace
+/jupyter_execute
