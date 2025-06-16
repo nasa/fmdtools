@@ -12,7 +12,7 @@ Contributions
 How to Contribute
 ^^^^^^^^^^^^^^^^^
 
-Development of fmdtools is coordinated by the `fmdtools team <../CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an NASA-developed and maintained open-source tool, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
+Development of fmdtools is coordinated by the :doc:`fmdtools team <../CONTRIBUTORS>` at NASA Ames Research Center. As an NASA-developed and maintained open-source tool, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
 
 
 Repository Structure
@@ -140,8 +140,7 @@ Documentation is generated using Sphinx, which generates html from rst files. Th
 
 Note that sphinx requires the following requirements, which should be installed beforehand::
 
-	nbsphinx
-	myst_parser
+	myst-nb
 	sphinx_rtd_theme
 	pandoc
 
