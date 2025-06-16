@@ -5,6 +5,7 @@ __pycache__/
 __pycache__/auxfunctions.cpython-36.pyc
 __pycache__/ffermat.cpython-36.pyc
 __pycache__/quad_mdl.cpython-36.pyc
+jupyter_execute/
 
 #ignore Jupyter checkpoints
 .ipynb_checkpoints
