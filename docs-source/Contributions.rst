@@ -142,9 +142,6 @@ Note that building the docs page with sphinx requires the following dependencies
 
 	myst-nb
 	sphinx_rtd_theme
-	pandoc
-
-Pandoc is an external program and thus should be installed from `its website <https://pandoc.org/installing.html>`_ or anaconda.
 
 Style/Formatting
 ----------------
