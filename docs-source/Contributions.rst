@@ -138,7 +138,7 @@ Documentation is generated using Sphinx, which generates html from rst files. Th
 	./make clean
 	./make html
 
-Note that sphinx requires the following requirements, which should be installed beforehand::
+Note that building the docs page with sphinx requires the following dependencies, which should be installed beforehand::
 
 	myst-nb
 	sphinx_rtd_theme
