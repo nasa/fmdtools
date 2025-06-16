@@ -356,7 +356,7 @@ class Drone(DroneRural):
                      'force_lin', 'hsig_dofs', 'environment',
                      ca={'archtype': self.p.phys_param.linearch})
         self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
-        self.add_fxn('plan_path',   PlanPath, 'ee_ctl', 'dofs', 'des_traj', 'force_st',
+        self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'dofs', 'des_traj', 'force_st',
                      'rsig_traj', 'environment', p=self.p.plan_param)
         self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st',
                      'environment')

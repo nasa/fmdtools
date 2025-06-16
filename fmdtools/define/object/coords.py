@@ -1494,7 +1494,7 @@ class Coords(BaseCoords):
                 z_h = None
             if label:
                 if z_h is not None:
-                    textloc = [*pt,  z_h+text_z_offset]
+                    textloc = [*pt, z_h+text_z_offset]
                 else:
                     textloc = pt
                 ax.text(*textloc, lab,

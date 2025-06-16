@@ -618,7 +618,7 @@ class DriveMode(Mode):
 
     default_phases = (('drive', 1.0), ('start', 1.0),)
     fault_elec_open = {"disturbances": (("s.transfer", 0.0),)}
-    fault_stuck: dict = {"disturbances": (("s.friction",  10.0),)}
+    fault_stuck: dict = {"disturbances": (("s.friction", 10.0),)}
     fault_stuck_right: dict = {"disturbances": (("s.friction", 3.0), ("s.drift", 0.2))}
     fault_stuck_left: dict = {"disturbances": (("s.friction", 3.0), ("s.drift", -0.2))}
     fault_custom: dict = {}
@@ -1210,7 +1210,7 @@ if __name__ == "__main__":
     ps_sine = ParameterSample(pd_sine)
     comb_kwargs = {'resolutions': {'ground.amp': 2, "ground.period": 20}}
     ps_sine.add_variable_ranges(comb_kwargs=comb_kwargs)
-    ec_nest, hist_nest, app_nest = prop.nested_sample(mdl, ps_sine, faultdomains={'drive_faults':  (('all_fxnclass_modes', 'Drive'), {})},
+    ec_nest, hist_nest, app_nest = prop.nested_sample(mdl, ps_sine, faultdomains={'drive_faults': (('all_fxnclass_modes', 'Drive'), {})},
                                                   faultsamples={'drive_faults': (('fault_phases', 'drive_faults', "start"), {})},
                                                   pool=mp.Pool(5))
 

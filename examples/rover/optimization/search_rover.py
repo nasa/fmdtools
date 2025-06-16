@@ -22,6 +22,8 @@ import matplotlib.pyplot as plt
 # OBJECTIVES: FORMULATION 1
 
 drive_modes = {'mode_options': {'custom_fault': {}}}
+
+
 def line_dist(ind, show_plot=False, print_time=False):
     """
     Take all of the individuals in a species and returns each of their distances.
@@ -44,7 +46,7 @@ def line_dist(ind, show_plot=False, print_time=False):
     if show_plot:
         hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y')
     # faultlabel='Faulty Scenarios', faultalpha=1.0)
-    return dist, enddist,  endpt
+    return dist, enddist, endpt
 
 
 def line_dist_faster(ind, show_plot=False, print_time=False):
@@ -63,7 +65,7 @@ def line_dist_faster(ind, show_plot=False, print_time=False):
     if show_plot:
         hist = mode_search_prob.hist
         hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y')
-    return dist, end_dist,  endpt
+    return dist, end_dist, endpt
 
 
 def f_1(sol):

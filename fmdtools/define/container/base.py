@@ -460,21 +460,13 @@ class ExContainer(BaseContainer):
     x: float = 1.0
     y: float = 2.0
 
+
 class ExNestContainer(BaseContainer):
     e1: ExContainer = ExContainer()
     z: float = 20.0
 
-# TODO: it seems possible to use the below property to reset containers.
-# Need to look at bug report for this.
-es = ExContainer(3.0, 4.0)
-es.__defaults__['x'] = 2
-
-# interestingly enough, __defaults__ does not change __default_vals__
-es.__default_vals__
-
-es1 = ExContainer()
-
 
 if __name__ == "__main__":
+
     import doctest
     doctest.testmod(verbose=True)

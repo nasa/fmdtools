@@ -114,7 +114,7 @@ ignore_notebooks = [*too_slow_notebooks,
                     "tmp"]
 
 
-def main(doctests=True,  notebooks=True, testlist=[], testtype="full",
+def main(doctests=True, notebooks=True, testlist=[], testtype="full",
          ignore=ignore_notebooks, cov=True, report=True, pyver="py311"):
     pytestargs = ["--cache-clear"]
 

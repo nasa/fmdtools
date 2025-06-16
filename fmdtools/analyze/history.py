@@ -624,7 +624,7 @@ class History(Result):
                   title='', indiv_kwargs={}, time_slice=[], time_slice_label=None,
                   figsize='default', comp_groups={},
                   v_padding=None, h_padding=None, title_padding=0.0,
-                  phases={}, phase_kwargs={}, legend_title=None,  **kwargs):
+                  phases={}, phase_kwargs={}, legend_title=None, **kwargs):
         """
         Plot history values over time aggregated over comp_groups.
 

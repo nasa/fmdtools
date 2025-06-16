@@ -93,7 +93,6 @@ class ActionArchitectureGraph(ArchitectureGraph):
         aa : ActionArchitecture
             Underlying action sequence graph object to get states from
         """
-        # TODO: need to fix so that these
         ArchitectureGraph.set_nx_states(self, aa, **kwargs)
         for g in self.g.nodes():
             self.g.nodes[g]['active'] = g in aa.active_actions
@@ -293,7 +292,6 @@ class ActionArchitecture(Architecture):
         """
         self.add_sim('acts', name, actclass, *flownames, **fkwargs)
 
-        # TODO: maybe functions should work like this also?
         self.action_graph.add_node(name)
         self.flow_graph.add_node(name, bipartite=0)
         flows = {fl: self.flows[fl] for fl in flownames}
