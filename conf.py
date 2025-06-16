@@ -35,13 +35,15 @@ version = release
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.intersphinx',
-              'sphinx.ext.autosummary',
-              "nbsphinx", "myst_parser", "sphinx.ext.githubpages"]
+              'sphinx.ext.autosummary', 'sphinx.ext.intersphinx', 'sphinx.ext.autosectionlabel',
+              "myst_nb", "sphinx.ext.githubpages"]
 
 # "gaphor.extensions.sphinx"
 # gaphor_models = "/docs-source/figures/uml/module-reference-diagrams.gaphor"
 myst_enable_extensions = ["html_image", "html_admonition"]
 
+# makes it so notebooks don't re-execute
+nb_execution_mode = "off"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -49,7 +51,7 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'docs', '**.ipynb_checkpoints']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'docs', 'fmdtools-dev', 'jupyter-execute', '**.ipynb_checkpoints']
 
 
 # -- Options for HTML output -------------------------------------------------

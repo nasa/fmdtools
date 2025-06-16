@@ -8,7 +8,7 @@ This repository provides several examples models in the `/examples` directory, w
 Pump
 +++++++++++++++++++++++++++++++++++++++++++++
 
-`examples/ex_pump <../examples/pump/readme.rst>`_ is an example of a simple pump model to demonstrate various capabilities of fmdtools. This includes a tutorial notebook, demostration of plot capabilities, optimization and stochastic modeling.
+:doc:`examples/ex_pump <pump/readme.rst>` is an example of a simple pump model to demonstrate various capabilities of fmdtools. This includes a tutorial notebook, demostration of plot capabilities, optimization and stochastic modeling.
 
 .. toctree::
    :hidden:
@@ -23,7 +23,7 @@ Pump
 Multirotor
 +++++++++++++++++++++++++++++++++++++++++++++
 
-`/examples/multirotor <../examples/multirotor/readme.rst>`_ includes several models of drones modelled at differing levels of detail. Includes a demonstration of how models can be matured as more details are added and how the system can be co-optimized.
+:doc:`/examples/multirotor <../examples/multirotor/readme>` includes several models of drones modelled at differing levels of detail. Includes a demonstration of how models can be matured as more details are added and how the system can be co-optimized.
  
  .. toctree::
    :hidden:

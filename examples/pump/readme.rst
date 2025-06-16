@@ -29,7 +29,7 @@ Notebooks
 
 - **Tutorial** which was designed to provide a basic interactive tutorial for learning basic fmdtools functions (along with the `Intro to fmdtools <docs/Intro_to_fmdtools.md>`_ workshop). This tutorial has two components: 
 
-  - `Tutorial_unfilled.ipynb <Tutorial_unfilled.ipynb>`_, which is to be used by students, and has the basic structure without the code filled in.
+  - :doc:`Tutorial_unfilled.ipynb <Tutorial_unfilled.ipynb>`, which is to be used by students, and has the basic structure without the code filled in.
 
   - `Tutorial_complete.ipynb <Tutorial_complete.ipynb>`_, which is to be used by the instructor, and has the basic code filled in to follow along with.
 
