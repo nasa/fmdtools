@@ -57,17 +57,19 @@ class HurricaneControlFlight(ControlFlight):
                 self.m.set_mode('flight')
 
     def replan_mission(self):
+        ''' replan if battery insufficient for mission '''
+        ''' replan if obstacle comes into flight path  turn on dynamic replanning boolean '''
         ap = AircraftPosition() # just a calculator! 
         ap.assign(self.trajectories.perc_traj.s) # initialize this state as current perceived state. 
-# DO WE NEED A PERCEPTION /= REALITY FAULT?
+# DO WE NEED A PERCEPTION /= REALITY FAULT? YES
         start = self.s.flightplan[0]
         ap.assign(start, 'goal_x', 'goal_y')
         start_dist = ap.calc_dist()
-#
+
         end = self.s.flightplan[-1]
         ap.assign(end, 'goal_x', 'goal_y')
         end_dist = ap.calc_dist()
-# 20 below arbitrary (?)perhaps play with value/
+# 20 below arbitrary (?)perhaps play with value/ -> maybe turn into parameter
         if start_dist > 20 and end_dist > 20:
             curr_pt = self.trajectories.perc_traj.s.get('x', 'y')
             land_pt = self.environment.c.find_closest(*curr_pt, 'suitable')
@@ -75,7 +77,7 @@ class HurricaneControlFlight(ControlFlight):
             land_pt = start
         else:
             land_pt = end
-# closest suitable spot DNE MOST optimal suitable spot. perhaps should prioritize suitable spot farthest closest to the goal?
+# closest suitable spot DNE MOST optimal suitable spot. perhaps should prioritize suitable spot closest to the goal?
 # in this case, must consider: 1. feasibility 2. distance to goal
         self.s.flightplan = (tuple(land_pt),)
         self.s.pt = 0
@@ -100,12 +102,12 @@ class HurricaneAircraftArchParameter(Parameter):
 # managing safe distances from all aerial obstacles in nominal flight (some inverse relationship to distance?) (envelope)
 # ^ dynamically calculated at each timestep?
 # should battery die, where the aircraft will land <- minimize risk(cost?)
-# potential coriolis consideration, given large enough aircraft?
 # 
 # Potential implementation strategy: 
-# 1. discretize (gridify?) space.
+# 1. discretize (gridify?) space. 
 # 2. connect all grid points to neighbors? Maybe do more than the 8 directions, like how about every grid point within 3 units? for smoother directions
-# 3. entirely remove all grid points which are disallowed?
+# Weights: [ultra tentative] c1*angle change cost + c2*time of straight-line flight + c3*grid gaussian blur*inv. prop to battery
+# 3. entirely remove all grid points which are disallowed? or cost ridiculously high 
 # 4. Dynamic cost redefinition based on if the aircraft breaks at that point
 # 5. Define heuristic: distance between grid, goal. <- is this improvable?
 # 6. define minHeap structure, implement A* priorityQueue 
