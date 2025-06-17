@@ -14,8 +14,60 @@ from fmdtools.define.block.function import Function
 
 from shapely import distance
 import numpy as np
+"""TODO: 
+    assign costs to suitabilities of areas below. 
+        Suitable: 0.
+        Disallowed: 10.
+        Occupied: 20.
+        Restricted: 1000.
+    create new grid on top of existing code for the drone to fly in. 
+        class DroneFlightGridParam(CoordsParam):
+        class DroneFlightGrid(Coords):
+    
 
+"""
+class DroneFlightGridParam(CoordsParam):
+    x_size: int = 48
+    y_size: int = 48
+    blocksize: float = 2.5
+    traverse_cost: int = 0
+    heuristic: float = 0.0
+    
 
+class DroneFlightGrid(Coords):
+    container_p = DroneFlightGridParam
+    
+    
+    def init_properties(self, **kwargs):
+        return
+    def get_grid_cost(self, env_coords, disallowed_cost = 10, occupied_cost = 20, restricted_cost = 1000, dist_cost = 2):
+        """
+        Calculate the GRID COST somewhere in the finer (than environment) drone traversal grid.
+        Grid cost + traversal cost = total cost per timestep. defines A* grid weights.
+        Heuristic = dist(place, goal.)
+        maybe there will be more or less time per timestep? dependent on distance traveled. this seems like a problem.
+        env_coords: hurricanecoords grid.
+        disallowed_cost, occupied_cost, restricted_cost: how unsavory it is to fly above those areas.
+        x, y: grid position.
+        env_i, env_j: HurricaneCoords grid indices.
+        
+        perhaps implement grid cost only for now?
+        """
+        
+        for i in range(self.param.y_size):
+            for j in range(self.param.x_size):
+                x = i * self.param.blocksize + self.param.blocksize/2
+                y = j * self.param.blocksize + self.param.blocksize/2
+                env_i = int(x // env_coords.param.blocksize)
+                env_j = int(y // env_coords.param.blocksize)
+                occupied = env_coords.features["occupied"][env_i, env_j]
+                disallowed = env_coords.features["disallowed"][env_i, env_j]
+                suitable = env_coords.features["suitable"][env_i, env_j]
+                grid_cost = disallowed_cost * disallowed + occupied_cost * occupied + restricted_cost * restricted
+                self.features["traverse_cost"][i, j] = grid_cost
+                also i
+                
+    def choose_next
 class HurricaneCoordsParam(CoordsParam):
     x_size: int = 12
     y_size: int = 12
@@ -26,6 +78,7 @@ class HurricaneCoordsParam(CoordsParam):
     collect_suitable: tuple = (("occupied", False, np.equal),
                                "and", ("disallowed", False, np.equal),
                                "and", ("restricted", False, np.equal))
+
     point_start: tuple = (10.0, 10.0)
     point_end: tuple = (100.0, 100.0)
 
@@ -34,6 +87,7 @@ class HurricaneCoords(Coords):
     container_p = HurricaneCoordsParam
 
     def init_properties(self, **kwargs):
+        
         self.set_rand_pts('occupied', True, 50)
         self.set_range('disallowed', True, xmin=30, xmax=60, ymin=70)
         self.set_range('disallowed', True, xmin=20, xmax=60, ymax=30)
