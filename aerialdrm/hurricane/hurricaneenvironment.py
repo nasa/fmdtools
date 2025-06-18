@@ -14,8 +14,11 @@ from fmdtools.define.block.function import Function
 
 from shapely import distance
 import numpy as np
+
+
 import math
 """importing math for heuristic difference calculation"""
+
 
 """TODO: 
     assign costs to suitabilities of areas below. 
@@ -36,7 +39,7 @@ class DroneFlightGridParam(CoordsParam):
     grid_cost: int = 0
     fuel_cost: int = 0
     heuristic: float = 0.0
-    astar_weight: float = 0.0
+    edge_weight: float = 0.0
     
 
 class DroneFlightGrid(Coords):
@@ -45,9 +48,14 @@ class DroneFlightGrid(Coords):
     
     def init_properties(self, **kwargs):
         return
-    def get_edge_weights(self):
+    def get_edge_weights(self, canecraftarch):
+        
         
     def get_fuel_cost(self, fuel_rate = 2.0):
+        """
+        calculate cost due to distance traveled per timestep.
+        """
+        
         for i in range(self.param.y_size):
             for j in range(self.param.x_size):
                 self.features["fuel_cost"][i, j] = fuel_rate * math.hypot(0, 0)
