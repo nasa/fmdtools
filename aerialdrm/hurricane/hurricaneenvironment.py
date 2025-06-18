@@ -14,6 +14,9 @@ from fmdtools.define.block.function import Function
 
 from shapely import distance
 import numpy as np
+import math
+"""importing math for heuristic difference calculation"""
+
 """TODO: 
     assign costs to suitabilities of areas below. 
         Suitable: 0.
@@ -56,16 +59,21 @@ class DroneFlightGrid(Coords):
         
         for i in range(self.param.y_size):
             for j in range(self.param.x_size):
-                x = i * self.param.blocksize + self.param.blocksize/2
-                y = j * self.param.blocksize + self.param.blocksize/2
+                x = j * self.param.blocksize + self.param.blocksize/2
+                y = i * self.param.blocksize + self.param.blocksize/2
                 env_i = int(x // env_coords.param.blocksize)
                 env_j = int(y // env_coords.param.blocksize)
                 occupied = env_coords.features["occupied"][env_i, env_j]
                 disallowed = env_coords.features["disallowed"][env_i, env_j]
+                restricted = env_coords.features["restricted"][env_i, env_j]
                 suitable = env_coords.features["suitable"][env_i, env_j]
                 grid_cost = disallowed_cost * disallowed + occupied_cost * occupied + restricted_cost * restricted
                 self.features["traverse_cost"][i, j] = grid_cost
-                also 
+                goal_x = env_coords.param.point_end[0]
+                goal_y = env_coords.param.point_end[1]
+                dx, dy = goal_x - x, goal_y - y
+                heuristic = math.hypot(dx, dy)
+                self.features["heuristic"][i, j] = heuristic
                 
     def choose_next
 class HurricaneCoordsParam(CoordsParam):
