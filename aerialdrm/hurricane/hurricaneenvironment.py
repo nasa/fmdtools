@@ -65,7 +65,7 @@ class DroneFlightGrid(Coords):
                 suitable = env_coords.features["suitable"][env_i, env_j]
                 grid_cost = disallowed_cost * disallowed + occupied_cost * occupied + restricted_cost * restricted
                 self.features["traverse_cost"][i, j] = grid_cost
-                also i
+                also 
                 
     def choose_next
 class HurricaneCoordsParam(CoordsParam):
