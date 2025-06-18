@@ -33,8 +33,10 @@ class DroneFlightGridParam(CoordsParam):
     x_size: int = 48
     y_size: int = 48
     blocksize: float = 2.5
-    traverse_cost: int = 0
+    grid_cost: int = 0
+    fuel_cost: int = 0
     heuristic: float = 0.0
+    astar_weight: float = 0.0
     
 
 class DroneFlightGrid(Coords):
@@ -43,6 +45,12 @@ class DroneFlightGrid(Coords):
     
     def init_properties(self, **kwargs):
         return
+    def get_edge_weights(self):
+        
+    def get_fuel_cost(self, fuel_rate = 2.0):
+        for i in range(self.param.y_size):
+            for j in range(self.param.x_size):
+                self.features["fuel_cost"][i, j] = fuel_rate * math.hypot(0, 0)
     def get_grid_cost(self, env_coords, disallowed_cost = 10, occupied_cost = 20, restricted_cost = 1000, dist_cost = 2):
         """
         Calculate the GRID COST somewhere in the finer (than environment) drone traversal grid.
@@ -68,7 +76,7 @@ class DroneFlightGrid(Coords):
                 restricted = env_coords.features["restricted"][env_i, env_j]
                 suitable = env_coords.features["suitable"][env_i, env_j]
                 grid_cost = disallowed_cost * disallowed + occupied_cost * occupied + restricted_cost * restricted
-                self.features["traverse_cost"][i, j] = grid_cost
+                self.features["grid_cost"][i, j] = grid_cost
                 goal_x = env_coords.param.point_end[0]
                 goal_y = env_coords.param.point_end[1]
                 dx, dy = goal_x - x, goal_y - y
