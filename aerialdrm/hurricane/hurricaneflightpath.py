@@ -8,11 +8,11 @@ Created on Wed Jun 18 14:30:59 2025
 decided to move new classes into a new file
 """
 from fmdtools.define.object.coords import Coords, CoordsParam
-from aerialdrm.base.aircraft.state import AircraftPosition
-import maths
+import math
 """importing math for heuristic difference calculation"""
 import numpy as np
 """importing numpy for zeroes initialization, init_properties"""
+import networkx as nx
 
 """TODO: 
     assign costs to suitabilities of areas below. 
@@ -29,23 +29,39 @@ class DroneFlightGridParam(CoordsParam):
     x_size: int = 48
     y_size: int = 48
     blocksize: float = 2.5
+    
+    """
+    weighing suboptimality of each region
+    """
+    disallowed_cost: float = 10.0
+    occupied_cost: float = 20.0
+    restricted_cost: float = 1000.0
+    
+    """
+    start, end points
+    """
+    point_start: tuple = (10.0, 10.0)
+    point_end: tuple = (100.0, 100.0)
+    
+    """
+    every grid point assigned 
+    """
     feature_grid_cost: float = 0.0
     feature_fuel_cost: float = 0.0
     feature_total_cost: float = 0.0
     feature_heuristic: float = 0.0
     feature_edge_weight: float = 0.0 # total cost normalized wrt dist
     
-"""GET NEIGHBORS"""
 class DroneFlightGrid(Coords):
     container_p = DroneFlightGridParam
     
     def init_properties(self, **kwargs):
         shape = self.param.y_size, self.param.x_size
-        self.set("grid_cost", np.zeroes(shape))
-        self.set("fuel_cost", np.zeroes(shape))
-        self.set("total_cost", np.zeroes(shape))
-        self.set("edge_weight", np.zeroes(shape))
-        self.set("heuristic", np.zeroes(shape))
+        self.set("grid_cost", np.zeros(shape))
+        self.set("fuel_cost", np.zeros(shape))
+        self.set("total_cost", np.zeros(shape))
+        self.set("edge_weight", np.zeros(shape))
+        self.set("heuristic", np.zeros(shape))
         
     def get_edge_weights(self, env_coords, curr_x, curr_y, fuel_rate = 2.0, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0, dist_cost = 2.0):
         """
@@ -72,6 +88,7 @@ class DroneFlightGrid(Coords):
                 x = j * self.param.blocksize + self.param.blocksize/2
                 y = i * self.param.blocksize + self.param.blocksize/2
                 self.features["fuel_cost"][i, j] = fuel_rate * math.hypot(curr_x - x, curr_y - y)
+                
     def get_grid_cost(self, env_coords, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0):
         """
         Calculate the GRID COST somewhere in the finer (than environment) drone traversal grid.
@@ -84,8 +101,6 @@ class DroneFlightGrid(Coords):
         env_i, env_j: HurricaneCoords grid indices.
         implement gaussian later        
         """
-        
-        get_neighbors
         for i in range(self.param.y_size):
             for j in range(self.param.x_size):
                 x = j * self.param.blocksize + self.param.blocksize/2
@@ -95,13 +110,44 @@ class DroneFlightGrid(Coords):
                 occupied = env_coords.features["occupied"][env_i, env_j]
                 disallowed = env_coords.features["disallowed"][env_i, env_j]
                 restricted = env_coords.features["restricted"][env_i, env_j]
-                suitable = env_coords.features["suitable"][env_i, env_j]
-                grid_cost = disallowed_cost * disallowed + occupied_cost * occupied + restricted_cost * restricted
-                self.features["grid_cost"][i, j] = grid_cost
+                # suitable = env_coords.features["suitable"][env_i, env_j]
                 goal_x = env_coords.param.point_end[0]
                 goal_y = env_coords.param.point_end[1]
                 dx, dy = goal_x - x, goal_y - y
-                heuristic = math.hypot(dx, dy)
+                dist = math.hypot(dx, dy)
+                grid_cost = dist * (disallowed_cost * disallowed + occupied_cost * occupied + restricted_cost * restricted)
+                self.features["grid_cost"][i, j] = grid_cost
+                heuristic = dist
                 self.features["heuristic"][i, j] = heuristic
                 
+    def adj_list_gen(self, max_distance = 3):
+        """
+        Takes in maximum any-direction grid jump length. 
+        returns dictionary adjacency list. keys: vertices. Values: tuple of adjacent tuples.
+        """
+        adj_dict = {}
+        for i in range(self.param.y_size):
+            for j in range(self.param.x_size):
+                vertex = (i, j)
+                adj_list = []
+                visited = []
+                x = j * self.param.blocksize + self.param.blocksize / 2
+                y = i * self.param.blocksize + self.param.blocksize / 2
+                neighbors = self.get_neighbors_recursive(x, y, 1, visited, max_distance)
+                
+                
+        return adj_dict
+    def recursive_neighbor_gen(x, y, dist_remaining)
+        """
+        takes in coordinates, returns tuple of world coordinate tuples
+        """
+    def nx_graph_gen(self):
+        """
+        Uses path-generation methods in order to create NetworkX graph
+        """
     def a_star(self, start, goal):
+        """
+        returns a tuple of tuples which the aircraft should fly through, beginning at the start and finishing at the end.
+        Ex.: ((0, 0), (2, 2), (2, 5), (4, 6), (7, 6), (9, 7), (10, 7), (10, 10))
+        """
+        
