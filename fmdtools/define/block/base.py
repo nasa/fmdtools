@@ -205,6 +205,8 @@ class Simulable(BaseObject):
             Keyword arguments to BaseObject
         """
         loc_kwargs = {**kwargs, 'sp': {**self.default_sp, **sp}}
+        if 't' not in loc_kwargs:
+            loc_kwargs['t'] = {'dt': loc_kwargs.get('sp').get('dt', 1.0), 'use_local': False}
         BaseObject.__init__(self, **loc_kwargs)
         self.mut_kwargs = {role: kwargs.get(role)
                            for role in self.get_roles('container', with_immutable=False)
@@ -294,7 +296,7 @@ class Simulable(BaseObject):
             param_dict['r'] = r
         if not track:
             param_dict['track'] = copy.deepcopy(self.track)
-        return param_dict
+        return {**param_dict, **kwargs}
 
     def new(self, **kwargs):
         """
@@ -701,7 +703,7 @@ class Block(Simulable):
             if 'arch' in self.roletypes:
                 arch_dict = {role: getattr(self, role)
                              for role in self.get_roles('arch')}
-                paramdict = {**paramdict, **arch_dict}
+                paramdict = {**paramdict, 'sp': self.sp, **arch_dict}
             cop = self.__class__(self.name, *args, flows=flows, **paramdict)
             cop.assign_roles('container', self)
         except TypeError as e:
@@ -738,11 +740,11 @@ class Block(Simulable):
         # Step 1: Run Dynamic Propagation Methods in Order Specified
         # and Inject Faults if Applicable
         if hasattr(self, 'dynamic_loading_before'):
-            self.dynamic_loading_before(self, time)
+            self.dynamic_loading_before(time)
         if self.is_dynamic():
             self("dynamic", time=time, run_stochastic=run_stochastic)
         if hasattr(self, 'dynamic_loading_after'):
-            self.dynamic_loading_after(self, time)
+            self.dynamic_loading_after(time)
 
         # Step 2: Run Static Propagation Methods
         active = True
