@@ -113,7 +113,7 @@ class HurricaneEnvironment(AircraftEnvironment):
                               coll_overlay=False)
         self.ga.show(fig=fig, ax=ax)
         return fig, ax
-"""override environment init method. Seems AircraftEnvironment flow is TBD?"""
+    """override environment init method. Seems AircraftEnvironment flow is TBD?"""
     
 class HurricaneConditions(Function):
     __slots__ = ('environment', )

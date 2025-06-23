@@ -7,6 +7,10 @@ Created on Wed Jun 18 14:30:59 2025
 """
 decided to move new classes into a new file
 """
+# risk aware path planning algorithm
+"""
+gotta figure out: params for each method, initialization. 6/23/2025.
+"""
 from fmdtools.define.object.coords import Coords, CoordsParam
 import math
 """importing math for heuristic difference calculation"""
@@ -16,17 +20,7 @@ import networkx as nx
 
 from typing import Dict, Tuple
 from dataclasses import field
-"""TODO: 
-    assign costs to suitabilities of areas below. 
-        Suitable: 0.
-        Disallowed: 10.
-        Occupied: 20.
-        Restricted: 1000.
-    create new grid on top of existing code for the drone to fly in. 
-        class DroneFlightGridParam(CoordsParam):
-        class DroneFlightGrid(Coords):
 
-"""
 class DroneFlightGridParam(CoordsParam):
     x_size: int = 48
     y_size: int = 48
@@ -49,35 +43,22 @@ class DroneFlightGridParam(CoordsParam):
     every grid point assigned 
     """
     feature_grid_cost: float = 0.0
-    feature_fuel_costs: Dict[Tuple[int, int], float] = field(default_factory = Dict)
-    # Ask mentor!!!!
-    feature_total_costs: Dict[Tuple[int, int], float] = field(default_factory = Dict)
-    # mentor 
     feature_heuristic: float = 0.0
-    feature_edge_weights: Dict[Tuple[int, int], float] = field(default_factory = Dict) 
-    # total cost normalized wrt dist
-    # mentor
-    
+    feature_fuel_costs: dict = {}
+    feature_total_costs: Dict[Tuple[int, int], float] = field(default_factory = dict)
+    feature_edge_weights: Dict[Tuple[int, int], float] = field(default_factory = dict) 
+    # total cost normalized wrt dist    
     
 class DroneFlightGrid(Coords):
     container_p = DroneFlightGridParam
     
     def init_properties(self, **kwargs):
-        shape = self.param.y_size, self.param.x_size
-        self.set("grid_cost", np.zeros(shape))
-        # self.set("fuel_cost", np.zeros(shape))
-        self.fuel_costs = {}
-        # self.set("total_cost", np.zeros(shape))
-        self.total_costs = {}
-        # self.set("edge_weight", np.zeros(shape))
-        self.edge_weights = {}
-        self.set("heuristic", np.zeros(shape))
+        self.set("grid_cost", np.zeros((self.param.y_size, self.param.x_size)))
+        self.set("heuristic", np.zeros((self.param.y_size, self.param.x_size)))
+        self.fuel_costs = [[{} for _ in range(self.param.x_size)] for _ in range(self.param.y_size)]
+        self.total_costs = [[{} for _ in range(self.param.x_size)] for _ in range(self.param.y_size)]
+        self.edge_weights = [[{} for _ in range(self.param.x_size)] for _ in range(self.param.y_size)]
         
-        """ NEED TO DO 6/23: convert fuel_cost and total cost into 
-        dictionaries for each grid point, as each grid point necessitates an array.
-        must redefine total_cost, fuel_cost, edge_weight in get_edge_weight & get_fuel_cost
-        
-        """
     def get_edge_weights(self, env_coords, fuel_rate = 2.0, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0, dist_cost = 2.0):
         """
         calls get_edge_weight to assign all edge weights into array
@@ -85,6 +66,7 @@ class DroneFlightGrid(Coords):
         for i in range(self.param.y_size):
             for j in range(self.param.x_size):
                 self.get_edge_weight(env_coords, j, i, fuel_rate, disallowed_cost, occupied_cost, restricted_cost, dist_cost)
+                
     def get_edge_weight(self, env_coords, curr_x, curr_y, fuel_rate = 2.0, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0, dist_cost = 2.0):
         """
         gets total cost, edge weight <- total cost/dist. edge weight to be used in A*
@@ -119,7 +101,7 @@ class DroneFlightGrid(Coords):
             for j in range(self.param.x_size):
                 x = j * self.param.blocksize + self.param.blocksize/2
                 y = i * self.param.blocksize + self.param.blocksize/2
-                self.features["fuel_cost"][i, j] = fuel_rate * math.hypot(curr_x - x, curr_y - y)
+                self.features["fuel_costs"][i, j][(curr_x, curr_y)] = fuel_rate * math.hypot(curr_x - x, curr_y - y)
                 
     def get_grid_costs(self, env_coords, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0):
         """
@@ -142,8 +124,6 @@ class DroneFlightGrid(Coords):
         """
         review [i][j] vs [i, j]
         """
-        
-        
         for i in range(self.param.y_size):
             for j in range(self.param.x_size):
                 x = j * self.param.blocksize + self.param.blocksize/2
@@ -176,7 +156,7 @@ class DroneFlightGrid(Coords):
                 visited = []
                 x = j * self.param.blocksize + self.param.blocksize / 2
                 y = i * self.param.blocksize + self.param.blocksize / 2
-                adj_list = self.get_neighbors_recursive(x, y, 1, visited, max_distance)
+                adj_list = self.recursive_neighbor_gen(x, y, 1, visited, max_distance)
                 adj_dict[vertex] = list(adj_list)
         return adj_dict
     
