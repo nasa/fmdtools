@@ -59,15 +59,15 @@ class DroneFlightGrid(Coords):
         self.total_costs = [[{} for _ in range(self.param.x_size)] for _ in range(self.param.y_size)]
         self.edge_weights = [[{} for _ in range(self.param.x_size)] for _ in range(self.param.y_size)]
         
-    def get_edge_weights(self, env_coords, fuel_rate = 2.0, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0, dist_cost = 2.0):
+    def get_edge_weights(self, env_coords, fuel_rate = 2.0, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0):
         """
         calls get_edge_weight to assign all edge weights into array
         """
         for i in range(self.param.y_size):
             for j in range(self.param.x_size):
-                self.get_edge_weight(env_coords, j, i, fuel_rate, disallowed_cost, occupied_cost, restricted_cost, dist_cost)
+                self.get_edge_weight(env_coords, j, i, fuel_rate, disallowed_cost, occupied_cost, restricted_cost)
                 
-    def get_edge_weight(self, env_coords, curr_x, curr_y, fuel_rate = 2.0, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0, dist_cost = 2.0):
+    def get_edge_weight(self, env_coords, curr_x, curr_y, fuel_rate = 2.0, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0):
         """
         gets total cost, edge weight <- total cost/dist. edge weight to be used in A*
         Optimization [for future]: only assign relevant closer ones?
@@ -190,11 +190,12 @@ class DroneFlightGrid(Coords):
                 flight_grid.add_edge(vertex, neighbor, weight = weight)
         return flight_grid
         
-    def a_star(self, start, goal):
+    def a_star(self, start, goal, env_coords, max_distance = 3, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0, fuel_rate = 2.0):
         """
         returns a tuple of tuples which the aircraft should fly through, beginning at the start and finishing at the end.
         Ex.: ((0, 0), (2, 2), (2, 5), (4, 6), (7, 6), (9, 7), (10, 7), (10, 10))
         """
-        
-        
-        return
+        G = self.nx_graph_gen(env_coords, max_distance = max_distance, disallowed_cost = disallowed_cost, occupied_cost = occupied_cost, restricted_cost = restricted_cost, fuel_rate = fuel_rate)
+        heuristic = lambda a, b: math.hypot(a[0] - b[0], a[1] - b[1])
+        path = nx.astar_path(G, start, goal, heuristic = heuristic, weight = "weight")
+        return tuple(path)
