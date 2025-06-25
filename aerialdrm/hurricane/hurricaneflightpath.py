@@ -49,7 +49,7 @@ class DroneFlightGridParam(CoordsParam):
     """
     every grid point assigned 
     """
-    feature_grid_cost: float = 0.0
+    feature_grid_costs: float = 0.0
     feature_heuristic: float = 0.0
     feature_fuel_costs: Dict[Tuple[int, int], float] = field(default_factory = dict)
     feature_total_costs: Dict[Tuple[int, int], float] = field(default_factory = dict)
@@ -59,12 +59,20 @@ class DroneFlightGrid(Coords):
     container_p = DroneFlightGridParam
     
     def init_properties(self, **kwargs):
-        self.set("grid_cost", np.zeros((self.paramin .y_size, self.param.x_size)))
+        self.set("grid_costs", np.zeros((self.param.y_size, self.param.x_size)))
         self.set("heuristic", np.zeros((self.param.y_size, self.param.x_size)))
-        self.fuel_costs = [[{} for _ in range(self.param.x_size)] for _ in range(self.param.y_size)]
-        self.total_costs = [[{} for _ in range(self.param.x_size)] for _ in range(self.param.y_size)]
-        self.edge_weights = [[{} for _ in range(self.param.x_size)] for _ in range(self.param.y_size)]
-        # FIX WITH FMDTOOLS NOTATION! fuel_costs, total_costs, edge_weights.
+        self.set(
+            "fuel_costs",
+            [[{} for _ in range(self.param.x_size)] for _ in range(self.param.y_size)],
+        )
+        self.set(
+            "total_costs",
+            [[{} for _ in range(self.param.x_size)] for _ in range(self.param.y_size)],
+        )
+        self.set(
+            "edge_weights",
+            [[{} for _ in range(self.param.x_size)] for _ in range(self.param.y_size)],
+        )
     def get_edge_weights(self, env_coords, fuel_rate = 2.0, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0):
         """
         calls get_edge_weight to assign all edge weights into array
@@ -75,20 +83,24 @@ class DroneFlightGrid(Coords):
             for j in range(self.param.x_size):
                 self.get_edge_weight(env_coords, j, i, fuel_rate, disallowed_cost, occupied_cost, restricted_cost)
                 
-    def get_edge_weight(self, env_coords, curr_x, curr_y, fuel_rate = 2.0, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0):
+    def get_edge_weight(self, env_coords, curr_j, curr_i, fuel_rate = 2.0, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0):
         """
-        gets total cost, edge weight <- total cost/dist. edge weight to be used in A*
+        gets total cost, edge weight <- total cost/world coord dist. edge weight to be used in A*
         Optimization [for future]: only assign relevant closer ones?
         """
         for i in range(self.param.y_size):
             for j in range(self.param.x_size):
-                total_cost = self.features["fuel_cost"][i][j] + self.features["grid_cost"][i][j]
-                self.features["total_costs"][i][j][(j,i)] = total_cost
+                fuel_cost = self.features["fuel_costs"][curr_i][curr_j][(j, i)]
+                grid_cost = self.features["grid_costs"][i][j]
+                total_cost = fuel_cost + grid_cost
+                self.features["total_costs"][curr_i][curr_j][(j, i)] = total_cost
                 x = j * self.param.blocksize + self.param.blocksize/2
                 y = i * self.param.blocksize + self.param.blocksize/2
+                curr_x = curr_j * self.param.blocksize + self.param.blocksize / 2
+                curr_y = curr_i * self.param.blocksize + self.param.blocksize / 2
                 dist = math.hypot(curr_x - x, curr_y - y)
-                edge_weight = total_cost / dist
-                self.features["edge_weights"][i][j][(j, i)] = edge_weight
+                edge_weight = total_cost / dist if dist != 0 else float('inf')
+                self.features["edge_weights"][curr_i][curr_j][(j, i)] = edge_weight
                 
     def get_fuel_costs(self, fuel_rate = 2.0):
         """
@@ -99,15 +111,18 @@ class DroneFlightGrid(Coords):
             for j in range(self.param.x_size):
                 self.get_fuel_cost(j, i, fuel_rate)
                 
-    def get_fuel_cost(self, curr_x, curr_y, fuel_rate = 2.0):
+    def get_fuel_cost(self, curr_j, curr_i, fuel_rate = 2.0):
         """
         calculate cost due to distance traveled per timestep.
         """
+        curr_x = curr_j * self.param.blocksize + self.param.blocksize / 2
+        curr_y = curr_i * self.param.blocksize + self.param.blocksize / 2
         for i in range(self.param.y_size):
             for j in range(self.param.x_size):
                 x = j * self.param.blocksize + self.param.blocksize/2
                 y = i * self.param.blocksize + self.param.blocksize/2
-                self.features["fuel_costs"][i][j][(curr_x, curr_y)] = fuel_rate * math.hypot(curr_x - x, curr_y - y)
+                fuel_cost = fuel_rate * math.hypot(curr_x - x, curr_y - y)
+                self.features["fuel_costs"][curr_i][curr_j][(j, i)] = fuel_cost
                 
     def get_grid_costs(self, env_coords, disallowed_cost = 10.0, occupied_cost = 20.0, restricted_cost = 1000.0):
         """
@@ -139,13 +154,12 @@ class DroneFlightGrid(Coords):
                 occupied = env_coords.features["occupied"][env_i, env_j]
                 disallowed = env_coords.features["disallowed"][env_i, env_j]
                 restricted = env_coords.features["restricted"][env_i, env_j]
-                # suitable = env_coords.features["suitable"][env_i, env_j]
                 goal_x = env_coords.param.point_end[0]
                 goal_y = env_coords.param.point_end[1]
                 dx, dy = goal_x - x, goal_y - y
                 dist = math.hypot(dx, dy)
                 grid_cost = dist * (disallowed_cost * disallowed + occupied_cost * occupied + restricted_cost * restricted)
-                self.features["grid_cost"][i, j] = grid_cost
+                self.features["grid_costs"][i, j] = grid_cost
                 heuristic = dist
                 self.features["heuristic"][i, j] = heuristic
                 
@@ -157,12 +171,11 @@ class DroneFlightGrid(Coords):
         adj_dict = {}
         for i in range(self.param.y_size):
             for j in range(self.param.x_size):
-                vertex = (i, j)
-                adj_list = []
+                vertex = (j, i)
                 visited = []
                 x = j * self.param.blocksize + self.param.blocksize / 2
                 y = i * self.param.blocksize + self.param.blocksize / 2
-                adj_list = self.recursive_neighbor_gen(x, y, 1, visited, max_distance)
+                adj_list = self.recursive_neighbor_gen(x, y, max_distance, visited)
                 adj_dict[vertex] = list(adj_list)
         return adj_dict
     
@@ -186,11 +199,12 @@ class DroneFlightGrid(Coords):
         NetworkX: open source graph gen library.
         """
         flight_grid = nx.DiGraph()
+        self.get_edge_weights(env_coords, disallowed_cost, occupied_cost, restricted_cost, fuel_rate)
         adj_dict = self.adj_list_gen(max_distance = max_distance)
         for vertex, neighbors in adj_dict.items():
             flight_grid.add_node(vertex)
             for neighbor in neighbors:
-                weight = self.get_edge_weights(env_coords, fuel_rate, disallowed_cost, occupied_cost, restricted_cost)
+                weight = self.features["edge_weights"][vertex[1]][vertex[0]][neighbor]
                 flight_grid.add_edge(vertex, neighbor, weight = weight)
         return flight_grid
         
