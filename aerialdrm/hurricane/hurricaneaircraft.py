@@ -21,16 +21,22 @@ from aerialdrm.base.aircraft.arch.holdpayload import HoldPayload
 
 from aerialdrm.hurricane.hurricaneenvironment import HurricaneEnvironment, properties, collections
 from aerialdrm.hurricane.hurricaneenvironment import HurricaneConditions
-
-
+from hurricaneflightpath import DroneFlightGrid, DroneFlightGridParam
+# ^ import new class
 from aerialdrm.base.aircraft.state import AircraftPosition
 
 class HurricaneControlState(ControlState):
     closest_dist: float = 100.0
-
+    flightgrid: object = None
+    
+    # added flightgrid as new state object
 class HurricaneControlParameter(Parameter):
     with_proxthreat: bool = True
-
+    fuel_rate: float = 2.0
+    disallowed_cost: float = 10.0
+    occupied_cost: float = 20.0
+    restricted_cost: float = 1000.0
+    max_distance: int = 3
         # 
         # TASKS FOR 6/26: 
         # FIGURE THIS __init__ METHOD OUT, INTEGRATE FLIGHTPATH INTO THIS CLASS
@@ -62,33 +68,43 @@ class HurricaneControlFlight(ControlFlight):
                 self.m.set_mode('pause')
             elif self.m.in_mode('pause'):
                 self.m.set_mode('flight')
-
+    
+    def gen_flight_grid(self):
+        return DroneFlightGrid()
+    
     def replan_mission(self):
         ''' replan if battery insufficient for mission '''
         ''' replan if obstacle comes into flight path  turn on dynamic replanning boolean '''
         ap = AircraftPosition() # just a calculator! 
-        ap.assign(self.trajectories.perc_traj.s) # initialize this state as current perceived state. 
-# DO WE NEED A PERCEPTION /= REALITY FAULT? YES
+        ap.assign(self.trajectories.perc_traj.s) # initialize this state as current perceived state.
         start = self.s.flightplan[0]
         ap.assign(start, 'goal_x', 'goal_y')
         start_dist = ap.calc_dist()
-
         end = self.s.flightplan[-1]
         ap.assign(end, 'goal_x', 'goal_y')
         end_dist = ap.calc_dist()
+        if 0.0 < self.electricity.s.charge <= 25.0:
+# DO WE NEED A PERCEPTION /= REALITY FAULT? YES
 # 20 below arbitrary (?)perhaps play with value/ -> maybe turn into parameter
-        if start_dist > 20 and end_dist > 20:
-            curr_pt = self.trajectories.perc_traj.s.get('x', 'y')
-            land_pt = self.environment.c.find_closest(*curr_pt, 'suitable')
-        elif start_dist < end_dist:
-            land_pt = start
-        else:
-            land_pt = end
+            if start_dist > 20 and end_dist > 20:
+                curr_pt = self.trajectories.perc_traj.s.get('x', 'y')
+                land_pt = self.environment.c.find_closest(*curr_pt, 'suitable')
+            elif start_dist < end_dist:
+                land_pt = start
+            else:
+                land_pt = end
 # closest suitable spot DNE MOST optimal suitable spot. perhaps should prioritize suitable spot closest to the goal?
 # in this case, must consider: 1. feasibility 2. distance to goal
-        self.s.flightplan = (tuple(land_pt),)
-        self.s.pt = 0
-
+            self.s.flightplan = (tuple(land_pt),)
+            self.s.pt = 0
+            return
+        if self.new_obstacle_present():
+            return
+        else:
+            curr_x, curr_y = self.trajectories.perc_traj.s.get('x', 'y')
+            goal_x, goal_y = self.s.flightplan[-1]
+            grid = self.gen_flight_grid()
+            
 
 class HurricaneAviate(Aviate):
     __slots__ = ()
@@ -215,7 +231,6 @@ def plot_flightpath(mdl, hist, **kwargs):
                                      fig=fig, ax=ax, **kwargs)
     consolidate_legend(ax)
     return fig, ax
-
 
 
 if __name__ == "__main__":
