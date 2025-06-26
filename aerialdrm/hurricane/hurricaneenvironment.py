@@ -15,7 +15,7 @@ from fmdtools.define.block.function import Function
 from shapely import distance
 import numpy as np
 
-from aerialdrm.hurricane.hurricaneflightpath import DroneFlightGrid
+from hurricaneflightpath import DroneFlightGrid
 """import new file!"""
 
 class HurricaneCoordsParam(CoordsParam):
@@ -31,7 +31,6 @@ class HurricaneCoordsParam(CoordsParam):
 
     point_start: tuple = (10.0, 10.0)
     point_end: tuple = (100.0, 100.0)
-
 
 class HurricaneCoords(Coords):
     container_p = HurricaneCoordsParam
@@ -104,10 +103,10 @@ class HurricaneEnvironment(AircraftEnvironment):
 
     coords_c = HurricaneCoords
     arch_ga = HurricaneThreats
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.flightgrid = DroneFlightGrid()
-        self.flightgrid.get_grid_cost(self.c)
+    #    def __init__(self, *args, **kwargs):
+        #        super().__init__(*args, **kwargs)
+        #        self.flightgrid = DroneFlightGrid()
+        #        self.flightgrid.get_grid_cost(self.c)
     def show(self, *args, **kwargs):
         fig, ax = self.c.show(properties=properties, collections=collections,
                               coll_overlay=False)
