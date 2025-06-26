@@ -28,8 +28,9 @@ from aerialdrm.base.aircraft.state import AircraftPosition
 class HurricaneControlState(ControlState):
     closest_dist: float = 100.0
     flightgrid: object = None
+    flightplan: tuple = None
+    # added flightgrid, flight plan as new state objects
     
-    # added flightgrid as new state object
 class HurricaneControlParameter(Parameter):
     with_proxthreat: bool = True
     fuel_rate: float = 2.0
@@ -39,7 +40,7 @@ class HurricaneControlParameter(Parameter):
     max_distance: int = 3
         # 
         # TASKS FOR 6/26: 
-        # FIGURE THIS __init__ METHOD OUT, INTEGRATE FLIGHTPATH INTO THIS CLASS
+        # INTEGRATE FLIGHTPATH INTO THIS CLASS
         # get_grid_cost N^2 -> N by only initializing needed grid costs
         # ask about replan_mission, how other aircraft are represented, testhurricaneflightpath.py -> modular testing style?
         # Additionally: Gaussian blur (taking in threat.p.buffer_envelope and threat.p.buffer_safety? more params in hurricaneflightpath?)
@@ -70,8 +71,13 @@ class HurricaneControlFlight(ControlFlight):
                 self.m.set_mode('flight')
     
     def gen_flight_grid(self):
-        return DroneFlightGrid()
-    
+        dfgp = DroneFlightGridParam(
+            fuel_rate = self.p.fuel_rate,
+            disallowed_cost = self.p.disallowed_cost,
+            occupied_cost = self.p.occupied_cost,
+            restricted_cost = restricted_cost)
+        return DroneFlightGrid(p = dfgp)
+        
     def replan_mission(self):
         ''' replan if battery insufficient for mission '''
         ''' replan if obstacle comes into flight path  turn on dynamic replanning boolean '''
@@ -104,6 +110,20 @@ class HurricaneControlFlight(ControlFlight):
             curr_x, curr_y = self.trajectories.perc_traj.s.get('x', 'y')
             goal_x, goal_y = self.s.flightplan[-1]
             grid = self.gen_flight_grid()
+            new_path = grid.a_star_worldcoords(
+                env_coords = self.environment.c,
+                start = (curr_x, curr_y), 
+                goal = (goal_x, goal_y), 
+                max_distance = self.p.max_distance,
+                disallowed_cost = self.p.disallowed_cost,
+                occupied_cost = self.p.occupied_cost,
+                restricted_cost = self.p.restricted_cost,
+                fuel_rate = self.p.fuel_rate
+            )
+            if new_path and new_path[0] == (curr_x, curr_y):
+                new_path = new_path[1:]
+            self.s.flightplan = new_path
+            self.s.pt = 0
             
 
 class HurricaneAviate(Aviate):
