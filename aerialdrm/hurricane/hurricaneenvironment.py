@@ -15,7 +15,7 @@ from fmdtools.define.block.function import Function
 from shapely import distance
 import numpy as np
 
-from hurricaneflightpath import DroneFlightGri
+from hurricaneflightpath import DroneFlightGrid
 """import new file!"""
 
 class HurricaneCoordsParam(CoordsParam):

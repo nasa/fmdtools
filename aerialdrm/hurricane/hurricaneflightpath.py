@@ -21,7 +21,6 @@ figure out: all features, states must be tuples. change in methods.
 from fmdtools.define.object.coords import Coords, CoordsParam
 import networkx as nx
 import math
-from hurricaneenvironment import HurricaneCoords, HurricaneCoordsParam
 
 
 class DroneFlightGridParam(CoordsParam):
