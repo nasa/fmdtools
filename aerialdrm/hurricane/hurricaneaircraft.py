@@ -28,7 +28,6 @@ from aerialdrm.base.aircraft.state import AircraftPosition
 class HurricaneControlState(ControlState):
     closest_dist: float = 100.0
     flightgrid: object = None
-    flightplan: tuple = None
     # added flightgrid, flight plan as new state objects
     
 class HurricaneControlParameter(Parameter):
@@ -75,7 +74,7 @@ class HurricaneControlFlight(ControlFlight):
             fuel_rate = self.p.fuel_rate,
             disallowed_cost = self.p.disallowed_cost,
             occupied_cost = self.p.occupied_cost,
-            restricted_cost = restricted_cost)
+            restricted_cost = self.p.restricted_cost)
         return DroneFlightGrid(p = dfgp)
         
     def replan_mission(self):
@@ -140,21 +139,6 @@ class HurricaneAircraftArchParameter(Parameter):
 
     startpt: tuple = (10.0, 10.0)
     flightplan: tuple = ((10.0, 10.0), (50.0, 10.0), (50.0, 100.0), (100.0, 100.0)) 
-# static, fixed plan; should be fully revamped in order to support A* algorithm. 
-# A* considerations:
-# managing safe distances from all aerial obstacles in nominal flight (some inverse relationship to distance?) (envelope)
-# ^ dynamically calculated at each timestep?
-# should battery die, where the aircraft will land <- minimize risk(cost?)
-# 
-# Potential implementation strategy: 
-# 1. discretize (gridify?) space. 
-# 2. connect all grid points to neighbors? Maybe do more than the 8 directions, like how about every grid point within 3 units? for smoother directions
-# Weights: [ultra tentative] c1*angle change cost + c2*time of straight-line flight + c3*grid gaussian blur*inv. prop to battery
-# 3. entirely remove all grid points which are disallowed? or cost ridiculously high 
-# 4. Dynamic cost redefinition based on if the aircraft breaks at that point
-# 5. Define heuristic: distance between grid, goal. <- is this improvable?
-# 6. define minHeap structure, implement A* priorityQueue 
-# 7. copy over some A* implementation 
     height: float = 25.0
     depletion: float = 25.0
     with_proxthreat: bool = True
@@ -194,7 +178,12 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
         self.add_fxn('control_flight', HurricaneControlFlight,
                      'trajectories', 'force', 'electricity', 'environment',
                      s={'flightplan': self.p.flightplan, 'height': self.p.height},
-                     p={'with_proxthreat': self.p.with_proxthreat})
+                     p={'with_proxthreat': self.p.with_proxthreat,
+                        'fuel_rate': self.p.fuel_rate,
+                        'disallowed_cost': self.p.disallowed_cost,
+                        'occupied_cost':   self.p.occupied_cost,
+                        'restricted_cost': self.p.restricted_cost,
+                        'max_distance':    self.p.max_distance})
         self.add_fxn('aviate', HurricaneAviate,
                      'trajectories', 'force', 'electricity', 'environment')
         m = {'fault_depletion':
