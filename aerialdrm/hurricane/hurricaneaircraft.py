@@ -31,7 +31,14 @@ class HurricaneControlState(ControlState):
 class HurricaneControlParameter(Parameter):
     with_proxthreat: bool = True
 
-
+        # 
+        # TASKS FOR 6/26: 
+        # FIGURE THIS __init__ METHOD OUT, INTEGRATE FLIGHTPATH INTO THIS CLASS
+        # get_grid_cost N^2 -> N by only initializing needed grid costs
+        # ask about replan_mission, how other aircraft are represented, testhurricaneflightpath.py -> modular testing style?
+        # Additionally: Gaussian blur (taking in threat.p.buffer_envelope and threat.p.buffer_safety? more params in hurricaneflightpath?)
+        # 
+        # 
 class HurricaneControlFlight(ControlFlight):
     __slots__ = ()
     flow_environment = HurricaneEnvironment

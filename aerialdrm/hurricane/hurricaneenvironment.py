@@ -15,9 +15,6 @@ from fmdtools.define.block.function import Function
 from shapely import distance
 import numpy as np
 
-from hurricaneflightpath import DroneFlightGrid
-"""import new file!"""
-
 class HurricaneCoordsParam(CoordsParam):
     x_size: int = 12
     y_size: int = 12
@@ -102,18 +99,7 @@ class HurricaneThreats(GeomArchitecture):
 class HurricaneEnvironment(AircraftEnvironment):
 
     coords_c = HurricaneCoords
-    arch_ga = HurricaneThreats
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # 
-        # 
-        # TASKS FOR 6/26: 
-        # FIGURE THIS __init__ METHOD OUT, INTEGRATE FLIGHTPATH INTO THIS CLASS
-        # get_grid_cost N^2 -> N by only initializing needed grid costs
-        # ask about replan_mission, how other aircraft are represented, testhurricaneflightpath.py -> modular testing style?
-        # Additionally: Gaussian blur (taking in threat.p.buffer_envelope and threat.p.buffer_safety? more params in hurricaneflightpath?)
-        # 
-        # 
+    arch_ga = HurricaneThreats 
     def show(self, *args, **kwargs):
         fig, ax = self.c.show(properties=properties, collections=collections,
                               coll_overlay=False)
