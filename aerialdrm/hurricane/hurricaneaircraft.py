@@ -49,7 +49,7 @@ class HurricaneControlFlight(ControlFlight):
     flow_environment = HurricaneEnvironment
     container_s = HurricaneControlState
     container_p = HurricaneControlParameter
-
+    
     def set_faultmode(self):
         super().set_faultmode()
 
@@ -144,7 +144,12 @@ class HurricaneAircraftArchParameter(Parameter):
     height: float = 25.0
     depletion: float = 25.0
     with_proxthreat: bool = True
-
+    # below: new
+    fuel_rate: float       = 2.0
+    disallowed_cost: float = 10.0
+    occupied_cost: float   = 20.0
+    restricted_cost: float = 1000.0
+    max_distance: int      = 3
 
 class HurricaneAircraftArchitecture(FunctionArchitecture):
     """
