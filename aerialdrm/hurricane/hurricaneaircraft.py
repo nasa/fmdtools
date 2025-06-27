@@ -21,7 +21,7 @@ from aerialdrm.base.aircraft.arch.holdpayload import HoldPayload
 
 from aerialdrm.hurricane.hurricaneenvironment import HurricaneEnvironment, properties, collections
 from aerialdrm.hurricane.hurricaneenvironment import HurricaneConditions
-from hurricaneflightpath import DroneFlightGrid, DroneFlightGridParam
+from aerialdrm.hurricane.hurricaneflightpath import DroneFlightGrid, DroneFlightGridParam
 # ^ import new class
 from aerialdrm.base.aircraft.state import AircraftPosition
 
@@ -40,7 +40,6 @@ class HurricaneControlParameter(Parameter):
         # 
         # TASKS FOR 6/26: 
         # INTEGRATE FLIGHTPATH INTO THIS CLASS
-        # get_grid_cost N^2 -> N by only initializing needed grid costs
         # ask about replan_mission, how other aircraft are represented, testhurricaneflightpath.py -> modular testing style?
         # Additionally: Gaussian blur (taking in threat.p.buffer_envelope and threat.p.buffer_safety? more params in hurricaneflightpath?)
         # 
@@ -89,8 +88,8 @@ class HurricaneControlFlight(ControlFlight):
         ap.assign(end, 'goal_x', 'goal_y')
         end_dist = ap.calc_dist()
         if 0.0 < self.electricity.s.charge <= 25.0:
-# DO WE NEED A PERCEPTION /= REALITY FAULT? YES
-# 20 below arbitrary (?)perhaps play with value/ -> maybe turn into parameter
+            # DO WE NEED A PERCEPTION /= REALITY FAULT? YES
+            # 20 below arbitrary (?)perhaps play with value/ -> maybe turn into parameter
             if start_dist > 20 and end_dist > 20:
                 curr_pt = self.trajectories.perc_traj.s.get('x', 'y')
                 land_pt = self.environment.c.find_closest(*curr_pt, 'suitable')
@@ -98,12 +97,15 @@ class HurricaneControlFlight(ControlFlight):
                 land_pt = start
             else:
                 land_pt = end
-# closest suitable spot DNE MOST optimal suitable spot. perhaps should prioritize suitable spot closest to the goal?
-# in this case, must consider: 1. feasibility 2. distance to goal
+                # closest suitable spot DNE MOST optimal suitable spot. perhaps should prioritize suitable spot closest to the goal?
+                # in this case, must consider: 1. feasibility 2. distance to goal
             self.s.flightplan = (tuple(land_pt),)
             self.s.pt = 0
             return
         if self.new_obstacle_present():
+            """
+            define later 
+            """
             return
         else:
             curr_x, curr_y = self.trajectories.perc_traj.s.get('x', 'y')
