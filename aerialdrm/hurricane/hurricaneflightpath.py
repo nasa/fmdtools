@@ -29,9 +29,16 @@ class DroneFlightGridParam(CoordsParam):
     blocksize: float = 2.5
     
     """
-    weighing suboptimality of each region
+    fuel cost per distance
     """
     fuel_rate: float = 2.0
+    """
+    maximum distance traveled per timestep
+    """
+    max_distance: int = 3
+    """
+    weighing suboptimality of each region
+    """
     disallowed_cost: float = 10.0
     occupied_cost: float = 20.0
     restricted_cost: float = 1000.0
@@ -60,79 +67,37 @@ class DroneFlightGrid(Coords):
                 self.fuel_costs[i, j]   = {}
                 self.total_costs[i, j]  = {}
                 self.edge_weights[i, j] = {}
+
     def get_edge_weights(self, env_coords, fuel_rate, disallowed_cost,
-                         occupied_cost, restricted_cost):
+                     occupied_cost, restricted_cost, max_distance):
         """
-        calls get_edge_weight to assign all edge weights into array
+        Only initialize edge weights for reachable neighbors,
+        defined by both x and y distance not being greater than max_dist..
         """
-        self.get_grid_costs(env_coords, disallowed_cost, occupied_cost,
-                            restricted_cost)
-        self.get_fuel_costs(fuel_rate)
+        self.get_grid_costs(env_coords, disallowed_cost, occupied_cost, restricted_cost)
+    
         for i in range(self.p.y_size):
             for j in range(self.p.x_size):
-                self.get_edge_weight(env_coords, j, i, fuel_rate,
-                                     disallowed_cost, occupied_cost, 
-                                     restricted_cost)
-                
-    def get_edge_weight(self, env_coords, curr_j, curr_i, fuel_rate,
-                        disallowed_cost, occupied_cost, restricted_cost):
-        """
-        gets total cost, edge weight <- total cost/world coord dist. 
-        edge weight to be used in A*
-        Optimization [for future]: only assign relevant closer ones?
-        """
-        for i in range(self.p.y_size):
-            for j in range(self.p.x_size):
-                fuel_cost = self.fuel_costs[curr_i, curr_j][(j, i)]
-                grid_cost = self.grid_costs[i, j]
-                total_cost = fuel_cost + grid_cost
-                self.total_costs[curr_i,curr_j][(j, i)] = total_cost
-                x = j * self.p.blocksize + self.p.blocksize/2
-                y = i * self.p.blocksize + self.p.blocksize/2
-                curr_x = curr_j * self.p.blocksize + self.p.blocksize / 2
-                curr_y = curr_i * self.p.blocksize + self.p.blocksize / 2
-                dist = math.hypot(curr_x - x, curr_y - y)
-                edge_weight = total_cost / dist if dist != 0 else float('inf')
-                self.edge_weights[curr_i, curr_j][(j, i)] = edge_weight
-                
-    def get_fuel_costs(self, fuel_rate):
-        """
-        calls get_fuel_cost in order to assign all fuel costs into array. 
-        Optimization [for future]: only assign relevant closer ones?
-        """
-        for i in range(self.p.y_size):
-            for j in range(self.p.x_size):
-                self.get_fuel_cost(j, i, fuel_rate)
-                
-    def get_fuel_cost(self, curr_j, curr_i, fuel_rate):
-        """
-        calculate cost due to distance traveled per timestep.
-        """
-        curr_x = curr_j * self.p.blocksize + self.p.blocksize / 2
-        curr_y = curr_i * self.p.blocksize + self.p.blocksize / 2
-        for i in range(self.p.y_size):
-            for j in range(self.p.x_size):
-                x = j * self.p.blocksize + self.p.blocksize/2
-                y = i * self.p.blocksize + self.p.blocksize/2
-                fuel_cost = fuel_rate * math.hypot(curr_x - x, curr_y - y)
-                self.fuel_costs[curr_i, curr_j][(j, i)] = fuel_cost
-                
+                curr_x = j * self.p.blocksize + self.p.blocksize / 2
+                curr_y = i * self.p.blocksize + self.p.blocksize / 2
+                neighbors = self.recursive_neighbor_gen(j, i, max_distance)
+                for (j2, i2) in neighbors:
+                    x2 = j2 * self.p.blocksize + self.p.blocksize / 2
+                    y2 = i2 * self.p.blocksize + self.p.blocksize / 2
+                    dist = math.hypot(curr_x - x2, curr_y - y2)
+                    fuel_cost = fuel_rate * dist
+                    grid_cost = self.grid_costs[i2, j2]
+                    total_cost = fuel_cost + grid_cost
+                    weight = total_cost / dist if dist != 0 else float("inf")
+                    self.fuel_costs[i, j][(j2, i2)] = fuel_cost
+                    self.total_costs[i, j][(j2, i2)] = total_cost
+                    self.edge_weights[i, j][(j2, i2)] = weight
+       
     def get_grid_costs(self, env_coords, disallowed_cost, occupied_cost, 
                        restricted_cost):
         """
         Calculate the GRID COST somewhere in the finer (than environment) 
         drone traversal grid.
-        Grid cost + traversal cost = total cost per timestep. 
-        defines A* grid weights.
-        Heuristic = dist(place, goal.)
-        maybe there will be more or less time per timestep? 
-        dependent on distance traveled. this seems like a problem.
-        env_coords: hurricanecoords grid.
-        disallowed_cost, occupied_cost, restricted_cost: 
-        how unsavory it is to fly above those areas.
-        x, y: grid position.
-        env_i, env_j: HurricaneCoords grid indices.
-        i
         IMPLEMENT GAUSSIAN LATER!!! DO weighted average: 
             current tile: 0.4
             adj. tiles: 0.1
@@ -173,7 +138,7 @@ class DroneFlightGrid(Coords):
     
     def recursive_neighbor_gen(self, j, i, dist_remaining, visited = None):
         """
-        takes in coordinates, returns tuple of world coordinate tuples
+        takes in indices, returns tuple of index tuples
         """
         if visited is None:
             visited = set()
