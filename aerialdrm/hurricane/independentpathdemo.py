@@ -14,8 +14,35 @@ class Environment:
         self.features = {
             "occupied":   self._random_mask(rng, 0.40),
             "disallowed": self._random_mask(rng, 0.40),
-            "restricted": self._random_mask(rng, 0.20),
+            "restricted": self._random_mask(rng, 0.0),
         }
+        x0, y0 = 0, 30
+        x1, y1 = 20, 110
+        i0 = int(y0 // self.BLOCK)
+        j0 = int(x0 // self.BLOCK)
+        i1 = min(int(y1 // self.BLOCK), self.Y_SIZE - 1)
+        j1 = min(int(x1 // self.BLOCK), self.X_SIZE - 1)
+        for i in range(i0, i1 + 1):
+            for j in range(j0, j1 + 1):
+                self.features["restricted"][i, j] = True
+        x0, y0 = 30, 110
+        x1, y1 = 110, 110
+        i0 = int(y0 // self.BLOCK)
+        j0 = int(x0 // self.BLOCK)
+        i1 = int(y1 // self.BLOCK)
+        j1 = int(x1 // self.BLOCK)
+        for i in range(i0, i1 + 1):
+            for j in range(j0, j1 + 1):
+                self.features["restricted"][i, j] = True
+        x0, y0 = 60, 0
+        x1, y1 = 110, 70
+        i0 = int(y0 // self.BLOCK)
+        j0 = int(x0 // self.BLOCK)
+        i1 = int(y1 // self.BLOCK)
+        j1 = int(x1 // self.BLOCK)
+        for i in range(i0, i1 + 1):
+            for j in range(j0, j1 + 1):
+                self.features["restricted"][i, j] = True
         self._clear_feature_at((0, 0))
         self._clear_feature_at((10.0, 10.0))
         self._clear_feature_at((0, 10.0))
@@ -94,7 +121,6 @@ class DroneFlightGrid:
         env = self.env
         for i in range(self.y_size):
             for j in range(self.x_size):
-                # sample environment flags from surrounding flight-grid cells
                 neighbors = self.recursive_neighbor_gen(j, i, 1) - {(j, i)}
                 occ_vals = []
                 dis_vals = []
@@ -107,7 +133,6 @@ class DroneFlightGrid:
                     occ_vals.append(env.features["occupied"][ei, ej])
                     dis_vals.append(env.features["disallowed"][ei, ej])
                     res_vals.append(env.features["restricted"][ei, ej])
-                # average over flight-grid neighbors (if none, default to current cell)
                 if occ_vals:
                     avg_occ = sum(occ_vals)/len(occ_vals)
                     avg_dis = sum(dis_vals)/len(dis_vals)
@@ -117,7 +142,6 @@ class DroneFlightGrid:
                     avg_occ = env.features["occupied"][ei,jj]
                     avg_dis = env.features["disallowed"][ei,jj]
                     avg_res = env.features["restricted"][ei,jj]
-                # compute per-cell risk cost
                 env_cost = (self.occupied_cost*avg_occ +
                             self.disallowed_cost*avg_dis +
                             self.restricted_cost*avg_res)
@@ -191,7 +215,7 @@ def run_demo():
         alpha=0.5
     )
     xs, ys = zip(*path)
-    ax.plot(xs, ys, "-o", color="black", lw=2, ms=4)
+    ax.plot(xs, ys, "-o", color="black", lw=1, ms=2)
     ax.set_aspect("equal")
     ax.set_xlim(0, env.X_SIZE*env.BLOCK)
     ax.set_ylim(0, env.Y_SIZE*env.BLOCK)
