@@ -22,7 +22,6 @@ from fmdtools.define.object.coords import Coords, CoordsParam
 import networkx as nx
 import math
 
-
 class DroneFlightGridParam(CoordsParam):
     x_size: int = 48
     y_size: int = 48
@@ -59,13 +58,12 @@ class DroneFlightGridParam(CoordsParam):
     
 class DroneFlightGrid(Coords):
     container_p = DroneFlightGridParam
-    
+
     def init_properties(self, **kwargs):
         for i in range(self.p.y_size):
             for j in range(self.p.x_size):
-                
-                self.fuel_costs[i, j]   = {}
-                self.total_costs[i, j]  = {}
+                self.fuel_costs[i, j] = {}
+                self.total_costs[i, j] = {}
                 self.edge_weights[i, j] = {}
 
     def get_edge_weights(self, env_coords, fuel_rate, disallowed_cost,
@@ -103,6 +101,8 @@ class DroneFlightGrid(Coords):
             adj. tiles: 0.1
             diagonal tiles: 0.05
         """
+        print("Occupied feature type:", type(env_coords.features["occupied"]))
+        print("Sample element:", env_coords.features["occupied"])
         for i in range(self.p.y_size):
             for j in range(self.p.x_size):
                 x = j * self.p.blocksize + self.p.blocksize/2
@@ -165,7 +165,8 @@ class DroneFlightGrid(Coords):
         self.get_edge_weights(env_coords, fuel_rate = fuel_rate,
                               disallowed_cost = disallowed_cost,
                               occupied_cost = occupied_cost,
-                              restricted_cost = restricted_cost)
+                              restricted_cost = restricted_cost,
+                              max_distance = max_distance)
         adj_dict = self.adj_list_gen(max_distance = max_distance)
         for vertex, neighbors in adj_dict.items():
             flight_grid.add_node(vertex)

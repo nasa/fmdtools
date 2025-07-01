@@ -28,6 +28,7 @@ from aerialdrm.base.aircraft.state import AircraftPosition
 class HurricaneControlState(ControlState):
     closest_dist: float = 100.0
     flightgrid: object = None
+    planned: bool = False
     # added flightgrid, flight plan as new state objects
     
 class HurricaneControlParameter(Parameter):
@@ -67,7 +68,11 @@ class HurricaneControlFlight(ControlFlight):
                 self.m.set_mode('pause')
             elif self.m.in_mode('pause'):
                 self.m.set_mode('flight')
-    
+    def static_behavior(self, time):
+        if not self.s.planned:
+            self.replan_mission()
+            self.s.planned = True
+            
     def gen_flight_grid(self):
         dfgp = DroneFlightGridParam(
             fuel_rate = self.p.fuel_rate,
@@ -113,8 +118,8 @@ class HurricaneControlFlight(ControlFlight):
             grid = self.gen_flight_grid()
             new_path = grid.a_star_worldcoords(
                 env_coords = self.environment.c,
-                start = (curr_x, curr_y), 
-                goal = (goal_x, goal_y), 
+                start_xy = (curr_x, curr_y), 
+                goal_xy = (goal_x, goal_y), 
                 max_distance = self.p.max_distance,
                 disallowed_cost = self.p.disallowed_cost,
                 occupied_cost = self.p.occupied_cost,
@@ -126,7 +131,9 @@ class HurricaneControlFlight(ControlFlight):
             self.s.flightplan = new_path
             self.s.pt = 0
             
-
+    def new_obstacle_present(self):
+        return
+        
 class HurricaneAviate(Aviate):
     __slots__ = ()
 

@@ -33,7 +33,7 @@ class HurricaneCoords(Coords):
     container_p = HurricaneCoordsParam
 
     def init_properties(self, **kwargs):
-        
+
         self.set_rand_pts('occupied', True, 50)
         self.set_range('disallowed', True, xmin=30, xmax=60, ymin=70)
         self.set_range('disallowed', True, xmin=20, xmax=60, ymax=30)
@@ -43,8 +43,6 @@ class HurricaneCoords(Coords):
         self.set_range('restricted', True, ymin=110)
         self.set_pts([self.start, self.end], 'occupied', False)
         self.set_pts([self.start, self.end], 'disallowed', False)
-
-
 properties = {'disallowed': {'color': 'blue', 'proplab': 'disallowed', 'alpha': 0.5},
               'occupied': {'color': 'red', 'proplab': 'occupied', 'alpha': 0.5},
               'restricted': {'color': 'grey', 'proplab': 'restricted', 'alpha': 0.75}}
