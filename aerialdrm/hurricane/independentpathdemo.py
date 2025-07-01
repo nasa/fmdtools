@@ -1,3 +1,11 @@
+"""
+Aerialdrm, fmdtools-independent implementation of the hurricaneFlightGrid. 
+Using NetworkX, generates a fine grid resultant of environment discretization
+and runs A* with the following edge-weight logic:
+    edge weight = total cost = grid_cost + fuel_cost, where grid_cost is 
+env-dependent. The aircraft takes into consideration neighboring
+environment as well as its own position.
+"""
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,11 +17,11 @@ class Environment:
     Y_SIZE = 12
     BLOCK  = 10.0
 
-    def __init__(self, *, seed: int = 5):
+    def __init__(self, *, seed):
         rng = np.random.default_rng(seed)
         self.features = {
-            "occupied":   self._random_mask(rng, 0.40),
-            "disallowed": self._random_mask(rng, 0.40),
+            "occupied":   self._random_mask(rng, 0.3),
+            "disallowed": self._random_mask(rng, 0.3),
             "restricted": self._random_mask(rng, 0.0),
         }
         x0, y0 = 0, 30
@@ -186,7 +194,7 @@ class DroneFlightGrid:
 
 
 def run_demo():
-    env  = Environment(seed=5)
+    env  = Environment(seed=1)
     grid = DroneFlightGrid(env)
     path = grid.a_star_worldcoords()
     for p in path:

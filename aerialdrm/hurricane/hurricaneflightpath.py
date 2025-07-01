@@ -53,7 +53,6 @@ class DroneFlightGridParam(CoordsParam):
     """
     state_grid_costs: tuple = (float, 0.0)
     state_fuel_costs: tuple = (dict, None)
-    state_total_costs: tuple = (dict, None)
     state_edge_weights: tuple = (dict, None)
     
 class DroneFlightGrid(Coords):
@@ -63,7 +62,6 @@ class DroneFlightGrid(Coords):
         for i in range(self.p.y_size):
             for j in range(self.p.x_size):
                 self.fuel_costs[i, j] = {}
-                self.total_costs[i, j] = {}
                 self.edge_weights[i, j] = {}
 
     def get_edge_weights(self, env_coords, fuel_rate, disallowed_cost,
@@ -86,10 +84,8 @@ class DroneFlightGrid(Coords):
                     fuel_cost = fuel_rate * dist
                     grid_cost = self.grid_costs[i2, j2]
                     total_cost = fuel_cost + grid_cost
-                    weight = total_cost / dist if dist != 0 else float("inf")
                     self.fuel_costs[i, j][(j2, i2)] = fuel_cost
-                    self.total_costs[i, j][(j2, i2)] = total_cost
-                    self.edge_weights[i, j][(j2, i2)] = weight
+                    self.edge_weights[i, j][(j2, i2)] = total_cost
        
     def get_grid_costs(self, env_coords, disallowed_cost, occupied_cost, 
                        restricted_cost):
