@@ -24,6 +24,7 @@ from aerialdrm.hurricane.hurricaneenvironment import HurricaneConditions
 from aerialdrm.hurricane.hurricaneflightpath import DroneFlightGrid, DroneFlightGridParam
 # ^ import new class
 from aerialdrm.base.aircraft.state import AircraftPosition
+import math
 
 class HurricaneControlState(ControlState):
     closest_dist: float = 100.0
@@ -37,14 +38,9 @@ class HurricaneControlParameter(Parameter):
     disallowed_cost: float = 10.0
     occupied_cost: float = 20.0
     restricted_cost: float = 1000.0
-    max_distance: int = 3
-        # 
-        # TASKS FOR 6/26: 
-        # INTEGRATE FLIGHTPATH INTO THIS CLASS
-        # ask about replan_mission, how other aircraft are represented, testhurricaneflightpath.py -> modular testing style?
+    max_distance: int = 5
+    blocksize: float = 2.5
         # Additionally: Gaussian blur (taking in threat.p.buffer_envelope and threat.p.buffer_safety? more params in hurricaneflightpath?)
-        # 
-        # 
 class HurricaneControlFlight(ControlFlight):
     __slots__ = ()
     flow_environment = HurricaneEnvironment
@@ -72,18 +68,41 @@ class HurricaneControlFlight(ControlFlight):
         if not self.s.planned:
             self.replan_mission()
             self.s.planned = True
-            
+    def dynamic_behavior(self, time):
+        if self.s.flightplan and self.s.pt < len(self.s.flightplan):
+            tx, ty = self.s.flightplan[self.s.pt]
+            cx, cy = (self.trajectories.s.x,
+                          self.trajectories.s.y)
+            dx = tx - cx
+            dy = ty - cy
+            dz = 0.0
+            self.trajectories.des_traj.s.put(dx=dx, dy=dy, dz=dz)
+        super().dynamic_behavior(time)
+        if self.s.flightplan and self.s.pt < len(self.s.flightplan):
+            ex = self.trajectories.s.x - self.s.flightplan[self.s.pt][0]
+            ey = self.trajectories.s.y - self.s.flightplan[self.s.pt][1]
+            if math.hypot(ex, ey) < self.p.blocksize * 0.5:
+                self.s.pt += 1
     def gen_flight_grid(self):
         dfgp = DroneFlightGridParam(
             fuel_rate = self.p.fuel_rate,
             disallowed_cost = self.p.disallowed_cost,
             occupied_cost = self.p.occupied_cost,
             restricted_cost = self.p.restricted_cost)
-        return DroneFlightGrid(p = dfgp)
+        grid = DroneFlightGrid(p = dfgp)
+        grid.env_coords = self.environment.c
+        return grid
         
     def replan_mission(self):
         ''' replan if battery insufficient for mission '''
         ''' replan if obstacle comes into flight path  turn on dynamic replanning boolean '''
+        
+        # testing replan 
+        curr = self.trajectories.perc_traj.s.get('x', 'y')
+        goal = self.s.flightplan[-1]
+        # testing replan
+        
+        print(f"[DEBUG] replan from {curr} to {goal}")
         ap = AircraftPosition() # just a calculator! 
         ap.assign(self.trajectories.perc_traj.s) # initialize this state as current perceived state.
         start = self.s.flightplan[0]
@@ -94,7 +113,7 @@ class HurricaneControlFlight(ControlFlight):
         end_dist = ap.calc_dist()
         if 0.0 < self.electricity.s.charge <= 25.0:
             # DO WE NEED A PERCEPTION /= REALITY FAULT? YES
-            # 20 below arbitrary (?)perhaps play with value/ -> maybe turn into parameter
+            # 20 below arbitrary (?)perhaps play with value -> maybe turn into parameter
             if start_dist > 20 and end_dist > 20:
                 curr_pt = self.trajectories.perc_traj.s.get('x', 'y')
                 land_pt = self.environment.c.find_closest(*curr_pt, 'suitable')
@@ -117,7 +136,6 @@ class HurricaneControlFlight(ControlFlight):
             goal_x, goal_y = self.s.flightplan[-1]
             grid = self.gen_flight_grid()
             new_path = grid.a_star_worldcoords(
-                env_coords = self.environment.c,
                 start_xy = (curr_x, curr_y), 
                 goal_xy = (goal_x, goal_y), 
                 max_distance = self.p.max_distance,
@@ -128,11 +146,14 @@ class HurricaneControlFlight(ControlFlight):
             )
             if new_path and new_path[0] == (curr_x, curr_y):
                 new_path = new_path[1:]
+            
+            print(f"[DEBUG] final stored plan: {new_path}")
+            
             self.s.flightplan = new_path
             self.s.pt = 0
             
     def new_obstacle_present(self):
-        return
+        return False
         
 class HurricaneAviate(Aviate):
     __slots__ = ()
@@ -156,7 +177,7 @@ class HurricaneAircraftArchParameter(Parameter):
     disallowed_cost: float = 10.0
     occupied_cost: float   = 20.0
     restricted_cost: float = 1000.0
-    max_distance: int      = 3
+    max_distance: int      = 5
 
 class HurricaneAircraftArchitecture(FunctionArchitecture):
     """
@@ -244,16 +265,21 @@ def plot_flightpath(mdl, hist, **kwargs):
     fig, ax = mdl.flows['environment'].c.show(properties=properties,
                                               collections=collections)
     start = mdl.p.flightplan[0]
-    end = mdl.p.flightplan[-1]
+    end   = mdl.p.flightplan[-1]
     ax.scatter([start[0]], [start[1]], label="start", color="green")
-    ax.scatter([end[0]], [end[1]], label="end", color="red")
-    lx = [x[-1] for x in [*hist.get_vals('trajectories.s.x')][0]]
-    ly = [y[-1] for y in [*hist.get_vals('trajectories.s.y')][0]]
-    ax.scatter(lx, ly, label="landing", color="black", marker='x')
-    fig, ax = hist.plot_trajectories('trajectories.s.x', 'trajectories.s.y',
+    ax.scatter([end[0]],   [end[1]],   label="end",   color="red")
+    fig, ax = hist.plot_trajectories('trajectories.s.x',
+                                     'trajectories.s.y',
                                      fig=fig, ax=ax, **kwargs)
+    cf   = mdl.fxns['control_flight']
+    plan = cf.s.flightplan
+    if plan:
+        xs, ys = zip(*plan)
+        ax.plot(xs, ys, '--', label='planned path')
+        ax.scatter(xs, ys, marker='o', label='waypoints')
     consolidate_legend(ax)
     return fig, ax
+
 
 
 if __name__ == "__main__":
@@ -263,9 +289,28 @@ if __name__ == "__main__":
     from fmdtools.sim.sample import FaultDomain, FaultSample
 
     ha = HurricaneAircraftArchitecture()
+    
+    
+    
+    # testing pre-replan flight plan 
+    cf = ha.fxns['control_flight']
+    cf.static_behavior(time=0.0)
+
+    # 3) now inspect the real flightplan
+    print("Planner produced:", cf.s.flightplan)
+    print("Initial plan:", cf.s.flightplan)
+
+
+
     fg = FunctionArchitectureGraph(ha)
     fg.draw()
     res, hist = propagate.nominal(ha)
+    
+    
+    # Immediately after static_behavior/replan:
+    print("Plan after replan:", cf.s.flightplan)
+
+
     ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 10)
     pms = from_hist(hist)
     pm = pms['store_and_supply_ee']
@@ -287,40 +332,41 @@ if __name__ == "__main__":
     doctest.testmod(verbose=True)
 
     from fmdtools.analyze.phases import from_hist
-    haa = HurricaneAircraftArchitecture(p={'depletion': 40.0})
+    plot_flightpath(ha, hist)
+    # haa = HurricaneAircraftArchitecture(p={'depletion': 40.0})
 
-    res, hist = prop.nominal(haa)
-    pm = from_hist(hist)
+    # res, hist = prop.nominal(haa)
+    # pm = from_hist(hist)
 
-    # res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'break', 8, desired_result=['endclass', 'graph'])
-    res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'depletion', 18, desired_result=['endclass', 'graph'])
-    res, hist = prop.one_fault(haa, 'control_flight', 'loss', 19, desired_result=['endclass', 'graph'])
-    res.graph.draw()
+    # # res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'break', 8, desired_result=['endclass', 'graph'])
+    # res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'depletion', 18, desired_result=['endclass', 'graph'])
+    # res, hist = prop.one_fault(haa, 'control_flight', 'loss', 19, desired_result=['endclass', 'graph'])
+    # res.graph.draw()
 
-    fig, ax = haa.flows['environment'].c.show(properties=properties,
-                                              collections=collections)
+    # fig, ax = haa.flows['environment'].c.show(properties=properties,
+    #                                           collections=collections)
 
-    hist.plot_trajectories('trajectories.s.x', 'trajectories.s.y', fig=fig, ax=ax)
-
-
-    fig, ax = haa.flows['environment'].c.show_collection('suitable', z=0,
-                                                         **collections['suitable'])
-
-    fig, ax = hist.plot_trajectories('trajectories.s.x',
-                                     'trajectories.s.y',
-                                     'trajectories.s.z',
-                                     time_groups='nominal', time_ticks=2.0, fig=fig, ax=ax)
-
-    fig, ax = hist.plot_trajectories('environment.ga.points.uav.s.x',
-                                     'environment.ga.points.uav.s.y',
-                                     'environment.ga.points.uav.s.z',
-                                     time_groups='nominal', time_ticks=2.0, fig=fig, ax=ax)
+    # hist.plot_trajectories('trajectories.s.x', 'trajectories.s.y', fig=fig, ax=ax)
 
 
-    hist.plot_line('flows.electricity.s.charge',
-                   'fxns.control_flight.m.mode',
-                   'fxns.aviate.m.mode')
-    plot_flightpath(haa, hist)
+    # fig, ax = haa.flows['environment'].c.show_collection('suitable', z=0,
+    #                                                      **collections['suitable'])
+
+    # fig, ax = hist.plot_trajectories('trajectories.s.x',
+    #                                  'trajectories.s.y',
+    #                                  'trajectories.s.z',
+    #                                  time_groups='nominal', time_ticks=2.0, fig=fig, ax=ax)
+
+    # fig, ax = hist.plot_trajectories('environment.ga.points.uav.s.x',
+    #                                  'environment.ga.points.uav.s.y',
+    #                                  'environment.ga.points.uav.s.z',
+    #                                  time_groups='nominal', time_ticks=2.0, fig=fig, ax=ax)
+
+
+    # hist.plot_line('flows.electricity.s.charge',
+    #                'fxns.control_flight.m.mode',
+    #                'fxns.aviate.m.mode')
+    # plot_flightpath(haa, hist)
 
 
 

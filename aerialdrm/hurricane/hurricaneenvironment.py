@@ -46,7 +46,6 @@ class HurricaneCoords(Coords):
 properties = {'disallowed': {'color': 'blue', 'proplab': 'disallowed', 'alpha': 0.5},
               'occupied': {'color': 'red', 'proplab': 'occupied', 'alpha': 0.5},
               'restricted': {'color': 'grey', 'proplab': 'restricted', 'alpha': 0.75}}
-
 collections = {'suitable': {"label": False, 'color': 'lightgreen'}}
 
 

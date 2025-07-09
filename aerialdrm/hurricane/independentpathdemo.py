@@ -76,7 +76,7 @@ class DroneFlightGrid:
     y_size          = 96
     blocksize       = 1.25
     fuel_rate       = 2
-    max_distance    = 6
+    max_distance    = 1
     disallowed_cost = 10
     occupied_cost   = 20
     restricted_cost = 1000

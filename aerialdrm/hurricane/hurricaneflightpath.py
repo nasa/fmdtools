@@ -19,13 +19,14 @@ a_star()          ← ENTRY POINT
 figure out: all features, states must be tuples. change in methods.
 """
 from fmdtools.define.object.coords import Coords, CoordsParam
+from aerialdrm.hurricane.hurricaneenvironment import HurricaneCoords, HurricaneCoordsParam
 import networkx as nx
 import math
 
 class DroneFlightGridParam(CoordsParam):
-    x_size: int = 48
-    y_size: int = 48
-    blocksize: float = 2.5
+    x_size: int = 96
+    y_size: int = 96
+    blocksize: float = 1.25
     
     """
     fuel cost per distance
@@ -34,7 +35,7 @@ class DroneFlightGridParam(CoordsParam):
     """
     maximum distance traveled per timestep
     """
-    max_distance: int = 3
+    max_distance: int = 5
     """
     weighing suboptimality of each region
     """
@@ -44,6 +45,8 @@ class DroneFlightGridParam(CoordsParam):
     
     """
     start, end points
+    
+    TUNABLE PARAMETERS FOR PRESENTATION, AVERAGING VS GAUSSIAN THING, FUEL COSTS IS WAY TOO LOW (SHOW WHAT HAPPENS WHEN STUFF CHNAGE)
     """
     point_start: tuple = (10.0, 10.0)
     point_end: tuple = (100.0, 100.0)
@@ -64,114 +67,130 @@ class DroneFlightGrid(Coords):
                 self.fuel_costs[i, j] = {}
                 self.edge_weights[i, j] = {}
 
-    def get_edge_weights(self, env_coords, fuel_rate, disallowed_cost,
-                     occupied_cost, restricted_cost, max_distance):
-        """
-        Only initialize edge weights for reachable neighbors,
-        defined by both x and y distance not being greater than max_dist..
-        """
-        self.get_grid_costs(env_coords, disallowed_cost, occupied_cost, restricted_cost)
-    
+    def get_edge_weights(self, fuel_rate,
+                         disallowed_cost, occupied_cost, restricted_cost,
+                         max_distance):
+
+        self.get_grid_costs(disallowed_cost,
+                            occupied_cost, restricted_cost)
+
+        for row in range(self.p.y_size):
+            for col in range(self.p.x_size):
+                cx = col*self.p.blocksize + self.p.blocksize/2
+                cy = row*self.p.blocksize + self.p.blocksize/2
+                neighbours = self.neighbor_gen(col, row, max_distance)
+
+                for (ncol, nrow) in neighbours:
+                    if ncol == col and nrow == row:
+                        continue
+
+                    nx = ncol*self.p.blocksize + self.p.blocksize/2
+                    ny = nrow*self.p.blocksize + self.p.blocksize/2
+                    dist       = math.hypot(nx - cx, ny - cy)
+                    fuel_cost  = fuel_rate * dist
+                    env_cost   = self.get_properties(nrow, ncol)['grid_costs']
+                    total_cost = fuel_cost + dist*env_cost
+                    
+                    fc = self.get_properties(row, col)['fuel_costs']
+                    fc[(ncol, nrow)] = fuel_cost
+                    self.set(row, col, 'fuel_costs', fc)
+
+                    ew = self.get_properties(row, col)['edge_weights']
+                    ew[(ncol, nrow)] = total_cost
+                    self.set(row, col, 'edge_weights', ew)
+
+    def get_grid_costs(self, disallowed_cost, occupied_cost, restricted_cost):
         for i in range(self.p.y_size):
             for j in range(self.p.x_size):
-                curr_x = j * self.p.blocksize + self.p.blocksize / 2
-                curr_y = i * self.p.blocksize + self.p.blocksize / 2
-                neighbors = self.recursive_neighbor_gen(j, i, max_distance)
-                for (j2, i2) in neighbors:
-                    x2 = j2 * self.p.blocksize + self.p.blocksize / 2
-                    y2 = i2 * self.p.blocksize + self.p.blocksize / 2
-                    dist = math.hypot(curr_x - x2, curr_y - y2)
-                    fuel_cost = fuel_rate * dist
-                    grid_cost = self.grid_costs[i2, j2]
-                    total_cost = fuel_cost + grid_cost
-                    self.fuel_costs[i, j][(j2, i2)] = fuel_cost
-                    self.edge_weights[i, j][(j2, i2)] = total_cost
-       
-    def get_grid_costs(self, env_coords, disallowed_cost, occupied_cost, 
-                       restricted_cost):
-        """
-        Calculate the GRID COST somewhere in the finer (than environment) 
-        drone traversal grid.
-        IMPLEMENT GAUSSIAN LATER!!! DO weighted average: 
-            current tile: 0.4
-            adj. tiles: 0.1
-            diagonal tiles: 0.05
-        """
-        print("Occupied feature type:", type(env_coords.features["occupied"]))
-        print("Sample element:", env_coords.features["occupied"])
-        for i in range(self.p.y_size):
-            for j in range(self.p.x_size):
-                x = j * self.p.blocksize + self.p.blocksize/2
-                y = i * self.p.blocksize + self.p.blocksize/2
-                env_i = int(x // env_coords.p.blocksize)
-                env_j = int(y // env_coords.p.blocksize)
-                occupied = env_coords.features["occupied"][env_i, env_j]
-                disallowed = env_coords.features["disallowed"][env_i, env_j]
-                restricted = env_coords.features["restricted"][env_i, env_j]
-                goal_x = env_coords.p.point_end[0]
-                goal_y = env_coords.p.point_end[1]
-                dx, dy = goal_x - x, goal_y - y
-                dist = math.hypot(dx, dy)
-                grid_cost = dist * (disallowed_cost * disallowed +
-                                    occupied_cost * occupied +
-                                    restricted_cost * restricted)
-                self.grid_costs[i, j] = grid_cost
+                total = 0.0
+                for di in [-1, 0, 1]:
+                    for dj in [-1, 0, 1]:
+                        ci, cj = i + di, j + dj
+                        if 0 <= ci < self.p.y_size and 0 <= cj < self.p.x_size:
+                            x = cj * self.p.blocksize + self.p.blocksize / 2
+                            y = ci * self.p.blocksize + self.p.blocksize / 2
+                            col = int(x // self.env_coords.p.blocksize)
+                            row = int(y // self.env_coords.p.blocksize)
+                            disallowed = self.env_coords.get(x, y, 'disallowed', outside=True)
+                            occupied = self.env_coords.get(x, y, 'occupied', outside=True)
+                            restricted = self.env_coords.get(x, y, 'restricted', outside=True)
+                            # print(
+                            #     f"Grid ({j}, {i}) sampling Env ({col}, {row}) at offset ({dj}, {di}) → "
+                            #     f"disallowed={props['disallowed']}, "
+                            #     f"occupied={props['occupied']}, "
+                            #     f"restricted={props['restricted']}"
+                            #     )
+                            weight = (
+                                0.4 if (di == 0 and dj == 0)
+                                else 0.1 if (di == 0 or dj == 0)
+                                else 0.05
+                            )
+                            total = weight * (
+                                disallowed_cost * disallowed +
+                                occupied_cost   * occupied +
+                                restricted_cost * restricted
+                            )
+                self.set(i, j, 'grid_costs', total)
+
                 
-    def adj_list_gen(self, max_distance):
-        """
-        Takes in maximum any-direction grid jump length. 
-        returns dictionary adjacency list. keys: vertices. 
-        Values: tuple of adjacent tuples.
-        """
-        adj_dict = {}
-        for i in range(self.p.y_size):
-            for j in range(self.p.x_size):
-                vertex = (j, i)
-                visited = set()
-                adj_list = self.recursive_neighbor_gen(j, i, max_distance, visited)
-                adj_dict[vertex] = list(adj_list)
-        return adj_dict
-    
-    def recursive_neighbor_gen(self, j, i, dist_remaining, visited = None):
-        """
-        takes in indices, returns tuple of index tuples
-        """
+    def neighbor_gen(self, j, i, max_distance, visited=None):
         if visited is None:
             visited = set()
-        if (j, i) in visited or dist_remaining < 0:
-            return set()
-        visited.add((j, i))
-        neighbors = {(j, i)}
-        x = j * self.p.blocksize + self.p.blocksize / 2
-        y = i * self.p.blocksize + self.p.blocksize / 2
-        for x2, y2 in self.get_neighbors(x, y):
-            j2, i2 = self.to_index(x2, y2)
-            neighbors |= self.recursive_neighbor_gen(j2, i2, 
-                                                     dist_remaining - 1,
-                                                     visited)
+
+        neighbors = set()
+        for dj in range(-max_distance, max_distance + 1):
+            for di in range(-max_distance, max_distance + 1):
+                nj, ni = j + dj, i + di
+                if 0 <= nj < self.p.x_size and 0 <= ni < self.p.y_size:
+                    dist = math.hypot(dj, di)
+                    if dist <= max_distance:
+                        neighbors.add((nj, ni))
         return neighbors
-        
-    def nx_graph_gen(self, env_coords, max_distance, disallowed_cost,
+    
+    
+    def nx_graph_gen(self, max_distance, disallowed_cost,
                      occupied_cost, restricted_cost, fuel_rate):
         """
         Uses path-generation methods in order to create NetworkX graph
         NetworkX: open source graph gen library.
         """
         flight_grid = nx.DiGraph()
-        self.get_edge_weights(env_coords, fuel_rate = fuel_rate,
-                              disallowed_cost = disallowed_cost,
-                              occupied_cost = occupied_cost,
-                              restricted_cost = restricted_cost,
-                              max_distance = max_distance)
-        adj_dict = self.adj_list_gen(max_distance = max_distance)
-        for vertex, neighbors in adj_dict.items():
-            flight_grid.add_node(vertex)
-            for neighbor in neighbors:
-                weight = self.edge_weights[vertex[1], vertex[0]][neighbor]
-                flight_grid.add_edge(vertex, neighbor, weight = weight)
+        self.get_edge_weights(fuel_rate,
+                              disallowed_cost, occupied_cost,
+                              restricted_cost, max_distance)
+        
+        
+        print("=== DEBUG: cell costs and edge-weights ===")
+        for i in range(self.p.y_size):
+            for j in range(self.p.x_size):
+                gc = self.get_properties(i, j)["grid_costs"]
+                if gc != 0:
+                    print(f"Cell {(j,i)} flat grid_cost = {gc:.1f}")
+                fw = self.get_properties(i, j)["fuel_costs"]
+                ew = self.get_properties(i, j)["edge_weights"]
+                    # sort by total cost so we see the cheapest jumps first
+                for nbr, total in sorted(ew.items(), key=lambda x: x[1]):
+                    fuel = fw[nbr]
+                    # recompute dist so we can print grid_component cleanly
+                    dx = (nbr[0] - j)*self.p.blocksize
+                    dy = (nbr[1] - i)*self.p.blocksize
+                    dist = math.hypot(dx, dy)
+                    grid_comp = total - fuel
+                    print(
+                        f"  {(j,i)}→{nbr}: dist={dist:.2f}, "
+                        f"fuel={fuel:.1f}, grid={grid_comp:.1f}, total={total:.1f}"
+                    )
+        print("=== end debug ===")
+      
+        for i in range(self.p.y_size):
+            for j in range(self.p.x_size):
+                v = (j, i)
+                ew = self.get_properties(i, j)['edge_weights']
+                for u, w in ew.items():
+                    flight_grid.add_edge(v, u, weight=w)
         return flight_grid
         
-    def a_star(self, env_coords, start, goal, max_distance, disallowed_cost, 
+    def a_star(self, start, goal, max_distance, disallowed_cost, 
                occupied_cost, restricted_cost, fuel_rate):
         """
         returns a tuple of tuples which the aircraft should fly through, 
@@ -179,16 +198,22 @@ class DroneFlightGrid(Coords):
         Ex.: ((0, 0), (2, 2), (2, 5), (4, 6), (7, 6), (9, 7), (10, 7), (10, 10))
         this is in grid indices, not world coordinates!
         """
-        G = self.nx_graph_gen(env_coords, max_distance = max_distance,
+        G = self.nx_graph_gen(max_distance = max_distance,
                               disallowed_cost = disallowed_cost,
                               occupied_cost = occupied_cost,
                               restricted_cost = restricted_cost,
                               fuel_rate = fuel_rate)
         heuristic = lambda a, b: math.hypot(a[0] - b[0], a[1] - b[1])
+        if start not in G:
+            print(f"Start node {start} not in graph")
+        if goal not in G:
+            print(f"Goal node {goal} not in graph")
+        if not nx.has_path(G, start, goal):
+            print(f"No path from {start} to {goal}")
         path = nx.astar_path(G, start, goal, heuristic = heuristic, weight = "weight")
         return tuple(path)
     
-    def a_star_worldcoords(self, env_coords, start_xy, goal_xy, max_distance = 3,
+    def a_star_worldcoords(self, start_xy, goal_xy, max_distance = 3,
               disallowed_cost = 10.0, occupied_cost = 20.0,
               restricted_cost = 1000.0, fuel_rate = 2.0):
         """
@@ -197,7 +222,7 @@ class DroneFlightGrid(Coords):
         """
         start_ij = self.to_index(*start_xy)
         goal_ij = self.to_index(*goal_xy)
-        path_ij = self.a_star(env_coords, start_ij, goal_ij,
+        path_ij = self.a_star(start_ij, goal_ij,
                               max_distance = max_distance,
                               disallowed_cost = disallowed_cost,
                               occupied_cost = occupied_cost,
