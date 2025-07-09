@@ -103,14 +103,12 @@ class DroneFlightGrid(Coords):
         for i in range(self.p.y_size):
             for j in range(self.p.x_size):
                 total = 0.0
-                for di in [-1, 0, 1]:
-                    for dj in [-1, 0, 1]:
+                for di in [-2 , -1, 0, 1, 2]:
+                    for dj in [-2, -1, 0, 1, 2]:
                         ci, cj = i + di, j + dj
                         if 0 <= ci < self.p.y_size and 0 <= cj < self.p.x_size:
                             x = cj * self.p.blocksize + self.p.blocksize / 2
                             y = ci * self.p.blocksize + self.p.blocksize / 2
-                            col = int(x // self.env_coords.p.blocksize)
-                            row = int(y // self.env_coords.p.blocksize)
                             disallowed = self.env_coords.get(x, y, 'disallowed', outside=True)
                             occupied = self.env_coords.get(x, y, 'occupied', outside=True)
                             restricted = self.env_coords.get(x, y, 'restricted', outside=True)
@@ -120,12 +118,13 @@ class DroneFlightGrid(Coords):
                             #     f"occupied={props['occupied']}, "
                             #     f"restricted={props['restricted']}"
                             #     )
-                            weight = (
-                                0.4 if (di == 0 and dj == 0)
-                                else 0.1 if (di == 0 or dj == 0)
-                                else 0.05
-                            )
-                            total = weight * (
+                            # weight = (
+                            #     0.4 if (di == 0 and dj == 0)
+                            #     else 0.1 if (di == 0 or dj == 0)
+                            #     else 0.05
+                            # )
+                            weight = 0.04
+                            total += weight * (
                                 disallowed_cost * disallowed +
                                 occupied_cost   * occupied +
                                 restricted_cost * restricted
@@ -160,27 +159,27 @@ class DroneFlightGrid(Coords):
                               restricted_cost, max_distance)
         
         
-        print("=== DEBUG: cell costs and edge-weights ===")
-        for i in range(self.p.y_size):
-            for j in range(self.p.x_size):
-                gc = self.get_properties(i, j)["grid_costs"]
-                if gc != 0:
-                    print(f"Cell {(j,i)} flat grid_cost = {gc:.1f}")
-                fw = self.get_properties(i, j)["fuel_costs"]
-                ew = self.get_properties(i, j)["edge_weights"]
-                    # sort by total cost so we see the cheapest jumps first
-                for nbr, total in sorted(ew.items(), key=lambda x: x[1]):
-                    fuel = fw[nbr]
-                    # recompute dist so we can print grid_component cleanly
-                    dx = (nbr[0] - j)*self.p.blocksize
-                    dy = (nbr[1] - i)*self.p.blocksize
-                    dist = math.hypot(dx, dy)
-                    grid_comp = total - fuel
-                    print(
-                        f"  {(j,i)}→{nbr}: dist={dist:.2f}, "
-                        f"fuel={fuel:.1f}, grid={grid_comp:.1f}, total={total:.1f}"
-                    )
-        print("=== end debug ===")
+        # print("=== DEBUG: cell costs and edge-weights ===")
+        # for i in range(self.p.y_size):
+        #     for j in range(self.p.x_size):
+        #         gc = self.get_properties(i, j)["grid_costs"]
+        #         if gc != 0:
+        #             print(f"Cell {(j,i)} flat grid_cost = {gc:.1f}")
+        #         fw = self.get_properties(i, j)["fuel_costs"]
+        #         ew = self.get_properties(i, j)["edge_weights"]
+        #             # sort by total cost so we see the cheapest jumps first
+        #         for nbr, total in sorted(ew.items(), key=lambda x: x[1]):
+        #             fuel = fw[nbr]
+        #             # recompute dist so we can print grid_component cleanly
+        #             dx = (nbr[0] - j)*self.p.blocksize
+        #             dy = (nbr[1] - i)*self.p.blocksize
+        #             dist = math.hypot(dx, dy)
+        #             grid_comp = total - fuel
+        #             print(
+        #                 f"  {(j,i)}→{nbr}: dist={dist:.2f}, "
+        #                 f"fuel={fuel:.1f}, grid={grid_comp:.1f}, total={total:.1f}"
+        #             )
+        # print("=== end debug ===")
       
         for i in range(self.p.y_size):
             for j in range(self.p.x_size):
@@ -215,7 +214,7 @@ class DroneFlightGrid(Coords):
     
     def a_star_worldcoords(self, start_xy, goal_xy, max_distance = 3,
               disallowed_cost = 10.0, occupied_cost = 20.0,
-              restricted_cost = 1000.0, fuel_rate = 2.0):
+              restricted_cost = 1000.0, fuel_rate = 20.0):
         """
         Borrows a_star functionality, but turns grid indices into world coordinates.
         This method should be called from the outside.

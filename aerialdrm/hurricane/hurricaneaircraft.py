@@ -34,7 +34,7 @@ class HurricaneControlState(ControlState):
     
 class HurricaneControlParameter(Parameter):
     with_proxthreat: bool = True
-    fuel_rate: float = 2.0
+    fuel_rate: float = 20.0
     disallowed_cost: float = 10.0
     occupied_cost: float = 20.0
     restricted_cost: float = 1000.0
@@ -97,12 +97,7 @@ class HurricaneControlFlight(ControlFlight):
         ''' replan if battery insufficient for mission '''
         ''' replan if obstacle comes into flight path  turn on dynamic replanning boolean '''
         
-        # testing replan 
-        curr = self.trajectories.perc_traj.s.get('x', 'y')
-        goal = self.s.flightplan[-1]
-        # testing replan
-        
-        print(f"[DEBUG] replan from {curr} to {goal}")
+        # print(f"[DEBUG] replan from {curr} to {goal}")
         ap = AircraftPosition() # just a calculator! 
         ap.assign(self.trajectories.perc_traj.s) # initialize this state as current perceived state.
         start = self.s.flightplan[0]
@@ -147,7 +142,7 @@ class HurricaneControlFlight(ControlFlight):
             if new_path and new_path[0] == (curr_x, curr_y):
                 new_path = new_path[1:]
             
-            print(f"[DEBUG] final stored plan: {new_path}")
+            # print(f"[DEBUG] final stored plan: {new_path}")
             
             self.s.flightplan = new_path
             self.s.pt = 0
@@ -173,7 +168,7 @@ class HurricaneAircraftArchParameter(Parameter):
     depletion: float = 25.0
     with_proxthreat: bool = True
     # below: new
-    fuel_rate: float       = 2.0
+    fuel_rate: float       = 20.0
     disallowed_cost: float = 10.0
     occupied_cost: float   = 20.0
     restricted_cost: float = 1000.0
@@ -275,8 +270,8 @@ def plot_flightpath(mdl, hist, **kwargs):
     plan = cf.s.flightplan
     if plan:
         xs, ys = zip(*plan)
-        ax.plot(xs, ys, '--', label='planned path')
-        ax.scatter(xs, ys, marker='o', label='waypoints')
+        ax.plot(xs, ys, '--', label='planned path', color='red')  # Make line red
+        ax.scatter(xs, ys, marker='o', label='waypoints', color='red', s=10)  # Make dots red, smaller
     consolidate_legend(ax)
     return fig, ax
 
@@ -292,23 +287,11 @@ if __name__ == "__main__":
     
     
     
-    # testing pre-replan flight plan 
     cf = ha.fxns['control_flight']
     cf.static_behavior(time=0.0)
-
-    # 3) now inspect the real flightplan
-    print("Planner produced:", cf.s.flightplan)
-    print("Initial plan:", cf.s.flightplan)
-
-
-
     fg = FunctionArchitectureGraph(ha)
     fg.draw()
     res, hist = propagate.nominal(ha)
-    
-    
-    # Immediately after static_behavior/replan:
-    print("Plan after replan:", cf.s.flightplan)
 
 
     ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 10)
