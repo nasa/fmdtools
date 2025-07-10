@@ -30,7 +30,7 @@ class HurricaneControlState(ControlState):
     closest_dist: float = 100.0
     flightgrid: object = None
     planned: bool = False
-    # added flightgrid, flight plan as new state objects
+
     
 class HurricaneControlParameter(Parameter):
     with_proxthreat: bool = True
@@ -40,7 +40,7 @@ class HurricaneControlParameter(Parameter):
     restricted_cost: float = 1000.0
     max_distance: int = 5
     blocksize: float = 2.5
-        # Additionally: Gaussian blur (taking in threat.p.buffer_envelope and threat.p.buffer_safety? more params in hurricaneflightpath?)
+    
 class HurricaneControlFlight(ControlFlight):
     __slots__ = ()
     flow_environment = HurricaneEnvironment
@@ -64,25 +64,12 @@ class HurricaneControlFlight(ControlFlight):
                 self.m.set_mode('pause')
             elif self.m.in_mode('pause'):
                 self.m.set_mode('flight')
+                
     def static_behavior(self, time):
         if not self.s.planned:
             self.replan_mission()
             self.s.planned = True
-    def dynamic_behavior(self, time):
-        if self.s.flightplan and self.s.pt < len(self.s.flightplan):
-            tx, ty = self.s.flightplan[self.s.pt]
-            cx, cy = (self.trajectories.s.x,
-                          self.trajectories.s.y)
-            dx = tx - cx
-            dy = ty - cy
-            dz = 0.0
-            self.trajectories.des_traj.s.put(dx=dx, dy=dy, dz=dz)
-        super().dynamic_behavior(time)
-        if self.s.flightplan and self.s.pt < len(self.s.flightplan):
-            ex = self.trajectories.s.x - self.s.flightplan[self.s.pt][0]
-            ey = self.trajectories.s.y - self.s.flightplan[self.s.pt][1]
-            if math.hypot(ex, ey) < self.p.blocksize * 0.5:
-                self.s.pt += 1
+            
     def gen_flight_grid(self):
         dfgp = DroneFlightGridParam(
             fuel_rate = self.p.fuel_rate,
@@ -122,9 +109,7 @@ class HurricaneControlFlight(ControlFlight):
             self.s.pt = 0
             return
         if self.new_obstacle_present():
-            """
-            define later 
-            """
+            self.s.planned = False # ?
             return
         else:
             curr_x, curr_y = self.trajectories.perc_traj.s.get('x', 'y')

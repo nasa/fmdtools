@@ -19,7 +19,7 @@ import math
 class DroneFlightGridParam(CoordsParam):
     x_size: int = 120
     y_size: int = 120
-    blocksize: float = 1
+    blocksize: float = 1.0
     
     state_grid_costs: tuple = (float, 0.0)
     state_fuel_costs: tuple = (dict, None)

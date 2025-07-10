@@ -72,11 +72,11 @@ class Environment:
             layer[i, j] = False
 
 class DroneFlightGrid:
-    x_size          = 96
-    y_size          = 96
+    x_size          = 120
+    y_size          = 120
     blocksize       = 1.25
-    fuel_rate       = 2
-    max_distance    = 1
+    fuel_rate       = 20
+    max_distance    = 5
     disallowed_cost = 10
     occupied_cost   = 20
     restricted_cost = 1000
