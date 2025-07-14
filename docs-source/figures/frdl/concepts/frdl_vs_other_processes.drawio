@@ -1,121 +1,121 @@
-<mxfile host="Electron" modified="2025-04-30T00:04:22.233Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.2.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="jXrd9sfa6qNkR4LxsxRX" version="24.2.5" type="device">
+<mxfile host="Electron" modified="2025-06-25T18:26:07.910Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.2.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="eWd256ugflQQjDZYP0Z2" version="24.2.5" type="device">
   <diagram name="Page-1" id="w0gBR5lrRtHuP4hqJJ40">
-    <mxGraphModel dx="1322" dy="813" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="160" dy="94" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-23" value="Traditional F/FA Approach" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=bottom;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="140" y="448" width="120" height="20" as="geometry" />
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-23" value="Traditional F/FA Approach" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=bottom;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="140" y="440" width="120" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="29O7JyR8YCv0_GNUCtnZ-25" target="29O7JyR8YCv0_GNUCtnZ-27">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="29O7JyR8YCv0_GNUCtnZ-25" target="29O7JyR8YCv0_GNUCtnZ-27" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-25" value="Use overall function diagram with inputs and outputs to identify high-level hazards from the top-down" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-25" value="Use overall function diagram with inputs and outputs to identify high-level hazards from the top-down" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="140" y="475" width="120" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="29O7JyR8YCv0_GNUCtnZ-27" target="29O7JyR8YCv0_GNUCtnZ-35">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="29O7JyR8YCv0_GNUCtnZ-27" target="29O7JyR8YCv0_GNUCtnZ-35" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-27" value="Use functional-flow block diagram to identify sources of hazards from contained functions from the bottom-up" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-27" value="Use functional-flow block diagram to identify sources of hazards from contained functions from the bottom-up" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="140" y="600" width="120" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-28" value="Analyze control failures resulting from incorrect process model or control algorithm" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-28" value="Analyze control failures resulting from incorrect process model or control algorithm" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="620" y="640" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-29" value="STPA" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=bottom;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-29" value="STPA" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=bottom;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="640" y="405" width="60" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="29O7JyR8YCv0_GNUCtnZ-56" target="29O7JyR8YCv0_GNUCtnZ-28">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="29O7JyR8YCv0_GNUCtnZ-56" target="29O7JyR8YCv0_GNUCtnZ-28" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-31" value="Overall Functional Analysis" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=top;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-31" value="Overall Functional Analysis" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="75" y="470" width="60" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-32" value="Functional Architecture Analysis" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=top;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-32" value="Functional Architecture Analysis" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="75" y="590" width="60" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-33" value="Controls&lt;br&gt;Analysis" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=top;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-33" value="Controls&lt;br&gt;Analysis" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="75" y="700" width="60" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-34" value="Component Analysis" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=top;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-34" value="Component Analysis" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="75" y="800" width="60" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-35" value="Use component block diagram to identify sources of hazards at the system level from the component level." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="140" y="815" width="120" height="75" as="geometry" />
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-35" value="Use component block diagram to identify sources of hazards at the system level from the component level." style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="140" y="810" width="120" height="75" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-36" value="FFIP/HEFFR&lt;br&gt;(note in text that major limitation is simulation hapens at the end)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-36" value="FFIP/HEFFR&lt;br&gt;(note in text that major limitation is simulation hapens at the end)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="470" y="400" width="130" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="29O7JyR8YCv0_GNUCtnZ-38" target="29O7JyR8YCv0_GNUCtnZ-40">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="29O7JyR8YCv0_GNUCtnZ-38" target="29O7JyR8YCv0_GNUCtnZ-40" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-38" value="Create overall function block diagram" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-38" value="Create overall function block diagram" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="475" y="470" width="120" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="29O7JyR8YCv0_GNUCtnZ-40" target="29O7JyR8YCv0_GNUCtnZ-43">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="29O7JyR8YCv0_GNUCtnZ-40" target="29O7JyR8YCv0_GNUCtnZ-43" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-40" value="Create&amp;nbsp; functional model and flow state logic" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-40" value="Create&amp;nbsp; functional model and flow state logic" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="475" y="580" width="120" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-41" value="Create configuration flow graph relating component behaviors to functions to create overall failure analysis" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-41" value="Create configuration flow graph relating component behaviors to functions to create overall failure analysis" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="475" y="760" width="120" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="29O7JyR8YCv0_GNUCtnZ-43" target="29O7JyR8YCv0_GNUCtnZ-41">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="29O7JyR8YCv0_GNUCtnZ-43" target="29O7JyR8YCv0_GNUCtnZ-41" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-43" value="(HEFFR) Create action sequence graph to represent human actions" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-43" value="(HEFFR) Create action sequence graph to represent human actions" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="475" y="670" width="120" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-44" value="Proposed Approach using FRDL" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=bottom;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-44" value="Proposed Approach using FRDL" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=bottom;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="270" y="440" width="120" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="29O7JyR8YCv0_GNUCtnZ-46" target="29O7JyR8YCv0_GNUCtnZ-48">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="29O7JyR8YCv0_GNUCtnZ-46" target="29O7JyR8YCv0_GNUCtnZ-48" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-46" value="Create&amp;nbsp;&lt;b&gt;function-in-context diagram&lt;/b&gt; to analyze hazardous interactions between the system function and its immediate context" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-46" value="Create&amp;nbsp;&lt;b&gt;function-in-context diagram&lt;/b&gt; to analyze hazardous interactions between the system function and its immediate context" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="270" y="475" width="120" height="105" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="29O7JyR8YCv0_GNUCtnZ-48" target="29O7JyR8YCv0_GNUCtnZ-50">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="29O7JyR8YCv0_GNUCtnZ-48" target="29O7JyR8YCv0_GNUCtnZ-50" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-48" value="Create &lt;b&gt;function architecture diagram&lt;/b&gt; to analyze the propagation of hazards through the system." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-48" value="Create &lt;b&gt;function architecture diagram&lt;/b&gt; to analyze the propagation of hazards through the system." style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="270" y="600" width="120" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="29O7JyR8YCv0_GNUCtnZ-50" target="29O7JyR8YCv0_GNUCtnZ-51">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="29O7JyR8YCv0_GNUCtnZ-50" target="29O7JyR8YCv0_GNUCtnZ-51" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-50" value="Create &lt;b&gt;action architecture diagrams&lt;/b&gt; of control functions to analyze control failures" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-50" value="Create &lt;b&gt;action architecture diagrams&lt;/b&gt; of control functions to analyze control failures" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="270" y="710" width="120" height="77.5" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-51" value="Create &lt;b&gt;component architecture diagrams&amp;nbsp;&lt;/b&gt;to analyze how component failures propagate to the functional level" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-51" value="Create &lt;b&gt;component architecture diagrams&amp;nbsp;&lt;/b&gt;to analyze how component failures propagate to the functional level" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="270" y="810" width="120" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-52" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-52" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="70" y="800" as="sourcePoint" />
-            <mxPoint x="390" y="798" as="targetPoint" />
+            <mxPoint x="390" y="800" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-53" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-53" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="70" y="700" as="sourcePoint" />
             <mxPoint x="390" y="700" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-54" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-54" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="70" y="590" as="sourcePoint" />
             <mxPoint x="390" y="590" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-55" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-55" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="70" y="470" as="sourcePoint" />
             <mxPoint x="390" y="470" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="29O7JyR8YCv0_GNUCtnZ-56" value="Decompose system into a controller and controlled process to analyze hazards arising from failed interactions" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="29O7JyR8YCv0_GNUCtnZ-56" value="Decompose system into a controller and controlled process to analyze hazards arising from failed interactions" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="620" y="470" width="120" height="90" as="geometry" />
         </mxCell>
       </root>
