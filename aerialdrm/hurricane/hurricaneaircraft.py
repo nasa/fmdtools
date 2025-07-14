@@ -22,11 +22,22 @@ from aerialdrm.base.aircraft.arch.holdpayload import HoldPayload
 from aerialdrm.hurricane.hurricaneenvironment import HurricaneEnvironment, properties, collections
 from aerialdrm.hurricane.hurricaneenvironment import HurricaneConditions
 from aerialdrm.hurricane.hurricaneflightpath import DroneFlightGrid, DroneFlightGridParam
-# ^ import new class
 from aerialdrm.base.aircraft.state import AircraftPosition
 import math
 
 class HurricaneControlState(ControlState):
+    """ControlState defining the current state of the aircraft's FlightGrid and 
+    correspondent planning.
+    
+    Fields
+    ------
+    closest_dist: float [outdated?]
+    flightgrid: HurricaneFlightGrid
+        FlightGrid for current aviation plan; subject to update with faults/
+        environmental updates
+    planned: bool
+        Whether or not flightgrid is up to date
+    """
     closest_dist: float = 100.0
     flightgrid: object = None
     planned: bool = False
@@ -37,7 +48,7 @@ class HurricaneControlParameter(Parameter):
     fuel_rate: float = 20.0
     disallowed_cost: float = 10.0
     occupied_cost: float = 20.0
-    restricted_cost: float = 1000.0
+    restricted_cost: float = 1000000.0
     max_distance: int = 5
     blocksize: float = 2.5
     
@@ -81,8 +92,20 @@ class HurricaneControlFlight(ControlFlight):
         return grid
         
     def replan_mission(self):
-        ''' replan if battery insufficient for mission '''
-        ''' replan if obstacle comes into flight path  turn on dynamic replanning boolean '''
+        """
+        re-evaluates flight path based on flight circumstance. 
+        
+        If flight conditions nominal, use A* as normal.
+        
+        If battery low,  bump fuel cost significantly based on present fuel
+        and plan as if nominal.
+        
+        If obstacle appears in the path, evaluate between options:
+            1. Hold still until it disappears
+            2. Temporary descent (necessitates safe landing zone existence, 
+            dynamic cost consideration)
+            3. Replan around the obstacle 
+        """
         
         # print(f"[DEBUG] replan from {curr} to {goal}")
         ap = AircraftPosition() # just a calculator! 
@@ -95,7 +118,7 @@ class HurricaneControlFlight(ControlFlight):
         end_dist = ap.calc_dist()
         if 0.0 < self.electricity.s.charge <= 25.0:
             # DO WE NEED A PERCEPTION /= REALITY FAULT? YES
-            # 20 below arbitrary (?)perhaps play with value -> maybe turn into parameter
+            # 20 below arbitrary
             if start_dist > 20 and end_dist > 20:
                 curr_pt = self.trajectories.perc_traj.s.get('x', 'y')
                 land_pt = self.environment.c.find_closest(*curr_pt, 'suitable')
@@ -126,9 +149,6 @@ class HurricaneControlFlight(ControlFlight):
             )
             if new_path and new_path[0] == (curr_x, curr_y):
                 new_path = new_path[1:]
-            
-            # print(f"[DEBUG] final stored plan: {new_path}")
-            
             self.s.flightplan = new_path
             self.s.pt = 0
             
@@ -156,7 +176,7 @@ class HurricaneAircraftArchParameter(Parameter):
     fuel_rate: float       = 20.0
     disallowed_cost: float = 10.0
     occupied_cost: float   = 20.0
-    restricted_cost: float = 1000.0
+    restricted_cost: float = 1000000.0
     max_distance: int      = 5
 
 class HurricaneAircraftArchitecture(FunctionArchitecture):

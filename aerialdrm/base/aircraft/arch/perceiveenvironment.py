@@ -8,14 +8,14 @@ from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity,
 
 
 class PerceiveEnvironmentMode(Mode):
-
+    """
+    Perception Faults
+    TODO:
+    fault_bias : perceived trajectory off the actual trajectory by a fixed amount
+    fault_noisy: perceived trajectory randomly off the actual trajectory
+    fault_dimloss: perceived trajectory not updating in a dimension
+    """
     fault_break = ()
-# add environment misperception fault
-# fault_misperception = ()
-# Implementation: many different types of possible misperceptions. [BELOW]
-# misperception 1: bias (pseudocode: self.perc_traj.s.x = self.traj_)
-# misperception 2: noisy measurement (pseudocode: self.perc_traj.s.x += np.random.normal(0, 5.0))
-# misperception 3: lose a dimension (pseudocode: self.perc_traj.s.z = -1)
 
 class PerceiveEnvironment(Function):
     """Function that perceives the environment."""

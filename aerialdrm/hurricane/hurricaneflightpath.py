@@ -17,9 +17,36 @@ import networkx as nx
 import math
 
 class DroneFlightGridParam(CoordsParam):
+    """
+    Parameters for configuring the DroneFlightGrid.
+    
+    Class Variables
+    ---------------
+    x_size : int
+        Number of rows in the x-dimension
+    y_size : int
+        Number of rows in the y-dimension
+    blocksize : float
+        Coordinate resolution
+    max_cost : float
+        Maximum cost before algorithm termination
+    
+    Fmdtools-specific features
+    ---------------
+    state_grid_costs : tuple
+        Holds environmental cost at each FlightGrid point
+    state_fuel_costs : tuple
+        Holds fuel costs from every single-timestep accessible FlightGrid point
+        in a dictionary entry; each FlightGrid point has its own dictionary
+    state_edge_weights : tuple
+        Holds total costs from every single-timestep accessible FlightGrid point
+        in a dictionary entry; each FlightGrid point has its own dictionary
+    """
     x_size: int = 120
     y_size: int = 120
     blocksize: float = 1.0
+    
+    max_cost = 1000000.0
     
     state_grid_costs: tuple = (float, 0.0)
     state_fuel_costs: tuple = (dict, None)
@@ -37,6 +64,10 @@ class DroneFlightGrid(Coords):
     def get_edge_weights(self, fuel_rate,
                          disallowed_cost, occupied_cost, restricted_cost,
                          max_distance):
+        """
+        Assign edge weights between all accessible nodes in flight grid,
+        accounting for environmental and fuel costs.
+        """
         self.get_grid_costs(disallowed_cost,
                             occupied_cost, restricted_cost)
         for row in range(self.p.y_size):
@@ -63,6 +94,10 @@ class DroneFlightGrid(Coords):
                     self.set(row, col, 'edge_weights', ew)
 
     def get_grid_costs(self, disallowed_cost, occupied_cost, restricted_cost):
+        """
+        Assign suboptimality of all environment regions 
+        into correspondent FlightGrid areas.
+        """
         max_offset = int(round(4 / self.p.blocksize))
         avg_range = range(-max_offset, max_offset + 1)
         for i in range(self.p.y_size):
@@ -74,9 +109,12 @@ class DroneFlightGrid(Coords):
                         if 0 <= ci < self.p.y_size and 0 <= cj < self.p.x_size:
                             x = cj * self.p.blocksize + self.p.blocksize / 2
                             y = ci * self.p.blocksize + self.p.blocksize / 2
-                            disallowed = self.env_coords.get(x, y, 'disallowed', outside=True)
-                            occupied = self.env_coords.get(x, y, 'occupied', outside=True)
-                            restricted = self.env_coords.get(x, y, 'restricted', outside=True)
+                            disallowed = self.env_coords.get(x, y, 'disallowed',
+                                                             outside=True)
+                            occupied = self.env_coords.get(x, y, 'occupied',
+                                                           outside=True)
+                            restricted = self.env_coords.get(x, y, 'restricted',
+                                                             outside=True)
                             weight = 0.04
                             total += weight * (
                                 disallowed_cost * disallowed +
@@ -88,7 +126,6 @@ class DroneFlightGrid(Coords):
     def neighbor_gen(self, j, i, max_distance, visited=None):
         if visited is None:
             visited = set()
-
         neighbors = set()
         for dj in range(-max_distance, max_distance + 1):
             for di in range(-max_distance, max_distance + 1):
@@ -115,7 +152,32 @@ class DroneFlightGrid(Coords):
         
     def a_star(self, start, goal, max_distance, disallowed_cost, 
                occupied_cost, restricted_cost, fuel_rate):
-        # this is in grid indices, not world coordinates!
+        """
+        Find the optimal A* path between two grid indices at start and goal.
+        
+        Parameters
+        ----------
+        start : tuple
+            Grid index (j, i) of the starting point.
+        goal : tuple
+            Grid index (j, i) of the destination point.
+        max_distance : int 
+            Maximum grid distance jumped in each direction during each A* 
+            node-node step. 
+        disallowed_cost : float
+            Cost adder for flying in zones where landing is disallowed.
+        occupied_cost : float
+            Cost adder for flying in zones which are human-occupied.
+        restricted_cost : float
+            (Arbitrarily high) Cost adder for flying in restricted zones.
+        fuel_rate : float
+            Cost multiplier due to fuel consumption.
+            
+        Returns
+        -------
+        path : tuple(tuple(int, int))
+            DroneFlightGrid A*-generated path.
+        """
         G = self.nx_graph_gen(max_distance = max_distance,
                               disallowed_cost = disallowed_cost,
                               occupied_cost = occupied_cost,
@@ -128,12 +190,22 @@ class DroneFlightGrid(Coords):
             print(f"Goal node {goal} not in graph")
         if not nx.has_path(G, start, goal):
             print(f"No path from {start} to {goal}")
-        path = nx.astar_path(G, start, goal, heuristic = heuristic, weight = "weight")
-        return tuple(path)
+        cost = nx.astar_path_length(G, start, goal, heuristic = heuristic,
+                                    weight = "weight")
+        if cost > self.p.max_cost:
+            return # fix later
+        else:
+            path = tuple(nx.astar_path(G, start, goal, heuristic = heuristic,
+                                       weight = "weight"))
+            return path
     
     def a_star_worldcoords(self, start_xy, goal_xy, max_distance,
               disallowed_cost, occupied_cost,
               restricted_cost, fuel_rate):
+        """
+        Converts start_xy & goal_xy world coordinates into DroneFlightGid indices, 
+        takes a_star functionality.
+        """
         start_ij = self.to_index(*start_xy)
         goal_ij = self.to_index(*goal_xy)
         path_ij = self.a_star(start_ij, goal_ij,
@@ -144,3 +216,5 @@ class DroneFlightGrid(Coords):
                               fuel_rate=fuel_rate)
         path_xy = tuple(tuple(self.grid[j, i]) for (j, i) in path_ij)
         return path_xy
+    
+    # doctest for some of these
