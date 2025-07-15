@@ -70,9 +70,13 @@ class HurricaneControlFlight(ControlFlight):
 
         dists = self.environment.ga.calc_dist_to_threats()
         self.s.closest_dist = min([*dists.values()])
-        if self.p.with_proxthreat:
+        if self.p.with_proxthreat: # with proxthreat? investigate
             if self.s.closest_dist <= 0.0 and not self.m.any_faults():
                 self.m.set_mode('pause')
+            # new v
+            if self.s.closest_dist <= 10.0 and not self.m.any_faults():
+                self.replan_mission()
+            # new ^
             elif self.m.in_mode('pause'):
                 self.m.set_mode('flight')
                 
@@ -87,73 +91,66 @@ class HurricaneControlFlight(ControlFlight):
             disallowed_cost = self.p.disallowed_cost,
             occupied_cost = self.p.occupied_cost,
             restricted_cost = self.p.restricted_cost)
-        grid = DroneFlightGrid(p = dfgp)
-        grid.env_coords = self.environment.c
+        grid = DroneFlightGrid(self.environment, p = dfgp)
         return grid
         
     def replan_mission(self):
         """
         re-evaluates flight path based on flight circumstance. 
-        
-        If flight conditions nominal, use A* as normal.
-        
-        If battery low,  bump fuel cost significantly based on present fuel
-        and plan as if nominal.
-        
-        If obstacle appears in the path, evaluate between options:
-            1. Hold still until it disappears
-            2. Temporary descent (necessitates safe landing zone existence, 
-            dynamic cost consideration)
-            3. Replan around the obstacle 
         """
         
-        # print(f"[DEBUG] replan from {curr} to {goal}")
-        ap = AircraftPosition() # just a calculator! 
-        ap.assign(self.trajectories.perc_traj.s) # initialize this state as current perceived state.
+        ap = AircraftPosition() # calculator
+        ap.assign(self.trajectories.perc_traj.s) # initialize current perceived state as actual
         start = self.s.flightplan[0]
         ap.assign(start, 'goal_x', 'goal_y')
-        start_dist = ap.calc_dist()
         end = self.s.flightplan[-1]
         ap.assign(end, 'goal_x', 'goal_y')
-        end_dist = ap.calc_dist()
+        
+        curr_x, curr_y = self.trajectories.perc_traj.s.get('x', 'y')
+        goal_x, goal_y = self.s.flightplan[-1]
+        grid = self.gen_flight_grid()
+        fuel_rate = self.p.fuel_rate
+        obstacle = False
+        if self.s.closest_dist <= 10:
+            """
+            if UAV within distance 10:
+                run A* as normal, except turn on "obstacle" boolean indicator 
+                to require A* consideration for UAV safety
+            """    
+            obstacle = True 
         if 0.0 < self.electricity.s.charge <= 25.0:
-            # DO WE NEED A PERCEPTION /= REALITY FAULT? YES
-            # 20 below arbitrary
-            if start_dist > 20 and end_dist > 20:
-                curr_pt = self.trajectories.perc_traj.s.get('x', 'y')
-                land_pt = self.environment.c.find_closest(*curr_pt, 'suitable')
-            elif start_dist < end_dist:
-                land_pt = start
-            else:
-                land_pt = end
-                # closest suitable spot DNE MOST optimal suitable spot. perhaps should prioritize suitable spot closest to the goal?
-                # in this case, must consider: 1. feasibility 2. distance to goal
-            self.s.flightplan = (tuple(land_pt),)
-            self.s.pt = 0
-            return
-        if self.new_obstacle_present():
-            self.s.planned = False # ?
-            return
+            """
+            If battery low:
+                run A* as normal, except bump fuel cost inversely proportional to 
+                current fuel level
+            """
+            fuel_rate = self.p.fuel_rate * 25000.0 / self.electricity.s.charge
+
         else:
-            curr_x, curr_y = self.trajectories.perc_traj.s.get('x', 'y')
-            goal_x, goal_y = self.s.flightplan[-1]
-            grid = self.gen_flight_grid()
-            new_path = grid.a_star_worldcoords(
-                start_xy = (curr_x, curr_y), 
-                goal_xy = (goal_x, goal_y), 
-                max_distance = self.p.max_distance,
-                disallowed_cost = self.p.disallowed_cost,
-                occupied_cost = self.p.occupied_cost,
-                restricted_cost = self.p.restricted_cost,
-                fuel_rate = self.p.fuel_rate
+            """
+            If flight condition nominal:
+                run standard A*
+            """
+            pass
+
+        new_path = grid.a_star_worldcoords(
+            start_xy = (curr_x, curr_y), 
+            goal_xy = (goal_x, goal_y), 
+            max_distance = self.p.max_distance,
+            disallowed_cost = self.p.disallowed_cost,
+            occupied_cost = self.p.occupied_cost,
+            restricted_cost = self.p.restricted_cost,
+            fuel_rate = fuel_rate, 
+            obstacle = obstacle
             )
-            if new_path and new_path[0] == (curr_x, curr_y):
-                new_path = new_path[1:]
-            self.s.flightplan = new_path
-            self.s.pt = 0
-            
-    def new_obstacle_present(self):
-        return False
+
+        if new_path == None:
+        # CHATGPT HELP WITH THIS later. for now, assume new_path always exists.
+            return
+        if new_path and new_path[0] == (curr_x, curr_y):
+            new_path = new_path[1:]
+        self.s.flightplan = new_path
+        self.s.pt = 0
         
 class HurricaneAviate(Aviate):
     __slots__ = ()
@@ -172,7 +169,6 @@ class HurricaneAircraftArchParameter(Parameter):
     height: float = 25.0
     depletion: float = 25.0
     with_proxthreat: bool = True
-    # below: new
     fuel_rate: float       = 20.0
     disallowed_cost: float = 10.0
     occupied_cost: float   = 20.0
