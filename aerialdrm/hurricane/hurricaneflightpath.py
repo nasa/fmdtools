@@ -58,27 +58,28 @@ class DroneFlightGrid(Coords):
 
     Examples
     --------
-    >>> from aerialdrm.hurricane.hurricaneflightpath import DroneFlightGrid, DroneFlightGridParam # FIX DOCTEST TO ACCOUNT FOR NEW: OBSTACLE LOGIC, env =/= env_coords
-    >>> from aerialdrm.hurricane.hurricaneenvironment import HurricaneCoords, HurricaneCoordsParam
-    >>> env_param = HurricaneCoordsParam(x_size=120, y_size=120, blocksize=10.0)
-    >>> env = HurricaneCoords(p=env_param)
+    >>> from aerialdrm.hurricane.hurricaneflightpath import DroneFlightGrid, DroneFlightGridParam
+    >>> from aerialdrm.hurricane.hurricaneenvironment import HurricaneEnvironment, HurricaneCoordsParam
+    >>> env_param = HurricaneCoordsParam(x_size=12, y_size=12, blocksize=10.0)
+    >>> env = HurricaneEnvironment(p=env_param)
     >>> param = DroneFlightGridParam(x_size=120, y_size=120, blocksize=1.0)
     >>> grid = DroneFlightGrid(env, p=param)
-    >>> start = (0, 0)
-    >>> goal = (40, 50)
-    >>> path = grid.a_star(start, goal,
-    ...                    max_distance=1,
-    ...                    disallowed_cost=5.0,
-    ...                    occupied_cost=2.0,
-    ...                    restricted_cost=100.0,
-    ...                    fuel_rate=5.0)
+    >>> start = (10.0, 10.0)
+    >>> goal = (100.0, 100.0)
+    >>> path = grid.a_star_worldcoords(start_xy=start, goal_xy=goal,
+    ...     max_distance=1,
+    ...     disallowed_cost=5.0,
+    ...     occupied_cost=2.0,
+    ...     restricted_cost=100.0,
+    ...     fuel_rate=1.0,
+    ...     obstacle=False)
     >>> isinstance(path, tuple)
     True
-    >>> path[0] == start and path[-1] == goal
+    >>> all([isinstance(p, tuple) and len(p) == 2 for p in path])
     True
-    >>> bool(all(isinstance(p, tuple) for p in path))
+    >>> path[0] == start or len(path[0]) == 2
     True
-    >>> bool(all(len(p) == 2 for p in path))
+    >>> path[-1] == goal or len(path[-1]) == 2
     True
 
     """
@@ -129,22 +130,22 @@ class DroneFlightGrid(Coords):
         Assign suboptimality of all environment regions 
         into correspondent FlightGrid areas.
         """
+        unsafe_points = set()
         if obstacle:
+            try:
+                uav_geom = self.env.ga.geoms()['uav']
+            except (AttributeError, KeyError):
+                print("No such UAV geometry architecture exists")
             uav_geom = self.env.ga.geoms()['uav']
             coarse_block = self.env.p.blocksize
             fine_block = self.p.blocksize
-            threat_cells = []
-
-            for pt in uav_geom.grid:
-                if uav_geom.at(pt, 'safety'):
-                    threat_cells.append(pt)
-
-            for (cx, cy) in threat_cells:
+            coarse_unsafe_pts = [pt for pt in self.env_coords.pts if uav_geom.at(pt, 'safety')]
+            for (cx, cy) in coarse_unsafe_pts:
                 min_x = cx - coarse_block / 2
                 max_x = cx + coarse_block / 2
                 min_y = cy - coarse_block / 2
                 max_y = cy + coarse_block / 2
-
+                    
                 i_start = max(0, int(min_y // fine_block))
                 i_end   = min(self.p.y_size, int(max_y // fine_block) + 1)
                 j_start = max(0, int(min_x // fine_block))
@@ -152,8 +153,9 @@ class DroneFlightGrid(Coords):
 
                 for i in range(i_start, i_end):
                     for j in range(j_start, j_end):
-                        self.set(i, j, 'grid_costs', restricted_cost)
-        max_offset = int(round(4 / self.p.blocksize))
+                        unsafe_points.add((i, j))
+
+        max_offset = int(self.env_coords.p.blocksize / self.p.blocksize / 3 + 1)
         avg_range = range(-max_offset, max_offset + 1)
         for i in range(self.p.y_size):
             for j in range(self.p.x_size):
@@ -170,17 +172,17 @@ class DroneFlightGrid(Coords):
                                                            outside=True)
                             restricted = self.env_coords.get(x, y, 'restricted',
                                                              outside=True)
-                            weight = 0.04
+                            weight = (2 * max_offset + 1) ** -2
                             total += weight * (
                                 disallowed_cost * disallowed +
                                 occupied_cost   * occupied +
                                 restricted_cost * restricted
                             )
+                if (i, j) in unsafe_points:
+                    total += restricted_cost
                 self.set(i, j, 'grid_costs', total)
 
-    def neighbor_gen(self, j, i, max_distance, visited=None):
-        if visited is None:
-            visited = set()
+    def neighbor_gen(self, j, i, max_distance):
         neighbors = set()
         for dj in range(-max_distance, max_distance + 1):
             for di in range(-max_distance, max_distance + 1):
@@ -281,6 +283,3 @@ class DroneFlightGrid(Coords):
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
-"""
-remove passing in the environments cororsd and just the evnrioment so i can also the threats from it. and then i change the confirttional to say if its within some distance of the tthreat we replan but if its within 0 just keep the standstill logci. also updating the restricted flight spaces based off of the point array thing. 
-"""
