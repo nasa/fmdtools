@@ -21,23 +21,43 @@ from aerialdrm.base.aircraft.arch.holdpayload import HoldPayload
 
 from aerialdrm.hurricane.hurricaneenvironment import HurricaneEnvironment, properties, collections
 from aerialdrm.hurricane.hurricaneenvironment import HurricaneConditions
-
-
+from aerialdrm.hurricane.hurricaneflightpath import DroneFlightGrid, DroneFlightGridParam
 from aerialdrm.base.aircraft.state import AircraftPosition
+import math
 
 class HurricaneControlState(ControlState):
+    """ControlState defining the current state of the aircraft's FlightGrid and 
+    correspondent planning.
+    
+    Fields
+    ------
+    closest_dist: float [outdated?]
+    flightgrid: HurricaneFlightGrid
+        FlightGrid for current aviation plan; subject to update with faults/
+        environmental updates
+    planned: bool
+        Whether or not flightgrid is up to date
+    """
     closest_dist: float = 100.0
+    flightgrid: object = None
+    planned: bool = False
 
+    
 class HurricaneControlParameter(Parameter):
     with_proxthreat: bool = True
-
-
+    fuel_rate: float = 20.0
+    disallowed_cost: float = 10.0
+    occupied_cost: float = 20.0
+    restricted_cost: float = 1000000.0
+    max_distance: int = 5
+    blocksize: float = 2.5
+    
 class HurricaneControlFlight(ControlFlight):
     __slots__ = ()
     flow_environment = HurricaneEnvironment
     container_s = HurricaneControlState
     container_p = HurricaneControlParameter
-
+    
     def set_faultmode(self):
         super().set_faultmode()
 
@@ -50,36 +70,88 @@ class HurricaneControlFlight(ControlFlight):
 
         dists = self.environment.ga.calc_dist_to_threats()
         self.s.closest_dist = min([*dists.values()])
-        if self.p.with_proxthreat:
+        if self.p.with_proxthreat: # with proxthreat? investigate
             if self.s.closest_dist <= 0.0 and not self.m.any_faults():
                 self.m.set_mode('pause')
+            # new v
+            if self.s.closest_dist <= 10.0 and not self.m.any_faults():
+                self.replan_mission()
+            # new ^
             elif self.m.in_mode('pause'):
                 self.m.set_mode('flight')
-
+                
+    def static_behavior(self, time):
+        if not self.s.planned:
+            self.replan_mission()
+            self.s.planned = True
+            
+    def gen_flight_grid(self):
+        dfgp = DroneFlightGridParam(
+            fuel_rate = self.p.fuel_rate,
+            disallowed_cost = self.p.disallowed_cost,
+            occupied_cost = self.p.occupied_cost,
+            restricted_cost = self.p.restricted_cost)
+        grid = DroneFlightGrid(self.environment, p = dfgp)
+        return grid
+        
     def replan_mission(self):
-        ap = AircraftPosition()
-        ap.assign(self.trajectories.perc_traj.s)
-
+        """
+        re-evaluates flight path based on flight circumstance. 
+        """
+        
+        ap = AircraftPosition() # calculator
+        ap.assign(self.trajectories.perc_traj.s) # initialize current perceived state as actual
         start = self.s.flightplan[0]
         ap.assign(start, 'goal_x', 'goal_y')
-        start_dist = ap.calc_dist()
-
         end = self.s.flightplan[-1]
         ap.assign(end, 'goal_x', 'goal_y')
-        end_dist = ap.calc_dist()
+        
+        curr_x, curr_y = self.trajectories.perc_traj.s.get('x', 'y')
+        goal_x, goal_y = self.s.flightplan[-1]
+        grid = self.gen_flight_grid()
+        fuel_rate = self.p.fuel_rate
+        obstacle = False
+        if self.s.closest_dist <= 10:
+            """
+            if UAV within distance 10:
+                run A* as normal, except turn on "obstacle" boolean indicator 
+                to require A* consideration for UAV safety
+            """    
+            obstacle = True 
+        if 0.0 < self.electricity.s.charge <= 25.0:
+            """
+            If battery low:
+                run A* as normal, except bump fuel cost inversely proportional to 
+                current fuel level
+            """
+            fuel_rate = self.p.fuel_rate * 25000.0 / self.electricity.s.charge
 
-        if start_dist > 20 and end_dist > 20:
-            curr_pt = self.trajectories.perc_traj.s.get('x', 'y')
-            land_pt = self.environment.c.find_closest(*curr_pt, 'suitable')
-        elif start_dist < end_dist:
-            land_pt = start
         else:
-            land_pt = end
+            """
+            If flight condition nominal:
+                run standard A*
+            """
+            pass
 
-        self.s.flightplan = (tuple(land_pt),)
+        new_path = grid.a_star_worldcoords(
+            start_xy = (curr_x, curr_y), 
+            goal_xy = (goal_x, goal_y), 
+            max_distance = self.p.max_distance,
+            disallowed_cost = self.p.disallowed_cost,
+            occupied_cost = self.p.occupied_cost,
+            restricted_cost = self.p.restricted_cost,
+            fuel_rate = fuel_rate, 
+            obstacle = obstacle
+            )
+
+        if new_path == None:
+        # CHATGPT HELP WITH THIS later. for now, assume new_path always exists.
+            return
+        if new_path and new_path[0] == (curr_x, curr_y):
+            new_path = new_path[1:]
+        self.s.flightplan = new_path
         self.s.pt = 0
-
-
+        
 class HurricaneAviate(Aviate):
     __slots__ = ()
 
@@ -93,11 +165,15 @@ class HurricaneAircraftArchParameter(Parameter):
     """Overall Parameter Defining the AircraftArchitecture."""
 
     startpt: tuple = (10.0, 10.0)
-    flightplan: tuple = ((10.0, 10.0), (50.0, 10.0), (50.0, 100.0), (100.0, 100.0))
+    flightplan: tuple = ((10.0, 10.0), (50.0, 10.0), (50.0, 100.0), (100.0, 100.0)) 
     height: float = 25.0
     depletion: float = 25.0
     with_proxthreat: bool = True
-
+    fuel_rate: float       = 20.0
+    disallowed_cost: float = 10.0
+    occupied_cost: float   = 20.0
+    restricted_cost: float = 1000000.0
+    max_distance: int      = 5
 
 class HurricaneAircraftArchitecture(FunctionArchitecture):
     """
@@ -133,7 +209,12 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
         self.add_fxn('control_flight', HurricaneControlFlight,
                      'trajectories', 'force', 'electricity', 'environment',
                      s={'flightplan': self.p.flightplan, 'height': self.p.height},
-                     p={'with_proxthreat': self.p.with_proxthreat})
+                     p={'with_proxthreat': self.p.with_proxthreat,
+                        'fuel_rate': self.p.fuel_rate,
+                        'disallowed_cost': self.p.disallowed_cost,
+                        'occupied_cost':   self.p.occupied_cost,
+                        'restricted_cost': self.p.restricted_cost,
+                        'max_distance':    self.p.max_distance})
         self.add_fxn('aviate', HurricaneAviate,
                      'trajectories', 'force', 'electricity', 'environment')
         m = {'fault_depletion':
@@ -180,14 +261,18 @@ def plot_flightpath(mdl, hist, **kwargs):
     fig, ax = mdl.flows['environment'].c.show(properties=properties,
                                               collections=collections)
     start = mdl.p.flightplan[0]
-    end = mdl.p.flightplan[-1]
+    end   = mdl.p.flightplan[-1]
     ax.scatter([start[0]], [start[1]], label="start", color="green")
-    ax.scatter([end[0]], [end[1]], label="end", color="red")
-    lx = [x[-1] for x in [*hist.get_vals('trajectories.s.x')][0]]
-    ly = [y[-1] for y in [*hist.get_vals('trajectories.s.y')][0]]
-    ax.scatter(lx, ly, label="landing", color="black", marker='x')
-    fig, ax = hist.plot_trajectories('trajectories.s.x', 'trajectories.s.y',
+    ax.scatter([end[0]],   [end[1]],   label="end",   color="red")
+    fig, ax = hist.plot_trajectories('trajectories.s.x',
+                                     'trajectories.s.y',
                                      fig=fig, ax=ax, **kwargs)
+    cf   = mdl.fxns['control_flight']
+    plan = cf.s.flightplan
+    if plan:
+        xs, ys = zip(*plan)
+        ax.plot(xs, ys, '--', label='planned path', color='red')  # Make line red
+        ax.scatter(xs, ys, marker='o', label='waypoints', color='red', s=10)  # Make dots red, smaller
     consolidate_legend(ax)
     return fig, ax
 
@@ -200,9 +285,16 @@ if __name__ == "__main__":
     from fmdtools.sim.sample import FaultDomain, FaultSample
 
     ha = HurricaneAircraftArchitecture()
+    
+    
+    
+    cf = ha.fxns['control_flight']
+    cf.static_behavior(time=0.0)
     fg = FunctionArchitectureGraph(ha)
     fg.draw()
     res, hist = propagate.nominal(ha)
+
+
     ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 10)
     pms = from_hist(hist)
     pm = pms['store_and_supply_ee']
@@ -224,40 +316,41 @@ if __name__ == "__main__":
     doctest.testmod(verbose=True)
 
     from fmdtools.analyze.phases import from_hist
-    haa = HurricaneAircraftArchitecture(p={'depletion': 40.0})
+    plot_flightpath(ha, hist)
+    # haa = HurricaneAircraftArchitecture(p={'depletion': 40.0})
 
-    res, hist = prop.nominal(haa)
-    pm = from_hist(hist)
+    # res, hist = prop.nominal(haa)
+    # pm = from_hist(hist)
 
-    # res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'break', 8, desired_result=['endclass', 'graph'])
-    res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'depletion', 18, desired_result=['endclass', 'graph'])
-    res, hist = prop.one_fault(haa, 'control_flight', 'loss', 19, desired_result=['endclass', 'graph'])
-    res.graph.draw()
+    # # res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'break', 8, desired_result=['endclass', 'graph'])
+    # res, hist = prop.one_fault(haa, 'store_and_supply_ee', 'depletion', 18, desired_result=['endclass', 'graph'])
+    # res, hist = prop.one_fault(haa, 'control_flight', 'loss', 19, desired_result=['endclass', 'graph'])
+    # res.graph.draw()
 
-    fig, ax = haa.flows['environment'].c.show(properties=properties,
-                                              collections=collections)
+    # fig, ax = haa.flows['environment'].c.show(properties=properties,
+    #                                           collections=collections)
 
-    hist.plot_trajectories('trajectories.s.x', 'trajectories.s.y', fig=fig, ax=ax)
-
-
-    fig, ax = haa.flows['environment'].c.show_collection('suitable', z=0,
-                                                         **collections['suitable'])
-
-    fig, ax = hist.plot_trajectories('trajectories.s.x',
-                                     'trajectories.s.y',
-                                     'trajectories.s.z',
-                                     time_groups='nominal', time_ticks=2.0, fig=fig, ax=ax)
-
-    fig, ax = hist.plot_trajectories('environment.ga.points.uav.s.x',
-                                     'environment.ga.points.uav.s.y',
-                                     'environment.ga.points.uav.s.z',
-                                     time_groups='nominal', time_ticks=2.0, fig=fig, ax=ax)
+    # hist.plot_trajectories('trajectories.s.x', 'trajectories.s.y', fig=fig, ax=ax)
 
 
-    hist.plot_line('flows.electricity.s.charge',
-                   'fxns.control_flight.m.mode',
-                   'fxns.aviate.m.mode')
-    plot_flightpath(haa, hist)
+    # fig, ax = haa.flows['environment'].c.show_collection('suitable', z=0,
+    #                                                      **collections['suitable'])
+
+    # fig, ax = hist.plot_trajectories('trajectories.s.x',
+    #                                  'trajectories.s.y',
+    #                                  'trajectories.s.z',
+    #                                  time_groups='nominal', time_ticks=2.0, fig=fig, ax=ax)
+
+    # fig, ax = hist.plot_trajectories('environment.ga.points.uav.s.x',
+    #                                  'environment.ga.points.uav.s.y',
+    #                                  'environment.ga.points.uav.s.z',
+    #                                  time_groups='nominal', time_ticks=2.0, fig=fig, ax=ax)
+
+
+    # hist.plot_line('flows.electricity.s.charge',
+    #                'fxns.control_flight.m.mode',
+    #                'fxns.aviate.m.mode')
+    # plot_flightpath(haa, hist)
 
 
 

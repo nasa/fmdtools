@@ -15,7 +15,6 @@ from fmdtools.define.block.function import Function
 from shapely import distance
 import numpy as np
 
-
 class HurricaneCoordsParam(CoordsParam):
     x_size: int = 12
     y_size: int = 12
@@ -26,14 +25,15 @@ class HurricaneCoordsParam(CoordsParam):
     collect_suitable: tuple = (("occupied", False, np.equal),
                                "and", ("disallowed", False, np.equal),
                                "and", ("restricted", False, np.equal))
+
     point_start: tuple = (10.0, 10.0)
     point_end: tuple = (100.0, 100.0)
-
 
 class HurricaneCoords(Coords):
     container_p = HurricaneCoordsParam
 
     def init_properties(self, **kwargs):
+
         self.set_rand_pts('occupied', True, 50)
         self.set_range('disallowed', True, xmin=30, xmax=60, ymin=70)
         self.set_range('disallowed', True, xmin=20, xmax=60, ymax=30)
@@ -43,12 +43,9 @@ class HurricaneCoords(Coords):
         self.set_range('restricted', True, ymin=110)
         self.set_pts([self.start, self.end], 'occupied', False)
         self.set_pts([self.start, self.end], 'disallowed', False)
-
-
 properties = {'disallowed': {'color': 'blue', 'proplab': 'disallowed', 'alpha': 0.5},
               'occupied': {'color': 'red', 'proplab': 'occupied', 'alpha': 0.5},
               'restricted': {'color': 'grey', 'proplab': 'restricted', 'alpha': 0.75}}
-
 collections = {'suitable': {"label": False, 'color': 'lightgreen'}}
 
 
@@ -99,15 +96,14 @@ class HurricaneThreats(GeomArchitecture):
 class HurricaneEnvironment(AircraftEnvironment):
 
     coords_c = HurricaneCoords
-    arch_ga = HurricaneThreats
-
+    arch_ga = HurricaneThreats 
     def show(self, *args, **kwargs):
         fig, ax = self.c.show(properties=properties, collections=collections,
                               coll_overlay=False)
         self.ga.show(fig=fig, ax=ax)
         return fig, ax
-
-
+    """override environment init method. Seems AircraftEnvironment flow is TBD?"""
+    
 class HurricaneConditions(Function):
     __slots__ = ('environment', )
     flow_environment = HurricaneEnvironment

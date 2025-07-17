@@ -8,12 +8,17 @@ from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity,
 
 
 class PerceiveEnvironmentMode(Mode):
-
+    """
+    Perception Faults
+    TODO:
+    fault_bias : perceived trajectory off the actual trajectory by a fixed amount
+    fault_noisy: perceived trajectory randomly off the actual trajectory
+    fault_dimloss: perceived trajectory not updating in a dimension
+    """
     fault_break = ()
 
-
 class PerceiveEnvironment(Function):
-    """Function that percieves the environment."""
+    """Function that perceives the environment."""
 
     __slots__ = ('environment', 'force', 'electricity', 'trajectories', 'perc_traj')
     container_m = PerceiveEnvironmentMode
