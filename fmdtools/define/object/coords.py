@@ -1016,10 +1016,10 @@ class Coords(BaseCoords):
 
     Class Variables/Modifiers
     ---------------
-    init_p: CoordsParam
+    container_p: CoordsParam
         Parameter controlling default grid matrix (see CoordsParam), along with other
         properties of interest. Sets the .p container.
-    init_r: Rand
+    container_r: Rand
         Random number generator. sets the .r container.
     init_properties: method
         Method that initializes the (non-default) properties of the Coords.
