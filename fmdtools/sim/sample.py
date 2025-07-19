@@ -398,7 +398,8 @@ def sample_times_quad(times, nodes, weights):
         raise Exception("Nodes length " + str(len(nodes))
                         + "longer than times" + str(len(times)))
     else:
-        sampletimes = [int(round(np.quantile(times, q))) for q in quantiles]
+        exac_times = [np.quantile(times, q) for q in quantiles]
+        sampletimes = [times[np.argmin(np.abs(np.array(times)-t))] for t in exac_times]
         weights = np.array(weights)/sum(weights)
     return sampletimes, list(weights)
 
@@ -1100,7 +1101,7 @@ class FaultSample(BaseSample):
         if self.phasemap:
             phasetimes = self.phasemap.get_sample_times(*phases_to_sample)
         else:
-            interval = [0, self.faultdomain.mdl.sp.times[-1]]
+            interval = [0, self.faultdomain.mdl.sp.end_time]
             tstep = self.faultdomain.mdl.sp.dt
             phasetimes = {'phase': gen_timerange(interval[0], interval[-1], tstep)}
 

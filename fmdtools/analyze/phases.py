@@ -363,7 +363,7 @@ class PhaseMap(object):
         plt.grid(which='major', axis='x')
 
 
-def from_hist(hist, fxn_modephases='all'):
+def from_hist(hist, fxn_modephases='all', dt=1.0):
     """
     Identify the phases of operation for the system based on its modes.
 
@@ -428,7 +428,7 @@ def from_hist(hist, fxn_modephases='all'):
                 mph = modephases
             else:
                 mph = {}
-            modephasemaps[fxn] = PhaseMap(phases=phases, modephases=mph)
+            modephasemaps[fxn] = PhaseMap(phases=phases, modephases=mph, dt=dt)
     return modephasemaps
 
 

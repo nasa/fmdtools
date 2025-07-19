@@ -88,7 +88,7 @@ class UrbanGridParam(CoordsParam):
     y_size: int = 10
     blocksize: float = 100.0
     num_allowed: int = 10
-    num_unsafe: int = 10
+    num_unsafe: int = 60
     num_occupied: int = 10
     max_height: float = 100.0
     roadwidth: int = 15
