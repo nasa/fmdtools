@@ -82,7 +82,7 @@ class Action(Block):
         """Return fmdtools type of the model class."""
         return Action
 
-    def __call__(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
+    def __call__(self, time=0, run_stochastic=False, proptype='dynamic'):
         """
         Update the behaviors, faults, times, etc of the action.
 
@@ -97,15 +97,15 @@ class Action(Block):
             if hasattr(self, 'r'):
                 self.r.update_stochastic_states()
         if not proptype == 'dynamic' or self.t.time < time:
-            self.update_behavior(time, dt)
+            self.update_behavior(time)
         self.set_sub_faults()
         self.t.update_time(time)
 
-    def update_behavior(self, time, dt):
+    def update_behavior(self, time):
         """Update the behavior of the Action."""
         if hasattr(self, 'behavior'):
             self.behavior(time)
-        self.t.t_loc += dt
+        self.t.t_loc += self.t.dt
 
 
 class ExampleAction(Action):

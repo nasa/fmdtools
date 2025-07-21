@@ -119,7 +119,7 @@ class Function(Block):
                 obj = getattr(self, objname)
                 # TODO: this should be more general
                 if objname == 'aa':
-                    obj(proptype, time, run_stochastic, self.t.dt)
+                    obj(proptype, time, run_stochastic)
                 elif objname == 'fa':
                     obj.propagate(time, proptype=proptype, run_stochastic=run_stochastic)
             except TypeError as e:

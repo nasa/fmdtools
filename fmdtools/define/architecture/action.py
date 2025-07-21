@@ -346,7 +346,7 @@ class ActionArchitecture(Architecture):
         else:
             raise Exception("Invalid option for initial_action.")
 
-    def __call__(self, proptype, time, run_stochastic, dt):
+    def __call__(self, proptype, time, run_stochastic):
         """
         Propagates behaviors through the ActionArchitecture.
 
@@ -359,8 +359,6 @@ class ActionArchitecture(Architecture):
         proptype : str
             Type of propagation step to update
             ('behavior', 'static_behavior', or 'dynamic_behavior')
-        dt : float
-            Timestep to propagate over.
         """
         if self.per_timestep:
             self.set_active_actions(self.initial_action)
@@ -373,7 +371,7 @@ class ActionArchitecture(Architecture):
             while active_actions:
                 new_active_actions = set(active_actions)
                 for action in active_actions:
-                    self.acts[action](time, run_stochastic, proptype=proptype, dt=dt)
+                    self.acts[action](time, run_stochastic, proptype=proptype)
                     action_cond_edges = self.action_graph.out_edges(action, data=True)
                     for act_in, act_out, atts in action_cond_edges:
                         try:
@@ -381,7 +379,7 @@ class ActionArchitecture(Architecture):
                         except TypeError as e:
                             raise TypeError("Poorly specified condition " +
                                             str(atts['name'])+": ") from e
-                        if cond and self.acts[action].t.duration_complete(dt=dt):
+                        if cond and self.acts[action].t.duration_complete():
                             self.acts[action].t.t_loc = 0.0
                             new_active_actions.add(act_out)
                             new_active_actions.discard(act_in)

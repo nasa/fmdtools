@@ -171,7 +171,7 @@ class TankTests(unittest.TestCase, CommonTests):
         self.check_ps_save(self.mdl, self.ps, "tank_res.csv", "tank_hists.csv")
         self.check_ps_save(self.mdl, self.ps, "tank_res.json", "tank_hists.json")
 
-    def test_param_sample_save(self):
+    def test_param_sample_isave(self):
         indiv_names = ("tank_res", "tank_hist")
         self.check_ps_isave(self.mdl, self.ps, *indiv_names, "npz")
         self.check_ps_isave(self.mdl, self.ps, *indiv_names, "csv")
@@ -227,7 +227,7 @@ def check_parallel():
 
     assert res == res_par
     print("staged-parallel")
-    res_par_staged, hist_par_staged = prop.fault_sample(mdl, fs,showprogress=False,
+    res_par_staged, hist_par_staged = prop.fault_sample(mdl, fs, showprogress=False,
                                                         pool=mp.Pool(4), staged=True,
                                                         track='all')
 
@@ -236,7 +236,7 @@ def check_parallel():
 
     hist_diff.guide_water_out_leak_t0p0.flows.wat_in_2.s.effort
 
-    #mc_diff.guide_water_in_leak_t0p0.flows.wat_in_2.s.effort
+    # mc_diff.guide_water_in_leak_t0p0.flows.wat_in_2.s.effort
 
     hist_diff.human_detect_false_low_t16p0.fxns.human.aa.active_actions[16]
 
@@ -258,15 +258,15 @@ if __name__ == '__main__':
     # runner = unittest.TextTestRunner()
     # runner.run(suite)
 
-    #suite = unittest.TestSuite()
-    #suite.addTest(TankTests("test_approach_parallelism_notrack"))
-    #suite.addTest(TankTests("test_approach_parallelism_0"))
-    #suite.addTest(TankTests("test_approach_parallelism_1"))
-    #runner = unittest.TextTestRunner()
-    #runner.run(suite)
+    # suite = unittest.TestSuite()
+    # suite.addTest(TankTests("test_approach_parallelism_notrack"))
+    # suite.addTest(TankTests("test_approach_parallelism_0"))
+    # suite.addTest(TankTests("test_approach_parallelism_1"))
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite)
 
     unittest.main()
 
-    #mdl = Tank()
-    #scen = {'human': 'NotDetected'}
-    #mdl.propagate(scen,1)    
+    # mdl = Tank()
+    # scen = {'human': 'NotDetected'}
+    # mdl.propagate(scen,1)    
