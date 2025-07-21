@@ -89,6 +89,9 @@ class Architecture(Simulable):
         self.init_flexible_roles(**kwargs)
         self.init_architecture(**kwargs)
         self.build(**kwargs)
+        self.mut_kwargs = {role: kwargs.get(role)
+                           for role in self.get_roles('container', with_immutable=False)
+                           if role in kwargs}
 
     def base_type(self):
         """Return fmdtools type of the model class."""
@@ -137,6 +140,7 @@ class Architecture(Simulable):
         Get role keyword arguments for init_obj.
 
         Ensures that (1) Rands are synced and (2) SimParams are passed down.
+
         Parameters
         ----------
         objclass : class/obj

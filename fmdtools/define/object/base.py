@@ -451,18 +451,24 @@ class BaseObject(object):
         rs = self.get_all_roles(with_immutable=False)
         return rs + ['i'] + self.rolevars
 
-    def get_default_roletypes(self, *roletypes, no_flows=False):
+    def get_default_roletypes(self, *roletypes, no_flows=False, with_flex=True):
         if not roletypes or roletypes[0] == 'all':
             roletypes = [*self.roletypes]
         elif roletypes[0] == 'none':
             roletypes = []
         if no_flows and 'flows' in roletypes:
             roletypes.remove('flows')
+        if not with_flex:
+            for flex_role in self.flexible_roles:
+                if flex_role[:-1] in roletypes:
+                    roletypes.remove(flex_role[:-1])
         return roletypes
 
-    def get_roles(self, *roletypes, with_immutable=True, no_flows=False, **kwargs):
+    def get_roles(self, *roletypes, with_immutable=True, no_flows=False, with_flex=True,
+                  **kwargs):
         """Get all roles."""
-        roletypes = self.get_default_roletypes(*roletypes, no_flows=no_flows)
+        roletypes = self.get_default_roletypes(*roletypes,
+                                               no_flows=no_flows, with_flex=with_flex)
         return [role for roletype in roletypes
                 for role in getattr(self, roletype+'s', [])
                 if with_immutable or role not in self.immutable_roles]

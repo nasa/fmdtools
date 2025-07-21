@@ -507,7 +507,7 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
     ctimes : float/list
         Times to copy the nominal model from
     protect : bool
-        Whether or not to protect the model object via copying.
+        Whether or not to protect the model object via re-instantiation.
         Options:
 
         - True (default): re-instances the model so that multiple simulations can

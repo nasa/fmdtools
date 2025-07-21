@@ -207,9 +207,6 @@ class Simulable(BaseObject):
         BaseObject.__init__(self, **kwargs)
         self.set_time()
         self.update_seed()
-        self.mut_kwargs = {role: kwargs.get(role)
-                           for role in self.get_roles('container', with_immutable=False)
-                           if role in kwargs}
 
     def set_time(self):
         """Set time from SimParam"""
@@ -529,6 +526,10 @@ class Block(Simulable):
         # send flows from block level to arch level
         if 'arch' in self.roletypes:
             self.init_roletypes('arch', **self.create_arch_kwargs(**kwargs))
+        self.mut_kwargs = {role: kwargs.get(role)
+                           for role in self.get_roles(with_flex=False,
+                                                      with_immutable=False)
+                           if role in kwargs}
         self.check_flows(flows=flows)
         # finally, allow for user-defined role/state changing
         self.init_block(**kwargs)
