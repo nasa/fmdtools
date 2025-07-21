@@ -204,13 +204,16 @@ class Simulable(BaseObject):
         **kwargs : kwargs
             Keyword arguments to BaseObject
         """
-        loc_kwargs = {**kwargs, 'sp': {**self.default_sp, **sp}}
-        if 't' not in loc_kwargs:
-            loc_kwargs['t'] = {'dt': loc_kwargs.get('sp').get('dt', 1.0), 'use_local': False}
-        BaseObject.__init__(self, **loc_kwargs)
+        BaseObject.__init__(self, **kwargs)
+        self.set_time()
+        self.update_seed()
         self.mut_kwargs = {role: kwargs.get(role)
                            for role in self.get_roles('container', with_immutable=False)
                            if role in kwargs}
+
+    def set_time(self):
+        """Set time from SimParam"""
+        self.t.set_timestep(dt=self.sp.dt, use_local=self.sp.use_local)
 
     def init_hist(self, h={}):
         """Initialize the history of the sim using SimParam parameters and track."""
@@ -527,7 +530,6 @@ class Block(Simulable):
         if 'arch' in self.roletypes:
             self.init_roletypes('arch', **self.create_arch_kwargs(**kwargs))
         self.check_flows(flows=flows)
-        self.update_seed()
         # finally, allow for user-defined role/state changing
         self.init_block(**kwargs)
         self.init_hist(h=h)

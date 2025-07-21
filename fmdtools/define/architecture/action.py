@@ -381,7 +381,7 @@ class ActionArchitecture(Architecture):
                         except TypeError as e:
                             raise TypeError("Poorly specified condition " +
                                             str(atts['name'])+": ") from e
-                        if cond and getattr(self.acts[action], 'duration', 0.0)+dt <= self.acts[action].t.t_loc:
+                        if cond and self.acts[action].t.duration_complete(dt=dt):
                             self.acts[action].t.t_loc = 0.0
                             new_active_actions.add(act_out)
                             new_active_actions.discard(act_in)
@@ -399,6 +399,7 @@ class ActionArchitecture(Architecture):
                     raise Exception("Undesired looping in Function ASG for: "+self.name)
             self.active_actions = active_actions
         self.set_sub_faults()
+        self.t.update_time(time)
 
     def as_modelgraph(self, gtype=ActionArchitectureGraph, **kwargs):
         """Create and return the corresponding ModelGraph for the Object."""

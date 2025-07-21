@@ -132,6 +132,34 @@ class Architecture(Simulable):
             else:
                 setattr(self, role, dict())
 
+    def get_flex_role_kwargs(self, objclass, **kwargs):
+        """
+        Get role keyword arguments for init_obj.
+
+        Ensures that (1) Rands are synced and (2) SimParams are passed down.
+        Parameters
+        ----------
+        objclass : class/obj
+            Class or object being instantiated.
+        **kwargs : kwargs
+            Keyword arguments to self.add_sim.
+
+        Returns
+        -------
+        **kwargs : kwargs
+            Keyword arguments to self.add_flex_role_obj
+        """
+        kwar = {}
+        # ensure global seed
+        if hasattr(self, 'r') and hasattr(objclass, "container_r"):
+            kwar['r'] = {"seed": self.r.seed}
+        # pass simparam from arch
+        if hasattr(objclass, "container_sp"):
+            kwar['sp'] = {'sp': self.sp.asdict()}
+            if not self.sp.use_local:
+                kwar['sp'].pop('dt')
+        return {**kwar, **kwargs}
+
     def add_flex_role_obj(self, flex_role, name, objclass=BaseObject, use_copy=False,
                           **kwargs):
         """
@@ -164,11 +192,7 @@ class Architecture(Simulable):
             as_copy = self.as_copy
 
         track = get_sub_include(name, get_sub_include(flex_role, self.track))
-        # sync rands, if present
-        if hasattr(self, 'r') and hasattr(objclass, "container_r"):
-            kwargs = {**{'r': {"seed": self.r.seed}}, **kwargs}
-        if hasattr(objclass, "container_sp"):
-            kwargs = {**{'sp': self.sp.asdict()}, **kwargs}
+        kwargs = self.get_flex_role_kwargs(objclass, **kwargs)
         obj = init_obj(name=name, objclass=objclass, track=track,
                        as_copy=as_copy, root=self.get_full_name()+"."+flex_role,
                        **kwargs)
@@ -243,10 +267,8 @@ class Architecture(Simulable):
             Flows, dicts for non-default values to p, s, etc.
         """
         flows = self.get_flows(*flownames, all_if_empty=False)
-        if not self.sp.use_local:
-            kwargs = {**{'t': {'dt': self.sp.dt}}, **kwargs}
-
-        self.add_flex_role_obj(flex_role, name, objclass=simclass, flows=flows, **kwargs)
+        self.add_flex_role_obj(flex_role, name,
+                               objclass=simclass, flows=flows, **kwargs)
 
     def init_architecture(self, *args, **kwargs):
         """Use to initialize architecture."""

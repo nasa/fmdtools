@@ -36,8 +36,6 @@ class Time(BaseContainer):
         timestep size
     t_ind : int
         index of the given time
-    t_loc : float
-        local time (e.g., for actions with durations)
     run_times : int
         number of times to run the behavior if running at a different timestep than
         global
@@ -80,7 +78,6 @@ class Time(BaseContainer):
     rolename = "t"
     time: float = -0.1
     t_ind: int = 0
-    t_loc: float = 0.0
     timers: dict = {}
     use_local: bool = True
     dt: float = 1.0
@@ -111,16 +108,23 @@ class Time(BaseContainer):
         return (*(t.time for t in self.timers.values()),
                 self.time,
                 self.t_ind,
-                self.t_loc,
                 self.run_times)
 
-    def set_timestep(self):
+    def update_time(self, time):
+        """Update the current time from the overall simulation."""
+        if time > self.time:
+            self.time = time
+            if time > 0.0:
+                self.t_ind += 1
+
+    def set_timestep(self, **kwargs):
         """
         Set the timestep of the function given.
 
         If using the option use_local, local_timestep is used instead of
         global_timestep.
         """
+        self.assign(kwargs)
         global_tstep = Decimal(str(self.dt))
         local_tstep = Decimal(self.local_dt)
         if self.use_local:
@@ -147,7 +151,6 @@ class Time(BaseContainer):
         """Reset time to the initial state."""
         self.time = -0.1
         self.t_ind = 0
-        self.t_loc = 0.0
         for timer in self.timers.values():
             timer.reset()
 

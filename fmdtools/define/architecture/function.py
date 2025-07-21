@@ -718,6 +718,7 @@ class FunctionArchitecture(Architecture):
         except Exception as e:
             raise Exception("Error in static propagation at time t=" + str(time)) from e
         self.set_sub_faults()
+        self.t.update_time(time)
 
     def prop_static(self, time, run_stochastic=False):
         """

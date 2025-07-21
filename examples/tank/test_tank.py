@@ -52,13 +52,13 @@ class TankTests(unittest.TestCase, CommonTests):
         mdl_cop = self.mdl.copy()
         mdl_cop_2 = mdl_cop.copy()
 
-        self.assertEqual(self.mdl.fxns['human'].aa.acts['detect'].duration, 2)
-        self.assertEqual(mdl_cop.fxns['human'].aa.acts['detect'].duration, 2)
-        self.assertEqual(mdl_cop_2.fxns['human'].aa.acts['detect'].duration, 2)
+        self.assertEqual(self.mdl.fxns['human'].aa.acts['detect'].t.duration, 2)
+        self.assertEqual(mdl_cop.fxns['human'].aa.acts['detect'].t.duration, 2)
+        self.assertEqual(mdl_cop_2.fxns['human'].aa.acts['detect'].t.duration, 2)
 
     def test_approach(self):
         res, hists = prop.fault_sample(self.mdl, self.fs,
-                                      track="all", showprogress=False)
+                                       track="all", showprogress=False)
         for scen in self.fs.scenarios():
             seq = scen.sequence
             name = scen.name

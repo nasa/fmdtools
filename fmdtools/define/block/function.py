@@ -162,7 +162,7 @@ class Function(Block):
             elif not Decimal(str(time)) % Decimal(str(self.t.dt)):
                 self.dynamic_behavior(time)
 
-        self.t.time = time
+        self.t.update_time(time)
         self.set_sub_faults()
         if run_stochastic == 'track_pdf':
             if hasattr(self, 'r'):
