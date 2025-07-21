@@ -29,11 +29,15 @@ class ActionTime(Time):
 
     Attributes
     ----------
+    out_delay: float
+        Time after which the duration is complete before moving to the next action(s)
     duration : float
         Duration of the Action.
     t_loc : float
         local time (e.g., for actions with durations)
     """
+
+    out_delay: float = 0.0
     duration: float = 0.0
     t_loc: float = 0.0
 
@@ -46,11 +50,13 @@ class ActionTime(Time):
         super().reset()
         self.t_loc = 0.0
 
-    def duration_complete(self, dt=None):
+    def duration_complete(self):
         """Return True if the local time is over the given duration."""
-        if dt is None:
-            dt = self.dt
-        return self.duration+dt <= self.t_loc
+        return self.duration+self.dt <= self.t_loc
+
+    def complete(self):
+        """Return True if the duration and delay are over."""
+        return self.duration+self.out_delay <= self.t_loc
 
 
 class Action(Block):
@@ -74,8 +80,9 @@ class Action(Block):
     __slots__ = ()
     container_t = ActionTime
 
-    def __init__(self, name=None, duration=0.0, **kwargs):
-        kwargs['t'] = {'duration': duration, **kwargs.get('t', {})}
+    def __init__(self, name=None, duration=0.0, out_delay=0.0, **kwargs):
+        kwargs['t'] = {'duration': duration, 'out_delay': out_delay,
+                       **kwargs.get('t', {})}
         super().__init__(name=name, **kwargs)
 
     def base_type(self):
@@ -103,9 +110,8 @@ class Action(Block):
 
     def update_behavior(self, time):
         """Update the behavior of the Action."""
-        if hasattr(self, 'behavior'):
+        if hasattr(self, 'behavior') and not self.t.duration_complete():
             self.behavior(time)
-        self.t.t_loc += self.t.dt
 
 
 class ExampleAction(Action):

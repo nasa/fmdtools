@@ -215,9 +215,7 @@ class HumanASG(ActionArchitecture):
         self.add_act('reach', Reach)
         self.add_act('grasp', Grasp)
         self.add_act('turn', Turn, 'detect_sig',
-# %%
                      'valve1_sig', 'valve2_sig', duration=1.0)
-# %%
 
         self.add_cond('look', 'detect', 'looked', condition=self.acts['look'].looked)
         self.add_cond('detect', 'reach', 'detected',

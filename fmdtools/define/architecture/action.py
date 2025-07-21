@@ -379,10 +379,16 @@ class ActionArchitecture(Architecture):
                         except TypeError as e:
                             raise TypeError("Poorly specified condition " +
                                             str(atts['name'])+": ") from e
-                        if cond and self.acts[action].t.duration_complete():
+                        if cond:
+                            if self.acts[action].t.complete():
+                                self.acts[action].t.t_loc = 0.0
+                                new_active_actions.add(act_out)
+                                new_active_actions.discard(act_in)
+                            else:
+                                self.acts[action].t.t_loc += self.acts[action].t.dt
+                        else:
                             self.acts[action].t.t_loc = 0.0
-                            new_active_actions.add(act_out)
-                            new_active_actions.discard(act_in)
+
                 if len(new_active_actions) > 1 and self.state_rep == 'finite-state':
                     raise Exception("Multiple active actions in a finite-state " +
                                     "representation: "+str(new_active_actions))
