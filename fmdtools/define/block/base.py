@@ -33,6 +33,7 @@ import itertools
 import copy
 import warnings
 import numpy as np
+from decimal import Decimal
 
 
 class SimParam(Parameter, readonly=True):
@@ -64,6 +65,13 @@ class SimParam(Parameter, readonly=True):
     use_local : bool
         Whether to use locally-defined time-steps in functions (if any).
         Default is True.
+    with_loadings : bool
+        Whether to execute simulable with defined loading methods. Default is False.
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values. Default is False.
+    track_pdf : bool
+        If run_stochastic=True, track_pdf is used to calculate/track the probability
+        densities of random states over time.
     """
 
     rolename = "sp"
@@ -76,6 +84,9 @@ class SimParam(Parameter, readonly=True):
     units_set = ('sec', 'min', 'hr', 'day', 'wk', 'month', 'year')
     end_condition: str = ''
     use_local: bool = True
+    with_loadings: bool = False
+    run_stochastic: bool = False
+    track_pdf: bool = False
 
     def __init__(self, *args, **kwargs):
         if 'phases' not in kwargs:
@@ -208,8 +219,14 @@ class Simulable(BaseObject):
         self.set_time()
         self.update_seed()
 
+    def get_time(self, time):
+        """Get time from the SimParam (if not provided)."""
+        if time is None:
+            time = self.t.time + self.t.dt
+        return time
+
     def set_time(self):
-        """Set time from SimParam"""
+        """Set time from SimParam."""
         self.t.set_timestep(dt=self.sp.dt, use_local=self.sp.use_local)
 
     def init_hist(self, h={}):
@@ -226,8 +243,12 @@ class Simulable(BaseObject):
             timerange = self.sp.get_histrange()
             self.h['time'] = timerange
 
-    def log_hist(self, t_ind, t, shift):
+    def log_hist(self, t_ind=None, t=None, shift=0):
         """Log the history over time."""
+        if t_ind is None:
+            t_ind = self.t.t_ind
+        if t is None:
+            t = self.t.time
         if self.sp.track_times:
             t_ind_rec = self.sp.get_hist_ind(t_ind, t, shift)
             self.h.log(self, t_ind_rec, time=t)
@@ -368,6 +389,11 @@ class Simulable(BaseObject):
                             sim_units=self.sp.units, weight=weight)
         return rate
 
+    def set_disturbances(self, disturbances):
+        """Set variables in the Simulable based on defined disturbances."""
+        for var, val in disturbances.items():
+            set_var(self, var, val)
+
     def inject_faults(self, faults=[]):
         """
         Inject faults into the block and its contained architectures.
@@ -377,27 +403,28 @@ class Simulable(BaseObject):
         faults : str/list/dict, optional
             Faults to inject. The default is [].
         """
-        if isinstance(faults, str):
-            faults = [faults]
-        if faults and (isinstance(faults, list)
-                       or Fault.valid_fault([*faults.values()][0])):
-            faults = {self.name: faults}
-        full_name = self.get_full_name()
-        for faultscope, fault in faults.items():
-            if faultscope == self.name or faultscope == full_name:
-                self.m.add_fault(fault)
-                self.set_fault_disturbances(fault)
-            else:
-                if faultscope.startswith(self.name):
-                    faultscope = faultscope[len(self.name)+1:]
-                if faultscope.startswith(full_name):
-                    faultscope = faultscope[len(full_name)+1:]
-                fs_split = faultscope.split(".")
-                roles = self.get_roles()
-                if fs_split[0] in roles or fs_split[1] in roles:
-                    obj = self.get_vars(faultscope)
-                    obj.inject_faults(fault)
-        self.set_sub_faults()
+        if faults:
+            if isinstance(faults, str):
+                faults = [faults]
+            if faults and (isinstance(faults, list)
+                           or Fault.valid_fault([*faults.values()][0])):
+                faults = {self.name: faults}
+            full_name = self.get_full_name()
+            for faultscope, fault in faults.items():
+                if faultscope == self.name or faultscope == full_name:
+                    self.m.add_fault(fault)
+                    self.set_fault_disturbances(fault)
+                else:
+                    if faultscope.startswith(self.name):
+                        faultscope = faultscope[len(self.name)+1:]
+                    if faultscope.startswith(full_name):
+                        faultscope = faultscope[len(full_name)+1:]
+                    fs_split = faultscope.split(".")
+                    roles = self.get_roles()
+                    if fs_split[0] in roles or fs_split[1] in roles:
+                        obj = self.get_vars(faultscope)
+                        obj.inject_faults(fault)
+            self.set_sub_faults()
 
     def set_fault_disturbances(self, *faults):
         """Set Mode-based disturbances (if present)."""
@@ -415,6 +442,10 @@ class Simulable(BaseObject):
         if hasattr(self, 'm'):
             sub_faults = self.get_faults(with_base_faults=False)
             self.m.sub_faults = bool(sub_faults)
+        if hasattr(self, 'm') and self.m.exclusive is True and len(self.m.faults) > 1:
+            raise Exception("More than one fault present in " + self.name +
+                            "\n faults: " + str(self.m.faults) +
+                            "\n Is the mode representation nonexclusive?")
 
     def get_faults(self, with_sub_faults=True, with_base_faults=True,
                    only_present=True):
@@ -471,7 +502,100 @@ class Simulable(BaseObject):
             state_pd = self.r.return_probdens()
         else:
             state_pd = 1.0
+        for arch in self.get_roles('arch'):
+            state_pd *= getattr(self, arch).return_probdens()
         return state_pd
+
+    def update_stochastic_states(self, time):
+        """Update stochastic states if in run_stochastic configuration."""
+        if time > self.t.time and self.sp.run_stochastic and hasattr(self, 'r'):
+            self.r.update_stochastic_states()
+            if self.sp.track_pdf:
+                self.r.probdens = self.r.return_probdens()
+
+    def update_arch_behaviors(self, time, proptype):
+        """Propagate behaviors into contained architectures."""
+        for objname in self.get_roles('arch'):
+            try:
+                obj = getattr(self, objname)
+                obj(time=time, proptype=proptype)
+            except TypeError as e:
+                raise Exception("Poorly specified Architecture: "
+                                + str(obj.__class__)) from e
+
+    def update_dynamic_behaviors(self, time, proptype="dynamic"):
+        """Run dynamic behaviors, including loadings (if specified)."""
+        if time > self.t.time and proptype in ['dynamic', 'both']:
+            if self.sp.with_loadings and hasattr(self, 'dynamic_loading_before'):
+                self.dynamic_loading_before(time)
+            self.update_arch_behaviors(time, "dynamic")
+            if hasattr(self, "dynamic_behavior"):
+                if self.t.run_times >= 1:
+                    for i in range(self.t.run_times):
+                        self.dynamic_behavior(time)
+                elif not Decimal(str(time)) % Decimal(str(self.t.dt)):
+                    self.dynamic_behavior(time)
+            if self.sp.with_loadings and hasattr(self, 'dynamic_loading_after'):
+                self.dynamic_loading_after(time)
+
+    def update_static_behaviors(self, time, proptype="static"):
+        """Run static behaviors, including loadings (if specified)."""
+        if proptype in ['static', 'both']:
+            active = True
+            oldmutables = self.return_mutables()
+            flows_mutables = {f: fl.return_mutables()
+                              for f, fl in self.get_flows().items()}
+            while active:
+                self.update_arch_behaviors(time, "static")
+                if hasattr(self, 'static_behavior'):
+                    self.static_behavior(time)
+                if self.sp.with_loadings and hasattr(self, 'static_loading'):
+                    self.static_loading(time)
+                # Check to see what flows now have new values
+                # (done for each because of communications potential)
+                active = False
+                newmutables = self.return_mutables()
+                if oldmutables != newmutables:
+                    active = True
+                    oldmutables = newmutables
+                for flowname, fl in self.get_flows().items():
+                    newflowmutables = fl.return_mutables()
+                    if flows_mutables[flowname] != newflowmutables:
+                        active = True
+                        flows_mutables[flowname] = newflowmutables
+
+    def __call__(self, time=None, proptype="both", faults=[], disturbances={},
+                 end_of_timestep=True):
+        """
+        Call the Simulable to propagate behavior at a single time-step.
+
+        Parameters
+        ----------
+        time : float
+            Time at which to simulate the Simulable. Default is None, which uses
+            self.t.time.
+        proptype : str
+            Type of propagation step to update ('static', 'dynamic', or 'both')
+        faults : dict/list
+            Faults to inject during this propagation step.
+            With structure ['fault1', 'fault2'...]
+        disturbances : dict
+            Variables to change during this propagation step.
+            With structure {'var1': value}
+        end_of_timestep : bool
+            Whether this is the end of the current simulation time, meaning that time
+            should be incremented. Default is True.
+        """
+        time = self.get_time(time)
+        self.set_disturbances(disturbances)
+        self.inject_faults(faults)
+        self.update_stochastic_states(time)
+        self.update_dynamic_behaviors(time, proptype=proptype)
+        self.update_static_behaviors(time, proptype=proptype)
+        self.set_sub_faults()
+        if end_of_timestep:
+            self.t.update_time(time)
+            self.log_hist()
 
 
 class Block(Simulable):
@@ -714,63 +838,6 @@ class Block(Simulable):
         if hasattr(self, 'h'):
             cop.h = self.h.copy()
         return cop
-
-    def propagate(self, time, faults=[], disturbances={}, run_stochastic=False):
-        """
-        Inject and propagates faults through the graph at one time-step.
-
-        Parameters
-        ----------
-        time : float
-            The current time-step.
-        faults : dict
-            Faults to inject during this propagation step.
-            With structure ['fault1', 'fault2'...]
-        disturbances : dict
-            Variables to change during this propagation step.
-            With structure {'var1': value}
-        run_stochastic : bool
-            Whether to run stochastic behaviors or use default values. Default is False.
-            Can set as 'track_pdf' to calculate/track the probability densities of
-            random states over time.
-        """
-        # Step 0: Update block states with disturbances
-        for var, val in disturbances.items():
-            set_var(self, var, val)
-        if faults:
-            self.inject_faults(faults)
-
-        # Step 1: Run Dynamic Propagation Methods in Order Specified
-        # and Inject Faults if Applicable
-        if hasattr(self, 'dynamic_loading_before'):
-            self.dynamic_loading_before(time)
-        if self.is_dynamic():
-            self("dynamic", time=time, run_stochastic=run_stochastic)
-        if hasattr(self, 'dynamic_loading_after'):
-            self.dynamic_loading_after(time)
-
-        # Step 2: Run Static Propagation Methods
-        active = True
-        oldmutables = self.return_mutables()
-        flows_mutables = {f: fl.return_mutables() for f, fl in self.get_flows().items()}
-        while active:
-            if self.is_static():
-                self("static", time=time, run_stochastic=run_stochastic)
-
-            if hasattr(self, 'static_loading'):
-                self.static_loading(time)
-            # Check to see what flows now have new values and add connected functions
-            # (done for each because of communications potential)
-            active = False
-            newmutables = self.return_mutables()
-            if oldmutables != newmutables:
-                active = True
-                oldmutables = newmutables
-            for flowname, fl in self.get_flows().items():
-                newflowmutables = fl.return_mutables()
-                if flows_mutables[flowname] != newflowmutables:
-                    active = True
-                    flows_mutables[flowname] = newflowmutables
 
 
 if __name__ == "__main__":

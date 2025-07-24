@@ -76,7 +76,6 @@ import os
 sim_kwargs = {'desired_result': 'endclass',
               'staged': False,
               'cut_hist': True,
-              'run_stochastic': False,
               'use_end_condition': True,
               'warn_faults': True}
 """
@@ -103,10 +102,6 @@ desired_result : dict/str/list
 
     The default is 'all'.
 
-run_stochastic : bool
-    Whether to run stochastic behaviors or use default values. Default is False.
-    Can set as 'track_pdf' to calculate/track the probability densities of random
-    states over time.
 staged : bool, optional
     Whether to inject the faults in a copy of the nominal model at the fault time
     (True) or instantiate a new model for the fault (False). Setting to True
@@ -1069,7 +1064,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
     t_end: float
         Last sim time
     """
-    desired_result, staged, cut_hist, run_stochastic, use_end_condition, warn_faults = unpack_sim_kwargs(**kwargs)
+    desired_result, staged, cut_hist, use_end_condition, warn_faults = unpack_sim_kwargs(**kwargs)
     # if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
     if staged:
@@ -1099,7 +1094,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
                 fxnfaults = {}
                 disturbances = {}
             try:
-                mdl.propagate(t, fxnfaults, disturbances, run_stochastic=run_stochastic)
+                mdl(time=t, faults=fxnfaults, disturbances=disturbances)
             except Exception as e:
                 raise Exception("Error in scenario " + str(scen)) from e
 

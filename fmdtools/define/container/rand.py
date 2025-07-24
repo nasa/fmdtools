@@ -54,6 +54,10 @@ class Rand(BaseContainer):
         probability of the given states
     seed : int
         state for the random number generator
+    run_stochastic : bool
+        Whether the rand is to be updated/called
+    track_pdf : bool
+        Whether a pdf is to be tracked and returned from the Rand.
 
     Examples
     --------
@@ -67,7 +71,7 @@ class Rand(BaseContainer):
     Which enables the use of set_rand_state, update_stochastic_states, etc for updating
     these states with methods called from the rng when run_stochastic=True.
 
-    >>> exr = ExampleRand(run_stochastic='track_pdf')
+    >>> exr = ExampleRand(run_stochastic=True, track_pdf=True)
     >>> exr.set_rand_state('noise', 'normal', 1.0, 1.0)
     >>> exr.s
     RandState(noise=1.3047170797544314)
@@ -80,7 +84,7 @@ class Rand(BaseContainer):
     >>> exr2.s
     RandState(noise=1.3047170797544314)
     >>> exr2.run_stochastic
-    'track_pdf'
+    True
     >>> exr2.rng.__getstate__()['state'] == exr.rng.__getstate__()['state']
     True
 
@@ -100,6 +104,7 @@ class Rand(BaseContainer):
     probdens: float = 1.0
     seed: int = 42
     run_stochastic: bool = False
+    track_pdf: bool = False
     default_track = ('s', 'probdens')
 
     def __init__(self, *args, seed=42, s_kwargs={}, **kwargs):
@@ -170,7 +175,7 @@ class Rand(BaseContainer):
                                 " be a float/int--check args")
                 newvalue = newvalue[0]
             setattr(self.s, statename, newvalue)
-            if self.run_stochastic == 'track_pdf':
+            if self.track_pdf:
                 value_pds = get_prob_for_rand(newvalue, methodname, *args)
                 self.probs.append(value_pds)
 
@@ -192,7 +197,7 @@ class Rand(BaseContainer):
     def update_stochastic_states(self):
         """Update the defined stochastic states defined to auto-update."""
         if hasattr(self, 's'):
-            if self.run_stochastic == 'track_pdf':
+            if self.track_pdf:
                 self.probs.clear()
             for state in self.s.__fields__:
                 if hasattr(self.s, state+"_update"):
@@ -226,7 +231,7 @@ class Rand(BaseContainer):
 
     def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
         """Add field 'att' to history. Accommodates track_pdf option."""
-        if self.run_stochastic == 'track_pdf' and att == 'track_pdf':
+        if self.track_pdf and att == 'track_pdf':
             hist.init_att('probdens', self.return_probdens(),
                           timerange=timerange, track='all')
         else:

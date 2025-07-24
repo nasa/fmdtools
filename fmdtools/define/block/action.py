@@ -89,29 +89,10 @@ class Action(Block):
         """Return fmdtools type of the model class."""
         return Action
 
-    def __call__(self, time=0, run_stochastic=False, proptype='dynamic'):
-        """
-        Update the behaviors, faults, times, etc of the action.
-
-        Parameters
-        ----------
-        time : float, optional
-            Model time. The default is 0.
-        run_stochastic : bool
-            Whether to run the simulation using stochastic or deterministic behavior
-        """
-        if time > self.t.time:
-            if hasattr(self, 'r'):
-                self.r.update_stochastic_states()
-        if not proptype == 'dynamic' or self.t.time < time:
-            self.update_behavior(time)
-        self.set_sub_faults()
-        self.t.update_time(time)
-
-    def update_behavior(self, time):
+    def update_dynamic_behaviors(self, time, proptype="dynamic"):
         """Update the behavior of the Action."""
-        if hasattr(self, 'behavior') and not self.t.duration_complete():
-            self.behavior(time)
+        if not self.t.duration_complete():
+            super().update_dynamic_behaviors(time, proptype=proptype)
 
 
 class ExampleAction(Action):
@@ -120,8 +101,8 @@ class ExampleAction(Action):
     container_p = ExampleParameter
     flow_exf = ExampleFlow
 
-    def behavior(self, time):
-        """The Action increases x when executed."""
+    def dynamic_behavior(self, time):
+        """Increase x when executed."""
         if not self.indicate_done():
             self.exf.s.inc(x=1.0)
 
