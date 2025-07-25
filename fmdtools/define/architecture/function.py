@@ -32,7 +32,6 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.container.mode import Mode
-from fmdtools.define.base import set_var
 from fmdtools.define.architecture.base import Architecture, ArchitectureGraph
 from fmdtools.define.block.function import ExampleFlow
 from fmdtools.define.block.function import ExampleFunction
@@ -471,7 +470,7 @@ class FunctionArchitecture(Architecture):
     method. Note how the flow exf accumulates both ex_fxn and ex_fxn2 as reflected in
     their behavior methods:
 
-    >>> exfa.propagate(1.0)
+    >>> exfa()
     >>> exfa
     exfa ExFxnArch
     FUNCTIONS:
@@ -484,7 +483,7 @@ class FunctionArchitecture(Architecture):
     FLOWS:
     exf ExampleFlow flow: ExampleState(x=4.0, y=0.0)
 
-    >>> exfa.propagate(2.0)
+    >>> exfa()
     >>> exfa
     exfa ExFxnArch
     FUNCTIONS:
@@ -534,11 +533,11 @@ class FunctionArchitecture(Architecture):
 
     def is_static(self):
         """Determine if static based on containment of static functions."""
-        return any(self.staticfxns)
+        return super().is_static() or any(self.staticfxns)
 
     def is_dynamic(self):
         """Determine if dynamic based on containment of dynamic functions."""
-        return any(self.dynamicfxns)
+        return super().is_dynamic() or any(self.dynamicfxns)
 
     def add_fxn(self, name, fclass, *flownames, **fkwargs):
         """
@@ -679,48 +678,13 @@ class FunctionArchitecture(Architecture):
             probdens *= fxn.return_probdens()
         return probdens
 
-    def propagate(self, time, fxnfaults={}, disturbances={}, proptype="both",
-                  run_stochastic=False):
-        """
-        Inject and propagates faults through the graph at one time-step.
-
-        Parameters
-        ----------
-        time : float
-            The current time-step.
-        fxnfaults : dict
-            Faults to inject during this propagation step.
-            With structure {'function':['fault1', 'fault2'...]}
-        disturbances : dict
-            Variables to change during this propagation step.
-            With structure {'function.var1':value}
-        proptype : str
-            Whether the propagate 'static' or 'dynamic' behaviors, or 'both'. Default
-            is 'both'.
-        run_stochastic : bool
-            Whether to run stochastic behaviors or use default values. Default is False.
-            Can set as 'track_pdf' to calculate/track the probability densities of
-            random states over time.
-        """
-        # Step 0: Update model states with disturbances and faults
-        self.set_vars(**disturbances)
-        if fxnfaults:
-            self.inject_faults(fxnfaults)
-
-        # Step 1: Run Dynamic Propagation Methods in Order Specified
+    def prop_dynamic(self, time):
+        """Run dynamic propagation functions in order specified."""
         for fxnname in self.dynamicfxns:
             fxn = self.fxns[fxnname]
-            fxn('dynamic', time=time, run_stochastic=run_stochastic)
+            fxn(time=time, proptype='dynamic', end_of_timestep=False)
 
-        # Step 2: Run Static Propagation Methods
-        try:
-            self.prop_static(time, run_stochastic=run_stochastic)
-        except Exception as e:
-            raise Exception("Error in static propagation at time t=" + str(time)) from e
-        self.set_sub_faults()
-        self.t.update_time(time)
-
-    def prop_static(self, time, run_stochastic=False):
+    def prop_static(self, time):
         """
         Propagate behaviors through model graph (static propagation step).
 
@@ -746,7 +710,7 @@ class FunctionArchitecture(Architecture):
             for fxnname in list(activefxns).copy():
                 # Update functions with new values, check to see if new faults or states
                 oldmutables = self.fxns[fxnname].return_mutables()
-                self.fxns[fxnname]('static', time=time, run_stochastic=run_stochastic)
+                self.fxns[fxnname](time=time, proptype='static', end_of_timestep=False)
                 if oldmutables != self.fxns[fxnname].return_mutables():
                     nextfxns.update([fxnname])
 

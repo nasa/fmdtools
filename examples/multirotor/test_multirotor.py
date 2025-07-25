@@ -157,9 +157,5 @@ class DroneDisturbanceTest(unittest.TestCase):
         self.assertLess(soc_later, soc_res)
 
 
-
-
-
-
 if __name__ == '__main__':
     unittest.main()

@@ -94,7 +94,7 @@ class TankTests(unittest.TestCase, CommonTests):
                  for mode in a.m.get_faults()}
         for modescope, mode in modes.items():
             mdl = Tank()
-            mdl.propagate(1, fxnfaults={modescope: mode})
+            mdl(time=1, faults={modescope: mode})
             faults = mdl.get_vars(modescope).m.faults
             self.assertIn(mode, faults)
             self.assertTrue(mdl.fxns['human'].m.sub_faults)

@@ -408,7 +408,7 @@ class HumanActions(ActionArchitecture):
     >>> ha.flows['comms'].s.on = True
     >>> ha.active_actions
     {'look'}
-    >>> ha('dynamic', 1, False, 1)
+    >>> ha(proptype='dynamic', time=1.0)
     >>> ha.active_actions
     {'press'}
     """
@@ -518,6 +518,7 @@ asg_pos = {'look': [-0.9, 0.88], 'percieve': [-0.68, 0.62], 'comms': [-0.66, -0.
 
 
 if __name__ == "__main__":
+    mdl = RoverHuman()
     import doctest
     doctest.testmod(verbose=True)
 
@@ -530,7 +531,6 @@ if __name__ == "__main__":
 
     from examples.rover.rover_model import plot_map
     from fmdtools.sim import propagate as prop
-    mdl = RoverHuman()
     endresults, mdlhist = prop.nominal(mdl)
     ec1, hist = prop.nominal(mdl)
     fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',

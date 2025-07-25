@@ -298,7 +298,7 @@ class Detect(Action):
     flow_detect_sig = Signal
     flow_tank_sig = Signal
 
-    def behavior(self, time):
+    def dynamic_behavior(self, time):
         if self.m.has_fault('not_detected'):
             self.detect_sig.s.put(indicator=0, action=0)
         elif self.m.has_fault('false_high'):
@@ -373,7 +373,7 @@ class Turn(Action):
     flow_valve1_sig = Signal
     flow_valve2_sig = Signal
 
-    def behavior(self, time):
+    def dynamic_behavior(self, time):
         if self.m.has_fault('cannot'):
             turned = 0
         else:

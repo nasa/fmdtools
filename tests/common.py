@@ -41,8 +41,7 @@ class CommonTests():
         values_to_check = mdl.get_vars(*new_val_dict)
         np.testing.assert_array_equal(values_to_check, [*new_val_dict.values()])
 
-    def check_model_copy_same(self, mdl, mdl2, inj_times, copy_time, max_time=55,
-                              run_stochastic=False):
+    def check_model_copy_same(self, mdl, mdl2, inj_times, copy_time, max_time=55):
         """
         Model copying tests.
 
@@ -59,15 +58,14 @@ class CommonTests():
                         scen = faultscen
                     else:
                         scen = {}
-                    mdl.propagate(t, run_stochastic=run_stochastic, fxnfaults=scen)
-                    mdl2.propagate(t, run_stochastic=run_stochastic, fxnfaults=scen)
+                    mdl(time=t, faults=scen)
+                    mdl2(time=t, faults=scen)
                     self.check_same_model(mdl, mdl2)
                     if t == copy_time:
                         mdl_copy = mdl.copy()
                         self.check_same_model(mdl, mdl_copy)
                     if t > copy_time:
-                        mdl_copy.propagate(t, run_stochastic=run_stochastic,
-                                           fxnfaults=scen)
+                        mdl_copy(time=t, faults=scen)
                         self.check_same_model(mdl, mdl_copy)
 
     def check_fs_parallel(self, mdl, fs, track="all"):
@@ -142,8 +140,7 @@ class CommonTests():
                                  + "\n" + hist1name + "= " + str(hist1[err_key])
                                  + " \n see also: " + "\n".join(err_keys))
 
-    def check_model_reset(self, mdl, mdl_reset, res_times, max_time=55,
-                          run_stochastic=False):
+    def check_model_reset(self, mdl, mdl_reset, res_times, max_time=55):
         """
         Check if model attributes reset with the reset() method.
 
@@ -159,13 +156,12 @@ class CommonTests():
                         scen = faultscen
                     else:
                         scen = {}
-                    mdl_reset.propagate(t, run_stochastic=run_stochastic,
-                                        fxnfaults=scen)
+                    mdl_reset(time=t, fxnfaults=scen)
                 mdl_reset.reset()
                 mdl = mdls.pop()
                 for t in range(max_time):
-                    mdl_reset.propagate(t, run_stochastic=run_stochastic)
-                    mdl.propagate(t, run_stochastic=run_stochastic)
+                    mdl_reset(t)
+                    mdl(t)
                     try:
                         self.check_same_model(mdl, mdl_reset)
                     except AssertionError as e:
@@ -173,8 +169,7 @@ class CommonTests():
                                              " and faultscen: " + str(faultscen) +
                                              " injected at t=" + str(inj_time)) from e
 
-    def check_model_copy_different(self, mdl, cop_times, max_time=55,
-                                   run_stochastic=False):
+    def check_model_copy_different(self, mdl, cop_times, max_time=55):
         """
         Check that a copied model has different states from the original.
 
@@ -185,11 +180,11 @@ class CommonTests():
         for faultscen in faultscens:
             for inj_time in cop_times:
                 for t in range(max_time):
-                    mdl.propagate(t, run_stochastic=run_stochastic)
+                    mdl(time=t)
                     if t == inj_time:
                         mdl_copy = mdl.copy()
                     if t > inj_time:
-                        mdl_copy.propagate(t, fxnfaults=faultscen)
+                        mdl_copy(time=t, faults=faultscen)
                         self.check_diff_model(mdl, mdl_copy)
 
     def check_same_model(self, mdl, mdl2):

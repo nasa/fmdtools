@@ -49,4 +49,3 @@ class ComponentArchitecture(Architecture):
             kwargs to instantiate the Component with
         """
         self.add_sim('comps', name, compclass, *flownames, **kwargs)
-

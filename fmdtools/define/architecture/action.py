@@ -207,11 +207,6 @@ class ActionArchitecture(Architecture):
             - 'until_false' means actions are simulated until all outgoing conditions are false
             - providing an integer places a limit on the number of actions that can be
             performed per timestep
-    proptype : 'static'/'dynamic'/'manual'
-        Which propagation step to execute the Action Sequence Graph in.
-        Default is 'dynamic'
-            - 'manual' means that the propagation is performed manually
-            (defined in a behavior method)
     per_timestep : bool
         Defines whether the action sequence graph is reset to the initial state each
         time-step (True) or stays in the current action (False). Default is False.
@@ -221,7 +216,6 @@ class ActionArchitecture(Architecture):
     initial_action = "auto"
     state_rep = "finite-state"
     max_action_prop = "until_false"
-    proptype = 'dynamic'
     per_timestep = False
     default_track = ('acts', 'flows', 'active_actions', 'i')
     flexible_roles = ['flows', 'acts', 'conds']
@@ -240,12 +234,14 @@ class ActionArchitecture(Architecture):
         return ActionArchitecture
 
     def is_static(self):
-        """Determine if static based on self.proptype."""
-        return self.proptype in ['static', 'both']
+        """Determine if static based on containment of static actions."""
+        any_static_actions = any([obj.is_static() for obj in self.acts.values()])
+        return super().is_static() or any_static_actions
 
     def is_dynamic(self):
-        """Determine if dynamic based on self.proptype."""
-        return self.proptype in ['dynamic', 'both']
+        """Determine if dynamic based on containment of dynamic actions."""
+        any_dynamic_actions = any([obj.is_dynamic() for obj in self.acts.values()])
+        return super().is_dynamic() or any_dynamic_actions
 
     def copy(self, **kwargs):
         cop = super().copy(**kwargs)
@@ -267,6 +263,7 @@ class ActionArchitecture(Architecture):
         self.set_active_actions(initial_action)
 
     def build(self, **kwargs):
+        """Build the action graph."""
         super().build(**kwargs)
         self.set_initial_active_action()
         if self.state_rep == 'finite-state' and len(self.active_actions) > 1:
@@ -346,64 +343,83 @@ class ActionArchitecture(Architecture):
         else:
             raise Exception("Invalid option for initial_action.")
 
-    def __call__(self, proptype, time, run_stochastic):
+    def prop_dynamic(self, time):
         """
-        Propagates behaviors through the ActionArchitecture.
+        Propagate dynamic behavior through the ActionArchitecture graph.
+
+        If self.per_timestep is set to True, this will also reset the active actions
+        each timestep to ensure the graph is reset to the initial active action.
 
         Parameters
         ----------
-        time : float, optional
-            Model time. The default is 0.
-        run_stochastic : bool/str
-            Whether to run the simulation using stochastic or deterministic behavior
-        proptype : str
-            Type of propagation step to update
-            ('behavior', 'static_behavior', or 'dynamic_behavior')
+        time : float
+            Model time.
         """
         if self.per_timestep:
             self.set_active_actions(self.initial_action)
             for action in self.active_actions:
                 self.acts[action].t.t_loc = 0.0
+        self.prop_graph(time, 'dynamic')
 
-        if proptype == self.proptype:
-            active_actions = self.active_actions
-            num_prop = 0
-            while active_actions:
-                new_active_actions = set(active_actions)
-                for action in active_actions:
-                    self.acts[action](time, run_stochastic, proptype=proptype)
-                    action_cond_edges = self.action_graph.out_edges(action, data=True)
-                    for act_in, act_out, atts in action_cond_edges:
-                        try:
-                            cond = self.conds[atts['name']]()
-                        except TypeError as e:
-                            raise TypeError("Poorly specified condition " +
-                                            str(atts['name'])+": ") from e
-                        if cond:
-                            if self.acts[action].t.complete():
-                                self.acts[action].t.t_loc = 0.0
-                                new_active_actions.add(act_out)
-                                new_active_actions.discard(act_in)
-                            else:
-                                self.acts[action].t.t_loc += self.acts[action].t.dt
-                        else:
+    def prop_static(self, time):
+        """
+        Propagate static behavior through the ActionArchitecture graph.
+
+        Parameters
+        ----------
+        time : float
+            Model time.
+        """
+        self.prop_graph(time, 'static')
+
+    def prop_graph(self, time, proptype):
+        """
+        Propagate behavior through the ActionArchitecture graph.
+
+        Parameters
+        ----------
+        time : float
+            Model time.
+        proptype : str
+            Type of propagation to perform (static or dynamic). If proptype="static",
+            the static_behavior methods are called and local time is not incremented. If
+            proptype="dynamic", the dynamic behavior methods are run and local time is
+            incremented.
+        """
+        active_actions = self.active_actions
+        num_prop = 0
+        while active_actions:
+            new_active_actions = set(active_actions)
+            for action in active_actions:
+                self.acts[action](time=time, proptype=proptype, end_of_timestep=False)
+                action_cond_edges = self.action_graph.out_edges(action, data=True)
+                for act_in, act_out, atts in action_cond_edges:
+                    try:
+                        cond = self.conds[atts['name']]()
+                    except TypeError as e:
+                        raise TypeError("Poorly specified condition " +
+                                        str(atts['name'])+": ") from e
+                    if cond:
+                        if self.acts[action].t.complete():
                             self.acts[action].t.t_loc = 0.0
+                            new_active_actions.add(act_out)
+                            new_active_actions.discard(act_in)
+                        elif proptype == 'dynamic':
+                            self.acts[action].t.t_loc += self.acts[action].t.dt
+                    else:
+                        self.acts[action].t.t_loc = 0.0
 
-                if len(new_active_actions) > 1 and self.state_rep == 'finite-state':
-                    raise Exception("Multiple active actions in a finite-state " +
-                                    "representation: "+str(new_active_actions))
-                num_prop += 1
-                if isinstance(self.proptype, int) and num_prop >= self.proptype:
-                    break
-                if new_active_actions == set(active_actions):
-                    break
-                else:
-                    active_actions = new_active_actions
-                if num_prop > 10000:
-                    raise Exception("Undesired looping in Function ASG for: "+self.name)
-            self.active_actions = active_actions
-        self.set_sub_faults()
-        self.t.update_time(time)
+            if len(new_active_actions) > 1 and self.state_rep == 'finite-state':
+                raise Exception("Multiple active actions in a finite-state " +
+                                "representation: "+str(new_active_actions))
+            num_prop += 1
+            if new_active_actions == set(active_actions):
+                break
+            else:
+                active_actions = new_active_actions
+            if num_prop > 10000:
+                raise Exception("Undesired looping in Function ASG for: "+self.name)
+        self.active_actions = active_actions
 
     def as_modelgraph(self, gtype=ActionArchitectureGraph, **kwargs):
         """Create and return the corresponding ModelGraph for the Object."""

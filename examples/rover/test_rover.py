@@ -15,9 +15,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.rover.optimization.search_rover import line_dist, line_dist_faster
 from tests.common import CommonTests
-
+from examples.rover.optimization.search_rover import line_dist, line_dist_faster
 import unittest
 
 

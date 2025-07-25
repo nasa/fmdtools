@@ -106,13 +106,12 @@ class Architecture(Simulable):
             raise Exception("invalid roletype for " + str(self.__class__) +
                             ", should be: " + self.rolename)
 
-    def is_static(self):
-        """Determine if static (False by default)."""
-        return False
-
-    def is_dynamic(self):
-        """Determine if dynamic (False by default)."""
-        return False
+    def update_arch_behaviors(self, time, proptype):
+        """Update/propagate behavior in the architecture."""
+        if proptype in ["dynamic", "both"] and hasattr(self, 'prop_static'):
+            self.prop_dynamic(time)
+        if proptype in ["static", "both"] and hasattr(self, 'prop_dynamic'):
+            self.prop_static(time)
 
     def init_flexible_roles(self, **kwargs):
         """
@@ -159,7 +158,7 @@ class Architecture(Simulable):
             kwar['r'] = {"seed": self.r.seed}
         # pass simparam from arch
         if hasattr(objclass, "container_sp"):
-            kwar['sp'] = {'sp': self.sp.asdict()}
+            kwar['sp'] = self.sp.asdict()
             if not self.sp.use_local:
                 kwar['sp'].pop('dt')
         return {**kwar, **kwargs}

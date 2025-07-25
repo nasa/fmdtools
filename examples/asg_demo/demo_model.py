@@ -66,7 +66,7 @@ class Perceive(Action):
     flow_hazard = Hazard
     flow_outcome = Outcome
 
-    def behavior(self, time):
+    def dynamic_behavior(self, time):
         if not self.m.in_mode('failed', 'unable'):
             self.hazard.s.percieved = self.hazard.s.present
             self.outcome.s.num_perceptions += self.hazard.s.percieved
@@ -86,7 +86,7 @@ class Act(Action):
     flow_hazard = Hazard
     flow_outcome = Outcome
 
-    def behavior(self, time):
+    def dynamic_behavior(self, time):
         if not self.m.in_mode('failed', 'unable'):
             self.outcome.s.num_actions += 1
             self.hazard.s.mitigated = True
@@ -106,7 +106,7 @@ class Done(Action):
     __slots__ = ('hazard')
     flow_hazard = Hazard
 
-    def behavior(self, time):
+    def dynamic_behavior(self, time):
         if not self.hazard.s.present:
             self.hazard.s.mitigated = False
 

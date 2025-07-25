@@ -1077,7 +1077,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
         if t not in timerange:
             raise Exception("t="+str(t)+" from sequence not in timerange: "
                             + str(timerange))
-    shift = mdl.sp.get_shift(start_time)
+    t_shift = mdl.sp.get_shift(start_time)
     mdl.init_time_hist()
     # run model through the time range defined in the object
     c_mdl = dict.fromkeys(ctimes)
@@ -1094,11 +1094,10 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
                 fxnfaults = {}
                 disturbances = {}
             try:
-                mdl(time=t, faults=fxnfaults, disturbances=disturbances)
+                mdl(time=t, faults=fxnfaults, disturbances=disturbances,
+                    t_ind=t_ind, t_shift=t_shift)
             except Exception as e:
                 raise Exception("Error in scenario " + str(scen)) from e
-
-            mdl.log_hist(t_ind, t, shift)
 
             if type(desired_result) is dict:
                 if "all" in desired_result:
@@ -1119,7 +1118,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
             raise
             break
     if cut_hist:
-        mdl.h.cut(t_ind + shift)
+        mdl.h.cut(t_ind + t_shift)
     if type(desired_result) is dict and 'end' in desired_result:
         result['end'] = get_result(scen, mdl, desired_result['end'], nomhist, nomresult,
                                    time=t)
@@ -1130,7 +1129,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
     if None in c_mdl.values():
         raise Exception("Sample times" + str(ctimes)
                         + " go beyond simulation time " + str(t))
-    return result, mdl.h, c_mdl, t_ind + shift
+    return result, mdl.h, c_mdl, t_ind + t_shift
 
 
 def get_result(scen, mdl, desired_result, nomhist={}, nomresult={}, time=0.0):
