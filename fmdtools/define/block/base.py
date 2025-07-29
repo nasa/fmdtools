@@ -217,7 +217,6 @@ class Simulable(BaseObject):
         """
         BaseObject.__init__(self, **kwargs)
         self.set_time()
-        self.update_seed()
 
     def is_static(self):
         """Check if Block has static execution step."""
@@ -278,8 +277,10 @@ class Simulable(BaseObject):
         seed : int, optional
             Random seed. The default is [].
         """
-        if seed and hasattr(self, 'r'):
-            self.r.update_seed(seed)
+        if hasattr(self, 'r'):
+            self.r.assign(self.sp, 'run_stochastic', 'track_pdf')
+            if seed:
+                self.r.update_seed(seed)
 
     def find_classification(self, scen, mdlhists):
         """
@@ -528,9 +529,9 @@ class Simulable(BaseObject):
             state_pd *= getattr(self, arch).return_probdens()
         return state_pd
 
-    def update_stochastic_states(self, time):
+    def update_stochastic_states(self):
         """Update stochastic states if in run_stochastic configuration."""
-        if time > self.t.time and self.sp.run_stochastic and hasattr(self, 'r'):
+        if not self.t.has_executed() and self.sp.run_stochastic and hasattr(self, 'r'):
             self.r.update_stochastic_states()
             if self.sp.track_pdf:
                 self.r.probdens = self.r.return_probdens()
@@ -575,7 +576,7 @@ class Simulable(BaseObject):
             Propagation the system is in. Skips if proptype="static."
             Default is "dynamic"
         """
-        if time > self.t.time and proptype in ['dynamic', 'both']:
+        if not self.t.executed_dynamic and proptype in ['dynamic', 'both']:
             if self.sp.with_loadings and hasattr(self, 'dynamic_loading_before'):
                 self.dynamic_loading_before(time)
             self.update_arch_behaviors(time, "dynamic")
@@ -583,10 +584,10 @@ class Simulable(BaseObject):
                 if self.t.run_times >= 1:
                     for i in range(self.t.run_times):
                         self.dynamic_behavior(time)
-                        self.t.executed = True
+                        self.t.executed_dynamic = True
                 elif not Decimal(str(time)) % Decimal(str(self.t.dt)):
                     self.dynamic_behavior(time)
-                    self.t.executed = True
+                    self.t.executed_dynamic = True
             if self.sp.with_loadings and hasattr(self, 'dynamic_loading_after'):
                 self.dynamic_loading_after(time)
 
@@ -617,7 +618,7 @@ class Simulable(BaseObject):
                 self.update_arch_behaviors(time, "static")
                 if hasattr(self, 'static_behavior'):
                     self.static_behavior(time)
-                    self.t.executed = True
+                    self.t.executed_static = True
                 if self.sp.with_loadings and hasattr(self, 'static_loading'):
                     self.static_loading(time)
                 # Check to see what flows now have new values
@@ -680,7 +681,7 @@ class Simulable(BaseObject):
         time = self.get_time(time)
         self.set_vars(**disturbances)
         self.inject_faults(faults)
-        self.update_stochastic_states(time)
+        self.update_stochastic_states()
         self.update_dynamic_behaviors(time, proptype=proptype)
         self.update_static_behaviors(time, proptype=proptype)
         self.set_sub_faults()
@@ -745,6 +746,7 @@ class Block(Simulable):
                                                       with_immutable=False)
                            if role in kwargs}
         self.check_flows(flows=flows)
+        self.update_seed()
         # finally, allow for user-defined role/state changing
         self.init_block(**kwargs)
         self.init_hist(h=h)

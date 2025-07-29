@@ -116,7 +116,7 @@ class StoreEE(StaticstoreEE):
             self.ee_out.s.effort = 0.0
         else:
             self.ee_out.s.effort = 1.0
-        if not self.t.executed:
+        if not self.t.executed_static:
             self.s.inc(soc=-self.ee_out.s.mul('rate', 'effort')*(time-self.t.time)/2)
 
 
@@ -277,7 +277,7 @@ class PlanPath(Function):
             self.m.mode = 'move'
         elif self.s.dist < 5 and self.m.in_mode('move', 'hover'):
             self.m.mode = 'hover'
-            if not self.t.executed:
+            if not self.t.executed_static:
                 self.t.pause.inc(1)
                 if self.t.pause.t() > 2:
                     self.s.inc(pt=1)

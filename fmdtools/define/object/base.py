@@ -291,11 +291,13 @@ class BaseObject(object):
         # initialize roles and add as attributes to the object
         for rolename in roles:
             container_initializer = getattr(self, roletype+'_'+rolename)
-            default_args = getattr(self, 'default_'+rolename, dict())
-            container_args = kwargs.get(rolename, default_args)
+            container_args = kwargs.get(rolename, dict())
+
             if isinstance(container_args, container_initializer):
                 container = container_args
             elif isinstance(container_args, dict):
+                default_args = getattr(self, 'default_'+rolename, dict())
+                container_args = {**default_args, **container_args}
                 if issubclass(container_initializer, BaseObject):
                     container_args['root'] = self.get_full_name()
                 try:

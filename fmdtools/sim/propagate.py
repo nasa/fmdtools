@@ -967,9 +967,9 @@ def gen_sampleapproach(mdl, faultdomains={}, faultsamples={},
     """Generate a SampleApproach from faultdomain and faultsample arguments."""
     if get_phasemap:
         pm = from_hist(nomhist)
+        app = SampleApproach(mdl, phasemaps=pm)
     else:
-        pm = {}
-    app = SampleApproach(mdl, phasemaps=pm)
+        app = SampleApproach(mdl)
     app.add_faultdomains(**faultdomains)
     app.add_faultsamples(**faultsamples)
     return app
@@ -1061,8 +1061,8 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
         A dictionary with a history of modelstates.
     c_mdl : dict
         A dictionary of models at each time given in ctimes with structure {time:model}
-    t_end: float
-        Last sim time
+    t_end: int
+        Index of last sim time
     """
     desired_result, staged, cut_hist, use_end_condition, warn_faults = unpack_sim_kwargs(**kwargs)
     # if staged, we want it to start a new run from the starting time of the scenario,

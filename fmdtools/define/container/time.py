@@ -39,8 +39,10 @@ class Time(BaseContainer):
     run_times : int
         number of times to run the behavior if running at a different timestep than
         global
-    executed : bool
-        Whether the sim has executed yet this timestep (or not).
+    executed_static: bool
+        Whether a sim's static behavior has executed yet this timestep (or not).
+    executed_dynamic: bool
+        Whether a sim's dynamic behavior has executed yet this timestep (or not).
     timers : dict
         dictionary of instantiated timers
     use_local : bool
@@ -84,7 +86,8 @@ class Time(BaseContainer):
     use_local: bool = True
     dt: float = 1.0
     run_times: int = 1
-    executed: bool = False
+    executed_static: bool = False
+    executed_dynamic: bool = False
     local_dt = 1.0
     timernames = ()
     default_track = ('timers')
@@ -101,6 +104,10 @@ class Time(BaseContainer):
         """Return fmdtools type of the model class."""
         return Time
 
+    def has_executed(self):
+        """Return whether the Simulabe has been called."""
+        return self.executed_static or self.executed_dynamic
+
     def __getattr__(self, item):
         if item in self.timers:
             return self.timers[item]
@@ -116,8 +123,7 @@ class Time(BaseContainer):
     def update_time(self, time):
         """Update the current time from the overall simulation."""
         if time > self.time:
-            self.time = time
-            self.executed = False
+            self.assign(dict(time=time, executed_static=False, executed_dynamic=False))
             if time > 0.0:
                 self.t_ind += 1
 
@@ -153,8 +159,8 @@ class Time(BaseContainer):
 
     def reset(self):
         """Reset time to the initial state."""
-        self.time = -0.1
-        self.t_ind = 0
+        self.assign(dict(time=-0.1, t_ind=0,
+                         executed_static=False, executed_dynamic=False))
         for timer in self.timers.values():
             timer.reset()
 

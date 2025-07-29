@@ -403,7 +403,7 @@ class MoveWat(Function):
         """
         if self.p.delay:
             if self.indicate_over_pressure(time):
-                if not self.t.executed:
+                if not self.t.executed_static:
                     self.t.pressure_limit.inc(self.t.dt)
                 if self.t.pressure_limit.time >= self.p.delay:
                     self.m.add_fault('mech_break')
