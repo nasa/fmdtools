@@ -188,10 +188,9 @@ class Integration_Tests(unittest.TestCase):
         Useful when the model has states which are not recorded.
         """
         for t in range(0, 10):
-            self.mdl.propagate(t)  # simulate time up until t=10
+            self.mdl(time=t)  # simulate time up until t=10
 
-        self.mdl.propagate(10, {'move_water': 'mech_break'}
-                           )  # instantiate fault at time
+        self.mdl(time=10, faults={'move_water': 'mech_break'})  # instantiate fault
         self.assertTrue(self.mdl.fxns['move_water'].m.has_fault(
             'mech_break'))  # check model properties
         self.assertEqual(self.mdl.flows['ee_1'].s.current, 0.2)

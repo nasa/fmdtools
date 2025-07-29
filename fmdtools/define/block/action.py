@@ -90,7 +90,7 @@ class Action(Block):
         return Action
 
     def update_dynamic_behaviors(self, time, proptype="dynamic"):
-        """Update the behavior of the Action."""
+        """Update the behavior of the Action provided the action is not complete."""
         if not self.t.duration_complete():
             super().update_dynamic_behaviors(time, proptype=proptype)
 

@@ -107,10 +107,21 @@ class Architecture(Simulable):
                             ", should be: " + self.rolename)
 
     def update_arch_behaviors(self, time, proptype):
-        """Update/propagate behavior in the architecture."""
-        if proptype in ["dynamic", "both"] and hasattr(self, 'prop_static'):
+        """
+        Update/propagate behavior in the architecture.
+
+        Parameters
+        ----------
+        time : float
+            Time to propagate behaviors at
+        proptype : str
+            Type of propagation step to update ('dynamic', 'static', or 'both'). If
+            'dynamic', this method calls self.prop_dynamic(). If 'static', this method
+            calls self.prop_static()
+        """
+        if proptype in ["dynamic", "both"] and hasattr(self, 'prop_dynamic'):
             self.prop_dynamic(time)
-        if proptype in ["static", "both"] and hasattr(self, 'prop_dynamic'):
+        if proptype in ["static", "both"] and hasattr(self, 'prop_static'):
             self.prop_static(time)
 
     def init_flexible_roles(self, **kwargs):

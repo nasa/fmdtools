@@ -357,7 +357,20 @@ class Simulable(BaseObject):
         return fxns
 
     def get_fault(self, scope, faultmode, **kwargs):
-        """Get the faultmode in the given scope of the model."""
+        """
+        Get the named Fault for the Simulable in the given scope of the model.
+
+        Will also get a Fault for a contained object at the given scope.
+
+        Parameters
+        ----------
+        scope : str
+            Scope to get the fault from (e.g., self.name, 'self', or 'global')
+        faultmode: str
+            Name of the fault (e.g., "short").
+        **kwargs: kwargs
+            Keyword arguments to Mode.get_fault.
+        """
         name = self.get_full_name()
         if name.endswith(scope) or scope in ['self', 'global']:
             obj = self
@@ -523,7 +536,19 @@ class Simulable(BaseObject):
                 self.r.probdens = self.r.return_probdens()
 
     def update_arch_behaviors(self, time, proptype):
-        """Propagate behaviors into contained architectures."""
+        """
+        Propagate behaviors into contained architectures.
+
+        Iterates through the Block's contained architectures and calls the corresponding
+        propagation type.
+
+        Parameters
+        ----------
+        time : float
+            Time to update the architecture behaviors at.
+        proptype : str
+            Propagation step to perform ('dynamic' or 'static').
+        """
         for objname in self.get_roles('arch'):
             try:
                 obj = getattr(self, objname)
@@ -533,7 +558,23 @@ class Simulable(BaseObject):
                                 + str(obj.__class__)) from e
 
     def update_dynamic_behaviors(self, time, proptype="dynamic"):
-        """Run dynamic behaviors, including loadings (if specified)."""
+        """
+        Run the dynamic behaviors of the block, including loadings (if specified).
+
+        Runs in the defined order:
+            1.) running dynamic_loading_before() (if sp.with_loadings is set to True)
+            2.) updating contained architecture dynamic behaviors/propagation
+            3.) running dynamic_behavior())
+            4.) running dynamic_loading_after (if sp.with_loadings is set to True)
+
+        Parameters
+        ----------
+        time : float
+            Time to update at. Must be greater than the current model time to update.
+        proptype : str
+            Propagation the system is in. Skips if proptype="static."
+            Default is "dynamic"
+        """
         if time > self.t.time and proptype in ['dynamic', 'both']:
             if self.sp.with_loadings and hasattr(self, 'dynamic_loading_before'):
                 self.dynamic_loading_before(time)
@@ -542,13 +583,31 @@ class Simulable(BaseObject):
                 if self.t.run_times >= 1:
                     for i in range(self.t.run_times):
                         self.dynamic_behavior(time)
+                        self.t.executed = True
                 elif not Decimal(str(time)) % Decimal(str(self.t.dt)):
                     self.dynamic_behavior(time)
+                    self.t.executed = True
             if self.sp.with_loadings and hasattr(self, 'dynamic_loading_after'):
                 self.dynamic_loading_after(time)
 
     def update_static_behaviors(self, time, proptype="static"):
-        """Run static behaviors, including loadings (if specified)."""
+        """
+        Run the static behaviors of the block, including loadings (if specified).
+
+        Runs in the defined order:
+            1.) running static_loading_before() (if sp.with_loadings is set to True)
+            2.) updating contained architecture static behaviors/propagation
+            3.) running static_behavior())
+            4.) running static_loading_after (if sp.with_loadings is set to True)
+
+        Parameters
+        ----------
+        time : float
+            Time to update the static behavior at.
+        proptype : str
+            Propagation the system is in. Skips if proptype="dynamic."
+            Default is "static"
+        """
         if proptype in ['static', 'both']:
             active = True
             oldmutables = self.return_mutables()
@@ -558,6 +617,7 @@ class Simulable(BaseObject):
                 self.update_arch_behaviors(time, "static")
                 if hasattr(self, 'static_behavior'):
                     self.static_behavior(time)
+                    self.t.executed = True
                 if self.sp.with_loadings and hasattr(self, 'static_loading'):
                     self.static_loading(time)
                 # Check to see what flows now have new values
@@ -574,7 +634,20 @@ class Simulable(BaseObject):
                         flows_mutables[flowname] = newflowmutables
 
     def end_timestep(self, time, t_shift=None, t_ind=None, log_hist=True):
-        """Update sim time and log at the end of the timestep."""
+        """
+        Update the simulation time and log at the end of the timestep.
+
+        Parameters
+        ----------
+        time : float
+            Time at which the simulation was simulated.
+        t_shift : int
+            Time to shift the time by when logging the history. Default is None.
+        t_ind : int
+            Index of the timestep in the history. Default is None.
+        log_hist :bool
+            Whether to log history. Default is True.
+        """
         for objname, obj in self.get_roles_as_dict().items():
             if hasattr(obj, 'end_timestep'):
                 obj.end_timestep(time, t_shift=t_shift, t_ind=t_ind, log_hist=False)
@@ -678,7 +751,7 @@ class Block(Simulable):
         self.check_slots()
 
     def init_block(self, **kwargs):
-        """Placeholder initialization method to set initial states etc."""
+        """Initilialization method to set initial states etc (placeholder)."""
         return
 
     def create_arch_kwargs(self, **kwargs):

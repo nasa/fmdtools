@@ -452,6 +452,25 @@ class BaseObject(object):
         return rs + ['i'] + self.rolevars
 
     def get_default_roletypes(self, *roletypes, no_flows=False, with_flex=True):
+        """
+        Get the default role types for the object.
+
+        Parameters
+        ----------
+        *roletypes : str
+            Types of roles (e.g. 'containers' or 'flows'). If not provided, all role
+            types are included.
+        no_flows : bool, optional
+            Whether to remove flows. The default is False.
+        with_flex : bool, optional
+            Whether to include flexible roletypes (e.g., functions).
+            The default is True.
+
+        Returns
+        -------
+        roletypes : list
+            List of default role types to iterate over, e.g. ['containers', 'flows'].
+        """
         if not roletypes or roletypes[0] == 'all':
             roletypes = [*self.roletypes]
         elif roletypes[0] == 'none':
@@ -466,7 +485,29 @@ class BaseObject(object):
 
     def get_roles(self, *roletypes, with_immutable=True, no_flows=False, with_flex=True,
                   **kwargs):
-        """Get all roles."""
+        """
+        Get all roles from the object.
+
+        Parameters
+        ----------
+        *roletypes : str
+            Types of roles to get. If not provided, gets default roletypes.
+        with_immutable : bool, optional
+            Whether to include immutable roles (e.g., parameters at container_p). The
+            default is True.
+        no_flows : bool, optional
+            Whether to not inlude flows. The default is False.
+        with_flex : bool, optional
+            Whether to include flexible roles. The default is True.
+        **kwargs : kwargs
+            (unused) keyword arguments
+
+        Returns
+        -------
+        roles : list
+            List of roles in the object, e.g. ['p', 's' 'r'] for an object with the
+            parameter, state, and rand roles filled.
+        """
         roletypes = self.get_default_roletypes(*roletypes,
                                                no_flows=no_flows, with_flex=with_flex)
         return [role for roletype in roletypes
@@ -474,7 +515,22 @@ class BaseObject(object):
                 if with_immutable or role not in self.immutable_roles]
 
     def get_flex_role_objs(self, *flexible_roles, flex_prefixes=False):
-        """Get the objects in flexible roles (e.g., functions, flows, components)."""
+        """
+        Get the objects in flexible roles (e.g., functions, flows, components).
+
+        Parameters
+        ----------
+        *flexible_roles : str
+            Names of flexible roles (e.g., 'fxns', 'flows').
+        flex_prefixes : bool, optional
+            Whether to include the prefixes in the keys of the returned dictionary. The
+            default is False.
+
+        Returns
+        -------
+        flex_role_objs : dict
+            Dict of flexible role objects with structure {'rolename': roleobject}
+        """
         if not flexible_roles:
             flexible_roles = self.flexible_roles
         role_objs = {}
@@ -497,7 +553,35 @@ class BaseObject(object):
     def get_roles_as_dict(self, *roletypes, with_immutable=True, with_prefix=False,
                           flex_prefixes=False, with_flex=True, no_flows=False,
                           **kwargs):
-        """Return all roles and their objects as a dict."""
+        """
+        Return all roles and their objects as a dict.
+
+        Parameters
+        ----------
+        *roletypes : str
+            Types of roles to get (e.g. "container"). If not provided, gets default
+            roletypes.
+        with_immutable : bool, optional
+            Whether to include immutable roles (e.g., parameters at container_p). The
+            default is True.
+        with_prefix : bool
+            Whether to provide prefixes to the names (e.g., naming 'fxnname.s', not 's')
+        flex_prefixes : bool, optional
+            Whether to include the prefixes in the keys of the returned dictionary. The
+            default is False.
+        no_flows : bool, optional
+            Whether to not inlude flows. The default is False.
+        with_flex : bool, optional
+            Whether to include flexible roles. The default is True.
+        **kwargs : kwargs
+            (unused) keyword arguments
+
+        Returns
+        -------
+        roles : list
+            List of roles in the object, e.g. ['p', 's' 'r'] for an object with the
+            parameter, state, and rand roles filled.
+        """
         roletypes = self.get_default_roletypes(*roletypes)
         flex_roles = [r+'s' for r in roletypes if r+'s' in self.flexible_roles]
         if with_flex:
@@ -519,7 +603,22 @@ class BaseObject(object):
         return all_roles
 
     def get_roledicts(self, *roledicts, with_immutable=True):
-        """Get all roles in roledicts."""
+        """
+        Get all roles in that stored in dictionaries (e.g., self.flows).
+
+        Parameters
+        ----------
+        *roledicts : str
+            Names of dictionaries to get roles from. Defaults to all roledits.
+            with_immutable : bool, optional
+                Whether to include immutable roles (e.g., parameters at container_p).
+                The default is True.
+
+        Returns
+        -------
+        roles : list
+            List of roles in the object from the role dictionaries
+        """
         if not roledicts:
             roledicts = self.roledicts
         return [role for roledict in roledicts for role in getattr(self, roledict)
@@ -810,6 +909,7 @@ class BaseObject(object):
             raise Exception("Unknown edge type for role: " + roletype)
 
     def _prep_graph(self, g=None, name='', **kwargs):
+        """Prepare graph by adding self as a node and returning name."""
         g = add_node(self, g=g, **kwargs)
         if not name:
             name = self.get_full_name()

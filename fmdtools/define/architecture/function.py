@@ -679,7 +679,13 @@ class FunctionArchitecture(Architecture):
         return probdens
 
     def prop_dynamic(self, time):
-        """Run dynamic propagation functions in order specified."""
+        """
+        Run dynamic propagation functions.
+
+        Calls the defined dynamaic functions
+        (e.g., those with dynamic_behavior() methods) in order the specified by the
+        init_architecture method.
+        """
         for fxnname in self.dynamicfxns:
             fxn = self.fxns[fxnname]
             fxn(time=time, proptype='dynamic', end_of_timestep=False)
@@ -688,14 +694,19 @@ class FunctionArchitecture(Architecture):
         """
         Propagate behaviors through model graph (static propagation step).
 
+        Runs by maintaining a list of "active" functions to update, starting with all
+        functions with a static_behavior() method to call. For each of these functions,
+        it updates the static_behavior() method. If new mutables are present, the
+        function is kept in the list (otherwise it is removed). If its connected flows
+        have new mutables, other functions connected to that flow are added to the list.
+        This algorithm is run until there are no more "active" functions, which may
+        require several executions of each function's static_behavior() method to
+        propagate behavior through the entire model graph.
+
         Parameters
         ----------
         time : float
             Current time-step
-        run_stochastic : bool
-            Whether to run stochastic behaviors or use default values. Default is False.
-            Can set as 'track_pdf' to calculate/track the probability densities of
-            random states over time.
         """
         # set up history of flows to see if any has changed
         activefxns = self.staticfxns.copy()

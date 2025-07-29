@@ -39,6 +39,8 @@ class Time(BaseContainer):
     run_times : int
         number of times to run the behavior if running at a different timestep than
         global
+    executed : bool
+        Whether the sim has executed yet this timestep (or not).
     timers : dict
         dictionary of instantiated timers
     use_local : bool
@@ -82,6 +84,7 @@ class Time(BaseContainer):
     use_local: bool = True
     dt: float = 1.0
     run_times: int = 1
+    executed: bool = False
     local_dt = 1.0
     timernames = ()
     default_track = ('timers')
@@ -114,6 +117,7 @@ class Time(BaseContainer):
         """Update the current time from the overall simulation."""
         if time > self.time:
             self.time = time
+            self.executed = False
             if time > 0.0:
                 self.t_ind += 1
 

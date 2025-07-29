@@ -51,8 +51,6 @@ class BaseObjCon(dataobject):
     """
     Base class for objectives and constraints.
 
-    ...
-
     Fields
     ------
     name : str
@@ -67,7 +65,7 @@ class BaseObjCon(dataobject):
 
 class Objective(BaseObjCon):
     """
-    ...
+    Base class for objectives which derive from simulation results.
 
     Fields
     ------

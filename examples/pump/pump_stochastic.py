@@ -57,9 +57,9 @@ class ImportEE(DetImportEE):
         elif self.m.has_fault('inf_v'):
             self.r.s.effstate = 100.0  # a voltage spike means voltage is much higher
         else:
-            if time > self.t.time:
+            if not self.t.executed:
                 self.r.set_rand_state('effstate', 'triangular', 0.9, 1, 1.1)
-        if time > self.t.time:
+        if not self.t.executed:
             self.r.set_rand_state('grid_noise', 'normal',
                                   1, 0.05*(2+np.sin(np.pi/2*time)))
         self.ee_out.s.voltage = self.r.s.grid_noise*self.r.s.effstate * 500
@@ -117,7 +117,7 @@ class MoveWat(DetMoveWat):
     def static_behavior(self, time):
         self.s.eff = self.r.s.eff
         super().static_behavior(time)
-        if time > self.t.time:
+        if not self.t.executed:
             self.s.inc(total_flow=self.wat_out.s.flowrate)
 
 
