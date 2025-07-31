@@ -45,6 +45,9 @@ class GeomArchitecture(Architecture):
     ...        self.add_point("ex_point", ExPoint)
     ...        self.add_line("ex_line", ExLine)
     ...        self.add_poly("ex_poly", ExPoly)
+    ...    def dynamic_behavior(self, time):
+    ...        if self.t.time >= 1.0:
+    ...            self.points["ex_point"].s.buffer_around = self.t.time + self.t.dt
 
     This can then be used in containing classes (e.g., environments) that need multiple
     geoms. We can then access the individual geoms in the geoms dict, e.g.,:
@@ -70,6 +73,22 @@ class GeomArchitecture(Architecture):
     polys.ex_poly.s.buffer_around: array(101)
     >>> ega.return_mutables()
     ((False, 1.0), (False, 1.0), (False, 1.0), (-0.1, 0, 1, False, False))
+
+    GeomArchitectures are also simulable provided dynamic_behavior and static_behavior
+    methods as shown below. Note that this behavior must be called externally,
+    such as from a function, to have meaning in a broader modelling context.
+
+    >>> ega()
+    >>> ega()
+    >>> ega
+    exgeomarch ExGeomArch
+    - t=Time(time=2.0, timers={})
+    POINTS:
+    - ex_point, s=(occupied=False, buffer_around=2.0)
+    LINES:
+    - ex_line, s=(occupied=False, buffer_around=1.0)
+    POLYS:
+    - ex_poly, s=(occupied=False, buffer_around=1.0)
     """
 
     container_p = Parameter
@@ -251,6 +270,11 @@ class ExGeomArch(GeomArchitecture):
         self.add_point("ex_point", ExPoint)
         self.add_line("ex_line", ExLine)
         self.add_poly("ex_poly", ExPoly)
+
+    def dynamic_behavior(self, time):
+        """Example dynamic behavior demonstrating dynamic buffers."""
+        if self.t.time >= 0.0:
+            self.points["ex_point"].s.buffer_around = self.t.time + self.t.dt
 
 
 if __name__ == "__main__":

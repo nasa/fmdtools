@@ -332,18 +332,21 @@ class Architecture(Simulable):
 
     def get_flows(self, *flownames, all_if_empty=True):
         """Return a list of the model flow objects."""
-        if all_if_empty and not flownames:
-            flownames = self.flows
-        return {flowname: self.flows[flowname] for flowname in flownames}
+        if hasattr(self, 'flows'):
+            if all_if_empty and not flownames:
+                flownames = self.flows
+            return {flowname: self.flows[flowname] for flowname in flownames}
+        else:
+            return {}
 
     def flowtypes(self):
         """Return the set of flow types used in the model."""
         return {obj.__class__.__name__: obj.get_typename()
-                for f, obj in self.flows.items()}
+                for f, obj in self.get_flows().items()}
 
     def flows_of_type(self, ftype):
         """Return the set of flows for each flow type."""
-        return {flow for flow, obj in self.flows.items()
+        return {flow for flow, obj in self.get_flows().items()
                 if obj.__class__.__name__ == ftype}
 
     def update_seed(self, seed=[]):

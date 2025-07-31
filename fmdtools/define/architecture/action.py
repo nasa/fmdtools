@@ -208,6 +208,38 @@ class ActionArchitecture(Architecture):
     per_timestep : bool
         Defines whether the action sequence graph is reset to the initial state each
         time-step (True) or stays in the current action (False). Default is False.
+
+    Examples
+    --------
+    >>> exaa = ExampleActionArchitecture()
+    >>> exaa
+    exampleactionarchitecture ExampleActionArchitecture
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
+    - t=Time(time=-0.1, timers={})
+    FLOWS:
+    - exf, s=(x=1.0, y=1.0)
+    ACTS:
+    - act_1
+    - act_2
+    CONDS:
+    act_1_done
+    >>> exaa()
+    >>> exaa.active_actions
+    {'act_1'}
+    >>> exaa()
+    >>> exaa
+    exampleactionarchitecture ExampleActionArchitecture
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
+    - t=Time(time=2.0, timers={})
+    FLOWS:
+    - exf, s=(x=4.0, y=1.0)
+    ACTS:
+    - act_1
+    - act_2
+    CONDS:
+    act_1_done
+    >>> exaa.active_actions
+    {'act_2'}
     """
 
     __slots__ = ['acts', 'conds', 'action_graph', 'flow_graph', 'active_actions', 'm']
@@ -429,8 +461,8 @@ class ExampleActionArchitecture(ActionArchitecture):
 
     def init_architecture(self, **kwargs):
         self.add_flow("exf", ExampleFlow)
-        self.add_act("act_1", ExampleAction, "exf", p={'x': 5.0})
-        self.add_act("act_2", ExampleAction, "exf", p={'x': 10.0})
+        self.add_act("act_1", ExampleAction, "exf", p={'x': 2.0})
+        self.add_act("act_2", ExampleAction, "exf", p={'x': 4.0})
         self.add_cond("act_1", "act_2", "act_1_done", self.acts['act_1'].indicate_done)
 
 
