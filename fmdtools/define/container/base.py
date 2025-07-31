@@ -44,7 +44,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     def __repr__(self):
         return self.create_repr(with_classname=True, fields="all")
 
-    def create_repr(self, with_classname=True, fields="all"):
+    def create_repr(self, with_classname=True, fields="all", one_line=True):
         """Create repr-friendly string for container."""
         if with_classname:
             repr_str = self.__class__.__name__
@@ -52,7 +52,8 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
             repr_str = ""
         if fields == "all":
             fields = self.__fields__
-        field_str = ", ".join(f+"="+self[f].__repr__() for f in fields)
+        field_str = ", ".join(f+"="+self[f].__repr__() for f in fields
+                              if f in dir(self))
         return repr_str+"("+field_str+")"
 
     def get_typename(self):

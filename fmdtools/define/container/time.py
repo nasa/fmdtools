@@ -122,7 +122,9 @@ class Time(BaseContainer):
         return (*(t.time for t in self.timers.values()),
                 self.time,
                 self.t_ind,
-                self.run_times)
+                self.run_times,
+                self.executed_dynamic,
+                self.executed_static)
 
     def update_time(self, time):
         """Update the current time from the overall simulation."""

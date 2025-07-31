@@ -207,7 +207,8 @@ class BaseObject(object):
                 role_obj = getattr(self, rolename, False)
                 if role_obj:
                     if hasattr(role_obj, 'create_repr'):
-                        objrepr = role_obj.create_repr(with_classname=with_classname)
+                        objrepr = role_obj.create_repr(with_classname=not one_line,
+                                                       one_line=True)
                     else:
                         objrepr = role_obj.__repr__()
                     if one_line:

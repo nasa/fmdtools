@@ -41,20 +41,18 @@ class ComponentArchitecture(Architecture):
     examplecomponentarchitecture ExampleComponentArchitecture
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=-0.1, timers={})
-    FLOWS
-    COMPS
-    c1, s=(x=5.0, y=5.0)
-    c2, s=(x=10.0, y=10.0)
+    COMPS:
+    - c1, s=(x=5.0, y=5.0)
+    - c2, s=(x=10.0, y=10.0)
     >>> exc()
     >>> exc()
     >>> exc
     examplecomponentarchitecture ExampleComponentArchitecture
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=2.0, timers={})
-    FLOWS
-    COMPS
-    c1, s=(x=7.0, y=6.0)
-    c2, s=(x=12.0, y=11.0)
+    COMPS:
+    - c1, s=(x=7.0, y=6.0)
+    - c2, s=(x=12.0, y=11.0)
     """
 
     __slots__ = ['comps']

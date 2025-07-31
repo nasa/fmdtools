@@ -66,33 +66,32 @@ class CommsFlow(MultiFlow):
     >>> t1 = ecf.create_comms("t1")
     >>> t2 = ecf.create_comms("t2")
     >>> ecf
-    examplecommsflow ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-       t1: t1 ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           out: t1_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           in: {}
-           received: {}
-       t2: t2 ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           out: t2_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           in: {}
-           received: {}
+    examplecommsflow ExampleCommsFlow
+    - s=ExampleState(x=1.0, y=1.0)
+    COMMS:
+    - t1, s=(x=1.0, y=1.0)
+    - t2, s=(x=1.0, y=1.0)
     >>> t1.s.put(x=10.0, y=10.0)
     >>> t1.send("t2", "x")
     >>> t1
-    t1 ExampleCommsFlow flow: ExampleState(x=10.0, y=10.0)
-           out: t1_out ExampleCommsFlow flow: ExampleState(x=10.0, y=1.0)
-           in: {}
-           received: {}
+    t1 ExampleCommsFlow
+    - s=ExampleState(x=10.0, y=10.0)
+    - out(): t1_out, s=(x=10.0, y=1.0)
+    - inbox(): {}
+    - received(): {}
     >>> t2
-    t2 ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           out: t2_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           in: {'t1': ('x',)}
-           received: {}
+    t2 ExampleCommsFlow
+    - s=ExampleState(x=1.0, y=1.0)
+    - out(): t2_out, s=(x=1.0, y=1.0)
+    - inbox(): {'t1': ('x',)}
+    - received(): {}
     >>> t2.receive()
     >>> t2
-    t2 ExampleCommsFlow flow: ExampleState(x=10.0, y=1.0)
-           out: t2_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           in: {}
-           received: {'t1': ('x',)}
+    t2 ExampleCommsFlow
+    - s=ExampleState(x=10.0, y=1.0)
+    - out(): t2_out, s=(x=1.0, y=1.0)
+    - inbox(): {}
+    - received(): {'t1': ('x',)}
     """
 
     slots = ['fxns', '__dict__']
@@ -109,20 +108,23 @@ class CommsFlow(MultiFlow):
 
     def __repr__(self):
         """Print console representation of CommsFlow."""
-        rep_str = super().create_repr(one_line=False)
-        if self.name == self.glob.name:
+        rep_str = self.create_repr(one_line=False)
+        if self.name == self.glob.name and self.locals:
             rep_str += "\nCOMMS:"
             for fname, func in self.fxns.items():
                 f_repr = func['internal'].create_repr(with_classname=False,
                                                       one_line=True)
                 rep_str += "\n- "+f_repr
         elif self.name in self.glob.fxns:
-            rep_str = (rep_str + "\nPORTS:"
-                       "\n- out: " + self.out().create_repr(with_classname=False, one_line=True) +
-                       "\n- in: " + str(self.inbox()) +
-                       "\n- received: " + str(self.received()))
-            for lo in self.locals:
-                rep_str = rep_str+"\n       "+lo+": "+getattr(self, lo).__repr__()
+            rep_str = (rep_str +
+                       "\n- out(): " + self.out().create_repr(with_classname=False, one_line=True) +
+                       "\n- inbox(): " + str(self.inbox()) +
+                       "\n- received(): " + str(self.received()))
+            if self.locals:
+                loc_reprs = [getattr(self, lo).create_repr(with_classname=False,
+                                                           one_line=True)
+                             for lo in self.locals]
+                rep_str += "\nLOCALS:\n- "+"\n- ".join(loc_reprs)
         return rep_str
 
     def create_comms(self, name, ports=[], as_copy=False, **kwargs):

@@ -68,11 +68,15 @@ class Action(Block):
     Examples
     --------
     >>> exa = ExampleAction()
-    >>> exa.exf
-    exampleflow ExampleFlow flow: ExampleState(x=1.0, y=1.0)
+    >>> exa
+    exampleaction ExampleAction
+    - t=ActionTime(time=-0.1, timers={})
+    - exf=exampleflow ExampleFlow, s=(x=1.0, y=1.0)
     >>> exa(1.0)
-    >>> exa.exf
-    exampleflow ExampleFlow flow: ExampleState(x=2.0, y=1.0)
+    >>> exa
+    exampleaction ExampleAction
+    - t=ActionTime(time=1.0, timers={})
+    - exf=exampleflow ExampleFlow, s=(x=2.0, y=1.0)
     >>> exa.indicate_done()
     True
     """

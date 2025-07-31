@@ -96,6 +96,10 @@ class CoordsParam(Parameter):
     blocksize: ClassVar[float] = 10.0
     gapwidth: ClassVar[float] = 0.0
 
+    def create_repr(self, fields=['x_size', 'y_size', 'blocksize', 'gapwidth'],
+                    **kwargs):
+        return super().create_repr(fields=fields, **kwargs)
+
 
 class DefaultCoordsParam(Parameter):
     """Default Parameter for Coords (with no states/features)."""
@@ -1041,6 +1045,13 @@ class Coords(BaseCoords):
     As shown, features are normal numpy arrays set to readonly:
 
     >>> ex = ExampleCoords()
+    >>> ex
+    examplecoords ExampleCoords
+    - p=ExampleCoordsParam(x_size=10, y_size=10, blocksize=10.0, gapwidth=0.0)
+    - r=Rand(seed=42)
+    - COLLECTIONS: hi_v_not_a(bool), high_v(bool)
+    - FEATURES: a(bool), v(float)
+    - STATES: st(float)
     >>> type(ex.a)
     <class 'numpy.ndarray'>
     >>> np.size(ex.a)
@@ -1104,6 +1115,22 @@ class Coords(BaseCoords):
         self.init_properties(*args, **kwargs)
         self.build()
         self.init_track(track)
+
+    def __repr__(self):
+        return self.create_repr(rolenames=["p", "s", "r"])
+
+    def create_repr(self, rolenames=[""], one_line=False, **kwargs):
+        """Create repr with showing grid properties."""
+        repstr = super().create_repr(rolenames=rolenames, one_line=one_line,
+                                     **kwargs)
+        if not one_line:
+            repstr += "\n- COLLECTIONS: "+", ".join([k+"(bool"+")"
+                                                     for k in self.collections.keys()])
+            repstr += "\n- FEATURES: "+", ".join([k+"("+v[0].__name__+")"
+                                                  for k, v in self.features.items()])
+            repstr += "\n- STATES: "+", ".join([k+"("+v[0].__name__+")"
+                                                  for k, v in self.states.items()])
+        return repstr
 
     def base_type(self):
         """Return fmdtools type of the model class."""

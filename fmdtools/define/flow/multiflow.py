@@ -84,20 +84,20 @@ class MultiFlow(Flow):
     >>> exf
     examplemultiflow ExampleMultiFlow
     - s=ExampleState(x=1.0, y=1.0)
-    LOCALS
+    LOCALS:
     - sub_flow, s=(x=0.0, y=0.0)
     >>> exf.update(to_get="sub_flow")
     >>> exf
     examplemultiflow ExampleMultiFlow
     - s=ExampleState(x=0.0, y=0.0)
-    LOCALS
+    LOCALS:
     - sub_flow, s=(x=0.0, y=0.0)
     >>> exf.s.put(x=10.0, y=10.0)
     >>> sub_flow.update("x", to_get="global")
     >>> exf
     examplemultiflow ExampleMultiFlow
     - s=ExampleState(x=10.0, y=10.0)
-    LOCALS
+    LOCALS:
     - sub_flow, s=(x=10.0, y=0.0)
     """
 
@@ -121,7 +121,7 @@ class MultiFlow(Flow):
         """Print console string."""
         rep_str = super().create_repr(one_line=False)
         if self.locals:
-            rep_str += "\nLOCALS"
+            rep_str += "\nLOCALS:"
             for loc in self.locals:
                 rep_str += "\n- "+self.get_view(loc).create_repr(with_classname=False,
                                                                  one_line=True)
@@ -215,7 +215,7 @@ class MultiFlow(Flow):
         >>> sub_f.get_view("global")
         examplemultiflow ExampleMultiFlow
         - s=ExampleState(x=1.0, y=1.0)
-        LOCALS
+        LOCALS:
         - sub_f, s=(x=1.0, y=1.0)
         - sub_f2, s=(x=1.0, y=1.0)
         >>> sub_f.get_view("sub_f2")

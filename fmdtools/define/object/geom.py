@@ -462,22 +462,25 @@ class GeomLine(Geom):
     ...    __slots__ = ()
     ...    container_p = ExLineParam
     ...    container_s = ExGeomState
-    >>> exp = ExLine()
-    >>> exp.at((1.0, 1.0), "on")
+    >>> exl = ExLine()
+    >>> exl
+    exline ExLine
+    - s=ExGeomState(occupied=False, buffer_around=1.0)
+    >>> exl.at((1.0, 1.0), "on")
     True
-    >>> exp.at((0.0, 0.0), "on")
+    >>> exl.at((0.0, 0.0), "on")
     True
-    >>> exp.at((2.0, 2.0), "on")
+    >>> exl.at((2.0, 2.0), "on")
     False
 
     Additionally, note the underlying shapely objects returned by get_shape():
 
-    >>> type(exp.get_shape())
+    >>> type(exl.get_shape())
     <class 'shapely.geometry.linestring.LineString'>
 
     As well as the buffer (on):
 
-    >>> type(exp.get_shape('on'))
+    >>> type(exl.get_shape('on'))
     <class 'shapely.geometry.polygon.Polygon'>
     """
 
@@ -555,6 +558,9 @@ class GeomPoly(Geom):
     ...    container_p = ExPolyParam
     ...    container_s = ExGeomState
     >>> egp = ExPoly()
+    >>> egp
+    expoly ExPoly
+    - s=ExGeomState(occupied=False, buffer_around=1.0)
     >>> egp.at((0.1, 0.05))
     True
     >>> egp.at((0.4, 0.3))

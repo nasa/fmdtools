@@ -35,19 +35,23 @@ class Component(Block):
     >>> c
     examplecomponent ExampleComponent
     - s=ExampleState(x=0.0, y=0.0)
+    - t=Time(time=-0.1, timers={})
     >>> c()
     >>> c()
     >>> c
     examplecomponent ExampleComponent
     - s=ExampleState(x=2.0, y=1.0)
+    - t=Time(time=2.0, timers={})
     >>> c()
     >>> c
     examplecomponent ExampleComponent
     - s=ExampleState(x=2.0, y=2.0)
+    - t=Time(time=3.0, timers={})
     >>> c(proptype="dynamic")
     >>> c
     examplecomponent ExampleComponent
     - s=ExampleState(x=2.0, y=3.0)
+    - t=Time(time=4.0, timers={})
     """
 
     __slots__ = ()

@@ -300,16 +300,19 @@ class DistEE(Function):
         >>> d.ee_in.s.effort = 2.0
         >>> d.static_behavior(1.0)
         >>> d.ee_mot
-        ee EE flow: EEState(rate=1.0, effort=2.0)
+        ee EE
+        - s=EEState(rate=1.0, effort=2.0)
 
         while fault modes modify this relationship::
         >>> d = DistEE()
         >>> d.m.add_fault("short")
         >>> d.static_behavior(1.0)
         >>> d.ee_mot
-        ee EE flow: EEState(rate=1.0, effort=0.0)
+        ee EE
+        - s=EEState(rate=1.0, effort=0.0)
         >>> d.ee_in
-        ee EE flow: EEState(rate=10.0, effort=1.0)
+        ee EE
+        - s=EEState(rate=10.0, effort=1.0)
         """
         self.set_faults()
         if self.m.has_fault("short"):

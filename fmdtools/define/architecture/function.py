@@ -451,11 +451,11 @@ class FunctionArchitecture(Architecture):
     exfa ExFxnArch
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=-0.1, timers={})
-    FLOWS
-    exf, s=(x=0.0, y=0.0)
-    FXNS
-    ex_fxn, s=(x=1.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
-    ex_fxn2, s=(x=1.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
+    FLOWS:
+    - exf, s=(x=0.0, y=0.0)
+    FXNS:
+    - ex_fxn, s=(x=1.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
+    - ex_fxn2, s=(x=1.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
 
     This type of functional architecture only has dynamic functions:
 
@@ -473,22 +473,22 @@ class FunctionArchitecture(Architecture):
     exfa ExFxnArch
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=1.0, timers={})
-    FLOWS
-    exf, s=(x=4.0, y=0.0)
-    FXNS
-    ex_fxn, s=(x=2.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
-    ex_fxn2, s=(x=2.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
+    FLOWS:
+    - exf, s=(x=4.0, y=0.0)
+    FXNS:
+    - ex_fxn, s=(x=2.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
+    - ex_fxn2, s=(x=2.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
 
     >>> exfa()
     >>> exfa
     exfa ExFxnArch
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=2.0, timers={})
-    FLOWS
-    exf, s=(x=10.0, y=0.0)
-    FXNS
-    ex_fxn, s=(x=3.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
-    ex_fxn2, s=(x=3.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
+    FLOWS:
+    - exf, s=(x=10.0, y=0.0)
+    FXNS:
+    - ex_fxn, s=(x=3.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
+    - ex_fxn2, s=(x=3.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
     """
 
     __slots__ = ['fxns', 'functionorder', '_fxnflows', '_flowstates',

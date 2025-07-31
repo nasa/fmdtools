@@ -49,6 +49,11 @@ class Environment(CommsFlow):
     ...    coords_c = ExampleCoords
     ...    arch_ga = ExGeomArch
     >>> env = ExampleEnvironment('env')
+    >>> env
+    env ExampleEnvironment
+    - r=Rand(seed=42)
+    - c=examplecoords ExampleCoords
+    - ga=exgeomarch ExGeomArch
     >>> env.create_hist([1.0])
     c.r.probdens:                   array(1)
     c.st:                           array(1)
@@ -88,6 +93,13 @@ class Environment(CommsFlow):
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Environment
+
+    def __repr__(self, rolenames=["s", "r", "c", "ga"], **kwargs):
+        return self.create_repr(rolenames, **kwargs)
+
+    def create_repr(self, rolenames=["s", "c", "ga"], **kwargs):
+        """Add details to repr."""
+        return super().create_repr(rolenames=rolenames, **kwargs)
 
     def copy(self, glob=[], p={}, s={}):
         """

@@ -50,6 +50,15 @@ class GeomArchitecture(Architecture):
     geoms. We can then access the individual geoms in the geoms dict, e.g.,:
 
     >>> ega = ExGeomArch()
+    >>> ega
+    exgeomarch ExGeomArch
+    - t=Time(time=-0.1, timers={})
+    POINTS:
+    - ex_point, s=(occupied=False, buffer_around=1.0)
+    LINES:
+    - ex_line, s=(occupied=False, buffer_around=1.0)
+    POLYS:
+    - ex_poly, s=(occupied=False, buffer_around=1.0)
     >>> ega.geoms()['ex_point'].s
     ExGeomState(occupied=False, buffer_around=1.0)
     >>> ega.h
@@ -60,7 +69,7 @@ class GeomArchitecture(Architecture):
     polys.ex_poly.s.occupied:     array(101)
     polys.ex_poly.s.buffer_around: array(101)
     >>> ega.return_mutables()
-    ((False, 1.0), (False, 1.0), (False, 1.0), (-0.1, 0, 0.0, 1))
+    ((False, 1.0), (False, 1.0), (False, 1.0), (-0.1, 0, 1, False, False))
     """
 
     container_p = Parameter
