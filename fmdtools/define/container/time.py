@@ -100,6 +100,10 @@ class Time(BaseContainer):
             self.timers[timername] = Timer(timername)
         self.set_timestep()
 
+    def create_repr(self, fields=['time', "timers"], **kwargs):
+        """Limit model repr to relevant time/timers fields."""
+        return super().create_repr(fields=fields, **kwargs)
+
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Time

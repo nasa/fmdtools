@@ -49,24 +49,24 @@ class Function(Block):
     >>> exf = ExampleFunction("exf")
     >>> exf
     exf ExampleFunction
-    - ExampleState(x=1.0, y=1.0)
-    - ExampleMode(mode=standby, faults=set())
+    - s=ExampleState(x=1.0, y=1.0)
+    - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
 
     Behavior can be called using __call__ or the user-defined behavior method:
 
     >>> exf(time=1.0, proptype="dynamic")
     >>> exf
     exf ExampleFunction
-    - ExampleState(x=2.0, y=1.0)
-    - ExampleMode(mode=standby, faults=set())
+    - s=ExampleState(x=2.0, y=1.0)
+    - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
 
     Which can also be used to inject faults:
 
     >>> exf(time=2.0, proptype="dynamic", faults=['no_charge'])
     >>> exf
     exf ExampleFunction
-    - ExampleState(x=2.0, y=4.0)
-    - ExampleMode(mode=no_charge, faults={'no_charge'})
+    - s=ExampleState(x=2.0, y=4.0)
+    - m=ExampleMode(mode='no_charge', faults={'no_charge'}, sub_faults=False)
     """
 
     __slots__ = ["ca", "aa", "fa", "args_f", "archs"]

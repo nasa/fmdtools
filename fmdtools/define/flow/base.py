@@ -36,13 +36,15 @@ class Flow(BaseObject):
 
     >>> exf = ExampleFlow('exf', s={'x': 0.0})
     >>> exf
-    exf ExampleFlow flow: ExampleState(x=0.0, y=1.0)
+    exf ExampleFlow
+    - s=ExampleState(x=0.0, y=1.0)
 
     Note that copying creates independent copies of states:
 
     >>> exf2 = exf.copy()
     >>> exf2
-    exf ExampleFlow flow: ExampleState(x=0.0, y=1.0)
+    exf ExampleFlow
+    - s=ExampleState(x=0.0, y=1.0)
     >>> exf2.s.x = 2.0
     >>> exf2.s == exf.s
     False
@@ -51,16 +53,6 @@ class Flow(BaseObject):
     __slots__ = ('p', 's', 'h')
     default_track = ('s', 'i')
     check_dict_creation = True
-
-    def __repr__(self):
-        if hasattr(self, 'name'):
-            startext = getattr(self, 'name') + ' ' + self.__class__.__name__
-            if hasattr(self, 's'):
-                return startext + ' flow: ' + self.s.__repr__()
-            else:
-                return startext
-        else:
-            return "Uninitialized Flow"
 
     def check_role(self, roletype, rolename):
         """Flows may be given any role name."""

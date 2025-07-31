@@ -449,15 +449,13 @@ class FunctionArchitecture(Architecture):
     >>> exfa = ExFxnArch(name="exfa")
     >>> exfa
     exfa ExFxnArch
-    FUNCTIONS:
-    ex_fxn ExampleFunction
-    - ExampleState(x=1.0, y=1.0)
-    - ExampleMode(mode=standby, faults=set())
-    ex_fxn2 ExampleFunction
-    - ExampleState(x=1.0, y=1.0)
-    - ExampleMode(mode=standby, faults=set())
-    FLOWS:
-    exf ExampleFlow flow: ExampleState(x=0.0, y=0.0)
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
+    - t=Time(time=-0.1, timers={})
+    FLOWS
+    exf, s=(x=0.0, y=0.0)
+    FXNS
+    ex_fxn, s=(x=1.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
+    ex_fxn2, s=(x=1.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
 
     This type of functional architecture only has dynamic functions:
 
@@ -473,28 +471,24 @@ class FunctionArchitecture(Architecture):
     >>> exfa()
     >>> exfa
     exfa ExFxnArch
-    FUNCTIONS:
-    ex_fxn ExampleFunction
-    - ExampleState(x=2.0, y=1.0)
-    - ExampleMode(mode=standby, faults=set())
-    ex_fxn2 ExampleFunction
-    - ExampleState(x=2.0, y=1.0)
-    - ExampleMode(mode=standby, faults=set())
-    FLOWS:
-    exf ExampleFlow flow: ExampleState(x=4.0, y=0.0)
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
+    - t=Time(time=1.0, timers={})
+    FLOWS
+    exf, s=(x=4.0, y=0.0)
+    FXNS
+    ex_fxn, s=(x=2.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
+    ex_fxn2, s=(x=2.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
 
     >>> exfa()
     >>> exfa
     exfa ExFxnArch
-    FUNCTIONS:
-    ex_fxn ExampleFunction
-    - ExampleState(x=3.0, y=1.0)
-    - ExampleMode(mode=standby, faults=set())
-    ex_fxn2 ExampleFunction
-    - ExampleState(x=3.0, y=1.0)
-    - ExampleMode(mode=standby, faults=set())
-    FLOWS:
-    exf ExampleFlow flow: ExampleState(x=10.0, y=0.0)
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
+    - t=Time(time=2.0, timers={})
+    FLOWS
+    exf, s=(x=10.0, y=0.0)
+    FXNS
+    ex_fxn, s=(x=3.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
+    ex_fxn2, s=(x=3.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
     """
 
     __slots__ = ['fxns', 'functionorder', '_fxnflows', '_flowstates',
@@ -511,21 +505,6 @@ class FunctionArchitecture(Architecture):
         self._fxnflows = []
         self._flowstates = {}
         Architecture.__init__(self, h=h, **kwargs)
-
-    def __repr__(self):
-        fxnlist = ['\n' + fxn.__repr__() for fxn in self.fxns.values()]
-        fxnlist = [fstr[:115] + '...' if len(fstr) > 120 else fstr for fstr in fxnlist]
-        if len(fxnlist) > 15:
-            fxnlist = fxnlist[:15]+["...("+str(len(fxnlist))+' total)\n']
-        fxnstr = ''.join(fxnlist)
-        flowlist = ['\n' + flow.__repr__() for flow in self.flows.values()]
-        flowlist = [fstr[:115]+'...\n'if len(fstr) > 120 else fstr for fstr in flowlist]
-        if len(flowlist) > 15:
-            flowlist = flowlist[:15]+["...("+str(len(flowlist))+' total)\n']
-        flowstr = ''.join(flowlist)
-        repstr = (self.name + " " + self.__class__.__name__ +
-                  '\n' + 'FUNCTIONS:' + fxnstr + '\nFLOWS:' + flowstr)
-        return repstr
 
     def base_type(self):
         """Return fmdtools type of the model class."""

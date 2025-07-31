@@ -109,15 +109,18 @@ class CommsFlow(MultiFlow):
 
     def __repr__(self):
         """Print console representation of CommsFlow."""
-        rep_str = Flow.__repr__(self)
+        rep_str = super().create_repr(one_line=False)
         if self.name == self.glob.name:
+            rep_str += "\nCOMMS:"
             for fname, func in self.fxns.items():
-                rep_str = rep_str+"\n   "+fname+": "+func["internal"].__repr__()
+                f_repr = func['internal'].create_repr(with_classname=False,
+                                                      one_line=True)
+                rep_str += "\n- "+f_repr
         elif self.name in self.glob.fxns:
-            rep_str = (rep_str +
-                       "\n       out: " + self.out().__repr__() +
-                       "\n       in: " + str(self.inbox()) +
-                       "\n       received: " + str(self.received()))
+            rep_str = (rep_str + "\nPORTS:"
+                       "\n- out: " + self.out().create_repr(with_classname=False, one_line=True) +
+                       "\n- in: " + str(self.inbox()) +
+                       "\n- received: " + str(self.received()))
             for lo in self.locals:
                 rep_str = rep_str+"\n       "+lo+": "+getattr(self, lo).__repr__()
         return rep_str

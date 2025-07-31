@@ -93,6 +93,25 @@ class Architecture(Simulable):
                            for role in self.get_roles('container', with_immutable=False)
                            if role in kwargs}
 
+    def create_repr(self, rolenames=['s', 'm'], sim_rolenames=['s', 'm'],
+                    with_classname=False, one_line=False):
+        """Show string with sims and flows."""
+        repstr = super().create_repr(rolenames=rolenames, with_classname=True,
+                                     one_line=False)
+        if not one_line:
+            for flex_role in self.flexible_roles:
+                roledict = self.get_flex_role_objs(flex_role)
+                rolelist = ['\n' + obj.create_repr(with_classname=False, one_line=True)
+                            if isinstance(obj, BaseObject) else '\n' + name
+                            for name, obj in roledict.items()]
+                rolelist = [fstr[:115] + '...' if len(fstr) > 120 else fstr
+                            for fstr in rolelist]
+                if len(rolelist) > 15:
+                    rolelist = rolelist[:15]+["...("+str(len(rolelist))+' total)\n']
+                rolestr = "\n"+flex_role.upper()+"".join(rolelist)
+                repstr += rolestr
+        return repstr
+
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Architecture

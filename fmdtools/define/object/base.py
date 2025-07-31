@@ -188,6 +188,39 @@ class BaseObject(object):
         self.init_track(track)
         self.check_slots()
 
+    def create_repr(self, rolenames=[], with_classname=True, one_line=False):
+        """
+        Provide a repl-friendly string showing the states of the Object.
+
+        Returns
+        -------
+        repr: str
+            console string
+        """
+        if hasattr(self, 'name'):
+            objstr = getattr(self, 'name', '')
+            if with_classname:
+                objstr += ' '+self.__class__.__name__
+            if not rolenames:
+                rolenames = self.get_roles(with_immutable=False, with_flex=False)
+            for rolename in rolenames:
+                role_obj = getattr(self, rolename, False)
+                if role_obj:
+                    if hasattr(role_obj, 'create_repr'):
+                        objrepr = role_obj.create_repr(with_classname=with_classname)
+                    else:
+                        objrepr = role_obj.__repr__()
+                    if one_line:
+                        objstr += ', '+rolename+"="+objrepr
+                    else:
+                        objstr += '\n'+"- "+rolename+"="+objrepr
+            return objstr
+        else:
+            return 'New uninitialized '+self.__class__.__name__
+
+    def __repr__(self):
+        return self.create_repr(rolenames=[])
+
     @classmethod
     def create_name(cls, name=''):
         """Create a name for the object (default is class name)."""

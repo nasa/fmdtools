@@ -752,6 +752,10 @@ class Block(Simulable):
         self.init_hist(h=h)
         self.check_slots()
 
+    def create_repr(self, rolenames=['s', 'm'], **kwargs):
+        """Restricts default repr to state and mode."""
+        return super().create_repr(rolenames=rolenames, **kwargs)
+
     def init_block(self, **kwargs):
         """Initilialization method to set initial states etc (placeholder)."""
         return
@@ -808,25 +812,6 @@ class Block(Simulable):
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Block
-
-    def __repr__(self):
-        """
-        Provide a repl-friendly string showing the states of the Block.
-
-        Returns
-        -------
-        repr: str
-            console string
-        """
-        if hasattr(self, 'name'):
-            fxnstr = getattr(self, 'name', '')+' '+self.__class__.__name__
-            for at in ['s', 'm']:
-                at_container = getattr(self, at, False)
-                if at_container:
-                    fxnstr = fxnstr+'\n'+"- "+at_container.__repr__()
-            return fxnstr
-        else:
-            return 'New uninitialized '+self.__class__.__name__
 
     def get_rand_states(self, auto_update_only=False):
         """

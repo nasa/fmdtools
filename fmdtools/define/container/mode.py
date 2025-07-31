@@ -29,7 +29,6 @@ from fmdtools.analyze.history import History
 
 from typing import ClassVar
 import numpy as np
-import itertools
 import copy
 
 
@@ -215,14 +214,9 @@ class Mode(BaseContainer, readonly=False):
         if not self.faults:
             self.faults = set()
 
-    def __repr__(self):
-        reprstr = (self.__class__.__name__ +
-                   "(mode=" +
-                   self.mode +
-                   ", faults=" +
-                   str(self.faults) +
-                   ")")
-        return reprstr
+    def create_repr(self, fields=["mode", "faults", "sub_faults"], **kwargs):
+        """Limit default repr to relevant fields."""
+        return super().create_repr(fields=fields, **kwargs)
 
     def base_type(self):
         """Return fmdtools type of the model class."""
@@ -372,7 +366,7 @@ class Mode(BaseContainer, readonly=False):
         Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.charge': 20.0}, units='sim')
         >>> exm.add_fault(dict(low={'disturbances': {'s.charge': 40.0}}))
         >>> exm
-        ExampleMode(mode=low, faults={'low'})
+        ExampleMode(faults={'low'}, sub_faults=False, fault_low={'disturbances': {'s.charge': 40.0}}, mode='low')
         >>> exm.get_fault('low')
         Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.charge': 40.0}, units='sim')
         """

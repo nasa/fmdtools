@@ -41,6 +41,20 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     default_track = 'all'
     rolename = 'x'
 
+    def __repr__(self):
+        return self.create_repr(with_classname=True, fields="all")
+
+    def create_repr(self, with_classname=True, fields="all"):
+        """Create repr-friendly string for container."""
+        if with_classname:
+            repr_str = self.__class__.__name__
+        else:
+            repr_str = ""
+        if fields == "all":
+            fields = self.__fields__
+        field_str = ", ".join(f+"="+self[f].__repr__() for f in fields)
+        return repr_str+"("+field_str+")"
+
     def get_typename(self):
         """Containers are typed as containers unless specified otherwise."""
         return "Container"

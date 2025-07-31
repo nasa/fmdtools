@@ -119,6 +119,10 @@ class Rand(BaseContainer):
         if self.seed is None:
             raise Exception("Invalid seed: None")
 
+    def create_repr(self, fields=["seed", "s"], **kwargs):
+        """Limit default repr to relevant fields."""
+        return super().create_repr(fields=fields, **kwargs)
+
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Rand

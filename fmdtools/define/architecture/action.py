@@ -184,8 +184,6 @@ class ActionArchitectureFlowGraph(ActionArchitectureGraph):
         return set_aa_nx_types(aa, aa.flow_graph.copy())
 
 
-
-
 class ActionArchitecture(Architecture):
     """
     Construct the Action Sequence Graph with the given parameters.
