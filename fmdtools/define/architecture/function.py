@@ -113,16 +113,16 @@ class FunctionArchitectureGraph(ArchitectureGraph):
 
     def get_staticnodes(self, mdl):
         """Get static node information for set_exec_order."""
-        staticfxns = [mdl.fxns[sf].get_full_name() for sf in mdl.staticfxns]
-        staticflows = list(set([n for node in staticfxns if node in self.g
+        staticsims = [mdl.fxns[sf].get_full_name() for sf in mdl.staticsims]
+        staticflows = list(set([n for node in staticsims if node in self.g
                                 for n in self.g.neighbors(node)]))
-        staticnodes = staticfxns + staticflows
+        staticnodes = staticsims + staticflows
         static_node_dict = {n: n in staticnodes for n in self.g.nodes()}
         return static_node_dict
 
     def get_dynamicnodes(self, mdl):
         """Get dynamic node information for set_exec_order."""
-        dynamicnodes = [mdl.fxns[sf].get_full_name() for sf in mdl.dynamicfxns]
+        dynamicnodes = [mdl.fxns[sf].get_full_name() for sf in mdl.dynamicsims]
         orders = {n: str(i) for i, n in enumerate(dynamicnodes)}
         dynamic_node_dict = {n: n in orders for n in self.g.nodes()}
         return dynamic_node_dict, orders, dynamicnodes
@@ -424,19 +424,6 @@ class FunctionArchitecture(Architecture):
     fxns : dict
         dictionary of functions in the model indexed by name
 
-    Special Attributes
-    ------------------
-    functionorder : OrderedSet
-        Keeps track of function dynamic execution order
-    staticfxns : OrderedSet
-        Keeps track of which functions run in static execution step
-    dynamicfxns : Orderedset
-        Keeps track of which functions run in dynamic execution step
-    staticflows : list
-        Flows to keep track of in static execution step
-    graph : networkx graph
-        multigraph view of functions and flows
-
     Examples
     --------
     >>> class ExFxnArch(FunctionArchitecture):
@@ -459,9 +446,9 @@ class FunctionArchitecture(Architecture):
 
     This type of functional architecture only has dynamic functions:
 
-    >>> exfa.dynamicfxns
+    >>> exfa.dynamicsims
     OrderedSet(['ex_fxn', 'ex_fxn2'])
-    >>> exfa.staticfxns
+    >>> exfa.staticsims
     OrderedSet()
 
     This can in turn be simulated using FunctionArchitecture's built-in .propagate
@@ -491,8 +478,7 @@ class FunctionArchitecture(Architecture):
     - ex_fxn2, s=(x=3.0, y=1.0), m=(mode='standby', faults=set(), sub_faults=False)
     """
 
-    __slots__ = ['fxns', 'functionorder', '_fxnflows', '_flowstates',
-                 'graph', 'staticfxns', 'dynamicfxns', 'staticflows']
+    __slots__ = ['fxns']
     default_track = ('fxns', 'flows', 'i')
     default_name = 'model'
     flexible_roles = ['flows', 'fxns']
@@ -500,23 +486,9 @@ class FunctionArchitecture(Architecture):
     rolename = 'fa'
     container_m = Mode
 
-    def __init__(self, h={}, **kwargs):
-        self.functionorder = OrderedSet()
-        self._fxnflows = []
-        self._flowstates = {}
-        Architecture.__init__(self, h=h, **kwargs)
-
     def base_type(self):
         """Return fmdtools type of the model class."""
         return FunctionArchitecture
-
-    def is_static(self):
-        """Determine if static based on containment of static functions."""
-        return super().is_static() or any(self.staticfxns)
-
-    def is_dynamic(self):
-        """Determine if dynamic based on containment of dynamic functions."""
-        return super().is_dynamic() or any(self.dynamicfxns)
 
     def add_fxn(self, name, fclass, *flownames, **fkwargs):
         """
@@ -537,21 +509,11 @@ class FunctionArchitecture(Architecture):
             Parameters to send to __init__ method of the Function superclass
         """
         self.add_sim('fxns', name, fclass, *flownames, **fkwargs)
-        for flowname in flownames:
-            self._fxnflows.append((name, flowname))
-        self.functionorder.update([name])
 
-    def set_functionorder(self, functionorder):
-        """
-        Manually set the order of functions to be executed.
-
-        (otherwise it will be executed based on the sequence of add_fxn calls)
-        """
-        if not self.functionorder.difference(functionorder):
-            self.functionorder = OrderedSet(functionorder)
-        else:
-            raise Exception("Invalid list: "+str(functionorder) +
-                            " should have elements: "+str(self.functionorder))
+    def build(self, construct_graph=True, require_connections=True, **kwargs):
+        """Build the function architecture - connections should be enforced."""
+        super().build(construct_graph=construct_graph,
+                      require_connections=require_connections, **kwargs)
 
     def fxns_of_class(self, ftype):
         """Return dict of funcitons corresponding to the given class name ftype."""
@@ -571,30 +533,6 @@ class FunctionArchitecture(Architecture):
             else:
                 class_relationship[obj.__class__.__name__] = set(obj.get_flowtypes())
         return class_relationship
-
-    def build(self, require_connections=True, **kwargs):
-        """Build the model graph after the functions have been added."""
-        super().build(**kwargs)
-        self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items()
-                                      if fxn.is_static()])
-        self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items()
-                                       if fxn.is_dynamic()])
-        self.construct_graph(require_connections=require_connections)
-        self.staticflows = [flow for flow in self.flows
-                            if any([n in self.staticfxns
-                                    for n in self.graph.neighbors(flow)])]
-
-    def construct_graph(self, require_connections=True):
-        """Create .graph nx.graph representation of the model."""
-        self.graph = nx.Graph()
-        self.graph.add_nodes_from(self.fxns, bipartite=0)
-        self.graph.add_nodes_from(self.flows, bipartite=1)
-        self.graph.add_edges_from(self._fxnflows)
-
-        # check to see that all functions/flows are connected
-        dangling_nodes = [e for e in nx.isolates(self.graph)]
-        if dangling_nodes and require_connections:
-            raise Exception("Fxns/flows disconnected from model: "+str(dangling_nodes))
 
     def calc_repaircost(self, additional_cost=0, default_cost=0, max_cost=np.inf):
         """
@@ -649,158 +587,6 @@ class FunctionArchitecture(Architecture):
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
         super().reset()
-
-    def return_probdens(self):
-        """Return the probability density of the model distributions."""
-        probdens = 1.0
-        for fxn in self.fxns.values():
-            probdens *= fxn.return_probdens()
-        return probdens
-
-    def prop_dynamic(self, time):
-        """
-        Run dynamic propagation functions.
-
-        Calls the defined dynamaic functions
-        (e.g., those with dynamic_behavior() methods) in order the specified by the
-        init_architecture method.
-        """
-        for fxnname in self.dynamicfxns:
-            fxn = self.fxns[fxnname]
-            fxn(time=time, proptype='dynamic', end_of_timestep=False)
-
-    def prop_static(self, time):
-        """
-        Propagate behaviors through model graph (static propagation step).
-
-        Runs by maintaining a list of "active" functions to update, starting with all
-        functions with a static_behavior() method to call. For each of these functions,
-        it updates the static_behavior() method. If new mutables are present, the
-        function is kept in the list (otherwise it is removed). If its connected flows
-        have new mutables, other functions connected to that flow are added to the list.
-        This algorithm is run until there are no more "active" functions, which may
-        require several executions of each function's static_behavior() method to
-        propagate behavior through the entire model graph.
-
-        Parameters
-        ----------
-        time : float
-            Current time-step
-        """
-        # set up history of flows to see if any has changed
-        activefxns = self.staticfxns.copy()
-        nextfxns = set()
-        if not self._flowstates:
-            self._flowstates = dict.fromkeys(self.staticflows)
-            for flowname in self.staticflows:
-                self._flowstates[flowname] = self.flows[flowname].return_mutables()
-        n = 0
-        while activefxns:
-            flows_to_check = {*self.staticflows}
-            for fxnname in list(activefxns).copy():
-                # Update functions with new values, check to see if new faults or states
-                oldmutables = self.fxns[fxnname].return_mutables()
-                self.fxns[fxnname](time=time, proptype='static', end_of_timestep=False)
-                if oldmutables != self.fxns[fxnname].return_mutables():
-                    nextfxns.update([fxnname])
-
-                # Check what flows now have new values and add connected functions
-                # (done for each because of communications potential)
-                for flowname in self.fxns[fxnname].flows:
-                    if flowname in flows_to_check:
-                        try:
-                            if self._flowstates[flowname] != self.flows[flowname].return_mutables():
-                                nextfxns.update(set([n for n in self.graph.neighbors(flowname)
-                                                     if n in self.staticfxns]))
-                                flows_to_check.remove(flowname)
-                        except ValueError as e:
-                            raise Exception("Invalid mutables in flow: "
-                                            + flowname) from e
-            # check remaining flows that have not been checked already
-            for flowname in flows_to_check:
-                if self._flowstates[flowname] != self.flows[flowname].return_mutables():
-                    nextfxns.update(set([n for n in self.graph.neighbors(flowname)
-                                         if n in self.staticfxns]))
-            # update flowstates
-            for flowname in self.staticflows:
-                self._flowstates[flowname] = self.flows[flowname].return_mutables()
-            activefxns = nextfxns.copy()
-            nextfxns.clear()
-            n += 1
-            if n > 1000:  # break if this is going for too long
-                raise Exception("Undesired looping for functions in static propagation",
-                                "at t=" + str(time) + ", these functions remain active:"
-                                + str(activefxns))
-
-    def plot_dynamic_run_order(self, rotateticks=False, title="Dynamic Run Order"):
-        """
-        Plot the run order for the model during the dynamic propagation step.
-
-        The x-direction is the order of each function executed and the y are the
-        corresponding flows acted on by the given methods.
-
-        Parameters
-        ----------
-        rotateticks : Bool, optional
-            Whether to rotate the x-ticks (for bigger plots). The default is False.
-        title : str, optional
-            String to use for the title (if any). The default is "Dynamic Run Order".
-
-        Returns
-        -------
-        fig : figure
-            Matplotlib figure object
-        ax : axis
-            Corresponding matplotlib axis
-        """
-        from matplotlib import pyplot as plt
-        from matplotlib.collections import PolyCollection
-        from matplotlib.ticker import AutoMinorLocator
-        fxnorder = list(self.dynamicfxns)
-        times = [i+0.5 for i in range(len(fxnorder))]
-        fxntimes = {f: i for i, f in enumerate(fxnorder)}
-
-        flowtimes = {f: [fxntimes[n] for n in self.graph.neighbors(
-            f) if n in self.dynamicfxns] for f in self.flows}
-
-        lengthorder = {k: v for k, v in
-                       sorted(flowtimes.items(), key=lambda x: len(x[1]), reverse=True)
-                       if len(v) > 0}
-        starttimeorder = {k: v for k, v in sorted(lengthorder.items(),
-                                                  key=lambda x: x[1][0], reverse=True)}
-        endtimeorder = [k for k, v in sorted(starttimeorder.items(),
-                                             key=lambda x: x[1][-1], reverse=True)]
-        flowtimedict = {flow: i for i, flow in enumerate(endtimeorder)}
-
-        fig, ax = plt.subplots()
-
-        for flow in flowtimes:
-            phaseboxes = [((t, flowtimedict[flow]-0.5),
-                           (t, flowtimedict[flow]+0.5),
-                           (t+1.0, flowtimedict[flow]+0.5),
-                           (t+1.0, flowtimedict[flow]-0.5))
-                          for t in flowtimes[flow]]
-            bars = PolyCollection(phaseboxes)
-            ax.add_collection(bars)
-
-        flowtimes = [i+0.5 for i in range(len(self.flows))]
-        ax.set_yticks(list(flowtimedict.values()))
-        ax.set_yticklabels(list(flowtimedict.keys()))
-        ax.set_ylim(-0.5, len(flowtimes)-0.5)
-        ax.set_xticks(times)
-        ax.set_xticklabels(fxnorder, rotation=90*rotateticks)
-        ax.set_xlim(0, len(times))
-        ax.xaxis.set_minor_locator(AutoMinorLocator(2))
-        ax.yaxis.set_minor_locator(AutoMinorLocator(2))
-        ax.grid(which='minor', linewidth=2)
-        ax.tick_params(axis='x', bottom=False, top=False,
-                       labelbottom=False, labeltop=True)
-        if title:
-            if rotateticks:
-                fig.suptitle(title, fontweight='bold', y=1.15)
-            else:
-                fig.suptitle(title, fontweight='bold')
-        return fig, ax
 
     def as_modelgraph(self, gtype=FunctionArchitectureGraph, **kwargs):
         """Create and return the corresponding ModelGraph for the Object."""

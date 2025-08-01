@@ -82,6 +82,11 @@ class ComponentArchitecture(Architecture):
         """
         self.add_sim('comps', name, compclass, *flownames, **kwargs)
 
+    def build(self, construct_graph=True, require_connections=False, **kwargs):
+        """Build the function architecture - connections should be enforced."""
+        super().build(construct_graph=construct_graph,
+                      require_connections=require_connections, **kwargs)
+
 
 
 class ExampleComponentArchitecture(ComponentArchitecture):
@@ -96,15 +101,6 @@ class ExampleComponentArchitecture(ComponentArchitecture):
     def init_architecture(self, *args, **kwargs):
         self.add_comp("c1", ExampleComponent, s={'x': 5.0, 'y': 5.0})
         self.add_comp("c2", ExampleComponent, s={'x': 10.0, 'y': 10.0})
-
-    def static_behavior(self, time):
-        self.comps['c1'].static_behavior(time)
-        self.comps['c2'].static_behavior(time)
-
-    def dynamic_behavior(self, time):
-        self.comps['c1'].dynamic_behavior(time)
-        self.comps['c2'].dynamic_behavior(time)
-
 
 
 if __name__ == "__main__":

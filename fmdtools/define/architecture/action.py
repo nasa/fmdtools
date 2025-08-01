@@ -292,9 +292,9 @@ class ActionArchitecture(Architecture):
             initial_action = [self.initial_action]
         self.set_active_actions(initial_action)
 
-    def build(self, **kwargs):
+    def build(self, construct_graph=False, **kwargs):
         """Build the action graph."""
-        super().build(**kwargs)
+        super().build(construct_graph=construct_graph, **kwargs)
         self.set_initial_active_action()
         if self.state_rep == 'finite-state' and len(self.active_actions) > 1:
             raise Exception("Cannot have more than one initial action with" +

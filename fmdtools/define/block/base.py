@@ -222,12 +222,12 @@ class Simulable(BaseObject):
         """Check if Block has static execution step."""
         return (getattr(self, 'behavior', False) or
                 getattr(self, 'static_behavior', False) or
-                any([getattr(self, r).is_static() for r in self.get_roles('arch')]))
+                any([r.is_static() for r in self.get_sims().values()]))
 
     def is_dynamic(self):
         """Check if Block has dynamic execution step."""
         return (hasattr(self, 'dynamic_behavior') or
-                any([getattr(self, r).is_dynamic() for r in self.get_roles('arch')]))
+                any([r.is_dynamic() for r in self.get_sims().values()]))
 
     def get_time(self, time):
         """Get time from the SimParam (if not provided)."""
@@ -505,8 +505,7 @@ class Simulable(BaseObject):
             if not isinstance(with_sub_faults, bool):
                 with_sub_faults -= 1
             sub_kwar = dict(only_present=only_present, with_sub_faults=with_sub_faults)
-            for objname in self.get_roles('arch'):
-                obj = getattr(self, objname)
+            for objname, obj in self.get_sims().items():
                 all_faults.update(obj.get_faults(**sub_kwar))
             for objname, obj in self.get_flex_role_objs().items():
                 if hasattr(obj, 'get_faults'):
@@ -525,7 +524,7 @@ class Simulable(BaseObject):
             state_pd = self.r.return_probdens()
         else:
             state_pd = 1.0
-        for arch in self.get_roles('arch'):
+        for arch in self.get_sims():
             state_pd *= getattr(self, arch).return_probdens()
         return state_pd
 
@@ -535,6 +534,12 @@ class Simulable(BaseObject):
             self.r.update_stochastic_states()
             if self.sp.track_pdf:
                 self.r.probdens = self.r.return_probdens()
+
+    def get_sims(self):
+        """Return dict of simulable objects within the object."""
+        all_roles = self.get_roles_as_dict(with_immutable=False, no_flows=True)
+        return {rolename: roleobj for rolename, roleobj in all_roles.items()
+                if isinstance(roleobj, Simulable)}
 
     def update_arch_behaviors(self, time, proptype):
         """
@@ -550,9 +555,8 @@ class Simulable(BaseObject):
         proptype : str
             Propagation step to perform ('dynamic' or 'static').
         """
-        for objname in self.get_roles('arch'):
+        for objname, obj in self.get_sims().items():
             try:
-                obj = getattr(self, objname)
                 obj(time=time, proptype=proptype, end_of_timestep=False)
             except TypeError as e:
                 raise Exception("Poorly specified Architecture: "
@@ -606,23 +610,27 @@ class Simulable(BaseObject):
             Time to update the static behavior at.
         proptype : str
             Propagation the system is in. Skips if proptype="dynamic."
-            Default is "static"
+            If "static-once", static behaviors are only executed once. This option is
+            used when executing in architectures. Default is "static"
         """
         if proptype in ['static', 'both']:
             active = True
-            oldmutables = self.return_mutables()
-
+            self.set_mutables()
             while active:
-                self.update_arch_behaviors(time, "static")
-                if hasattr(self, 'static_behavior'):
-                    self.static_behavior(time)
-                    self.t.executed_static = True
-                if self.sp.with_loadings and hasattr(self, 'static_loading'):
-                    self.static_loading(time)
+                self.execute_static_behaviors(time)
                 # determine if propagation should continue due to new states
-                newmutables = self.return_mutables()
-                active = oldmutables != newmutables
-                oldmutables = newmutables
+                active = self.has_changed(update=True)
+        elif proptype in ['static-once']:
+            self.execute_static_behaviors(time)
+
+    def execute_static_behaviors(self, time):
+        """Execute static behaviors."""
+        self.update_arch_behaviors(time, "static")
+        if hasattr(self, 'static_behavior'):
+            self.static_behavior(time)
+            self.t.executed_static = True
+        if self.sp.with_loadings and hasattr(self, 'static_loading'):
+            self.static_loading(time)
 
     def end_timestep(self, time, t_shift=None, t_ind=None, log_hist=True):
         """

@@ -143,7 +143,7 @@ class BaseObject(object):
     s.y:                            array(2)
     """
 
-    __slots__ = ('name', 'containers', 'indicators', 'track', 'root')
+    __slots__ = ('name', 'containers', 'indicators', 'track', 'root', 'mutables')
     roletypes = ['container']
     roledicts = []
     rolevars = []
@@ -187,6 +187,7 @@ class BaseObject(object):
         self.init_roletypes(*roletypes, **kwargs)
         self.init_track(track)
         self.check_slots()
+        self.mutables = ()
 
     def create_repr(self, rolenames=[], with_classname=True, one_line=False):
         """
@@ -833,6 +834,21 @@ class BaseObject(object):
         """
         return tuple([mut.return_mutables() if hasattr(mut, 'return_mutables')
                       else mut for mut in self.find_mutables()])
+
+    def set_mutables(self):
+        """Set the current mutables of the object (to check against later)."""
+        self.mutables = self.return_mutables()
+
+    def has_changed(self, update=False):
+        """Check if the mutables of the object have changed."""
+        new_mutables = self.return_mutables()
+        try:
+            is_changed = new_mutables != self.mutables
+        except ValueError as e:
+            raise Exception("Invalid mutables in "+self.name) from e
+        if update:
+            self.mutables = new_mutables
+        return is_changed
 
     def get_node_attrs(self, roles=['container'], with_immutable=False,
                        time=0.0, indicators=True, obj=False):

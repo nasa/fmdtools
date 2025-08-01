@@ -28,6 +28,7 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.analyze.common import setup_plot
 from fmdtools.define.object.geom import GeomPoint, GeomLine, GeomPoly
 from fmdtools.define.object.geom import ExPoint, ExLine, ExPoly
+from fmdtools.define.block.base import Block
 
 
 class GeomArchitecture(Architecture):
@@ -48,6 +49,8 @@ class GeomArchitecture(Architecture):
     ...    def dynamic_behavior(self, time):
     ...        if self.t.time >= 1.0:
     ...            self.points["ex_point"].s.buffer_around = self.t.time + self.t.dt
+    ...    def static_behavior(self, time):
+    ...        self.lines["ex_line"].s.buffer_around = self.points["ex_point"].s.buffer_around
 
     This can then be used in containing classes (e.g., environments) that need multiple
     geoms. We can then access the individual geoms in the geoms dict, e.g.,:
@@ -86,7 +89,7 @@ class GeomArchitecture(Architecture):
     POINTS:
     - ex_point, s=(occupied=False, buffer_around=2.0)
     LINES:
-    - ex_line, s=(occupied=False, buffer_around=1.0)
+    - ex_line, s=(occupied=False, buffer_around=2.0)
     POLYS:
     - ex_poly, s=(occupied=False, buffer_around=1.0)
     """
@@ -261,6 +264,14 @@ class GeomArchitecture(Architecture):
                 geom.assign_from(hist.get(flex_role+"."+geomname), t)
         return self.show(**kwargs)
 
+    def prop_static(self, time):
+        """Since geoms are not connected, just run in sequence."""
+        Block.update_arch_behaviors(self, time, "static")
+
+    def build(self, construct_graph=False, **kwargs):
+        """Build the action graph."""
+        super().build(construct_graph=construct_graph, **kwargs)
+
 
 class ExGeomArch(GeomArchitecture):
     """Example Geometric Architecture for testing etc."""
@@ -275,6 +286,9 @@ class ExGeomArch(GeomArchitecture):
         """Example dynamic behavior demonstrating dynamic buffers."""
         if self.t.time >= 0.0:
             self.points["ex_point"].s.buffer_around = self.t.time + self.t.dt
+
+    def static_behavior(self, time):
+        self.lines["ex_line"].s.buffer_around = self.points["ex_point"].s.buffer_around
 
 
 if __name__ == "__main__":
