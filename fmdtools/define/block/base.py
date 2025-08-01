@@ -596,10 +596,9 @@ class Simulable(BaseObject):
         Run the static behaviors of the block, including loadings (if specified).
 
         Runs in the defined order:
-            1.) running static_loading_before() (if sp.with_loadings is set to True)
-            2.) updating contained architecture static behaviors/propagation
+            1.) updating contained architecture static behaviors/propagation
             3.) running static_behavior())
-            4.) running static_loading_after (if sp.with_loadings is set to True)
+            3.) running static_loading (if sp.with_loadings is set to True)
 
         Parameters
         ----------
@@ -612,8 +611,7 @@ class Simulable(BaseObject):
         if proptype in ['static', 'both']:
             active = True
             oldmutables = self.return_mutables()
-            flows_mutables = {f: fl.return_mutables()
-                              for f, fl in self.get_flows().items()}
+
             while active:
                 self.update_arch_behaviors(time, "static")
                 if hasattr(self, 'static_behavior'):
@@ -621,18 +619,10 @@ class Simulable(BaseObject):
                     self.t.executed_static = True
                 if self.sp.with_loadings and hasattr(self, 'static_loading'):
                     self.static_loading(time)
-                # Check to see what flows now have new values
-                # (done for each because of communications potential)
-                active = False
+                # determine if propagation should continue due to new states
                 newmutables = self.return_mutables()
-                if oldmutables != newmutables:
-                    active = True
-                    oldmutables = newmutables
-                for flowname, fl in self.get_flows().items():
-                    newflowmutables = fl.return_mutables()
-                    if flows_mutables[flowname] != newflowmutables:
-                        active = True
-                        flows_mutables[flowname] = newflowmutables
+                active = oldmutables != newmutables
+                oldmutables = newmutables
 
     def end_timestep(self, time, t_shift=None, t_ind=None, log_hist=True):
         """
