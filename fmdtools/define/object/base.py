@@ -816,12 +816,13 @@ class BaseObject(object):
                             hist.init_att(at, attr, timerange, at_track)
             return hist.flatten()
 
-    def find_mutables(self):
+    def find_mutables(self, exclude=[]):
         """Return list of mutable roles."""
-        return [v for v in self.get_roles_as_dict(with_immutable=False).values()
-                if not ismethod(v)]
+        return [v for v in
+                self.get_roles_as_dict(with_immutable=False).values()
+                if (not ismethod(v) and getattr(v, 'name', '') not in exclude)]
 
-    def return_mutables(self):
+    def return_mutables(self, exclude=[]):
         """
         Return all mutable values in the block.
 
@@ -833,15 +834,15 @@ class BaseObject(object):
             tuple of all mutable roles for the object.
         """
         return tuple([mut.return_mutables() if hasattr(mut, 'return_mutables')
-                      else mut for mut in self.find_mutables()])
+                      else mut for mut in self.find_mutables(exclude=exclude)])
 
-    def set_mutables(self):
+    def set_mutables(self, exclude=[]):
         """Set the current mutables of the object (to check against later)."""
-        self.mutables = self.return_mutables()
+        self.mutables = self.return_mutables(exclude=exclude)
 
-    def has_changed(self, update=False):
+    def has_changed(self, update=False, exclude=[]):
         """Check if the mutables of the object have changed."""
-        new_mutables = self.return_mutables()
+        new_mutables = self.return_mutables(exclude=exclude)
         try:
             is_changed = new_mutables != self.mutables
         except ValueError as e:

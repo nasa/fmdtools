@@ -213,9 +213,9 @@ class Architecture(Simulable):
             for simname in list(activesims).copy():
                 sim = sims[simname]
                 # Update functions with new values, check to see if new faults or states
-                sim.set_mutables()
+                sim.set_mutables(exclude=[*self.staticflows])
                 sim(time=time, proptype='static-once', end_of_timestep=False)
-                if sim.has_changed(update=True):
+                if sim.has_changed(update=True, exclude=[*self.staticflows]):
                     nextsims.update([simname])
 
                 # Check what flows now have new values and add connected functions

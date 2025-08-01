@@ -280,9 +280,9 @@ class CommsFlow(MultiFlow):
                              as_copy=True)
         return cop
 
-    def find_mutables(self):
+    def find_mutables(self, **kwargs):
         """Add in/received dicts to mutables."""
-        mutes = super().find_mutables()
+        mutes = super().find_mutables(**kwargs)
         for f in self.fxns.values():
             mutes.append([f['in'], f['received']])
         return mutes

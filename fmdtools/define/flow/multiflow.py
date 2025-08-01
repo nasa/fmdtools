@@ -319,7 +319,7 @@ class MultiFlow(Flow):
             self.h[localname] = local_flow.create_hist(timerange)
         return self.h
 
-    def find_mutables(self):
+    def find_mutables(self, **kwargs):
         """Find mutables (includes locals)."""
         localflows = [getattr(self, lo) for lo in self.locals]
         return [*super().find_mutables(), *localflows]
