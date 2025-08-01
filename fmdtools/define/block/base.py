@@ -597,7 +597,7 @@ class Simulable(BaseObject):
 
         Runs in the defined order:
             1.) updating contained architecture static behaviors/propagation
-            3.) running static_behavior())
+            2.) running static_behavior())
             3.) running static_loading (if sp.with_loadings is set to True)
 
         Parameters
