@@ -361,9 +361,9 @@ class Drone(DroneRural):
         self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st',
                      'environment')
 
-    def indicate_landed(self, time):
+    def indicate_landed(self):
         """Return true if the drone has entered the "landed" state."""
-        return time > 1 and self.fxns['plan_path'].m.mode == 'taxi'
+        return self.t.time > 1 and self.fxns['plan_path'].m.mode == 'taxi'
 
     def at_safe(self, dofs):
         """Check if drone is at a safe location (if in designated safe collection)."""

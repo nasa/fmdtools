@@ -1056,10 +1056,10 @@ class Rover(FunctionArchitecture):
         self.add_fxn("drive", Drive, "ground", 'pos', "ee_15", "motor_control",
                      "fault_sig", m=self.p.drive_modes, p=self.p.degradation)
 
-    def indicate_finished(self, time):
+    def indicate_finished(self):
         """Determine if the rover has completed its mission (successful or not)."""
         if  (self.flows['ground'].at_end(self.flows['pos'].s)
-             or (time > 5 and self.fxns["plan_path"].m.in_mode("standby"))
+             or (self.t.time > 5 and self.fxns["plan_path"].m.in_mode("standby"))
              or self.fxns["plan_path"].m.in_mode("em_off", "finished")):
             return True
         else:

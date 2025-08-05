@@ -65,8 +65,8 @@ class ExampleObject(BaseObject):
     container_s = ExampleState
     def indicate_high_x(self):
         return self.s.x > 1.0
-    def indicate_y_over_t(self, t):
-        return self.s.y > t
+    def indicate_y_over_x(self):
+        return self.s.y > self.s.x
 """
 
 
@@ -87,8 +87,8 @@ class BaseObject(object):
     ...    container_s = ExampleState
     ...    def indicate_high_x(self):
     ...        return self.s.x > 1.0
-    ...    def indicate_y_over_t(self, t):
-    ...        return self.s.y > t
+    ...    def indicate_y_over_x(self):
+    ...        return self.s.y > self.s.x
 
 
     >>> ex = ExampleObject()
@@ -110,7 +110,7 @@ class BaseObject(object):
     indicators property:
 
     >>> ex.indicators
-    ('high_x', 'y_over_t')
+    ('high_x', 'y_over_x')
 
     And are used to evaluate conditions, e.g.:
 
@@ -121,16 +121,16 @@ class BaseObject(object):
 
     Time may be used as an optional argument to indicators:
 
-    >>> ex.indicate_y_over_t(0.0)
-    True
-    >>> ex2.return_true_indicators(0.0)
-    ['high_x', 'y_over_t']
+    >>> ex.indicate_y_over_x()
+    False
+    >>> ex2.return_true_indicators()
+    ['high_x', 'y_over_x']
 
     A history may be created using create_hist:
 
     >>> ex.create_hist([0.0, 1.0])
     i.high_x:                       array(2)
-    i.y_over_t:                     array(2)
+    i.y_over_x:                     array(2)
 
     Note that adding roles to the class often means modifying default_track.
     Initializing all possible using the 'all' option:
@@ -138,7 +138,7 @@ class BaseObject(object):
     >>> ex = ExampleObject(track='all')
     >>> ex.create_hist([0.0, 1.0])
     i.high_x:                       array(2)
-    i.y_over_t:                     array(2)
+    i.y_over_x:                     array(2)
     s.x:                            array(2)
     s.y:                            array(2)
     """
@@ -438,7 +438,7 @@ class BaseObject(object):
         """
         return {i: getattr(self, 'indicate_'+i) for i in self.indicators}
 
-    def return_true_indicators(self, time=0.0):
+    def return_true_indicators(self):
         """
         Get list of indicators.
 
@@ -452,9 +452,7 @@ class BaseObject(object):
         list
             List of inticators that return true at time
         """
-        return [f for f, ind in self.get_indicators().items()
-                if (bool(signature(ind).parameters) and ind(time))
-                or (not bool(signature(ind).parameters) and ind())]
+        return [f for f, ind in self.get_indicators().items() if ind()]
 
     def init_indicator_hist(self, h, timerange, track):
         """
@@ -852,7 +850,7 @@ class BaseObject(object):
         return is_changed
 
     def get_node_attrs(self, roles=['container'], with_immutable=False,
-                       time=0.0, indicators=True, obj=False):
+                       indicators=True, obj=False):
         """
         Get attributes from the node to attach to a graph node.
 
@@ -864,23 +862,22 @@ class BaseObject(object):
             Roles to set as node attributes. The default is ['container'].
         with_immutable : bool, optional
             Whether to include immutable roles. The default is False.
-        time : float, optional
-            Time to evaluate indicators at. The default is None.
         indicators : bool, optional
             Whether to evaluate indicators. The default is True.
 
         Examples
         --------
         >>> exec(example_object_code)
-        >>> ExampleObject().get_node_attrs()
-        {'s': ExampleState(x=1.0, y=1.0), 'indicators': ['y_over_t']}
-        >>> ExampleObject().get_node_attrs(roles=["none"])
-        {'indicators': ['y_over_t']}
+        >>> exo = ExampleObject(s={'y': 2.0})
+        >>> exo.get_node_attrs()
+        {'s': ExampleState(x=1.0, y=2.0), 'indicators': ['y_over_x']}
+        >>> exo.get_node_attrs(roles=["none"])
+        {'indicators': ['y_over_x']}
         """
         attdict = self.get_roles_as_dict(*roles, with_immutable=with_immutable)
 
         if indicators:
-            attdict['indicators'] = self.return_true_indicators(time)
+            attdict['indicators'] = self.return_true_indicators()
         if obj:
             attdict['obj'] = self
         return attdict

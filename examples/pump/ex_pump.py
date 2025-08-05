@@ -411,7 +411,7 @@ class MoveWat(Function):
             if self.indicate_over_pressure(time):
                 self.m.add_fault('mech_break')
 
-    def indicate_over_pressure(self, time):
+    def indicate_over_pressure(self):
         """
         Use methods with names indicate_XXX to mark conditions met by the model.
 
@@ -496,7 +496,7 @@ class Pump(FunctionArchitecture):
                      'wat_1', 'wat_2', p={'delay': self.p.delay})
         self.add_fxn('export_water', ExportWater, 'wat_2')
 
-    def indicate_finished(self, time):
+    def indicate_finished(self):
         """
         Indicate that the pump is finished.
 
@@ -510,12 +510,12 @@ class Pump(FunctionArchitecture):
         a dummy method is provided to demonstrate, in practice this would depend on
         the intended end-states of the model.
         """
-        if time > self.sp.end_time:
+        if self.t.time > self.sp.end_time:
             return True
         else:
             return False
 
-    def indicate_on(self, time):
+    def indicate_on(self):
         """Indicate that the pump is on."""
         return self.flows['wat_1'].s.flowrate > 0
 

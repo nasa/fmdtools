@@ -511,7 +511,7 @@ class Environment(MultiFlow):
             figs[route] = self.show_route(route, color=color, legend=legend, **kwargs)
         return figs
 
-    def indicate_overbooked(self, time):
+    def indicate_overbooked(self):
         """Return true if too many assets are assigned in area_allocation."""
         overbooked = False
         for k in self.s.area_allocation:
@@ -519,7 +519,7 @@ class Environment(MultiFlow):
                 overbooked = True
         return overbooked
 
-    def indicate_incorrect_perception(self, time):
+    def indicate_incorrect_perception(self):
         """Return true for the atc if it doesn't match the true allocation."""
         if self.name == 'atc':
             if self.s.area_allocation != self.glob.s.area_allocation:
@@ -591,7 +591,7 @@ class Location(MultiFlow):
                     closest = i
         return closest, dist
 
-    def indicate_unsafe(self, time):
+    def indicate_unsafe(self):
         """If the real location is too close to the closest location, set unsafe."""
         if self.name not in ['percieved', 'closest']:
             closest, dist = self.get_closest_loc()
@@ -604,7 +604,7 @@ class Location(MultiFlow):
         else:
             return False
 
-    def indicate_nosight(self, time):
+    def indicate_nosight(self):
         """Indicate as 'incorrect' if percieved doesn't match the closest location."""
         if "percieved" in self.name:
             if self.glob.s != self.s:
@@ -658,7 +658,7 @@ class RequestState(State):
 class Requests(CommsFlow):
     container_s = RequestState
 
-    def indicate_incorrect(self, time):
+    def indicate_incorrect(self):
         """
         Indicate whether the request is based on accurate information.
 
@@ -681,7 +681,7 @@ class Requests(CommsFlow):
             a=1
         return condition
 
-    def indicate_duplicate_land(self, time):
+    def indicate_duplicate_land(self):
         """Indicate true if same landing command has been given as another flow."""
         if self.glob.name == 'atc' and self.s.atc_com == 'land':
             other_requests = self.glob.locals

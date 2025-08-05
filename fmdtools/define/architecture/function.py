@@ -67,11 +67,9 @@ class FunctionArchitectureGraph(ArchitectureGraph):
         ----------
         mdl: Model
             Model to represent
-        time: float
-            Time to execute indicators at. Default is 0.0
         """
         for fxnname, fxn in mdl.fxns.items():
-            fxn.set_node_attrs(self.g, time=self.time, with_root=with_root)
+            fxn.set_node_attrs(self.g, with_root=with_root)
 
     def set_flow_nodestates(self, mdl, with_root=True):
         """
@@ -83,7 +81,7 @@ class FunctionArchitectureGraph(ArchitectureGraph):
             Model to represent
         """
         for flowname, flow in mdl.flows.items():
-            flow.set_node_attrs(self.g, time=self.time, with_root=with_root)
+            flow.set_node_attrs(self.g, with_root=with_root)
 
     def get_multi_edges(self, graph, subedges):
         """
@@ -361,7 +359,7 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
             for flow in mdl.flows_of_type(flowtype):
                 mutes[flow] = mdl.flows[flow].get_roles_as_dict('container',
                                                                 with_immutable=False)
-                indicators[flow] = mdl.flows[flow].return_true_indicators(self.time)
+                indicators[flow] = mdl.flows[flow].return_true_indicators()
             self.g.nodes[flowtype]['mutables'] = mutes
             self.g.nodes[flowtype]['indicators'] = indicators
 
@@ -371,7 +369,7 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
             for fxn in mdl.fxns_of_class(fxnclass):
                 mutes[fxn] = mdl.fxns[fxn].get_roles_as_dict('container',
                                                              with_immutable=False)
-                indicators[fxn] = mdl.fxns[fxn].return_true_indicators(self.time)
+                indicators[fxn] = mdl.fxns[fxn].return_true_indicators()
             self.g.nodes[fxnclass]['mutables'] = mutes
             self.g.nodes[fxnclass]['indicators'] = indicators
 

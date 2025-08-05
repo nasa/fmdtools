@@ -64,7 +64,7 @@ class ArchitectureGraph(ExtModelGraph):
         for role, roleobj in mdl.get_roles_as_dict().items():
             name = get_obj_name(roleobj, role, basename=basename)
             if name in self.g.nodes:
-                set_node_states(self.g, roleobj, name, time=self.time)
+                set_node_states(self.g, roleobj, name)
 
 
 class Architecture(Simulable):
