@@ -35,10 +35,7 @@ class Time(BaseContainer):
     dt : float
         timestep size
     t_ind : int
-        index of the given time
-    run_times : int
-        number of times to run the behavior if running at a different timestep than
-        global
+        index of the given time in the history.
     executed_static: bool
         Whether a sim's static behavior has executed yet this timestep (or not).
     executed_dynamic: bool
@@ -85,7 +82,6 @@ class Time(BaseContainer):
     timers: dict = {}
     use_local: bool = True
     dt: float = 1.0
-    run_times: int = 1
     executed_static: bool = False
     executed_dynamic: bool = False
     local_dt = 1.0
@@ -122,7 +118,6 @@ class Time(BaseContainer):
         return (*(t.time for t in self.timers.values()),
                 self.time,
                 self.t_ind,
-                self.run_times,
                 self.executed_dynamic,
                 self.executed_static)
 
@@ -130,8 +125,6 @@ class Time(BaseContainer):
         """Update the current time from the overall simulation."""
         if time > self.time:
             self.assign(dict(time=time, executed_static=False, executed_dynamic=False))
-            if time > 0.0:
-                self.t_ind += 1
 
     def set_timestep(self, **kwargs):
         """
@@ -145,23 +138,15 @@ class Time(BaseContainer):
         local_tstep = Decimal(self.local_dt)
         if self.use_local:
             dt = local_tstep
-            if dt < global_tstep:
-                if global_tstep % dt:
-                    raise Exception("Local timestep: " + str(dt) +
-                                    " doesn't line up with global timestep: " +
-                                    str(global_tstep))
-            else:
-                if dt % global_tstep:
-                    raise Exception(
-                        "Local timestep: " + str(dt) +
-                        " doesn't line up with global timestep: " + str(global_tstep))
-            self.run_times = int(global_tstep/dt)
+            if (dt < global_tstep and global_tstep % dt) or dt % global_tstep:
+                raise Exception("Local timestep: " + str(dt) +
+                                " doesn't line up with global timestep: " +
+                                str(global_tstep))
         else:
             dt = global_tstep
-            self.run_times = 1
         self.dt = float(dt)
         for timer in self.timers.values():
-            timer.dt = -self.dt
+            timer.tstep = -self.dt
 
     def reset(self):
         """Reset time to the initial state."""
@@ -180,6 +165,30 @@ class Time(BaseContainer):
                     hist[tname] = timer.create_hist(timerange)
         else:
             BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
+
+    def get_sim_times(self, time):
+        """
+        Get the start and end time for the end of the timestep (if not provided).
+
+        If the current time is -0.1, sets start_time at 0.0 for static propagation.
+        Otherwise gets the time at the next timestep.
+
+        Returns
+        -------
+        start_time : float
+            Starting time for the timestep
+        end_time : float
+            Ending time for the timestep.
+        """
+        if self.time == -0.1:
+            start_time = 0.0
+        else:
+            start_time = self.time
+        if time is None:
+            end_time = start_time + self.dt
+        else:
+            end_time = time
+        return start_time, end_time
 
 
 class ExtendedTime(Time):

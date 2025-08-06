@@ -84,7 +84,7 @@ class Asset(Function):
         self.m.set_mode(self.perc_location.s.stage)
         self.send_perception()
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.receive_perception()
         self.check_crash()
         self.m.set_mode(self.perc_location.s.stage)

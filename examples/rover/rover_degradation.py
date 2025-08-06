@@ -88,7 +88,7 @@ class DriveDegradation(Function):
     container_r = DriveRand
     default_sp = dict(end_time=100)
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.s.inc(corrosion=self.r.s.corrode_rate, wear=self.r.s.wear_rate)
         opp_drift = (np.sign(self.s.drift) == np.sign(self.r.s.yaw_load))
         self.s.inc(drift=self.r.s.yaw_load / 1000 + opp_drift * self.r.s.yaw_load)
@@ -168,7 +168,7 @@ class PSFDegradationShort(Function):
         self.s.experience = self.p.experience
         self.r.s.fatigue_param = self.p.fatigue_param
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.s.inc(fatigue=self.r.s.fatigue_param)
 
         if self.s.stress < 100:
@@ -217,7 +217,7 @@ class PSFDegradationLong(Function):
     container_p = LongParams
     default_sp = dict(end_time=100)
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         # normalize time between -1 and 1 to enable sigmoid usage
         norm_time = (((self.t.time - 0) * 2) / (self.sp.end_time - self.sp.start_time)
                      - 1)

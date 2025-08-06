@@ -109,7 +109,7 @@ class StoreEE(StaticstoreEE):
             self.s.soc = 0
             self.m.add_fault('nocharge')
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Energy storage/use behavior."""
         self.set_faults()
         if self.m.has_fault('nocharge'):
@@ -117,7 +117,7 @@ class StoreEE(StaticstoreEE):
         else:
             self.ee_out.s.effort = 1.0
         if not self.t.executed_static:
-            self.s.inc(soc=-self.ee_out.s.mul('rate', 'effort')*(time-self.t.time)/2)
+            self.s.inc(soc=-self.ee_out.s.mul('rate', 'effort')*self.t.dt/2)
 
 
 class HoldPayload(HoldPayloadStatic):
@@ -254,7 +254,7 @@ class PlanPath(Function):
         vd = vectdist(self.s.goal, loc)
         self.des_traj.s.assign(vd, "dx", "dy", "dz")
 
-    def static_behavior(self, t):
+    def static_behavior(self):
         """
         Path planning behavior.
 
@@ -265,7 +265,7 @@ class PlanPath(Function):
         self.s.goal = self.p.goals[self.s.pt]
         self.calc_dist_to_goal()
 
-        if self.m.mode == 'taxi' and t > 5:
+        if self.m.mode == 'taxi' and self.t.time > 5:
             self.m.mode = 'taxi'
         elif self.dofs.s.z < 1 and self.s.pt == 5:
             self.m.mode = 'taxi'
@@ -311,12 +311,12 @@ class AffectDOF(AffectDOFStatic):
     __slots__ = ('des_traj',)
     flow_des_traj = DesTraj
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Behavior in-time (fault effects on states and instantaneous power/force)."""
         self.calc_faults()
         self.calc_pwr()
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Behavior at-time (calculating velociy and incrementing position)."""
         self.calc_vel()
         self.inc_pos()
@@ -384,7 +384,7 @@ class ViewEnvironment(Function):
     flow_dofs = DOFs
     flow_environment = DroneEnvironment
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Set points in grid as viewed if in range of view."""
         width = self.dofs.s.z
         height = self.dofs.s.z

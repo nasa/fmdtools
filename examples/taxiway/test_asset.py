@@ -48,8 +48,8 @@ class LoadingForAircraft(Function):
         self.perc_requests = self.requests.create_comms("atc", ports=self.p.mas)
         self.ground.area_to_standby("ma1", "air_loc")
 
-    def dynamic_behavior(self, t):
-        if t == 1.0:
+    def dynamic_behavior(self):
+        if self.t.time == 1.0:
             self.perc_requests.ma1.s.put(atc_com="land")
             self.ground.s.asset_assignment["ma1"] = "landing1"
         # if t>7.0:
@@ -103,8 +103,8 @@ class LoadingForHeli(Function):
     def init_block(self, **kwargs):
         self.perc_requests = self.requests.create_comms("atc", ports=["h1"])
 
-    def dynamic_behavior(self, t):
-        if t == 1.0:
+    def dynamic_behavior(self):
+        if self.t.time == 1.0:
             self.perc_requests.h1.s.put(atc_com="land")
             self.ground.s.asset_assignment["h1"] = "helipad1"
         self.perc_requests.receive()

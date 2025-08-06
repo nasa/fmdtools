@@ -50,7 +50,7 @@ class ImportEE(DetImportEE):
         if self.ee_out.s.current > 20.0:
             self.m.add_fault('no_v')
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.set_faults()
         if self.m.has_fault('no_v'):
             self.r.s.effstate = 0.0  # an open circuit means no voltage is exported
@@ -61,7 +61,7 @@ class ImportEE(DetImportEE):
                 self.r.set_rand_state('effstate', 'triangular', 0.9, 1, 1.1)
         if not self.t.executed_static:
             self.r.set_rand_state('grid_noise', 'normal',
-                                  1, 0.05*(2+np.sin(np.pi/2*time)))
+                                  1, 0.05*(2+np.sin(np.pi/2*self.t.time)))
         self.ee_out.s.voltage = self.r.s.grid_noise*self.r.s.effstate * 500
 
 
@@ -78,15 +78,15 @@ class ImportSig(DetImportSig):
     __slots__ = ()
     container_r = ImportSigRand
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault('no_sig'):
             self.sig_out.s.power = 0.0  # an open circuit means no voltage is exported
         else:
-            if time < 5:
+            if self.t.time < 5:
                 self.sig_out.s.power = 0.0
                 self.r.s.to_default('sig_noise')
-            elif time < 50:
-                if not time % 5 and not self.t.executed_static:
+            elif self.t.time < 50:
+                if not self.t.time % 5 and not self.t.executed_static:
                     self.r.set_rand_state('sig_noise', 'choice', [1.0, 0.9, 1.1])
                 self.sig_out.s.power = 1.0*self.r.s.sig_noise
             else:
@@ -114,9 +114,9 @@ class MoveWat(DetMoveWat):
     container_s = MoveWatStates
     container_r = MoveWatRand
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.s.eff = self.r.s.eff
-        super().static_behavior(time)
+        super().static_behavior()
         if not self.t.executed_static:
             self.s.inc(total_flow=self.wat_out.s.flowrate)
 

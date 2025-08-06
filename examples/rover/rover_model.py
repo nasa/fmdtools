@@ -538,7 +538,7 @@ class PlanPath(Function):
     flow_fault_sig = FaultSig
     flownames = {"auto_control": "control"}
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """
         Dynamic Behavior of Planning Module.
 
@@ -552,9 +552,9 @@ class PlanPath(Function):
         right power control signal to 0.
         """
         if not self.m.in_mode("no_con"):
-            if time == 5:
+            if self.t.time == 5:
                 self.m.set_mode("drive")
-            if time == 149:
+            if self.t.time == 149:
                 self.m.set_mode("standby")
 
         if self.m.in_mode("drive") and not self.m.in_mode("no_con"):
@@ -653,7 +653,7 @@ class Drive(Function):
             self.m.update_degradation_modes(friction=self.p.friction,
                                             drift=self.p.drift)
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Define the drive behavior for a given time step."""
         # calculate left and right motor power
         self.fault_sig.s.assign(self.s, "friction", "transfer", "drift")
@@ -751,7 +751,7 @@ class Perception(Function):
     flow_video = Video
     flownames = {"ee_12": "ee"}
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Set the video feed based on the behavior mode at each timestep."""
         # Nominal Behavior
         if self.ee.s.v > 8:
@@ -845,7 +845,7 @@ class Power(Function):
     flow_ee_12 = EE
     flow_switch = Switch
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Determine power use based on mode."""
         if self.m.in_mode("off"):
             self.off_power()
@@ -863,7 +863,7 @@ class Power(Function):
             if self.m.in_mode("short"):
                 self.short_power_usage()
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Charge increment over time."""
         self.s.inc(charge=-self.s.power / 100)
         self.s.limit(charge=(0, 100))
@@ -946,7 +946,7 @@ class Override(Function):
     flow_auto_control = Control
     flownames = {"ee_5": "ee"}
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         if self.ee.s.v > 4:
             if self.comms.s.active and self.comms.s.on:
                 self.m.set_mode("override")
@@ -974,7 +974,7 @@ class Communications(Function):
     flow_pos_signal = Pos
     flow_video = Video
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """When active, convert position signals to communication signals."""
         if self.ee_12.s.v == 12:
             self.ee_12.s.a = 1
@@ -992,14 +992,14 @@ class Operator(Function):
     __slots__ = ("switch",)
     flow_switch = Switch
 
-    def set_power(self, t):
-        if t == 1:
+    def set_power(self):
+        if self.t.time == 1.0:
             self.switch.s.power = True
-        elif t == 200:
+        elif self.t.time == 200:
             self.switch.s.power = False
 
-    def dynamic_behavior(self, t):
-        self.set_power(t)
+    def dynamic_behavior(self):
+        self.set_power()
 
 
 class Rover(FunctionArchitecture):

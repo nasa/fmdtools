@@ -46,10 +46,10 @@ class GeomArchitecture(Architecture):
     ...        self.add_point("ex_point", ExPoint)
     ...        self.add_line("ex_line", ExLine)
     ...        self.add_poly("ex_poly", ExPoly)
-    ...    def dynamic_behavior(self, time):
+    ...    def dynamic_behavior(self):
     ...        if self.t.time >= 1.0:
-    ...            self.points["ex_point"].s.buffer_around = self.t.time + self.t.dt
-    ...    def static_behavior(self, time):
+    ...            self.points["ex_point"].s.buffer_around = self.t.time
+    ...    def static_behavior(self):
     ...        self.lines["ex_line"].s.buffer_around = self.points["ex_point"].s.buffer_around
 
     This can then be used in containing classes (e.g., environments) that need multiple
@@ -68,6 +68,7 @@ class GeomArchitecture(Architecture):
     >>> ega.geoms()['ex_point'].s
     ExGeomState(occupied=False, buffer_around=1.0)
     >>> ega.h
+    time:                         array(101)
     points.ex_point.s.occupied:   array(101)
     points.ex_point.s.buffer_around: array(101)
     lines.ex_line.s.occupied:     array(101)
@@ -75,14 +76,13 @@ class GeomArchitecture(Architecture):
     polys.ex_poly.s.occupied:     array(101)
     polys.ex_poly.s.buffer_around: array(101)
     >>> ega.return_mutables()
-    ((False, 1.0), (False, 1.0), (False, 1.0), (-0.1, 0, 1, False, False))
+    ((False, 1.0), (False, 1.0), (False, 1.0), (-0.1, 0, False, False))
 
     GeomArchitectures are also simulable provided dynamic_behavior and static_behavior
     methods as shown below. Note that this behavior must be called externally,
     such as from a function, to have meaning in a broader modelling context.
 
-    >>> ega()
-    >>> ega()
+    >>> ega(time=2.0)
     >>> ega
     exgeomarch ExGeomArch
     - t=Time(time=2.0, timers={})
@@ -264,9 +264,9 @@ class GeomArchitecture(Architecture):
                 geom.assign_from(hist.get(flex_role+"."+geomname), t)
         return self.show(**kwargs)
 
-    def prop_static(self, time):
+    def prop_static(self):
         """Since geoms are not connected, just run in sequence."""
-        Block.update_arch_behaviors(self, time, "static")
+        Block.update_arch_behaviors(self, "static")
 
     def build(self, construct_graph=False, **kwargs):
         """Build the action graph."""
@@ -282,12 +282,12 @@ class ExGeomArch(GeomArchitecture):
         self.add_line("ex_line", ExLine)
         self.add_poly("ex_poly", ExPoly)
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Example dynamic behavior demonstrating dynamic buffers."""
         if self.t.time >= 0.0:
-            self.points["ex_point"].s.buffer_around = self.t.time + self.t.dt
+            self.points["ex_point"].s.buffer_around = self.t.time
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.lines["ex_line"].s.buffer_around = self.points["ex_point"].s.buffer_around
 
 

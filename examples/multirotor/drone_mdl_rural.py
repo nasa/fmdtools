@@ -382,7 +382,7 @@ class StoreEE(Function):
             for batname, bat in self.ca.comps.items():
                 bat.s.soc = 0
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Calculate overall behavior for StoreEE architecture."""
         self.set_faults()
         ee, soc = {}, {}
@@ -390,7 +390,7 @@ class StoreEE(Function):
         for batname, bat in self.ca.comps.items():
             ee[bat.name], soc[bat.name], rate_res = \
                 bat.behavior(self.force_st.s.support, self.ee_1.s.rate /
-                             (self.ca.p.series*self.ca.p.parallel)+rate_res, time)
+                             (self.ca.p.series*self.ca.p.parallel)+rate_res, self.t.time)
         # need to incorporate max current draw somehow + draw when reconfigured
         if self.ca.p.archtype == 'monolithic':
             self.ee_1.s.effort = ee['s1p1']
@@ -467,7 +467,7 @@ class ManageHealth(Function):
         if self.force_st.s.support < 0.5 or self.ee_ctl.s.effort > 2.0:
             self.m.add_fault('lostfunction')
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Assign recovery trajectory from ResPolicy for a fault mode, if found."""
         self.set_faults()
         if self.m.has_fault('lostfunction'):

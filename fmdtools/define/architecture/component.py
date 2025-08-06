@@ -45,14 +45,21 @@ class ComponentArchitecture(Architecture):
     - c1, s=(x=5.0, y=5.0)
     - c2, s=(x=10.0, y=10.0)
     >>> exc()
+    >>> exc
+    examplecomponentarchitecture ExampleComponentArchitecture
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
+    - t=Time(time=1.0, timers={})
+    COMPS:
+    - c1, s=(x=7.0, y=6.0)
+    - c2, s=(x=12.0, y=11.0)
     >>> exc()
     >>> exc
     examplecomponentarchitecture ExampleComponentArchitecture
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=2.0, timers={})
     COMPS:
-    - c1, s=(x=7.0, y=6.0)
-    - c2, s=(x=12.0, y=11.0)
+    - c1, s=(x=7.0, y=7.0)
+    - c2, s=(x=12.0, y=12.0)
     """
 
     __slots__ = ['comps']
@@ -88,7 +95,6 @@ class ComponentArchitecture(Architecture):
                       require_connections=require_connections, **kwargs)
 
 
-
 class ExampleComponentArchitecture(ComponentArchitecture):
     """
     Example Component Architecture Class demonstrating individual simulation.
@@ -96,6 +102,7 @@ class ExampleComponentArchitecture(ComponentArchitecture):
     In this architecture, custom static_behavior and dynamic_behavior methods are used
     to enable the individual simulation of the ComponentArchitecture.
     """
+
     __slots__ = ()
 
     def init_architecture(self, *args, **kwargs):

@@ -153,25 +153,23 @@ class Architecture(Simulable):
         """Determine if dynamic based on containment of dynamic sims."""
         return super().is_dynamic() or any(self.dynamicsims)
 
-    def update_arch_behaviors(self, time, proptype):
+    def update_arch_behaviors(self, proptype):
         """
         Update/propagate behavior in the architecture.
 
         Parameters
         ----------
-        time : float
-            Time to propagate behaviors at
         proptype : str
             Type of propagation step to update ('dynamic', 'static', or 'both'). If
             'dynamic', this method calls self.prop_dynamic(). If 'static', this method
             calls self.prop_static()
         """
         if proptype in ["dynamic", "both"] and hasattr(self, 'prop_dynamic'):
-            self.prop_dynamic(time)
+            self.prop_dynamic()
         if proptype in ["static", "static-once", "both"] and hasattr(self, 'prop_static'):
-            self.prop_static(time)
+            self.prop_static()
 
-    def prop_dynamic(self, time):
+    def prop_dynamic(self):
         """
         Run dynamic propagation functions.
 
@@ -182,9 +180,9 @@ class Architecture(Simulable):
         sims = self.get_sims()
         for simname in self.dynamicsims:
             sim = sims[simname]
-            sim(time=time, proptype='dynamic', end_of_timestep=False)
+            sim(time=self.t.time, proptype='dynamic', end_of_timestep=False)
 
-    def prop_static(self, time):
+    def prop_static(self):
         """
         Propagate behaviors through model graph (static propagation step).
 
@@ -196,11 +194,6 @@ class Architecture(Simulable):
         This algorithm is run until there are no more "active" sims, which may
         require several executions of each simulable's static_behavior() method to
         propagate behavior through the entire model graph.
-
-        Parameters
-        ----------
-        time : float
-            Current time-step
         """
         # set up history of flows to see if any has changed
         activesims = self.staticsims.copy()
@@ -214,7 +207,7 @@ class Architecture(Simulable):
                 sim = sims[simname]
                 # Update functions with new values, check to see if new faults or states
                 sim.set_mutables(exclude=[*self.staticflows])
-                sim(time=time, proptype='static-once', end_of_timestep=False)
+                sim(time=self.t.time, proptype='static-once', end_of_timestep=False)
                 if sim.has_changed(update=True, exclude=[*self.staticflows]):
                     nextsims.update([simname])
 
@@ -236,8 +229,8 @@ class Architecture(Simulable):
             n += 1
             if n > 1000:  # break if this is going for too long
                 raise Exception("Undesired looping for Simulables in static",
-                                "propagation at t=" + str(time) + ", these Simulables",
-                                "remain active: " + str(activesims))
+                                "propagation at t=" + str(self.t.time) + ", these",
+                                "Simulables remain active: " + str(activesims))
 
     def get_connected_sims(self, flowname):
         """Get the simulables connected to a given flow."""

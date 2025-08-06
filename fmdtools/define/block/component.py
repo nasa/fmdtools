@@ -37,21 +37,32 @@ class Component(Block):
     - s=ExampleState(x=0.0, y=0.0)
     - t=Time(time=-0.1, timers={})
     >>> c()
-    >>> c()
     >>> c
     examplecomponent ExampleComponent
     - s=ExampleState(x=2.0, y=1.0)
-    - t=Time(time=2.0, timers={})
+    - t=Time(time=1.0, timers={})
     >>> c()
     >>> c
     examplecomponent ExampleComponent
     - s=ExampleState(x=2.0, y=2.0)
-    - t=Time(time=3.0, timers={})
+    - t=Time(time=2.0, timers={})
+
+    Calling a particular propagation step individually only runs the given behavior
+    method (in this case, dynamic and not static).
+
     >>> c(proptype="dynamic")
     >>> c
     examplecomponent ExampleComponent
     - s=ExampleState(x=2.0, y=3.0)
-    - t=Time(time=4.0, timers={})
+    - t=Time(time=3.0, timers={})
+
+    Note that we can also simulate to a given time, which should give the same results.
+    >>> c2 = ExampleComponent()
+    >>> c2(time=2.0)
+    >>> c2
+    examplecomponent ExampleComponent
+    - s=ExampleState(x=2.0, y=2.0)
+    - t=Time(time=2.0, timers={})
     """
 
     __slots__ = ()
@@ -73,12 +84,12 @@ class ExampleComponent(Component):
     container_s = ExampleState
     default_s = {'x': 0.0, 'y': 0.0}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Increment x if y is higher."""
         if self.s.x < self.s.y:
             self.s.x += 2.0
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Increment y."""
         if self.t.time >= 0.0:
             self.s.y += 1.0

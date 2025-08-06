@@ -93,10 +93,16 @@ class Action(Block):
         """Return fmdtools type of the model class."""
         return Action
 
-    def update_dynamic_behaviors(self, time, proptype="dynamic"):
+    def update_dynamic_behaviors(self, proptype="dynamic"):
         """Update the behavior of the Action provided the action is not complete."""
         if not self.t.duration_complete():
-            super().update_dynamic_behaviors(time, proptype=proptype)
+            super().update_dynamic_behaviors(proptype=proptype)
+
+    def inc_sim_time(self, time=None, **kwargs):
+        """Increment the simulation time (update from external time)."""
+        if time is not None:
+            self.t.update_time(time)
+        super().inc_sim_time(time=time, **kwargs)
 
 
 class ExampleAction(Action):
@@ -105,7 +111,7 @@ class ExampleAction(Action):
     container_p = ExampleParameter
     flow_exf = ExampleFlow
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Increase x when executed."""
         if not self.indicate_done():
             self.exf.s.inc(x=1.0)

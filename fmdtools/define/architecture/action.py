@@ -373,25 +373,19 @@ class ActionArchitecture(Architecture):
         else:
             raise Exception("Invalid option for initial_action.")
 
-    def prop_dynamic(self, time):
-        """
-        Propagate dynamic behavior through the ActionArchitecture graph.
+    def prop_dynamic(self):
+        """Propagate dynamic behavior through the ActionArchitecture graph.
 
         If self.per_timestep is set to True, this will also reset the active actions
         each timestep to ensure the graph is reset to the initial active action.
-
-        Parameters
-        ----------
-        time : float
-            Model time.
         """
         if self.per_timestep:
             self.set_active_actions(self.initial_action)
             for action in self.active_actions:
                 self.acts[action].t.t_loc = 0.0
-        self.prop_graph(time, 'dynamic')
+        self.prop_graph('dynamic')
 
-    def prop_static(self, time):
+    def prop_static(self):
         """
         Propagate static behavior through the ActionArchitecture graph.
 
@@ -400,16 +394,18 @@ class ActionArchitecture(Architecture):
         time : float
             Model time.
         """
-        self.prop_graph(time, 'static')
+        self.prop_graph('static')
 
-    def prop_graph(self, time, proptype):
+    def inc_sim_time(self, **kwargs):
+        """Increment action simulation times to current."""
+        super().inc_sim_time(**{**kwargs, 'time': self.t.time})
+
+    def prop_graph(self, proptype):
         """
         Propagate behavior through the ActionArchitecture graph.
 
         Parameters
         ----------
-        time : float
-            Model time.
         proptype : str
             Type of propagation to perform (static or dynamic). If proptype="static",
             the static_behavior methods are called and local time is not incremented. If
@@ -421,7 +417,9 @@ class ActionArchitecture(Architecture):
         while active_actions:
             new_active_actions = set(active_actions)
             for action in active_actions:
-                self.acts[action](time=time, proptype=proptype, end_of_timestep=False)
+                act = self.acts[action]
+                act.t.update_time(self.t.time)
+                act(time=self.t.time, proptype=proptype, end_of_timestep=False)
                 action_cond_edges = self.action_graph.out_edges(action, data=True)
                 for act_in, act_out, atts in action_cond_edges:
                     try:
@@ -430,14 +428,14 @@ class ActionArchitecture(Architecture):
                         raise TypeError("Poorly specified condition " +
                                         str(atts['name'])+": ") from e
                     if cond:
-                        if self.acts[action].t.complete():
-                            self.acts[action].t.t_loc = 0.0
+                        if act.t.complete():
+                            act.t.t_loc = 0.0
                             new_active_actions.add(act_out)
                             new_active_actions.discard(act_in)
-                        elif proptype == 'dynamic':
-                            self.acts[action].t.t_loc += self.acts[action].t.dt
+                        elif proptype in ['dynamic', 'both']:
+                            act.t.t_loc += self.acts[action].t.dt
                     else:
-                        self.acts[action].t.t_loc = 0.0
+                        act.t.t_loc = 0.0
 
             if len(new_active_actions) > 1 and self.state_rep == 'finite-state':
                 raise Exception("Multiple active actions in a finite-state " +

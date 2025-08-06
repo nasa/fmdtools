@@ -53,20 +53,22 @@ class CommonTests():
                       if f.m.get_faults()]
         for faultscen in faultscens:
             for inj_time in inj_times:
+                mdla = mdl.new()
+                mdlb = mdl2.new()
                 for t in range(max_time):
                     if t == inj_time:
                         scen = faultscen
                     else:
                         scen = {}
-                    mdl(time=t, faults=scen)
-                    mdl2(time=t, faults=scen)
-                    self.check_same_model(mdl, mdl2)
+                    mdla(time=t, faults=scen)
+                    mdlb(time=t, faults=scen)
+                    self.check_same_model(mdla, mdlb)
                     if t == copy_time:
-                        mdl_copy = mdl.copy()
-                        self.check_same_model(mdl, mdl_copy)
+                        mdl_copy = mdla.copy()
+                        self.check_same_model(mdla, mdl_copy)
                     if t > copy_time:
                         mdl_copy(time=t, faults=scen)
-                        self.check_same_model(mdl, mdl_copy)
+                        self.check_same_model(mdla, mdl_copy)
 
     def check_fs_parallel(self, mdl, fs, track="all"):
         """
@@ -179,13 +181,14 @@ class CommonTests():
                       if f.m.get_faults()]
         for faultscen in faultscens:
             for inj_time in cop_times:
+                mdlc = mdl.new()
                 for t in range(max_time):
-                    mdl(time=t)
+                    mdlc(time=t)
                     if t == inj_time:
-                        mdl_copy = mdl.copy()
+                        mdl_copy = mdlc.copy()
                     if t > inj_time:
                         mdl_copy(time=t, faults=faultscen)
-                        self.check_diff_model(mdl, mdl_copy)
+                        self.check_diff_model(mdlc, mdl_copy)
 
     def check_same_model(self, mdl, mdl2):
         """Check if models mdl and mdl2 have the same attributes."""

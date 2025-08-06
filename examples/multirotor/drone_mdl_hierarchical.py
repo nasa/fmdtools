@@ -159,7 +159,7 @@ class AffectDOF(AffectDOFDynamic):
     container_s = OverallAffectDOFState
     arch_ca = AffectDOFArch
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Rotor dynamic behavior with architecture-base recovery."""
         if self.ca.p.opposite:
             self.reconfig_faults()

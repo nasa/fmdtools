@@ -106,6 +106,10 @@ staged : bool, optional
     Whether to inject the faults in a copy of the nominal model at the fault time
     (True) or instantiate a new model for the fault (False). Setting to True
     roughly halves execution time. The default is False.
+cut_hist : bool
+    Whether to cut the history.
+use_end_condition : bool
+    Whether to use the end-condition
 warn_faults : bool
     Whether to produce a warning when faults occur in a nominal sim.
 """
@@ -229,7 +233,7 @@ def nominal(mdl, **kwargs):
     nomhist : History
         A History dict with a history of modelstates
     """
-    result, mdlhist, _, mdl, t_end = nom_helper(mdl, None, cut_hist=True, **kwargs)
+    result, mdlhist, _, mdl = nom_helper(mdl, None, cut_hist=True, **kwargs)
     save_helper(kwargs.get('save_args', {}), result, mdlhist)
     return result, mdlhist
 
@@ -361,7 +365,7 @@ def exec_nom_helper(mdl, scen, name, mdl_kwargs={}, **kwargs):
                   'sp': {**mdl_kwargs.get('sp', {}), **scen.sp},
                   'r': {**mdl_kwargs.get('r', {}), **scen.r}}
     mdl_run = mdl.new(**mdl_kwargs)
-    result, mdlhist, _, t_end = prop_one_scen(mdl_run, scen, **kwargs)
+    result, mdlhist, _ = prop_one_scen(mdl_run, scen, **kwargs)
     check_hist_memory(mdlhist, kwargs['num_scens'], max_mem=kwargs['max_mem'])
     save_helper(kwargs['save_args'], result, mdlhist, name, name)
     return result, mdlhist
@@ -474,17 +478,13 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.nan,
                         [min(scen.sequence)],
                         **{**sim_kwarg, 'use_end_condition': False},
                         **run_kwarg)
-    nomresult, nomhist, nomscen, mdls, t_end_nom = n_outs
+    nomresult, nomhist, nomscen, mdls = n_outs
 
     mdl_f = [*mdls.values()][0]
 
-    result, faulthist, _, t_end = prop_one_scen(mdl_f,
-                                                scen,
-                                                **sim_kwarg,
-                                                nomhist=nomhist,
-                                                nomresult=nomresult)
+    result, faulthist, _ = prop_one_scen(mdl_f, scen, **sim_kwarg,
+                                         nomhist=nomhist, nomresult=nomresult)
     if include_nominal:
-        nomhist.cut(t_end_nom)
         mdlhists = History(nominal=nomhist, faulty=faulthist)
     save_helper(kwargs.get('save_args', {}), result, mdlhists)
     return result.flatten(), mdlhists.flatten()
@@ -538,8 +538,6 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
         nominal scenario dict
     mdls : list
         Models from copy time(s) ctimes
-    t_end_nom : float
-        Nominal simulation end time
     """
     staged = kwargs.get('staged', False)
     check_overwrite(save_args)
@@ -563,10 +561,7 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
     else:
         ctimes = []
 
-    result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl,
-                                                        nomscen,
-                                                        ctimes=ctimes,
-                                                        **kwargs)
+    result, nommdlhist, mdls = prop_one_scen(mdl, nomscen, ctimes=ctimes, **kwargs)
 
     endfaultprops = mdl.return_faultmodes()
     endfaults = [*endfaultprops]
@@ -576,7 +571,7 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
     if not staged:
         mdls = {0: mdl.new(**mdl_kwargs)}
 
-    return result, nommdlhist, nomscen, mdls, t_end_nom
+    return result, nommdlhist, nomscen, mdls
 
 
 def fault_sample(mdl, fs, include_nominal=True, get_phasemap=False, **kwargs):
@@ -624,7 +619,7 @@ def fault_sample(mdl, fs, include_nominal=True, get_phasemap=False, **kwargs):
     n_outs = nom_helper(mdl,
                         fs.times(),
                         **{**kwargs, 'use_end_condition': False})
-    nomresult, nomhist, nomscen, c_mdl, t_end_nom = n_outs
+    nomresult, nomhist, nomscen, c_mdl = n_outs
     scenlist = fs.scenarios()
 
     results, mdlhists = scenlist_helper(mdl,
@@ -635,7 +630,7 @@ def fault_sample(mdl, fs, include_nominal=True, get_phasemap=False, **kwargs):
                                         nomresult=nomresult)
 
     if include_nominal:
-        process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, **kwargs)
+        process_nominal(mdlhists, nomhist, results, nomresult, **kwargs)
     save_helper(kwargs['save_args'], results, mdlhists)
     close_pool(kwargs)
     return results.flatten(), mdlhists.flatten()
@@ -687,19 +682,18 @@ def fault_sample_from(mdl, faultdomains={}, faultsamples={}, get_phasemap=True,
     loc_kwargs = {**sim_kwarg, **run_kwarg, 'staged': False}
     if not scen:
         mdl = mdl.new(**run_kwarg.get('mdl_kwargs', {}))
-        _, nomhist, _, _, t_end = nom_helper(mdl, [], **loc_kwargs)
+        _, nomhist, _, _ = nom_helper(mdl, [], **loc_kwargs)
     else:
         mdl = mdl.new(p=scen.p, sp=scen.sp, r=scen.r)
-        _, nomhist, _, t_end, = prop_one_scen(mdl, scen, **loc_kwargs)
+        _, nomhist, _ = prop_one_scen(mdl, scen, **loc_kwargs)
     app = gen_sampleapproach(mdl, faultdomains, faultsamples, get_phasemap, nomhist)
     res, hist = fault_sample(mdl, app, **sim_kwarg, **run_kwargs, **mult_kwarg,
                              include_nominal=include_nominal)
     return res, hist, app
 
 
-def process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, **kwargs):
+def process_nominal(mdlhists, nomhist, results, nomresult, **kwargs):
     """Add/save nominal hists/result to overall hist/result."""
-    nomhist.cut(t_end_nom)
     mdlhists['nominal'] = nomhist
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args', {}),
@@ -752,7 +746,7 @@ def single_faults(mdl, times=[0.0], include_nominal=True, **kwargs):
     n_outs = nom_helper(mdl,
                         times,
                         **{**kwargs, 'use_end_condition': False})
-    nomresult, nomhist, nomscen, c_mdl, t_end_nom = n_outs
+    nomresult, nomhist, nomscen, c_mdl = n_outs
 
     scenlist = list_init_faults(mdl, times)
     results, mdlhists = scenlist_helper(mdl,
@@ -762,7 +756,7 @@ def single_faults(mdl, times=[0.0], include_nominal=True, **kwargs):
                                         nomhist=nomhist,
                                         nomresult=nomresult)
     if include_nominal:
-        process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, **kwargs)
+        process_nominal(mdlhists, nomhist, results, nomresult, **kwargs)
     save_helper(kwargs['save_args'], results, mdlhists)
     close_pool(kwargs)
     return results.flatten(), mdlhists.flatten()
@@ -799,7 +793,7 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
                 mdl_i = c_mdl[scen.time].copy()
             else:
                 mdl_i = c_mdl[0].new()
-            ec, mh, t_end = exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs)
+            ec, mh = exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs)
             results[name], mdlhists[name] = ec, mh
     return results, mdlhists
 
@@ -835,9 +829,9 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
     **kwargs : kwargs
         :data:`sim_kwargs` for :func:`prop_one_scen`
     """
-    result, mdlhist, _, t_end, = prop_one_scen(mdl, scen, **kwargs)
+    result, mdlhist, _ = prop_one_scen(mdl, scen, **kwargs)
     save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen.name))
-    return result, mdlhist, t_end
+    return result, mdlhist
 
 
 def check_hist_memory(mdlhist, nscens, max_mem=2e9):
@@ -1025,7 +1019,7 @@ def check_end_condition(mdl, use_end_condition, t):
     """
     if use_end_condition and mdl.sp.end_condition:
         end_condition = get_var(mdl, mdl.sp.end_condition)
-        if end_condition(t):
+        if end_condition():
             return True
         else:
             return False
@@ -1061,8 +1055,6 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
         A dictionary with a history of modelstates.
     c_mdl : dict
         A dictionary of models at each time given in ctimes with structure {time:model}
-    t_end: int
-        Index of last sim time
     """
     desired_result, staged, cut_hist, use_end_condition, warn_faults = unpack_sim_kwargs(**kwargs)
     # if staged, we want it to start a new run from the starting time of the scenario,
@@ -1077,8 +1069,6 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
         if t not in timerange:
             raise Exception("t="+str(t)+" from sequence not in timerange: "
                             + str(timerange))
-    t_shift = mdl.sp.get_shift(start_time)
-    mdl.init_time_hist()
     # run model through the time range defined in the object
     c_mdl = dict.fromkeys(ctimes)
     result = Result()
@@ -1094,8 +1084,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
                 fxnfaults = {}
                 disturbances = {}
             try:
-                mdl(time=t, faults=fxnfaults, disturbances=disturbances,
-                    t_ind=t_ind, t_shift=t_shift)
+                mdl(time=t, faults=fxnfaults, disturbances=disturbances)
             except Exception as e:
                 raise Exception("Error in scenario " + str(scen)) from e
 
@@ -1118,7 +1107,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
             raise
             break
     if cut_hist:
-        mdl.h.cut(t_ind + t_shift)
+        mdl.cut_hist()
     if type(desired_result) is dict and 'end' in desired_result:
         result['end'] = get_result(scen, mdl, desired_result['end'], nomhist, nomresult,
                                    time=t)
@@ -1129,7 +1118,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
     if None in c_mdl.values():
         raise Exception("Sample times" + str(ctimes)
                         + " go beyond simulation time " + str(t))
-    return result, mdl.h, c_mdl, t_ind + t_shift
+    return result, mdl.h, c_mdl
 
 
 def get_result(scen, mdl, desired_result, nomhist={}, nomresult={}, time=0.0):

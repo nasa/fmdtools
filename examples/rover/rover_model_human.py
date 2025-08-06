@@ -460,8 +460,8 @@ class Operator(BaseOperator):
     arch_aa = HumanActions
     container_m = Mode
 
-    def dynamic_behavior(self, t):
-        self.set_power(t)
+    def dynamic_behavior(self):
+        self.set_power(self.t.time)
         if self.ground.at_end(self.pos_signal.s):
             self.switch.s.power = False
             self.comms.s.ctl.put(rpower=0, lpower=0)

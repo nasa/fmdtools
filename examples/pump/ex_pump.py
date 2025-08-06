@@ -234,7 +234,7 @@ class ImportEE(Function):
         if self.ee_out.s.current > 15.0:
             self.m.add_fault('no_v')
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Electricity input behavior.
 
@@ -267,7 +267,7 @@ class ImportWater(Function):
     flow_wat_out = Water
     flownames = {"wat_1": "wat_out"}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """If the flow has a no_wat fault, the water level goes to zero."""
         if self.m.has_fault('no_wat'):
             self.wat_out.s.level = 0.0
@@ -293,7 +293,7 @@ class ExportWater(Function):
     flow_wat_in = Water
     flownames = {'wat_2': 'wat_in'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Blockage changes the area the output water flows through."""
         if self.m.has_fault('block'):
             self.wat_in.s.area = 0.01
@@ -314,7 +314,7 @@ class ImportSig(Function):
     flow_sig_out = Signal
     flownames = {'sig_1': 'sig_out'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Time-dependent behavior for the function.
 
@@ -327,9 +327,9 @@ class ImportSig(Function):
             self.sig_out.s.power = 0.0
             # an open circuit means no voltage is exported
         else:
-            if time < 5:
+            if self.t.time < 5:
                 self.sig_out.s.power = 0.0
-            elif time < 50:
+            elif self.t.time < 50:
                 self.sig_out.s.power = 1.0
             else:
                 self.sig_out.s.power = 0.0
@@ -387,7 +387,7 @@ class MoveWat(Function):
     flownames = {"ee_1": "ee_in", "sig_1": "sig_in",
                  "wat_1": "wat_in", "wat_2": "wat_out"}
 
-    def set_faults(self, time):
+    def set_faults(self):
         """
         Here we use the timer to define a conditional fault that only occurs after a
         state is present after X seconds.
@@ -402,13 +402,13 @@ class MoveWat(Function):
         added.
         """
         if self.p.delay:
-            if self.indicate_over_pressure(time):
+            if self.indicate_over_pressure():
                 if not self.t.executed_static:
                     self.t.pressure_limit.inc(self.t.dt)
                 if self.t.pressure_limit.time >= self.p.delay:
                     self.m.add_fault('mech_break')
         else:
-            if self.indicate_over_pressure(time):
+            if self.indicate_over_pressure():
                 self.m.add_fault('mech_break')
 
     def indicate_over_pressure(self):
@@ -420,9 +420,9 @@ class MoveWat(Function):
         """
         return self.wat_out.s.pressure > 15.0
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Define how the function will behave with different faults."""
-        self.set_faults(time)
+        self.set_faults()
         if self.m.has_fault('short'):
             self.ee_in.s.current = 500*10/5000*self.sig_in.s.power*self.ee_in.s.voltage
             self.s.eff = 0.0

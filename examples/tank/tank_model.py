@@ -85,7 +85,7 @@ class ImportLiquid(Function):
     flow_watout = Liquid
     flownames = {'wat_in_1': 'watout', 'valve1_sig': 'sig'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if not self.m.has_fault('stuck'):
             if self.sig.s.action >= 2:
                 self.s.amt_open = 2
@@ -105,7 +105,7 @@ class ExportLiquid(Function):
     flow_watin = Liquid
     flownames = {'wat_out_2': 'watin', 'valve2_sig': 'sig'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if not self.m.has_fault('stuck'):
             if self.sig.s.action >= 1:
                 self.s.amt_open = 1
@@ -127,7 +127,7 @@ class GuideLiquid(Function):
     flow_watout = Liquid
     container_m = GuideLiquidMode
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault('clogged'):
             self.watin.s.put(rate=0.0)
             self.watout.s.put(effort=0.0)
@@ -167,7 +167,7 @@ class StoreLiquid(Function):
     flow_sig = Signal
     flownames = {'wat_in_2': 'watin', 'wat_out_1': 'watout', 'tank_sig': 'sig'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.s.level >= 20.0:
             self.watin.s.rate = 0.0 * self.watin.s.effort
             self.watout.s.effort = 2.0 * self.watin.s.effort
@@ -189,7 +189,7 @@ class StoreLiquid(Function):
         else:
             self.s.net_flow = self.watin.s.rate - self.watout.s.rate
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.s.inc(level=self.s.net_flow*self.t.dt)
         self.s.limit(level=(0.0, 25))
         # self.s.level = self.s.level + self.s.net_flow*self.dt
@@ -236,7 +236,7 @@ class HumanActions(Function):
     flow_tank_sig = Signal
     flow_valve2_sig = Signal
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """
         Some testing code for ASG behavior and copying, etc. Raises exceptions when
         flows aren't copied correctly
@@ -298,7 +298,7 @@ class Detect(Action):
     flow_detect_sig = Signal
     flow_tank_sig = Signal
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         if self.m.has_fault('not_detected'):
             self.detect_sig.s.put(indicator=0, action=0)
         elif self.m.has_fault('false_high'):
@@ -373,7 +373,7 @@ class Turn(Action):
     flow_valve1_sig = Signal
     flow_valve2_sig = Signal
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         if self.m.has_fault('cannot'):
             turned = 0
         else:

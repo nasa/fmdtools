@@ -127,13 +127,13 @@ class ExampleFunction(Function):
     container_m = ExampleMode
     flow_exf = ExampleFlow
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Increment x if nominal, else increment y."""
         if not self.m.any_faults():
             self.s.x += self.p.x
         else:
             self.s.y += self.p.y
-        if time < 1.0:
+        if self.t.time < 1.0:
             self.s.put(x=0.0, y=0.0)
         self.exf.s.inc(x=self.s.x)
 

@@ -222,7 +222,7 @@ class StoreEE(Function):
     flow_fs = Force
     flownames = {"ee_1": "ee_out", "force_st": "fs"}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Source loses voltage in nocharge mode."""
         if self.m.has_fault("nocharge"):
             self.ee_out.s.effort = 0.0
@@ -290,7 +290,7 @@ class DistEE(Function):
         if self.ee_in.s.rate > 2:
             self.m.add_fault("short")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Power distribution behavior.
 
@@ -378,7 +378,7 @@ class HoldPayload(Function):
         else:
             self.s.force_gr = 0.0
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Ground support behavior.
 
@@ -527,7 +527,7 @@ class AffectDOF(Function, BaseLine):
                  "ctl": "ctl_in",
                  "force_lin": "force"}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Drone locomotive behaviors.
 
@@ -619,7 +619,7 @@ class CtlDOF(Function):
         if self.fs.s.support < 0.5:
             self.m.add_fault("noctl")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Translate desired trajectory into control signals.
 

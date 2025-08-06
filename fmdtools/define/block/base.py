@@ -229,15 +229,6 @@ class Simulable(BaseObject):
         return (hasattr(self, 'dynamic_behavior') or
                 any([r.is_dynamic() for r in self.get_sims().values()]))
 
-    def get_time(self, time):
-        """Get time from the SimParam (if not provided)."""
-        if time is None:
-            if self.t.time == -0.1:
-                time = self.t.dt
-            else:
-                time = self.t.time + self.t.dt
-        return time
-
     def set_time(self):
         """Set time from SimParam."""
         self.t.set_timestep(dt=self.sp.dt, use_local=self.sp.use_local)
@@ -249,22 +240,14 @@ class Simulable(BaseObject):
             self.h = self.create_hist(timerange)
         else:
             self.h = h.copy()
+        if not self.root:
+            self.init_time_hist()
 
     def init_time_hist(self):
         """Add time history to the model (only done at top level)."""
         if 'time' not in self.h:
             timerange = self.sp.get_histrange()
             self.h['time'] = timerange
-
-    def log_hist(self, t_ind=None, t=None, t_shift=0):
-        """Log the history over time."""
-        if t_ind is None:
-            t_ind = self.t.t_ind
-        if t is None:
-            t = self.t.time
-        if self.sp.track_times:
-            t_ind_rec = self.sp.get_hist_ind(t_ind, t, t_shift)
-            self.h.log(self, t_ind_rec, time=t)
 
     def update_seed(self, seed=[]):
         """
@@ -541,7 +524,7 @@ class Simulable(BaseObject):
         return {rolename: roleobj for rolename, roleobj in all_roles.items()
                 if isinstance(roleobj, Simulable)}
 
-    def update_arch_behaviors(self, time, proptype):
+    def update_arch_behaviors(self, proptype):
         """
         Propagate behaviors into contained architectures.
 
@@ -557,12 +540,12 @@ class Simulable(BaseObject):
         """
         for objname, obj in self.get_sims().items():
             try:
-                obj(time=time, proptype=proptype, end_of_timestep=False)
+                obj(time=self.t.time, proptype=proptype, end_of_timestep=False)
             except TypeError as e:
                 raise Exception("Poorly specified Architecture: "
                                 + str(obj.__class__)) from e
 
-    def update_dynamic_behaviors(self, time, proptype="dynamic"):
+    def update_dynamic_behaviors(self, proptype="dynamic"):
         """
         Run the dynamic behaviors of the block, including loadings (if specified).
 
@@ -574,28 +557,21 @@ class Simulable(BaseObject):
 
         Parameters
         ----------
-        time : float
-            Time to update at. Must be greater than the current model time to update.
         proptype : str
             Propagation the system is in. Skips if proptype="static."
             Default is "dynamic"
         """
-        if not self.t.executed_dynamic and proptype in ['dynamic', 'both']:
+        if not self.t.executed_dynamic and proptype in ['dynamic', 'both'] and self.t.time > 0.0:
             if self.sp.with_loadings and hasattr(self, 'dynamic_loading_before'):
-                self.dynamic_loading_before(time)
-            self.update_arch_behaviors(time, "dynamic")
+                self.dynamic_loading_before()
+            self.update_arch_behaviors("dynamic")
             if hasattr(self, "dynamic_behavior"):
-                if self.t.run_times >= 1:
-                    for i in range(self.t.run_times):
-                        self.dynamic_behavior(time)
-                        self.t.executed_dynamic = True
-                elif not Decimal(str(time)) % Decimal(str(self.t.dt)):
-                    self.dynamic_behavior(time)
-                    self.t.executed_dynamic = True
+                self.dynamic_behavior()
             if self.sp.with_loadings and hasattr(self, 'dynamic_loading_after'):
-                self.dynamic_loading_after(time)
+                self.dynamic_loading_after()
+            self.t.executed_dynamic = True
 
-    def update_static_behaviors(self, time, proptype="static"):
+    def update_static_behaviors(self, proptype="static"):
         """
         Run the static behaviors of the block, including loadings (if specified).
 
@@ -617,45 +593,35 @@ class Simulable(BaseObject):
             active = True
             self.set_mutables()
             while active:
-                self.execute_static_behaviors(time)
+                self.execute_static_behaviors()
                 # determine if propagation should continue due to new states
                 active = self.has_changed(update=True)
         elif proptype in ['static-once']:
-            self.execute_static_behaviors(time)
+            self.execute_static_behaviors()
 
-    def execute_static_behaviors(self, time):
+    def execute_static_behaviors(self):
         """Execute static behaviors."""
-        self.update_arch_behaviors(time, "static")
+        self.update_arch_behaviors("static")
         if hasattr(self, 'static_behavior'):
-            self.static_behavior(time)
-            self.t.executed_static = True
+            self.static_behavior()
         if self.sp.with_loadings and hasattr(self, 'static_loading'):
-            self.static_loading(time)
+            self.static_loading()
+        self.t.executed_static = True
 
-    def end_timestep(self, time, t_shift=None, t_ind=None, log_hist=True):
-        """
-        Update the simulation time and log at the end of the timestep.
-
-        Parameters
-        ----------
-        time : float
-            Time at which the simulation was simulated.
-        t_shift : int
-            Time to shift the time by when logging the history. Default is None.
-        t_ind : int
-            Index of the timestep in the history. Default is None.
-        log_hist :bool
-            Whether to log history. Default is True.
-        """
+    def inc_sim_time(self, **kwargs):
+        """Update the simulation time t_ind at the end of the timestep."""
+        if self.t.time > 0.0:
+            self.t.t_ind += 1
         for objname, obj in self.get_roles_as_dict().items():
-            if hasattr(obj, 'end_timestep'):
-                obj.end_timestep(time, t_shift=t_shift, t_ind=t_ind, log_hist=False)
-        self.t.update_time(time)
-        if log_hist:
-            self.log_hist(t_ind=t_ind, t=time, t_shift=t_shift)
+            if hasattr(obj, 'inc_sim_time'):
+                obj.inc_sim_time(**kwargs)
+
+    def cut_hist(self):
+        """Cut the simulation history to the current time."""
+        self.h.cut(end_ind=self.t.t_ind)
 
     def __call__(self, time=None, proptype="both", faults=[], disturbances={},
-                 end_of_timestep=True, t_ind=None, t_shift=0):
+                 end_of_timestep=True, end_of_simulation=False):
         """
         Call the Simulable to propagate behavior at a single time-step.
 
@@ -667,24 +633,33 @@ class Simulable(BaseObject):
         proptype : str
             Type of propagation step to update ('static', 'dynamic', or 'both')
         faults : dict/list
-            Faults to inject during this propagation step.
+            Faults to inject during this propagation step. (to be injected at time.)
             With structure ['fault1', 'fault2'...]
         disturbances : dict
-            Variables to change during this propagation step.
+            Variables to change during this propagation step. (to be injected at time.)
             With structure {'var1': value}
         end_of_timestep : bool
             Whether this is the end of the current simulation time, meaning that time
-            should be incremented. Default is True.
+            should be incremented and history logged. Default is True.
+        end_of_simulation : bool
+            Whether this is the end of the simulation (and history should be cut).
         """
-        time = self.get_time(time)
-        self.set_vars(**disturbances)
-        self.inject_faults(faults)
-        self.update_stochastic_states()
-        self.update_dynamic_behaviors(time, proptype=proptype)
-        self.update_static_behaviors(time, proptype=proptype)
-        self.set_sub_faults()
+        start_time, end_time = self.t.get_sim_times(time)
+        sim_times = self.sp.get_timerange(start_time, end_time)
+        for t in sim_times:
+            self.t.update_time(t)
+            if t == end_time:
+                self.set_vars(**disturbances)
+                self.inject_faults(faults)
+            self.update_stochastic_states()
+            self.update_dynamic_behaviors(proptype=proptype)
+            self.update_static_behaviors(proptype=proptype)
+            self.set_sub_faults()
         if end_of_timestep:
-            self.end_timestep(time=time, t_ind=t_ind, t_shift=t_shift)
+            self.inc_sim_time()
+            self.h.log(self, self.t.t_ind, self.t.time)
+        if end_of_simulation:
+            self.cut_hist()
 
 
 class Block(Simulable):

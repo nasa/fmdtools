@@ -21,7 +21,7 @@ class OverFxn(Function):
     container_s = ExampleState
     container_m = Mode
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.s.assign(self.fa.flows['exf'].s)
 
 

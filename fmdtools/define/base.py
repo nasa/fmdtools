@@ -335,7 +335,7 @@ def nan_to_x(metric, x=0.0):
 
 def gen_timerange(start_time, end_time, dt=1.0, min_r=7):
     """Generate the times in a given interval given the timestep dt."""
-    return np.round(np.arange(start_time, end_time + dt, dt), min_r)
+    return np.round(np.arange(start_time, end_time + np.power(10.0, -min_r), dt), min_r)
 
 
 def get_code_attrs(obj):

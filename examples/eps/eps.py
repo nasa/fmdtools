@@ -84,7 +84,7 @@ class ImportEE(Function):
     Both representations can be used--this just shows this representation.
     """
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault("no_v"):
             self.ee_out.s.effort = 0.0
         elif self.m.has_fault("high_v"):
@@ -107,7 +107,7 @@ class ImportSig(Function):
     flow_sig_out = Signal
     flownames = {"sig_in": "sig_out"}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault("partial_signal"):
             self.sig_out.s.value = 0.5
         elif self.m.has_fault("no_signal"):
@@ -135,7 +135,7 @@ class StoreEE(Function):
         elif self.ee_out.s.effort * self.ee_out.s.rate >= 2.0:
             self.m.add_fault("low_storage")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.set_faults()
         if self.m.has_fault("no_storage"):
             self.ee_out.s.effort = 0.0
@@ -171,7 +171,7 @@ class SupplyEE(Function):
         elif self.ee_out.s.rate > 1.0:
             self.m.add_fault("open_circuit")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.set_faults()
         if self.m.has_fault("open_circuit"):
             self.ee_out.s.effort = 0.0
@@ -214,7 +214,7 @@ class DistEE(Function):
         if max(self.ee_m.s.rate, self.ee_h.s.rate, self.ee_o.s.rate) > 2.0:
             self.m.add_fault("short")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.set_faults()
         if self.m.has_fault("short"):
             self.ee_in.s.rate = self.ee_in.s.effort * 4.0
@@ -258,7 +258,7 @@ class ExportHE(Function):
     flow_he = GenericFlow
     flownames = {"waste_he_1": "he", "waste_he_o": "he", "waste_he_m": "he"}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault("ineffective_sink"):
             self.he.s.rate = 4.0
         elif self.m.has_fault("hot_sink"):
@@ -272,7 +272,7 @@ class ExportME(Function):
     __slots__ = ("me",)
     flow_me = GenericFlow
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.me.s.rate = self.me.s.effort
 
 
@@ -281,7 +281,7 @@ class ExportOE(Function):
     __slots__ = ("oe",)
     flow_oe = GenericFlow
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.oe.s.rate = self.oe.s.effort
 
 
@@ -302,7 +302,7 @@ class EEtoME(Function):
     flow_he_out = GenericFlow
     flownames = {"ee_m": "ee_in", "waste_he_m": "he_out"}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault("high_torque"):
             self.he_out.s.effort = self.ee_in.s.effort + 1.0
             self.me.s.effort = self.ee_in.s.effort + 1.0
@@ -353,7 +353,7 @@ class EEtoHE(Function):
         elif self.ee_in.s.effort > 1.0:
             self.m.add_fault("low_heat")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault("open_circuit"):
             self.he.s.effort = 0.0
             self.ee_in.s.rate = 0.0
@@ -389,7 +389,7 @@ class EEtoOE(Function):
         if self.ee_in.s.effort >= 2.0:
             self.m.add_fault("burnt_out")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault("burnt_out"):
             self.ee_in.s.rate = 0.0
             self.he_out.s.effort = 0.0

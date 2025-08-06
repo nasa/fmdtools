@@ -1861,7 +1861,6 @@ class DynamicInterface():
         else:
             self.desired_result = desired_result
         self.mdl = mdl.new(**mdl_kwargs, track=track, sp={'end_time': self.t_max})
-        self.mdl.init_time_hist()
         self.hist = self.mdl.h
         self.run_stochastic = run_stochastic
         self.use_end_condition = use_end_condition
@@ -1888,9 +1887,8 @@ class DynamicInterface():
         """
         if seed:
             self.mdl.update_seed(seed)
-        self.mdl.propagate(self.t, fxnfaults=faults, disturbances=disturbances,
-                           run_stochastic=self.run_stochastic)
-        self.mdl.log_hist(self.t_ind, self.t, 0)
+        self.mdl(time=self.t, fxnfaults=faults, disturbances=disturbances,
+                 run_stochastic=self.run_stochastic)
 
         returns = {}
         for result in self.desired_result:

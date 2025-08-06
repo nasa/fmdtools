@@ -97,7 +97,7 @@ class Timer(BaseObject):
         self.time = 0.0
         self.mode = 'standby'
 
-    def set_timer(self, time, tstep=-1.0, overwrite='always'):
+    def set_timer(self, time, tstep=None, overwrite='always'):
         """
         Set timer to a given time.
 
@@ -125,7 +125,8 @@ class Timer(BaseObject):
             self.time = time
         elif overwrite == 'increment':
             self.time += time
-        self.tstep = tstep
+        if tstep is not None:
+            self.tstep = tstep
         self.mode = 'set'
 
     def indicate_standby(self):

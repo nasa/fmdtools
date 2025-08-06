@@ -54,13 +54,13 @@ class Mover(Function):
         self.internal_info = self.communications.create_comms(self.name)
         self.loc = self.location.create_local(self.name)
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         # move
         self.loc.s.inc(x=self.p.x_up, y=self.p.y_up)
         # the inbox should be cleared each timestep to allow new messages
         self.internal_info.clear_inbox()
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         # recieve messages
         self.internal_info.receive()
         # communicate
@@ -84,10 +84,10 @@ class Coordinator(Function):
         self.coord_view = self.communications.create_comms(self.name,
                                                            ports=["mover_1", "mover_2"])
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.coord_view.clear_inbox()
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.coord_view.receive()
         self.coord_view.update("y", to_update="local", to_get="mover_1")
         self.coord_view.update("x", to_update="local", to_get="mover_2")
