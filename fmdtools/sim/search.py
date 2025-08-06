@@ -931,8 +931,7 @@ class ScenarioProblem(BaseSimProblem):
         self.prepped_sims = {"result": n_outs[0],
                              "hist": n_outs[1],
                              "scen": n_outs[2],
-                             "mdls": n_outs[3],
-                             "t_end_nom": n_outs[4]}
+                             "mdls": n_outs[3]}
 
     def sim_mdl(self, *x):
         """
@@ -962,11 +961,8 @@ class ScenarioProblem(BaseSimProblem):
         sim_kwarg = propagate.pack_sim_kwargs(**self.kwargs,
                                               desired_result=desired_result,
                                               staged=True)
-        res, hist, _, t_end = self.prop_method(mdl,
-                                               scen,
-                                               nomhist=nomhist,
-                                               nomresult=nomresult,
-                                               **sim_kwarg)
+        res, hist, _ = self.prop_method(mdl, scen, nomhist=nomhist, nomresult=nomresult,
+                                        **sim_kwarg)
         return res.flatten(), hist.flatten()
 
 
@@ -996,9 +992,9 @@ class SingleFaultScenarioProblem(ScenarioProblem):
     objective value should be 1.0 (init value) + 3 * time_with_fault
     >>> ex_scenprob = ExScenProb()
     >>> ex_scenprob.f1(5.0)
-    4.0
+    3.0
     >>> ex_scenprob.f1(4.0)
-    7.0
+    6.0
     """
 
     def name_repr(self):
@@ -1297,14 +1293,14 @@ class ProblemArchitecture(BaseProblem):
     >>> ex_pa.ex_sp_f1(1, 1)
     2.0
     >>> ex_pa.ex_scenprob_f1()
-    16.0
+    15.0
     >>> ex_pa.ex_dp_f1()
     1.0
 
     We can also call these in terms of the full set of variables:
 
     >>> ex_pa.ex_scenprob_f1_full(2, 2)
-    13.0
+    12.0
     >>> ex_pa.ex_dp_f1_full(3, 3)
     3.0
     """
@@ -1583,7 +1579,7 @@ class ProblemArchitecture(BaseProblem):
          -ex_sp_xloc                                                [1. 2.]
         OBJECTIVES
          -ex_sp_f1                                                   3.0000
-         -ex_scenprob_f1                                            16.0000
+         -ex_scenprob_f1                                            15.0000
          -ex_dp_f1                                                   2.0000
         CONSTRAINTS
          -ex_sp_g1                                                  -4.0000
@@ -1654,7 +1650,7 @@ class ProblemArchitecture(BaseProblem):
         VARIABLES
          -time                                                       1.0000
         OBJECTIVES
-         -f1                                                        16.0000
+         -f1                                                        15.0000
         """
         inconsistent_upstream = self.find_inconsistent_upstream(probname)
         for upstream_prob in inconsistent_upstream:

@@ -28,7 +28,6 @@ from fmdtools.define.container.parameter import ExampleParameter
 from fmdtools.define.container.mode import ExampleMode
 from fmdtools.define.flow.base import ExampleFlow
 
-from decimal import Decimal
 
 class Function(Block):
     """
@@ -50,7 +49,7 @@ class Function(Block):
     >>> exf
     exf ExampleFunction
     - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
-    - s=ExampleState(x=1.0, y=1.0)
+    - s=ExampleState(x=0.0, y=0.0)
     - t=Time(time=-0.1, timers={})
     - exf=exampleflow ExampleFlow, s=(x=1.0, y=1.0)
 
@@ -60,9 +59,9 @@ class Function(Block):
     >>> exf
     exf ExampleFunction
     - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
-    - s=ExampleState(x=2.0, y=1.0)
+    - s=ExampleState(x=1.0, y=0.0)
     - t=Time(time=1.0, timers={})
-    - exf=exampleflow ExampleFlow, s=(x=3.0, y=1.0)
+    - exf=exampleflow ExampleFlow, s=(x=2.0, y=1.0)
 
     Which can also be used to inject faults:
 
@@ -70,9 +69,9 @@ class Function(Block):
     >>> exf
     exf ExampleFunction
     - m=ExampleMode(mode='no_charge', faults={'no_charge'}, sub_faults=False)
-    - s=ExampleState(x=2.0, y=4.0)
+    - s=ExampleState(x=1.0, y=3.0)
     - t=Time(time=2.0, timers={})
-    - exf=exampleflow ExampleFlow, s=(x=5.0, y=1.0)
+    - exf=exampleflow ExampleFlow, s=(x=3.0, y=1.0)
     """
 
     __slots__ = ["ca", "aa", "fa", "args_f", "archs"]
@@ -126,6 +125,7 @@ class ExampleFunction(Function):
     container_s = ExampleState
     container_m = ExampleMode
     flow_exf = ExampleFlow
+    default_s = {'x': 0.0, 'y': 0.0}
 
     def dynamic_behavior(self):
         """Increment x if nominal, else increment y."""
@@ -133,8 +133,6 @@ class ExampleFunction(Function):
             self.s.x += self.p.x
         else:
             self.s.y += self.p.y
-        if self.t.time < 1.0:
-            self.s.put(x=0.0, y=0.0)
         self.exf.s.inc(x=self.s.x)
 
     def find_classification(self, scen, hist):
