@@ -85,6 +85,10 @@ class BaseScenObj(dataobject, readonly=True, mapping=True):
         existing_kwargs = asdict(self)
         return self.__class__(**{**existing_kwargs, **kwargs})
 
+    def asdict(self):
+        """Return as dictionary."""
+        return asdict(self)
+
 
 class Injection(BaseScenObj):
     """

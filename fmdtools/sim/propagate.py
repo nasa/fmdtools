@@ -1019,10 +1019,7 @@ def check_end_condition(mdl, use_end_condition, t):
     """
     if use_end_condition and mdl.sp.end_condition:
         end_condition = get_var(mdl, mdl.sp.end_condition)
-        if end_condition():
-            return True
-        else:
-            return False
+        return end_condition()
     else:
         return False
 
@@ -1056,7 +1053,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
     c_mdl : dict
         A dictionary of models at each time given in ctimes with structure {time:model}
     """
-    desired_result, staged, cut_hist, use_end_condition, warn_faults = unpack_sim_kwargs(**kwargs)
+    desired_result, staged, cut_hist, use_end_condition, _ = unpack_sim_kwargs(**kwargs)
     # if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
     if staged:
@@ -1078,13 +1075,13 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
             if t in ctimes:
                 c_mdl[t] = mdl.copy()
             if t in scen['sequence']:
-                fxnfaults = scen['sequence'][t].get('faults', {})
+                faults = scen['sequence'][t].get('faults', {})
                 disturbances = scen['sequence'][t].get('disturbances', {})
             else:
-                fxnfaults = {}
+                faults = {}
                 disturbances = {}
             try:
-                mdl(time=t, faults=fxnfaults, disturbances=disturbances)
+                mdl(time=t, faults=faults, disturbances=disturbances)
             except Exception as e:
                 raise Exception("Error in scenario " + str(scen)) from e
 
@@ -1219,3 +1216,67 @@ def get_endclass_vars(mdl, desired_result, result):
     var_result = mdl.get_vars(*vars_to_get, trunc_tuple=False)
     for i, var in enumerate(vars_to_get):
         result[var] = var_result[i]
+
+
+from recordclass import dataobject, asdict
+from fmdtools.sim.scenario import Injection
+from fmdtools.define.block.base import Simulable
+
+class SimEvent(dataobject):
+    time: float = 0.0
+    copy: bool = False
+    mdl_copy: Simulable = None
+    injection: Injection = None
+    to_return: dict = None
+    result: dict = None
+    simulated: bool = False
+
+    def __repr__(self):
+        fieldstr = ", ".join([f+"="+str(v) for f, v in asdict(self).items() if v])
+        return self.__class__.__name__ + "(" + fieldstr + ")"
+
+    def run(self, mdl, scen, **kwargs):
+        if not self.simulated:
+            if self.copy:
+                self.mdl_copy = mdl.copy()
+            if self.injection:
+                mdl(time=self.time, **self.injection.asdict(), **kwargs)
+            else:
+                mdl(time=self.time)
+            if self.to_return:
+                self.result = mdl.get_result(to_return=self.to_return, **kwargs)
+            self.simulated = True
+        else:
+            raise Exception("Event already simulated.")
+
+
+class Simulation(object):
+    def __init__(self, mdl, scen, ctimes=[], to_return={}):
+        self.mdl = mdl
+        self.scen = scen
+        self.ctimes = ctimes
+        self.to_return = to_return
+        res_sequence = {k: v for k, v in to_return.items()
+                        if isinstance(k, float) or isinstance(k, int)}
+        times = [float(i) for i in [*scen.sequence, *ctimes, *res_sequence]]
+        times.sort()
+        self.simevents = []
+        for time in times:
+            copy = time in self.ctimes
+            injection = self.scen.sequence.get(time, None)
+            to_ret = to_return.get(time, None)
+            self.simevents.append(SimEvent(time=time, copy=copy, injection=injection,
+                                           to_return=to_ret))
+        self.simevents.append(SimEvent(time='end', to_return=to_return.get('end', {})))
+
+    def run(self, **kwargs):
+        for simevent in self.simevents:
+            simevent.run(self.mdl, self.scen, **kwargs)
+
+if __name__ == "__main__":
+    from fmdtools.define.block.function import ExampleFunction
+    from fmdtools.sim.scenario import SingleFaultScenario
+    esf = ExampleFunction()
+    s = SingleFaultScenario.from_fault(("examplefunction", "low"), 3.0, esf)
+    sim = Simulation(esf, s, ctimes = [2, 4], to_return={1.0: 's.x'})
+    sim.run()

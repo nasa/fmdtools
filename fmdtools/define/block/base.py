@@ -22,7 +22,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import set_var, gen_timerange, is_iter
+from fmdtools.define.base import gen_timerange, is_iter, get_var
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
@@ -33,7 +33,6 @@ import itertools
 import copy
 import warnings
 import numpy as np
-from decimal import Decimal
 
 
 class SimParam(Parameter, readonly=True):
@@ -282,6 +281,73 @@ class Simulable(BaseObject):
             Result dictionary with rate, cost, and expecte_cost values
         """
         return Result({'rate': scen.rate, 'cost': 1, 'expected_cost': scen.rate})
+
+    def classify(self, scen={}, **kwargs):
+        """Classify the results of the simulation (placeholder)."""
+        return {}
+
+    def get_result(self, to_return={}, **kwargs):
+        to_return = copy.deepcopy(to_return)
+        if type(to_return) is str:
+            to_return = {to_return: None}
+        elif type(to_return) in [list, set]:
+            tr = to_return
+            to_return = {str(k): k for k in tr if type(k) is not str}
+            to_return.update({k: None for k in tr if type(k) is str})
+        result = Result()
+        self.get_endclass(to_return=to_return, result=result, **kwargs)
+        if 'endfaults' in to_return:
+            result['endfaults'] = [*self.return_faultmodes()]
+        self.get_resgraph(to_return=to_return, result=result, **kwargs)
+
+    def get_endclass(self, to_return={}, result=Result(), **kwargs):
+        sub_returns = [x.split('.')[1] for x in to_return
+                      if 'endclass.' in x]
+        get_endclass = 'endclass' in to_return
+        if get_endclass or sub_returns:
+            res = self.classify(**kwargs)
+            if get_endclass:
+                result['endclass'] = Result(res)
+            for sub_r in sub_returns:
+                result['endclass.'+sub_r] = res[sub_r]
+        return result
+
+    def get_resgraph(self, to_return={}, result=Result(), nomresult={}):
+        graphs_to_get = {g: arg for g, arg in to_return.items()
+                         if type(g) is str and (g.startswith('graph')
+                                                or g.startswith('Graph'))}
+        for g, arg in graphs_to_get:
+            if isinstance(arg, tuple):
+                Gclass, kwargs = arg
+            else:
+                Gclass = False
+                kwargs = {}
+
+            if '.' in g:
+                strs = g.split(".")
+                obj = get_var(self, strs[1:])
+            else:
+                obj = self
+            rgraph = obj.as_modelgraph(time=self.time, **kwargs)
+
+            if nomresult and g in nomresult:
+                rgraph.set_resgraph(nomresult[g])
+            elif nomresult:
+                rgraph.set_resgraph(nomresult)
+            else:
+                rgraph.set_resgraph()
+            result[g] = rgraph
+        return result
+
+    def get_resvars(self, to_return={}, result=Result()):
+        vars_to_get = [v for v in to_return if isinstance(v, str) and
+                       (not 'endclass' in v and not 'vars' in v and not 'endfaults' in v
+                        and not 'graph' in v and not 'Graph' in v)]
+        if 'vars' in to_return:
+            vars_to_get.append(to_return['vars'])
+        var_result = self.get_vars(*vars_to_get, trunc_tuple=False)
+        for i, var in enumerate(vars_to_get):
+            result[var] = var_result[i]
 
     def new_params(self, name='', p={}, sp={}, r={}, track={}, **kwargs):
         """
@@ -627,9 +693,10 @@ class Simulable(BaseObject):
 
         Parameters
         ----------
-        time : float
+        time : float/'end'
             Time at which to simulate the Simulable. Default is None, which uses
-            self.t.time.
+            self.t.time. If 'end' is provided, will be simulated until the end of
+            the simulation (sp.end_time or sp.end_condition)
         proptype : str
             Type of propagation step to update ('static', 'dynamic', or 'both')
         faults : dict/list
@@ -644,6 +711,8 @@ class Simulable(BaseObject):
         end_of_simulation : bool
             Whether this is the end of the simulation (and history should be cut).
         """
+        if time == 'end':
+            time = self.sp.end_time
         start_time, end_time = self.t.get_sim_times(time)
         sim_times = self.sp.get_timerange(start_time, end_time)
         for t in sim_times:
@@ -655,6 +724,9 @@ class Simulable(BaseObject):
             self.update_dynamic_behaviors(proptype=proptype)
             self.update_static_behaviors(proptype=proptype)
             self.set_sub_faults()
+            if self.sp.end_condition:
+                if get_var(self, self.sp.end_condition)():
+                    break
         if end_of_timestep:
             self.inc_sim_time()
             self.h.log(self, self.t.t_ind, self.t.time)
