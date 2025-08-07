@@ -8,6 +8,7 @@ Defines:
 - :class:`MultiFlowGraph` class which represents `MultiFlow` in a ModelGraph structure.
 """
 
+from fmdtools.define.base import get_dict_repr
 from fmdtools.define.flow.base import Flow, ExampleFlow
 from fmdtools.analyze.graph.model import ModelGraph
 
@@ -85,20 +86,20 @@ class MultiFlow(Flow):
     examplemultiflow ExampleMultiFlow
     - s=ExampleState(x=1.0, y=1.0)
     LOCALS:
-    - sub_flow, s=(x=0.0, y=0.0)
+    - sub_flow=(s=(x=0.0, y=0.0))
     >>> exf.update(to_get="sub_flow")
     >>> exf
     examplemultiflow ExampleMultiFlow
     - s=ExampleState(x=0.0, y=0.0)
     LOCALS:
-    - sub_flow, s=(x=0.0, y=0.0)
+    - sub_flow=(s=(x=0.0, y=0.0))
     >>> exf.s.put(x=10.0, y=10.0)
     >>> sub_flow.update("x", to_get="global")
     >>> exf
     examplemultiflow ExampleMultiFlow
     - s=ExampleState(x=10.0, y=10.0)
     LOCALS:
-    - sub_flow, s=(x=10.0, y=0.0)
+    - sub_flow=(s=(x=10.0, y=0.0))
     """
 
     slots = ['locals', '__dict__']
@@ -119,12 +120,15 @@ class MultiFlow(Flow):
 
     def __repr__(self):
         """Print console string."""
-        rep_str = super().create_repr(one_line=False)
+        return super().create_repr(one_line=False) + self.create_local_repr()
+
+    def create_local_repr(self):
+        """Create repr string for local flows."""
+        rep_str = ""
         if self.locals:
             rep_str += "\nLOCALS:"
-            for loc in self.locals:
-                rep_str += "\n- "+self.get_view(loc).create_repr(with_classname=False,
-                                                                 one_line=True)
+            locs = {loc: self.get_view(loc) for loc in self.locals}
+            rep_str += get_dict_repr(locs, with_classname=False, one_line=False)
         return rep_str
 
     def base_type(self):
@@ -216,8 +220,8 @@ class MultiFlow(Flow):
         examplemultiflow ExampleMultiFlow
         - s=ExampleState(x=1.0, y=1.0)
         LOCALS:
-        - sub_f, s=(x=1.0, y=1.0)
-        - sub_f2, s=(x=1.0, y=1.0)
+        - sub_f=(s=(x=1.0, y=1.0))
+        - sub_f2=(s=(x=1.0, y=1.0))
         >>> sub_f.get_view("sub_f2")
         sub_f2 ExampleMultiFlow
         - s=ExampleState(x=1.0, y=1.0)

@@ -21,7 +21,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.object.base import check_pickleability, BaseObject
+from fmdtools.define.object.base import check_pickleability, BaseObject, get_dict_repr
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.block.base import Simulable
 from fmdtools.define.object.base import init_obj, get_obj_name
@@ -113,23 +113,16 @@ class Architecture(Simulable):
                            if role in kwargs}
 
     def create_repr(self, rolenames=['s', 'm'], sim_rolenames=['s', 'm'],
-                    with_classname=True, one_line=False):
+                    with_classname=True, with_name=True, one_line=False):
         """Show string with sims and flows."""
         repstr = super().create_repr(rolenames=rolenames, with_classname=with_classname,
-                                     one_line=one_line)
+                                     with_name=with_name, one_line=one_line)
         if not one_line:
             for flex_role in self.flexible_roles:
                 roledict = self.get_flex_role_objs(flex_role)
-                rolelist = ['\n- ' + obj.create_repr(with_classname=False, one_line=True)
-                            if isinstance(obj, BaseObject) else '\n' + name
-                            for name, obj in roledict.items()]
-                rolelist = [fstr[:115] + '...' if len(fstr) > 120 else fstr
-                            for fstr in rolelist]
-                if len(rolelist) > 15:
-                    rolelist = rolelist[:15]+["...("+str(len(rolelist))+' total)\n']
-                if rolelist:
-                    rolestr = "\n"+flex_role.upper()+":"+"".join(rolelist)
-                    repstr += rolestr
+                if roledict:
+                    rolestr = get_dict_repr(roledict, one_line=one_line)
+                    repstr += "\n"+flex_role.upper()+":"+rolestr
         return repstr
 
     def base_type(self):

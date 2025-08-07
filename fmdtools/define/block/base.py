@@ -27,7 +27,7 @@ from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
 from fmdtools.define.container.mode import Fault
-from fmdtools.analyze.result import Result
+from fmdtools.analyze.result import Result, clean_to_return
 
 import itertools
 import copy
@@ -287,22 +287,17 @@ class Simulable(BaseObject):
         return {}
 
     def get_result(self, to_return={}, **kwargs):
-        to_return = copy.deepcopy(to_return)
-        if type(to_return) is str:
-            to_return = {to_return: None}
-        elif type(to_return) in [list, set]:
-            tr = to_return
-            to_return = {str(k): k for k in tr if type(k) is not str}
-            to_return.update({k: None for k in tr if type(k) is str})
+        to_return = clean_to_return(to_return)
         result = Result()
         self.get_endclass(to_return=to_return, result=result, **kwargs)
         if 'endfaults' in to_return:
             result['endfaults'] = [*self.return_faultmodes()]
         self.get_resgraph(to_return=to_return, result=result, **kwargs)
+        return result
 
     def get_endclass(self, to_return={}, result=Result(), **kwargs):
         sub_returns = [x.split('.')[1] for x in to_return
-                      if 'endclass.' in x]
+                      if isinstance(x, str) and 'endclass.' in x]
         get_endclass = 'endclass' in to_return
         if get_endclass or sub_returns:
             res = self.classify(**kwargs)

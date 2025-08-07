@@ -42,24 +42,24 @@ class ComponentArchitecture(Architecture):
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=-0.1, timers={})
     COMPS:
-    - c1, s=(x=5.0, y=5.0)
-    - c2, s=(x=10.0, y=10.0)
+    - c1=ExampleComponent(s=(x=5.0, y=5.0))
+    - c2=ExampleComponent(s=(x=10.0, y=10.0))
     >>> exc()
     >>> exc
     examplecomponentarchitecture ExampleComponentArchitecture
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=1.0, timers={})
     COMPS:
-    - c1, s=(x=7.0, y=6.0)
-    - c2, s=(x=12.0, y=11.0)
+    - c1=ExampleComponent(s=(x=7.0, y=6.0))
+    - c2=ExampleComponent(s=(x=12.0, y=11.0))
     >>> exc()
     >>> exc
     examplecomponentarchitecture ExampleComponentArchitecture
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=2.0, timers={})
     COMPS:
-    - c1, s=(x=7.0, y=7.0)
-    - c2, s=(x=12.0, y=12.0)
+    - c1=ExampleComponent(s=(x=7.0, y=7.0))
+    - c2=ExampleComponent(s=(x=12.0, y=12.0))
     """
 
     __slots__ = ['comps']

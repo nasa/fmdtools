@@ -49,6 +49,7 @@ from fmdtools.analyze.common import set_empty_multiplots
 from fmdtools.analyze.common import auto_filetype, file_check, load_folder
 
 import numpy as np
+import copy
 import pandas as pd
 import sys
 import os
@@ -123,6 +124,29 @@ def check_include_error(result, to_include):
     if to_include not in ('all', 'default') and to_include not in result:
         raise Exception("to_include key " + to_include +
                         " not in result keys: " + str(result.keys()))
+
+
+def clean_to_return(to_return):
+    """Clean the to_return dictionary."""
+    to_return = copy.deepcopy(to_return)
+    if type(to_return) is str:
+        to_return = {to_return: None}
+    elif type(to_return) in [list, set]:
+        tr = to_return
+        to_return = {str(k): k for k in tr if type(k) is not str}
+        to_return.update({k: None for k in tr if type(k) is str})
+    return to_return
+
+
+def get_to_return_time(to_return, time):
+    if isinstance(time, float) or isinstance(time, int):
+        return to_return.get(time, None)
+    if time == 'end':
+        to_ret = {k: v for k, v in to_return.items() if isinstance(k, str)}
+        if 'end' in to_ret:
+            to_ret.update(to_ret.pop('end'))
+        return to_ret
+
 
 
 class Result(UserDict):

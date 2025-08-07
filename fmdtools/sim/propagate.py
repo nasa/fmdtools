@@ -1221,8 +1221,10 @@ def get_endclass_vars(mdl, desired_result, result):
 from recordclass import dataobject, asdict
 from fmdtools.sim.scenario import Injection
 from fmdtools.define.block.base import Simulable
+from fmdtools.define.container.base import BaseContainer
+from fmdtools.define.base import get_dict_repr
 
-class SimEvent(dataobject):
+class SimEvent(BaseContainer):
     time: float = 0.0
     copy: bool = False
     mdl_copy: Simulable = None
@@ -1231,9 +1233,15 @@ class SimEvent(dataobject):
     result: dict = None
     simulated: bool = False
 
+    def create_repr(self, fields=['copy', 'injection', 'to_return', 'simulated'],
+                    **kwargs):
+        if not fields:
+            fields = self.__fields__
+        fields = [f for f in fields if self[f]]
+        return super().create_repr(fields=fields, **kwargs)
+
     def __repr__(self):
-        fieldstr = ", ".join([f+"="+str(v) for f, v in asdict(self).items() if v])
-        return self.__class__.__name__ + "(" + fieldstr + ")"
+        return self.create_repr(fields=[])
 
     def run(self, mdl, scen, **kwargs):
         if not self.simulated:
@@ -1250,12 +1258,14 @@ class SimEvent(dataobject):
             raise Exception("Event already simulated.")
 
 
+from fmdtools.analyze.result import clean_to_return, get_to_return_time
+
 class Simulation(object):
     def __init__(self, mdl, scen, ctimes=[], to_return={}):
         self.mdl = mdl
         self.scen = scen
         self.ctimes = ctimes
-        self.to_return = to_return
+        self.to_return = clean_to_return(to_return)
         res_sequence = {k: v for k, v in to_return.items()
                         if isinstance(k, float) or isinstance(k, int)}
         times = [float(i) for i in [*scen.sequence, *ctimes, *res_sequence]]
@@ -1264,10 +1274,16 @@ class Simulation(object):
         for time in times:
             copy = time in self.ctimes
             injection = self.scen.sequence.get(time, None)
-            to_ret = to_return.get(time, None)
+            to_ret = get_to_return_time(to_return, time)
             self.simevents.append(SimEvent(time=time, copy=copy, injection=injection,
                                            to_return=to_ret))
-        self.simevents.append(SimEvent(time='end', to_return=to_return.get('end', {})))
+        to_ret = get_to_return_time(self.to_return, 'end')
+        self.simevents.append(SimEvent(time='end', to_return=to_ret))
+
+    def __repr__(self):
+        repstr = get_dict_repr({str(ev.time): ev for ev in self.simevents},
+                               one_line=False)
+        return "Simulation with SimEvents:"+repstr
 
     def run(self, **kwargs):
         for simevent in self.simevents:
@@ -1278,5 +1294,5 @@ if __name__ == "__main__":
     from fmdtools.sim.scenario import SingleFaultScenario
     esf = ExampleFunction()
     s = SingleFaultScenario.from_fault(("examplefunction", "low"), 3.0, esf)
-    sim = Simulation(esf, s, ctimes = [2, 4], to_return={1.0: 's.x'})
+    sim = Simulation(esf, s, ctimes = [2, 4], to_return={1.0: 's.x', "endclass": None})
     sim.run()

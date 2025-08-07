@@ -217,12 +217,12 @@ class ActionArchitecture(Architecture):
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=-0.1, timers={})
     FLOWS:
-    - exf, s=(x=1.0, y=1.0)
+    - exf=ExampleFlow(s=(x=1.0, y=1.0))
     ACTS:
-    - act_1
-    - act_2
+    - act_1=ExampleAction()
+    - act_2=ExampleAction()
     CONDS:
-    act_1_done
+    - act_1_done=<method act_1.indicate_done()>
     >>> exaa()
     >>> exaa.active_actions
     {'act_1'}
@@ -232,12 +232,12 @@ class ActionArchitecture(Architecture):
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=2.0, timers={})
     FLOWS:
-    - exf, s=(x=4.0, y=1.0)
+    - exf=ExampleFlow(s=(x=4.0, y=1.0))
     ACTS:
-    - act_1
-    - act_2
+    - act_1=ExampleAction()
+    - act_2=ExampleAction()
     CONDS:
-    act_1_done
+    - act_1_done=<method act_1.indicate_done()>
     >>> exaa.active_actions
     {'act_2'}
     """

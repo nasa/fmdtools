@@ -22,7 +22,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.flow.base import Flow, ExampleFlow
+from fmdtools.define.base import get_dict_repr
+from fmdtools.define.flow.base import ExampleFlow
 from fmdtools.define.flow.multiflow import MultiFlow, MultiFlowGraph
 from fmdtools.define.base import get_obj_name
 from fmdtools.analyze.graph.model import add_edge, ModelGraph
@@ -69,27 +70,27 @@ class CommsFlow(MultiFlow):
     examplecommsflow ExampleCommsFlow
     - s=ExampleState(x=1.0, y=1.0)
     COMMS:
-    - t1, s=(x=1.0, y=1.0)
-    - t2, s=(x=1.0, y=1.0)
+    - t1=(s=(x=1.0, y=1.0))
+    - t2=(s=(x=1.0, y=1.0))
     >>> t1.s.put(x=10.0, y=10.0)
     >>> t1.send("t2", "x")
     >>> t1
     t1 ExampleCommsFlow
     - s=ExampleState(x=10.0, y=10.0)
-    - out(): t1_out, s=(x=10.0, y=1.0)
+    - out(): t1_out(s=(x=10.0, y=1.0))
     - inbox(): {}
     - received(): {}
     >>> t2
     t2 ExampleCommsFlow
     - s=ExampleState(x=1.0, y=1.0)
-    - out(): t2_out, s=(x=1.0, y=1.0)
+    - out(): t2_out(s=(x=1.0, y=1.0))
     - inbox(): {'t1': ('x',)}
     - received(): {}
     >>> t2.receive()
     >>> t2
     t2 ExampleCommsFlow
     - s=ExampleState(x=10.0, y=1.0)
-    - out(): t2_out, s=(x=1.0, y=1.0)
+    - out(): t2_out(s=(x=1.0, y=1.0))
     - inbox(): {}
     - received(): {'t1': ('x',)}
     """
@@ -111,20 +112,14 @@ class CommsFlow(MultiFlow):
         rep_str = self.create_repr(one_line=False)
         if self.name == self.glob.name and self.locals:
             rep_str += "\nCOMMS:"
-            for fname, func in self.fxns.items():
-                f_repr = func['internal'].create_repr(with_classname=False,
-                                                      one_line=True)
-                rep_str += "\n- "+f_repr
+            comms = {f: func['internal'] for f, func in self.fxns.items()}
+            rep_str += get_dict_repr(comms, with_classname=False, one_line=False)
         elif self.name in self.glob.fxns:
             rep_str = (rep_str +
                        "\n- out(): " + self.out().create_repr(with_classname=False, one_line=True) +
                        "\n- inbox(): " + str(self.inbox()) +
                        "\n- received(): " + str(self.received()))
-            if self.locals:
-                loc_reprs = [getattr(self, lo).create_repr(with_classname=False,
-                                                           one_line=True)
-                             for lo in self.locals]
-                rep_str += "\nLOCALS:\n- "+"\n- ".join(loc_reprs)
+            rep_str += self.create_local_repr()
         return rep_str
 
     def create_comms(self, name, ports=[], as_copy=False, **kwargs):

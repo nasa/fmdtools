@@ -60,11 +60,11 @@ class GeomArchitecture(Architecture):
     exgeomarch ExGeomArch
     - t=Time(time=-0.1, timers={})
     POINTS:
-    - ex_point, s=(occupied=False, buffer_around=1.0)
+    - ex_point=ExPoint(s=(occupied=False, buffer_around=1.0))
     LINES:
-    - ex_line, s=(occupied=False, buffer_around=1.0)
+    - ex_line=ExLine(s=(occupied=False, buffer_around=1.0))
     POLYS:
-    - ex_poly, s=(occupied=False, buffer_around=1.0)
+    - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
     >>> ega.geoms()['ex_point'].s
     ExGeomState(occupied=False, buffer_around=1.0)
     >>> ega.h
@@ -87,11 +87,11 @@ class GeomArchitecture(Architecture):
     exgeomarch ExGeomArch
     - t=Time(time=2.0, timers={})
     POINTS:
-    - ex_point, s=(occupied=False, buffer_around=2.0)
+    - ex_point=ExPoint(s=(occupied=False, buffer_around=2.0))
     LINES:
-    - ex_line, s=(occupied=False, buffer_around=2.0)
+    - ex_line=ExLine(s=(occupied=False, buffer_around=2.0))
     POLYS:
-    - ex_poly, s=(occupied=False, buffer_around=1.0)
+    - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
     """
 
     container_p = Parameter

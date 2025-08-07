@@ -17,7 +17,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import set_arg_as_type, remove_para
+from fmdtools.define.base import set_arg_as_type, remove_para, get_repr
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 
@@ -44,7 +44,8 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     def __repr__(self):
         return self.create_repr(with_classname=True, fields="all")
 
-    def create_repr(self, with_classname=True, fields="all", one_line=True):
+    def create_repr(self, with_classname=True, fields="all", one_line=True,
+                    with_name=False):
         """Create repr-friendly string for container."""
         if with_classname:
             repr_str = self.__class__.__name__
@@ -52,7 +53,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
             repr_str = ""
         if fields == "all":
             fields = self.__fields__
-        field_str = ", ".join(f+"="+self[f].__repr__() for f in fields
+        field_str = ", ".join(get_repr(self[f], f) for f in fields
                               if f in dir(self))
         return repr_str+"("+field_str+")"
 

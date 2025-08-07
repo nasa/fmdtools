@@ -28,6 +28,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import get_var, set_var, get_methods, get_obj_name, get_memory
+from fmdtools.define.base import get_repr, get_dict_repr
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 from fmdtools.analyze.graph.model import add_node, add_edge, remove_base, ModelGraph
@@ -189,7 +190,8 @@ class BaseObject(object):
         self.check_slots()
         self.mutables = ()
 
-    def create_repr(self, rolenames=[], with_classname=True, one_line=False):
+    def create_repr(self, rolenames=[], with_classname=True, with_name=True,
+                    one_line=False):
         """
         Provide a repl-friendly string showing the states of the Object.
 
@@ -199,23 +201,16 @@ class BaseObject(object):
             console string
         """
         if hasattr(self, 'name'):
-            objstr = getattr(self, 'name', '')
+            namestrs = []
+            if with_name:
+                namestrs.append(getattr(self, 'name', ''))
             if with_classname:
-                objstr += ' '+self.__class__.__name__
+                namestrs.append(self.__class__.__name__)
+            objstr = " ".join(namestrs)
             if not rolenames:
                 rolenames = self.get_roles(with_immutable=False, with_flex=False)
-            for rolename in rolenames:
-                role_obj = getattr(self, rolename, False)
-                if role_obj:
-                    if hasattr(role_obj, 'create_repr'):
-                        objrepr = role_obj.create_repr(with_classname=not one_line,
-                                                       one_line=True)
-                    else:
-                        objrepr = role_obj.__repr__()
-                    if one_line:
-                        objstr += ', '+rolename+"="+objrepr
-                    else:
-                        objstr += '\n'+"- "+rolename+"="+objrepr
+            roledict = {k: getattr(self, k) for k in rolenames if hasattr(self, k)}
+            objstr += get_dict_repr(roledict, one_line=one_line)
             return objstr
         else:
             return 'New uninitialized '+self.__class__.__name__
