@@ -431,7 +431,7 @@ class FMEA(BaseTab):
         The default is ('function', 'fault').
     prefix : str
         Prefix for the metrics to use for get_metric. Default is 'endclass.', which
-        gets the metrics from endclass (output of find_classification method) only.
+        gets the metrics from endclass (output of classify() method) only.
     rates/weights : str(s)
         Weighting or rate factor to use for weighted averages and expectations.
         Can be any value from the result (e,g. rates='rate') or the FaultSample

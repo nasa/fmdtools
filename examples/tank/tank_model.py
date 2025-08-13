@@ -416,7 +416,7 @@ class Tank(FunctionArchitecture):
         self.add_fxn('human', HumanActions, 'valve1_sig', 'tank_sig',
                      'valve2_sig', aa={'reacttime': self.p.reacttime})
 
-    def find_classification(self, scen, hist):
+    def classify(self, scen={}, hist={}, **kwargs):
         # here we define failure in terms of the water level getting too low or too high
         if any(self.h.fxns.store_water.s.level >= 20):
             totcost = 1000000

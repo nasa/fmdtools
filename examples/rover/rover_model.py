@@ -1065,7 +1065,7 @@ class Rover(FunctionArchitecture):
         else:
             return False
 
-    def find_classification(self, scen, mdlhist):
+    def classify(self, scen={}, mdlhist={}, **kwargs):
         """
         Calculate metric that need to be tracked for the simulation.
 

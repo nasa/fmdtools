@@ -373,7 +373,7 @@ class Drone(DroneRural):
         """Check if drone is at a dangerous location (if occupied)."""
         return self.flows['environment'].c.in_area(dofs.s.x, dofs.s.y, "all_occupied")
 
-    def find_classification(self, scen, mdlhist):
+    def classify(self, scen={}, mdlhist={}, **kwargs):
         """Classify a given scenario based on land_metrics and expected cost model."""
         faulttime = self.h.get_fault_time(metric='total')
 

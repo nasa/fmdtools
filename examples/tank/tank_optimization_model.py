@@ -227,7 +227,7 @@ class Tank(FunctionArchitecture):
         self.add_fxn('contingency', ContingencyActions,
                      'input_sig', 'tank_sig', 'output_sig', p=self.p)
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, scen={}, mdlhists={}, **kwargs):
         # here we define failure in terms of the water level getting too low or too high
         overfullcost, emptycost, buffercost = 0, 0, 0
         # calculate time the tank is overfull:

@@ -101,7 +101,7 @@ class Signal(Flow):
 
 """
 DEFINING RESILIENCE METRICS
-Below we define certain functions used in the value function in find_classification
+Below we define certain functions used in the value function in classify()
 """
 
 
@@ -146,7 +146,7 @@ Below we define a class that defines the parameter of the model
 class PumpParam(Parameter, readonly=True):
     """PumpParam defines the parameters which the pump may be simulated over."""
 
-    # costs to tabulate in cost model (see find_classification)
+    # costs to tabulate in cost model (see classify())
     cost: tuple = ("repair", "water")
     # delay to use in MoveWater function
     delay: int = 10
@@ -519,11 +519,11 @@ class Pump(FunctionArchitecture):
         """Indicate that the pump is on."""
         return self.flows['wat_1'].s.flowrate > 0
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, scen={}, mdlhists={}, **kwargs):
         """
         Classify the simulation run/scenario.
 
-        Propagation methods use find_classification() to classify the results based on
+        Propagation methods use classify() to classify the results based on
         the effects of a fault scenario, returning whatever metrics are desired. In this
         case, a dictionary with rate, cost, and expected cost is calculated.
 

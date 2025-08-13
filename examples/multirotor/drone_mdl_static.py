@@ -791,7 +791,7 @@ class Drone(FunctionArchitecture):
         self.add_fxn("hold_payload", HoldPayload, "dofs", "force_lin", "force_st")
         self.add_fxn("view_env", ViewEnvironment, "dofs")
 
-    def find_classification(self, scen, mdlhist):
+    def classify(self, scen={}, mdlhist={}, **kwargs):
         """Calculate rate, cost, expected cost based on cost of repair information."""
         modeprops = self.return_faultmodes()
         repcost = sum([m["cost"] for f, m in modeprops.items()])

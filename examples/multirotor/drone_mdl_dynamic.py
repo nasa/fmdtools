@@ -428,7 +428,7 @@ class Drone(FunctionArchitecture):
         self.add_fxn('hold_payload', HoldPayload, 'force_lin', 'force_st', 'dofs')
         self.add_fxn('view_env', ViewEnvironment, 'dofs', 'environment')
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, scen={}, mdlhists={}, **kwargs):
         """
         Calculate cost model based on scenario results.
 

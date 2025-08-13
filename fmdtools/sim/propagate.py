@@ -87,7 +87,7 @@ desired_result : dict/str/list
     Desired quantities to return in the first argument.
     Options are:
 
-    - 'endclass': a dict returned by find_classification (default)
+    - 'endclass': a dict returned by classify (default)
     - 'endfaults': a dict of returned fault modes and their propagation, e.g., ::
 
         {'endfaults':faultdict, 'faultprops':faultpropdict}
@@ -1224,7 +1224,27 @@ from fmdtools.define.block.base import Simulable
 from fmdtools.define.container.base import BaseContainer
 from fmdtools.define.base import get_dict_repr
 
+
 class SimEvent(BaseContainer):
+    """
+    Event in a Simulation.
+
+    Parameters
+    ----------
+    time : float
+        Time when the SimEvent is to Occur
+    copy : bool
+        Whether to copy the model just before the time.
+    mdl_copy : Simulable
+        Copied model at the simevent (returned by run())
+    injection : Injection
+        Injection of faults and disturbances to inject at time.
+    to_return : dict
+        Dict specifying what to return as a Result from the simulation.
+    simulated : bool
+        Whether the event has simulated. Default is False.
+    """
+
     time: float = 0.0
     copy: bool = False
     mdl_copy: Simulable = None
@@ -1235,15 +1255,27 @@ class SimEvent(BaseContainer):
 
     def create_repr(self, fields=['copy', 'injection', 'to_return', 'simulated'],
                     **kwargs):
+        """Represent the SimEvent as a string."""
         if not fields:
             fields = self.__fields__
         fields = [f for f in fields if self[f]]
         return super().create_repr(fields=fields, **kwargs)
 
     def __repr__(self):
+        """Show Simulation event as a string."""
         return self.create_repr(fields=[])
 
-    def run(self, mdl, scen, **kwargs):
+    def run(self, mdl, scen={}, **kwargs):
+        """
+        Run the Simulated event.
+
+        Parameters
+        ----------
+        mdl : Simulable
+            Model to simulate the event in.
+        **kwargs : kwargs
+            Keyword arguments to __call__ and Model.get_result()
+        """
         if not self.simulated:
             if self.copy:
                 self.mdl_copy = mdl.copy()
@@ -1252,13 +1284,13 @@ class SimEvent(BaseContainer):
             else:
                 mdl(time=self.time)
             if self.to_return:
-                self.result = mdl.get_result(to_return=self.to_return, **kwargs)
+                self.result = mdl.get_result(to_return=self.to_return, scen=scen, **kwargs)
             self.simulated = True
         else:
             raise Exception("Event already simulated.")
 
 
-from fmdtools.analyze.result import clean_to_return, get_to_return_time
+from fmdtools.analyze.result import clean_to_return
 
 class Simulation(object):
     def __init__(self, mdl, scen, ctimes=[], to_return={}):
@@ -1274,10 +1306,10 @@ class Simulation(object):
         for time in times:
             copy = time in self.ctimes
             injection = self.scen.sequence.get(time, None)
-            to_ret = get_to_return_time(to_return, time)
+            to_ret = self.to_return.get(time, None)
             self.simevents.append(SimEvent(time=time, copy=copy, injection=injection,
                                            to_return=to_ret))
-        to_ret = get_to_return_time(self.to_return, 'end')
+        to_ret = self.to_return.get('end', None)
         self.simevents.append(SimEvent(time='end', to_return=to_ret))
 
     def __repr__(self):
@@ -1287,12 +1319,20 @@ class Simulation(object):
 
     def run(self, **kwargs):
         for simevent in self.simevents:
-            simevent.run(self.mdl, self.scen, **kwargs)
+            simevent.run(self.mdl, scen=self.scen, **kwargs)
+
+    def get_results(self, **kwargs):
+        res = Result()
+        for simevent in self.simevents:
+            if simevent.result:
+                res[t_key(simevent.time)] = simevent.result
+        return res.flatten()
 
 if __name__ == "__main__":
     from fmdtools.define.block.function import ExampleFunction
     from fmdtools.sim.scenario import SingleFaultScenario
     esf = ExampleFunction()
     s = SingleFaultScenario.from_fault(("examplefunction", "low"), 3.0, esf)
-    sim = Simulation(esf, s, ctimes = [2, 4], to_return={1.0: 's.x', "endclass": None})
+    sim = Simulation(esf, s, ctimes = [2, 4], to_return={1.0: 's.x', "end": "class"})
     sim.run()
+    res = sim.get_results()

@@ -40,7 +40,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import t_key, nest_dict, is_numeric, is_bool
+from fmdtools.define.base import t_key, nest_dict, is_numeric, is_bool, is_iter
 from fmdtools.analyze.common import to_include_keys
 from fmdtools.analyze.common import calc_metric, calc_metric_ci, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values
@@ -129,24 +129,16 @@ def check_include_error(result, to_include):
 def clean_to_return(to_return):
     """Clean the to_return dictionary."""
     to_return = copy.deepcopy(to_return)
-    if type(to_return) is str:
-        to_return = {to_return: None}
-    elif type(to_return) in [list, set]:
-        tr = to_return
-        to_return = {str(k): k for k in tr if type(k) is not str}
-        to_return.update({k: None for k in tr if type(k) is str})
+    if not isinstance(to_return, dict):
+        to_return = {"end": to_return}
+
+    for k, v in to_return.items():
+        if not isinstance(v, dict):
+            if is_iter(v):
+                to_return[k] = {i: None for i in v}
+            else:
+                to_return[k] = {v: None}
     return to_return
-
-
-def get_to_return_time(to_return, time):
-    if isinstance(time, float) or isinstance(time, int):
-        return to_return.get(time, None)
-    if time == 'end':
-        to_ret = {k: v for k, v in to_return.items() if isinstance(k, str)}
-        if 'end' in to_ret:
-            to_ret.update(to_ret.pop('end'))
-        return to_ret
-
 
 
 class Result(UserDict):

@@ -786,7 +786,7 @@ class Drone(FunctionArchitecture):
                                  'minor': scen.rate * (1 - metrics['p_safety'])}
         return metrics
 
-    def find_classification(self, scen, mdlhist):
+    def classify(self, scen={}, mdlhist={}, **kwargs):
         """Classify a given scenario based on land_metrics and expected cost model."""
         viewed = 0.5 + np.sum(self.flows['environment'].c.viewed*self.flows['environment'].c.target)
         # to fix: need to find fault time more efficiently (maybe in the toolkit?)

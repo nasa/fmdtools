@@ -264,50 +264,32 @@ class Simulable(BaseObject):
             if seed:
                 self.r.update_seed(seed)
 
-    def find_classification(self, scen, mdlhists):
-        """
-        Classify the results of the simulation (placeholder).
-
-        Parameters
-        ----------
-        scen     : Scenario
-            Scenario defining the model run.
-        mdlhists : History
-            History for the simulation(s)
-
-        Returns
-        -------
-        endclass: Result
-            Result dictionary with rate, cost, and expecte_cost values
-        """
-        return Result({'rate': scen.rate, 'cost': 1, 'expected_cost': scen.rate})
-
     def classify(self, scen={}, **kwargs):
         """Classify the results of the simulation (placeholder)."""
         return {}
 
     def get_result(self, to_return={}, **kwargs):
-        to_return = clean_to_return(to_return)
         result = Result()
         self.get_endclass(to_return=to_return, result=result, **kwargs)
-        if 'endfaults' in to_return:
-            result['endfaults'] = [*self.return_faultmodes()]
+        if 'faults' in to_return:
+            result['faults'] = [*self.return_faultmodes()]
         self.get_resgraph(to_return=to_return, result=result, **kwargs)
+        self.get_resvars(to_return=to_return, result=result)
         return result
 
     def get_endclass(self, to_return={}, result=Result(), **kwargs):
         sub_returns = [x.split('.')[1] for x in to_return
-                      if isinstance(x, str) and 'endclass.' in x]
-        get_endclass = 'endclass' in to_return
+                      if isinstance(x, str) and 'class.' in x]
+        get_endclass = 'class' in to_return
         if get_endclass or sub_returns:
             res = self.classify(**kwargs)
             if get_endclass:
-                result['endclass'] = Result(res)
+                result['class'] = Result(res)
             for sub_r in sub_returns:
-                result['endclass.'+sub_r] = res[sub_r]
+                result['class.'+sub_r] = res[sub_r]
         return result
 
-    def get_resgraph(self, to_return={}, result=Result(), nomresult={}):
+    def get_resgraph(self, to_return={}, result=Result(), nomresult={}, **kwargs):
         graphs_to_get = {g: arg for g, arg in to_return.items()
                          if type(g) is str and (g.startswith('graph')
                                                 or g.startswith('Graph'))}
@@ -336,13 +318,14 @@ class Simulable(BaseObject):
 
     def get_resvars(self, to_return={}, result=Result()):
         vars_to_get = [v for v in to_return if isinstance(v, str) and
-                       (not 'endclass' in v and not 'vars' in v and not 'endfaults' in v
+                       (not 'class' in v and not 'vars' in v and not 'faults' in v
                         and not 'graph' in v and not 'Graph' in v)]
         if 'vars' in to_return:
             vars_to_get.append(to_return['vars'])
         var_result = self.get_vars(*vars_to_get, trunc_tuple=False)
         for i, var in enumerate(vars_to_get):
             result[var] = var_result[i]
+        return result
 
     def new_params(self, name='', p={}, sp={}, r={}, track={}, **kwargs):
         """

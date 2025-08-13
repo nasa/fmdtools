@@ -135,7 +135,7 @@ class ExampleFunction(Function):
             self.s.y += self.p.y
         self.exf.s.inc(x=self.s.x)
 
-    def find_classification(self, scen, hist):
+    def classify(self, **kwargs):
         """Classify via metric xy = s.x + s.y."""
         return {"xy": self.s.x + self.s.y}
 

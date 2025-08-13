@@ -63,7 +63,7 @@ class taxiway_model(FunctionArchitecture):
                 p=self.p.assetparams,
             )
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, **kwargs):
         num_cycled = len(
             [f for f, fxn in self.fxns.items() if f != "atc" and fxn.s.cycled]
         )

@@ -444,7 +444,7 @@ class EPS(FunctionArchitecture):
         self.add_fxn("export_waste_ho", ExportHE, "waste_he_o")
         self.add_fxn("export_waste_hm", ExportHE, "waste_he_m")
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, scen={}, mdlhists={}, **kwargs):
         outflows = ["he", "me", "oe"]
 
         qualfunc = [
