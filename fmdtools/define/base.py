@@ -57,8 +57,11 @@ def get_var(obj, var):
 
     Parameters
     ----------
+    obj : Object
+        Object to get the value from.
     var : str/list
-        list specifying the attribute (or sub-attribute of the object
+        list specifying the attribute (or sub-attribute of the object)
+
     Returns
     -------
     var_value: any

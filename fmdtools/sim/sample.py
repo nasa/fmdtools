@@ -701,7 +701,7 @@ class BaseSample():
 
     Subclasses should have methods:
         - scenarios() for getting all scenarios from the sample
-        - times() for getting all times from the sample
+        - get_times() for getting all times from the sample
     """
 
     def get_scens(self, **kwargs):
@@ -909,7 +909,7 @@ class FaultSample(BaseSample):
         self._scenarios = [scen for scen in self._scenarios
                            if comparator(get_var(scen, scen_var), value)]
 
-    def times(self):
+    def get_times(self):
         """Get all sampled times."""
         return list(self._times)
 
@@ -1315,9 +1315,9 @@ class SampleApproach(BaseSample):
         for fs in faultsamples:
             self.add_faultsample(fs, *faultsamples[fs][0], **faultsamples[fs][1])
 
-    def times(self):
+    def get_times(self):
         """Get all sampletimes covered by the SampleApproach."""
-        return list(set(np.concatenate([list(samp.times())
+        return list(set(np.concatenate([list(samp.get_times())
                                         for samp in self.faultsamples.values()])))
 
     def scenarios(self):
@@ -1933,7 +1933,7 @@ class ParameterHistSample(ParameterResultSample):
         """Add a scenario from a history (extends add_res_scenario)."""
         self.add_res_scenario(comp_group, rep, t, name, **kwargs)
 
-    def _get_times(self, comp_group, rep, ts):
+    def _get_hist_times(self, comp_group, rep, ts):
         """
         Get the available times to sample in a given comparison group and replicate.
 
@@ -1984,7 +1984,7 @@ class ParameterHistSample(ParameterResultSample):
             Keyword arguments to .add_hist_scenario
         """
         rep = self._get_repname(comp_group, rep)
-        ts_to_sample = self._get_times(comp_group, rep, ts)
+        ts_to_sample = self._get_hist_times(comp_group, rep, ts)
         for t in ts_to_sample:
             self.add_hist_scenario(comp_group, rep, t, **kwargs)
 

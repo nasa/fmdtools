@@ -40,6 +40,9 @@ class Time(BaseContainer):
         Whether a sim's static behavior has executed yet this timestep (or not).
     executed_dynamic: bool
         Whether a sim's dynamic behavior has executed yet this timestep (or not).
+    executing : bool
+        Whether the timestep of the sim is executing or has finished executing.
+        Gets set as true when time is updated and false when the timestep is incremented
     timers : dict
         dictionary of instantiated timers
     use_local : bool
@@ -84,6 +87,7 @@ class Time(BaseContainer):
     dt: float = 1.0
     executed_static: bool = False
     executed_dynamic: bool = False
+    executing: bool = False
     local_dt = 1.0
     timernames = ()
     default_track = ('timers')
@@ -119,12 +123,16 @@ class Time(BaseContainer):
                 self.time,
                 self.t_ind,
                 self.executed_dynamic,
-                self.executed_static)
+                self.executed_static,
+                self.executing)
 
     def update_time(self, time):
         """Update the current time from the overall simulation."""
         if time > self.time:
-            self.assign(dict(time=time, executed_static=False, executed_dynamic=False))
+            self.assign(dict(time=time,
+                             executed_static=False,
+                             executed_dynamic=False,
+                             executing=True))
 
     def set_timestep(self, **kwargs):
         """

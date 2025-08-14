@@ -272,7 +272,7 @@ class History(Result):
         Parameters
         ----------
         end_ind : int, optional
-            the index of the array that you want to cut the history upto.
+            the index of the array that you want to cut the history up to.
             Default is None.
         start_ind: int, optional
             the index of the array that you want to start cutting the history from.
@@ -287,7 +287,7 @@ class History(Result):
         Examples
         --------
         >>> hist = History({'a':[2,3,4,5], 'b':[5,4,3,2,1,0], 'time': [0,1,2,3,4,5]})
-        >>> cut_hist = hist.cut(3)
+        >>> cut_hist = hist.cut(4)
         >>> cut_hist
         a:                              array(4)
         b:                              array(4)
@@ -316,7 +316,8 @@ class History(Result):
                     if end_ind is None:
                         ei = len(att)
                     else:
-                        ei = end_ind+1
+                        ei = end_ind + 1
+
                     if start_ind is None:
                         start_ind = 0
                     hist[name] = att[start_ind:ei]

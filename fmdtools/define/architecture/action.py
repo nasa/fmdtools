@@ -419,7 +419,7 @@ class ActionArchitecture(Architecture):
             for action in active_actions:
                 act = self.acts[action]
                 act.t.update_time(self.t.time)
-                act(time=self.t.time, proptype=proptype, end_of_timestep=False)
+                act(time=self.t.time, proptype=proptype, inc_at="")
                 action_cond_edges = self.action_graph.out_edges(action, data=True)
                 for act_in, act_out, atts in action_cond_edges:
                     try:

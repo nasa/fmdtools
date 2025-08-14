@@ -27,7 +27,9 @@ from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
 from fmdtools.define.container.mode import Fault
-from fmdtools.analyze.result import Result, clean_to_return
+from fmdtools.analyze.common import get_func_kwargs
+from fmdtools.analyze.result import Result
+from fmdtools.analyze.graph.base import Graph
 
 import itertools
 import copy
@@ -268,44 +270,103 @@ class Simulable(BaseObject):
         """Classify the results of the simulation (placeholder)."""
         return {}
 
-    def get_result(self, to_return={}, **kwargs):
+    def get_result(self, to_return={}, nomresult={}, **kwargs):
+        """
+        Get the Result for the simulation corresponding to to_return.
+
+        Parameters
+        ----------
+        to_return : iterable, optional
+            Iterable of stings to get. The default is {}.
+        **kwargs : kwargs
+            Keyword arguments to self.classify or self.as_modelgraph.
+
+        Returns
+        -------
+        result : TYPE
+            DESCRIPTION.
+        """
         result = Result()
-        self.get_endclass(to_return=to_return, result=result, **kwargs)
+        self.get_endclass(to_return=to_return, result=result, nomresult=nomresult,
+                          **kwargs)
         if 'faults' in to_return:
             result['faults'] = [*self.return_faultmodes()]
-        self.get_resgraph(to_return=to_return, result=result, **kwargs)
+        self.get_resgraph(to_return=to_return, result=result, nomresult=nomresult)
         self.get_resvars(to_return=to_return, result=result)
         return result
 
-    def get_endclass(self, to_return={}, result=Result(), **kwargs):
+    def get_endclass(self, to_return={}, result={}, **kwargs):
+        """
+        Get the end-state classification from self.classify().
+
+        Parameters
+        ----------
+        to_return : iterable, optional
+            Iterable with attributes to get from model. If "class" is in to_return,
+            it returns the whole dictionary. If "class.att" is in to_return, it gets
+            the attribute "att" from dict returned by classify(). The default is {}.
+        result : Result, optional
+            Result to add the result to. The default is Result().
+        **kwargs : kwargs
+            Keyword arguments to self.classify().
+
+        Returns
+        -------
+        result : Result
+            Result with returned class attributes.
+        """
         sub_returns = [x.split('.')[1] for x in to_return
-                      if isinstance(x, str) and 'class.' in x]
+                       if isinstance(x, str) and 'class.' in x]
         get_endclass = 'class' in to_return
         if get_endclass or sub_returns:
-            res = self.classify(**kwargs)
+            res = self.classify(**get_func_kwargs(self.classify, **kwargs))
             if get_endclass:
                 result['class'] = Result(res)
             for sub_r in sub_returns:
                 result['class.'+sub_r] = res[sub_r]
         return result
 
-    def get_resgraph(self, to_return={}, result=Result(), nomresult={}, **kwargs):
+    def get_resgraph(self, to_return={}, result={}, nomresult={}):
+        """
+        Get the graph corresponding to the state of the simulation.
+
+        Parameters
+        ----------
+        to_return : iterable, optional
+            Iterable with attributes to get from the model. If "graph" is in to_return,
+            it returns the graph from self.get_modelgraph. If "graph.obj" is in
+            to_return, it returns the graph from obj.get_modelgraph. If to_return is a
+            dict, the values of the dict can specify arguments to get_modelgraph. The
+            default is {}.
+        result : Result, optional
+            Result to add the graph to. The default is Result().
+        nomresult : dict, optional
+            Nominal result. If provided, set_resgraph() adds degredations to the graph
+            attributes. The default is {}.
+
+        Returns
+        -------
+        result : Result
+            Result with graph added.
+        """
+        if not isinstance(to_return, dict):
+            to_return = dict.fromkeys(to_return)
         graphs_to_get = {g: arg for g, arg in to_return.items()
                          if type(g) is str and (g.startswith('graph')
                                                 or g.startswith('Graph'))}
-        for g, arg in graphs_to_get:
-            if isinstance(arg, tuple):
-                Gclass, kwargs = arg
-            else:
-                Gclass = False
-                kwargs = {}
-
+        for g, arg in graphs_to_get.items():
             if '.' in g:
                 strs = g.split(".")
                 obj = get_var(self, strs[1:])
             else:
                 obj = self
-            rgraph = obj.as_modelgraph(time=self.time, **kwargs)
+            kwar = {}
+            if isinstance(arg, tuple):
+                kwar = {**kwar, **arg[1], 'gtype': arg[0]}
+            elif isinstance(arg, Graph):
+                kwar = {**kwar, 'gtype': arg}
+
+            rgraph = obj.as_modelgraph(time=self.t.time, **kwar)
 
             if nomresult and g in nomresult:
                 rgraph.set_resgraph(nomresult[g])
@@ -316,7 +377,23 @@ class Simulable(BaseObject):
             result[g] = rgraph
         return result
 
-    def get_resvars(self, to_return={}, result=Result()):
+    def get_resvars(self, to_return={}, result={}):
+        """
+        Get variables specified in to_return.
+
+        Parameters
+        ----------
+        to_return : Iterable, optional
+            Iterable of values to get from the object. Keys could start with "vars" or
+            simply not be "class", "faults", or "graph". The default is {}.
+        result : Result, optional
+            REsult to add the variables to. The default is Result().
+
+        Returns
+        -------
+        result : Result
+            Result with variables added.
+        """
         vars_to_get = [v for v in to_return if isinstance(v, str) and
                        (not 'class' in v and not 'vars' in v and not 'faults' in v
                         and not 'graph' in v and not 'Graph' in v)]
@@ -584,7 +661,7 @@ class Simulable(BaseObject):
         """
         for objname, obj in self.get_sims().items():
             try:
-                obj(time=self.t.time, proptype=proptype, end_of_timestep=False)
+                obj(time=self.t.time, proptype=proptype, inc_at="")
             except TypeError as e:
                 raise Exception("Poorly specified Architecture: "
                                 + str(obj.__class__)) from e
@@ -656,6 +733,7 @@ class Simulable(BaseObject):
         """Update the simulation time t_ind at the end of the timestep."""
         if self.t.time > 0.0:
             self.t.t_ind += 1
+            self.t.executing = False
         for objname, obj in self.get_roles_as_dict().items():
             if hasattr(obj, 'inc_sim_time'):
                 obj.inc_sim_time(**kwargs)
@@ -665,7 +743,7 @@ class Simulable(BaseObject):
         self.h.cut(end_ind=self.t.t_ind)
 
     def __call__(self, time=None, proptype="both", faults=[], disturbances={},
-                 end_of_timestep=True, end_of_simulation=False):
+                 inc_at="all", end_of_simulation=False, copy=False):
         """
         Call the Simulable to propagate behavior at a single time-step.
 
@@ -683,31 +761,38 @@ class Simulable(BaseObject):
         disturbances : dict
             Variables to change during this propagation step. (to be injected at time.)
             With structure {'var1': value}
-        end_of_timestep : bool
-            Whether this is the end of the current simulation time, meaning that time
-            should be incremented and history logged. Default is True.
+        inc_at : bool
+            When to increment the history. If "all", increment at each time the sim
+            iterates through. If "time", increment only at t==time.
         end_of_simulation : bool
             Whether this is the end of the simulation (and history should be cut).
+        copy : bool
+            If true, returns a copy of the model just before fault injection and
+            stops simulation
         """
         if time == 'end':
             time = self.sp.end_time
         start_time, end_time = self.t.get_sim_times(time)
         sim_times = self.sp.get_timerange(start_time, end_time)
         for t in sim_times:
-            self.t.update_time(t)
             if t == end_time:
+                if copy:
+                    return self.copy()
                 self.set_vars(**disturbances)
                 self.inject_faults(faults)
-            self.update_stochastic_states()
-            self.update_dynamic_behaviors(proptype=proptype)
-            self.update_static_behaviors(proptype=proptype)
-            self.set_sub_faults()
-            if self.sp.end_condition:
-                if get_var(self, self.sp.end_condition)():
-                    break
-        if end_of_timestep:
-            self.inc_sim_time()
-            self.h.log(self, self.t.t_ind, self.t.time)
+            self.t.update_time(t)
+            if self.t.executing:
+                self.update_stochastic_states()
+                self.update_dynamic_behaviors(proptype=proptype)
+                self.update_static_behaviors(proptype=proptype)
+                self.set_sub_faults()
+                if inc_at == "all" or (inc_at == "time" and t == time):
+                    self.inc_sim_time()
+                    self.h.log(self, self.t.t_ind, self.t.time)
+                if self.sp.end_condition:
+                    if get_var(self, self.sp.end_condition)():
+                        break
+
         if end_of_simulation:
             self.cut_hist()
 

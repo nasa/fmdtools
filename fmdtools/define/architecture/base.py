@@ -173,7 +173,7 @@ class Architecture(Simulable):
         sims = self.get_sims()
         for simname in self.dynamicsims:
             sim = sims[simname]
-            sim(time=self.t.time, proptype='dynamic', end_of_timestep=False)
+            sim(time=self.t.time, proptype='dynamic', inc_at="")
 
     def prop_static(self):
         """
@@ -200,7 +200,7 @@ class Architecture(Simulable):
                 sim = sims[simname]
                 # Update functions with new values, check to see if new faults or states
                 sim.set_mutables(exclude=[*self.staticflows])
-                sim(time=self.t.time, proptype='static-once', end_of_timestep=False)
+                sim(time=self.t.time, proptype='static-once', inc_at="")
                 if sim.has_changed(update=True, exclude=[*self.staticflows]):
                     nextsims.update([simname])
 

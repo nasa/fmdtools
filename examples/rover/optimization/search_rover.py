@@ -704,7 +704,7 @@ def visualizations(soln, method="EA", figsize=(4, 4), ax=False, legend=True,
     fs = FaultSample(fd, phasemap=phasemaps['plan_path'])
     fs.add_fault_phases('drive')
 
-    fault_time = fs.times()[0]
+    fault_time = fs.get_times()[0]
     end_time = phasemaps['plan_path'].phases['drive'][1]+25
     endclasses_range, mdlhists_range = prop.fault_sample(mdl_range, fs, staged=True,
                                                          showprogress=False,
@@ -756,7 +756,7 @@ fd.add_all_fxn_modes('drive')
 fs = FaultSample(fd, phasemap=phasemaps['plan_path'])
 fs.add_fault_phases('drive')
 
-fault_time = fs.times()[0]
+fault_time = fs.get_times()[0]
 line_dist([0, 0, 0])
 end_time = phasemaps['plan_path'].phases['drive'][1]+25
 

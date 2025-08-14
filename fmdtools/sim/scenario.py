@@ -211,6 +211,14 @@ class BaseScenario(BaseScenObj):
         """Get the first time in the scenario."""
         return np.min(self.sequence)
 
+    def get_times(self):
+        """Get time that the scenario branches off."""
+        return [self.start_time()]
+
+    def scenlist(self):
+        """Return list with scenario."""
+        return [self]
+
 
 class Scenario(BaseScenario):
     """Class defining generic scenarios. Extends BaseScenario."""

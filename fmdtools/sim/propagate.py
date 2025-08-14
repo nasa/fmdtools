@@ -1024,200 +1024,6 @@ def check_end_condition(mdl, use_end_condition, t):
         return False
 
 
-def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
-    """
-    Simulate a single scenario in the model over time.
-
-    Parameters
-    ----------
-    mdl : Simulable
-        The model to inject faults in.
-    scen : Scenario
-        The Scenario to run.
-    ctimes : list, optional
-        List of times to copy the model (for use in staged execution).
-        The default is [].
-    nomhist : dict, optional
-        Model history dictionary from previous runs, for use in creating the new
-        mdlhist. The default is {}.
-    nomresult : dict, optional
-        Nominal result dictionary (to compare with current if desired)
-    **kwargs : kwargs
-        simulation options, see :data:`sim_kwargs`
-    Returns
-    -------
-    result: Result
-        dict of result corresponding to desired_result.
-    mdlhist : dict
-        A dictionary with a history of modelstates.
-    c_mdl : dict
-        A dictionary of models at each time given in ctimes with structure {time:model}
-    """
-    desired_result, staged, cut_hist, use_end_condition, _ = unpack_sim_kwargs(**kwargs)
-    # if staged, we want it to start a new run from the starting time of the scenario,
-    # using a copy of the input model (which is the nominal run) at this time
-    if staged:
-        start_time = scen.time
-    else:
-        start_time = 0
-    timerange = mdl.sp.get_timerange(start_time)
-    # check if sequence is out of timerange
-    for t in scen['sequence']:
-        if t not in timerange:
-            raise Exception("t="+str(t)+" from sequence not in timerange: "
-                            + str(timerange))
-    # run model through the time range defined in the object
-    c_mdl = dict.fromkeys(ctimes)
-    result = Result()
-    for t_ind, t in enumerate(timerange):
-        # inject fault when it occurs, track defined flow states and graph
-        try:
-            if t in ctimes:
-                c_mdl[t] = mdl.copy()
-            if t in scen['sequence']:
-                faults = scen['sequence'][t].get('faults', {})
-                disturbances = scen['sequence'][t].get('disturbances', {})
-            else:
-                faults = {}
-                disturbances = {}
-            try:
-                mdl(time=t, faults=faults, disturbances=disturbances)
-            except Exception as e:
-                raise Exception("Error in scenario " + str(scen)) from e
-
-            if type(desired_result) is dict:
-                if "all" in desired_result:
-                    des_res = desired_result['all']
-                    nom_res = nomresult
-                elif t in desired_result:
-                    des_res = desired_result[t]
-                    nom_res = nomresult.get(t_key(t))
-                else:
-                    des_res = False
-                if des_res:
-                    result[t_key(t)] = get_result(scen, mdl, des_res, nomhist,
-                                                  nom_res, time=t)
-            if check_end_condition(mdl, use_end_condition, t):
-                break
-        except:
-            print("Error at t=" + str(t) + ' in scenario ' + str(scen))
-            raise
-            break
-    if cut_hist:
-        mdl.cut_hist()
-    if type(desired_result) is dict and 'end' in desired_result:
-        result['end'] = get_result(scen, mdl, desired_result['end'], nomhist, nomresult,
-                                   time=t)
-    elif (type(desired_result) is not dict
-          or all([type(k) is str for k in desired_result])):
-        result.update(get_result(scen, mdl, desired_result, nomhist, nomresult, time=t))
-
-    if None in c_mdl.values():
-        raise Exception("Sample times" + str(ctimes)
-                        + " go beyond simulation time " + str(t))
-    return result, mdl.h, c_mdl
-
-
-def get_result(scen, mdl, desired_result, nomhist={}, nomresult={}, time=0.0):
-    """Get the desired_result specified from the model."""
-    mdlhist = mdl.h
-    desired_result = copy.deepcopy(desired_result)
-    if type(desired_result) is str:
-        desired_result = {desired_result: None}
-    elif type(desired_result) in [list, set]:
-        des_res = desired_result
-        desired_result = {str(k): k for k in des_res if type(k) is not str}
-        desired_result.update({k: None for k in des_res if type(k) is str})
-    result = Result()
-    if not nomhist:
-        nomhist = mdlhist
-    elif len(nomhist['time']) != len(mdlhist['time']):
-        nomhist = nomhist.cut(start_ind=len(nomhist['time']) - len(mdlhist['time']),
-                              newcopy=True)
-    ec_des_res = [x.split('.')[1] for x in desired_result
-                  if 'endclass' in x and x != 'endclass']
-    if 'endclass' in desired_result or ec_des_res:
-        mdlhists = History()
-        mdlhists['faulty'] = mdlhist
-        mdlhists['nominal'] = nomhist
-        endclass = Result(**mdl.find_classification(scen, mdlhists))
-        if ec_des_res:
-            result['endclass'] = Result({k: v for k, v in endclass.items()
-                                         if k in ec_des_res})
-            for k in ec_des_res:
-                desired_result.pop('endclass.'+k)
-        elif type(desired_result['endclass']) is dict:
-            result['endclass'] = Result({k: v for k, v in endclass.items()
-                                         if k in desired_result['endclass']})
-            desired_result.pop('endclass')
-        else:
-            result['endclass'] = endclass
-            desired_result.pop('endclass')
-    if 'endfaults' in desired_result:
-        result['faultprops'] = mdl.return_faultmodes()
-        result['endfaults'] = [*result['faultprops']]
-        desired_result.pop('endfaults')
-
-    graphs_to_get = [g for g in desired_result
-                     if type(g) is str and (g.startswith('graph')
-                                            or g.startswith('Graph'))]
-    for g in graphs_to_get:
-        arg = desired_result.pop(g)
-        if isinstance(arg, tuple):
-            Gclass, kwargs = arg
-        else:
-            Gclass = False
-            kwargs = {}
-
-        if '.' in g:
-            strs = g.split(".")
-            obj = get_var(mdl, strs[1:])
-        else:
-            obj = mdl
-        rgraph = obj.as_modelgraph(time=time, **kwargs)
-
-        if nomresult and g in nomresult:
-            rgraph.set_resgraph(nomresult[g])
-        elif nomresult:
-            rgraph.set_resgraph(nomresult)
-        else:
-            rgraph.set_resgraph()
-        result[g] = rgraph
-
-    if desired_result:
-        if 'vars' in desired_result:
-            result['vars'] = {}
-            get_endclass_vars(mdl, desired_result['vars'], result['vars'])
-        else:
-            get_endclass_vars(mdl, desired_result, result)
-    return result
-
-
-def get_endclass_vars(mdl, desired_result, result):
-    """
-    Get variables in the model corresponding to the provided desired_result dictionary.
-
-    Appends them to provided result.
-
-    Parameters
-    ----------
-    mdl : Simulable
-        fmdtools Simulation (e.g., Model)
-    desired_result : dict
-        dictionary arguments for desired_result
-    result : Result
-        Result to append results to.
-    """
-    if type(desired_result) is str:
-        vars_to_get = [desired_result]
-    else:
-        vars_to_get = [d for d in desired_result
-                       if type(d) not in [int, float]]
-    var_result = mdl.get_vars(*vars_to_get, trunc_tuple=False)
-    for i, var in enumerate(vars_to_get):
-        result[var] = var_result[i]
-
-
 from recordclass import dataobject, asdict
 from fmdtools.sim.scenario import Injection
 from fmdtools.define.block.base import Simulable
@@ -1250,7 +1056,7 @@ class SimEvent(BaseContainer):
     mdl_copy: Simulable = None
     injection: Injection = None
     to_return: dict = None
-    result: dict = None
+    result: Result = Result()
     simulated: bool = False
 
     def create_repr(self, fields=['copy', 'injection', 'to_return', 'simulated'],
@@ -1277,12 +1083,15 @@ class SimEvent(BaseContainer):
             Keyword arguments to __call__ and Model.get_result()
         """
         if not self.simulated:
-            if self.copy:
-                self.mdl_copy = mdl.copy()
+            kwar = {}
             if self.injection:
-                mdl(time=self.time, **self.injection.asdict(), **kwargs)
+                kwar.update(self.injection.asdict())
+            if self.time == "end":
+                kwar["end_of_simulation"] = True
+            if self.copy:
+                self.mdl_copy = mdl(time=self.time, **kwar, copy=True)
             else:
-                mdl(time=self.time)
+                mdl(time=self.time, **kwar)
             if self.to_return:
                 self.result = mdl.get_result(to_return=self.to_return, scen=scen, **kwargs)
             self.simulated = True
@@ -1292,17 +1101,136 @@ class SimEvent(BaseContainer):
 
 from fmdtools.analyze.result import clean_to_return
 
-class Simulation(object):
-    def __init__(self, mdl, scen, ctimes=[], to_return={}):
+
+def one_scen(mdl, sim_kwargs={}, run_kwargs={}, save_kwargs={}):
+    sim = Simulation(mdl, **sim_kwargs)
+    sim.run(**run_kwargs)
+    # sim.save(**save_kwargs)
+    return sim.result.flatten(), sim.history
+
+
+def staged_events(mdl, fs, sim_kwargs={}, run_kwargs={}, save_indiv=True, save_kwargs={}):
+    nominal_sim = Simulation(mdl, ctimes=fs.get_times(), **sim_kwargs)
+    nominal_sim.run()
+    result = Result({'nominal': nominal_sim.result})
+    history = History({'nominal': nominal_sim.history})
+    # if save_indiv:
+    #     nominal_sim.save(**save_kwargs)
+    mdls = {ev.time: ev.mdl_copy for ev in nominal_sim.simevents if ev.mdl_copy}
+    for scen in fs.scenlist():
+        fault_sim = Simulation(mdls[scen.time], scen=scen, copy=True, protect=False)
+        fault_sim.run(nomhist=nominal_sim.history, nomresult=nominal_sim.result,
+                      **run_kwargs)
+        # if save_indiv:
+        #     fault_sim.save(**save_kwargs)
+        result[scen.name] = fault_sim.result
+        history[scen.name] = fault_sim.history
+    # if not save_indiv and save_kwargs:
+    #     if 'result_filename' in save_kwargs:
+    #         result.save(save_kwargs['result_filename'])
+    #     if 'history_filename' in save_kwargs:
+    #         history.save(save_kwargs['history_filename'])
+    return result, history
+
+
+from fmdtools.analyze.common import get_func_kwargs
+
+class BaseSimulation(object):
+    def __init__(self, name='', result={}, history={}, tosave=False):
+        self.name = name
+        self.result = Result(result)
+        self.history = History(history)
+        self.tosave = tosave
+
+    def save(self, result_filename="result.csv", history_filename="history.csv"):
+
+        if self.result and result_filename:
+            self.result.save(result_filename, result_id=self.name)
+        if self.history and history_filename:
+            self.history.save(history_filename, result_id=self.name)
+
+    def __call__(self, **kwargs):
+        self.run(**kwargs)
+        if self.tosave:
+            self.save(**get_func_kwargs(self.save, **kwargs))
+        return self.result, self.history
+
+
+def exec_sim(mdl, **kwargs):
+    sim = Simulation(mdl, **kwargs)
+    return sim()
+
+
+class MultiSimulation(BaseSimulation):
+    def __init__(self, mdl, samp, tosave=False, save_indiv=True, **kwargs):
+        self.save_indiv = save_indiv
+        if self.save_indiv is True:
+            tosave = False
         self.mdl = mdl
+        self.samp = samp
+        super().__init__(tosave=tosave, **kwargs)
+
+    def run(self, **kwargs):
+        for scen in self.samp.scenlist():
+            r, h = exec_sim(self.mdl, scen=scen, save=self.save_indiv)
+            self.result[scen.name], self.history[scen.name] = r, h
+
+
+class MultiEventSimulation(MultiSimulation):
+    def __init__(self, mdl, faultsamp, staged=True, **kwargs):
+        super().__init__(mdl, faultsamp, **kwargs)
+        self.staged = staged
+
+    def run(self, **kwargs):
+        if self.staged:
+            self.nominal = Simulation(self.mdl, ctimes=self.samp.get_times())
+        else:
+            self.nominal = Simulation(self.mdl)
+        self.result['nominal'], self.history['nominal'] = self.nominal()
+        if self.staged:
+            self.run_staged(**kwargs)
+        else:
+            super().run(**kwargs)
+
+    def run_staged(self, **kwargs):
+        mdls = {ev.time: ev.mdl_copy
+                for ev in self.nominal.simevents if ev.mdl_copy}
+        for scen in self.samp.scenlist():
+            r, h = exec_sim(mdls[scen.time], scen=scen, copy=True, protect=False,
+                            save = self.save_indiv)
+            self.result[scen.name], self.history[scen.name] = r, h
+
+
+class Simulation(BaseSimulation):
+    def __init__(self, mdl, name='', scen=Scenario(), ctimes=[],
+                 to_return={"end": "class"}, **kwargs):
         self.scen = scen
+        if not name:
+            name = self.scen.name
+        self.init_model(mdl, **kwargs)
         self.ctimes = ctimes
         self.to_return = clean_to_return(to_return)
-        res_sequence = {k: v for k, v in to_return.items()
-                        if isinstance(k, float) or isinstance(k, int)}
-        times = [float(i) for i in [*scen.sequence, *ctimes, *res_sequence]]
-        times.sort()
         self.simevents = []
+        self.create_simevents()
+        super().__init__(name=name, history=self.mdl.h)
+
+    def init_model(self, mdl, copy=False, protect=True, **kwargs):
+        mdl_kwargs = {'p': {**kwargs.get('p', {}), **self.scen.get("p", {})},
+                      'sp': {**kwargs.get('sp', {}), **self.scen.get("sp", {})},
+                      'r': {**kwargs.get('r', {}), **self.scen.get("r", {})}}
+        if copy:
+            mdl = mdl.copy()
+        elif protect:
+            mdl = mdl.new(**mdl_kwargs)
+        self.mdl = mdl
+
+    def create_simevents(self):
+        res_sequence = {k: v for k, v in self.to_return.items()
+                        if isinstance(k, float) or isinstance(k, int)}
+        times = [float(i) for i in [*self.scen.sequence, *self.ctimes, *res_sequence]
+                 if i > self.mdl.t.time]
+        times.sort()
+
         for time in times:
             copy = time in self.ctimes
             injection = self.scen.sequence.get(time, None)
@@ -1320,19 +1248,21 @@ class Simulation(object):
     def run(self, **kwargs):
         for simevent in self.simevents:
             simevent.run(self.mdl, scen=self.scen, **kwargs)
-
-    def get_results(self, **kwargs):
-        res = Result()
-        for simevent in self.simevents:
             if simevent.result:
-                res[t_key(simevent.time)] = simevent.result
-        return res.flatten()
+                self.result[t_key(simevent.time)] = simevent.result
+
+
 
 if __name__ == "__main__":
     from fmdtools.define.block.function import ExampleFunction
     from fmdtools.sim.scenario import SingleFaultScenario
     esf = ExampleFunction()
     s = SingleFaultScenario.from_fault(("examplefunction", "low"), 3.0, esf)
-    sim = Simulation(esf, s, ctimes = [2, 4], to_return={1.0: 's.x', "end": "class"})
+    sim = Simulation(esf, s, ctimes = [2, 4], to_return={1.0: 's.x', "end": ["class", "graph"]})
     sim.run()
-    res = sim.get_results()
+    res, hist = one_scen(esf)
+    res, hist = staged_events(esf, s)
+    sim2 = MultiEventSimulation(esf, s)
+    res, hist = sim2()
+    sim2 = MultiEventSimulation(esf, s, staged=False)
+    res, hist = sim2()

@@ -601,7 +601,9 @@ class ExFxnArch(FunctionArchitecture):
         self.add_fxn("ex_fxn2", ExampleFunction, "exf", p=self.p)
 
 if __name__ == "__main__":
-    efa = FunctionArchitectureFxnGraph(ExFxnArch())
+    efa = ExFxnArch()
+    efa(1.0)
+    effa = FunctionArchitectureFxnGraph(ExFxnArch())
     efla = FunctionArchitectureFlowGraph(ExFxnArch())
     FunctionArchitectureTypeGraph(ExFxnArch())
     import doctest
