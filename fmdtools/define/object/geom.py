@@ -32,11 +32,11 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
+from fmdtools.define.base import filter_kwargs
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.analyze.common import setup_plot, consolidate_legend, add_title_xylabs
-from fmdtools.analyze.common import get_func_kwargs
 
 from shapely import LineString, Point, Polygon
 from shapely.ops import nearest_points
@@ -268,8 +268,8 @@ class Geom(BaseObject):
             fig, ax = setup_plot(z=z, figsize=figsize)
         if 'all' in shapes:
             shapes = {s: {} for s in self.shapenames}
-        l_kw = get_func_kwargs(consolidate_legend, **kwargs)
-        t_kw = get_func_kwargs(add_title_xylabs, **kwargs)
+        l_kw = filter_kwargs(consolidate_legend, **kwargs)
+        t_kw = filter_kwargs(add_title_xylabs, **kwargs)
         plot_kwargs = {k: v for k, v in kwargs.items() if k not in {**l_kw, **t_kw}}
         if type(z) in (int, float):
             plot_kwargs = {'zs': z, 'zdir': 'z', **plot_kwargs}

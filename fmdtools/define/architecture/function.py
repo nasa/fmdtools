@@ -600,6 +600,9 @@ class ExFxnArch(FunctionArchitecture):
         self.add_fxn("ex_fxn", ExampleFunction, "exf", p=self.p)
         self.add_fxn("ex_fxn2", ExampleFunction, "exf", p=self.p)
 
+    def classify(self, **kwargs):
+        return {'flowval': self.flows['exf'].s.x}
+
 if __name__ == "__main__":
     efa = ExFxnArch()
     efa(1.0)

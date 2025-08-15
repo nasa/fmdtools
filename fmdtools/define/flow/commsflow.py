@@ -32,14 +32,7 @@ import copy
 
 
 class CommsFlowGraph(MultiFlowGraph):
-    """
-    Create graph representation of the CommsFlow.
-
-    Returns
-    -------
-    g : networkx.DiGraph
-        Graph of the commsflow connections.
-    """
+    """Create graph representation of the CommsFlow."""
 
     def __init__(self, flow, role_nodes=['local'], recursive=True, **kwargs):
         ModelGraph.__init__(self, flow, role_nodes=role_nodes, recursive=recursive,

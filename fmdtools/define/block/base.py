@@ -22,12 +22,11 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import gen_timerange, is_iter, get_var
+from fmdtools.define.base import gen_timerange, is_iter, get_var, filter_kwargs
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
 from fmdtools.define.container.mode import Fault
-from fmdtools.analyze.common import get_func_kwargs
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.graph.base import Graph
 
@@ -319,7 +318,7 @@ class Simulable(BaseObject):
                        if isinstance(x, str) and 'class.' in x]
         get_endclass = 'class' in to_return
         if get_endclass or sub_returns:
-            res = self.classify(**get_func_kwargs(self.classify, **kwargs))
+            res = self.classify(**filter_kwargs(self.classify, **kwargs))
             if get_endclass:
                 result['class'] = Result(res)
             for sub_r in sub_returns:
@@ -341,7 +340,7 @@ class Simulable(BaseObject):
         result : Result, optional
             Result to add the graph to. The default is Result().
         nomresult : dict, optional
-            Nominal result. If provided, set_resgraph() adds degredations to the graph
+            Nominal result. If provided, set_resgraph() adds degradations to the graph
             attributes. The default is {}.
 
         Returns
@@ -370,8 +369,6 @@ class Simulable(BaseObject):
 
             if nomresult and g in nomresult:
                 rgraph.set_resgraph(nomresult[g])
-            elif nomresult:
-                rgraph.set_resgraph(nomresult)
             else:
                 rgraph.set_resgraph()
             result[g] = rgraph
@@ -424,7 +421,7 @@ class Simulable(BaseObject):
         param_dict: dict
             Dict with immutable parameters/options. (e.g., 'p', 'sp', 'track')
         """
-        param_dict = {**copy.deepcopy(self.mut_kwargs)}
+        param_dict = {**copy.deepcopy(getattr(self, 'mut_kwargs', {}))}
 
         if hasattr(self, 'p'):
             param_dict['p'] = self.p.copy_with_vals(**p)

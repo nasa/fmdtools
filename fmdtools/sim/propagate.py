@@ -59,18 +59,22 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import get_var, t_key
-from fmdtools.sim.sample import SampleApproach
-from fmdtools.sim.scenario import Sequence, Scenario, SingleFaultScenario
+from fmdtools.define.base import t_key, filter_kwargs, get_dict_repr
+from fmdtools.define.block.base import Simulable, Block
+from fmdtools.define.container.base import BaseContainer
+from fmdtools.sim.sample import SampleApproach, FaultDomain, FaultSample
+from fmdtools.sim.scenario import Injection, Sequence, Scenario, SingleFaultScenario
 from fmdtools.analyze.common import create_indiv_filename, file_check
-from fmdtools.analyze.result import Result
+from fmdtools.analyze.result import Result, clean_to_return
 from fmdtools.analyze.history import History
 from fmdtools.analyze.phases import from_hist
+
 
 import numpy as np
 import copy
 import tqdm
 import os
+import warnings
 
 # DEFAULT ARGUMENTS
 sim_kwargs = {'desired_result': 'endclass',
@@ -203,6 +207,10 @@ def unpack_mult_kwargs(kwargs):
 
 # FAULT PROPAGATION
 
+def get_sim_call_kwargs(sim, **kwargs):
+    return {**filter_kwargs(sim, **kwargs),
+            **filter_kwargs(SimEvent.run, **kwargs)}
+
 
 def nominal(mdl, **kwargs):
     """
@@ -233,9 +241,8 @@ def nominal(mdl, **kwargs):
     nomhist : History
         A History dict with a history of modelstates
     """
-    result, mdlhist, _, mdl = nom_helper(mdl, None, cut_hist=True, **kwargs)
-    save_helper(kwargs.get('save_args', {}), result, mdlhist)
-    return result, mdlhist
+    sim = Simulation(mdl=mdl, **filter_kwargs(Simulation, **kwargs))
+    return sim(**get_sim_call_kwargs(sim, **kwargs))
 
 
 def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
@@ -314,61 +321,8 @@ def parameter_sample(mdl, ps, **kwargs):
     nomhists : History
         History of model histories, with structure {'scenname': mdlhist}
     """
-    kwargs.update(pack_run_kwargs(**kwargs))
-    check_overwrite(kwargs['save_args'])
-    kwargs['max_mem'], showprogress, pool, close_p = unpack_mult_kwargs(kwargs)
-    num_scens = ps.num_scenarios()
-    kwargs['num_scens'] = num_scens
-
-    if pool:
-        check_mdl_memory(mdl, num_scens, max_mem=kwargs['max_mem'])
-        inputs = [(mdl, sc, name, kwargs) for name, sc in ps.named_scenarios().items()]
-        res_list = list(tqdm.tqdm(pool.imap(exec_nom_par, inputs),
-                                  total=len(inputs),
-                                  disable=not (showprogress),
-                                  desc="SCENARIOS COMPLETE"))
-        n_results, n_mdlhists = unpack_res_list(ps.scenarios(), res_list)
-    else:
-        scennames = ps.scen_names()
-        n_results = Result.fromkeys(scennames)
-        n_mdlhists = History.fromkeys(scennames)
-        for scenname, scen in tqdm.tqdm(ps.named_scenarios().items(),
-                                        disable=not (showprogress),
-                                        desc="SCENARIOS COMPLETE"):
-            loc_kwargs = {**kwargs, 'use_end_condition': False}
-            res, hist = exec_nom_helper(mdl, scen, scenname, **loc_kwargs)
-            n_results[scenname], n_mdlhists[scenname] = res, hist
-    save_helper(kwargs['save_args'], n_results, n_mdlhists)
-    close_pool({'pool': pool, 'close_pool': close_p})
-    return n_results.flatten(), n_mdlhists.flatten()
-
-
-def unpack_res_list(scenlist, res_list):
-    """Create result/history from output list."""
-    results = Result()
-    mdlhists = History()
-    results.data = {scen.name: res_list[i][0] for i, scen in enumerate(scenlist)}
-    mdlhists.data = {scen.name: res_list[i][1] for i, scen in enumerate(scenlist)}
-    return results, mdlhists
-
-
-def exec_nom_par(arg):
-    """Execute a nominal scenario (helper function/interface for parallel pools)."""
-    endclass, mdlhist = exec_nom_helper(arg[0], arg[1], arg[2],
-                                        **{**arg[3], 'use_end_condition': False})
-    return endclass, mdlhist
-
-
-def exec_nom_helper(mdl, scen, name, mdl_kwargs={}, **kwargs):
-    """Execute a nominal scenario (helper function)."""
-    mdl_kwargs = {'p': {**mdl_kwargs.get('p', {}), **scen.p},
-                  'sp': {**mdl_kwargs.get('sp', {}), **scen.sp},
-                  'r': {**mdl_kwargs.get('r', {}), **scen.r}}
-    mdl_run = mdl.new(**mdl_kwargs)
-    result, mdlhist, _ = prop_one_scen(mdl_run, scen, **kwargs)
-    check_hist_memory(mdlhist, kwargs['num_scens'], max_mem=kwargs['max_mem'])
-    save_helper(kwargs['save_args'], result, mdlhist, name, name)
-    return result, mdlhist
+    sim = MultiSimulation(mdl=mdl, samp=ps, **filter_kwargs(MultiSimulation, **kwargs))
+    return sim(**get_sim_call_kwargs(sim, **kwargs))
 
 
 def one_fault(mdl, *fxnfault, time=0, f_kw={}, **kwargs):
@@ -415,8 +369,7 @@ def one_fault(mdl, *fxnfault, time=0, f_kw={}, **kwargs):
         fxnname, fault = mdl.name, fxnfault[0]
 
     scen = SingleFaultScenario.from_fault((fxnname, fault), time, mdl=mdl, **f_kw)
-    result, mdlhists = sequence(mdl, scen=scen, **kwargs)
-    return result.flatten(), mdlhists.flatten()
+    return sequence(mdl, scen=scen, **kwargs)
 
 
 def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.nan,
@@ -463,9 +416,6 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.nan,
         A dictionary of the states of the model of each fault scenario over time with
         structure: {'nominal': nomhist, 'faulty': faulthist}
     """
-    sim_kwarg = pack_sim_kwargs(**kwargs)
-    run_kwarg = pack_run_kwargs(**kwargs)
-
     if not scen:
         if not seq:
             seq = Sequence(faultseq=faultseq, disturbances=disturbances)
@@ -474,107 +424,15 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.nan,
                         name='faulty',
                         times=tuple([*seq.keys()]))
 
-    n_outs = nom_helper(mdl,
-                        [min(scen.sequence)],
-                        **{**sim_kwarg, 'use_end_condition': False},
-                        **run_kwarg)
-    nomresult, nomhist, nomscen, mdls = n_outs
-
-    mdl_f = [*mdls.values()][0]
-
-    result, faulthist, _ = prop_one_scen(mdl_f, scen, **sim_kwarg,
-                                         nomhist=nomhist, nomresult=nomresult)
     if include_nominal:
-        mdlhists = History(nominal=nomhist, faulty=faulthist)
-    save_helper(kwargs.get('save_args', {}), result, mdlhists)
-    return result.flatten(), mdlhists.flatten()
-
-
-def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
-               warn_faults=True, **kwargs):
-    """
-    Run initial run of nominal scenario.
-
-    Parameters
-    ----------
-    mdl : Simulable (object or class)
-        Model of the system
-    ctimes : float/list
-        Times to copy the nominal model from
-    protect : bool
-        Whether or not to protect the model object via re-instantiation.
-        Options:
-
-        - True (default): re-instances the model so that multiple simulations can
-        be run successively without causing problems
-        - False : Thus, the model object that is returned can be modified and
-        analyzed if needed
-    save_args : dict (optional)
-        Dictionary specifying if/how to save results. Default is {}, which doesn't
-        save anything.
-        Has structure ::
-
-            {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv}
-    mdl_kwargs : dict, optional
-        Model arameter dictionary.
-        Has structure ::
-
-            {"p": Parameter, "sp":SimParam, "track":track}
-    scen : scenario, optional
-        Scenario to use. The default is {}.
-    warn_faults : bool
-        choose whether to display a warning message if faults are identified during
-        nominal runs. Default is True.
-    **kwargs : kwargs
-        :data:`sim_kwargs` simulation options for :func:`prop_one_scen`
-
-    Returns
-    -------
-    result : Result
-        results dict from nominal sim
-    nommdlhist : History
-        result history from nominal sim
-    nomscen : dict
-        nominal scenario dict
-    mdls : list
-        Models from copy time(s) ctimes
-    """
-    staged = kwargs.get('staged', False)
-    check_overwrite(save_args)
-    # run model nominally, get relevant results
-    if isinstance(mdl, type):
-        mdl = mdl(**mdl_kwargs)
-    elif protect or mdl_kwargs:
-        mdl = mdl.new(**mdl_kwargs)
-
-    if not scen:
-        nomscen = Scenario(sequence=Sequence(disturbances=kwargs.get('disturbances',
-                                                                     {})))
+        sim = MultiEventSimulation(mdl=mdl, samp=scen,
+                                   **filter_kwargs(MultiEventSimulation, **kwargs))
     else:
-        nomscen = scen
-
-    if staged:
-        if type(ctimes) in [float, int]:
-            ctimes = [ctimes]
-        else:
-            ctimes = ctimes
-    else:
-        ctimes = []
-
-    result, nommdlhist, mdls = prop_one_scen(mdl, nomscen, ctimes=ctimes, **kwargs)
-
-    endfaultprops = mdl.return_faultmodes()
-    endfaults = [*endfaultprops]
-    if any(endfaults) and warn_faults:
-        print("Faults found during the nominal run " + str(endfaults))
-
-    if not staged:
-        mdls = {0: mdl.new(**mdl_kwargs)}
-
-    return result, nommdlhist, nomscen, mdls
+        sim = Simulation(mdl=mdl, scen=scen, **filter_kwargs(Simulation, **kwargs))
+    return sim(**get_sim_call_kwargs(sim, **kwargs))
 
 
-def fault_sample(mdl, fs, include_nominal=True, get_phasemap=False, **kwargs):
+def fault_sample(mdl, fs, **kwargs):
     """
     Injects and propagates faults in the model defined by a FaultSample/SampleApproach.
 
@@ -615,31 +473,13 @@ def fault_sample(mdl, fs, include_nominal=True, get_phasemap=False, **kwargs):
     mdlhists : History
         A History dictionary with the tracked scenario (including the nominal)
     """
-    kwargs.update(pack_run_kwargs(**kwargs))
-    n_outs = nom_helper(mdl,
-                        fs.times(),
-                        **{**kwargs, 'use_end_condition': False})
-    nomresult, nomhist, nomscen, c_mdl = n_outs
-    scenlist = fs.scenarios()
+    sim = MultiEventSimulation(mdl=mdl, samp=fs,
+                               **filter_kwargs(MultiEventSimulation, **kwargs))
+    return sim(**get_sim_call_kwargs(sim, **kwargs))
 
-    results, mdlhists = scenlist_helper(mdl,
-                                        scenlist,
-                                        c_mdl,
-                                        **kwargs,
-                                        nomhist=nomhist,
-                                        nomresult=nomresult)
-
-    if include_nominal:
-        process_nominal(mdlhists, nomhist, results, nomresult, **kwargs)
-    save_helper(kwargs['save_args'], results, mdlhists)
-    close_pool(kwargs)
-    return results.flatten(), mdlhists.flatten()
-
-
-#  pool=pool, close_pool=False, showprogress=False,
 
 def fault_sample_from(mdl, faultdomains={}, faultsamples={}, get_phasemap=True,
-                      scen={}, include_nominal=False, **kwargs):
+                      scen={}, **kwargs):
     """
     Create and simulate a fault_sample from the given arguments.
 
@@ -676,31 +516,11 @@ def fault_sample_from(mdl, faultdomains={}, faultsamples={}, get_phasemap=True,
     app : SampleApproach
         Generated SampleApproach
     """
-    run_kwarg = pack_run_kwargs(**kwargs)
-    sim_kwarg = pack_sim_kwargs(**kwargs)
-    mult_kwarg = pack_mult_kwargs(**kwargs)
-    loc_kwargs = {**sim_kwarg, **run_kwarg, 'staged': False}
-    if not scen:
-        mdl = mdl.new(**run_kwarg.get('mdl_kwargs', {}))
-        _, nomhist, _, _ = nom_helper(mdl, [], **loc_kwargs)
-    else:
-        mdl = mdl.new(p=scen.p, sp=scen.sp, r=scen.r)
-        _, nomhist, _ = prop_one_scen(mdl, scen, **loc_kwargs)
-    app = gen_sampleapproach(mdl, faultdomains, faultsamples, get_phasemap, nomhist)
-    res, hist = fault_sample(mdl, app, **sim_kwarg, **run_kwargs, **mult_kwarg,
-                             include_nominal=include_nominal)
+    sim = Simulation(mdl=mdl, scen=scen, protect=True, to_return={})
+    nomres, nomhist = sim()
+    app = gen_sampleapproach(sim.mdl, faultdomains, faultsamples, get_phasemap, nomhist)
+    res, hist = fault_sample(sim.mdl, app, **kwargs)
     return res, hist, app
-
-
-def process_nominal(mdlhists, nomhist, results, nomresult, **kwargs):
-    """Add/save nominal hists/result to overall hist/result."""
-    mdlhists['nominal'] = nomhist
-    results['nominal'] = nomresult
-    save_helper(kwargs.get('save_args', {}),
-                nomresult,
-                mdlhists['nominal'],
-                indiv_id=str(len(results)-1),
-                result_id='nominal')
 
 
 def single_faults(mdl, times=[0.0], include_nominal=True, **kwargs):
@@ -742,137 +562,13 @@ def single_faults(mdl, times=[0.0], include_nominal=True, **kwargs):
         History dict with the history of all tracked model states for each scenario
         (including the nominal)
     """
-    kwargs.update(pack_run_kwargs(**kwargs))
-    n_outs = nom_helper(mdl,
-                        times,
-                        **{**kwargs, 'use_end_condition': False})
-    nomresult, nomhist, nomscen, c_mdl = n_outs
-
-    scenlist = list_init_faults(mdl, times)
-    results, mdlhists = scenlist_helper(mdl,
-                                        scenlist,
-                                        c_mdl,
-                                        **kwargs,
-                                        nomhist=nomhist,
-                                        nomresult=nomresult)
-    if include_nominal:
-        process_nominal(mdlhists, nomhist, results, nomresult, **kwargs)
-    save_helper(kwargs['save_args'], results, mdlhists)
-    close_pool(kwargs)
-    return results.flatten(), mdlhists.flatten()
-
-
-def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
-    max_mem, showprogress, pool, close_p = unpack_mult_kwargs(kwargs)
-    staged = kwargs.get('staged', False)
-    mem, mem_profile = kwargs['nomhist'].get_memory()
-    if mem * len(scenlist) > max_mem:
-        raise Exception("Model history will be too large: "
-                        + str(mem) + " > " + str(max_mem))
-    results = Result()
-    mdlhists = History()
-    if pool:
-        check_mdl_memory(mdl, len(scenlist), max_mem=max_mem)
-        if staged:
-            inputs = [(c_mdl[scen.time], scen, kwargs, str(i))
-                      for i, scen in enumerate(scenlist)]
-        else:
-            inputs = [(c_mdl[0], scen, kwargs, str(i))
-                      for i, scen in enumerate(scenlist)]
-        res_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs),
-                                  total=len(inputs),
-                                  disable=not (showprogress),
-                                  desc="SCENARIOS COMPLETE"))
-        results, mdlhists = unpack_res_list(scenlist, res_list)
-    else:
-        for i, scen in enumerate(tqdm.tqdm(scenlist,
-                                           disable=not (showprogress),
-                                           desc="SCENARIOS COMPLETE")):
-            name = scen.name
-            if staged:
-                mdl_i = c_mdl[scen.time].copy()
-            else:
-                mdl_i = c_mdl[0].new()
-            ec, mh = exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs)
-            results[name], mdlhists[name] = ec, mh
-    return results, mdlhists
-
-
-def close_pool(kwargs):
-    """Close pool to avoid memory problems."""
-    if kwargs.get('pool', False) and kwargs.get('close_pool', True):
-        kwargs['pool'].close()
-        kwargs['pool'].terminate()
-        kwargs['pool'].join()
-
-
-def exec_scen_par(args):
-    """Execute scenario (parallel execution helper function for pool.map)."""
-    return exec_scen(args[0].copy(), args[1], **args[2], indiv_id=args[3])
-
-
-def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
-    """
-    Executes a scenario and generates results and classifications given a model and
-    nominal model history.
-
-    Parameters
-    ----------
-    mdl : Simulable
-        The model to inject faults in
-    scen : scenario
-        scenario used to define time and faults where the fault is to be injected
-    save_args : dict
-        Save dictionary to use in save_helper defining when/how to save the dictionary
-    indiv_id : str
-        ID str to insert into the file name (if saving individually)
-    **kwargs : kwargs
-        :data:`sim_kwargs` for :func:`prop_one_scen`
-    """
-    result, mdlhist, _ = prop_one_scen(mdl, scen, **kwargs)
-    save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen.name))
-    return result, mdlhist
-
-
-def check_hist_memory(mdlhist, nscens, max_mem=2e9):
-    """Check if the memory will be exhausted by the hist over the scenarios."""
-    mem_total, mem_profile = mdlhist.get_memory()
-    total_memory = int(mem_total) * int(nscens)
-    if total_memory > max_mem:
-        raise Exception("Mdlhist has size: " + str(mem_total)
-                        + " bytes. With " + str(nscens)
-                        + " scenarios, it is expected that this run will pass the"
-                        + " user-defined max_mem=" + str(max_mem)
-                        + " byte limit by a factor of: "+str(total_memory/max_mem)
-                        + ". To avoid, use the track= option to track less information"
-                        + " in the mdlhist")
-
-
-def check_mdl_memory(mdl, nscens, max_mem=2e9):
-    """Check if memory will be exhausted by the model over the scenarios."""
-    mem_total, mem_profile = mdl.get_memory()
-    total_memory = int(mem_total) * int(nscens)
-    if total_memory > max_mem:
-        raise Exception("Model has size: " + str(mem_total)
-                        + " bytes. With "+str(nscens)
-                        + " scenarios, it is expected that this run will pass the"
-                        + " user-defined max_mem="+str(max_mem)
-                        + " byte limit by a factor of: "+str(total_memory/max_mem)
-                        + ". To avoid, increase mem_total, reduce the size of the model"
-                        + "or number of scenarios, or run outside a parallel pool")
-
-
-def check_overwrite(save_args):
-    for arg, args in save_args.items():
-        if arg != 'indiv':
-            filename = args['filename']
-            if args.get('filename', False):
-                file_check(filename, args.get('overwrite', False))
-            if save_args.get('indiv', False):
-                last_split_index = filename.rfind(".")
-                foldername = filename[:last_split_index]
-                if not os.path.exists(foldername):
-                    os.makedirs(foldername)
+    fd = FaultDomain(mdl)
+    fd.add_all()
+    fs = FaultSample(fd)
+    fs.add_fault_times(times)
+    sim = MultiEventSimulation(mdl=mdl, samp=fs,
+                               **filter_kwargs(MultiEventSimulation, **kwargs))
+    return sim(**get_sim_call_kwargs(sim, **kwargs))
 
 
 def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
@@ -956,79 +652,28 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
     return nest_res.flatten(), nest_hist.flatten(), apps
 
 
-def gen_sampleapproach(mdl, faultdomains={}, faultsamples={},
-                       get_phasemap=False, nomhist={}):
-    """Generate a SampleApproach from faultdomain and faultsample arguments."""
-    if get_phasemap:
-        pm = from_hist(nomhist)
-        app = SampleApproach(mdl, phasemaps=pm)
-    else:
-        app = SampleApproach(mdl)
-    app.add_faultdomains(**faultdomains)
-    app.add_faultsamples(**faultsamples)
-    return app
 
 
-def list_init_faults(mdl, times):
-    """
-    Create list of single-fault scenarios for the given Model mode information.
 
-    Parameters
-    ----------
-    mdl : Simulable/Function
-        Simulable
-    times
-        list with list of times in (start_time, end_time)
-
-    Returns
-    -------
-    faultlist : list
-        A list of SingleFaultScenario
-    """
-    faultlist = []
-    fxns = mdl.get_fxns()
-    for time in times:
-        for fxnname, fxn in fxns.items():
-            if hasattr(fxn, 'm'):
-                faultmodes = fxn.m.get_faults()
-            else:
-                faultmodes = {}
-            for mode in faultmodes:
-                newscen = SingleFaultScenario.from_fault((fxnname, mode), time, mdl)
-                faultlist.append(newscen)
-    return faultlist
+def close_pool(kwargs):
+    """Close pool to avoid memory problems."""
+    if kwargs.get('pool', False) and kwargs.get('close_pool', True):
+        kwargs['pool'].close()
+        kwargs['pool'].terminate()
+        kwargs['pool'].join()
 
 
-def check_end_condition(mdl, use_end_condition, t):
-    """
-    Check if the end condition of the simulation has been met.
-
-    Parameters
-    ----------
-    mdl : Simulable
-        Model with or without a given end condition and simparam
-    use_end_condition : bool
-        Whether to use the end condition
-    t : float
-        time.
-
-    Returns
-    -------
-    end_condition : bool
-        Whether to end the simulation.
-    """
-    if use_end_condition and mdl.sp.end_condition:
-        end_condition = get_var(mdl, mdl.sp.end_condition)
-        return end_condition()
-    else:
-        return False
-
-
-from recordclass import dataobject, asdict
-from fmdtools.sim.scenario import Injection
-from fmdtools.define.block.base import Simulable
-from fmdtools.define.container.base import BaseContainer
-from fmdtools.define.base import get_dict_repr
+def check_overwrite(save_args):
+    for arg, args in save_args.items():
+        if arg != 'indiv':
+            filename = args['filename']
+            if args.get('filename', False):
+                file_check(filename, args.get('overwrite', False))
+            if save_args.get('indiv', False):
+                last_split_index = filename.rfind(".")
+                foldername = filename[:last_split_index]
+                if not os.path.exists(foldername):
+                    os.makedirs(foldername)
 
 
 class SimEvent(BaseContainer):
@@ -1071,7 +716,7 @@ class SimEvent(BaseContainer):
         """Show Simulation event as a string."""
         return self.create_repr(fields=[])
 
-    def run(self, mdl, scen={}, **kwargs):
+    def run(self, mdl, scen={}, nomhist={}, nomresult={}, **kwargs):
         """
         Run the Simulated event.
 
@@ -1093,54 +738,26 @@ class SimEvent(BaseContainer):
             else:
                 mdl(time=self.time, **kwar)
             if self.to_return:
-                self.result = mdl.get_result(to_return=self.to_return, scen=scen, **kwargs)
+                nomresult = getattr(nomresult, t_key(self.time), {})
+                self.result = mdl.get_result(to_return=self.to_return, scen=scen,
+                                             nomhist=nomhist, nomresult=nomresult,
+                                             **kwargs)
             self.simulated = True
         else:
             raise Exception("Event already simulated.")
 
 
-from fmdtools.analyze.result import clean_to_return
+class BaseSimulation(BaseContainer):
+    name: str = ''
+    mdl: Simulable = Block()
+    result: Result = Result()
+    history: History = History()
+    tosave: bool = False
+    to_return: dict = {"end": "class"}
 
-
-def one_scen(mdl, sim_kwargs={}, run_kwargs={}, save_kwargs={}):
-    sim = Simulation(mdl, **sim_kwargs)
-    sim.run(**run_kwargs)
-    # sim.save(**save_kwargs)
-    return sim.result.flatten(), sim.history
-
-
-def staged_events(mdl, fs, sim_kwargs={}, run_kwargs={}, save_indiv=True, save_kwargs={}):
-    nominal_sim = Simulation(mdl, ctimes=fs.get_times(), **sim_kwargs)
-    nominal_sim.run()
-    result = Result({'nominal': nominal_sim.result})
-    history = History({'nominal': nominal_sim.history})
-    # if save_indiv:
-    #     nominal_sim.save(**save_kwargs)
-    mdls = {ev.time: ev.mdl_copy for ev in nominal_sim.simevents if ev.mdl_copy}
-    for scen in fs.scenlist():
-        fault_sim = Simulation(mdls[scen.time], scen=scen, copy=True, protect=False)
-        fault_sim.run(nomhist=nominal_sim.history, nomresult=nominal_sim.result,
-                      **run_kwargs)
-        # if save_indiv:
-        #     fault_sim.save(**save_kwargs)
-        result[scen.name] = fault_sim.result
-        history[scen.name] = fault_sim.history
-    # if not save_indiv and save_kwargs:
-    #     if 'result_filename' in save_kwargs:
-    #         result.save(save_kwargs['result_filename'])
-    #     if 'history_filename' in save_kwargs:
-    #         history.save(save_kwargs['history_filename'])
-    return result, history
-
-
-from fmdtools.analyze.common import get_func_kwargs
-
-class BaseSimulation(object):
-    def __init__(self, name='', result={}, history={}, tosave=False):
-        self.name = name
-        self.result = Result(result)
-        self.history = History(history)
-        self.tosave = tosave
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.to_return = clean_to_return(self.to_return)
 
     def save(self, result_filename="result.csv", history_filename="history.csv"):
 
@@ -1152,77 +769,253 @@ class BaseSimulation(object):
     def __call__(self, **kwargs):
         self.run(**kwargs)
         if self.tosave:
-            self.save(**get_func_kwargs(self.save, **kwargs))
-        return self.result, self.history
+            self.save(**filter_kwargs(self.save, **kwargs))
+        return self.result.flatten(), self.history.flatten()
 
 
-def exec_sim(mdl, **kwargs):
-    sim = Simulation(mdl, **kwargs)
-    return sim()
+def exec_sim(args):
+    sim = Simulation(**args[0])
+    if len(args) > 1:
+        return sim(**args[1])
+    else:
+        return sim()
 
 
 class MultiSimulation(BaseSimulation):
-    def __init__(self, mdl, samp, tosave=False, save_indiv=True, **kwargs):
-        self.save_indiv = save_indiv
+    samp: object = Scenario()
+    save_indiv: bool = False
+    pool: object = None
+    auto_close_pool: bool = True
+    showprogress: bool = True
+    max_mem: int = 2e9
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         if self.save_indiv is True:
-            tosave = False
-        self.mdl = mdl
-        self.samp = samp
-        super().__init__(tosave=tosave, **kwargs)
+            self.tosave = False
+        self.check_hist_memory()
+        self.check_mdl_memory()
+
+    def __call__(self, **kwargs):
+        super().__call__(**kwargs)
+        if self.auto_close_pool:
+            self.close_pool()
+        return self.result.flatten(), self.history.flatten()
+
+    def close_pool(self):
+        if self.pool:
+            self.pool.close()
+            self.pool.terminate()
+            self.pool.join()
 
     def run(self, **kwargs):
-        for scen in self.samp.scenlist():
-            r, h = exec_sim(self.mdl, scen=scen, save=self.save_indiv)
-            self.result[scen.name], self.history[scen.name] = r, h
+        if self.pool:
+            runner = self.pool_runner
+        else:
+            runner = self.std_runner
+        scenlist = self.samp.scenarios()
+        inputs = self.gen_inputs(scenlist)
+        res_list = list(tqdm.tqdm(runner(inputs),
+                                  total=len(inputs),
+                                  disable=not (self.showprogress),
+                                  desc="SCENARIOS COMPLETE"))
+        for i, scen in enumerate(scenlist):
+            self.result[scen.name] = res_list[i][0]
+            self.history[scen.name] = res_list[i][1]
+
+    def gen_default_kwargs(self, **kwargs):
+        def_kwar = dict(mdl=self.mdl,
+                        to_return=self.to_return,
+                        protect=not bool(self.pool))
+        def_kwar = {**def_kwar, **kwargs}
+        def_kwar = filter_kwargs(Simulation, **def_kwar)
+        return def_kwar
+
+    def gen_inputs(self, scenlist, **kwargs):
+        def_kwar = self.gen_default_kwargs(**kwargs)
+        return [({**def_kwar, 'scen': scen},) for scen in scenlist]
+
+    def pool_runner(self, inputs):
+        return self.pool.imap(exec_sim, inputs)
+
+    def std_runner(self, inputs):
+        return [exec_sim(i) for i in inputs]
+
+    def check_hist_memory(self):
+        """Check if the memory will be exhausted by the hist over the scenarios."""
+        mem_total, mem_profile = self.mdl.h.get_memory()
+        nscens = len(self.samp.scenarios())
+        tot_mem = int(mem_total) * int(nscens)
+        if tot_mem > self.max_mem:
+            raise Exception("Mdlhist has size: " + str(mem_total)
+                            + " bytes. With " + str(nscens)
+                            + " scenarios, it is expected that this run will pass the"
+                            + " user-defined max_mem=" + str(self.max_mem)
+                            + " byte limit by a factor of: "+str(tot_mem/self.max_mem)
+                            + ". To avoid, use the track= option to track less info"
+                            + " in the mdlhist")
+
+    def check_mdl_memory(self):
+        """Check if memory will be exhausted by the model over the scenarios."""
+        mem_total, mem_profile = self.mdl.get_memory()
+        nscens = len(self.samp.scenarios())
+        tot_mem = int(mem_total) * int(nscens)
+        if tot_mem > self.max_mem:
+            raise Exception("Model has size: " + str(mem_total)
+                            + " bytes. With "+str(nscens)
+                            + " scenarios, it is expected that this run will pass the"
+                            + " user-defined max_mem="+str(self.max_mem)
+                            + " byte limit by a factor of: "+str(tot_mem/self.max_mem)
+                            + ". To avoid, increase mem_total, reduce model size "
+                            + "or number of scenarios, or run outside a parallel pool")
 
 
 class MultiEventSimulation(MultiSimulation):
-    def __init__(self, mdl, faultsamp, staged=True, **kwargs):
-        super().__init__(mdl, faultsamp, **kwargs)
-        self.staged = staged
+    staged: bool = True
+    mdls: dict = dict()
+    include_nominal: bool = True
+    gen_samp: bool = False
+
+    def __call__(self, **kwargs):
+        rets = super().__call__(**kwargs)
+        if self.gen_samp:
+            rets = (*rets, self.samp)
+        return rets
+
+    def run_nom(self, with_copy=False, gen_samp=False, **kwargs):
+        kwar = {'mdl': self.mdl, 'to_return': self.to_return}
+        if with_copy:
+            kwar['ctimes'] = self.samp.get_times()
+        nomsim =  Simulation(**kwar)
+        sim_kwar = dict(with_mdls=with_copy, gen_samp=gen_samp, **kwargs)
+        if self.pool:
+            outs = self.pool.apply(nomsim, (), sim_kwar)
+        else:
+            outs = nomsim(**sim_kwar)
+        self.result['nominal'] = outs[0]
+        self.history['nominal'] = outs[1]
+        if with_copy:
+            self.mdls = outs[2]
+        if gen_samp:
+            self.samp = outs[-1]
 
     def run(self, **kwargs):
-        if self.staged:
-            self.nominal = Simulation(self.mdl, ctimes=self.samp.get_times())
-        else:
-            self.nominal = Simulation(self.mdl)
-        self.result['nominal'], self.history['nominal'] = self.nominal()
-        if self.staged:
-            self.run_staged(**kwargs)
-        else:
-            super().run(**kwargs)
+        if self.gen_samp:
+            self.run_nom(gen_samp=True, **kwargs)
+            if self.staged:
+                self.run_nom(with_copy=True)
+        elif self.staged:
+            self.run_nom(with_copy=True)
+        elif self.include_nominal:
+            self.run_nom()
 
-    def run_staged(self, **kwargs):
-        mdls = {ev.time: ev.mdl_copy
-                for ev in self.nominal.simevents if ev.mdl_copy}
-        for scen in self.samp.scenlist():
-            r, h = exec_sim(mdls[scen.time], scen=scen, copy=True, protect=False,
-                            save = self.save_indiv)
-            self.result[scen.name], self.history[scen.name] = r, h
+        super().run(**kwargs)
+        if not self.include_nominal:
+            self.result.pop('nominal', None)
+            self.history.pop('nominal', None)
+
+    def gen_inputs(self, scenlist, **kwargs):
+        sim_kwar = {'nomresult': self.result['nominal'],
+                    'nomhist': self.history['nominal']}
+        if self.staged:
+            def_kwar = self.gen_default_kwargs(**kwargs, protect=False,
+                                               copy=not bool(self.pool))
+            return [({**def_kwar, 'scen': scen, 'mdl': self.mdls[scen.time].copy()},
+                     sim_kwar) for scen in scenlist]
+        else:
+            def_kwar = self.gen_default_kwargs(**kwargs)
+            return [({**def_kwar, 'scen': scen}, sim_kwar) for scen in scenlist]
+
+
+def exec_fault_sim(args):
+    kwar = args[0]
+    kwar['mdl'] = kwar['mdl'].new(**get_mdl_kwargs(kwar.pop('scen', {})))
+    sim = MultiEventSimulation(**kwar)
+    if len(args) > 1:
+        return sim(**args[1])
+    else:
+        return sim()
+
+class NestedSimulation(MultiSimulation):
+    get_phasemap: bool = True
+    apps: dict = {}
+    faultdomains: dict = {}
+    faultsamples: dict = {}
+
+    def pool_runner(self, inputs):
+        return self.pool.imap(exec_fault_sim, inputs)
+
+    def std_runner(self, inputs):
+        return [exec_fault_sim(i) for i in inputs]
+
+    def gen_default_kwargs(self, **kwargs):
+        def_kwar = dict(mdl=self.mdl,
+                        showprogress=False,
+                        gen_samp=True)
+        def_kwar = {**def_kwar, **kwargs}
+        def_kwar = filter_kwargs(MultiEventSimulation, **def_kwar)
+        return def_kwar
+
+    def gen_inputs(self, scenlist, **kwargs):
+        def_kwar = self.gen_default_kwargs(**kwargs)
+        run_kwar = dict(get_phasemap=self.get_phasemap,
+                        faultdomains=self.faultdomains,
+                        faultsamples=self.faultsamples)
+        return [({**def_kwar, 'mdl': self.mdl, 'scen': scen}, run_kwar)
+                for scen in scenlist]
 
 
 class Simulation(BaseSimulation):
-    def __init__(self, mdl, name='', scen=Scenario(), ctimes=[],
-                 to_return={"end": "class"}, **kwargs):
-        self.scen = scen
-        if not name:
-            name = self.scen.name
-        self.init_model(mdl, **kwargs)
-        self.ctimes = ctimes
-        self.to_return = clean_to_return(to_return)
-        self.simevents = []
-        self.create_simevents()
-        super().__init__(name=name, history=self.mdl.h)
+    scen: Scenario = Scenario()
+    protect: bool = True
+    copy: bool = False
+    ctimes: list = []
+    mdl_kwargs: dict = {}
+    simevents: list = []
+    warn_faults = False
 
-    def init_model(self, mdl, copy=False, protect=True, **kwargs):
-        mdl_kwargs = {'p': {**kwargs.get('p', {}), **self.scen.get("p", {})},
-                      'sp': {**kwargs.get('sp', {}), **self.scen.get("sp", {})},
-                      'r': {**kwargs.get('r', {}), **self.scen.get("r", {})}}
-        if copy:
-            mdl = mdl.copy()
-        elif protect:
-            mdl = mdl.new(**mdl_kwargs)
-        self.mdl = mdl
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.name:
+            self.name = self.scen.name
+        self.init_model()
+        self.history = self.mdl.h
+        self.create_simevents()
+
+    def get_models(self):
+        return {ev.time: ev.mdl_copy for ev in self.simevents if ev.mdl_copy}
+
+    def gen_sampleapproach(self, faultdomains={}, faultsamples={}, get_phasemap=False):
+        if get_phasemap:
+            pm = from_hist(self.history)
+            app = SampleApproach(self.mdl, phasemaps=pm)
+        else:
+            app = SampleApproach(self.mdl)
+        app.add_faultdomains(**faultdomains)
+        app.add_faultsamples(**faultsamples)
+        return app
+
+    def __call__(self, with_mdls=False, gen_samp=False, **kwargs):
+        res, hist = super().__call__(**kwargs)
+        self.check_faults()
+        rets = [res, hist]
+        if with_mdls:
+            rets.append(self.get_models())
+        if gen_samp:
+            rets.append(self.gen_sampleapproach(**kwargs))
+        return tuple(rets)
+
+    def check_faults(self):
+        if self.warn_faults:
+            endfaults, faultprops = self.mdl.return_faultmodes()
+            if endfaults:
+                warnings.warn("Faults found during the nominal run " + str(endfaults))
+
+    def init_model(self):
+        if self.copy:
+            self.mdl = self.mdl.copy()
+        elif self.protect:
+            self.mdl = self.mdl.new(**get_mdl_kwargs(self.scen))
 
     def create_simevents(self):
         res_sequence = {k: v for k, v in self.to_return.items()
@@ -1252,17 +1045,50 @@ class Simulation(BaseSimulation):
                 self.result[t_key(simevent.time)] = simevent.result
 
 
+def get_mdl_kwargs(scen):
+    return {'p':  scen.get("p", {}), 'sp': scen.get("sp", {}), 'r': scen.get("r", {})}
+
 
 if __name__ == "__main__":
     from fmdtools.define.block.function import ExampleFunction
-    from fmdtools.sim.scenario import SingleFaultScenario
+    from fmdtools.define.architecture.function import ExFxnArch
+    from multiprocessing import Pool
+    from fmdtools.sim.sample import ParameterDomain, ParameterSample, expd, exp_ps
+    esf = ExampleFunction()
+    n = NestedSimulation(mdl=esf, samp=exp_ps,
+                         faultdomains={"fd": (("all",), {})},
+                         faultsamples={"fs": (("fault_times", "fd", [1]), {})})
+    n()
+
+    efa = ExFxnArch()
+    res5, hist5 = single_faults(efa, times=[5.0, 10.0])
+
+
     esf = ExampleFunction()
     s = SingleFaultScenario.from_fault(("examplefunction", "low"), 3.0, esf)
-    sim = Simulation(esf, s, ctimes = [2, 4], to_return={1.0: 's.x', "end": ["class", "graph"]})
+    sim = Simulation(mdl=esf, scen=s, ctimes = [2, 4], to_return={1.0: 's.x', "end": ["class", "graph"]})
     sim.run()
-    res, hist = one_scen(esf)
-    res, hist = staged_events(esf, s)
-    sim2 = MultiEventSimulation(esf, s)
-    res, hist = sim2()
-    sim2 = MultiEventSimulation(esf, s, staged=False)
-    res, hist = sim2()
+    nomres, nomhist = nominal(esf, to_return={5.0: 's.x', 7.0: 'class', 'end': 'class'})
+
+    faultres, faulthist = one_fault(esf, "examplefunction", "low", 3.0)
+
+    sim2 = MultiEventSimulation(mdl=esf, samp=s)
+    res2, hist2 = sim2()
+
+    sim3 = MultiEventSimulation(mdl=esf, samp=s, staged=False,
+                                to_return={'end': ["class", "graph"]})
+    res3, hist3 = sim3()
+
+
+    s = SingleFaultScenario.from_fault(("ex_fxn", "low"), 3.0, efa)
+    sim4 = MultiEventSimulation(mdl=efa, samp=s, staged=True, pool = Pool(5),
+                                to_return={'end': ["class", "graph"]})
+    res4, hist4 = sim4()
+
+
+
+    psim = MultiSimulation(mdl=esf, samp=exp_ps)
+    res7, hist7 = psim()
+
+
+

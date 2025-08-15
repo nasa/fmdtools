@@ -521,3 +521,16 @@ def get_inheritance(obj):
                       if b is not object and b is not dataobject])
     else:
         return (obj.__class__, )
+
+
+def filter_kwargs(obj, **kwargs):
+    """
+    Get keyword arguments just related to the method being called.
+
+    May not work with **kwargs.
+    """
+    if inspect.isclass(obj) and hasattr(obj, "__fields__"):
+        params = obj.__fields__
+    else:
+        params = inspect.signature(obj).parameters
+    return {k: v for k, v in kwargs.items() if k in params and v is not None}

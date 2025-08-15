@@ -215,7 +215,7 @@ class BaseScenario(BaseScenObj):
         """Get time that the scenario branches off."""
         return [self.start_time()]
 
-    def scenlist(self):
+    def scenarios(self):
         """Return list with scenario."""
         return [self]
 
