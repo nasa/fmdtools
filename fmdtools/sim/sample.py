@@ -2073,6 +2073,9 @@ exp_ps = ParameterSample(expd, seed=1)
 exp_ps.add_variable_scenario(1, 2)
 exp_ps.add_variable_ranges(replicates=10)
 
+exp_ps_45 = ParameterSample(expd, seed=1)
+exp_ps_45.add_variable_ranges()
+
 
 if __name__ == "__main__":
     from examples.multirotor.drone_mdl_rural import Drone
