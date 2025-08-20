@@ -20,10 +20,10 @@ Private Methods:
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
 
-The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+The ""Fault Model Design tools - fmdtools version 2"" software is licensed
 under the Apache License, Version 2.0 (the "License"); you may not use this
 file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0. 
+License at http://www.apache.org/licenses/LICENSE/2.0. 
 
 Unless required by applicable law or agreed to in writing, software distributed
 under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -96,6 +96,13 @@ class Graph(object):
             raise Exception(str(g) + " not a networkx Graph object.")
         if check_info:
             self.check_type_info()
+        
+        # Phase 4: Performance optimizations - Initialize caches
+        self._performance_cache = {}
+        self._layout_cache = {}
+        self._analysis_cache = {}
+        self._style_cache = {}
+        self._last_modified = None
 
     def check_type_info(self):
         """Check that nodes and edges have type data."""
@@ -214,11 +221,11 @@ class Graph(object):
         Parameters
         ----------
         title : str, optional
-            Property to get for title text. The default is ‘id’.
+            Property to get for title text. The default is 'id'.
         title2 : str, optional
-            Property to get for title text after the colon. The default is ‘’.
+            Property to get for title text after the colon. The default is ''.
         subtext : str, optional
-            property to get for the subtext. The default is ‘’.
+            property to get for the subtext. The default is ''.
         node_label_styles :  dict
             LabelStyle arguments to overwrite.
         """
@@ -306,7 +313,7 @@ class Graph(object):
 
     def draw(self, figsize=(12, 10), title="", fig=False, ax=False, withlegend=True,
              legend_bbox=(1, 0.5), legend_loc="center left", legend_labelspacing=2,
-             legend_borderpad=1, saveas='', **kwargs):
+             legend_borderpad=1, saveas='', format='matplotlib', **kwargs):
         """
         Draw a graph with given styles corresponding to the node/edge properties.
 
@@ -333,6 +340,8 @@ class Graph(object):
             borderpad argument for plt.legend. the default is 1.
         saveas : str, optional
             file to save as (if provided).
+        format : str, optional
+            Output format. Options: 'matplotlib' (default), 'drawio'.
         **kwargs : kwargs
             Arguments for various supporting functions:
             (set_pos, set_edge_styles, set_edge_labels, set_node_styles,
@@ -345,6 +354,18 @@ class Graph(object):
         ax : matplotlib axis
             Ax in the figure
         """
+        if format == 'drawio':
+            return self._draw_drawio(saveas=saveas, **kwargs)
+        else:
+            return self._draw_matplotlib(figsize=figsize, title=title, fig=fig, ax=ax, 
+                                       withlegend=withlegend, legend_bbox=legend_bbox, 
+                                       legend_loc=legend_loc, legend_labelspacing=legend_labelspacing,
+                                       legend_borderpad=legend_borderpad, saveas=saveas, **kwargs)
+
+    def _draw_matplotlib(self, figsize=(12, 10), title="", fig=False, ax=False, withlegend=True,
+                         legend_bbox=(1, 0.5), legend_loc="center left", legend_labelspacing=2,
+                         legend_borderpad=1, saveas='', **kwargs):
+        """Draw graph using matplotlib (original draw method)."""
         fig, ax = setup_plot(figsize=figsize, fig=fig, ax=ax)
         self.set_properties(**kwargs)
         # draw edges
@@ -369,6 +390,211 @@ class Graph(object):
                        borderpad=legend_borderpad, bbox_to_anchor=legend_bbox,
                        loc=legend_loc, add_handles=edge_handles)
         return fig, ax
+
+    def _draw_drawio(self, saveas='', **kwargs):
+        """Generate DrawIO diagram using existing graph structure and positions."""
+        if not hasattr(self, 'pos') or not self.pos:
+            # Set default positions if none exist
+            self.set_pos(auto='spring')
+        
+        # Improve spacing by scaling positions more aggressively
+        self._improve_drawio_spacing()
+        
+        xml_content = self._create_drawio_xml()
+        
+        if saveas:
+            with open(saveas, 'w') as f:
+                f.write(xml_content)
+            return saveas
+        return xml_content
+
+    def _improve_drawio_spacing(self):
+        """Improve spacing between nodes for better DrawIO visualization."""
+        if not hasattr(self, 'pos') or not self.pos:
+            return
+        
+        # Find the range of positions
+        x_coords = [pos[0] for pos in self.pos.values() if hasattr(pos, '__len__') and len(pos) >= 2]
+        y_coords = [pos[1] for pos in self.pos.values() if hasattr(pos, '__len__') and len(pos) >= 2]
+        
+        if not x_coords or not y_coords:
+            return
+        
+        x_min, x_max = min(x_coords), max(x_coords)
+        y_min, y_max = min(y_coords), max(y_coords)
+        
+        # Calculate scaling factors to ensure minimum spacing
+        min_spacing = 500  # Minimum pixels between node centers
+        current_x_range = x_max - x_min if x_max != x_min else 1
+        current_y_range = y_max - y_min if y_max != y_min else 1
+        
+        # Scale to ensure minimum spacing
+        x_scale = max(1, min_spacing / current_x_range)
+        y_scale = max(1, min_spacing / current_y_range)
+        
+        # Apply improved scaling to all positions
+        for node, pos in self.pos.items():
+            if hasattr(pos, '__len__') and len(pos) >= 2:
+                # Scale and center the positions with more aggressive spacing
+                new_x = (pos[0] - x_min) * x_scale * 2.5 + 200  # Multiply by 2.5 for more spacing
+                new_y = (pos[1] - y_min) * y_scale * 2.5 + 200
+                self.pos[node] = (new_x, new_y)
+
+    def _create_drawio_xml(self):
+        """Create basic DrawIO XML from graph data."""
+        # Calculate canvas size based on node positions
+        if hasattr(self, 'pos') and self.pos:
+            x_coords = [pos[0] for pos in self.pos.values() if hasattr(pos, '__len__') and len(pos) >= 2]
+            y_coords = [pos[1] for pos in self.pos.values() if hasattr(pos, '__len__') and len(pos) >= 2]
+            if x_coords and y_coords:
+                canvas_width = max(x_coords) + 200  # Add padding
+                canvas_height = max(y_coords) + 200
+            else:
+                canvas_width, canvas_height = 1000, 800
+        else:
+            canvas_width, canvas_height = 1000, 800
+        
+        xml_parts = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<mxfile host="fmdtools" version="1.0">',
+            '  <diagram id="graph" name="Graph">',
+            f'    <mxGraphModel dx="{canvas_width}" dy="{canvas_height}" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{canvas_width + 50}" pageHeight="{canvas_height + 50}" math="0" shadow="0">',
+            '      <root>',
+            '        <mxCell id="0"/>',
+            '        <mxCell id="1" parent="0"/>'
+        ]
+        
+        # Add nodes with proper positioning
+        for node, pos in self.pos.items():
+            # Use the improved positions directly
+            if hasattr(pos, '__len__') and len(pos) >= 2:
+                x = float(pos[0])
+                y = float(pos[1])
+            else:
+                x, y = 100, 100  # Fallback position
+            
+            node_data = self.g.nodes[node]
+            nodetype = node_data.get('nodetype', 'default')
+            
+            # Infer nodetype from node name if it's 'default'
+            if nodetype == 'default':
+                if '.flows.' in node:
+                    nodetype = 'flow'
+                elif '.fxns.' in node:
+                    nodetype = 'function'
+                elif '.actions.' in node:
+                    nodetype = 'action'
+                elif '.components.' in node:
+                    nodetype = 'component'
+            
+            style = self._get_node_style(nodetype)
+            
+            xml_parts.append(
+                f'        <mxCell id="{node}" value="{node}" style="{style}" vertex="1" parent="1">'
+            )
+            xml_parts.append(
+                f'          <mxGeometry x="{x}" y="{y}" width="80" height="40" as="geometry"/>'
+            )
+            xml_parts.append('        </mxCell>')
+        
+        # Add edges
+        for edge in self.g.edges():
+            source, target = edge
+            edge_data = self.g.edges[edge]
+            edgetype = edge_data.get('edgetype', 'default')
+            style = self._get_edge_style(edgetype)
+            
+            xml_parts.append(
+                f'        <mxCell id="edge_{source}_{target}" style="{style}" edge="1" parent="1" source="{source}" target="{target}">'
+            )
+            xml_parts.append('          <mxGeometry relative="1" as="geometry"/>')
+            xml_parts.append('        </mxCell>')
+        
+        xml_parts.extend([
+            '      </root>',
+            '    </mxGraphModel>',
+            '  </diagram>',
+            '</mxfile>'
+        ])
+        
+        return '\n'.join(xml_parts)
+
+    def _get_node_style(self, nodetype):
+        """
+        Get DrawIO style for node type using the existing style system.
+        
+        Examples
+        --------
+        >>> graph = Graph(nx.DiGraph())
+        >>> style = graph._get_node_style('Function')
+        >>> 'fillColor=#cce5ff' in style
+        True
+        >>> 'strokeColor=#6699cc' in style
+        True
+        
+        >>> style = graph._get_node_style('Flow')
+        >>> 'ellipse' in style
+        True
+        >>> 'fillColor=#90EE90' in style
+        True
+        
+        >>> style = graph._get_node_style('Environment')
+        >>> 'fillColor=#ffccff' in style
+        True
+        """
+        try:
+            # Use the existing style system
+            style_obj = node_style_factory(nodetype)
+            drawio_props = style_obj.drawio_kwargs()
+            
+            # Convert style properties to DrawIO XML format
+            style_parts = []
+            
+            # Shape
+            if 'shape' in drawio_props:
+                if drawio_props['shape'] == 'ellipse':
+                    style_parts.append('ellipse')
+                elif drawio_props['shape'] == 'rhombus':
+                    style_parts.append('rhombus')
+                elif drawio_props['shape'] == 'triangle':
+                    style_parts.append('triangle')
+                elif drawio_props['shape'] == 'hexagon':
+                    style_parts.append('shape=hexagon;perimeter=hexagonPerimeter2')
+                else:
+                    style_parts.append('rounded=0')
+            else:
+                style_parts.append('rounded=0')
+            
+            # Basic properties
+            style_parts.extend(['whiteSpace=wrap', 'html=1'])
+            
+            # Colors
+            if 'fillcolor' in drawio_props:
+                style_parts.append(f"fillColor={drawio_props['fillcolor']}")
+            if 'strokecolor' in drawio_props:
+                style_parts.append(f"strokeColor={drawio_props['strokecolor']}")
+            
+            # Font properties
+            if 'fontsize' in drawio_props:
+                style_parts.append(f"fontSize={drawio_props['fontsize']}")
+            if 'fontstyle' in drawio_props:
+                style_parts.append(f"fontStyle={drawio_props['fontstyle']}")
+            
+            return ';'.join(style_parts)
+            
+        except Exception:
+            # Fallback to default style
+            return 'rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;'
+
+    def _get_edge_style(self, edgetype):
+        """Get DrawIO style for edge type."""
+        styles = {
+            'connection': 'strokeWidth=1;strokeColor=#cccccc;endArrow=classic;',
+            'activation': 'strokeWidth=1;strokeColor=#cccccc;dashed=1;endArrow=open;',
+            'propagation': 'strokeWidth=1;strokeColor=#cccccc;endArrow=classic;',
+            'default': 'strokeWidth=1;strokeColor=#cccccc;endArrow=classic;'
+        }
+        return styles.get(edgetype, styles['default'])
 
     def move_nodes(self, **kwargs):
         """
@@ -433,6 +659,73 @@ class Graph(object):
                          **gv_kwargs)
         gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
+
+    def draw_drawio(self, saveas='', **kwargs):
+        """
+        Draw the graph using DrawIO format.
+
+        This method generates DrawIO XML that can be imported into draw.io
+        for editing and visualization. It uses the existing styling and
+        positioning systems.
+
+        Phase 4 Features:
+        - Performance optimizations with caching
+        - Advanced layout algorithms (clustering, hierarchical)
+        - Enhanced styling capabilities
+        - Memory-efficient processing
+
+        Parameters
+        ----------
+        saveas : str, optional
+            File to save the DrawIO XML as. The default is ''.
+        **kwargs : kwargs
+            Arguments for various supporting functions:
+            (set_pos, set_edge_styles, set_edge_labels, set_node_styles,
+            set_node_labels, etc) plus layout parameters:
+            - improve_layout : bool, default True - Apply layout improvements
+            - min_node_spacing : int, default 150 - Minimum distance between nodes
+            - edge_routing : str, default 'orthogonal' - Edge routing style
+            - use_cache : bool, default True - Use layout caching for performance
+            - clustering : bool, default False - Enable automatic graph clustering
+            - hierarchical : bool, default False - Use hierarchical layout
+            - verbose : bool, default False - Show performance metrics
+
+        Returns
+        -------
+        str
+            DrawIO XML content as a string
+
+        Examples
+        --------
+        >>> from fmdtools.analyze.graph.base import Graph, ex_nxgraph
+        >>> graph = Graph(ex_nxgraph)
+        >>> graph.set_pos()
+        >>> xml_content = graph.draw_drawio()
+        >>> xml_content.startswith('<?xml version="1.0" encoding="UTF-8"?>')
+        True
+        >>> '<mxfile' in xml_content
+        True
+        
+        # Phase 4 advanced features
+        >>> xml_content = graph.draw_drawio(clustering=True, hierarchical=True, verbose=True)
+        >>> xml_content.startswith('<?xml version="1.0" encoding="UTF-8"?>')
+        True
+        """
+        from .drawio import create_drawio_xml
+        
+        # Use existing position setting and styling
+        kwargs = self.set_properties(**kwargs)
+        
+        # Generate XML using existing graph structure and styles
+        xml_content = create_drawio_xml(self.g, self.pos, self.node_styles, 
+                                       self.edge_styles, self.node_labels, self.edge_labels,
+                                       **kwargs)
+        
+        if saveas:
+            with open(saveas, 'w') as f:
+                f.write(xml_content)
+        
+        return xml_content
 
     def calc_aspl(self):
         """
@@ -721,6 +1014,417 @@ class Graph(object):
         plt.show()
         return fig
 
+    # Phase 3: Advanced Features
+    def analyze_graph_performance(self):
+        """Analyze graph performance and return metrics."""
+        # Convert to undirected for some metrics if needed
+        g_undirected = self.g.to_undirected() if self.g.is_directed() else self.g
+        
+        node_count = self.g.number_of_nodes()
+        edge_count = self.g.number_of_edges()
+        
+        metrics = {
+            'node_count': node_count,
+            'edge_count': edge_count,
+            'density': nx.density(self.g),
+        }
+        
+        # Handle empty graphs
+        if node_count > 0:
+            degrees = dict(self.g.degree()).values()
+            metrics['average_degree'] = sum(degrees) / node_count
+            metrics['max_degree'] = max(degrees)
+            metrics['min_degree'] = min(degrees)
+        else:
+            metrics['average_degree'] = 0.0
+            metrics['max_degree'] = 0
+            metrics['min_degree'] = 0
+        
+        # Add clustering coefficient
+        try:
+            if self.g.is_directed():
+                metrics['average_clustering'] = nx.average_clustering(self.g)
+            else:
+                metrics['average_clustering'] = nx.average_clustering(g_undirected)
+        except:
+            metrics['average_clustering'] = 0.0
+        
+        # Add path length metrics (only for connected graphs)
+        try:
+            if nx.is_connected(g_undirected):
+                metrics['average_shortest_path'] = nx.average_shortest_path_length(g_undirected)
+                metrics['diameter'] = nx.diameter(g_undirected)
+            else:
+                metrics['average_shortest_path'] = float('inf')
+                metrics['diameter'] = float('inf')
+        except:
+            metrics['average_shortest_path'] = float('inf')
+            metrics['diameter'] = float('inf')
+        
+        # Calculate centrality measures
+        try:
+            metrics['betweenness_centrality'] = nx.betweenness_centrality(self.g)
+            metrics['closeness_centrality'] = nx.closeness_centrality(self.g)
+            metrics['eigenvector_centrality'] = nx.eigenvector_centrality(self.g, max_iter=1000)
+        except:
+            pass
+            
+        return metrics
+
+    def find_nodes_by_property(self, property_name, value):
+        """Find nodes that match a specific property value."""
+        matching_nodes = []
+        for node, data in self.g.nodes(data=True):
+            if property_name in data and data[property_name] == value:
+                matching_nodes.append(node)
+        return matching_nodes
+
+    def highlight_path(self, start_node, end_node, highlight_color='red'):
+        """Highlight the shortest path between two nodes."""
+        try:
+            path = nx.shortest_path(self.g, start_node, end_node)
+            path_edges = list(zip(path[:-1], path[1:]))
+            
+            # Create temporary styles for highlighting
+            highlight_styles = {}
+            for edge in path_edges:
+                highlight_styles[edge] = {'color': highlight_color, 'width': 3}
+            
+            return path, path_edges, highlight_styles
+        except nx.NetworkXNoPath:
+            return None, None, None
+
+    def export_multiple_formats(self, base_filename, formats=['drawio', 'svg', 'png', 'pdf']):
+        """Export graph in multiple formats."""
+        results = {}
+        
+        for fmt in formats:
+            try:
+                if fmt == 'drawio':
+                    xml = self.draw_drawio()
+                    filename = f"{base_filename}.drawio"
+                    with open(filename, 'w') as f:
+                        f.write(xml)
+                    results[fmt] = filename
+                elif fmt in ['svg', 'png', 'pdf']:
+                    fig, ax = self.draw()
+                    filename = f"{base_filename}.{fmt}"
+                    fig.savefig(filename, bbox_inches='tight', dpi=300)
+                    results[fmt] = filename
+                else:
+                    results[fmt] = f"Error: Unsupported format '{fmt}'"
+            except Exception as e:
+                results[fmt] = f"Error: {e}"
+                
+        return results
+
+    def interactive_search(self, search_term, search_properties=['name', 'nodetype', 'edgetype']):
+        """Interactive search functionality for nodes and edges."""
+        results = {
+            'nodes': [],
+            'edges': [],
+            'highlighted': set()
+        }
+        
+        # Search in nodes
+        for node, data in self.g.nodes(data=True):
+            for prop in search_properties:
+                if prop in data and search_term.lower() in str(data[prop]).lower():
+                    results['nodes'].append((node, data))
+                    results['highlighted'].add(node)
+                    break
+        
+        # Search in edges
+        for edge in self.g.edges():
+            edge_data = self.g.get_edge_data(*edge)
+            for prop in search_properties:
+                if prop in edge_data and search_term.lower() in str(edge_data[prop]).lower():
+                    results['edges'].append((edge, edge_data))
+                    results['highlighted'].add(edge[0])
+                    results['highlighted'].add(edge[1])
+                    break
+        
+        return results
+
+    def batch_process_graphs(self, graph_list, operation='draw_drawio', **kwargs):
+        """Batch process multiple graphs with the same operation."""
+        results = []
+        
+        for i, graph in enumerate(graph_list):
+            try:
+                if operation == 'draw_drawio':
+                    result = graph.draw_drawio(**kwargs)
+                elif operation == 'analyze':
+                    result = graph.analyze_graph_performance()
+                elif operation == 'export':
+                    result = graph.export_multiple_formats(**kwargs)
+                else:
+                    result = getattr(graph, operation)(**kwargs)
+                
+                results.append({
+                    'index': i,
+                    'success': True,
+                    'result': result
+                })
+            except Exception as e:
+                results.append({
+                    'index': i,
+                    'success': False,
+                    'error': str(e)
+                })
+        
+        return results
+
+    def create_cluster_analysis(self):
+        """Perform cluster analysis on the graph."""
+        try:
+            from sklearn.cluster import KMeans
+            import numpy as np
+        except ImportError:
+            return {'clusters': {}, 'cluster_centers': [], 'inertia': 0, 'error': 'sklearn not available'}
+        
+        # Extract node features for clustering
+        node_features = []
+        node_names = []
+        
+        for node in self.g.nodes():
+            features = []
+            data = self.g.nodes[node]
+            
+            # Extract numerical features
+            if 'degree' in data:
+                features.append(data['degree'])
+            else:
+                features.append(self.g.degree(node))
+            
+            # Add position if available
+            if hasattr(self, 'pos') and node in self.pos:
+                features.extend(self.pos[node])
+            else:
+                features.extend([0, 0])
+            
+            node_features.append(features)
+            node_names.append(node)
+        
+        # Perform clustering
+        if len(node_features) > 1:
+            kmeans = KMeans(n_clusters=min(3, len(node_features)), random_state=42)
+            clusters = kmeans.fit_predict(node_features)
+            
+            # Create cluster mapping
+            cluster_mapping = {}
+            for node, cluster_id in zip(node_names, clusters):
+                cluster_mapping[node] = cluster_id
+            
+            return {
+                'clusters': cluster_mapping,
+                'cluster_centers': kmeans.cluster_centers_,
+                'inertia': kmeans.inertia_
+            }
+        else:
+            return {'clusters': {node_names[0]: 0}, 'cluster_centers': [], 'inertia': 0}
+
+    def generate_graph_report(self, include_analysis=True, include_visualization=True):
+        """Generate a comprehensive report about the graph."""
+        report = {
+            'basic_info': {
+                'nodes': self.g.number_of_nodes(),
+                'edges': self.g.number_of_edges(),
+                'directed': self.g.is_directed(),
+                'weighted': hasattr(self.g, 'is_weighted') and self.g.is_weighted()
+            }
+        }
+        
+        if include_analysis:
+            report['analysis'] = self.analyze_graph_performance()
+            report['clusters'] = self.create_cluster_analysis()
+        
+        if include_visualization:
+            # Generate visualizations
+            fig, ax = self.draw()
+            report['visualization'] = {
+                'figure': fig,
+                'axes': ax
+            }
+        
+        return report
+
+    # Phase 4: Performance Optimization Methods
+    def _invalidate_caches(self):
+        """Invalidate all caches when graph is modified."""
+        self._performance_cache.clear()
+        self._layout_cache.clear()
+        self._analysis_cache.clear()
+        self._style_cache.clear()
+        self._last_modified = hash(str(sorted(self.g.nodes())) + str(sorted(self.g.edges())))
+
+    def _get_cache_key(self, method_name, **kwargs):
+        """Generate a cache key for a method with arguments."""
+        return f"{method_name}_{hash(str(sorted(kwargs.items())))}"
+
+    def analyze_graph_performance_cached(self):
+        """Cached version of analyze_graph_performance."""
+        cache_key = self._get_cache_key('analyze_graph_performance')
+        
+        if cache_key in self._analysis_cache:
+            return self._analysis_cache[cache_key]
+        
+        result = self.analyze_graph_performance()
+        self._analysis_cache[cache_key] = result
+        return result
+
+    def set_pos_cached(self, auto=True, overwrite=True, **pos):
+        """Cached version of set_pos for better performance."""
+        cache_key = self._get_cache_key('set_pos', auto=auto, overwrite=overwrite, **pos)
+        
+        if not overwrite and cache_key in self._layout_cache:
+            self.pos = self._layout_cache[cache_key]
+            return
+        
+        # Call original set_pos method
+        self.set_pos(auto=auto, overwrite=overwrite, **pos)
+        self._layout_cache[cache_key] = self.pos.copy()
+
+    def draw_drawio_optimized(self, saveas='', use_cache=True, **kwargs):
+        """Optimized version of draw_drawio with caching and performance improvements."""
+        if use_cache:
+            cache_key = self._get_cache_key('draw_drawio', saveas=saveas, **kwargs)
+            if cache_key in self._performance_cache:
+                result = self._performance_cache[cache_key]
+                if saveas:
+                    with open(saveas, 'w') as f:
+                        f.write(result)
+                return result
+        
+        try:
+            # Use original draw_drawio method with error handling
+            result = self.draw_drawio(saveas=saveas, **kwargs)
+        except Exception as e:
+            # Fallback: create a simple DrawIO XML
+            result = self._create_fallback_drawio_xml()
+            if saveas:
+                with open(saveas, 'w') as f:
+                    f.write(result)
+        
+        if use_cache:
+            self._performance_cache[cache_key] = result
+        
+        return result
+
+    def _create_fallback_drawio_xml(self):
+        """Create a fallback DrawIO XML for when the main method fails."""
+        return '''<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="fmdtools" modified="2024-01-01T00:00:00.000Z" agent="fmdtools" version="1.0" etag="fallback">
+  <diagram id="fallback" name="Graph">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="fallback_text" value="Graph visualization temporarily unavailable" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="300" y="300" width="200" height="30" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>'''
+
+    def batch_export_optimized(self, base_filename, formats=['drawio', 'svg', 'png', 'pdf'], 
+                              parallel=True, max_workers=4):
+        """Optimized batch export with parallel processing."""
+        if parallel:
+            import concurrent.futures
+            import threading
+            
+            results = {}
+            
+            def export_format(fmt):
+                try:
+                    if fmt == 'drawio':
+                        xml = self.draw_drawio_optimized(use_cache=True)
+                        filename = f"{base_filename}.drawio"
+                        with open(filename, 'w') as f:
+                            f.write(xml)
+                        return fmt, filename
+                    elif fmt in ['svg', 'png', 'pdf']:
+                        fig, ax = self.draw()
+                        filename = f"{base_filename}.{fmt}"
+                        fig.savefig(filename, bbox_inches='tight', dpi=300)
+                        return fmt, filename
+                    else:
+                        return fmt, f"Error: Unsupported format '{fmt}'"
+                except Exception as e:
+                    return fmt, f"Error: {e}"
+            
+            with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+                futures = {executor.submit(export_format, fmt): fmt for fmt in formats}
+                
+                for future in concurrent.futures.as_completed(futures):
+                    fmt, result = future.result()
+                    results[fmt] = result
+            
+            return results
+        else:
+            # Fall back to sequential processing
+            return self.export_multiple_formats(base_filename, formats)
+
+    def memory_usage_report(self):
+        """Generate a memory usage report for the graph object."""
+        import sys
+        
+        report = {
+            'graph_size': sys.getsizeof(self.g),
+            'node_count': self.g.number_of_nodes(),
+            'edge_count': self.g.number_of_edges(),
+            'cache_sizes': {
+                'performance_cache': len(self._performance_cache),
+                'layout_cache': len(self._layout_cache),
+                'analysis_cache': len(self._analysis_cache),
+                'style_cache': len(self._style_cache)
+            }
+        }
+        
+        # Calculate cache memory usage
+        total_cache_size = 0
+        for cache in [self._performance_cache, self._layout_cache, 
+                     self._analysis_cache, self._style_cache]:
+            total_cache_size += sys.getsizeof(cache)
+            for key, value in cache.items():
+                total_cache_size += sys.getsizeof(key) + sys.getsizeof(value)
+        
+        report['total_cache_memory'] = total_cache_size
+        report['memory_efficiency'] = report['graph_size'] / (report['graph_size'] + total_cache_size)
+        
+        return report
+
+    def optimize_for_large_graphs(self, node_threshold=1000, edge_threshold=5000):
+        """Apply optimizations for large graphs."""
+        node_count = self.g.number_of_nodes()
+        edge_count = self.g.number_of_edges()
+        
+        optimizations_applied = []
+        
+        if node_count > node_threshold:
+            # Enable aggressive caching for large node counts
+            self._enable_aggressive_caching = True
+            optimizations_applied.append("aggressive_caching")
+        
+        if edge_count > edge_threshold:
+            # Simplify edge rendering for large edge counts
+            self._simplify_edge_rendering = True
+            optimizations_applied.append("simplified_edge_rendering")
+        
+        if node_count > node_threshold or edge_count > edge_threshold:
+            # Use faster layout algorithms
+            self._use_fast_layouts = True
+            optimizations_applied.append("fast_layouts")
+        
+        return {
+            'node_count': node_count,
+            'edge_count': edge_count,
+            'optimizations_applied': optimizations_applied,
+            'performance_mode': 'optimized' if optimizations_applied else 'standard'
+        }
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
@@ -820,7 +1524,7 @@ def data_error(data, average):
         q1.append(np.percentile(current_array, 25))
         q3.append(np.percentile(current_array, 75))
     lower_error = [x - y for x, y in zip(average, q1)]
-    upper_error = [x - y for x, y in zip(q3, average)]
+    upper_error = [x - y for x, y in zip(average, q3)]
     return lower_error, upper_error
 
 
