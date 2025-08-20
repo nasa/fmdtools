@@ -245,15 +245,15 @@ class CommonTests():
         if os.path.exists(ecfile):
             os.remove(ecfile)
         check_link = False
-        save_args = {'mdlhist': {'filename': mfile}, 'endclass': {'filename': ecfile}}
+        save_args = {'history_filename': mfile, 'result_filename': ecfile, 'tosave': True}
         if runtype == 'nominal':
-            res, hist = prop.nominal(mdl, save_args=save_args)
+            res, hist = prop.nominal(mdl, **save_args)
             check_link = True
         elif runtype == 'one_fault':
             fxn, mode, time = faultscen
-            res, hist = prop.one_fault(mdl, fxn, mode, time, save_args=save_args)
+            res, hist = prop.one_fault(mdl, fxn, mode, time, **save_args)
         elif runtype == 'sequence':
-            res, hist = prop.sequence(mdl, faultscen, {}, save_args=save_args)
+            res, hist = prop.sequence(mdl, faultscen, {}, **save_args)
         else:
             raise Exception("Invalid Run Type" + runtype)
 
@@ -441,30 +441,21 @@ class CommonTests():
             kwargs to send to the propagate method (if any)
         """
         self.start_indiv_save(resfolder, histfolder)
-        save_args = {'mdlhist': {'filename': histfolder+"."+ext},
-                     'endclass': {'filename': resfolder+"."+ext},
-                     'indiv': True}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False, **kwargs}
+        loc_kwargs = gen_save_kwargs(resfolder, histfolder, ext, **kwargs)
         res, hist = prop.single_faults(mdl, **loc_kwargs)
         self.end_indiv_save(res, hist, resfolder, histfolder, ext)
 
     def check_fs_isave(self, mdl, fs, resfolder, histfolder, ext, **kwargs):
         """Check that individually saved results for prop.fault_sample match outputs."""
         self.start_indiv_save(resfolder, histfolder)
-        save_args = {'mdlhist': {'filename': histfolder+"."+ext},
-                     'endclass': {'filename': resfolder+"."+ext},
-                     'indiv': True}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False, **kwargs}
+        loc_kwargs = gen_save_kwargs(resfolder, histfolder, ext, **kwargs)
         res, hist = prop.fault_sample(mdl, fs, **loc_kwargs)
         self.end_indiv_save(res, hist, resfolder, histfolder, ext)
 
     def check_ps_isave(self, mdl, ps, resfolder, histfolder, ext, **kwargs):
         """Check that individually saved prop.parameter_sample results match outputs."""
         self.start_indiv_save(resfolder, histfolder)
-        save_args = {'mdlhist': {'filename': histfolder+"."+ext},
-                     'endclass': {'filename': resfolder+"."+ext},
-                     'indiv': True}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False, **kwargs}
+        loc_kwargs = gen_save_kwargs(resfolder, histfolder, ext, **kwargs)
         res, hist = prop.parameter_sample(mdl, ps, **loc_kwargs)
         self.end_indiv_save(res, hist, resfolder, histfolder, ext)
 
@@ -472,11 +463,19 @@ class CommonTests():
                        resfolder, histfolder, ext, **kwargs):
         """Check that individually saved prop.nested_sample results match outputs."""
         self.start_indiv_save(resfolder, histfolder)
-        save_args = {'mdlhist': {'filename': histfolder+"."+ext},
-                     'endclass': {'filename': resfolder+"."+ext},
-                     'indiv': True}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False,
-                      'faultdomains': faultdomains, 'faultsamples': faultsamples,
-                      **kwargs}
+        loc_kwargs = gen_save_kwargs(resfolder, histfolder, ext,
+                                     faultdomains=faultdomains,
+                                     faultsamples=faultsamples, **kwargs)
+
         res, hist, apps = prop.nested_sample(mdl, ps, **loc_kwargs)
         self.end_indiv_save(res, hist, resfolder, histfolder, ext)
+
+
+def gen_save_kwargs(resfolder, histfolder, ext, **kwargs):
+    return {'history_filename': histfolder+"."+ext,
+            'result_filename': resfolder+"."+ext,
+            'tosave': True,
+            'save_indiv': True,
+            'showprogress': False,
+            'overwrite': True,
+            **kwargs}

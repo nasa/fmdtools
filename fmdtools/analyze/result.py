@@ -566,6 +566,11 @@ class Result(UserDict):
                             ", resulting grouped result is empty")
         return group_hist
 
+    def get_faulty(self):
+        """Get just the results related to fault scenarios from the Result."""
+        faulty = self.get_default_comp_groups()['faulty']
+        return self.get(*faulty).flatten()
+
     def get_default_comp_groups(self):
         """
         Get a dict of nominal and faulty scenario keys from the Result.
@@ -752,7 +757,7 @@ class Result(UserDict):
     def create_simple_fmea(self, *metrics):
         """Make a simple FMEA-stype table of the metrics in the endclasses
         of a list of fault scenarios run. If metrics not provided, returns all"""
-        nested = {k: {**v.endclass} for k, v in self.nest(levels=1).items()}
+        nested = {k: {**v.tend.classify} for k, v in self.nest(levels=1).items()}
         tab = pd.DataFrame.from_dict(nested).transpose()
         if not metrics:
             return tab

@@ -389,10 +389,10 @@ class History(Result):
 
     def _prep_faulty(self):
         """Create a faulty history of states from the current history."""
-        if self.is_in('faulty'):
-            return self.faulty.flatten()
-        else:
-            return self.flatten()
+        try:
+            return self.get_faulty()
+        except KeyError:
+            return self
 
     def _prep_nom_faulty(self, nomhist={}, align=True):
         """Create a nominal history of states from the current history."""

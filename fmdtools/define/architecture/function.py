@@ -564,10 +564,10 @@ class FunctionArchitecture(Architecture):
 
         Includes profile of fxn/flow memory usage.
         """
-        mem_profile = {}
+        mem_profile = {"params": 0}
         mem = 0
         if hasattr(self, 'p'):
-            mem_profile['params'] = sys.getsizeof(self.p)
+            mem_profile['params'] += sys.getsizeof(self.p)
         mem_profile['params'] += sys.getsizeof(self.sp)
         mem_profile['params'] += sys.getsizeof(self.track)
         for fxnname, fxn in self.fxns.items():

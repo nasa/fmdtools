@@ -39,7 +39,7 @@ class epsTests(unittest.TestCase, CommonTests):
         backwards through the graph as expected - distributor short leads to empty battery
         """
         res, hist = prop.one_fault(self.mdl, "distribute_ee", "short",
-                                   desired_result="endfaults")
+                                   to_return="endfaults")
         self.assertEqual(res["endfaults"], ['store_ee.no_storage', 'distribute_ee.short'])
 
     def test_backward_fault_prop_2(self):
@@ -47,7 +47,7 @@ class epsTests(unittest.TestCase, CommonTests):
         backwards through the graph as expected - motor short leads to distributor short
         """
         res, hist = prop.one_fault(self.mdl, "ee_to_me", "short",
-                                   desired_result="endfaults")
+                                   to_return="endfaults")
         self.assertEqual(res["endfaults"], ['store_ee.no_storage', 'distribute_ee.short', 'ee_to_me.short'])
 
     def test_all_faults(self):

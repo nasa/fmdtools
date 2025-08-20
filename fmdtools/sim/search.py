@@ -740,7 +740,7 @@ class BaseSimProblem(BaseProblem):
             to_return argument to prop_method.
         """
         if self.keep_ec:
-            des_res = {'end': ['class']}
+            des_res = {'end': ['classify']}
         else:
             des_res = {}
         for n in {**self.objectives, **self.constraints}.values():
@@ -767,7 +767,7 @@ class BaseSimProblem(BaseProblem):
 
     def close_pool(self):
         """Close pool if instantiated in the Problem."""
-        propagate.close_pool({**self.kwargs, 'close_pool': True})
+        propagate.close_pool(self.kwargs.get('pool', None))
 
 
 class ParameterSimProblem(BaseSimProblem):
@@ -821,7 +821,7 @@ class ParameterSimProblem(BaseSimProblem):
     ...     def init_problem(self, **kwargs):
     ...         self.add_sim(ExampleFunction(), "nominal")
     ...         self.add_parameterdomain(expd)
-    ...         self.add_result_objective("f1", "class.xy")
+    ...         self.add_result_objective("f1", "classify.xy")
 
     >>> ex_obj_prob = ExampleParameterSimProblemObj()
     >>> ex_obj_prob.f1(1, 1)

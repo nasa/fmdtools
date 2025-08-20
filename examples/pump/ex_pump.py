@@ -519,7 +519,7 @@ class Pump(FunctionArchitecture):
         """Indicate that the pump is on."""
         return self.flows['wat_1'].s.flowrate > 0
 
-    def classify(self, scen={}, mdlhists={}, **kwargs):
+    def classify(self, scen={}, nomhist={}, **kwargs):
         """
         Classify the simulation run/scenario.
 
@@ -536,19 +536,19 @@ class Pump(FunctionArchitecture):
             repcost = self.calc_repaircost()
         else:
             repcost = 0.0
-        if 'water' in self.p.cost:
-            lostwat = sum(mdlhists['nominal'].flows.wat_2.s.flowrate -
-                          mdlhists['faulty'].flows.wat_2.s.flowrate)
+        if 'water' in self.p.cost and nomhist:
+            lostwat = sum(nomhist.flows.wat_2.s.flowrate -
+                          self.h.flows.wat_2.s.flowrate)
             watcost = 750 * lostwat * self.sp.dt
-        elif 'water_exp' in self.p.cost:
-            wat = mdlhists['nominal'].flows.wat_2.s.flowrate - \
-                mdlhists['faulty'].flows.wat_2.s.flowrate
+        elif 'water_exp' in self.p.cost and nomhist:
+            wat = nomhist.flows.wat_2.s.flowrate - \
+                self.h.flows.wat_2.s.flowrate
             watcost = 100 * sum(np.array(accumulate(wat))**2) * self.sp.dt
         else:
             watcost = 0.0
-        if 'ee' in self.p.cost:
-            eespike = [spike for spike in mdlhists['faulty'].flows.ee_1.s.current -
-                       mdlhists['nominal'].flows.ee_1.s.current if spike > 1.0]
+        if 'ee' in self.p.cost and nomhist:
+            eespike = [spike for spike in self.h.flows.ee_1.s.current -
+                       nomhist.flows.ee_1.s.current if spike > 1.0]
             if len(eespike) > 0:
                 eecost = 14 * \
                     sum(np.array(reseting_accumulate(eespike))) * self.sp.dt
@@ -671,7 +671,7 @@ if __name__ == "__main__":
     
     mdl = Pump()
     endfaults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
-                                             time=10, desired_result='endfaults')
+                                             time=10, to_return='faults')
     # import doctest
     # doctest.testmod(verbose=True)
     Pump().get_vars("flows.ee_1")

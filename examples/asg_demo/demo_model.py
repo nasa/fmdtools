@@ -149,7 +149,7 @@ class ProduceHazard(Function):
     flow_hazard = Hazard
 
     def dynamic_behavior(self):
-        if not time % 4:
+        if not self.t.time % 4:
             self.hazard.s.present = True
         else:
             self.hazard.s.present = False
@@ -194,9 +194,9 @@ if __name__ == '__main__':
     mdl = HazardModel()
     result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard.aa.acts.act',
                                                  'unable', time=4,
-                                                 desired_result='graph')
+                                                 to_return='graph')
 
-    result_fault.graph.draw()
+    result_fault.get_faulty().tend.graph.draw()
     ex_fxn = DetectHazard('detect_hazard')
     result_indiv, hist_indiv = prop.nominal(ex_fxn,
                                             disturbances={5:{'aa.flows.hazard.s.present':True}})
@@ -206,5 +206,5 @@ if __name__ == '__main__':
 
     result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard.aa.acts.perceive',
                                                  'failed', time=4,
-                                                 desired_result='graph.fxns.detect_hazard.aa')
-    result_fault.graph.fxns.detect_hazard.aa.draw_graphviz(layout='dot')
+                                                 to_return='graph.fxns.detect_hazard.aa')
+    result_fault.get_faulty().tend.graph.fxns.detect_hazard.aa.draw_graphviz(layout='dot')

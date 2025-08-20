@@ -330,6 +330,7 @@ class BaseObject(object):
                 container_args = {**default_args, **container_args}
                 if issubclass(container_initializer, BaseObject):
                     container_args['root'] = self.get_full_name()
+                    container_args['track'] = get_sub_include(rolename, self.track)
                 try:
                     container = container_initializer(**container_args)
                 except AttributeError as ae:

@@ -62,7 +62,7 @@ class TankTests(unittest.TestCase, CommonTests):
         for scen in self.fs.scenarios():
             seq = scen.sequence
             name = scen.name
-            res, hist = prop.sequence(self.mdl, seq=seq)
+            res, hist = prop.sequence(self.mdl, seq=seq, showprogress=False)
             faulthist = hist.faulty
             self.check_same_hist(faulthist, hists.get(name), "approach")
 
@@ -115,17 +115,20 @@ class TankTests(unittest.TestCase, CommonTests):
                                          ('operation', 1, 20)),
                               'end_time': 20.0, 'dt': 1.0,
                               'units': 'min', 'use_local': False})
-        _, hist_global = prop.one_fault(mdl_global, 'store_water', 'leak', time=2)
+        _, hist_global = prop.one_fault(mdl_global, 'store_water', 'leak', time=2,
+                                        showprogress=False)
         hist_global = hist_global.flatten()
 
         mdl_loc_low = Tank(p={'reacttime': 2, 'store_tstep': 0.1})
-        _, hist_loc_low = prop.one_fault(mdl_loc_low, 'store_water', 'leak', time=2)
+        _, hist_loc_low = prop.one_fault(mdl_loc_low, 'store_water', 'leak', time=2,
+                                         showprogress=False)
         hist_loc_low = hist_loc_low.flatten()
 
         self.compare_results(hist_global, hist_loc_low)
 
         mdl_loc_high = Tank(p={'reacttime': 2, 'store_tstep': 3.0})
-        _, hist_loc_high = prop.one_fault(mdl_loc_high, 'store_water', 'leak', time=2)
+        _, hist_loc_high = prop.one_fault(mdl_loc_high, 'store_water', 'leak', time=2,
+                                          showprogress=False)
         hist_loc_high = hist_loc_high.flatten()
         for i in [2, 5, 8, 12]:
             slice_global = hist_global.get_slice(i)
@@ -147,7 +150,8 @@ class TankTests(unittest.TestCase, CommonTests):
         for extension in [".npz", ".csv", ".json"]:
             faultscen = ('import_water', 'stuck', 5)
             fname = "tank_hist"+extension, "tank_res"+extension
-            self.check_onerun_save(self.mdl, 'one_fault', *fname, faultscen=faultscen)
+            self.check_onerun_save(self.mdl, 'one_fault', *fname, faultscen=faultscen,
+                                   showprogress=False)
 
     def test_save_load_multfault(self):
         for extension in [".npz", ".csv", ".json"]:
@@ -248,13 +252,13 @@ if __name__ == '__main__':
     sys.path.append("../..")
     # NOTE: reset expected not to work since args are no longer being saved
 
-    # suite = unittest.TestSuite()
-    # suite.addTest(TankTests("test_model_reset"))
-    # runner = unittest.TextTestRunner()
-    # runner.run(suite)
+    suite = unittest.TestSuite()
+    suite.addTest(TankTests("test_fault_sample_isave"))
+    runner = unittest.TextTestRunner()
+    runner.run(suite)
 
     # suite = unittest.TestSuite()
-    # suite.addTest(TankTests("test_model_copy_same"))
+    # suite.addTest(TankTests("test_save_load_nominal"))
     # runner = unittest.TextTestRunner()
     # runner.run(suite)
 
@@ -265,7 +269,11 @@ if __name__ == '__main__':
     # runner = unittest.TextTestRunner()
     # runner.run(suite)
 
-    unittest.main()
+    # test_fault_sample_isave
+    # test_fault_sample_save
+    # test_nested_sample_isave
+
+    # unittest.main()
 
     # mdl = Tank()
     # scen = {'human': 'NotDetected'}

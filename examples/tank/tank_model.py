@@ -433,6 +433,8 @@ if __name__ == '__main__':
     import fmdtools.sim.propagate as propagate
     from fmdtools.sim.sample import FaultDomain, FaultSample
 
+    mdl = Tank()
+
     mdl = Tank(track='all')
 
     endclass, mdlhist = propagate.one_fault(mdl, 'human.aa.acts.look', 'not_visible', time=2,
@@ -443,37 +445,37 @@ if __name__ == '__main__':
     fig, ax = mg.draw_from(10, mdlhist)
 
     # nominal run
-    endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass', 'graph'])
+    res, mdlhist = propagate.nominal(mdl, to_return=['classify', 'graph'])
     mdlhist.plot_line("fxns.store_water.s.level")
-    endresults.graph.draw()
+    res.tend.graph.draw()
 
     # faulty run
     endres, mdlhist = propagate.one_fault(
-        mdl, 'store_water', 'leak', time=2, desired_result='graph')
+        mdl, 'store_water', 'leak', time=2, to_return='graph')
     mdlhist.plot_line("fxns.store_water.s.level",
                       title='Leak Response', time_slice=2)
-    endres.graph.draw(title="leak response at time=end")
+    endres.store_water_leak_t2.tend.graph.draw(title="leak response at time=end")
 
     resgraph, mdlhist = propagate.one_fault(
-        mdl, 'human.aa.acts.detect', 'false_high', time=2, desired_result='graph')
+        mdl, 'human.aa.acts.detect', 'false_high', time=2, to_return='graph')
 
     mdlhist.plot_line("fxns.store_water.s.level",
                       title='detect_false_high', time_slice=2)
-    resgraph.graph.draw(title='detect_false_high, t=2')
+    resgraph.get_faulty().tend.graph.draw(title='detect_false_high, t=2')
 
     resgraph, mdlhist = propagate.one_fault(
-        mdl, 'human.aa.acts.turn', 'wrong_valve', time=2, desired_result='graph')
+        mdl, 'human.aa.acts.turn', 'wrong_valve', time=2, to_return='graph')
 
     mdlhist.plot_line("fxns.store_water.s.level",
                       title='turn_wrong_valve', time_slice=2)
-    resgraph.graph.draw(title='turn_wrong_valve, t=2')
+    resgraph.get_faulty().tend.graph.draw(title='turn_wrong_valve, t=2')
 
     mdl = Tank(p=TankParam(reacttime=2), sp=dict(dt=1.0))
     resgraph, mdlhist = propagate.one_fault(
-        mdl, 'store_water', 'leak', time=3, desired_result='graph')
+        mdl, 'store_water', 'leak', time=3, to_return='graph')
     mdlhist.plot_line("fxns.store_water.s.level",
                       title='Leak Response', time_slice=2)
-    resgraph.graph.draw(title='turn_wrong_valve, t=end')
+    resgraph.get_faulty().tend.graph.draw(title='turn_wrong_valve, t=end')
 
     # run all faults - note: all faults get caught!
     endclasses, hist = propagate.single_faults(mdl)

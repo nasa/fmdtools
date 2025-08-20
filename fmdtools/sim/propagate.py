@@ -207,7 +207,8 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.nan,
         scen = Scenario(sequence=seq,
                         rate=rate,
                         name='faulty',
-                        times=tuple([*seq.keys()]))
+                        times=tuple([*seq.keys()]),
+                        time=min([*seq.keys()]))
 
     if include_nominal:
         sim = MultiEventSimulation(mdl=mdl, samp=scen,
@@ -334,9 +335,9 @@ class SimEvent(BaseContainer):
     Examples
     --------
     >>> from fmdtools.define.block.function import ExampleFunction
-    >>> se = SimEvent(time=5.0, copy=True, to_return=["class"])
+    >>> se = SimEvent(time=5.0, copy=True, to_return=["classify"])
     >>> se
-    SimEvent(time=5.0, copy=True, to_return=['class'])
+    SimEvent(time=5.0, copy=True, to_return=['classify'])
     >>> se.run(ExampleFunction())
     >>> se.mdl_copy # note that copied models are gotten just before the simulation
     examplefunction ExampleFunction
@@ -345,7 +346,7 @@ class SimEvent(BaseContainer):
     - t=Time(time=4.0, timers={})
     - exf=ExampleFlow(s=(x=1.0, y=1.0))
     >>> se.result
-    class: 
+    classify: 
     --xy:                                4.0
     """
 
@@ -418,34 +419,37 @@ class BaseSimulation(BaseContainer):
         Name of the simulation.
     mdl : Simulable
         Model associated with the simulation
-    result : Result
-        Result returned by the simulation
-    history : History
-        History of model states
+    to_return : dict
+        Specification of results to return from the model during simulation. Can be
+        specified in a few ways, including: {'time': ['val', 'classify', 'graph']}, where
+        time would be the sim time to get the result from, 'val' would be a value to
+        get, 'classify' would be what mdl.classify() returns, and 'graph' would be a graph.
     tosave : bool
         Whether to save the results/history of the sim. Default is False
     overwrite : bool
         Whether to overwrite existing files
-    to_return : dict
-        Specification of results to return from the model during simulation. Can be
-        specified in a few ways, including: {'time': ['val', 'class', 'graph']}, where
-        time would be the sim time to get the result from, 'val' would be a value to
-        get, 'class' would be what mdl.classify() returns, and 'graph' would be a graph.
+    indiv_id : bool
+        Whether to put individual id at the beginning of the save file.
     result_filename : str
         Name of the result to save as
     history_filename : str
         Name of the history to save as
+    result : Result
+        Result returned by the simulation
+    history : History
+        History of model states
     """
 
     name: str = ''
     mdl: Simulable = Block()
-    result: Result = Result()
-    history: History = History()
+    to_return: dict = {"end": "classify"}
     tosave: bool = False
     overwrite: bool = False
-    to_return: dict = {"end": "class"}
+    indiv_id: bool = False
     result_filename: str = "result.csv"
     history_filename: str = "history.csv"
+    result: Result = Result()
+    history: History = History()
 
     def __init__(self, *args, **kwargs):
         """Instantiate the sim and clean up to_return."""
@@ -454,16 +458,23 @@ class BaseSimulation(BaseContainer):
 
     def save(self):
         """Save the results of the sim."""
+        if self.indiv_id:
+            result_id = self.name
+        else:
+            result_id = ''
         if self.result and self.result_filename:
-            self.result.save(self.result_filename, result_id=self.name,
+            self.result.save(self.result_filename, result_id=result_id,
                              overwrite=self.overwrite)
         if self.history and self.history_filename:
-            self.history.save(self.history_filename, result_id=self.name,
+            self.history.save(self.history_filename, result_id=result_id,
                               overwrite=self.overwrite)
 
     def __call__(self, **kwargs):
         """Run the sim, save its results (if needed), return its result and history."""
-        self.run(**kwargs)
+        try:
+            self.run(**kwargs)
+        except Exception as e:
+            raise Exception("Error simulating "+self.name+": ") from e
         if self.tosave:
             self.save(**filter_kwargs(self.save, **kwargs))
         return self.result.flatten(), self.history.flatten()
@@ -508,21 +519,21 @@ class Simulation(BaseSimulation):
     'nominal'
     >>> sim
     Simulation with SimEvents:
-    - end=SimEvent(to_return={'class': None})
+    - end=SimEvent(to_return={'classify': None})
     >>> res, hist = sim()
     >>> res
-    tend.class.xy:                     100.0
+    tend.classify.xy:                  100.0
 
     >>> esf = ExampleFunction() # here we try sometime more complicated:
     >>> s = SingleFaultScenario.from_fault(("examplefunction", "low"), 3.0, esf)
-    >>> sim = Simulation(mdl=esf, scen=s, ctimes = [2, 4], to_return={1.0: 's.x', "end": ["class", "graph"]})
+    >>> sim = Simulation(mdl=esf, scen=s, ctimes = [2, 4], to_return={1.0: 's.x', "end": ["classify", "graph"]})
     >>> sim
     Simulation with SimEvents:
     - 1.0=SimEvent(to_return={'s.x': None})
     - 2.0=SimEvent(copy=True)
     - 3.0=SimEvent(injection=Injection(faults={'examplefunction': ['low']}, disturbances={}))
     - 4.0=SimEvent(copy=True)
-    - end=SimEvent(to_return={'class': None, 'graph': None})
+    - end=SimEvent(to_return={'classify': None, 'graph': None})
     >>> res, hist = sim()
     >>> sim.mdl
     examplefunction ExampleFunction
@@ -531,7 +542,7 @@ class Simulation(BaseSimulation):
     - t=Time(time=100.0, timers={})
     - exf=ExampleFlow(s=(x=1964.0, y=1.0))
     >>> [*res.keys()]
-    ['t1p0.s.x', 'tend.class.xy', 'tend.graph']
+    ['t1p0.s.x', 'tend.classify.xy', 'tend.graph']
     >>> sim.get_models()
     {2.0: examplefunction ExampleFunction
     - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
@@ -662,6 +673,14 @@ def exec_sim(args):
         return sim()
 
 
+def close_pool(pool=None):
+    """Close a pool if present."""
+    if pool:
+        pool.close()
+        pool.terminate()
+        pool.join()
+
+
 class MultiSimulation(BaseSimulation):
     """
     Simulation of multiple models.
@@ -718,50 +737,50 @@ class MultiSimulation(BaseSimulation):
      # the amount x increments and thus the "xy" classification at the end
      # y has no such effect since it only increments during faults
      >>> res
-     rep0_range_0.tend.class.xy:          0.0
-     rep0_range_1.tend.class.xy:        100.0
-     rep0_range_2.tend.class.xy:        200.0
-     rep0_range_3.tend.class.xy:        300.0
-     rep0_range_4.tend.class.xy:        400.0
-     rep0_range_5.tend.class.xy:        500.0
-     rep0_range_6.tend.class.xy:        600.0
-     rep0_range_7.tend.class.xy:        700.0
-     rep0_range_8.tend.class.xy:        800.0
-     rep0_range_9.tend.class.xy:        900.0
-     rep0_range_10.tend.class.xy:      1000.0
-     rep0_range_11.tend.class.xy:         0.0
-     rep0_range_12.tend.class.xy:       100.0
-     rep0_range_13.tend.class.xy:       200.0
-     rep0_range_14.tend.class.xy:       300.0
-     rep0_range_15.tend.class.xy:       400.0
-     rep0_range_16.tend.class.xy:       500.0
-     rep0_range_17.tend.class.xy:       600.0
-     rep0_range_18.tend.class.xy:       700.0
-     rep0_range_19.tend.class.xy:       800.0
-     rep0_range_20.tend.class.xy:       900.0
-     rep0_range_21.tend.class.xy:      1000.0
-     rep0_range_22.tend.class.xy:         0.0
-     rep0_range_23.tend.class.xy:       100.0
-     rep0_range_24.tend.class.xy:       200.0
-     rep0_range_25.tend.class.xy:       300.0
-     rep0_range_26.tend.class.xy:       400.0
-     rep0_range_27.tend.class.xy:       500.0
-     rep0_range_28.tend.class.xy:       600.0
-     rep0_range_29.tend.class.xy:       700.0
-     rep0_range_30.tend.class.xy:       800.0
-     rep0_range_31.tend.class.xy:       900.0
-     rep0_range_32.tend.class.xy:      1000.0
-     rep0_range_33.tend.class.xy:         0.0
-     rep0_range_34.tend.class.xy:       100.0
-     rep0_range_35.tend.class.xy:       200.0
-     rep0_range_36.tend.class.xy:       300.0
-     rep0_range_37.tend.class.xy:       400.0
-     rep0_range_38.tend.class.xy:       500.0
-     rep0_range_39.tend.class.xy:       600.0
-     rep0_range_40.tend.class.xy:       700.0
-     rep0_range_41.tend.class.xy:       800.0
-     rep0_range_42.tend.class.xy:       900.0
-     rep0_range_43.tend.class.xy:      1000.0
+     rep0_range_0.tend.classify.xy:       0.0
+     rep0_range_1.tend.classify.xy:     100.0
+     rep0_range_2.tend.classify.xy:     200.0
+     rep0_range_3.tend.classify.xy:     300.0
+     rep0_range_4.tend.classify.xy:     400.0
+     rep0_range_5.tend.classify.xy:     500.0
+     rep0_range_6.tend.classify.xy:     600.0
+     rep0_range_7.tend.classify.xy:     700.0
+     rep0_range_8.tend.classify.xy:     800.0
+     rep0_range_9.tend.classify.xy:     900.0
+     rep0_range_10.tend.classify.xy:   1000.0
+     rep0_range_11.tend.classify.xy:      0.0
+     rep0_range_12.tend.classify.xy:    100.0
+     rep0_range_13.tend.classify.xy:    200.0
+     rep0_range_14.tend.classify.xy:    300.0
+     rep0_range_15.tend.classify.xy:    400.0
+     rep0_range_16.tend.classify.xy:    500.0
+     rep0_range_17.tend.classify.xy:    600.0
+     rep0_range_18.tend.classify.xy:    700.0
+     rep0_range_19.tend.classify.xy:    800.0
+     rep0_range_20.tend.classify.xy:    900.0
+     rep0_range_21.tend.classify.xy:   1000.0
+     rep0_range_22.tend.classify.xy:      0.0
+     rep0_range_23.tend.classify.xy:    100.0
+     rep0_range_24.tend.classify.xy:    200.0
+     rep0_range_25.tend.classify.xy:    300.0
+     rep0_range_26.tend.classify.xy:    400.0
+     rep0_range_27.tend.classify.xy:    500.0
+     rep0_range_28.tend.classify.xy:    600.0
+     rep0_range_29.tend.classify.xy:    700.0
+     rep0_range_30.tend.classify.xy:    800.0
+     rep0_range_31.tend.classify.xy:    900.0
+     rep0_range_32.tend.classify.xy:   1000.0
+     rep0_range_33.tend.classify.xy:      0.0
+     rep0_range_34.tend.classify.xy:    100.0
+     rep0_range_35.tend.classify.xy:    200.0
+     rep0_range_36.tend.classify.xy:    300.0
+     rep0_range_37.tend.classify.xy:    400.0
+     rep0_range_38.tend.classify.xy:    500.0
+     rep0_range_39.tend.classify.xy:    600.0
+     rep0_range_40.tend.classify.xy:    700.0
+     rep0_range_41.tend.classify.xy:    800.0
+     rep0_range_42.tend.classify.xy:    900.0
+     rep0_range_43.tend.classify.xy:   1000.0
     """
 
     samp: object = Scenario()
@@ -785,10 +804,7 @@ class MultiSimulation(BaseSimulation):
 
     def close_pool(self):
         """Close the pool so that the threads do not keep running."""
-        if self.pool:
-            self.pool.close()
-            self.pool.terminate()
-            self.pool.join()
+        close_pool(self.pool)
 
     def run(self, **kwargs):
         """Simulate the scenarios, closing the pool when done."""
@@ -797,7 +813,10 @@ class MultiSimulation(BaseSimulation):
         else:
             runner = self.std_runner
         scenlist = self.samp.scenarios()
-        inputs = self.gen_inputs(scenlist)
+        try:
+            inputs = self.gen_inputs(scenlist)
+        except KeyError as e:
+            raise Exception("Not enough models: "+str(self.mdls)) from e
         res_list = list(tqdm.tqdm(runner(inputs),
                                   total=len(inputs),
                                   disable=not (self.showprogress),
@@ -815,7 +834,10 @@ class MultiSimulation(BaseSimulation):
     def gen_sim_kwargs(self, **kwargs):
         """Generate the arguments for the Simulations to run."""
         def_kwar = dict(mdl=self.mdl,
-                        save=self.save_indiv,
+                        tosave=self.save_indiv,
+                        result_filename=self.result_filename,
+                        history_filename=self.history_filename,
+                        indiv_id=True,
                         overwrite=self.overwrite,
                         to_return=self.to_return,
                         protect=not bool(self.pool))
@@ -907,7 +929,7 @@ class MultiEventSimulation(MultiSimulation):
      - exfxnarch_fxns_ex_fxn2_short_t2
     >>> res, hist = sim()
     >>> res
-    nominal.tend.class.flowval:      10100.0
+    nominal.tend.classify.flowval:   10100.0
     exfxnarch_fxns_ex_fx              5050.0
     exfxnarch_fxns_ex_fx              5150.0
     exfxnarch_fxns_ex_fx              5050.0
@@ -921,7 +943,7 @@ class MultiEventSimulation(MultiSimulation):
     >>> sim = MultiEventSimulation(mdl=ExFxnArch(), samp=exfs, staged=False, showprogress=False)
     >>> res, hist = sim()
     >>> res
-    nominal.tend.class.flowval:      10100.0
+    nominal.tend.classify.flowval:   10100.0
     exfxnarch_fxns_ex_fx              5050.0
     exfxnarch_fxns_ex_fx              5150.0
     exfxnarch_fxns_ex_fx              5050.0
@@ -1058,13 +1080,13 @@ class NestedSimulation(MultiSimulation):
     {'fs': (('fault_times', 'fd', [0]), {})})
     >>> res, hist = n()
     >>> res
-    rep0_var_0.nominal.tend.class.xy:    0.0
+    rep0_var_0.nominal.tend.classify.xy: 0.0
     rep0_var_0.examplefu               120.0
-    rep0_var_1.nominal.tend.class.xy:  100.0
+    rep0_var_1.nominal.tend.classify.xy: 100.0
     rep0_var_1.examplefu               120.0
-    rep0_var_2.nominal.tend.class.xy:  100.0
+    rep0_var_2.nominal.tend.classify.xy: 100.0
     rep0_var_2.examplefu               220.0
-    rep0_var_3.nominal.tend.class.xy:  200.0
+    rep0_var_3.nominal.tend.classify.xy: 200.0
     rep0_var_3.examplefu               220.0
     >>> n.apps
     {'rep0_var_0': SampleApproach for examplefunction with: 
@@ -1085,13 +1107,13 @@ class NestedSimulation(MultiSimulation):
     >>> n = NestedSimulation(mdl=esf, samp=exp_ps_4, faultdomains={"fd": (("fault", "examplefunction", "low"), {})}, faultsamples={"fs": (("fault_times", "fd", [0]), {})}, showprogress=False, staged=False)
     >>> res, hist = n()
     >>> res
-    rep0_var_0.nominal.tend.class.xy:    0.0
+    rep0_var_0.nominal.tend.classify.xy: 0.0
     rep0_var_0.examplefu               120.0
-    rep0_var_1.nominal.tend.class.xy:  100.0
+    rep0_var_1.nominal.tend.classify.xy: 100.0
     rep0_var_1.examplefu               120.0
-    rep0_var_2.nominal.tend.class.xy:  100.0
+    rep0_var_2.nominal.tend.classify.xy: 100.0
     rep0_var_2.examplefu               220.0
-    rep0_var_3.nominal.tend.class.xy:  200.0
+    rep0_var_3.nominal.tend.classify.xy: 200.0
     rep0_var_3.examplefu               220.0
     """
 
@@ -1126,7 +1148,10 @@ class NestedSimulation(MultiSimulation):
     def gen_sim_kwargs(self, **kwargs):
         """Generate applicable simulation kwargs for MultiEventSimulation."""
         def_kwar = dict(mdl=self.mdl,
-                        save=self.save_indiv,
+                        tosave=self.save_indiv,
+                        result_filename=self.result_filename,
+                        history_filename=self.history_filename,
+                        indiv_id=True,
                         overwrite=self.overwrite,
                         to_return=self.to_return,
                         staged=self.staged,

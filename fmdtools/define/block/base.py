@@ -315,14 +315,14 @@ class Simulable(BaseObject):
             Result with returned class attributes.
         """
         sub_returns = [x.split('.')[1] for x in to_return
-                       if isinstance(x, str) and 'class.' in x]
-        get_endclass = 'class' in to_return
+                       if isinstance(x, str) and 'classify.' in x]
+        get_endclass = 'classify' in to_return
         if get_endclass or sub_returns:
             res = self.classify(**filter_kwargs(self.classify, **kwargs))
             if get_endclass:
-                result['class'] = Result(res)
+                result['classify'] = Result(res)
             for sub_r in sub_returns:
-                result['class.'+sub_r] = res[sub_r]
+                result['classify.'+sub_r] = res[sub_r]
         return result
 
     def get_resgraph(self, to_return={}, result={}, nomresult={}):
