@@ -6,10 +6,10 @@ Package for graph representations and analysis of model structures.
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
 
-The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+The ""Fault Model Design tools - fmdtools version 2"" software is licensed
 under the Apache License, Version 2.0 (the "License"); you may not use this
 file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0. 
+License at http://www.apache.org/licenses/LICENSE/2.0. 
 
 Unless required by applicable law or agreed to in writing, software distributed
 under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -21,3 +21,4 @@ from fmdtools.analyze.graph import label
 from fmdtools.analyze.graph import style
 from fmdtools.analyze.graph import base
 from fmdtools.analyze.graph import model
+

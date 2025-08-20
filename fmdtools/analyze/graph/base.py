@@ -695,72 +695,7 @@ class Graph(object):
         gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
 
-    def draw_drawio(self, saveas='', **kwargs):
-        """
-        Draw the graph using DrawIO format.
 
-        This method generates DrawIO XML that can be imported into draw.io
-        for editing and visualization. It uses the existing styling and
-        positioning systems.
-
-        Phase 4 Features:
-        - Performance optimizations with caching
-        - Advanced layout algorithms (clustering, hierarchical)
-        - Enhanced styling capabilities
-        - Memory-efficient processing
-
-        Parameters
-        ----------
-        saveas : str, optional
-            File to save the DrawIO XML as. The default is ''.
-        **kwargs : kwargs
-            Arguments for various supporting functions:
-            (set_pos, set_edge_styles, set_edge_labels, set_node_styles,
-            set_node_labels, etc) plus layout parameters:
-            - improve_layout : bool, default True - Apply layout improvements
-            - min_node_spacing : int, default 150 - Minimum distance between nodes
-            - edge_routing : str, default 'orthogonal' - Edge routing style
-            - use_cache : bool, default True - Use layout caching for performance
-            - clustering : bool, default False - Enable automatic graph clustering
-            - hierarchical : bool, default False - Use hierarchical layout
-            - verbose : bool, default False - Show performance metrics
-
-        Returns
-        -------
-        str
-            DrawIO XML content as a string
-
-        Examples
-        --------
-        >>> from fmdtools.analyze.graph.base import Graph, ex_nxgraph
-        >>> graph = Graph(ex_nxgraph)
-        >>> graph.set_pos()
-        >>> xml_content = graph.draw_drawio()
-        >>> xml_content.startswith('<?xml version="1.0" encoding="UTF-8"?>')
-        True
-        >>> '<mxfile' in xml_content
-        True
-        
-        # Phase 4 advanced features
-        >>> xml_content = graph.draw_drawio(clustering=True, hierarchical=True, verbose=True)
-        >>> xml_content.startswith('<?xml version="1.0" encoding="UTF-8"?>')
-        True
-        """
-        from .drawio import create_drawio_xml
-        
-        # Use existing position setting and styling
-        kwargs = self.set_properties(**kwargs)
-        
-        # Generate XML using existing graph structure and styles
-        xml_content = create_drawio_xml(self.g, self.pos, self.node_styles, 
-                                       self.edge_styles, self.node_labels, self.edge_labels,
-                                       **kwargs)
-        
-        if saveas:
-            with open(saveas, 'w') as f:
-                f.write(xml_content)
-        
-        return xml_content
 
     def calc_aspl(self):
         """
@@ -1129,86 +1064,11 @@ class Graph(object):
         except nx.NetworkXNoPath:
             return None, None, None
 
-    def export_multiple_formats(self, base_filename, formats=['drawio', 'svg', 'png', 'pdf']):
-        """Export graph in multiple formats."""
-        results = {}
-        
-        for fmt in formats:
-            try:
-                if fmt == 'drawio':
-                    xml = self.draw_drawio()
-                    filename = f"{base_filename}.drawio"
-                    with open(filename, 'w') as f:
-                        f.write(xml)
-                    results[fmt] = filename
-                elif fmt in ['svg', 'png', 'pdf']:
-                    fig, ax = self.draw()
-                    filename = f"{base_filename}.{fmt}"
-                    fig.savefig(filename, bbox_inches='tight', dpi=300)
-                    results[fmt] = filename
-                else:
-                    results[fmt] = f"Error: Unsupported format '{fmt}'"
-            except Exception as e:
-                results[fmt] = f"Error: {e}"
-                
-        return results
 
-    def interactive_search(self, search_term, search_properties=['name', 'nodetype', 'edgetype']):
-        """Interactive search functionality for nodes and edges."""
-        results = {
-            'nodes': [],
-            'edges': [],
-            'highlighted': set()
-        }
-        
-        # Search in nodes
-        for node, data in self.g.nodes(data=True):
-            for prop in search_properties:
-                if prop in data and search_term.lower() in str(data[prop]).lower():
-                    results['nodes'].append((node, data))
-                    results['highlighted'].add(node)
-                    break
-        
-        # Search in edges
-        for edge in self.g.edges():
-            edge_data = self.g.get_edge_data(*edge)
-            for prop in search_properties:
-                if prop in edge_data and search_term.lower() in str(edge_data[prop]).lower():
-                    results['edges'].append((edge, edge_data))
-                    results['highlighted'].add(edge[0])
-                    results['highlighted'].add(edge[1])
-                    break
-        
-        return results
 
-    def batch_process_graphs(self, graph_list, operation='draw_drawio', **kwargs):
-        """Batch process multiple graphs with the same operation."""
-        results = []
-        
-        for i, graph in enumerate(graph_list):
-            try:
-                if operation == 'draw_drawio':
-                    result = graph.draw_drawio(**kwargs)
-                elif operation == 'analyze':
-                    result = graph.analyze_graph_performance()
-                elif operation == 'export':
-                    result = graph.export_multiple_formats(**kwargs)
-                else:
-                    result = getattr(graph, operation)(**kwargs)
-                
-                results.append({
-                    'index': i,
-                    'success': True,
-                    'result': result
-                })
-            except Exception as e:
-                results.append({
-                    'index': i,
-                    'success': False,
-                    'error': str(e)
-                })
-        
-        return results
+
+
+
 
     def create_cluster_analysis(self):
         """Perform cluster analysis on the graph."""
@@ -1284,181 +1144,15 @@ class Graph(object):
         
         return report
 
-    # Phase 4: Performance Optimization Methods
-    def _invalidate_caches(self):
-        """Invalidate all caches when graph is modified."""
-        self._performance_cache.clear()
-        self._layout_cache.clear()
-        self._analysis_cache.clear()
-        self._style_cache.clear()
-        self._last_modified = hash(str(sorted(self.g.nodes())) + str(sorted(self.g.edges())))
 
-    def _get_cache_key(self, method_name, **kwargs):
-        """Generate a cache key for a method with arguments."""
-        return f"{method_name}_{hash(str(sorted(kwargs.items())))}"
 
-    def analyze_graph_performance_cached(self):
-        """Cached version of analyze_graph_performance."""
-        cache_key = self._get_cache_key('analyze_graph_performance')
-        
-        if cache_key in self._analysis_cache:
-            return self._analysis_cache[cache_key]
-        
-        result = self.analyze_graph_performance()
-        self._analysis_cache[cache_key] = result
-        return result
 
-    def set_pos_cached(self, auto=True, overwrite=True, **pos):
-        """Cached version of set_pos for better performance."""
-        cache_key = self._get_cache_key('set_pos', auto=auto, overwrite=overwrite, **pos)
-        
-        if not overwrite and cache_key in self._layout_cache:
-            self.pos = self._layout_cache[cache_key]
-            return
-        
-        # Call original set_pos method
-        self.set_pos(auto=auto, overwrite=overwrite, **pos)
-        self._layout_cache[cache_key] = self.pos.copy()
 
-    def draw_drawio_optimized(self, saveas='', use_cache=True, **kwargs):
-        """Optimized version of draw_drawio with caching and performance improvements."""
-        if use_cache:
-            cache_key = self._get_cache_key('draw_drawio', saveas=saveas, **kwargs)
-            if cache_key in self._performance_cache:
-                result = self._performance_cache[cache_key]
-                if saveas:
-                    with open(saveas, 'w') as f:
-                        f.write(result)
-                return result
-        
-        try:
-            # Use original draw_drawio method with error handling
-            result = self.draw_drawio(saveas=saveas, **kwargs)
-        except Exception as e:
-            # Fallback: create a simple DrawIO XML
-            result = self._create_fallback_drawio_xml()
-            if saveas:
-                with open(saveas, 'w') as f:
-                    f.write(result)
-        
-        if use_cache:
-            self._performance_cache[cache_key] = result
-        
-        return result
 
-    def _create_fallback_drawio_xml(self):
-        """Create a fallback DrawIO XML for when the main method fails."""
-        return '''<?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="fmdtools" modified="2024-01-01T00:00:00.000Z" agent="fmdtools" version="1.0" etag="fallback">
-  <diagram id="fallback" name="Graph">
-    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
-      <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        <mxCell id="fallback_text" value="Graph visualization temporarily unavailable" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="300" y="300" width="200" height="30" as="geometry"/>
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-</mxfile>'''
 
-    def batch_export_optimized(self, base_filename, formats=['drawio', 'svg', 'png', 'pdf'], 
-                              parallel=True, max_workers=4):
-        """Optimized batch export with parallel processing."""
-        if parallel:
-            import concurrent.futures
-            import threading
-            
-            results = {}
-            
-            def export_format(fmt):
-                try:
-                    if fmt == 'drawio':
-                        xml = self.draw_drawio_optimized(use_cache=True)
-                        filename = f"{base_filename}.drawio"
-                        with open(filename, 'w') as f:
-                            f.write(xml)
-                        return fmt, filename
-                    elif fmt in ['svg', 'png', 'pdf']:
-                        fig, ax = self.draw()
-                        filename = f"{base_filename}.{fmt}"
-                        fig.savefig(filename, bbox_inches='tight', dpi=300)
-                        return fmt, filename
-                    else:
-                        return fmt, f"Error: Unsupported format '{fmt}'"
-                except Exception as e:
-                    return fmt, f"Error: {e}"
-            
-            with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-                futures = {executor.submit(export_format, fmt): fmt for fmt in formats}
-                
-                for future in concurrent.futures.as_completed(futures):
-                    fmt, result = future.result()
-                    results[fmt] = result
-            
-            return results
-        else:
-            # Fall back to sequential processing
-            return self.export_multiple_formats(base_filename, formats)
 
-    def memory_usage_report(self):
-        """Generate a memory usage report for the graph object."""
-        import sys
-        
-        report = {
-            'graph_size': sys.getsizeof(self.g),
-            'node_count': self.g.number_of_nodes(),
-            'edge_count': self.g.number_of_edges(),
-            'cache_sizes': {
-                'performance_cache': len(self._performance_cache),
-                'layout_cache': len(self._layout_cache),
-                'analysis_cache': len(self._analysis_cache),
-                'style_cache': len(self._style_cache)
-            }
-        }
-        
-        # Calculate cache memory usage
-        total_cache_size = 0
-        for cache in [self._performance_cache, self._layout_cache, 
-                     self._analysis_cache, self._style_cache]:
-            total_cache_size += sys.getsizeof(cache)
-            for key, value in cache.items():
-                total_cache_size += sys.getsizeof(key) + sys.getsizeof(value)
-        
-        report['total_cache_memory'] = total_cache_size
-        report['memory_efficiency'] = report['graph_size'] / (report['graph_size'] + total_cache_size)
-        
-        return report
 
-    def optimize_for_large_graphs(self, node_threshold=1000, edge_threshold=5000):
-        """Apply optimizations for large graphs."""
-        node_count = self.g.number_of_nodes()
-        edge_count = self.g.number_of_edges()
-        
-        optimizations_applied = []
-        
-        if node_count > node_threshold:
-            # Enable aggressive caching for large node counts
-            self._enable_aggressive_caching = True
-            optimizations_applied.append("aggressive_caching")
-        
-        if edge_count > edge_threshold:
-            # Simplify edge rendering for large edge counts
-            self._simplify_edge_rendering = True
-            optimizations_applied.append("simplified_edge_rendering")
-        
-        if node_count > node_threshold or edge_count > edge_threshold:
-            # Use faster layout algorithms
-            self._use_fast_layouts = True
-            optimizations_applied.append("fast_layouts")
-        
-        return {
-            'node_count': node_count,
-            'edge_count': edge_count,
-            'optimizations_applied': optimizations_applied,
-            'performance_mode': 'optimized' if optimizations_applied else 'standard'
-        }
+
 
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
