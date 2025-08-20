@@ -587,14 +587,49 @@ class Graph(object):
             return 'rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;'
 
     def _get_edge_style(self, edgetype):
-        """Get DrawIO style for edge type."""
-        styles = {
-            'connection': 'strokeWidth=1;strokeColor=#cccccc;endArrow=classic;',
-            'activation': 'strokeWidth=1;strokeColor=#cccccc;dashed=1;endArrow=open;',
-            'propagation': 'strokeWidth=1;strokeColor=#cccccc;endArrow=classic;',
-            'default': 'strokeWidth=1;strokeColor=#cccccc;endArrow=classic;'
-        }
-        return styles.get(edgetype, styles['default'])
+        """
+        Get DrawIO style for edge type using the existing style system.
+        
+        Examples
+        --------
+        >>> graph = Graph(nx.DiGraph())
+        >>> style = graph._get_edge_style('connection')
+        >>> 'strokeWidth=1' in style
+        True
+        
+        >>> style = graph._get_edge_style('activation')
+        >>> 'dashed=1' in style
+        True
+        """
+        try:
+            # Use the existing style system
+            style_obj = edge_style_factory(edgetype)
+            drawio_props = style_obj.drawio_kwargs()
+            
+            # Convert style properties to DrawIO XML format
+            style_parts = []
+            
+            # Stroke properties
+            if 'strokewidth' in drawio_props:
+                style_parts.append(f"strokeWidth={drawio_props['strokewidth']}")
+            if 'strokecolor' in drawio_props:
+                style_parts.append(f"strokeColor={drawio_props['strokecolor']}")
+            
+            # Arrow properties
+            if 'startarrow' in drawio_props:
+                style_parts.append(f"startArrow={drawio_props['startarrow']}")
+            if 'endarrow' in drawio_props:
+                style_parts.append(f"endArrow={drawio_props['endarrow']}")
+            
+            # Line style
+            if 'dashed' in drawio_props and drawio_props['dashed']:
+                style_parts.append('dashed=1')
+            
+            return ';'.join(style_parts)
+            
+        except Exception:
+            # Fallback to default style
+            return 'strokeWidth=1;strokeColor=#cccccc;endArrow=classic;'
 
     def move_nodes(self, **kwargs):
         """
