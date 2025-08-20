@@ -97,12 +97,7 @@ class Graph(object):
         if check_info:
             self.check_type_info()
         
-        # Phase 4: Performance optimizations - Initialize caches
-        self._performance_cache = {}
-        self._layout_cache = {}
-        self._analysis_cache = {}
-        self._style_cache = {}
-        self._last_modified = None
+
 
     def check_type_info(self):
         """Check that nodes and edges have type data."""
@@ -984,85 +979,6 @@ class Graph(object):
         plt.show()
         return fig
 
-    # Phase 3: Advanced Features
-    def analyze_graph_performance(self):
-        """Analyze graph performance and return metrics."""
-        # Convert to undirected for some metrics if needed
-        g_undirected = self.g.to_undirected() if self.g.is_directed() else self.g
-        
-        node_count = self.g.number_of_nodes()
-        edge_count = self.g.number_of_edges()
-        
-        metrics = {
-            'node_count': node_count,
-            'edge_count': edge_count,
-            'density': nx.density(self.g),
-        }
-        
-        # Handle empty graphs
-        if node_count > 0:
-            degrees = dict(self.g.degree()).values()
-            metrics['average_degree'] = sum(degrees) / node_count
-            metrics['max_degree'] = max(degrees)
-            metrics['min_degree'] = min(degrees)
-        else:
-            metrics['average_degree'] = 0.0
-            metrics['max_degree'] = 0
-            metrics['min_degree'] = 0
-        
-        # Add clustering coefficient
-        try:
-            if self.g.is_directed():
-                metrics['average_clustering'] = nx.average_clustering(self.g)
-            else:
-                metrics['average_clustering'] = nx.average_clustering(g_undirected)
-        except:
-            metrics['average_clustering'] = 0.0
-        
-        # Add path length metrics (only for connected graphs)
-        try:
-            if nx.is_connected(g_undirected):
-                metrics['average_shortest_path'] = nx.average_shortest_path_length(g_undirected)
-                metrics['diameter'] = nx.diameter(g_undirected)
-            else:
-                metrics['average_shortest_path'] = float('inf')
-                metrics['diameter'] = float('inf')
-        except:
-            metrics['average_shortest_path'] = float('inf')
-            metrics['diameter'] = float('inf')
-        
-        # Calculate centrality measures
-        try:
-            metrics['betweenness_centrality'] = nx.betweenness_centrality(self.g)
-            metrics['closeness_centrality'] = nx.closeness_centrality(self.g)
-            metrics['eigenvector_centrality'] = nx.eigenvector_centrality(self.g, max_iter=1000)
-        except:
-            pass
-            
-        return metrics
-
-    def find_nodes_by_property(self, property_name, value):
-        """Find nodes that match a specific property value."""
-        matching_nodes = []
-        for node, data in self.g.nodes(data=True):
-            if property_name in data and data[property_name] == value:
-                matching_nodes.append(node)
-        return matching_nodes
-
-    def highlight_path(self, start_node, end_node, highlight_color='red'):
-        """Highlight the shortest path between two nodes."""
-        try:
-            path = nx.shortest_path(self.g, start_node, end_node)
-            path_edges = list(zip(path[:-1], path[1:]))
-            
-            # Create temporary styles for highlighting
-            highlight_styles = {}
-            for edge in path_edges:
-                highlight_styles[edge] = {'color': highlight_color, 'width': 3}
-            
-            return path, path_edges, highlight_styles
-        except nx.NetworkXNoPath:
-            return None, None, None
 
 
 
@@ -1070,79 +986,12 @@ class Graph(object):
 
 
 
-    def create_cluster_analysis(self):
-        """Perform cluster analysis on the graph."""
-        try:
-            from sklearn.cluster import KMeans
-            import numpy as np
-        except ImportError:
-            return {'clusters': {}, 'cluster_centers': [], 'inertia': 0, 'error': 'sklearn not available'}
-        
-        # Extract node features for clustering
-        node_features = []
-        node_names = []
-        
-        for node in self.g.nodes():
-            features = []
-            data = self.g.nodes[node]
-            
-            # Extract numerical features
-            if 'degree' in data:
-                features.append(data['degree'])
-            else:
-                features.append(self.g.degree(node))
-            
-            # Add position if available
-            if hasattr(self, 'pos') and node in self.pos:
-                features.extend(self.pos[node])
-            else:
-                features.extend([0, 0])
-            
-            node_features.append(features)
-            node_names.append(node)
-        
-        # Perform clustering
-        if len(node_features) > 1:
-            kmeans = KMeans(n_clusters=min(3, len(node_features)), random_state=42)
-            clusters = kmeans.fit_predict(node_features)
-            
-            # Create cluster mapping
-            cluster_mapping = {}
-            for node, cluster_id in zip(node_names, clusters):
-                cluster_mapping[node] = cluster_id
-            
-            return {
-                'clusters': cluster_mapping,
-                'cluster_centers': kmeans.cluster_centers_,
-                'inertia': kmeans.inertia_
-            }
-        else:
-            return {'clusters': {node_names[0]: 0}, 'cluster_centers': [], 'inertia': 0}
 
-    def generate_graph_report(self, include_analysis=True, include_visualization=True):
-        """Generate a comprehensive report about the graph."""
-        report = {
-            'basic_info': {
-                'nodes': self.g.number_of_nodes(),
-                'edges': self.g.number_of_edges(),
-                'directed': self.g.is_directed(),
-                'weighted': hasattr(self.g, 'is_weighted') and self.g.is_weighted()
-            }
-        }
-        
-        if include_analysis:
-            report['analysis'] = self.analyze_graph_performance()
-            report['clusters'] = self.create_cluster_analysis()
-        
-        if include_visualization:
-            # Generate visualizations
-            fig, ax = self.draw()
-            report['visualization'] = {
-                'figure': fig,
-                'axes': ax
-            }
-        
-        return report
+
+
+
+
+
 
 
 
