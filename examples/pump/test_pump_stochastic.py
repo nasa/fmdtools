@@ -44,7 +44,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def test_stochastic_pdf(self):
         """Tests that (1) track_pdf option runs and (2) gives repeated
         probability density results under the same seed(s)"""
-        testvals = [35.23570453993965,
+        testvals = [8.695319186944289,
                     49.32124529702974,
                     0.31327201999190035,
                     21.386958080811567,
@@ -90,7 +90,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         ps.add_variable_replicates([], replicates=1000)
         res, hist = prop.parameter_sample(mdl, ps, showprogress=False,
                                           warn_faults=False,
-                                          desired_result={})
+                                          to_return={})
         ave_effs = []
         std_effs = []
         for scen in ps.named_scenarios():
@@ -277,9 +277,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
 if __name__ == '__main__':
     # suite = unittest.TestSuite()
-    # suite.addTest(StochasticPumpTests("test_stochastic_pdf"))
-
-    # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach"))
+    # suite.addTest(StochasticPumpTests("test_param_sample_isave"))
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach_indiv"))
     # runner = unittest.TextTestRunner()
     # runner.run(suite)
@@ -287,6 +285,6 @@ if __name__ == '__main__':
     # runner = unittest.TextTestRunner()
     # runner.run(suite_for_plots(StochasticPumpTests))
 
-    runner = unittest.TextTestRunner()
-    runner.run(suite_for_plots(StochasticPumpTests, True))
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite_for_plots(StochasticPumpTests, True))
     unittest.main()

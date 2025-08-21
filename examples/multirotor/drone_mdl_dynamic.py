@@ -439,16 +439,16 @@ class Drone(FunctionArchitecture):
         endclass : dict
             Rate, cost, and expected cost for scenario.
         """
-        if -5 > mdlhists.faulty.flows.dofs.s.x[-1] or 5 < mdlhists.faulty.flows.dofs.s.x[-1]:
+        if -5 > self.h.flows.dofs.s.x[-1] or 5 < self.h.flows.dofs.s.x[-1]:
             lostcost = 50000
-        elif -5 > mdlhists.faulty.flows.dofs.s.y[-1] or 5 < mdlhists.faulty.flows.dofs.s.y[-1]:
+        elif -5 > self.h.flows.dofs.s.y[-1] or 5 < self.h.flows.dofs.s.y[-1]:
             lostcost = 50000
-        elif mdlhists.faulty.flows.dofs.s.z[-1] > 5:
+        elif self.h.flows.dofs.s.z[-1] > 5:
             lostcost = 50000
         else:
             lostcost = 0
         a = 1
-        if any(mdlhists.faulty.fxns.hold_payload.m.faults['break']):
+        if any(self.h.fxns.hold_payload.m.faults['break']):
             crashcost = 100000
         else:
             crashcost = 0

@@ -86,10 +86,10 @@ def result_summary_fmea(result, mdlhist, *attrs, metrics=()):
     fault_summaries = {}
     mdlhist = mdlhist.nest(levels=1)
     for scen, hist in mdlhist.items():
-        hist_comp = History(faulty=hist, nominal=mdlhist.nominal)
+        hist_comp = History({'scenario': hist, 'nominal': mdlhist.nominal})
         hist_summary = hist_comp.get_fault_degradation_summary(*attrs)
         deg_summaries[scen] = str(hist_summary.degraded)
-        fault_summaries[scen] = str(hist_summary.faulty)
+        fault_summaries[scen] = str(hist_summary.has_faults)
     degradedtable = pd.DataFrame(deg_summaries, index=['degraded'])
     faulttable = pd.DataFrame(fault_summaries, index=['faulty'])
     simplefmea = result.create_simple_fmea(*metrics)
@@ -131,7 +131,7 @@ def result_summary(result, mdlhist, *attrs, t="end"):
     classif = result.get_faulty().get(t_key(t)).get("classify")
     table = pd.DataFrame(classif.data, index=[0])
     table['degraded'] = [hist_summary.degraded]
-    table['faulty'] = [hist_summary.faulty]
+    table['faulty'] = [hist_summary.has_faults]
     return table
 
 

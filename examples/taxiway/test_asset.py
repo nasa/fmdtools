@@ -154,7 +154,7 @@ class AssetTests(unittest.TestCase):
     def test_one_cycle(self):
         """Test that a single airborne asset will land, park at a gate, and take off."""
         for t in range(100):
-            self.single_ac_model.propagate(t)
+            self.single_ac_model(t)
             ma_xy = self.single_ac_model.flows["location"].ma1.s.get("x", "y")
             if t == 5:  # test - does it make it to the landing spot?
                 self.assertTrue(
@@ -182,7 +182,7 @@ class AssetTests(unittest.TestCase):
         """Test that a single airborne asset will land, park at a gate, and take off as
         desired"""
         for t in range(100):
-            self.two_ac_model.propagate(t)
+            self.two_ac_model(t)
             if t == 77:
                 self.assertAlmostEqual(
                     self.two_ac_model.flows["location"].ma1.s.speed, 1.0, places=3
@@ -257,7 +257,7 @@ class AssetTests(unittest.TestCase):
     def test_heli_cycle(self):
         """Tests that a single helicopter will land and take off as desired"""
         for t in range(100):
-            self.heli_model.propagate(t)
+            self.heli_model(t)
             heli_xy = self.heli_model.flows["location"].h1.s.get("x", "y")
             if t == 7:  # lands
                 self.assertTrue(

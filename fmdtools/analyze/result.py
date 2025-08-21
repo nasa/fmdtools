@@ -41,7 +41,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import t_key, nest_dict, is_numeric, is_bool, is_iter
-from fmdtools.analyze.common import to_include_keys
+from fmdtools.analyze.common import to_include_keys, create_indiv_filename
 from fmdtools.analyze.common import calc_metric, calc_metric_ci, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
@@ -93,10 +93,11 @@ def clean_resultdict_keys(resultdict_dirty):
 
 def get_dict_attr(dict_in, des_class, *attr):
     """Get attributes *attr from a given nested dict dict_in of class des_class."""
+    sub_dict = dict_in[attr[0]]
     if len(attr) == 1:
-        return dict_in[attr[0]]
+        return sub_dict
     else:
-        return get_dict_attr(des_class(dict_in[attr[0]]), des_class, *attr[1:])
+        return get_dict_attr(des_class(sub_dict), des_class, *attr[1:])
 
 
 def fromdict(resultclass, inputdict):
@@ -353,7 +354,15 @@ class Result(UserDict):
         """Get attribute (custom method)."""
         try:
             args = argstr.split(".")
-            return get_dict_attr(self.data, self.__class__, *args)
+            if args[0] == 'faulty':
+                obj = self.get_faulty()
+                if len(args) > 1:
+                    args = args[1:]
+                else:
+                    return obj
+            else:
+                obj = self
+            return get_dict_attr(obj.data, self.__class__, *args)
         except KeyError:
             try:
                 return self.all_with(argstr)
@@ -626,7 +635,7 @@ class Result(UserDict):
                 newname = prevname+"."+att
             else:
                 newname = att
-            if isinstance(val, Result):
+            if isinstance(val, self.__class__):
                 new_to_include = get_sub_include(att, to_include)
                 if new_to_include:
                     val.flatten(newhist, newname, new_to_include)
@@ -706,6 +715,9 @@ class Result(UserDict):
         """
         import json
         import csv
+        if result_id:
+            filename = create_indiv_filename(filename, result_id, splitchar="/")
+
         file_check(filename, overwrite)
 
         variable = self

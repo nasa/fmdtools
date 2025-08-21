@@ -498,7 +498,7 @@ if __name__ == "__main__":
     result.get_faulty().tend.graph.draw()
     # endclasses, mdlhists = propagate.single_faults(mdl)
 
-    # resgraph, mdlhists = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', desired_result="fxnflowgraph")
+    # resgraph, mdlhists = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', to_return="fxnflowgraph")
     # result.graph.draw()
     ks = [*mdl.get_roles_as_dict("fxn", "flow", flex_prefixes=True)]
 

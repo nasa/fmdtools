@@ -245,15 +245,16 @@ class CommonTests():
         if os.path.exists(ecfile):
             os.remove(ecfile)
         check_link = False
-        save_args = {'history_filename': mfile, 'result_filename': ecfile, 'tosave': True}
+        kw = {'history_filename': mfile, 'result_filename': ecfile, 'tosave': True,
+              'showprogress': False}
         if runtype == 'nominal':
-            res, hist = prop.nominal(mdl, **save_args)
+            res, hist = prop.nominal(mdl, **kw)
             check_link = True
         elif runtype == 'one_fault':
             fxn, mode, time = faultscen
-            res, hist = prop.one_fault(mdl, fxn, mode, time, **save_args)
+            res, hist = prop.one_fault(mdl, fxn, mode, time, **kw)
         elif runtype == 'sequence':
-            res, hist = prop.sequence(mdl, faultscen, {}, **save_args)
+            res, hist = prop.sequence(mdl, faultseq=faultscen, **kw)
         else:
             raise Exception("Invalid Run Type" + runtype)
 
@@ -371,9 +372,10 @@ class CommonTests():
         **kwargs : kwargs to send to the propagate method (if any)
         """
         self.start_sample_test(histfile, resfile)
-        save_args = {'mdlhist': {'filename': histfile},
-                     'endclass': {'filename': resfile}}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False, **kwargs}
+        loc_kwargs = {'result_filename': resfile,
+                      'history_filename': histfile,
+                      'tosave': True,
+                      'showprogress': False, **kwargs}
         res, hist = prop.fault_sample(mdl, fs, **loc_kwargs)
 
         self.end_sample_test(hist, histfile, res, resfile)
@@ -381,9 +383,10 @@ class CommonTests():
     def check_sf_save(self, mdl, resfile='file', histfile='file', **kwargs):
         """Check that prop.single_faults results save/load correctly."""
         self.start_sample_test(histfile, resfile)
-        save_args = {'mdlhist': {'filename': histfile},
-                     'endclass': {'filename': resfile}}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False, **kwargs}
+        loc_kwargs = {'result_filename': resfile,
+                      'history_filename': histfile,
+                      'tosave': True,
+                      'showprogress': False, **kwargs}
         res, hist = prop.single_faults(mdl, **loc_kwargs)
 
         self.end_sample_test(hist, histfile, res, resfile)
@@ -391,9 +394,10 @@ class CommonTests():
     def check_ps_save(self, mdl, ps, resfile='file', histfile='file', **kwargs):
         """Check that prop.parameter_sample results save/load correctly."""
         self.start_sample_test(histfile, resfile)
-        save_args = {'mdlhist': {'filename': histfile},
-                     'endclass': {'filename': resfile}}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False, **kwargs}
+        loc_kwargs = {'result_filename': resfile,
+                      'history_filename': histfile,
+                      'tosave': True,
+                      'showprogress': False, **kwargs}
         res, hist = prop.parameter_sample(mdl, ps, **loc_kwargs)
 
         self.end_sample_test(hist, histfile, res, resfile)
@@ -402,11 +406,12 @@ class CommonTests():
                       histfile='file', resfile='file', **kwargs):
         """Check that prop.nested_sample results save/load correctly."""
         self.start_sample_test(histfile, resfile)
-        save_args = {'mdlhist': {'filename': histfile},
-                     'endclass': {'filename': resfile}}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False,
-                      'faultdomains': faultdomains, 'faultsamples': faultsamples,
-                      **kwargs}
+        loc_kwargs = {'result_filename': resfile,
+                      'history_filename': histfile,
+                      'tosave': True,
+                      'faultdomains': faultdomains,
+                      'faultsamples': faultsamples,
+                      'showprogress': False, **kwargs}
         res, hist, apps = prop.nested_sample(mdl, ps, **loc_kwargs)
         self.end_sample_test(hist, histfile, res, resfile)
 

@@ -133,8 +133,8 @@ if __name__ == '__main__':
     MultiFlowGraph(mdl.flows['communications']).draw()
     CommsFlowGraph(mdl.flows['communications']).draw()
 
-    # endres, mdlhist = propagate.nominal(mdl, desired_result='graph.flows.communications')
+    # endres, mdlhist = propagate.nominal(mdl, to_return='graph.flows.communications')
 
-    # endres.graph.flows.communications.set_node_labels(title='id', subtext='s')
-    # endres.graph.flows.communications.draw()
-    # endres.graph.flows.communications.draw_graphviz()
+    # endres.tend.graph.flows.communications.set_node_labels(title='id', subtext='s')
+    # endres.tend.graph.flows.communications.draw()
+    # endres.tend.graph.flows.communications.draw_graphviz()

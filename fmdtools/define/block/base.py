@@ -625,8 +625,8 @@ class Simulable(BaseObject):
             state_pd = self.r.return_probdens()
         else:
             state_pd = 1.0
-        for arch in self.get_sims():
-            state_pd *= getattr(self, arch).return_probdens()
+        for arch, sim in self.get_sims().items():
+            state_pd *= sim.return_probdens()
         return state_pd
 
     def update_stochastic_states(self):
@@ -775,8 +775,9 @@ class Simulable(BaseObject):
             if t == end_time:
                 if copy:
                     return self.copy()
-                self.set_vars(**disturbances)
-                self.inject_faults(faults)
+                if t != self.t.time:  # faults are only injected if not run yet
+                    self.set_vars(**disturbances)
+                    self.inject_faults(faults)
             self.t.update_time(t)
             if self.t.executing:
                 self.update_stochastic_states()

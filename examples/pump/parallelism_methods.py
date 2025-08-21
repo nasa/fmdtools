@@ -19,16 +19,11 @@ specific language governing permissions and limitations under the License.
 
 from examples.pump.ex_pump import Pump, PumpParam
 import fmdtools.sim.propagate as propagate
+from fmdtools.sim.propagate import close_pool
 
 import time
 import multiprocessing as mp
 import multiprocess as ms
-
-
-def close_pool(pool):
-    """Close a pool process."""
-    pool.close()
-    pool.terminate()
 
 
 def delay_test(delays=[i for i in range(0, 100, 10)]):
@@ -89,7 +84,7 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose=True,
     endclasses, mdlhists = propagate.fault_sample(mdl, app, pool=False, staged=staged,
                                                   showprogress=False,
                                                   track_times=track_times,
-                                                  desired_result={})
+                                                  to_return={})
     exectime_single = time.time() - starttime
     if verbose:
         print("single-thread exec time: "+str(exectime_single))
@@ -101,8 +96,8 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose=True,
                           staged=staged,
                           showprogress=False,
                           track_times=track_times,
-                          desired_result={},
-                          close_pool=False)
+                          to_return={},
+                          auto_close_pool=False)
         endclasses, mdlhists = propagate.fault_sample(mdl, app, **loc_kwargs)
         exectime_par = time.time() - starttime
         if verbose:

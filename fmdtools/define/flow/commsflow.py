@@ -88,7 +88,7 @@ class CommsFlow(MultiFlow):
     - received(): {'t1': ('x',)}
     """
 
-    slots = ['fxns', '__dict__']
+    __slots__ = ['fxns']
     check_dict_creation = False
 
     def __init__(self, name='', glob=[], track=['s'], **kwargs):

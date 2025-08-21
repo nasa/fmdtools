@@ -72,6 +72,7 @@ class Flow(BaseObject):
         if hasattr(self, 's'):
             loc_kwargs['s'] = self.s.copy()
         loc_kwargs['name'] = self.name
+        loc_kwargs['root'] = self.root
         cop = self.__class__(**loc_kwargs)
         if hasattr(self, 'h'):
             cop.h = self.h.copy()

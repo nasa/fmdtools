@@ -614,7 +614,7 @@ class Architecture(Simulable):
             cargs[flex_role] = getattr(self, flex_role)
         # if flows provided from above, use those flows. Otherwise copy own.
         if hasattr(self, 'flows'):
-            cargs['flows'] = {f: flows[f] if f in flows else obj.copy(root=self.get_full_name()+".flows")
+            cargs['flows'] = {f: flows[f] if f in flows else obj.copy()
                               for f, obj in self.flows.items()}
 
         if hasattr(self, 'r'):

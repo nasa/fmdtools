@@ -150,8 +150,7 @@ class TankTests(unittest.TestCase, CommonTests):
         for extension in [".npz", ".csv", ".json"]:
             faultscen = ('import_water', 'stuck', 5)
             fname = "tank_hist"+extension, "tank_res"+extension
-            self.check_onerun_save(self.mdl, 'one_fault', *fname, faultscen=faultscen,
-                                   showprogress=False)
+            self.check_onerun_save(self.mdl, 'one_fault', *fname, faultscen=faultscen)
 
     def test_save_load_multfault(self):
         for extension in [".npz", ".csv", ".json"]:
@@ -252,13 +251,13 @@ if __name__ == '__main__':
     sys.path.append("../..")
     # NOTE: reset expected not to work since args are no longer being saved
 
-    suite = unittest.TestSuite()
-    suite.addTest(TankTests("test_fault_sample_isave"))
-    runner = unittest.TextTestRunner()
-    runner.run(suite)
+    # suite = unittest.TestSuite()
+    # suite.addTest(TankTests("test_nested_sample_isave"))
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite)
 
     # suite = unittest.TestSuite()
-    # suite.addTest(TankTests("test_save_load_nominal"))
+    # suite.addTest(TankTests("test_save_load_multfault"))
     # runner = unittest.TextTestRunner()
     # runner.run(suite)
 
@@ -269,11 +268,7 @@ if __name__ == '__main__':
     # runner = unittest.TextTestRunner()
     # runner.run(suite)
 
-    # test_fault_sample_isave
-    # test_fault_sample_save
-    # test_nested_sample_isave
-
-    # unittest.main()
+    unittest.main()
 
     # mdl = Tank()
     # scen = {'human': 'NotDetected'}

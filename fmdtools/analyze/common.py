@@ -132,8 +132,10 @@ def file_check(filename, overwrite):
     if "/" in filename:
         last_split_index = filename.rfind("/")
         foldername = filename[:last_split_index]
-        if not os.path.exists(foldername):
+        try:
             os.makedirs(foldername)
+        except FileExistsError:
+            0  # in this case, just don't make the directory
 
 
 def auto_filetype(filename, filetype="", filetypes=['npz', 'csv', 'json']):

@@ -52,8 +52,8 @@ class Environment(CommsFlow):
     >>> env
     env ExampleEnvironment
     - r=Rand(seed=42)
-    - c=examplecoords ExampleCoords
-    - ga=exgeomarch ExGeomArch
+    - c=ExampleCoords()
+    - ga=ExGeomArch()
     >>> env.create_hist([1.0])
     c.r.probdens:                   array(1)
     c.st:                           array(1)
@@ -65,7 +65,7 @@ class Environment(CommsFlow):
     ga.polys.ex_poly.s.buffer_around: array(1)
     """
 
-    slots = ["c", "r", "ga"]
+    __slots__ = ["c", "r", "ga"]
     container_r = Rand
     container_sp = SimParam
     default_sp = {}

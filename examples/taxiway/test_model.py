@@ -36,7 +36,7 @@ class ModelTests(unittest.TestCase):
     def test_scen(self):
         """Tests that every asset has cycled after 120 timesteps. Should not crash."""
         for t in range(120):
-            self.mdl.propagate(t)
+            self.mdl(t)
         uncycled = [f for f, fxn in self.mdl.fxns.items()
                     if f != "atc" and not fxn.s.cycled]
         self.assertFalse(any(uncycled))
@@ -61,7 +61,7 @@ class ModelTests(unittest.TestCase):
         # hist.faulty.atc
         # hist.faulty.atc.area_allocation
         self.assertTrue(any(hist.faulty.fxns.atc.m.faults.lost_ground_perception))
-        self.assertTrue(res.endclass.perc_cycled <= 0.5)
+        self.assertTrue(res.faulty.tend.classify.perc_cycled <= 0.5)
 
     def test_atc_lost_ground_perception_plot(self):
         """Plot for atc losing ground perception."""
@@ -71,13 +71,13 @@ class ModelTests(unittest.TestCase):
     def test_atc_wrong_land_command(self):
         """Test that wrong landing command by itself does not result in crashes."""
         res, hist = prop.one_fault(self.mdl, "atc", "wrong_land_command", time=5)
-        self.assertTrue(res.endclass.num_crashed == 0)
+        self.assertTrue(res.faulty.tend.classify.num_crashed == 0)
 
     def test_atc_wrong_land_command_lost_sight(self):
         """Tests that wrong landing commands result in crashes"""
         seq = {1: {"atc": "wrong_land_command"}, 2: {"h2": "lost_sight"}}
         res, hist = prop.sequence(self.mdl, faultseq=seq)
-        self.assertTrue(res.endclass.num_crashed >= 1)
+        self.assertTrue(res.faulty.tend.classify.num_crashed >= 1)
 
     def test_atc_wrong_land_command_sight_plot(self):
         seq = {1: {"atc": "wrong_land_command"}, 2: {"h2": "lost_sight"}}

@@ -247,7 +247,7 @@ class Battery(Component):
     container_m = BatMode
     container_p = BatParam
 
-    def behavior(self, fs, ee_outr, time):
+    def behavior(self, fs, ee_outr, exec_dynamic):
         """Battery behavior returning electrical transference, soc, and fault state."""
         # If current is too high, battery breaks.
         if fs < 1.0 or ee_outr > self.p.maxa:
@@ -264,10 +264,9 @@ class Battery(Component):
             self.s.e_t = self.p.avail_eff
 
         # Increment power use/soc (once per timestep)
-        if time > self.t.time:
+        if exec_dynamic:
             self.s.inc(soc=-100*ee_outr*self.p.parallel *
-                       self.p.series*(time-self.t.time)/self.p.amt)
-            self.t.time = time
+                       self.p.series*self.t.dt/self.p.amt)
 
         # Calculate charge modes/values
         if self.s.soc < 20:
@@ -390,7 +389,8 @@ class StoreEE(Function):
         for batname, bat in self.ca.comps.items():
             ee[bat.name], soc[bat.name], rate_res = \
                 bat.behavior(self.force_st.s.support, self.ee_1.s.rate /
-                             (self.ca.p.series*self.ca.p.parallel)+rate_res, self.t.time)
+                             (self.ca.p.series*self.ca.p.parallel)+rate_res,
+                             not self.t.executed_static)
         # need to incorporate max current draw somehow + draw when reconfigured
         if self.ca.p.archtype == 'monolithic':
             self.ee_1.s.effort = ee['s1p1']
@@ -592,7 +592,7 @@ class PlanPath(PlanPathDyn):
         """Initialize path planning goals based on initial flightplan."""
         self.s.goals = {i: list(vals) for i, vals in enumerate(self.p.flightplan)}
 
-    def static_behavior(self, t):
+    def static_behavior(self):
         """
         Path planning behavior for the drone.
 
@@ -603,7 +603,7 @@ class PlanPath(PlanPathDyn):
         self.increment_point()
         self.calc_ground_height()
 
-        self.update_mode(t)
+        self.update_mode()
         self.update_goal()
         if self.ee_ctl.s.effort < 0.5 or self.m.in_mode('taxi'):
             self.des_traj.s.assign([0.0, 0.0, 0.0, 0.0], 'dx', 'dy', 'dz', 'power')
@@ -615,13 +615,13 @@ class PlanPath(PlanPathDyn):
         """Assigns the ground height state."""
         self.s.ground_height = self.dofs.s.z
 
-    def update_mode(self, t):
+    def update_mode(self):
         """Update mode based on current mode and state."""
         if not self.m.any_faults():
             # if in reconfigure mode, copy that mode, otherwise complete mission
             if self.rsig_traj.s.mode != 'continue' and not self.m.in_mode("move_em", "emland"):
                 self.m.set_mode(self.rsig_traj.s.mode)
-            elif self.m.in_mode('taxi') and t < 5 and t > 1:
+            elif self.m.in_mode('taxi') and self.t.time < 5 and self.t.time > 1:
                 self.m.set_mode("move")
             # if mission is over, enter landing mode when you get close
             if self.mission_over():

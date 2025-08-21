@@ -185,8 +185,8 @@ class BaseObject(object):
         self.name = self.create_name(name)
         self.root = root
         self.init_indicators()
-        self.init_roletypes(*roletypes, **kwargs)
         self.init_track(track)
+        self.init_roletypes(*roletypes, **kwargs)
         self.check_slots()
         self.mutables = ()
 
@@ -657,11 +657,13 @@ class BaseObject(object):
 
     def get_all_roles(self, with_immutable=True):
         """Get all roles in the object."""
-        roles = self.get_roles(with_immutable=with_immutable)
-        roledict_roles = self.get_roledicts(with_immutable=with_immutable)
-        rolevars = [role for role in self.rolevars
-                    if with_immutable or role not in self.immutable_roles]
-        return roles + roledict_roles + rolevars
+        rolenames = []
+        for roletype in self.roletypes:
+            rolenames.extend(self.find_roletype_initiators(roletype))
+        if with_immutable:
+            return rolenames
+        else:
+            return [r for r in rolenames if r not in self.immutable_roles]
 
     def get_vars(self, *variables, trunc_tuple=True):
         """

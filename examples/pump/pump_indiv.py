@@ -26,14 +26,14 @@ from fmdtools.sim.sample import FaultSample, FaultDomain, ParameterSample
 class MoveWatDynamic(MoveWat):
 
     __slots__ = ()
-    default_sp = {'end_time': 50}
+    default_sp = {'end_time': 50, 'with_loadings': True}
 
-    def static_loading(self, time):
+    def static_loading(self):
         """Simulate how the outside system interacts with the function."""
         # Signal Inputs
-        if time < 5:
+        if self.t.time < 5:
             self.sig_in.s.power = 0.0
-        elif time < 50:
+        elif self.t.time < 50:
             self.sig_in.s.power = 1.0
         else:
             self.sig_in.s.power = 0.0

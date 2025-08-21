@@ -287,7 +287,7 @@ class History(Result):
         Examples
         --------
         >>> hist = History({'a':[2,3,4,5], 'b':[5,4,3,2,1,0], 'time': [0,1,2,3,4,5]})
-        >>> cut_hist = hist.cut(4)
+        >>> cut_hist = hist.cut(3)
         >>> cut_hist
         a:                              array(4)
         b:                              array(4)
@@ -464,7 +464,7 @@ class History(Result):
 
         Examples
         --------
-        >>> h = History({'nominal.a': np.array([1,2,3]), 'nominal.time': [0,1,2], 'faulty.a': np.array([1,1,1]), 'faulty.time': [0,1,2]})
+        >>> h = History({'nominal.a': np.array([1,2,3]), 'nominal.time': [0,1,2], 'fault1.a': np.array([1,1,1]), 'fault1.time': [0,1,2]})
         >>> dh = h.get_degraded_hist("a")
         >>> dh['total']
         array([0, 1, 1])
@@ -615,7 +615,7 @@ class History(Result):
         faulty = [k for k, v in faulty_hist.items() if np.any(v)]
         deg_hist = self.get_degraded_hist(*attrs, withtotal=False, withtime=False)
         degraded = [k for k, v in deg_hist.items() if np.any(v)]
-        return Result(faulty=faulty, degraded=degraded)
+        return Result(has_faults=faulty, degraded=degraded)
 
     def plot_line(self, *plot_values, cols=2, aggregation='individual',
                   legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', titles={},

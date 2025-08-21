@@ -209,7 +209,7 @@ class BaseScenario(BaseScenObj):
 
     def start_time(self):
         """Get the first time in the scenario."""
-        return np.min(self.sequence)
+        return np.min([*self.sequence])
 
     def get_times(self):
         """Get time that the scenario branches off."""

@@ -102,7 +102,7 @@ class MultiFlow(Flow):
     - sub_flow=(s=(x=10.0, y=0.0))
     """
 
-    slots = ['locals', '__dict__']
+    __slots__ = ['locals', 'glob', '__dict__']
     check_dict_creation = False
     flexible_roles = ['locals']
     roletypes = ['container', 'local']
@@ -283,7 +283,7 @@ class MultiFlow(Flow):
         """Copy the flow and create new sub-flow copies for it."""
         if not s and hasattr(self, 's'):
             s = self.s.asdict()
-        cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track)
+        cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track, root=self.root)
         for loc in self.locals:
             local = getattr(self, loc)
             cop.create_local(local.name, **local.copy_mut_containers(), as_copy=True)

@@ -298,7 +298,7 @@ class DistEE(Function):
         e.g., when nominal, high effort gets passed to outgoing EE flows::
         >>> d = DistEE()
         >>> d.ee_in.s.effort = 2.0
-        >>> d.static_behavior(1.0)
+        >>> d.static_behavior()
         >>> d.ee_mot
         ee EE
         - s=EEState(rate=1.0, effort=2.0)
@@ -306,7 +306,7 @@ class DistEE(Function):
         while fault modes modify this relationship::
         >>> d = DistEE()
         >>> d.m.add_fault("short")
-        >>> d.static_behavior(1.0)
+        >>> d.static_behavior()
         >>> d.ee_mot
         ee EE
         - s=EEState(rate=1.0, effort=0.0)
@@ -388,13 +388,13 @@ class HoldPayload(Function):
         e.g., in the nominal case::
         >>> h = HoldPayload()
         >>> h.dofs.s.z = 1.0
-        >>> h.static_behavior(1.0)
+        >>> h.static_behavior()
         >>> h.force_st.s
         ForceState(support=1.0)
 
         Or, in the drone has fallen::
         >>> h.dofs.s.z = 0.0
-        >>> h.static_behavior(2.0)
+        >>> h.static_behavior()
         >>> h.m.faults
         {'break'}
         >>> h.force_st.s
@@ -537,13 +537,13 @@ class AffectDOF(Function, BaseLine):
         >>> a = AffectDOF()
         >>> a.dofs.s.z
         0.0
-        >>> a.static_behavior(0.0)
+        >>> a.static_behavior()
         >>> a.dofs.s.z
         1.0
 
         Mechanical breakages (And other faults) cause a fall::
         >>> a.m.add_fault("mechbreak")
-        >>> a.static_behavior(0.0)
+        >>> a.static_behavior()
         >>> a.s.mt
         0.0
         >>> a.dofs.s.uppwr
@@ -625,13 +625,13 @@ class CtlDOF(Function):
 
         e.g., in the nominal case::
         >>> c = CtlDOF()
-        >>> c.static_behavior(0.0)
+        >>> c.static_behavior()
         >>> c.ctl.s
         ControlState(forward=1.0, upward=1.0)
 
         and in the off-nominal case::
         >>> c.m.add_fault("noctl")
-        >>> c.static_behavior(0.0)
+        >>> c.static_behavior()
         >>> c.ctl.s
         ControlState(forward=0.0, upward=0.0)
         """
@@ -693,20 +693,20 @@ class PlanPath(Function):
         if self.dofs.s.planvel > 1.5 or self.dofs.s.planvel < 0.5:
             self.m.add_fault("noloc")
 
-    def static_behavior(self, t):
+    def static_behavior(self):
         """
         Path planning behavior.
 
         Assigns trajectory based on current point. In the static case, this is just
         going forward 1.0 in the x, e.g.::
         >>> p = PlanPath()
-        >>> p.static_behavior(0.0)
+        >>> p.static_behavior()
         >>> p.des_traj.s
         DesTrajState(dx=1.0, dy=0.0, dz=0.0, power=1.0)
 
         If it loses location, navigation not provided:
         >>> p.m.add_fault("noloc")
-        >>> p.static_behavior(0.0)
+        >>> p.static_behavior()
         >>> p.des_traj.s
         DesTrajState(dx=0.0, dy=0.0, dz=0.0, power=1.0)
         """

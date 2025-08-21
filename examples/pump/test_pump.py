@@ -57,14 +57,14 @@ class PumpTests(unittest.TestCase, CommonTests):
         """Test that tracking args set up history keys as expected."""
         # default track tracks wat_2.s.flowrate, ee_1.s.current, i.on, i.finished
         mdl_def = Pump()
-        self.assertEqual(len(mdl_def.h.keys()), 4)
+        self.assertEqual(len(mdl_def.h.keys()), 5)
         def_keys = {'flows.ee_1.s.current', 'flows.wat_2.s.flowrate',
-                    'i.finished', 'i.on'}
+                    'i.finished', 'i.on', "time"}
         self.assertEqual(set(mdl_def.h.keys()), def_keys)
         # sending track arguments should overwrite
         track_arg = {'flows': {'ee_1': 'all', "wat_1": {'s': ('flowrate',)}}}
         to_track = ['flows.ee_1.s.current', 'flows.ee_1.s.voltage',
-                    'flows.wat_1.s.flowrate']
+                    'flows.wat_1.s.flowrate', "time"]
         mdl_cust = Pump(track=track_arg)
         self.assertEqual(set(mdl_cust.h.keys()), set(to_track))
         # at the very least, tracking all should mean there are a lot more keys
@@ -98,7 +98,7 @@ class PumpTests(unittest.TestCase, CommonTests):
             res, hist = prop.one_fault(self.water_mdl, "move_water", "mech_break",
                                        time=faulttime)
             expected_wcost = self.expected_water_cost(faulttime)
-            self.assertAlmostEqual(expected_wcost, res.endclass.cost)
+            self.assertAlmostEqual(expected_wcost, res.get_faulty().tend.classify.cost)
 
     def test_dynamic_prop_values_2(self):
         """Test that the delayed fault behavior occurs at the time specified"""
@@ -106,9 +106,10 @@ class PumpTests(unittest.TestCase, CommonTests):
         for delay in delays:
             mdl = Pump(p={'cost': ('water',), 'delay': delay}, track='all')
             res, hist = prop.one_fault(mdl, 'export_water', 'block', time=25)
-            fault_at_time = hist.faulty.fxns.move_water.m.faults.mech_break[25+delay]
+            fhist = hist.get_faulty()
+            fault_at_time = fhist.fxns.move_water.m.faults.mech_break[25+delay]
             self.assertEqual(fault_at_time, 1)
-            fault_bef_time = hist.faulty.fxns.move_water.m.faults.mech_break[25+delay-1]
+            fault_bef_time = fhist.fxns.move_water.m.faults.mech_break[25+delay-1]
             self.assertEqual(fault_bef_time, 0)
 
     def test_app_prop_values(self):
@@ -121,7 +122,7 @@ class PumpTests(unittest.TestCase, CommonTests):
         res, hist = prop.fault_sample(self.water_mdl, fs, showprogress=False)
         for scen in fs.scenarios():
             exp_wcost = self.expected_water_cost(scen.time)
-            self.assertAlmostEqual(exp_wcost, res.get(scen.name).endclass.cost)
+            self.assertAlmostEqual(exp_wcost, res.get(scen.name).tend.classify.cost)
 
     def expected_water_cost(self, faulttime):
         return (50 - faulttime) * 0.3 * 750
@@ -189,8 +190,8 @@ class PumpTests(unittest.TestCase, CommonTests):
         for hist_key in hist:
             np.testing.assert_array_equal(hist[hist_key], hist_saved[hist_key])
 
-        hist.faulty.time[0] = 100
-        self.assertNotEqual(hist.faulty.time[0], hist_saved.faulty.time[0])
+        hist.get_faulty().time[0] = 100
+        self.assertNotEqual(hist.get_faulty().time[0], hist_saved.get_faulty().time[0])
 
         os.remove("single_fault.npz")
 
@@ -328,8 +329,8 @@ if __name__ == '__main__':
 
     # suite = unittest.TestSuite()
     # suite.addTest(IndivPumpTests("test_mutable_setup"))
-    # suite.addTest(PumpTests("test_model_copy_same"))
-    # suite.addTest(PumpTests("test_value_setting_dict"))
-    # suite.addTest(PumpTests("test_one_run_csv"))
+    # suite.addTest(PumpTests("test_one_run_pickle"))
+    # suite.addTest(PumpTests("test_mutable_setup"))
+    # suite.addTest(PumpTests("test_hist_tracking_setup"))
     # runner = unittest.TextTestRunner()
     # runner.run(suite)

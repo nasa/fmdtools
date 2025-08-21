@@ -142,7 +142,7 @@ def one_fault(mdl, *fxnfault, time=0, f_kw={}, **kwargs):
     Returns
     -------
     result: Result
-        Result dict of result corresponding to desired_result, with structure,::
+        Result dict of result corresponding to to_return, with structure,::
 
         Result({'nominal': nomresult, 'scenname': faultyresult})
 
@@ -162,7 +162,7 @@ def one_fault(mdl, *fxnfault, time=0, f_kw={}, **kwargs):
 
 
 def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.nan,
-             include_nominal=True, **kwargs):
+             include_nominal=True, showprogress=False, **kwargs):
     """
     Run a sequence of faults and disturbances in the model at given times.
 
@@ -193,7 +193,7 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.nan,
     Returns
     -------
     result: Result
-        Result dict of result corresponding to desired_result, with structure,::
+        Result dict of result corresponding to to_return, with structure,::
 
         Result({'nominal': nomresult, 'scenname': faultyresult})
 
@@ -206,15 +206,18 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.nan,
             seq = Sequence(faultseq=faultseq, disturbances=disturbances)
         scen = Scenario(sequence=seq,
                         rate=rate,
-                        name='faulty',
+                        name='sequence',
                         times=tuple([*seq.keys()]),
                         time=min([*seq.keys()]))
 
     if include_nominal:
         sim = MultiEventSimulation(mdl=mdl, samp=scen,
-                                   **filter_kwargs(MultiEventSimulation, **kwargs))
+                                   **filter_kwargs(MultiEventSimulation,
+                                                   showprogress=showprogress, **kwargs))
     else:
-        sim = Simulation(mdl=mdl, scen=scen, **filter_kwargs(Simulation, **kwargs))
+        sim = Simulation(mdl=mdl, scen=scen,
+                         **filter_kwargs(Simulation, showprogress=showprogress,
+                                         **kwargs))
     return sim(**get_sim_call_kwargs(sim, **kwargs))
 
 
@@ -235,7 +238,7 @@ def fault_sample(mdl, fs, **kwargs):
     -------
     results : Result
         A Result dictionary with results desired from each scenario corresponding to
-        desired_result over the set of scenarios with structure {'scen': scenresult}
+        to_return over the set of scenarios with structure {'scen': scenresult}
     mdlhists : History
         A History dictionary with the tracked scenario with structure
         {'scen': scenhist}
@@ -262,7 +265,7 @@ def single_faults(mdl, times=[0.0], **kwargs):
     -------
     results : Result
         A Result dictionary with results desired from each scenario corresponding to
-        desired_result over the set of scenarios with structure {'scen': scenresult}
+        to_return over the set of scenarios with structure {'scen': scenresult}
     mdlhists : History
         A History dictionary with the tracked scenario with structure
         {'scen': scenhist}
@@ -303,7 +306,7 @@ def nested_sample(mdl, ps, **kwargs):
         A dictionary of the SampleApproaches generated corresponding to each parameter
         scenario with structure {'nomscen1': app1}
     """
-    sim = NestedSimulation(mdl=mdl, ps=ps,
+    sim = NestedSimulation(mdl=mdl, samp=ps,
                            **filter_kwargs(NestedSimulation, **kwargs))
     res, hist = sim(**get_sim_call_kwargs(sim, **kwargs))
     return res, hist, sim.apps
@@ -462,6 +465,7 @@ class BaseSimulation(BaseContainer):
             result_id = self.name
         else:
             result_id = ''
+
         if self.result and self.result_filename:
             self.result.save(self.result_filename, result_id=result_id,
                              overwrite=self.overwrite)
@@ -560,7 +564,7 @@ class Simulation(BaseSimulation):
     copy: bool = False
     ctimes: list = []
     simevents: list = []
-    warn_faults = True
+    warn_faults: bool = True
 
     def __init__(self, *args, **kwargs):
         """Initialize and create the list of simulation events to run."""
@@ -593,8 +597,12 @@ class Simulation(BaseSimulation):
         """Create the list of SimEvents to run for during the simulation."""
         res_sequence = {k: v for k, v in self.to_return.items()
                         if isinstance(k, float) or isinstance(k, int)}
-        times = [float(i) for i in [*self.scen.sequence, *self.ctimes, *res_sequence]
-                 if i > self.mdl.t.time]
+        try:
+            times = [float(i) for i in [*self.scen.sequence, *self.ctimes, *res_sequence]
+                     if i > self.mdl.t.time]
+        except:
+            raise
+        times = [*set(times)]
         times.sort()
 
         for time in times:
@@ -966,7 +974,7 @@ class MultiEventSimulation(MultiSimulation):
             rets = (*rets, self.samp)
         return rets
 
-    def run_nom(self, with_copy=False, gen_samp=False, **kwargs):
+    def run_nom(self, with_copy=False, gen_samp=False, with_save=True, **kwargs):
         """
         Run the nominal scenario and get the relevant information.
 
@@ -985,6 +993,10 @@ class MultiEventSimulation(MultiSimulation):
         kwar = {'mdl': self.mdl, 'to_return': self.to_return}
         if with_copy:
             kwar['ctimes'] = self.samp.get_times()
+        if with_save:
+            kwar.update({'tosave': self.save_indiv,
+                         'result_filename': self.result_filename,
+                         'history_filename': self.history_filename, 'indiv_id': True})
         nomsim = Simulation(**kwar)
         sim_kwar = dict(with_mdls=with_copy, gen_samp=gen_samp, **kwargs)
         if self.pool:
@@ -1003,7 +1015,7 @@ class MultiEventSimulation(MultiSimulation):
         if self.gen_samp:
             self.run_nom(gen_samp=True, **kwargs)
             if self.staged:
-                self.run_nom(with_copy=True)
+                self.run_nom(with_copy=True, with_save=True)
         elif self.staged:
             self.run_nom(with_copy=True)
         elif self.include_nominal:
@@ -1120,7 +1132,7 @@ class NestedSimulation(MultiSimulation):
     faultdomains: dict = {}
     faultsamples: dict = {}
     staged: bool = True
-    get_phasemap: bool = True
+    get_phasemap: bool = False
     apps: dict = {}
 
     def __repr__(self):
@@ -1167,7 +1179,7 @@ class NestedSimulation(MultiSimulation):
         run_kwar = dict(get_phasemap=self.get_phasemap,
                         faultdomains=self.faultdomains,
                         faultsamples=self.faultsamples)
-        return [({**sim_kwar, 'mdl': self.mdl, 'scen': scen}, run_kwar)
+        return [({**sim_kwar, 'mdl': self.mdl, 'scen': scen, 'name': scen.name}, run_kwar)
                 for scen in scenlist]
 
 

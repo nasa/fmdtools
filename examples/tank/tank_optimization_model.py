@@ -252,16 +252,16 @@ if __name__ == "__main__":
     vals = ['fxns.store_coolant.s.level',
             'fxns.store_coolant.s.net_flow',
             'fxns.store_coolant.s.coolingbuffer']
-    endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass', 'graph'])
+    endresults, mdlhist = propagate.nominal(mdl, to_Return=['endclass', 'graph'])
     mdlhist.plot_line(*vals)
 
     # check faulty run
     result, mdlhist = propagate.one_fault(mdl, 'export_coolant', 'blockage', time=2,
-                                          desired_result=['endclass', 'graph'])
+                                          to_return=['endclass', 'graph'])
 
     mdlhist.plot_line(*vals, time_slice=2, title='NotVisible')
-    result.graph.draw(title='NotVisible, time=2')
-    result.graph.draw_graphviz(title='NotVisible, time=2')
+    result.get_faulty().tend.graph.draw(title='NotVisible, time=2')
+    result.get_faulty().tend.graph.draw_graphviz(title='NotVisible, time=2')
 
     from fmdtools.sim.sample import ParameterDomain
     pd = ParameterDomain(TankParam)
