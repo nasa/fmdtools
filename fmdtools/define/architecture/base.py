@@ -381,7 +381,7 @@ class Architecture(Simulable):
         """Create and return the corresponding ModelGraph for the Object."""
         return gtype(self, **kwargs)
 
-    def as_drawio(self, saveas='', gtype=ArchitectureGraph, **kwargs):
+    def as_drawio(self, saveas='', **kwargs):
         """
         Generate DrawIO diagram from the architecture.
         
@@ -389,8 +389,6 @@ class Architecture(Simulable):
         ----------
         saveas : str, optional
             File path to save the DrawIO XML. If empty, returns XML content.
-        gtype : class, optional
-            Graph type to use for visualization. Default is ArchitectureGraph.
         **kwargs : dict
             Additional arguments passed to the graph creation.
             
@@ -404,8 +402,8 @@ class Architecture(Simulable):
         >>> xml_content = arch.as_drawio()  # Get XML content
         >>> arch.as_drawio("architecture.drawio")  # Save to file
         """
-        graph = self.as_modelgraph(gtype=gtype, **kwargs)
-        return graph.draw(saveas=saveas, format='drawio', **kwargs)
+        graph = self.as_modelgraph(**kwargs)
+        return graph.draw_drawio(saveas=saveas, **kwargs)
 
 
 def check_model_pickleability(model, try_pick=False):

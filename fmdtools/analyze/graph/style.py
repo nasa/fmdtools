@@ -92,11 +92,11 @@ def mod_prefix():
         return 'docs-source/figures/frdl/primitives/'
 
 
-class BaseStyle(dataobject, copy_default=True):
+class BaseStyle:
     """Base class to define node/edge styles."""
 
     def __init__(self, *args, styles={}, **kwargs):
-        super().__init__(*args, **kwargs)
+        self.modifiers = getattr(self, 'modifiers', {})
         self.set_styles(**styles)
 
     def set_styles(self, **styles):
@@ -110,27 +110,18 @@ class BaseStyle(dataobject, copy_default=True):
 
     def gv_kwargs(self):
         """Return keyword arguments for dot.edge."""
-        return {k[3:]: v for k, v in asdict(self).items() if k.startswith('gv_')}
+        return {k[3:]: v for k, v in self.__dict__.items() if k.startswith('gv_')}
 
     def nx_kwargs(self):
         """Return kwargs to nx.draw_networkx_nodes."""
-        return {k[3:]: v for k, v in asdict(self).items() if k.startswith('nx_')}
+        return {k[3:]: v for k, v in self.__dict__.items() if k.startswith('nx_')}
 
     def drawio_kwargs(self):
         """Return keyword arguments for DrawIO."""
         kwargs = {}
-        for k, v in asdict(self).items():
+        for k, v in self.__dict__.items():
             if k.startswith('drawio_'):
                 kwargs[k[7:]] = v  # Fixed: 'drawio_' is 7 characters, not 8
-        
-        # Phase 4: Add advanced styling options
-        if hasattr(self, 'drawio_gradient') and self.drawio_gradient:
-            kwargs['gradient'] = True
-        if hasattr(self, 'drawio_shadow') and self.drawio_shadow:
-            kwargs['shadow'] = True
-        if hasattr(self, 'drawio_rounded') and self.drawio_rounded:
-            kwargs['rounded'] = True
-        
         return kwargs
 
 
@@ -176,33 +167,26 @@ class EdgeStyle(BaseStyle):
         Modifiers to previous parameters to apply based on particular styles.
     """
 
-    nx_edge_color: str = 'black'
-    nx_style: str = 'solid'
-    nx_arrows: bool = False
-    nx_arrowstyle: str = '-|>'
-    nx_arrowsize: int = 15
-    gv_arrowhead: str = 'open'
-    gv_arrowtail: str = 'none'
-    gv_dir: str = 'forward'
-    gv_color: str = 'black'
-    gv_style: str = 'solid'
-    drawio_strokewidth: int = 1
-    drawio_strokecolor: str = 'white'  # Changed from 'black' to 'white'
-    drawio_startarrow: str = 'none'
-    drawio_endarrow: str = 'none'
-    drawio_dashed: bool = False
-    modifiers = dict(degraded=dict(nx_edge_color='orange', gv_color='orange'),
-                     active=dict(nx_edge_color='green', gv_color='green'))
-
     def __init__(self, *args, styles={}, **kwargs):
         super().__init__(*args, styles=styles, **kwargs)
-        # Set DrawIO defaults based on edge type
-        self._set_drawio_defaults()
-
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults based on the edge type."""
-        # This will be overridden by subclasses if needed
-        pass
+        # Set default values
+        self.nx_edge_color = 'black'
+        self.nx_style = 'solid'
+        self.nx_arrows = False
+        self.nx_arrowstyle = '-|>'
+        self.nx_arrowsize = 15
+        self.gv_arrowhead = 'open'
+        self.gv_arrowtail = 'none'
+        self.gv_dir = 'forward'
+        self.gv_color = 'black'
+        self.gv_style = 'solid'
+        self.drawio_strokewidth = 1
+        self.drawio_strokecolor = 'white'
+        self.drawio_startarrow = 'none'
+        self.drawio_endarrow = 'none'
+        self.drawio_dashed = False
+        self.modifiers = dict(degraded=dict(nx_edge_color='orange', gv_color='orange'),
+                             active=dict(nx_edge_color='green', gv_color='green'))
 
     def nx_kwargs(self):
         """Return the style-defined arguments for nx.draw_networkx_edges.v."""
@@ -262,32 +246,26 @@ class FlowEdgeStyle(EdgeStyle):
     {'edge_color': 'black', 'style': 'solid', 'arrows': True, 'arrowstyle': '-|>', 'arrowsize': 15}
     """
 
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for flow edges."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.nx_arrows = True
         self.gv_arrowhead = 'none'
         self.gv_arrowtail = 'ediamond'
         self.gv_dir = 'both'
-        self.drawio_strokewidth = 1
-        self.drawio_strokecolor = 'white'  # Changed from 'black' to 'white'
         self.drawio_startarrow = 'diamondThin'
         self.drawio_endarrow = 'none'
-        self.drawio_dashed = False
 
 
 class ActivationEdgeStyle(EdgeStyle):
     """EdgeStyle representing activation/conditions."""
 
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for activation edges."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.nx_style = 'dashed'
         self.nx_arrows = True
         self.nx_arrowstyle = '->'
         self.nx_arrowsize = 30
         self.gv_style = 'dashed'
-        self.drawio_strokewidth = 1
-        self.drawio_strokecolor = 'white'  # Changed from 'black' to 'white'
-        self.drawio_startarrow = 'none'
         self.drawio_endarrow = 'open'
         self.drawio_dashed = True
 
@@ -295,49 +273,35 @@ class ActivationEdgeStyle(EdgeStyle):
 class ContainmentEdgeStyle(EdgeStyle):
     """EdgeStyle representing containment."""
 
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for containment edges."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.nx_arrows = True
         self.gv_arrowhead = 'none'
         self.gv_arrowtail = 'diamond'
         self.gv_dir = 'both'
-        self.drawio_strokewidth = 1
-        self.drawio_strokecolor = 'white'  # Changed from 'black' to 'white'
         self.drawio_startarrow = 'diamond'
-        self.drawio_endarrow = 'none'
-        self.drawio_dashed = False
 
 
 class ConnectionEdgeStyle(EdgeStyle):
     """EdgeStyle representing activation/conditions."""
 
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for connection edges."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.nx_edge_color = 'grey'
         self.nx_style = 'dashed'
         self.gv_arrowhead = 'none'
         self.gv_style = 'dashed'
-        self.drawio_strokewidth = 1
-        self.drawio_strokecolor = 'white'  # Changed from 'grey' to 'white'
-        self.drawio_startarrow = 'none'
-        self.drawio_endarrow = 'none'
         self.drawio_dashed = True
 
 
 class InheritanceEdgeStyle(EdgeStyle):
     """EdgeStyle representing inheritance."""
 
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for inheritance edges."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.nx_edge_color = 'grey'
         self.nx_arrows = True
         self.gv_arrowhead = 'empty'
-        self.gv_style = 'solid'
-        self.drawio_strokewidth = 1
-        self.drawio_strokecolor = 'white'  # Changed from 'grey' to 'white'
-        self.drawio_startarrow = 'none'
-        self.drawio_endarrow = 'open'
-        self.drawio_dashed = False
 
 
 def edge_style_factory(style_tag, styles={}, **kwargs):
@@ -431,29 +395,6 @@ class NodeStyle(BaseStyle):
         Modifiers to previous parameters to apply based on particular styles.
     """
 
-    nx_node_shape: str = 'o'
-    nx_linewidths: int = 0
-    nx_node_color: str = "lightgrey"
-    nx_node_size: int = 500
-    nx_edgecolors: str = 'grey'
-    nx_cmap: Colormap = None
-    nx_vmin: float = None
-    nx_vmax: float = None
-    gv_shape: str = 'ellipse'
-    gv_penwidth: str = '0'
-    gv_style: str = 'filled'
-    gv_fillcolor: str = 'lightgrey'
-    gv_color: str = 'grey'
-    drawio_shape: str = 'ellipse'
-    drawio_fillcolor: str = 'lightgrey'
-    drawio_strokecolor: str = 'grey'
-    drawio_fontsize: int = 12
-    drawio_fontstyle: str = 'normal'
-    drawio_gradient: bool = False
-    drawio_shadow: bool = False
-    drawio_rounded: bool = False
-    drawio_strokewidth: int = 1
-    drawio_opacity: float = 1.0
     modifiers = dict(active=dict(nx_node_color='green', gv_fillcolor='green'),
                      degraded=dict(nx_node_color='orange', gv_fillcolor='orange'),
                      faulty=dict(nx_edgecolors='red', gv_color='red'),
@@ -463,13 +404,30 @@ class NodeStyle(BaseStyle):
 
     def __init__(self, *args, styles={}, **kwargs):
         super().__init__(*args, styles=styles, **kwargs)
-        # Set DrawIO defaults based on node type
-        self._set_drawio_defaults()
-
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults based on the node type."""
-        # This will be overridden by subclasses if needed
-        pass
+        # Set default values
+        self.nx_node_shape = 'o'
+        self.nx_linewidths = 0
+        self.nx_node_color = "lightgrey"
+        self.nx_node_size = 500
+        self.nx_edgecolors = 'grey'
+        self.nx_cmap = None
+        self.nx_vmin = None
+        self.nx_vmax = None
+        self.gv_shape = 'ellipse'
+        self.gv_penwidth = '0'
+        self.gv_style = 'filled'
+        self.gv_fillcolor = 'lightgrey'
+        self.gv_color = 'grey'
+        self.drawio_shape = 'ellipse'
+        self.drawio_fillcolor = 'lightgrey'
+        self.drawio_strokecolor = 'grey'
+        self.drawio_fontsize = 12
+        self.drawio_fontstyle = 'normal'
+        self.drawio_gradient = False
+        self.drawio_shadow = False
+        self.drawio_rounded = False
+        self.drawio_strokewidth = 1
+        self.drawio_opacity = 1.0
 
     def show_nx(self, fig=None, ax=None, figsize=(1, 1), withlegend=False, saveas=''):
         """Show how the node will look in networkx."""
@@ -501,8 +459,8 @@ class NodeStyle(BaseStyle):
 class BlockNodeStyle(NodeStyle):
     """Style representing Functions."""
 
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for block nodes."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.nx_node_shape = 's'
         self.nx_linewidths = 2
         self.gv_shape = 'rectangle'
@@ -513,9 +471,8 @@ class BlockNodeStyle(NodeStyle):
 class FunctionNodeStyle(BlockNodeStyle):
     """Style representing Functions."""
 
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for function nodes."""
-        super()._set_drawio_defaults()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.drawio_fillcolor = '#cce5ff'  # Light blue
         self.drawio_strokecolor = '#6699cc'  # Darker blue
 
@@ -523,9 +480,8 @@ class FunctionNodeStyle(BlockNodeStyle):
 class ActionNodeStyle(BlockNodeStyle):
     """Style representing Actions."""
 
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for action nodes."""
-        super()._set_drawio_defaults()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.gv_style = 'rounded, filled'
         self.drawio_shape = 'rhombus'
         self.drawio_fillcolor = '#ffffcc'  # Light yellow
@@ -535,8 +491,8 @@ class ActionNodeStyle(BlockNodeStyle):
 class ComponentNodeStyle(NodeStyle):
     """Style representing Components."""
 
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for component nodes."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.gv_style = 'filled'
         self.gv_shape = 'trapezium'
         self.drawio_shape = 'triangle'
@@ -547,8 +503,8 @@ class ComponentNodeStyle(NodeStyle):
 class ArchitectureNodeStyle(NodeStyle):
     """Style representing Actions."""
 
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for architecture nodes."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.nx_node_shape = '^'
         self.gv_shape = 'triangle'
         self.drawio_shape = 'hexagon'
@@ -557,8 +513,8 @@ class ArchitectureNodeStyle(NodeStyle):
 class FlowNodeStyle(NodeStyle):
     """Style representing Flow objects."""
 
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for flow nodes."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.nx_node_shape = 'o'
         self.nx_linewidths = 0
         self.gv_style = 'filled'
@@ -571,76 +527,65 @@ class FlowNodeStyle(NodeStyle):
 
 class MultiFlowNodeStyle(NodeStyle):
     """Style representing MultiFlow objects."""
-
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for multiflow nodes."""
-        self.nx_node_shape = 'p'
-        self.nx_linewidths = 0
-        self.gv_style = 'filled'
-        self.gv_shape = 'pentagon'
-        self.gv_penwidth = '0'
+    
+    nx_node_shape: str = 'p'
+    nx_linewidths: int = 0
+    gv_style: str = 'filled'
+    gv_shape: str = 'pentagon'
+    gv_penwidth: str = '0'
 
 
 class CommsFlowNodeStyle(NodeStyle):
     """Style representing CommsFlow objects."""
-
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for commsflow nodes."""
-        self.nx_node_shape = '8'
-        self.nx_linewidths = 0
-        self.gv_style = 'filled'
-        self.gv_shape = 'octagon'
-        self.gv_penwidth = '0'
+    
+    nx_node_shape: str = '8'
+    nx_linewidths: int = 0
+    gv_style: str = 'filled'
+    gv_shape: str = 'octagon'
+    gv_penwidth: str = '0'
 
 
 class ContainerNodeStyle(NodeStyle):
     """Style representing containers."""
-
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for container nodes."""
-        self.nx_node_shape = 's'
-        self.nx_linewidths = 0
-        self.gv_style = 'filled'
-        self.gv_shape = 'tab'
-        self.gv_penwidth = '1'
+    
+    nx_node_shape: str = 's'
+    nx_linewidths: int = 0
+    gv_style: str = 'filled'
+    gv_shape: str = 'tab'
+    gv_penwidth: str = '1'
 
 
 class MethodNodeStyle(NodeStyle):
-
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for method nodes."""
-        self.nx_node_shape = 'd'
-        self.nx_linewidths = 0
-        self.gv_style = 'filled'
-        self.gv_shape = 'component'
-        self.gv_penwidth = '1'
+    """Style representing method nodes."""
+    
+    nx_node_shape: str = 'd'
+    nx_linewidths: int = 0
+    gv_style: str = 'filled'
+    gv_shape: str = 'component'
+    gv_penwidth: str = '1'
 
 
 class OtherNodeStyle(NodeStyle):
     """Style representing other properties."""
     
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for other nodes."""
-        self.nx_node_shape = "P"
-        self.nx_linewidths = 0
-        self.gv_style = 'filled'
-        self.gv_shape = 'Msquare'
-        self.gv_penwidth = '1'
+    nx_node_shape: str = "P"
+    nx_linewidths: int = 0
+    gv_style: str = 'filled'
+    gv_shape: str = 'Msquare'
+    gv_penwidth: str = '1'
 
 
 class EnvironmentNodeStyle(NodeStyle):
     """Style representing Environment objects."""
-
-    def _set_drawio_defaults(self):
-        """Set DrawIO defaults for environment nodes."""
-        self.nx_node_shape = 's'
-        self.nx_linewidths = 1
-        self.gv_style = 'filled'
-        self.gv_shape = 'rectangle'
-        self.gv_penwidth = '1'
-        self.drawio_shape = 'rectangle'
-        self.drawio_fillcolor = '#ffccff'  # Light pink
-        self.drawio_strokecolor = '#cc66cc'  # Darker pink
+    
+    nx_node_shape: str = 's'
+    nx_linewidths: int = 1
+    gv_style: str = 'filled'
+    gv_shape: str = 'rectangle'
+    gv_penwidth: str = '1'
+    drawio_shape: str = 'rectangle'
+    drawio_fillcolor: str = '#ffccff'  # Light pink
+    drawio_strokecolor: str = '#cc66cc'  # Darker pink
 
 
 def node_style_factory(style_tag, styles={}, **kwargs):

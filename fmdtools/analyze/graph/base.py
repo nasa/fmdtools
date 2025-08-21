@@ -308,7 +308,7 @@ class Graph(object):
 
     def draw(self, figsize=(12, 10), title="", fig=False, ax=False, withlegend=True,
              legend_bbox=(1, 0.5), legend_loc="center left", legend_labelspacing=2,
-             legend_borderpad=1, saveas='', format='matplotlib', **kwargs):
+             legend_borderpad=1, saveas='', **kwargs):
         """
         Draw a graph with given styles corresponding to the node/edge properties.
 
@@ -335,8 +335,6 @@ class Graph(object):
             borderpad argument for plt.legend. the default is 1.
         saveas : str, optional
             file to save as (if provided).
-        format : str, optional
-            Output format. Options: 'matplotlib' (default), 'drawio'.
         **kwargs : kwargs
             Arguments for various supporting functions:
             (set_pos, set_edge_styles, set_edge_labels, set_node_styles,
@@ -349,13 +347,10 @@ class Graph(object):
         ax : matplotlib axis
             Ax in the figure
         """
-        if format == 'drawio':
-            return self._draw_drawio(saveas=saveas, **kwargs)
-        else:
-            return self._draw_matplotlib(figsize=figsize, title=title, fig=fig, ax=ax, 
-                                       withlegend=withlegend, legend_bbox=legend_bbox, 
-                                       legend_loc=legend_loc, legend_labelspacing=legend_labelspacing,
-                                       legend_borderpad=legend_borderpad, saveas=saveas, **kwargs)
+        return self._draw_matplotlib(figsize=figsize, title=title, fig=fig, ax=ax, 
+                                   withlegend=withlegend, legend_bbox=legend_bbox, 
+                                   legend_loc=legend_loc, legend_labelspacing=legend_labelspacing,
+                                   legend_borderpad=legend_borderpad, saveas=saveas, **kwargs)
 
     def _draw_matplotlib(self, figsize=(12, 10), title="", fig=False, ax=False, withlegend=True,
                          legend_bbox=(1, 0.5), legend_loc="center left", legend_labelspacing=2,
@@ -386,8 +381,27 @@ class Graph(object):
                        loc=legend_loc, add_handles=edge_handles)
         return fig, ax
 
-    def _draw_drawio(self, saveas='', **kwargs):
-        """Generate DrawIO diagram using existing graph structure and positions."""
+    def draw_drawio(self, saveas='', **kwargs):
+        """
+        Generate DrawIO diagram using existing graph structure and positions.
+        
+        Parameters
+        ----------
+        saveas : str, optional
+            File path to save the DrawIO XML. If empty, returns XML content.
+        **kwargs : dict
+            Additional arguments for graph styling and positioning.
+            
+        Returns
+        -------
+        str
+            DrawIO XML content if saveas is empty, otherwise the filename.
+            
+        Examples
+        --------
+        >>> xml_content = graph.draw_drawio()  # Get XML content
+        >>> graph.draw_drawio("graph.drawio")  # Save to file
+        """
         if not hasattr(self, 'pos') or not self.pos:
             # Set default positions if none exist
             self.set_pos(auto='spring')
@@ -408,9 +422,9 @@ class Graph(object):
         if not hasattr(self, 'pos') or not self.pos:
             return
         
-        # Find the range of positions
-        x_coords = [pos[0] for pos in self.pos.values() if hasattr(pos, '__len__') and len(pos) >= 2]
-        y_coords = [pos[1] for pos in self.pos.values() if hasattr(pos, '__len__') and len(pos) >= 2]
+        # Find the range of positions - positions should always be (x, y) tuples
+        x_coords = [pos[0] for pos in self.pos.values()]
+        y_coords = [pos[1] for pos in self.pos.values()]
         
         if not x_coords or not y_coords:
             return
@@ -429,18 +443,17 @@ class Graph(object):
         
         # Apply improved scaling to all positions
         for node, pos in self.pos.items():
-            if hasattr(pos, '__len__') and len(pos) >= 2:
-                # Scale and center the positions with more aggressive spacing
-                new_x = (pos[0] - x_min) * x_scale * 2.5 + 200  # Multiply by 2.5 for more spacing
-                new_y = (pos[1] - y_min) * y_scale * 2.5 + 200
-                self.pos[node] = (new_x, new_y)
+            # Scale and center the positions with more aggressive spacing
+            new_x = (pos[0] - x_min) * x_scale * 2.5 + 200  # Multiply by 2.5 for more spacing
+            new_y = (pos[1] - y_min) * y_scale * 2.5 + 200
+            self.pos[node] = (new_x, new_y)
 
     def _create_drawio_xml(self):
         """Create basic DrawIO XML from graph data."""
         # Calculate canvas size based on node positions
         if hasattr(self, 'pos') and self.pos:
-            x_coords = [pos[0] for pos in self.pos.values() if hasattr(pos, '__len__') and len(pos) >= 2]
-            y_coords = [pos[1] for pos in self.pos.values() if hasattr(pos, '__len__') and len(pos) >= 2]
+            x_coords = [pos[0] for pos in self.pos.values()]
+            y_coords = [pos[1] for pos in self.pos.values()]
             if x_coords and y_coords:
                 canvas_width = max(x_coords) + 200  # Add padding
                 canvas_height = max(y_coords) + 200
@@ -462,11 +475,8 @@ class Graph(object):
         # Add nodes with proper positioning
         for node, pos in self.pos.items():
             # Use the improved positions directly
-            if hasattr(pos, '__len__') and len(pos) >= 2:
-                x = float(pos[0])
-                y = float(pos[1])
-            else:
-                x, y = 100, 100  # Fallback position
+            x = float(pos[0])
+            y = float(pos[1])
             
             node_data = self.g.nodes[node]
             nodetype = node_data.get('nodetype', 'default')
@@ -1101,8 +1111,8 @@ def data_error(data, average):
         current_array = np.array([float(x[i]) for x in data])
         q1.append(np.percentile(current_array, 25))
         q3.append(np.percentile(current_array, 75))
-    lower_error = [x - y for x, y in zip(average, q1)]
-    upper_error = [x - y for x, y in zip(average, q3)]
+    lower_error = [avg - low for avg, low in zip(average, q1)]
+    upper_error = [hi - avg for avg, hi in zip(average, q3)]
     return lower_error, upper_error
 
 
