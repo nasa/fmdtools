@@ -16,7 +16,7 @@ import unittest
 
 class OverFxn(Function):
     """Test function containing a FunctionArchitecture."""
-    __slots__ = ('fa')
+
     arch_fa = ExFxnArch
     container_s = ExampleState
     container_m = Mode
@@ -31,11 +31,11 @@ class define_Tests(unittest.TestCase):
 
     def test_propagation(self):
         """Check that contained functionarch propagates as expected."""
-        self.mdl.propagate(1.0)
+        self.mdl(time=1.0)
         # should match values from functionarch propagation, see docstrings
-        self.assertEqual(self.mdl.s.x, 4.0)
-        self.mdl.propagate(2.0)
-        self.assertEqual(self.mdl.s.x, 10.0)
+        self.assertEqual(self.mdl.s.x, 2.0)
+        self.mdl(time=2.0)
+        self.assertEqual(self.mdl.s.x, 6.0)
 
     def test_fault_injection(self):
         """Check that faults get injected into contained functionarch."""

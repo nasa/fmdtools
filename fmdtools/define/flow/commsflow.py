@@ -23,7 +23,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import get_dict_repr
-from fmdtools.define.flow.base import ExampleFlow
+from fmdtools.define.container.state import ExampleState
 from fmdtools.define.flow.multiflow import MultiFlow, MultiFlowGraph
 from fmdtools.define.base import get_obj_name
 from fmdtools.analyze.graph.model import add_edge, ModelGraph
@@ -317,9 +317,10 @@ class CommsFlow(MultiFlow):
         return gtype(self, **kwargs)
 
 
-class ExampleCommsFlow(ExampleFlow, CommsFlow):
+class ExampleCommsFlow(CommsFlow):
     """Extension of ExampleFlow to CommsFlow case."""
 
+    container_s = ExampleState
     __slots__ = ()
 
 

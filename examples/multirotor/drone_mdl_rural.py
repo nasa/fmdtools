@@ -133,7 +133,6 @@ class HSigState(State):
 class HSig(Flow):
     """Health signal flow."""
 
-    __slots__ = ()
     container_s = HSigState
 
 
@@ -146,7 +145,6 @@ class RSigState(State):
 class RSig(Flow):
     """Recovery signal flow."""
 
-    __slots__ = ()
     container_s = RSigState
 
 # DEFINE FUNCTIONS
@@ -242,7 +240,6 @@ class BatParam(Parameter):
 class Battery(Component):
     """Battery component used to hold energy in distributed architecture."""
 
-    __slots__ = ()
     container_s = BatState
     container_m = BatMode
     container_p = BatParam
@@ -356,7 +353,6 @@ class StoreEEMode(Mode):
 class StoreEE(Function):
     """Class defining energy storage function with battery architecture."""
 
-    __slots__ = ('hsig_bat', 'ee_1', 'force_st')
     container_s = StoreEEState
     container_m = StoreEEMode
     arch_ca = BatArch
@@ -431,7 +427,6 @@ class HoldPayloadMode(Mode):
 class HoldPayload(HoldPayloadDyn):
     """Adaptation of HoldPayload with new mode information."""
 
-    __slots__ = ()
     container_m = HoldPayloadMode
 
 
@@ -453,7 +448,6 @@ class ManageHealthMode(Mode):
 class ManageHealth(Function):
     """Health management function for rotor and battery."""
 
-    __slots__ = ('force_st', 'ee_ctl', 'hsig_dofs', 'hsig_bat', 'rsig_traj')
     container_m = ManageHealthMode
     container_p = ResPolicy
     flow_force_st = Force
@@ -489,7 +483,6 @@ class AffectMode(Mode):
 class AffectDOF(AffectDOFHierarchical):
     """Adaptation of hierarchical AffecDOF function which returns fault signals."""
 
-    __slots__ = ('hsig_dofs',)
     container_m = AffectMode
     flow_hsig_dofs = HSig
 
@@ -524,7 +517,6 @@ class CtlDOFMode(Mode):
 class CtlDOF(CtlDOFStat):
     """Adaptation of CtlDOFMode with more mode information."""
 
-    __slots__ = ()
     container_m = CtlDOFMode
 
 
@@ -581,7 +573,6 @@ class PlanPathState(PlanPathStateDyn):
 class PlanPath(PlanPathDyn):
     """Path planning function of the drone. Follows a sequence defined in flightplan."""
 
-    __slots__ = ('rsig_traj', )
     container_s = PlanPathState
     container_m = PlanPathMode
     container_p = DroneParam
@@ -679,7 +670,6 @@ class PlanPath(PlanPathDyn):
 class Drone(FunctionArchitecture):
     """Rural surveillance Drone model."""
 
-    __slots__ = ('start_area', 'safe_area', 'target_area')
     container_p = DroneParam
     default_sp = dict(phases=(('taxi', 0, 0),
                               ('move', 1, 11),

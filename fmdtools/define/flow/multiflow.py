@@ -9,8 +9,9 @@ Defines:
 """
 
 from fmdtools.define.base import get_dict_repr
-from fmdtools.define.flow.base import Flow, ExampleFlow
+from fmdtools.define.flow.base import Flow
 from fmdtools.analyze.graph.model import ModelGraph
+from fmdtools.define.container.state import ExampleState
 
 
 class MultiFlowGraph(ModelGraph):
@@ -333,10 +334,11 @@ class MultiFlow(Flow):
         return gtype(self, **kwargs)
 
 
-class ExampleMultiFlow(ExampleFlow, MultiFlow):
+class ExampleMultiFlow(MultiFlow):
     """Extension of ExampleFlow to MultiFlow case."""
 
     __slots__ = ()
+    container_s = ExampleState
 
 
 if __name__ == "__main__":

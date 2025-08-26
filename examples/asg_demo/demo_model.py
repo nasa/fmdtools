@@ -33,7 +33,6 @@ class OutcomeStates(State):
 
 class Outcome(Flow):
 
-    __slots__ = ()
     container_s = OutcomeStates
 
 
@@ -47,7 +46,6 @@ class HazardState(State):
 
 class Hazard(Flow):
 
-    __slots__ = ()
     container_s = HazardState
 
 
@@ -61,7 +59,6 @@ class ActionMode(Mode):
 class Perceive(Action):
     """A user's perception abilities/behaviors for percieving the hazard."""
 
-    __slots__ = ('hazard', 'outcome')
     container_m = ActionMode
     flow_hazard = Hazard
     flow_outcome = Outcome
@@ -81,7 +78,6 @@ class Perceive(Action):
 class Act(Action):
     """User actions to mitigate the hazard."""
 
-    __slots__ = ('hazard', 'outcome')
     container_m = ActionMode
     flow_hazard = Hazard
     flow_outcome = Outcome
@@ -103,7 +99,6 @@ class Act(Action):
 class Done(Action):
     """User state after performing the action."""
 
-    __slots__ = ('hazard')
     flow_hazard = Hazard
 
     def dynamic_behavior(self):
@@ -136,7 +131,6 @@ class Human(ActionArchitecture):
 class DetectHazard(Function):
     """Function containing the human."""
 
-    __slots__ = ('hazard')
     container_m = Mode
     arch_aa = Human
     flow_hazard = Hazard
@@ -145,7 +139,6 @@ class DetectHazard(Function):
 class ProduceHazard(Function):
     """Function producing Hazards."""
 
-    __slots__ = ('hazard',)
     flow_hazard = Hazard
 
     def dynamic_behavior(self):
@@ -165,7 +158,6 @@ class PassStates(State):
 class PassHazard(Function):
     """Accumulates total hazards/mitigations."""
 
-    __slots__ = ('hazard',)
     container_s = PassStates
     flow_hazard = Hazard
 
@@ -179,7 +171,6 @@ class PassHazard(Function):
 class HazardModel(FunctionArchitecture):
     """Overall model of the human in context."""
 
-    __slots__ = ()
     default_sp = dict(end_time=60, dt=1.0)
 
     def init_architecture(self, **kwargs):

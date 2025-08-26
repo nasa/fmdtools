@@ -83,7 +83,6 @@ class DriveRand(Rand):
 class DriveDegradation(Function):
     """Function defining the stochastic degradation of the Drive function."""
 
-    __slots__ = ()
     container_s = DriveDegradationStates
     container_r = DriveRand
     default_sp = dict(end_time=100)
@@ -156,7 +155,6 @@ class PSFShortParams(Parameter, readonly=True):
 class PSFDegradationShort(Function):
     """Function defining short-term operator performance shaping factor degradation."""
 
-    __slots__ = ()
     container_s = PSFDegradationShortStates
     container_r = PSFDegShortRand
     container_p = PSFShortParams
@@ -212,7 +210,6 @@ class PSFDegradationLongStates(State):
 class PSFDegradationLong(Function):
     """Long-term degradation of operator behavior."""
 
-    __slots__ = ()
     container_s = PSFDegradationLongStates
     container_p = LongParams
     default_sp = dict(end_time=100)
@@ -233,8 +230,8 @@ if __name__ == "__main__":
     endresults, mdlhist = prop.nominal(deg_mdl)
     mdlhist.plot_line("s.wear")
     # stochastic
-    deg_mdl = DriveDegradation('DriveDeg')
-    endresults, mdlhist = prop.nominal(deg_mdl, run_stochastic=True)
+    deg_mdl = DriveDegradation('DriveDeg', sp=dict(run_stochastic=True))
+    endresults, mdlhist = prop.nominal(deg_mdl)
     mdlhist.plot_line("s.friction")
 
 

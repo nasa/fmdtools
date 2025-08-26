@@ -396,7 +396,7 @@ def sample_times_quad(times, nodes, weights):
     quantiles = np.array(nodes)/2 + 0.5
     if len(quantiles) > len(times):
         raise Exception("Nodes length " + str(len(nodes))
-                        + "longer than times" + str(len(times)))
+                        + " longer than times " + str(len(times)))
     else:
         exac_times = [np.quantile(times, q) for q in quantiles]
         sampletimes = [times[np.argmin(np.abs(np.array(times)-t))] for t in exac_times]

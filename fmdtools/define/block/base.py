@@ -180,6 +180,14 @@ class SimParam(Parameter, readonly=True):
             raise Exception("Invalid argument, track_times=" + str(self.track_times))
         return t_ind_rec
 
+    def get_sub_kwargs(self):
+        """Get keyword arguments for contained sim from larger sim."""
+        kwargs = self.asdict()
+        if not self.use_local:
+            kwargs.pop("dt")
+        kwargs['end_condition'] = ""
+        return kwargs
+
 
 class Simulable(BaseObject):
     """
@@ -874,16 +882,17 @@ class Block(Simulable):
         """
         archs = self.find_roletype_initiators("arch")
         b_flows = {f: getattr(self, f) for f in self.flows}
-        arch_kwargs = {}
+        spk = self.sp.get_sub_kwargs()
+        arch_kw = {}
         for k in archs:
             if k in kwargs and isinstance(kwargs[k], dict):
-                arch_kwargs[k] = {**kwargs[k], **{'flows': b_flows}, 'name': k, 'sp': self.sp}
+                arch_kw[k] = {**kwargs[k], **{'flows': b_flows}, 'name': k, 'sp': spk}
             elif k in kwargs and isinstance(kwargs[k], BaseObject):
-                arch_kwargs[k] = kwargs[k].copy(flows=b_flows, name=k, sp=self.sp)
+                arch_kw[k] = kwargs[k].copy(flows=b_flows, name=k, sp=spk)
             else:
-                arch_kwargs[k] = {'flows': b_flows, 'name': k, 'sp': self.sp}
+                arch_kw[k] = {'flows': b_flows, 'name': k, 'sp': spk}
 
-        return {'flows': b_flows, **arch_kwargs}
+        return {'flows': b_flows, **arch_kw}
 
     def check_flows(self, flows={}):
         """

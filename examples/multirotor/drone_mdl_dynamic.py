@@ -101,8 +101,6 @@ class DroneEnvironment(Environment):
 class StoreEE(StaticstoreEE):
     """Dynamic StoreEE function (adds energy usage)."""
 
-    __slots__ = ()
-
     def set_faults(self):
         """When soc is 0, add 'nocharge' fault."""
         if self.s.soc < 1:
@@ -122,8 +120,6 @@ class StoreEE(StaticstoreEE):
 
 class HoldPayload(HoldPayloadStatic):
     """Holds payload (adapted with dynamic behaviors)."""
-
-    __slots__ = ()
 
     def calc_force_gr(self):
         """Calculate ground force (dynamic adaptation).
@@ -207,7 +203,6 @@ class PlanPathTime(Time):
 class PlanPath(Function):
     """Path planning for the drone."""
 
-    __slots__ = ('ee_ctl', 'dofs', 'des_traj', 'fs', 'dofs')
     container_t = PlanPathTime
     container_m = PlanPathMode
     container_s = PlanPathState
@@ -308,7 +303,6 @@ class PlanPath(Function):
 class AffectDOF(AffectDOFStatic):
     """Dynamic extension of drone locomotion."""
 
-    __slots__ = ('des_traj',)
     flow_des_traj = DesTraj
 
     def static_behavior(self):
@@ -380,7 +374,6 @@ class AffectDOF(AffectDOFStatic):
 class ViewEnvironment(Function):
     """Camera for the drone. Determines which aspects of the environment are viewed."""
 
-    __slots__ = ('dofs', 'environment')
     flow_dofs = DOFs
     flow_environment = DroneEnvironment
 
@@ -399,7 +392,6 @@ class ViewEnvironment(Function):
 class Drone(FunctionArchitecture):
     """Dynamic drone model."""
 
-    __slots__ = ()
     default_sp = dict(phases=(('ascend', 0, 1),
                               ('forward', 2, 14),
                               ('descend', 15, 18),

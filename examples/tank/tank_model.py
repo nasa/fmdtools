@@ -52,7 +52,7 @@ class WatState(State):
 
 
 class Liquid(Flow):
-    __slots__ = ()
+
     container_s = WatState
 
 
@@ -62,7 +62,7 @@ class SigState(State):
 
 
 class Signal(Flow):
-    __slots__ = ()
+
     container_s = SigState
 
 
@@ -78,7 +78,6 @@ class TransportLiquidMode(Mode):
 
 class ImportLiquid(Function):
 
-    __slots__ = ('sig', 'watout')
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
     flow_sig = Signal
@@ -98,7 +97,7 @@ class ImportLiquid(Function):
 
 
 class ExportLiquid(Function):
-    __slots__ = ('sig', 'watin')
+
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
     flow_sig = Signal
@@ -122,7 +121,7 @@ class GuideLiquidMode(Mode):
 
 
 class GuideLiquid(Function):
-    __slots__ = ('watin', 'watout')
+
     flow_watin = Liquid
     flow_watout = Liquid
     container_m = GuideLiquidMode
@@ -140,12 +139,12 @@ class GuideLiquid(Function):
 
 
 class GuideLiquidIn(GuideLiquid):
-    __slots__ = ()
+
     flownames = {'wat_in_1': 'watin', 'wat_in_2': 'watout'}
 
 
 class GuideLiquidOut(GuideLiquid):
-    __slots__ = ()
+
     flownames = {'wat_out_1': 'watin', 'wat_out_2': 'watout'}
 
 
@@ -159,7 +158,7 @@ class StoreLiquidMode(Mode):
 
 
 class StoreLiquid(Function):
-    __slots__ = ('watin', 'watout', 'sig')
+
     container_s = StoreLiquidState
     container_m = StoreLiquidMode
     flow_watin = Liquid
@@ -228,7 +227,7 @@ class HumanASG(ActionArchitecture):
 
 
 class HumanActions(Function):
-    __slots__ = ('valve1_sig', 'tank_sig', 'valve2_sig')
+
     container_p = HumanParam
     container_m = Mode
     arch_aa = HumanASG
@@ -271,7 +270,7 @@ class LookMode(HumanErrorMode):
 
 
 class Look(Action):
-    __slots__ = ()
+
     container_m = LookMode
 
     def looked(self):
@@ -293,7 +292,7 @@ class DetectMode(HumanErrorMode):
 
 
 class Detect(Action):
-    __slots__ = ('tank_sig', 'detect_sig')
+
     container_m = DetectMode
     flow_detect_sig = Signal
     flow_tank_sig = Signal
@@ -331,7 +330,7 @@ class ReachMode(HumanErrorMode):
 
 
 class Reach(Action):
-    __slots__ = ()
+
     container_m = ReachMode
 
     def reached(self):
@@ -346,7 +345,7 @@ class GraspMode(Mode):
 
 
 class Grasp(Action):
-    __slots__ = ()
+
     container_m = GraspMode
 
     def grasped(self):
@@ -367,7 +366,7 @@ class TurnMode(HumanErrorMode):
 
 
 class Turn(Action):
-    __slots__ = ('detect_sig', 'valve1_sig', 'valve2_sig')
+
     container_m = TurnMode
     flow_detect_sig = Signal
     flow_valve1_sig = Signal
@@ -393,7 +392,7 @@ class TankParam(Parameter, readonly=True):
 
 
 class Tank(FunctionArchitecture):
-    __slots__ = ()
+
     container_p = TankParam
     default_sp = dict(phases=(('na', 0, 0), ('operation', 1, 20)),
                       end_time=20, units='min')

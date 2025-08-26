@@ -60,7 +60,7 @@ class Geom(BaseObject):
         Parameter defining immutable properties (e.g., shapely inputs, buffer)
     """
 
-    __slots__ = ('p', 's', 'shapenames', )
+    __slots__ = ('p', 's', 'shapenames')
     container_s = State
     container_p = Parameter
     default_track = ['s']
@@ -338,7 +338,6 @@ class GeomPoint(Geom):
     Examples
     --------
     >>> class ExPoint(GeomPoint):
-    ...    __slots__ = ()
     ...    container_p = ExPointParam
     ...    container_s = ExGeomState
     >>> exp = ExPoint()
@@ -368,7 +367,6 @@ class GeomPoint(Geom):
     True
     """
 
-    __slots__ = ()
     container_p = PointParam
     shapely_class = Point
 
@@ -412,7 +410,6 @@ class ExPointParam(PointParam):
 class ExPoint(GeomPoint):
     """Example point for testing."""
 
-    __slots__ = ()
     container_p = ExPointParam
     container_s = ExGeomState
 
@@ -459,7 +456,6 @@ class GeomLine(Geom):
     Examples
     --------
     >>> class ExLine(GeomLine):
-    ...    __slots__ = ()
     ...    container_p = ExLineParam
     ...    container_s = ExGeomState
     >>> exl = ExLine()
@@ -484,7 +480,6 @@ class GeomLine(Geom):
     <class 'shapely.geometry.polygon.Polygon'>
     """
 
-    __slots__ = ()
     container_p = LineParam
     shapely_class = LineString
 
@@ -505,7 +500,6 @@ class GeomLine(Geom):
 class ExLine(GeomLine):
     """Example GeomLine to use in testing."""
 
-    __slots__ = ()
     container_p = ExLineParam
     container_s = ExGeomState
 
@@ -526,7 +520,6 @@ class PolyParam(Parameter):
     The following PolyParam defines a hollow right triangle:
 
     >>> class ExPolyParam(PolyParam):
-    ...    __slots__ = ()
     ...    shell: tuple = ((0.0, 0.0), (1.0, 0.0), (1.0, 1.0))
     ...    holes: tuple = (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)), )
     >>> ExPolyParam()
@@ -554,7 +547,6 @@ class GeomPoly(Geom):
     Examples
     --------
     >>> class ExPoly(GeomPoly):
-    ...    __slots__ = ()
     ...    container_p = ExPolyParam
     ...    container_s = ExGeomState
     >>> egp = ExPoly()
@@ -572,7 +564,6 @@ class GeomPoly(Geom):
     <class 'shapely.geometry.polygon.Polygon'>
     """
 
-    __slots__ = ()
     container_p = PolyParam
     shapely_class = Polygon
 
@@ -591,7 +582,6 @@ class GeomPoly(Geom):
 class ExPoly(GeomPoly):
     """Example Polygon for use in testing."""
 
-    __slots__ = ()
     container_p = ExPolyParam
     container_s = ExGeomState
 

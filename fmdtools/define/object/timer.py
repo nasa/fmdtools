@@ -57,6 +57,7 @@ class Timer(BaseObject):
     default_track = ('time', 'mode')
     roletypes = []
     rolevars = ['time', 'mode']
+    __slots__ = ('time', 'tstep', 'mode')
 
     def __init__(self, name=''):
         """

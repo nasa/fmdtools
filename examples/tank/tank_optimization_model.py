@@ -83,7 +83,7 @@ class TransportLiquidMode(Mode):
 
 
 class ImportLiquid(Function):
-    __slots__ = ('sig', 'wat_out')
+
     container_p = TankParam
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
@@ -111,7 +111,7 @@ class ImportLiquid(Function):
 
 
 class ExportLiquid(Function):
-    __slots__ = ('sig', 'wat_in')
+
     container_p = TankParam
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
@@ -145,7 +145,7 @@ class StoreLiquidState(State):
 
 
 class StoreLiquid(Function):
-    __slots__ = ('wat_in', 'wat_out', 'sig')
+
     container_s = StoreLiquidState
     container_m = StoreLiquidMode
     container_p = TankParam
@@ -184,7 +184,6 @@ class StoreLiquid(Function):
 
 class ContingencyActions(Function):
 
-    __slots__ = ('input_sig', 'output_sig', 'tank_sig')
     container_p = TankParam
     flow_input_sig = Signal
     flow_output_sig = Signal
@@ -200,7 +199,7 @@ class ContingencyActions(Function):
 
 
 class Tank(FunctionArchitecture):
-    __slots__ = ()
+
     container_p = TankParam
     default_sp = dict(phases=(('na', 0, 0),
                               ('operation', 1, 20)),

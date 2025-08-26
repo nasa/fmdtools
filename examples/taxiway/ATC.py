@@ -30,7 +30,7 @@ class ATCModes(Mode):
 
 class ATC(Function):
 
-    __slots__ = ('location', 'requests', 'ground', 'perc_requests', 'perc_ground')
+    __slots__ = ('perc_requests', 'perc_ground')
     container_p = TaxiwayParams
     container_m = ATCModes
     flow_location = Location

@@ -69,7 +69,7 @@ class CoordsParam(Parameter):
     state_statename : tuple
         Tuple (datatype, defaultvalue) defining mutable grid features to instantiate
         as arrays.
-    collect_collectionname : tuple
+    collection_collectionname : tuple
         Tuple (propertyname, value, comparator) defining a collection of points to
         instantiate as a list, where the tuple is arguments to Coords.find_all_prop or
         to find_all_props
@@ -86,8 +86,8 @@ class CoordsParam(Parameter):
     ...     feature_v: tuple = (float, 1.0)
     ...     state_st: tuple = (float, 0.0)
     ...     point_start: tuple = (0.0, 0.0)
-    ...     collect_high_v: tuple = ("v", 5.0, np.greater)
-    ...     collect_hi_v_not_a: tuple = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
+    ...     collection_high_v: tuple = ("v", 5.0, np.greater)
+    ...     collection_hi_v_not_a: tuple = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
     >>> ex = ExampleCoordsParam()
     """
 
@@ -1146,7 +1146,7 @@ class Coords(BaseCoords):
     def add_coords_roles(self):
         """Add points, collections, features, and states as roles to Coords."""
         self.init_role_dict("point", set_attr=True)
-        self.init_role_dict("collect", "ions")
+        self.init_role_dict("collection")
         self.init_role_dict("feature")
         self.init_role_dict("state")
         self.properties = {**self.features, **self.states}
@@ -1649,8 +1649,8 @@ class ExampleCoordsParam(CoordsParam):
     feature_v: tuple = (float, 1.0)
     state_st: tuple = (float, 0.0)
     point_start: tuple = (0.0, 0.0)
-    collect_high_v: tuple = ("v", 5.0, np.greater)
-    collect_hi_v_not_a: tuple = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
+    collection_high_v: tuple = ("v", 5.0, np.greater)
+    collection_hi_v_not_a: tuple = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
 
 
 class ExampleCoords(Coords):
@@ -1692,6 +1692,7 @@ class MetricCoords(BaseCoords):
     array([[0, 1],
            [0, 4]])
     """
+    __slots__ = ('__dict__', )
 
     def __init__(self, res, *args, values=[], metric=np.mean, **kwargs):
         super().__init__(*args, **kwargs)

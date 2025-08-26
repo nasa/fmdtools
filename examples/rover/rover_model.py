@@ -227,7 +227,6 @@ class DestState(State):
 class Dest(GeomPoint):
     """Start/end/point."""
 
-    __slots__ = ()
     container_p = DestParam
     container_s = DestState
 
@@ -293,7 +292,6 @@ class Ground(Environment):
 class PathLine(GeomLine):
     """Rover Line."""
 
-    __slots__ = ()
     container_p = PathParam
 
 
@@ -325,7 +323,6 @@ class PosState(State):
 class Pos(Flow):
     """Rover position/velocity flow."""
 
-    __slots__ = ()
     container_s = PosState
 
 
@@ -339,7 +336,6 @@ class EEState(State):
 class EE(Flow):
     """Electricity flow."""
 
-    __slots__ = ()
     container_s = EEState
 
 
@@ -371,7 +367,6 @@ class VideoState(State):
 class Video(Flow):
     """Video flow."""
 
-    __slots__ = ()
     container_s = VideoState
 
 
@@ -394,7 +389,6 @@ class ControlState(State):
 class Control(Flow):
     """Control flow."""
 
-    __slots__ = ()
     container_s = ControlState
 
 
@@ -407,7 +401,6 @@ class SwitchState(State):
 class Switch(Flow):
     """Power switch."""
 
-    __slots__ = ()
     container_s = SwitchState
 
 
@@ -429,7 +422,6 @@ class CommsState(State):
 class Comms(Flow):
     """External communications flow."""
 
-    __slots__ = ()
     container_s = CommsState
 
 
@@ -444,7 +436,6 @@ class FaultStates(State):
 class FaultSig(Flow):
     """Rover fault signal."""
 
-    __slots__ = ()
     container_s = FaultStates
 
 
@@ -527,7 +518,6 @@ class PlanPathState(State):
 class PlanPath(Function):
     """Plan the next drive move based on the current state of the rover."""
 
-    __slots__ = ("video", "pos_signal", "ground", "control", "fault_sig")
     container_m = PlanPathMode
     container_p = ResCorrection
     container_s = PlanPathState
@@ -635,7 +625,6 @@ class DriveMode(Mode):
 class Drive(Function):
     """The drive function determines the rover drive functionality."""
 
-    __slots__ = ("ground", "motor_control", "ee_in", 'fault_sig', 'pos')
     container_m = DriveMode
     container_p = DegParam
     container_s = FaultStates
@@ -742,7 +731,6 @@ class PerceptionMode(Mode):
 class Perception(Function):
     """Rover function that percieves the environment and creates the video feed."""
 
-    __slots__ = ("ground", "ee", "video", 'pos', 'pos_signal')
     container_m = PerceptionMode
     flow_pos = Pos
     flow_pos_signal = Pos
@@ -837,7 +825,6 @@ class PowerMode(Mode):
 class Power(Function):
     """Rover power supply."""
 
-    __slots__ = ("ee_15", "ee_5", "ee_12", "switch")
     container_s = PowerState
     container_m = PowerMode
     flow_ee_15 = EE
@@ -938,7 +925,7 @@ class OverrideMode(Mode):
 
 
 class Override(Function):
-    __slots__ = ("comms", "ee", "motor_control", "auto_control")
+
     container_m = OverrideMode
     flow_comms = Comms
     flow_ee = EE
@@ -968,7 +955,6 @@ class Override(Function):
 class Communications(Function):
     """Rover communications to the user."""
 
-    __slots__ = ("ee_12", "comms", "pos_signal", "video")
     flow_ee_12 = EE
     flow_comms = Comms
     flow_pos_signal = Pos
@@ -989,7 +975,6 @@ class Communications(Function):
 class Operator(Function):
     """Operator turns on or off the rover."""
 
-    __slots__ = ("switch",)
     flow_switch = Switch
 
     def set_power(self):
@@ -1021,7 +1006,6 @@ class Rover(FunctionArchitecture):
                          ground is expected to be high).
     """
 
-    __slots__ = ()
     container_p = RoverParam
     default_sp = dict(end_time=150,
                       phases=(("start", 0, 30), ("end", 31, 150)),
@@ -1122,9 +1106,9 @@ class Rover(FunctionArchitecture):
 
         endpt = [self.flows["pos"].s.x, self.flows["pos"].s.y]
 
-        in_bound = all(mdlhist.faulty.flows.ground.s.in_bound)
+        in_bound = all(self.h.flows.ground.s.in_bound)
         line_dist = 1  # looks like this is not used. Is this needed? TODO: reimplement
-        hist_xy = mdlhist.faulty.flows.pos.s.get('x', 'y')
+        hist_xy = self.h.flows.pos.s.get('x', 'y')
         tot_deviation = self.flows['ground'].max_line_dist(hist_xy)
         return {"rate": scen.rate,
                 "cost": 0,

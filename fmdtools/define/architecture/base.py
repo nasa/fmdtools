@@ -279,9 +279,7 @@ class Architecture(Simulable):
             kwar['r'] = {"seed": self.r.seed}
         # pass simparam from arch
         if hasattr(objclass, "container_sp"):
-            kwar['sp'] = self.sp.asdict()
-            if not self.sp.use_local:
-                kwar['sp'].pop('dt')
+            kwar['sp'] = self.sp.get_sub_kwargs()
         return {**kwar, **kwargs}
 
     def add_flex_role_obj(self, flex_role, name, objclass=BaseObject, use_copy=False,

@@ -68,7 +68,6 @@ class WaterStates(State):
 class Water(Flow):
     """Flow connecting water from input to pump."""
 
-    __slots__ = ()
     container_s = WaterStates
 
 
@@ -82,7 +81,6 @@ class EEStates(State):
 class Electricity(Flow):
     """Flow connecting electricity from input to pump."""
 
-    __slots__ = ()
     container_s = EEStates
 
 
@@ -95,7 +93,6 @@ class SignalStates(State):
 class Signal(Flow):
     """Flow connecting signal from input to pump."""
 
-    __slots__ = ()
     container_s = SignalStates
 
 
@@ -211,7 +208,6 @@ class ImportEE(Function):
     (which isn't necessary if they are given the same name).
     """
 
-    __slots__ = ['ee_out']
     container_m = ImportEEMode
     container_s = ImportEEState
     flow_ee_out = Electricity
@@ -262,7 +258,6 @@ class ImportWaterMode(Mode):
 class ImportWater(Function):
     """Import Water is the pipe with water going into the pump."""
 
-    __slots__ = ['wat_out']
     container_m = ImportWaterMode
     flow_wat_out = Water
     flownames = {"wat_1": "wat_out"}
@@ -288,7 +283,6 @@ class ExportWaterMode(Mode):
 class ExportWater(Function):
     """Export Water is the pipe with water going out of the pump."""
 
-    __slots__ = ['wat_in']
     container_m = ExportWaterMode
     flow_wat_in = Water
     flownames = {'wat_2': 'wat_in'}
@@ -309,7 +303,6 @@ class ImportSigMode(Mode):
 class ImportSig(Function):
     """Import Signal is the on/off switch."""
 
-    __slots__ = ['sig_out']
     container_m = ImportSigMode
     flow_sig_out = Signal
     flownames = {'sig_1': 'sig_out'}
@@ -375,7 +368,6 @@ class MoveWat(Function):
     - t (time) by MoveWatTime, which will be used so we can have a timer
     """
 
-    __slots__ = ['ee_in', 'sig_in', 'wat_in', 'wat_out']
     container_s = MoveWatStates
     container_p = MoveWatParams
     container_m = MoveWatMode
@@ -461,7 +453,6 @@ class Pump(FunctionArchitecture):
     be tuned, we can easily use the timestep t=1 OR t=5.
     """
 
-    __slots__ = ()
     container_p = PumpParam
     default_sp = dict(phases=(('start', 0, 4), ('on', 5, 49), ('end', 50, 55)),
                       end_time=55.0, dt=1.0, units='hr')

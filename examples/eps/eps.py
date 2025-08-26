@@ -44,7 +44,6 @@ class GenericState(State):
 
 class GenericFlow(Flow):
 
-    __slots__ = ()
     container_s = GenericState
 
 
@@ -53,7 +52,6 @@ class SigState(State):
 
 
 class Signal(Flow):
-    __slots__ = ()
     container_s = SigState
 
 
@@ -65,7 +63,6 @@ class ImportEEModes(Mode):
 
 class ImportEE(Function):
 
-    __slots__ = ("ee_out",)
     container_m = ImportEEModes
     flow_ee_out = GenericFlow
     flownames = {"ee_1": "ee_out"}
@@ -102,7 +99,6 @@ class ImportSigModes(Mode):
 
 class ImportSig(Function):
 
-    __slots__ = ("sig_out",)
     container_m = ImportSigModes
     flow_sig_out = Signal
     flownames = {"sig_in": "sig_out"}
@@ -123,7 +119,6 @@ class StoreEEModes(Mode):
 
 class StoreEE(Function):
 
-    __slots__ = ("ee_in", "ee_out")
     container_m = StoreEEModes
     flow_ee_in = GenericFlow
     flow_ee_out = GenericFlow
@@ -158,7 +153,6 @@ class SupplyEEModes(Mode):
 
 class SupplyEE(Function):
 
-    __slots__ = ("ee_in", "ee_out", "heat_out")
     container_m = SupplyEEModes
     flow_ee_in = GenericFlow
     flow_ee_out = GenericFlow
@@ -201,7 +195,6 @@ class DistEEModes(Mode):
 
 class DistEE(Function):
 
-    __slots__ = ("sig_in", "ee_in", "ee_m", "ee_h", "ee_o")
     container_m = DistEEModes
     flow_sig_in = Signal
     flow_ee_in = GenericFlow
@@ -253,7 +246,6 @@ class ExportHEModes(Mode):
 
 class ExportHE(Function):
 
-    __slots__ = ("he",)
     container_m = ExportHEModes
     flow_he = GenericFlow
     flownames = {"waste_he_1": "he", "waste_he_o": "he", "waste_he_m": "he"}
@@ -269,7 +261,6 @@ class ExportHE(Function):
 
 class ExportME(Function):
 
-    __slots__ = ("me",)
     flow_me = GenericFlow
 
     def static_behavior(self):
@@ -278,7 +269,6 @@ class ExportME(Function):
 
 class ExportOE(Function):
 
-    __slots__ = ("oe",)
     flow_oe = GenericFlow
 
     def static_behavior(self):
@@ -295,7 +285,6 @@ class EEtoMEModes(Mode):
 
 class EEtoME(Function):
 
-    __slots__ = ("ee_in", "me", "he_out")
     container_m = EEtoMEModes
     flow_ee_in = GenericFlow
     flow_me = GenericFlow
@@ -341,7 +330,6 @@ class EEtoHEModes(Mode):
 
 class EEtoHE(Function):
 
-    __slots__ = ("ee_in", "he")
     container_m = EEtoHEModes
     flow_ee_in = GenericFlow
     flow_he = GenericFlow
@@ -378,7 +366,6 @@ class EEtoOEModes(Mode):
 
 class EEtoOE(Function):
 
-    __slots__ = ("ee_in", "oe", "he_out")
     container_m = EEtoOEModes
     flow_ee_in = GenericFlow
     flow_oe = GenericFlow
@@ -406,7 +393,6 @@ class EEtoOE(Function):
 
 class EPS(FunctionArchitecture):
 
-    __slots__ = ()
     default_track = {"flows": ["he", "me", "oe"]}
     default_sp = {'end_time': 0}
 

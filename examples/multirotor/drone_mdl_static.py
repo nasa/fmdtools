@@ -47,7 +47,6 @@ class EEState(State):
 class EE(Flow):
     """Electrical Energy Flow."""
 
-    __slots__ = ()
     container_s = EEState
 
 
@@ -60,7 +59,6 @@ class ForceState(State):
 class Force(Flow):
     """Force flow."""
 
-    __slots__ = ()
     container_s = ForceState
 
 
@@ -83,7 +81,6 @@ class ControlState(State):
 class Control(Flow):
     """Control Flow."""
 
-    __slots__ = ()
     container_s = ControlState
 
 
@@ -127,7 +124,6 @@ class DOFParam(Parameter):
 class DOFs(Flow):
     """Flow defining the Drone degrees of freedom."""
 
-    __slots__ = ()
     container_s = DOFstate
     container_p = DOFParam
 
@@ -193,7 +189,6 @@ class DesTrajState(State):
 class DesTraj(Flow):
     """Desired trajectory flow."""
 
-    __slots__ = ()
     container_s = DesTrajState
 
 
@@ -215,7 +210,6 @@ class StoreEEState(State):
 class StoreEE(Function):
     """Class for the battery architecture/energy storage."""
 
-    __slots__ = ("ee_out", "fs")
     container_s = StoreEEState
     container_m = StoreEEMode
     flow_ee_out = EE
@@ -274,7 +268,6 @@ class DistEE(Function):
     systems/avionics.
     """
 
-    __slots__ = ("ee_in", "ee_mot", "ee_ctl", "st")
     container_s = DistEEState
     container_m = DistEEMode
     flow_ee_in = EE
@@ -360,7 +353,6 @@ class HoldPayloadState(State):
 class HoldPayload(Function):
     """Drone landing gear."""
 
-    __slots__ = ('dofs', 'force_st', 'force_lin')
     container_m = HoldPayloadMode
     container_s = HoldPayloadState
     flow_dofs = DOFs
@@ -516,7 +508,6 @@ class BaseLine(object):
 class AffectDOF(Function, BaseLine):
     """Drone rotors that the drone through the air."""
 
-    __slots__ = ("ee_in", "ctl_in", "dofs", "force")
     container_s = AffectDOFState
     container_m = AffectDOFMode
     flow_ee_in = EE
@@ -604,7 +595,6 @@ class CtlDOFMode(Mode):
 class CtlDOF(Function):
     """Drone rotor control."""
 
-    __slots__ = ("ee_in", "des_traj", "ctl", "dofs", "fs")
     container_s = CtlDOFstate
     container_m = CtlDOFMode
     flow_ee_in = EE
@@ -678,7 +668,6 @@ class PlanPathMode(Mode):
 class PlanPath(Function):
     """Drone path planning function."""
 
-    __slots__ = ("ee_in", "dofs", "des_traj", "fs")
     container_m = PlanPathMode
     flow_ee_in = EE
     flow_dofs = DOFs
@@ -761,7 +750,6 @@ class ViewModes(Mode):
 class ViewEnvironment(Function):
     """Drone camera placeholder."""
 
-    __slots__ = ('dofs',)
     container_m = ViewModes
     flow_dofs = DOFs
 
@@ -769,7 +757,6 @@ class ViewEnvironment(Function):
 class Drone(FunctionArchitecture):
     """Static multirotor drone model (executes in a single timestep)."""
 
-    __slots__ = ()
     default_sp = {'end_time': 0}
 
     def init_architecture(self, **kwargs):

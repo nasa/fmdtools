@@ -43,7 +43,6 @@ class ImportEERand(Rand, copy_default=True):
 
 class ImportEE(DetImportEE):
 
-    __slots__ = ()
     container_r = ImportEERand
 
     def set_faults(self):
@@ -75,7 +74,6 @@ class ImportSigRand(Rand):
 
 class ImportSig(DetImportSig):
 
-    __slots__ = ()
     container_r = ImportSigRand
 
     def static_behavior(self):
@@ -110,7 +108,6 @@ class MoveWatRand(Rand):
 
 class MoveWat(DetMoveWat):
 
-    __slots__ = ()
     container_s = MoveWatStates
     container_r = MoveWatRand
 
@@ -123,7 +120,6 @@ class MoveWat(DetMoveWat):
 
 class Pump(DetPump):
 
-    __slots__ = ()
     default_track = 'all'
     container_r = Rand
 

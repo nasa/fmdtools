@@ -45,7 +45,7 @@ class MoveParam(Parameter):
 
 class Mover(Function):
 
-    __slots__ = ('communications', 'location', 'internal_info', 'loc')
+    __slots__ = ('internal_info', 'loc')
     container_p = MoveParam
     flow_communications = Communications
     flow_location = Location
@@ -77,7 +77,7 @@ class Mover(Function):
 
 class Coordinator(Function):
 
-    __slots__ = ('communications', 'coord_view')
+    __slots__ = ('coord_view',)
     flow_communications = Communications
 
     def init_block(self, **kwargs):
@@ -94,7 +94,6 @@ class Coordinator(Function):
 
 
 class ExModel(FunctionArchitecture):
-    __slots__ = ()
     default_sp = dict(end_time=10)
 
     def init_architecture(self, **kwargs):
@@ -109,6 +108,7 @@ class ExModel(FunctionArchitecture):
 
 if __name__ == '__main__':
     mdl = ExModel()
+
     mdl.flows["communications"].mover_1.s.x = 25
     mdl.flows["communications"].mover_1.send("mover_2")
     from fmdtools.sim import propagate

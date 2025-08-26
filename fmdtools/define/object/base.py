@@ -60,6 +60,64 @@ class ObjectGraph(ModelGraph):
         super().set_node_labels(title=title, title2=title2, **node_label_styles)
 
 
+def find_roletype_initiators(attrlist, roletype):
+    """Find initiators from list that start with 'roletype_'."""
+    return tuple([at[len(roletype)+1:]
+                  for at in attrlist if at.startswith(roletype+'_')])
+
+
+class BaseType(type):
+    """
+    Base type for BaseObject-based classes.
+
+    BaseType enables the use of __slots__ without defining explicit slots by relying
+    on the defined class roletypes (e.g., containers, flows, etc) as well as roledicts
+    which are used by Coords and Geom. This enables lower memory use and faster access
+    without requiring the user to define __slots__ for their classes.
+    """
+
+    def __new__(cls, name, bases, dct):
+        """Construct the type from its class variables."""
+        slots = list(dct.get('__slots__', []))  # get defined __slots__ if available
+        base_slots = []
+        roletypes = []
+        roledicts = []
+        base_p = None
+        for base in bases:
+            if hasattr(base, '__slots__'):
+                base_slots += base.__slots__
+            if hasattr(base, 'roletypes'):
+                roletypes = base.roletypes
+            if hasattr(base, 'roledicts'):
+                roledicts = base.roledicts
+            if hasattr(base, 'container_p'):
+                base_p = base.container_p
+
+        role_slots = []  # get slots to be inferred by roletypes (e.g., containers)
+        for roletype in roletypes:
+            role_slots += find_roletype_initiators(dct, roletype)
+
+        roledict_slots = []  # get slots to be inferred by roledicts
+        if roledicts:
+            if 'container_p' in dct:
+                p = dct['container_p']()
+            else:
+                p = base_p()
+            for roledict in roledicts:
+                roledict_slots += [k for k in p.get_pref_attrs(roledict[:-1])]
+
+        all_slots = set(slots+base_slots+role_slots+roledict_slots)  # combine slots
+        inherit_dict = "__dict__" in base_slots
+        if inherit_dict and "__dict__" in all_slots:
+            all_slots.remove("__dict__")
+        dct['__slots__'] = tuple(all_slots)
+
+        try:
+            return type.__new__(cls, name, bases, dct)
+        except TypeError as e:
+            raise TypeError("Incorrect class specification for "+name) from e
+
+
 example_object_code = """
 from fmdtools.define.container.state import ExampleState
 class ExampleObject(BaseObject):
@@ -71,7 +129,7 @@ class ExampleObject(BaseObject):
 """
 
 
-class BaseObject(object):
+class BaseObject(metaclass=BaseType):
     """
     Base object for Blocks, Flows, and Architectures.
 
@@ -286,8 +344,7 @@ class BaseObject(object):
             self.init_roles(roletype, **kwargs)
 
     def find_roletype_initiators(self, roletype):
-        return tuple([at[len(roletype)+1:]
-                     for at in dir(self) if at.startswith(roletype+'_')])
+        return find_roletype_initiators(dir(self), roletype)
 
     def get_full_name(self, with_root=True):
         """Get the full name of the object (root + name)."""
@@ -1095,7 +1152,8 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     try:
         itera = vars(obj)
     except TypeError:
-        itera = {a: getattr(obj, a) for a in obj.__slots__}
+        itera = {a: getattr(obj, a) for a in dir(obj)
+                 if hasattr(obj, a) and (not ismethod(getattr(obj, a)) or not a.startswith("__"))}
     for name, attribute in itera.items():
         print(name)
         time.sleep(pause)
@@ -1108,6 +1166,8 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
             elif isinstance(attribute, BaseObject):
                 if any(check_pickleability(attribute, verbose=False)):
                     unpickleable.append(name)
+            elif isinstance(attribute, History) or isinstance(attribute, np.ndarray):
+                pass  # ignoring history to prevent numpy bug in dill
             elif not dill.pickles(attribute):
                 unpickleable = unpickleable + [name]
         except ValueError as e:
