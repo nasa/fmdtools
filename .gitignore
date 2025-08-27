@@ -6,6 +6,11 @@ __pycache__/auxfunctions.cpython-36.pyc
 __pycache__/ffermat.cpython-36.pyc
 __pycache__/quad_mdl.cpython-36.pyc
 
+# Environment files
+.env
+.env.local
+.env.*.local
+
 #ignore Jupyter checkpoints
 .ipynb_checkpoints
 
