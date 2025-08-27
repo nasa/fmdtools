@@ -1,0 +1,65 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+{{ spec.name }} level model.
+
+{% if spec.description %}{{ spec.description }}{% endif %}
+"""
+
+# Import using absolute paths for direct execution
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from architecture import {{ arch_class_name }}, {{ arch_class_name }}Graph
+import fmdtools.sim.propagate as prop
+
+
+class {{ class_name }}({{ arch_class_name }}):
+    """{{ spec.name }} model."""
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    
+    def static_loading(self, time):
+        """Static loading implementation."""
+        # TODO: Implement static loading
+        pass
+
+
+# Export the main model class for linting
+MODEL_CLASS = {{ class_name }}
+
+
+if __name__ == "__main__":
+    """Example usage and simulation."""
+    
+    # Create model instance
+    model = {{ class_name }}(track='all')
+    
+    {% if spec.simulation.sample_run %}
+    # Basic sample run
+    print("Running basic simulation...")
+    try:
+        result, mdlhist = prop.nominal(model, end_time=100)
+    except TypeError:
+        # Handle different propagate.nominal signatures
+        mdlhist = prop.nominal(model, end_time=100)
+        result = {"time": 100}
+    print(f"Simulation completed. Final time: {result.get('time', 'unknown')}")
+    {% endif %}
+    
+    {% if spec.simulation.fault_analysis %}
+    # Fault analysis
+    print("Running fault analysis...")
+    # TODO: Implement fault analysis
+    {% endif %}
+    
+    {% if spec.simulation.parameter_study %}
+    # Parameter study
+    print("Running parameter study...")
+    # TODO: Implement parameter study
+    {% endif %}
+    
+    print("{{ spec.name }} model ready for use!")
+

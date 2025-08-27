@@ -1,0 +1,75 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+{{ class_name }} function for {{ spec.name }} model.
+
+{% if func.description %}{{ func.description }}{% endif %}
+"""
+
+try:
+    from fmdtools.define.block.function import Function
+    from fmdtools.define.container.state import State
+    from fmdtools.define.container.mode import Mode
+    from fmdtools.define.container.parameter import Parameter
+except ImportError:
+    try:
+        from fmdtools.define.function import Function
+        from fmdtools.define.state import State
+        from fmdtools.define.mode import Mode
+        from fmdtools.define.parameter import Parameter
+    except ImportError:
+        raise ImportError("Could not import required fmdtools modules")
+
+
+class {{ class_name }}States(State):
+    """States for {{ class_name }} function."""
+{% for name, value in func.states.items() %}
+    {{ name }} = {{ value | pyrepr }}
+{% endfor %}
+
+
+class {{ class_name }}Modes(Mode):
+    """Modes for {{ class_name }} function."""
+{% for mode in func.modes %}
+    {{ mode }}: str = "{{ mode }}"
+{% endfor %}
+
+
+class {{ class_name }}(Function):
+    """{{ class_name }} function implementation."""
+    
+    __slots__ = ()
+    default_sp = {
+        "end_time": 100,
+        "track": "all"
+    }
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    
+    def static_behavior(self, time):
+        """Static behavior implementation."""
+        # TODO: Implement static behavior
+        pass
+    
+    def dynamic_behavior(self, time):
+        """Dynamic behavior implementation."""
+        # TODO: Implement dynamic behavior
+        pass
+    
+    {% if func.faults %}
+    def failure_modes(self):
+        """Return list of failure modes."""
+        return [
+    {% for fault in func.faults %}
+            "{{ fault.name }}"{% if not loop.last %},{% endif %}
+    {% endfor %}
+        ]
+    {% endif %}
+    
+    {% if func.faults %}
+    def condfaults(self, time):
+        """Conditional fault injection."""
+        # TODO: Implement conditional fault logic
+        pass
+    {% endif %}

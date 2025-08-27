@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Flow definitions for {{ spec.name }} model.
+"""
+
+try:
+    from fmdtools.define.flow.base import Flow
+    from fmdtools.define.container.state import State
+except ImportError:
+    try:
+        from fmdtools.define.flow import Flow
+        from fmdtools.define.state import State
+    except ImportError:
+        raise ImportError("Could not import required fmdtools modules")
+
+
+{% for flow in flows %}
+{% set safe_name, class_name = flow_mapping[flow.name] %}
+class {{ class_name }}States(State):
+    """States for {{ class_name }} flow."""
+{% for name, value in flow.vars.items() %}
+    {{ name }} = {{ value | pyrepr }}
+{% endfor %}
+
+
+class {{ class_name }}(Flow):
+    """{{ class_name }} flow."""
+    
+    __slots__ = ()
+    container_s = {{ class_name }}States
+    container = {{ class_name }}States  # Compatibility
+{% if flow.description %}
+    # {{ flow.description }}
+{% endif %}
+
+
+{% endfor %}

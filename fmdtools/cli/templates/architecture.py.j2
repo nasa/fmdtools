@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Architecture definition for {{ spec.name }} model.
+"""
+
+try:
+    from fmdtools.define.architecture.function import FunctionArchitecture, FunctionArchitectureGraph
+except ImportError:
+    try:
+        from fmdtools.define.architecture import FunctionArchitecture, FunctionArchitectureGraph
+    except ImportError:
+        raise ImportError("Could not import FunctionArchitecture from fmdtools")
+
+{% for func in functions %}
+{% set safe_name, class_name = function_mapping[func.name] %}
+from {{ safe_name }} import {{ class_name }}
+{% endfor %}
+
+{% for flow in spec.flows %}
+{% set safe_name, class_name = flow_mapping[flow.name] %}
+from flows import {{ class_name }}
+{% endfor %}
+
+
+class {{ arch_class_name }}(FunctionArchitecture):
+    """{{ arch.name }} architecture."""
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        # Add functions
+{% for func_name in arch.functions %}
+{% set safe_name, class_name = function_mapping[func_name] %}
+        self.{{ safe_name }} = {{ class_name }}()
+{% endfor %}
+        
+        # Add flows
+{% for flow in spec.flows %}
+{% set safe_name, class_name = flow_mapping[flow.name] %}
+        self.{{ safe_name }} = {{ class_name }}()
+{% endfor %}
+        
+        # Add connections
+{% for conn in arch.connections %}
+{% set flow_safe_name, flow_class_name = flow_mapping[conn.flow_name] %}
+        self.add_connection(
+            self.{{ function_mapping[conn.from_fn][0] }},
+            self.{{ function_mapping[conn.to_fn][0] }},
+            self.{{ flow_safe_name }}
+        )
+{% endfor %}
+
+
+class {{ arch_class_name }}Graph(FunctionArchitectureGraph):
+    """Graph representation of {{ arch.name }}."""
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.arch = {{ arch_class_name }}(**kwargs)
