@@ -64,7 +64,7 @@ class ComponentArchitecture(Architecture):
 
     __slots__ = ['comps']
     flexible_roles = ['flows', 'comps']
-    roletypes = ['container', 'flow', 'comp']
+    roletypes = ['container']
     default_track = ('comps', 'flows', 'i')
     rolename = 'ca'
     container_m = Mode

@@ -479,7 +479,7 @@ class FunctionArchitecture(Architecture):
     default_track = ('fxns', 'flows', 'i')
     default_name = 'model'
     flexible_roles = ['flows', 'fxns']
-    roletypes = ['container', 'flow', 'fxn']
+    roletypes = ['container']
     rolename = 'fa'
     container_m = Mode
 

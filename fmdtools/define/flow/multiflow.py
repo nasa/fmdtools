@@ -103,7 +103,7 @@ class MultiFlow(Flow):
     - sub_flow=(s=(x=10.0, y=0.0))
     """
 
-    __slots__ = ['locals', 'glob', '__dict__']
+    __slots__ = ['glob', '__dict__']
     check_dict_creation = False
     flexible_roles = ['locals']
     roletypes = ['container', 'local']

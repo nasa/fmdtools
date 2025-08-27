@@ -74,7 +74,7 @@ class Function(Block):
     - exf=ExampleFlow(s=(x=3.0, y=1.0))
     """
 
-    __slots__ = ["ca", "aa", "fa", "args_f", "archs"]
+    __slots__ = ["ca", "aa", "fa", "args_f"]
     default_track = ["ca", "aa", "fa"]+Block.default_track
     roletypes = ['container', 'flow', 'arch']
 

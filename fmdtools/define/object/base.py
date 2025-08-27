@@ -93,9 +93,17 @@ class BaseType(type):
             if hasattr(base, 'container_p'):
                 base_p = base.container_p
 
+        if 'roletypes' in dct:
+            roletypes = dct['roletypes']
+
         role_slots = []  # get slots to be inferred by roletypes (e.g., containers)
         for roletype in roletypes:
-            role_slots += find_roletype_initiators(dct, roletype)
+            roles = find_roletype_initiators(dct, roletype)
+            sub_roles = []
+            for base in bases:
+                sub_roles += find_roletype_initiators(dir(base), roletype)
+            role_slots += roles
+            dct[roletype+'s'] = tuple(set(list(sub_roles)+list(roles)))
 
         roledict_slots = []  # get slots to be inferred by roledicts
         if roledicts:
@@ -108,13 +116,15 @@ class BaseType(type):
 
         all_slots = set(slots+base_slots+role_slots+roledict_slots)  # combine slots
         inherit_dict = "__dict__" in base_slots
+        if name == 'Block':
+            a=1
         if inherit_dict and "__dict__" in all_slots:
             all_slots.remove("__dict__")
         dct['__slots__'] = tuple(all_slots)
 
         try:
             return type.__new__(cls, name, bases, dct)
-        except TypeError as e:
+        except Exception as e:
             raise TypeError("Incorrect class specification for "+name) from e
 
 
@@ -202,7 +212,7 @@ class BaseObject(metaclass=BaseType):
     s.y:                            array(2)
     """
 
-    __slots__ = ('name', 'containers', 'indicators', 'track', 'root', 'mutables')
+    __slots__ = ('name', 'indicators', 'track', 'root', 'mutables')
     roletypes = ['container']
     roledicts = []
     rolevars = []
@@ -370,13 +380,8 @@ class BaseObject(metaclass=BaseType):
             Dictionary arguments (or already instantiated objects) to use for the
             attributes.
         """
-        # creates tuple of roles at .roletypes
-        container_collection = roletype + 's'
-        roles = self.find_roletype_initiators(roletype)
-        setattr(self, container_collection, roles)
-
         # initialize roles and add as attributes to the object
-        for rolename in roles:
+        for rolename in getattr(self, roletype+'s'):
             container_initializer = getattr(self, roletype+'_'+rolename)
             container_args = kwargs.get(rolename, dict())
 

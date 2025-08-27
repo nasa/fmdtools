@@ -87,7 +87,7 @@ class Environment(CommsFlow):
             ga = {**ga, 'p': p}
         r_kwargs = {'run_stochastic': self.r.run_stochastic, 'seed': self.r.seed}
         c = {**{'r': r_kwargs}, **c}
-        ga = {**{'r': r_kwargs, 'sp': self.sp}, **ga}
+        ga = {**{'r': r_kwargs, 'sp': self.sp.get_sub_kwargs()}, **ga}
         self.init_roletypes('coords', 'arch', c=c, ga=ga)
 
     def base_type(self):

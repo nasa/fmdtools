@@ -205,7 +205,7 @@ class Simulable(BaseObject):
         Non-default kwargs for mutable containers/roles (to use for reset)
     """
 
-    __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'flows', 'mut_kwargs')
+    __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'mut_kwargs')
     container_t = Time
     default_track = ["all"]
     immutable_roles = BaseObject.immutable_roles + ['sp']
