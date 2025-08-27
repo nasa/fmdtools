@@ -36,6 +36,18 @@ dependencies = ["scipy",
                 "shapely >= 2.0"
 ]
 
+[project.optional-dependencies]
+cli = [
+    "typer>=0.9.0",
+    "jinja2>=3.1.0",
+    "pydantic>=2.6,<3",
+    "python-dotenv>=1.0.0",
+    "openai>=1.40.0"
+]
+
+[project.scripts]
+fmdtools = "fmdtools.cli.main:main"
+
 [project.urls]
 Documentation = "https://nasa.github.io/fmdtools/"
 source-code = "https://github.com/nasa/fmdtools"
@@ -46,6 +58,12 @@ build-backend = "setuptools.build_meta"
 requires = [
   "setuptools>=61.0.0"
 ]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"fmdtools.cli" = ["templates/*.j2"]
 
 [tool.setuptools.packages.find]
 include = ["fmdtools*", "examples*"]
