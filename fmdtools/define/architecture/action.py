@@ -214,8 +214,8 @@ class ActionArchitecture(Architecture):
     >>> exaa = ExampleActionArchitecture()
     >>> exaa
     exampleactionarchitecture ExampleActionArchitecture
-    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=-0.1, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     FLOWS:
     - exf=ExampleFlow(s=(x=1.0, y=1.0))
     ACTS:
@@ -229,8 +229,8 @@ class ActionArchitecture(Architecture):
     >>> exaa()
     >>> exaa
     exampleactionarchitecture ExampleActionArchitecture
-    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=2.0, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     FLOWS:
     - exf=ExampleFlow(s=(x=4.0, y=1.0))
     ACTS:

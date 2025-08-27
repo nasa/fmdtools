@@ -98,12 +98,18 @@ class BaseType(type):
 
         role_slots = []  # get slots to be inferred by roletypes (e.g., containers)
         for roletype in roletypes:
-            roles = find_roletype_initiators(dct, roletype)
+            roles = list(find_roletype_initiators(dct, roletype))
+            role_slots += roles
+            # add to class roles tuple
             sub_roles = []
             for base in bases:
-                sub_roles += find_roletype_initiators(dir(base), roletype)
-            role_slots += roles
-            dct[roletype+'s'] = tuple(set(list(sub_roles)+list(roles)))
+                for sub_role in getattr(base, roletype+"s", []):
+                    if sub_role not in sub_roles:
+                        sub_roles.append(sub_role)
+            for r in roles:
+                if r not in sub_roles:
+                    sub_roles.append(r)
+            dct[roletype+'s'] = tuple(sub_roles)
 
         roledict_slots = []  # get slots to be inferred by roledicts
         if roledicts:

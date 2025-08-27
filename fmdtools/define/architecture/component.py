@@ -39,24 +39,24 @@ class ComponentArchitecture(Architecture):
     >>> exc = ExampleComponentArchitecture()
     >>> exc
     examplecomponentarchitecture ExampleComponentArchitecture
-    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=-0.1, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     COMPS:
     - c1=ExampleComponent(s=(x=5.0, y=5.0))
     - c2=ExampleComponent(s=(x=10.0, y=10.0))
     >>> exc()
     >>> exc
     examplecomponentarchitecture ExampleComponentArchitecture
-    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=1.0, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     COMPS:
     - c1=ExampleComponent(s=(x=7.0, y=6.0))
     - c2=ExampleComponent(s=(x=12.0, y=11.0))
     >>> exc()
     >>> exc
     examplecomponentarchitecture ExampleComponentArchitecture
-    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=2.0, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     COMPS:
     - c1=ExampleComponent(s=(x=7.0, y=7.0))
     - c2=ExampleComponent(s=(x=12.0, y=12.0))

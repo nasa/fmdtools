@@ -34,18 +34,18 @@ class Component(Block):
     >>> c = ExampleComponent()
     >>> c
     examplecomponent ExampleComponent
-    - s=ExampleState(x=0.0, y=0.0)
     - t=Time(time=-0.1, timers={})
+    - s=ExampleState(x=0.0, y=0.0)
     >>> c()
     >>> c
     examplecomponent ExampleComponent
-    - s=ExampleState(x=2.0, y=1.0)
     - t=Time(time=1.0, timers={})
+    - s=ExampleState(x=2.0, y=1.0)
     >>> c()
     >>> c
     examplecomponent ExampleComponent
-    - s=ExampleState(x=2.0, y=2.0)
     - t=Time(time=2.0, timers={})
+    - s=ExampleState(x=2.0, y=2.0)
 
     Calling a particular propagation step individually only runs the given behavior
     method (in this case, dynamic and not static).
@@ -53,19 +53,17 @@ class Component(Block):
     >>> c(proptype="dynamic")
     >>> c
     examplecomponent ExampleComponent
-    - s=ExampleState(x=2.0, y=3.0)
     - t=Time(time=3.0, timers={})
+    - s=ExampleState(x=2.0, y=3.0)
 
     Note that we can also simulate to a given time, which should give the same results.
     >>> c2 = ExampleComponent()
     >>> c2(time=2.0)
     >>> c2
     examplecomponent ExampleComponent
-    - s=ExampleState(x=2.0, y=2.0)
     - t=Time(time=2.0, timers={})
+    - s=ExampleState(x=2.0, y=2.0)
     """
-
-    __slots__ = ()
 
     def base_type(self):
         """Return fmdtools type of the model class."""
@@ -80,7 +78,6 @@ class ExampleComponent(Component):
     timestep, causing x to leapfrog it (since it increments by 2).
     """
 
-    __slots__ = ()
     container_s = ExampleState
     default_s = {'x': 0.0, 'y': 0.0}
 
