@@ -433,8 +433,8 @@ class FunctionArchitecture(Architecture):
     >>> exfa = ExFxnArch(name="exfa")
     >>> exfa
     exfa ExFxnArch
-    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=-0.1, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     FLOWS:
     - exf=ExampleFlow(s=(x=0.0, y=0.0))
     FXNS:
@@ -455,8 +455,8 @@ class FunctionArchitecture(Architecture):
     >>> exfa()
     >>> exfa
     exfa ExFxnArch
-    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=1.0, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     FLOWS:
     - exf=ExampleFlow(s=(x=2.0, y=0.0))
     FXNS:
@@ -466,8 +466,8 @@ class FunctionArchitecture(Architecture):
     >>> exfa()
     >>> exfa
     exfa ExFxnArch
-    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     - t=Time(time=2.0, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     FLOWS:
     - exf=ExampleFlow(s=(x=6.0, y=0.0))
     FXNS:
@@ -478,7 +478,7 @@ class FunctionArchitecture(Architecture):
     __slots__ = ['fxns']
     default_track = ('fxns', 'flows', 'i')
     default_name = 'model'
-    flexible_roles = ['flows', 'fxns']
+    flexible_roles = ['flow', 'fxn']
     roletypes = ['container']
     rolename = 'fa'
     container_m = Mode

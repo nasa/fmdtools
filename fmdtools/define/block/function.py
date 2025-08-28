@@ -99,23 +99,6 @@ class Function(Block):
         """Return fmdtools type of the model class."""
         return Function
 
-    def update_seed(self, seed=[]):
-        """
-        Update seed and propagates update to contained actions/components.
-
-        (keeps seeds in sync)
-
-        Parameters
-        ----------
-        seed : int, optional
-            Random seed. The default is [].
-        """
-        super().update_seed(seed)
-        for at in self.get_roles('arch'):
-            arch = getattr(self, at)
-            if hasattr(arch, 'r'):
-                arch.update_seed(self.r.seed)
-
 
 class ExampleFunction(Function):
     """Example Function block for testing."""

@@ -272,6 +272,10 @@ class Simulable(BaseObject):
             self.r.assign(self.sp, 'run_stochastic', 'track_pdf')
             if seed:
                 self.r.update_seed(seed)
+            else:
+                seed = self.r.seed
+        for simname, sim in self.get_sims().items():
+            sim.update_seed(seed)
 
     def classify(self, scen={}, **kwargs):
         """Classify the results of the simulation (placeholder)."""
@@ -615,8 +619,6 @@ class Simulable(BaseObject):
                 with_sub_faults -= 1
             sub_kwar = dict(only_present=only_present, with_sub_faults=with_sub_faults)
             for objname, obj in self.get_sims().items():
-                all_faults.update(obj.get_faults(**sub_kwar))
-            for objname, obj in self.get_flex_role_objs().items():
                 if hasattr(obj, 'get_faults'):
                     all_faults.update(obj.get_faults(**sub_kwar))
         return all_faults

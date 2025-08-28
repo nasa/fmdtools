@@ -93,20 +93,20 @@ class UrbanGridParam(CoordsParam):
     max_height: float = 100.0
     roadwidth: int = 15
     loc: str = 'urban'
-    feature_safe: tuple = (bool, True)
-    feature_allowed: tuple = (bool, False)
-    feature_occupied: tuple = (bool, False)
-    feature_height: tuple = (float, 0.0)
-    point_start: tuple = (0, 0)
-    point_end: tuple = (900, 900)
-    collection_all_occupied: tuple = ("occupied", True)
-    collection_all_safe: tuple = ("safe", True)
-    collection_all_allowed: tuple = ("allowed", True)
 
 
 class StreetGrid(Coords):
     """Define the urban environment (buildings, streets, etc)."""
 
+    feature_safe = (bool, True)
+    feature_allowed = (bool, False)
+    feature_occupied = (bool, False)
+    feature_height = (float, 0.0)
+    point_start = (0, 0)
+    point_end = (900, 900)
+    collection_all_occupied = ("occupied", True)
+    collection_all_safe = ("safe", True)
+    collection_all_allowed = ("allowed", True)
     container_p = UrbanGridParam
 
     def init_properties(self, *args, **kwargs):

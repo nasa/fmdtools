@@ -105,7 +105,7 @@ class MultiFlow(Flow):
 
     __slots__ = ['glob', '__dict__']
     check_dict_creation = False
-    flexible_roles = ['locals']
+    flexible_roles = ['local']
     roletypes = ['container', 'local']
 
     def __init__(self, name='', root='', glob=[], track=['s'], **kwargs):

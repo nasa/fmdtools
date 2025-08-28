@@ -76,7 +76,7 @@ class GeomArchitecture(Architecture):
     polys.ex_poly.s.occupied:     array(101)
     polys.ex_poly.s.buffer_around: array(101)
     >>> ega.return_mutables()
-    ((False, 1.0), (False, 1.0), (False, 1.0), (-0.1, 0, False, False, False))
+    ((-0.1, 0, False, False, False), (False, 1.0), (False, 1.0), (False, 1.0))
 
     GeomArchitectures are also simulable provided dynamic_behavior and static_behavior
     methods as shown below. Note that this behavior must be called externally,
@@ -98,7 +98,7 @@ class GeomArchitecture(Architecture):
     __slots__= ("points", "lines", "polys")
     default_track = ['points', 'lines', 'polys']
     all_possible = ['points', 'lines', 'polys']
-    flexible_roles = ['points', 'lines', 'polys']
+    flexible_roles = ['point', 'line', 'poly']
     rolename = 'ga'
 
     def base_type(self):
@@ -262,7 +262,7 @@ class GeomArchitecture(Architecture):
         """
         for flex_role in self.flexible_roles:
             for geomname, geom in self.get_flex_role_objs(flex_role).items():
-                geom.assign_from(hist.get(flex_role+"."+geomname), t)
+                geom.assign_from(hist.get(flex_role+"s."+geomname), t)
         return self.show(**kwargs)
 
     def prop_static(self):

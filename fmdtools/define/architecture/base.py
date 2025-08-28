@@ -95,7 +95,7 @@ class Architecture(Simulable):
     __slots__ = ['flows', 'as_copy', 'h', '_init_flexroles', 'm', 'simorder',
                  '_simflows', 'graph', 'staticsims', 'dynamicsims',
                  'staticflows']
-    flexible_roles = ['flows']
+    flexible_roles = ['flow']
     roletype = 'arch'
 
     def __init__(self, *args, as_copy=False, h={}, **kwargs):
@@ -122,7 +122,7 @@ class Architecture(Simulable):
                 roledict = self.get_flex_role_objs(flex_role)
                 if roledict:
                     rolestr = get_dict_repr(roledict, one_line=one_line)
-                    repstr += "\n"+flex_role.upper()+":"+rolestr
+                    repstr += "\n"+flex_role.upper()+"S:"+rolestr
         return repstr
 
     def base_type(self):
@@ -246,14 +246,15 @@ class Architecture(Simulable):
             Existing roles (if any).
         """
         for role in self.flexible_roles:
-            if self.as_copy and role in kwargs:
-                setattr(self, role, {**kwargs[role]})
+            rname = role+'s'
+            if self.as_copy and rname in kwargs:
+                setattr(self, rname, {**kwargs[role]})
             elif self.as_copy:
                 raise Exception("No role argument "+role+" to copy.")
             elif role in kwargs:
-                setattr(self, role, {**kwargs[role]})
+                setattr(self, rname, {**kwargs[role]})
             else:
-                setattr(self, role, dict())
+                setattr(self, rname, dict())
 
     def get_flex_role_kwargs(self, objclass, **kwargs):
         """
@@ -431,7 +432,7 @@ class Architecture(Simulable):
         # remove any dangling objects (flows usually) passed from above but not
         # initialized
         for role in self.flexible_roles:
-            roledict = getattr(self, role)
+            roledict = getattr(self, role+'s')
             roledict = {k: v for k, v in roledict.items() if k in self._init_flexroles}
 
         if update_seed and not self.as_copy:
@@ -551,24 +552,6 @@ class Architecture(Simulable):
         return {flow for flow, obj in self.get_flows().items()
                 if obj.__class__.__name__ == ftype}
 
-    def update_seed(self, seed=[]):
-        """
-        Update model seed and the seed in all contained roles.
-
-        Must have an associated Rand role.
-
-        Parameters
-        ----------
-        seed : int, optional
-            Seed to use. The default is [].
-        """
-        if hasattr(self, 'r'):
-            super().update_seed(seed)
-            role_objs = self.get_flex_role_objs()
-            for obj in role_objs.values():
-                if hasattr(obj, 'update_seed'):
-                    obj.update_seed(self.r.seed)
-
     def get_rand_states(self, auto_update_only=False):
         """Get dictionary of random states throughout the model objs."""
         rand_states = {}
@@ -609,7 +592,7 @@ class Architecture(Simulable):
                      as_copy=True)
         # send role dicts in to be copied via as_copy param.
         for flex_role in self.flexible_roles:
-            cargs[flex_role] = getattr(self, flex_role)
+            cargs[flex_role] = getattr(self, flex_role+'s')
         # if flows provided from above, use those flows. Otherwise copy own.
         if hasattr(self, 'flows'):
             cargs['flows'] = {f: flows[f] if f in flows else obj.copy()

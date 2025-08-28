@@ -65,7 +65,6 @@ class Geom(BaseObject):
     container_p = Parameter
     default_track = ['s']
     all_possible = ['s']
-    roledicts = ["buffers"]
     immutable_roles = BaseObject.immutable_roles + ['buffer']
 
     def __init__(self, *args, s={}, p={}, track='default', **kwargs):

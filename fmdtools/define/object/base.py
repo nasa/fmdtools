@@ -39,7 +39,7 @@ import pickle
 import time
 import sys
 import numpy as np
-from inspect import signature, isclass, ismethod
+from inspect import signature, isclass, ismethod, isfunction
 
 
 class ObjectGraph(ModelGraph):
@@ -71,9 +71,9 @@ class BaseType(type):
     Base type for BaseObject-based classes.
 
     BaseType enables the use of __slots__ without defining explicit slots by relying
-    on the defined class roletypes (e.g., containers, flows, etc) as well as roledicts
-    which are used by Coords and Geom. This enables lower memory use and faster access
-    without requiring the user to define __slots__ for their classes.
+    on the defined class roletypes (e.g., containers, flows, etc) This enables lower
+    memory use and faster access without requiring the user to define __slots__ for
+    their classes.
     """
 
     def __new__(cls, name, bases, dct):
@@ -81,17 +81,11 @@ class BaseType(type):
         slots = list(dct.get('__slots__', []))  # get defined __slots__ if available
         base_slots = []
         roletypes = []
-        roledicts = []
-        base_p = None
         for base in bases:
             if hasattr(base, '__slots__'):
                 base_slots += base.__slots__
             if hasattr(base, 'roletypes'):
                 roletypes = base.roletypes
-            if hasattr(base, 'roledicts'):
-                roledicts = base.roledicts
-            if hasattr(base, 'container_p'):
-                base_p = base.container_p
 
         if 'roletypes' in dct:
             roletypes = dct['roletypes']
@@ -111,19 +105,9 @@ class BaseType(type):
                     sub_roles.append(r)
             dct[roletype+'s'] = tuple(sub_roles)
 
-        roledict_slots = []  # get slots to be inferred by roledicts
-        if roledicts:
-            if 'container_p' in dct:
-                p = dct['container_p']()
-            else:
-                p = base_p()
-            for roledict in roledicts:
-                roledict_slots += [k for k in p.get_pref_attrs(roledict[:-1])]
-
-        all_slots = set(slots+base_slots+role_slots+roledict_slots)  # combine slots
+        all_slots = set(slots+base_slots+role_slots)  # combine slots
         inherit_dict = "__dict__" in base_slots
-        if name == 'Block':
-            a=1
+
         if inherit_dict and "__dict__" in all_slots:
             all_slots.remove("__dict__")
         dct['__slots__'] = tuple(all_slots)
@@ -220,7 +204,6 @@ class BaseObject(metaclass=BaseType):
 
     __slots__ = ('name', 'indicators', 'track', 'root', 'mutables')
     roletypes = ['container']
-    roledicts = []
     rolevars = []
     immutable_roles = ['p']
     flexible_roles = []
@@ -334,12 +317,12 @@ class BaseObject(metaclass=BaseType):
             # make sure role dict attributes are also tracked.
             self.track = []
             for t in track:
-                if t in self.roledicts:
-                    self.track.extend(getattr(self, t))
+                if t in self.roletypes:
+                    self.track.extend(getattr(self, t+"s"))
                 else:
                     self.track.append(t)
 
-    def init_roletypes(self, *roletypes, **kwargs):
+    def init_roletypes(self, *roletypes, initializer=None, **kwargs):
         """
         Initialize roletypes with given kwargs.
 
@@ -357,7 +340,7 @@ class BaseObject(metaclass=BaseType):
             if roletype not in self.roletypes:
                 raise Exception("Roletype: " + roletype + " not in class variable" +
                                 " self.roletypes: " + str(self.roletypes))
-            self.init_roles(roletype, **kwargs)
+            self.init_roles(roletype, initializer=initializer, **kwargs)
 
     def find_roletype_initiators(self, roletype):
         return find_roletype_initiators(dir(self), roletype)
@@ -369,7 +352,7 @@ class BaseObject(metaclass=BaseType):
         else:
             return self.name
 
-    def init_roles(self, roletype, **kwargs):
+    def init_roles(self, roletype, initializer=None, **kwargs):
         """
         Initialize the role 'roletype' for a given object.
 
@@ -388,31 +371,38 @@ class BaseObject(metaclass=BaseType):
         """
         # initialize roles and add as attributes to the object
         for rolename in getattr(self, roletype+'s'):
-            container_initializer = getattr(self, roletype+'_'+rolename)
-            container_args = kwargs.get(rolename, dict())
+            if not initializer:
+                obj_initializer = getattr(self, roletype+'_'+rolename)
+                obj_args = kwargs.get(rolename, dict())
+            else:
+                obj_initializer = initializer
+                obj_args = getattr(self, roletype+'_'+rolename)
 
-            if isinstance(container_args, container_initializer):
-                container = container_args
-            elif isinstance(container_args, dict):
+            if ismethod(obj_initializer) or isfunction(obj_initializer):
+                obj = obj_initializer(*obj_args)
+            elif isinstance(obj_args, obj_initializer):
+                obj = obj_args
+            elif isinstance(obj_args, dict):
                 default_args = getattr(self, 'default_'+rolename, dict())
-                container_args = {**default_args, **container_args}
-                if issubclass(container_initializer, BaseObject):
-                    container_args['root'] = self.get_full_name()
-                    container_args['track'] = get_sub_include(rolename, self.track)
+                obj_args = {**default_args, **obj_args}
+                if issubclass(obj_initializer, BaseObject):
+                    obj_args['root'] = self.get_full_name()
+                    obj_args['track'] = get_sub_include(rolename, self.track)
                 try:
-                    container = container_initializer(**container_args)
+                    obj = obj_initializer(**obj_args)
                 except AttributeError as ae:
                     raise Exception("Problem initializing " + roletype + "_" + rolename
-                                    + ": " + str(container_initializer)) from ae
-            elif isinstance(container_args, BaseObject):
-                raise Exception(str(container_args.__class__) + " not a recognized" +
-                                " instance of " + str(container_initializer) +
+                                    + ": " + str(initializer)) from ae
+            elif isinstance(obj_args, BaseObject):
+                raise Exception(str(obj_args.__class__) + " not a recognized" +
+                                " instance of " + str(initializer) +
                                 " (did you use relative instead of absolute imports?)")
             else:
-                raise Exception(str(container_args) + "not a dict or not a recognized" +
-                                "instance of " + str(container_initializer))
-            container.check_role(roletype, rolename)
-            setattr(self, rolename, container)
+                raise Exception(str(obj_args) + "not a dict or not a recognized "
+                                + "instance of " + str(obj_initializer))
+            if hasattr(obj, 'check_role'):
+                obj.check_role(roletype, rolename)
+            setattr(self, rolename, obj)
 
     def assign_roles(self, roletype, other_obj, **kwargs):
         """
@@ -458,33 +448,6 @@ class BaseObject(metaclass=BaseType):
     def reset(self):
         for role in self.get_all_roles():
             getattr(self, role).reset()
-
-    def init_role_dict(self, spec, name_end="s", set_attr=False):
-        """
-        Create a collection dict for the attribute 'spec'.
-
-        Works by finding all attributes from the obj's parameter with the name 'spec' in
-        them and adding them to the dict. Adds the dict to the object.
-
-        Used in more flexible classes like Coords and Geom to enable properties to be
-        set via parameters.
-
-        Parameters
-        ----------
-        spec : str
-            Name of the attributes to initialize
-        name_end: str
-            Last letter or set of lettersof the attribute used to give the role name to where 
-            the dictionary will be placed. It may be "ions" with collections. Default is 's'.
-        set_attr : bool
-            Whether to also add the individual attributes attr to the obj
-        """
-        specs = self.p.get_pref_attrs(spec)
-        specname = spec + name_end
-        setattr(self, specname, specs)
-        if set_attr:
-            for s_name in specs:
-                setattr(self, s_name, specs[s_name])
 
     def init_indicators(self):
         """Find all indicator methods and initialize in .indicator tuple."""
@@ -572,18 +535,24 @@ class BaseObject(metaclass=BaseType):
         """
         if not roletypes or roletypes[0] == 'all':
             roletypes = [*self.roletypes]
+            if with_flex:
+                for flex_role in self.flexible_roles:
+                    if flex_role not in roletypes:
+                        roletypes.append(flex_role)
         elif roletypes[0] == 'none':
             roletypes = []
+        else:
+            roletypes = list(roletypes)
         if no_flows and 'flows' in roletypes:
             roletypes.remove('flows')
         if not with_flex:
             for flex_role in self.flexible_roles:
-                if flex_role[:-1] in roletypes:
-                    roletypes.remove(flex_role[:-1])
+                if flex_role in roletypes:
+                    roletypes.remove(flex_role)
         return roletypes
 
     def get_roles(self, *roletypes, with_immutable=True, no_flows=False, with_flex=True,
-                  **kwargs):
+                  with_prefix=False, **kwargs):
         """
         Get all roles from the object.
 
@@ -609,7 +578,7 @@ class BaseObject(metaclass=BaseType):
         """
         roletypes = self.get_default_roletypes(*roletypes,
                                                no_flows=no_flows, with_flex=with_flex)
-        return [role for roletype in roletypes
+        return [roletype+"."+role if with_prefix else role for roletype in roletypes
                 for role in getattr(self, roletype+'s', [])
                 if with_immutable or role not in self.immutable_roles]
 
@@ -632,16 +601,8 @@ class BaseObject(metaclass=BaseType):
         """
         if not flexible_roles:
             flexible_roles = self.flexible_roles
-        role_objs = {}
-        for role in flexible_roles:
-            roledict = getattr(self, role)
-            if isinstance(roledict, list) or isinstance(roledict, tuple):
-                roledict = {k: getattr(self, k) for k in roledict}
-            if not flex_prefixes:
-                role_objs.update(roledict)
-            else:
-                role_objs.update({role+'.'+k: v for k, v in roledict.items()})
-        return role_objs
+        return self.get_roles_as_dict(*flexible_roles, with_flex=True,
+                                      with_prefixes=flex_prefixes)
 
     def copy_mut_containers(self):
         """Return copies of the mutable containers."""
@@ -650,8 +611,7 @@ class BaseObject(metaclass=BaseType):
                                                    with_immutable=False).items()}
 
     def get_roles_as_dict(self, *roletypes, with_immutable=True, with_prefix=False,
-                          flex_prefixes=False, with_flex=True, no_flows=False,
-                          **kwargs):
+                          with_flex=True, no_flows=False, **kwargs):
         """
         Return all roles and their objects as a dict.
 
@@ -663,9 +623,7 @@ class BaseObject(metaclass=BaseType):
         with_immutable : bool, optional
             Whether to include immutable roles (e.g., parameters at container_p). The
             default is True.
-        with_prefix : bool
-            Whether to provide prefixes to the names (e.g., naming 'fxnname.s', not 's')
-        flex_prefixes : bool, optional
+        with_prefix : bool, optional
             Whether to include the prefixes in the keys of the returned dictionary. The
             default is False.
         no_flows : bool, optional
@@ -681,47 +639,21 @@ class BaseObject(metaclass=BaseType):
             List of roles in the object, e.g. ['p', 's' 'r'] for an object with the
             parameter, state, and rand roles filled.
         """
-        roletypes = self.get_default_roletypes(*roletypes)
-        flex_roles = [r+'s' for r in roletypes if r+'s' in self.flexible_roles]
-        if with_flex:
-            flex_roles = self.get_flex_role_objs(*flex_roles,
-                                                 flex_prefixes=flex_prefixes)
-        else:
-            flex_roles = {}
-        non_flex_roletypes = [r for r in roletypes if r+'s' not in self.flexible_roles]
-        if not non_flex_roletypes:
-            non_flex_roletypes = 'none'
-
-        roles = self.get_roles(*non_flex_roletypes,
-                               with_immutable=with_immutable,
-                               no_flows=no_flows)
-        non_flex_roles = {role: getattr(self, role) for role in roles}
-        all_roles = {**flex_roles, **non_flex_roles}
-        if with_prefix:
-            all_roles = {self.name+"."+k: v for k, v in all_roles.items()}
-        return all_roles
-
-    def get_roledicts(self, *roledicts, with_immutable=True):
-        """
-        Get all roles in that stored in dictionaries (e.g., self.flows).
-
-        Parameters
-        ----------
-        *roledicts : str
-            Names of dictionaries to get roles from. Defaults to all roledits.
-            with_immutable : bool, optional
-                Whether to include immutable roles (e.g., parameters at container_p).
-                The default is True.
-
-        Returns
-        -------
-        roles : list
-            List of roles in the object from the role dictionaries
-        """
-        if not roledicts:
-            roledicts = self.roledicts
-        return [role for roledict in roledicts for role in getattr(self, roledict)
-                if with_immutable or roledict not in self.immutable_roles]
+        roletypes = self.get_default_roletypes(*roletypes, no_flows=no_flows,
+                                               with_flex=with_flex)
+        role_objs = {}
+        for roletype in roletypes:
+            roledict = getattr(self, roletype+"s")
+            if isinstance(roledict, list) or isinstance(roledict, tuple):
+                roledict = {k: getattr(self, k) for k in roledict}
+            if not with_immutable:
+                roledict = {k: v for k, v in roledict.items()
+                            if k not in self.immutable_roles}
+            if not with_prefix:
+                role_objs.update(roledict)
+            else:
+                role_objs.update({roletype+'.'+k: v for k, v in roledict.items()})
+        return role_objs
 
     def get_all_roles(self, with_immutable=True):
         """Get all roles in the object."""

@@ -63,10 +63,6 @@ class DroneEnvironmentGridParam(CoordsParam):
     x_size: int = 16
     y_size: int = 16
     blocksize: float = 10.0
-    state_viewed: tuple = (bool, False)
-    feature_target: tuple = (bool, False)
-    point_start: tuple = (0, 0)
-    point_safe: tuple = (0, 50)
     loc: str = 'rural'
 
 
@@ -84,6 +80,10 @@ class SightGrid(Coords):
     >>> fig, ax = mdl.flows['environment'].c.show({'viewed': {}})
     """
 
+    state_viewed = (bool, False)
+    feature_target = (bool, False)
+    point_start = (0, 0)
+    point_safe = (0, 50)
     container_p = DroneEnvironmentGridParam
 
     def init_properties(self, *args, **kwargs):
@@ -480,7 +480,7 @@ def script_faulty_trajectories(**kwargs):
     fig, ax = mdlhist.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
                                         time_groups=['nominal'], time_ticks=2.0)
 
-    app_mechfaults = SampleApproach(mdl, phasemaps={'mdl': PhaseMap(mdl.sp.phases)})
+    app_mechfaults = SampleApproach(mdl, phasemaps={'mdl': PhaseMap(mdl.sp.phases, dt=mdl.sp.dt)})
     app_mechfaults.add_faultdomain("mechfaults", "fault", "affect_dof", "mechbreak")
     app_mechfaults.add_faultsample("mechfault_scens", "fault_phases",
                                    "mechfaults", phasemap='mdl', args=(5,))

@@ -554,7 +554,8 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
     ax = faultsamp.phasemap.plot(ax=axes[1], fig=fig)
 
     # cost/metric plots
-    costs = np.array([endclasses.get(scen)[t_key(time)].classify[metric] for scen in scens])
+    costs = np.array([endclasses.get(scen+'.'+t_key(time)).classify[metric]
+                      for scen in scens])
     times = np.array([v.time for v in scens.values()])
     timesort = np.argsort(times)
     times = times[timesort]
@@ -567,7 +568,7 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
 
     # rate/metric plot
     if rad:
-        sizes = np.array([endclasses.get(scen)[t_key(time)].classify[rad] for scen in scens])
+        sizes = np.array([endclasses.get(scen+'.'+t_key(time)).classify[rad] for scen in scens])
         sizes = sizes[timesort]
         rad_scale *= np.max(abs(costs))/np.max(abs(sizes))
         axes[0].scatter(times, costs, s=rad_scale*sizes, label=rad, alpha=0.5)
