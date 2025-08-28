@@ -248,10 +248,10 @@ class Architecture(Simulable):
         for role in self.flexible_roles:
             rname = role+'s'
             if self.as_copy and rname in kwargs:
-                setattr(self, rname, {**kwargs[role]})
+                setattr(self, rname, {**kwargs[rname]})
             elif self.as_copy:
                 raise Exception("No role argument "+role+" to copy.")
-            elif role in kwargs:
+            elif rname in kwargs:
                 setattr(self, rname, {**kwargs[role]})
             else:
                 setattr(self, rname, dict())
@@ -592,7 +592,7 @@ class Architecture(Simulable):
                      as_copy=True)
         # send role dicts in to be copied via as_copy param.
         for flex_role in self.flexible_roles:
-            cargs[flex_role] = getattr(self, flex_role+'s')
+            cargs[flex_role+'s'] = getattr(self, flex_role+'s')
         # if flows provided from above, use those flows. Otherwise copy own.
         if hasattr(self, 'flows'):
             cargs['flows'] = {f: flows[f] if f in flows else obj.copy()

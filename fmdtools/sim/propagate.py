@@ -115,7 +115,8 @@ def parameter_sample(mdl, ps, **kwargs):
     hist : History
         Overall dict of model histories, with structure {'scenname': mdlhist}
     """
-    sim = MultiSimulation(mdl=mdl, samp=ps, **filter_kwargs(MultiSimulation, **kwargs))
+    sim = MultiSimulation(mdl=mdl, samp=ps, name="parameter sample",
+                          **filter_kwargs(MultiSimulation, **kwargs))
     return sim(**get_sim_call_kwargs(sim, **kwargs))
 
 
@@ -158,7 +159,7 @@ def one_fault(mdl, *fxnfault, time=0, f_kw={}, **kwargs):
         fxnname, fault = mdl.name, fxnfault[0]
 
     scen = SingleFaultScenario.from_fault((fxnname, fault), time, mdl=mdl, **f_kw)
-    return sequence(mdl, scen=scen, **kwargs)
+    return sequence(mdl, scen=scen, name=str((fxnname, fault)), **kwargs)
 
 
 def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.nan,
@@ -206,7 +207,7 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.nan,
             seq = Sequence(faultseq=faultseq, disturbances=disturbances)
         scen = Scenario(sequence=seq,
                         rate=rate,
-                        name='sequence',
+                        name=kwargs.get('name', 'sequence'),
                         times=tuple([*seq.keys()]),
                         time=min([*seq.keys()]))
 
@@ -243,7 +244,7 @@ def fault_sample(mdl, fs, **kwargs):
         A History dictionary with the tracked scenario with structure
         {'scen': scenhist}
     """
-    sim = MultiEventSimulation(mdl=mdl, samp=fs,
+    sim = MultiEventSimulation(mdl=mdl, samp=fs, name="fault sample",
                                **filter_kwargs(MultiEventSimulation, **kwargs))
     return sim(**get_sim_call_kwargs(sim, **kwargs))
 
@@ -274,7 +275,7 @@ def single_faults(mdl, times=[0.0], **kwargs):
     fd.add_all()
     fs = FaultSample(fd)
     fs.add_fault_times(times)
-    sim = MultiEventSimulation(mdl=mdl, samp=fs,
+    sim = MultiEventSimulation(mdl=mdl, samp=fs, name="single faults",
                                **filter_kwargs(MultiEventSimulation, **kwargs))
     return sim(**get_sim_call_kwargs(sim, **kwargs))
 
@@ -306,7 +307,7 @@ def nested_sample(mdl, ps, **kwargs):
         A dictionary of the SampleApproaches generated corresponding to each parameter
         scenario with structure {'nomscen1': app1}
     """
-    sim = NestedSimulation(mdl=mdl, samp=ps,
+    sim = NestedSimulation(mdl=mdl, samp=ps, name="nested sample",
                            **filter_kwargs(NestedSimulation, **kwargs))
     res, hist = sim(**get_sim_call_kwargs(sim, **kwargs))
     return res, hist, sim.apps
@@ -478,7 +479,7 @@ class BaseSimulation(BaseContainer):
         try:
             self.run(**kwargs)
         except Exception as e:
-            raise Exception("Error simulating "+self.name+": ") from e
+            raise Exception("Error simulating "+self.name+" scenario(s)") from e
         if self.tosave:
             self.save(**filter_kwargs(self.save, **kwargs))
         return self.result.flatten(), self.history.flatten()
@@ -801,6 +802,8 @@ class MultiSimulation(BaseSimulation):
     def __init__(self, *args, **kwargs):
         """Initialize the simulation an check memory."""
         super().__init__(*args, **kwargs)
+        if not self.name and hasattr(self.samp, 'name'):
+            self.name = self.samp.name
         if self.save_indiv is True:
             self.tosave = False
         self.check_hist_memory()

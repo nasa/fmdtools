@@ -433,6 +433,7 @@ class MoveWat(Function):
         self.wat_out.s.flowrate = 0.3/500 * velocity*self.wat_out.s.area
 
         self.wat_in.s.assign(self.wat_out.s, 'pressure', 'flowrate')
+        print(a)
 
 
 # DEFINE MODEL OBJECT
@@ -659,7 +660,7 @@ def script_sample_faults(track='all', **kwargs):
 
 
 if __name__ == "__main__":
-    
+
     mdl = Pump()
     endfaults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
                                              time=10, to_return='faults')
@@ -679,7 +680,7 @@ if __name__ == "__main__":
     script_fault_degradation_tables()
     script_try_faults()
     script_sample_faults()
-    check_model_pickleability(Pump(), try_pick=True)
+    # check_model_pickleability(Pump(), try_pick=True)
     import inspect
     source = inspect.getsource(Pump)
     og = ObjectGraph(Pump(), get_source=True)

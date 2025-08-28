@@ -319,6 +319,8 @@ class BaseObject(metaclass=BaseType):
             for t in track:
                 if t in self.roletypes:
                     self.track.extend(getattr(self, t+"s"))
+                elif t in self.flexible_roles:
+                    self.track.append(t+'s')
                 else:
                     self.track.append(t)
 
@@ -1096,7 +1098,7 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
         itera = vars(obj)
     except TypeError:
         itera = {a: getattr(obj, a) for a in dir(obj)
-                 if hasattr(obj, a) and (not ismethod(getattr(obj, a)) or not a.startswith("__"))}
+                 if hasattr(obj, a) and (not ismethod(getattr(obj, a)) and not a.startswith("__"))}
     for name, attribute in itera.items():
         print(name)
         time.sleep(pause)

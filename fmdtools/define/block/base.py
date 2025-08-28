@@ -777,32 +777,37 @@ class Simulable(BaseObject):
             If true, returns a copy of the model just before fault injection and
             stops simulation
         """
-        if time == 'end':
-            time = self.sp.end_time
-        start_time, end_time = self.t.get_sim_times(time)
-        sim_times = self.sp.get_timerange(start_time, end_time)
-        for t in sim_times:
-            if t == end_time:
-                if copy:
-                    return self.copy()
-                if t != self.t.time:  # faults are only injected if not run yet
-                    self.set_vars(**disturbances)
-                    self.inject_faults(faults)
-            self.t.update_time(t)
-            if self.t.executing:
-                self.update_stochastic_states()
-                self.update_dynamic_behaviors(proptype=proptype)
-                self.update_static_behaviors(proptype=proptype)
-                self.set_sub_faults()
-                if inc_at == "all" or (inc_at == "time" and t == time):
-                    self.inc_sim_time()
-                    self.h.log(self, self.t.t_ind, self.t.time)
-                if self.sp.end_condition:
-                    if get_var(self, self.sp.end_condition)():
-                        break
+        try:
+            if time == 'end':
+                time = self.sp.end_time
+            start_time, end_time = self.t.get_sim_times(time)
+            sim_times = self.sp.get_timerange(start_time, end_time)
+            for t in sim_times:
+                if t == end_time:
+                    if copy:
+                        return self.copy()
+                    if t != self.t.time:  # faults are only injected if not run yet
+                        self.set_vars(**disturbances)
+                        self.inject_faults(faults)
+                self.t.update_time(t)
+                if self.t.executing:
+                    self.update_stochastic_states()
+                    self.update_dynamic_behaviors(proptype=proptype)
+                    self.update_static_behaviors(proptype=proptype)
+                    self.set_sub_faults()
+                    if inc_at == "all" or (inc_at == "time" and t == time):
+                        self.inc_sim_time()
+                        self.h.log(self, self.t.t_ind, self.t.time)
+                    if self.sp.end_condition:
+                        if get_var(self, self.sp.end_condition)():
+                            break
 
-        if end_of_simulation:
-            self.cut_hist()
+            if end_of_simulation:
+                self.cut_hist()
+        except Exception as e:
+            raise Exception("Error simulating " + self.name +
+                            " of class " + self.__class__.__name__ +
+                            " at time=" + str(self.t.time)) from e
 
 
 class Block(Simulable):
