@@ -1409,7 +1409,7 @@
    ],
    "source": [
     "static_mdl = Drone_Static()\n",
-    "result, mdlhist = propagate.one_fault(static_mdl,'affect_dof', 'mechbreak', t=0, desired_result='graph')\n",
+    "result, mdlhist = propagate.one_fault(static_mdl,'affect_dof', 'mechbreak', t=0, to_return='graph')\n",
     "\n",
     "result.graph.set_edge_labels(title='')\n",
     "fig, ax = result.graph.draw(title = 'AffectDOF: Mechbreak at final sim time')\n",

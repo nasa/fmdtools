@@ -75,7 +75,7 @@
    },
    "outputs": [],
    "source": [
-    "result, mdlhist = propagate.nominal(mdl, desired_result='graph')"
+    "result, mdlhist = propagate.nominal(mdl, to_return='graph')"
    ]
   },
   {

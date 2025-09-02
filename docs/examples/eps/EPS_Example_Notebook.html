@@ -771,7 +771,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <p>As with dynamic models, in static models we use <code class="docutils literal notranslate"><span class="pre">fp.run_one_fault</span></code> to see the effects of single faults. All setup is performed in the Model class definition</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;ee_to_me&#39;</span><span class="p">,</span> <span class="s1">&#39;toohigh_torque&#39;</span><span class="p">,</span> <span class="n">desired_result</span><span class="o">=</span><span class="s2">&quot;graph&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;ee_to_me&#39;</span><span class="p">,</span> <span class="s1">&#39;toohigh_torque&#39;</span><span class="p">,</span> <span class="n">to_return</span><span class="o">=</span><span class="s2">&quot;graph&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

@@ -139,7 +139,7 @@ def xd_paramfunc(*xdes):
 def calc_oper(mdl):
     """Calculate operational objective, constraints, and phasedict for a given model."""
     endresults_nom, mdlhist = prop.nominal(mdl)
-    opercost = endresults_nom.endclass['expected_cost']
+    opercost = endresults_nom.tend.classify['expected_cost']
     g_soc = 20 - mdlhist.fxns.store_ee.s.soc[-1]
     # g_faults = any(endresults_nom['faults'])
     g_max_height = sum([i for i in mdlhist.flows.dofs.s.z-122 if i > 0])
@@ -174,7 +174,7 @@ def calc_res(mdl, fullcosts=False, faultmodes='all', include_nominal=True,
     result, mdlhists = prop.fault_sample(mdl, fs, staged=staged, pool=pool,
                                          showprogress=False)
     rescost = result.total('expected_cost')-(not include_nominal) * \
-        result.nominal.endclass['expected_cost']
+        result.nominal.tend.classify['expected_cost']
     return rescost
 
 

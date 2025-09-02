@@ -849,7 +849,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <section id="a-simulate-nominal">
 <h3>2a.) Simulate nominal<a class="headerlink" href="#a-simulate-nominal" title="Link to this heading"></a></h3>
 <p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.nominal</span></code> method, which returns:
-endresults, which is a result (or a dict of multiple results) specified by the <code class="docutils literal notranslate"><span class="pre">desired_result</span></code> option, e.g.:</p>
+endresults, which is a result (or a dict of multiple results) specified by the <code class="docutils literal notranslate"><span class="pre">to_return</span></code> option, e.g.:</p>
 <ul class="simple">
 <li><p>‘endclass’ (default), which provides the dict from <code class="docutils literal notranslate"><span class="pre">mdl.find_classification</span></code></p></li>
 <li><p>‘graph’ or <code class="docutils literal notranslate"><span class="pre">fmdtools.define.graph.Graph</span></code> subclass for the model.</p></li>
@@ -866,7 +866,7 @@ endresults, which is a result (or a dict of multiple results) specified by the <
 <li><p>‘valparams’ (model states specified in mdl.valparams),</p></li>
 <li><p>or a dict of form: <code class="docutils literal notranslate"><span class="pre">{'functions':{'fxn1':'att1'},</span> <span class="pre">'flows':{'flow1':'att1'}}</span></code></p></li>
 </ul>
-<p>What do the results look like? Explore results structures using the <code class="docutils literal notranslate"><span class="pre">desired_results</span></code> and <code class="docutils literal notranslate"><span class="pre">track</span></code> arguments.</p>
+<p>What do the results look like? Explore results structures using the <code class="docutils literal notranslate"><span class="pre">to_returns</span></code> and <code class="docutils literal notranslate"><span class="pre">track</span></code> arguments.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_nominal</span>
@@ -890,7 +890,7 @@ endresults, which is a result (or a dict of multiple results) specified by the <
 </section>
 <section id="b-visualize-nominal-model">
 <h3>2b.) Visualize nominal model<a class="headerlink" href="#b-visualize-nominal-model" title="Link to this heading"></a></h3>
-<p>First, we can show the model graph using <code class="docutils literal notranslate"><span class="pre">Graph.draw</span></code> to see that it was set up correctly. We can do this both on the model graph itself (using <code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code>) and the results of the nominal run (by passing <code class="docutils literal notranslate"><span class="pre">graph</span></code> as an argument in <code class="docutils literal notranslate"><span class="pre">desired_result</span></code>) to verify both are fault-free.</p>
+<p>First, we can show the model graph using <code class="docutils literal notranslate"><span class="pre">Graph.draw</span></code> to see that it was set up correctly. We can do this both on the model graph itself (using <code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code>) and the results of the nominal run (by passing <code class="docutils literal notranslate"><span class="pre">graph</span></code> as an argument in <code class="docutils literal notranslate"><span class="pre">to_return</span></code>) to verify both are fault-free.</p>
 <p>Note that the underlyign <code class="docutils literal notranslate"><span class="pre">Graph</span></code> class is very flexible and enables a wide range of display options:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.graph.Graph">Graph docs</a></p></li>

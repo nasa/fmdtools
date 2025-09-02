@@ -139,41 +139,21 @@ class SimParam(Parameter, readonly=True):
             histrange = self.track_times[1]
         return histrange
 
-    def get_shift(self, old_start_time=0.0):
-        """
-        Get the shift between the sim timerange in the history.
-
-        Examples
-        --------
-        >>> SimParam().get_shift(6.0)
-        6
-        >>> SimParam(track_times=('interval', 2)).get_shift(2)
-        1
-        """
-        prevrange = self.get_timerange(start_time=0.0, end_time=old_start_time)[:-1]
-        if self.track_times[0] == "all":
-            shift = len(prevrange)
-        elif self.track_times[0] == 'interval':
-            shift = len(prevrange[0:len(prevrange):self.track_times[1]])
-        elif self.track_times[0] == 'times':
-            shift = 0
-        return shift
-
-    def get_hist_ind(self, t_ind, t, shift):
+    def get_hist_ind(self, t_ind, t):
         """
         Get the index of the history given the simulation time/index and shift.
 
         Examples
         --------
-        >>> SimParam().get_hist_ind(2, 2.0, 1)
-        3
-        >>> SimParam(track_times=('interval', 2)).get_hist_ind(4, 4.0, 0)
+        >>> SimParam().get_hist_ind(2, 2.0)
+        2
+        >>> SimParam(track_times=('interval', 2)).get_hist_ind(4, 4.0)
         2
         """
         if self.track_times[0] == 'all':
-            t_ind_rec = t_ind + shift
+            t_ind_rec = t_ind
         elif self.track_times[0] == 'interval':
-            t_ind_rec = t_ind//self.track_times[1] + shift
+            t_ind_rec = t_ind//self.track_times[1]
         elif self.track_times[0] == 'times':
             t_ind_rec = self.track_times[1].index(t)
         else:
@@ -797,7 +777,8 @@ class Simulable(BaseObject):
                     self.set_sub_faults()
                     if inc_at == "all" or (inc_at == "time" and t == time):
                         self.inc_sim_time()
-                        self.h.log(self, self.t.t_ind, self.t.time)
+                        t_ind = self.sp.get_hist_ind(self.t.t_ind, self.t.time)
+                        self.h.log(self, t_ind, self.t.time)
                     if self.sp.end_condition:
                         if get_var(self, self.sp.end_condition)():
                             break

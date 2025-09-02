@@ -217,7 +217,7 @@ During handling of the above exception, another exception occurred:
 
 #x1B[31mAttributeError#x1B[39m: Not in dict: graph</failure></testcase><testcase classname="examples.eps.test_eps.epsTests" name="test_all_faults" time="3.279" /><testcase classname="examples.eps.test_eps.epsTests" name="test_backward_fault_prop_1" time="0.198" /><testcase classname="examples.eps.test_eps.epsTests" name="test_backward_fault_prop_2" time="0.199" /><testcase classname="examples.eps.test_eps.epsTests" name="test_fault_app" time="4.162" /><testcase classname="examples.eps.test_eps.epsTests" name="test_multfault_saving" time="0.817" /><testcase classname="examples.eps.test_eps.epsTests" name="test_nominal_saving" time="0.215" /><testcase classname="examples.eps.test_eps.epsTests" name="test_pickleability" time="6.919" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_onefault" time="0.682" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_singlefaults" time="11.373" /><testcase classname="examples.multiflow_demo.Multiflow_and_Commsflow_Demonstration.ipynb" name="Multiflow_and_Commsflow_Demonstration.ipynb" time="7.949" /><testcase classname="examples.multiflow_demo.test_multiflow.define_Tests" name="test_multiflow_combination" time="0.677" /><testcase classname="examples.multiflow_demo.test_multiflow.define_Tests" name="test_multiflow_passing" time="0.577" /><testcase classname="examples.multiflow_demo.test_multiflow.define_Tests" name="test_mutliflow_copying" time="0.537" /><testcase classname="examples.multirotor.Demonstration.ipynb" name="Demonstration.ipynb" time="17.703"><failure message="#x1B[31mAttributeError#x1B[39m: Not in dict: graph">---------------------------------------------------------------------------
 static_mdl = Drone_Static()
-result, mdlhist = propagate.one_fault(static_mdl,'affect_dof', 'mechbreak', t=0, desired_result='graph')
+result, mdlhist = propagate.one_fault(static_mdl,'affect_dof', 'mechbreak', t=0, to_return='graph')
 
 result.graph.set_edge_labels(title='')
 fig, ax = result.graph.draw(title = 'AffectDOF: Mechbreak at final sim time')
@@ -255,7 +255,7 @@ During handling of the above exception, another exception occurred:
 #x1B[31mAttributeError#x1B[39m                            Traceback (most recent call last)
 #x1B[36mCell#x1B[39m#x1B[36m #x1B[39m#x1B[32mIn[24]#x1B[39m#x1B[32m, line 4#x1B[39m
 #x1B[32m      1#x1B[39m static_mdl = Drone_Static()
-#x1B[32m      2#x1B[39m result, mdlhist = propagate.one_fault(static_mdl,#x1B[33m'#x1B[39m#x1B[33maffect_dof#x1B[39m#x1B[33m'#x1B[39m, #x1B[33m'#x1B[39m#x1B[33mmechbreak#x1B[39m#x1B[33m'#x1B[39m, t=#x1B[32m0#x1B[39m, desired_result=#x1B[33m'#x1B[39m#x1B[33mgraph#x1B[39m#x1B[33m'#x1B[39m)
+#x1B[32m      2#x1B[39m result, mdlhist = propagate.one_fault(static_mdl,#x1B[33m'#x1B[39m#x1B[33maffect_dof#x1B[39m#x1B[33m'#x1B[39m, #x1B[33m'#x1B[39m#x1B[33mmechbreak#x1B[39m#x1B[33m'#x1B[39m, t=#x1B[32m0#x1B[39m, to_return=#x1B[33m'#x1B[39m#x1B[33mgraph#x1B[39m#x1B[33m'#x1B[39m)
 #x1B[32m----&gt; #x1B[39m#x1B[32m4#x1B[39m #x1B[43mresult#x1B[49m#x1B[43m.#x1B[49m#x1B[43mgraph#x1B[49m.set_edge_labels(title=#x1B[33m'#x1B[39m#x1B[33m'#x1B[39m)
 #x1B[32m      5#x1B[39m fig, ax = result.graph.draw(title = #x1B[33m'#x1B[39m#x1B[33mAffectDOF: Mechbreak at final sim time#x1B[39m#x1B[33m'#x1B[39m)
 #x1B[32m      6#x1B[39m #x1B[38;5;66;03m#fig.savefig('static_propagation.pdf', format="pdf", bbox_inches = 'tight', pad_inches = 0)#x1B[39;00m
@@ -979,7 +979,7 @@ The above exception was the direct cause of the following exception:
 #x1B[32m    484#x1B[39m     #x1B[38;5;28mself#x1B[39m.save(**filter_kwargs(#x1B[38;5;28mself#x1B[39m.save, **kwargs))
 
 #x1B[31mException#x1B[39m: Error simulating nominal scenario(s)</failure></testcase><testcase classname="examples.pump.Parallelism_Tutorial.ipynb" name="Parallelism_Tutorial.ipynb" time="7.375"><failure message="#x1B[31mException#x1B[39m: Error simulating nominal scenario(s)">---------------------------------------------------------------------------
-result, mdlhist = propagate.nominal(mdl, desired_result='graph')
+result, mdlhist = propagate.nominal(mdl, to_return='graph')
 #x1B[31m---------------------------------------------------------------------------#x1B[39m
 #x1B[31mNameError#x1B[39m                                 Traceback (most recent call last)
 #x1B[36mFile #x1B[39m#x1B[32m~/bamboo-agent-home/xml-data/build-dir/RAD-TEST-UVF/fmdtools-full/lib/python3.11/site-packages/fmdtools/define/block/base.py:796#x1B[39m, in #x1B[36mSimulable.__call__#x1B[39m#x1B[34m(self, time, proptype, faults, disturbances, inc_at, end_of_simulation, copy)#x1B[39m
@@ -1067,7 +1067,7 @@ The above exception was the direct cause of the following exception:
 
 #x1B[31mException#x1B[39m                                 Traceback (most recent call last)
 #x1B[36mCell#x1B[39m#x1B[36m #x1B[39m#x1B[32mIn[3]#x1B[39m#x1B[32m, line 1#x1B[39m
-#x1B[32m----&gt; #x1B[39m#x1B[32m1#x1B[39m result, mdlhist = #x1B[43mpropagate#x1B[49m#x1B[43m.#x1B[49m#x1B[43mnominal#x1B[49m#x1B[43m(#x1B[49m#x1B[43mmdl#x1B[49m#x1B[43m,#x1B[49m#x1B[43m #x1B[49m#x1B[43mdesired_result#x1B[49m#x1B[43m=#x1B[49m#x1B[33;43m'#x1B[39;49m#x1B[33;43mgraph#x1B[39;49m#x1B[33;43m'#x1B[39;49m#x1B[43m)#x1B[49m
+#x1B[32m----&gt; #x1B[39m#x1B[32m1#x1B[39m result, mdlhist = #x1B[43mpropagate#x1B[49m#x1B[43m.#x1B[49m#x1B[43mnominal#x1B[49m#x1B[43m(#x1B[49m#x1B[43mmdl#x1B[49m#x1B[43m,#x1B[49m#x1B[43m #x1B[49m#x1B[43mto_return#x1B[49m#x1B[43m=#x1B[49m#x1B[33;43m'#x1B[39;49m#x1B[33;43mgraph#x1B[39;49m#x1B[33;43m'#x1B[39;49m#x1B[43m)#x1B[49m
 
 #x1B[36mFile #x1B[39m#x1B[32m~/bamboo-agent-home/xml-data/build-dir/RAD-TEST-UVF/fmdtools-full/lib/python3.11/site-packages/fmdtools/sim/propagate.py:92#x1B[39m, in #x1B[36mnominal#x1B[39m#x1B[34m(mdl, **kwargs)#x1B[39m
 #x1B[32m     74#x1B[39m #x1B[38;5;250m#x1B[39m#x1B[33;03m"""#x1B[39;00m
@@ -1093,7 +1093,7 @@ The above exception was the direct cause of the following exception:
 #x1B[32m    484#x1B[39m     #x1B[38;5;28mself#x1B[39m.save(**filter_kwargs(#x1B[38;5;28mself#x1B[39m.save, **kwargs))
 
 #x1B[31mException#x1B[39m: Error simulating nominal scenario(s)</failure></testcase><testcase classname="examples.pump.Pump_Example_Notebook.ipynb" name="Pump_Example_Notebook.ipynb" time="9.074"><failure message="#x1B[31mException#x1B[39m: Error simulating nominal scenario(s)">---------------------------------------------------------------------------
-result, mdlhist=propagate.nominal(mdl, desired_result={'graph': FunctionArchitectureGraph})
+result, mdlhist=propagate.nominal(mdl, to_return={'graph': FunctionArchitectureGraph})
 #x1B[31m---------------------------------------------------------------------------#x1B[39m
 #x1B[31mNameError#x1B[39m                                 Traceback (most recent call last)
 #x1B[36mFile #x1B[39m#x1B[32m~/bamboo-agent-home/xml-data/build-dir/RAD-TEST-UVF/fmdtools-full/lib/python3.11/site-packages/fmdtools/define/block/base.py:796#x1B[39m, in #x1B[36mSimulable.__call__#x1B[39m#x1B[34m(self, time, proptype, faults, disturbances, inc_at, end_of_simulation, copy)#x1B[39m
@@ -1181,7 +1181,7 @@ The above exception was the direct cause of the following exception:
 
 #x1B[31mException#x1B[39m                                 Traceback (most recent call last)
 #x1B[36mCell#x1B[39m#x1B[36m #x1B[39m#x1B[32mIn[7]#x1B[39m#x1B[32m, line 1#x1B[39m
-#x1B[32m----&gt; #x1B[39m#x1B[32m1#x1B[39m result, mdlhist=#x1B[43mpropagate#x1B[49m#x1B[43m.#x1B[49m#x1B[43mnominal#x1B[49m#x1B[43m(#x1B[49m#x1B[43mmdl#x1B[49m#x1B[43m,#x1B[49m#x1B[43m #x1B[49m#x1B[43mdesired_result#x1B[49m#x1B[43m=#x1B[49m#x1B[43m{#x1B[49m#x1B[33;43m'#x1B[39;49m#x1B[33;43mgraph#x1B[39;49m#x1B[33;43m'#x1B[39;49m#x1B[43m:#x1B[49m#x1B[43m #x1B[49m#x1B[43mFunctionArchitectureGraph#x1B[49m#x1B[43m}#x1B[49m#x1B[43m)#x1B[49m
+#x1B[32m----&gt; #x1B[39m#x1B[32m1#x1B[39m result, mdlhist=#x1B[43mpropagate#x1B[49m#x1B[43m.#x1B[49m#x1B[43mnominal#x1B[49m#x1B[43m(#x1B[49m#x1B[43mmdl#x1B[49m#x1B[43m,#x1B[49m#x1B[43m #x1B[49m#x1B[43mto_return#x1B[49m#x1B[43m=#x1B[49m#x1B[43m{#x1B[49m#x1B[33;43m'#x1B[39;49m#x1B[33;43mgraph#x1B[39;49m#x1B[33;43m'#x1B[39;49m#x1B[43m:#x1B[49m#x1B[43m #x1B[49m#x1B[43mFunctionArchitectureGraph#x1B[49m#x1B[43m}#x1B[49m#x1B[43m)#x1B[49m
 
 #x1B[36mFile #x1B[39m#x1B[32m~/bamboo-agent-home/xml-data/build-dir/RAD-TEST-UVF/fmdtools-full/lib/python3.11/site-packages/fmdtools/sim/propagate.py:92#x1B[39m, in #x1B[36mnominal#x1B[39m#x1B[34m(mdl, **kwargs)#x1B[39m
 #x1B[32m     74#x1B[39m #x1B[38;5;250m#x1B[39m#x1B[33;03m"""#x1B[39;00m

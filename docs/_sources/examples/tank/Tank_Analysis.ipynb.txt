@@ -67,7 +67,7 @@
    "outputs": [],
    "source": [
     "mdl = Tank(track='all')\n",
-    "result, mdlhist = propagate.nominal(mdl, desired_result={'graph': FunctionArchitectureGraph})"
+    "result, mdlhist = propagate.nominal(mdl, to_return={'graph': FunctionArchitectureGraph})"
    ]
   },
   {
@@ -823,7 +823,7 @@
     }
    ],
    "source": [
-    "resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=3,track='all',desired_result=['graph','endclass','endfaults'])\n",
+    "resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=3,track='all',to_return=['graph','endclass','endfaults'])\n",
     "\n",
     "fig, ax = mdlhist.plot_line('flows.valve1_sig.s.action', 'flows.tank_sig.s.indicator',\n",
     "                            'fxns.store_water.s.level', 'fxns.store_water.s.net_flow',\n",
@@ -2343,7 +2343,7 @@
     }
    ],
    "source": [
-    "resgraph, mdlhist = propagate.one_fault(mdl,'human.aa.acts.detect','false_low', time=3, track='all',desired_result=['graph','endclass','endfaults'])\n",
+    "resgraph, mdlhist = propagate.one_fault(mdl,'human.aa.acts.detect','false_low', time=3, track='all',to_return=['graph','endclass','endfaults'])\n",
     "\n",
     "fig, ax = mdlhist.plot_line('flows.valve1_sig.s.action',\n",
     "                       'flows.tank_sig.s.indicator',\n",
@@ -2902,7 +2902,7 @@
     }
    ],
    "source": [
-    "resgraph, mdlhist = propagate.one_fault(mdl,'human.aa.acts.detect','false_high', time=3, track='all',desired_result=['graph','endclass','endfaults'])\n",
+    "resgraph, mdlhist = propagate.one_fault(mdl,'human.aa.acts.detect','false_high', time=3, track='all',to_return=['graph','endclass','endfaults'])\n",
     "\n",
     "fig, ax = mdlhist.plot_line('flows.valve1_sig.s.action',\n",
     "                       'flows.tank_sig.s.indicator',\n",
@@ -5562,7 +5562,7 @@
     }
    ],
    "source": [
-    "result, mdlhist = propagate.one_fault(mdl_long_reaction_time,'store_water','leak', time=3,track=\"all\", desired_result='graph')\n",
+    "result, mdlhist = propagate.one_fault(mdl_long_reaction_time,'store_water','leak', time=3,track=\"all\", to_return='graph')\n",
     "\n",
     "fig, axs = mdlhist.plot_line('flows.valve1_sig.s.action',\n",
     "                       'flows.tank_sig.s.indicator',\n",

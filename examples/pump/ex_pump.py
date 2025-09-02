@@ -433,7 +433,6 @@ class MoveWat(Function):
         self.wat_out.s.flowrate = 0.3/500 * velocity*self.wat_out.s.area
 
         self.wat_in.s.assign(self.wat_out.s, 'pressure', 'flowrate')
-        print(a)
 
 
 # DEFINE MODEL OBJECT

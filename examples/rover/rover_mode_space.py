@@ -74,5 +74,5 @@ if __name__ == "__main__":
     endresults, reshist = prop.one_fault(mdl, "drive", "custom", time=15,
                                          staged=True, f_kw=f_kw)
 
-    line_dist = endresults.endclass.line_dist
+    line_dist = endresults.classify.tend.line_dist
     end_loc = (reshist.faulty.flows.pos.s.x[-1], reshist.faulty.flows.pos.s.y[-1])

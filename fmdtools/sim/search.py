@@ -911,7 +911,7 @@ class ScenarioProblem(BaseSimProblem):
 
     def add_sim(self, mdl, **kwargs):
         """Add a simulation - always use Simulation."""
-        super().add_sim(mdl, exec_sim, **kwargs)
+        super().add_sim(mdl, exec_sim, **filter_kwargs(exec_sim, **kwargs))
 
     def prep_sim(self):
         """Prepare simulation by simulating it until the start of the scenario."""

@@ -430,7 +430,7 @@
     "mdl.flows[\"communications\"].mover_1.send(\"mover_2\")\n",
     "from fmdtools.sim import propagate\n",
     "\n",
-    "result, mdlhist = propagate.nominal(mdl,track='all', desired_result={'graph': FunctionArchitectureGraph})\n",
+    "result, mdlhist = propagate.nominal(mdl,track='all', to_return={'graph': FunctionArchitectureGraph})\n",
     "#fig = result.graph.draw(figsize=(8,6)) #graph can be drawn, but it's the same as before since it's nominal\n",
     "mdlhist"
    ]

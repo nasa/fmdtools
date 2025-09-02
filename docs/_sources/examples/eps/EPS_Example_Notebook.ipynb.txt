@@ -92,7 +92,7 @@
    },
    "outputs": [],
    "source": [
-    "result, mdlhist = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', desired_result=\"graph\")"
+    "result, mdlhist = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', to_return=\"graph\")"
    ]
   },
   {

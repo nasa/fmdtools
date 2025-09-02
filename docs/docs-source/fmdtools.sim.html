@@ -928,7 +928,7 @@ See multiprocessing documentation.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>results</strong> (<em>Result</em>) – A Result dictionary with results desired from each scenario corresponding to
-desired_result over the set of scenarios.</p></li>
+to_return over the set of scenarios.</p></li>
 <li><p><strong>mdlhists</strong> (<em>History</em>) – A History dictionary with the tracked scenario (including the nominal)</p></li>
 </ul>
 </p>
@@ -960,7 +960,7 @@ where args and kwargs are arguments/kwargs to SampleApproach.add_faultsamples.</
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>res</strong> (<em>Result</em>) – A Result dictionary with results desired from each scenario corresponding to
-desired_result over the set of scenarios.</p></li>
+to_return over the set of scenarios.</p></li>
 <li><p><strong>hist</strong> (<em>History</em>) – A History dictionary with the tracked scenario (including the nominal)</p></li>
 <li><p><strong>app</strong> (<em>SampleApproach</em>) – Generated SampleApproach</p></li>
 </ul>
@@ -977,14 +977,14 @@ desired_result over the set of scenarios.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.get_endclass_vars">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">get_endclass_vars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.get_endclass_vars" title="Link to this definition"></a></dt>
-<dd><p>Get variables in the model corresponding to the provided desired_result dictionary.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">get_endclass_vars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_return</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.get_endclass_vars" title="Link to this definition"></a></dt>
+<dd><p>Get variables in the model corresponding to the provided to_return dictionary.</p>
 <p>Appends them to provided result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – fmdtools Simulation (e.g., Model)</p></li>
-<li><p><strong>desired_result</strong> (<em>dict</em>) – dictionary arguments for desired_result</p></li>
+<li><p><strong>to_return</strong> (<em>dict</em>) – dictionary arguments for to_return</p></li>
 <li><p><strong>result</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result to append results to.</p></li>
 </ul>
 </dd>
@@ -993,8 +993,8 @@ desired_result over the set of scenarios.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.get_result">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomresult</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.get_result" title="Link to this definition"></a></dt>
-<dd><p>Get the desired_result specified from the model.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_return</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomresult</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.get_result" title="Link to this definition"></a></dt>
+<dd><p>Get the to_return specified from the model.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1177,7 +1177,7 @@ nominal runs. Default is True.</p></li>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul>
 <li><p><strong>result</strong> (<em>Result</em>) –</p>
-<p>dict of result corresponding to desired_result, e.g.</p>
+<p>dict of result corresponding to to_return, e.g.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Result</span><span class="p">({</span><span class="s1">&#39;endclass&#39;</span><span class="p">:</span> <span class="n">endclasses</span><span class="p">,</span>
         <span class="s1">&#39;endfaults&#39;</span><span class="p">:</span> <span class="n">endfaults</span><span class="p">,</span>
         <span class="s1">&#39;varname&#39;</span><span class="p">:</span> <span class="n">var</span><span class="p">,</span>
@@ -1225,7 +1225,7 @@ nominal runs. Default is True.</p></li>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul>
 <li><p><strong>result</strong> (<em>Result</em>) –</p>
-<p>Result dict of result corresponding to desired_result, with structure,:</p>
+<p>Result dict of result corresponding to to_return, with structure,:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Result</span><span class="p">({</span><span class="s1">&#39;nominal&#39;</span><span class="p">:</span> <span class="n">nomresult</span><span class="p">,</span> <span class="s1">&#39;faulty&#39;</span><span class="p">:</span> <span class="n">faultyresult</span><span class="p">})</span>
 </pre></div>
 </div>
@@ -1323,7 +1323,7 @@ mdlhist. The default is {}.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>result</strong> (<em>Result</em>) – dict of result corresponding to desired_result.</p></li>
+<li><p><strong>result</strong> (<em>Result</em>) – dict of result corresponding to to_return.</p></li>
 <li><p><strong>mdlhist</strong> (<em>dict</em>) – A dictionary with a history of modelstates.</p></li>
 <li><p><strong>c_mdl</strong> (<em>dict</em>) – A dictionary of models at each time given in ctimes with structure {time:model}</p></li>
 <li><p><strong>t_end</strong> (<em>float</em>) – Last sim time</p></li>
@@ -1441,7 +1441,7 @@ and individual_saving is a bool (True/False)</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul>
 <li><p><strong>result</strong> (<em>Result</em>) –</p>
-<p>Result dict of result corresponding to desired_result, with structure,:</p>
+<p>Result dict of result corresponding to to_return, with structure,:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Result</span><span class="p">({</span><span class="s1">&#39;nominal&#39;</span><span class="p">:</span> <span class="n">nomresult</span><span class="p">,</span> <span class="s1">&#39;faulty&#39;</span><span class="p">:</span> <span class="n">faultyresult</span><span class="p">})</span>
 </pre></div>
 </div>
@@ -1456,12 +1456,12 @@ structure: {‘nominal’: nomhist, ‘faulty’: faulthist}</p></li>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.sim_kwargs">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">sim_kwargs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'cut_hist':</span> <span class="pre">True,</span> <span class="pre">'desired_result':</span> <span class="pre">'endclass',</span> <span class="pre">'run_stochastic':</span> <span class="pre">False,</span> <span class="pre">'staged':</span> <span class="pre">False,</span> <span class="pre">'use_end_condition':</span> <span class="pre">True,</span> <span class="pre">'warn_faults':</span> <span class="pre">True}</span></em><a class="headerlink" href="#fmdtools.sim.propagate.sim_kwargs" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">sim_kwargs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'cut_hist':</span> <span class="pre">True,</span> <span class="pre">'to_return':</span> <span class="pre">'endclass',</span> <span class="pre">'run_stochastic':</span> <span class="pre">False,</span> <span class="pre">'staged':</span> <span class="pre">False,</span> <span class="pre">'use_end_condition':</span> <span class="pre">True,</span> <span class="pre">'warn_faults':</span> <span class="pre">True}</span></em><a class="headerlink" href="#fmdtools.sim.propagate.sim_kwargs" title="Link to this definition"></a></dt>
 <dd><p>Simulation keyword arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>desired_result</strong> (<em>dict/str/list</em>) – <p>Desired quantities to return in the first argument.
+<li><p><strong>to_return</strong> (<em>dict/str/list</em>) – <p>Desired quantities to return in the first argument.
 Options are:</p>
 <ul>
 <li><p>’endclass’: a dict returned by find_classification (default)</p></li>
@@ -1535,7 +1535,7 @@ See multiprocessing documentation.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>results</strong> (<em>Result</em>) – Result dict of result corresponding to desired_result {scenname:result}</p></li>
+<li><p><strong>results</strong> (<em>Result</em>) – Result dict of result corresponding to to_return {scenname:result}</p></li>
 <li><p><strong>mdlhists</strong> (<em>History</em>) – History dict with the history of all tracked model states for each scenario
 (including the nominal)</p></li>
 </ul>
@@ -4012,7 +4012,7 @@ values.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseSimProblem.add_result_constraint">
 <span class="sig-name descname"><span class="pre">add_result_constraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem.add_result_constraint" title="Link to this definition"></a></dt>
-<dd><p>Add an objective corresponding to a possible desired_result.</p>
+<dd><p>Add an objective corresponding to a possible to_return.</p>
 <p>Associates a callable to the problem with name ‘name’ which may be called to
 evaluate the constraint at a value of x.</p>
 <dl class="field-list simple">
@@ -4029,7 +4029,7 @@ evaluate the constraint at a value of x.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseSimProblem.add_result_objective">
 <span class="sig-name descname"><span class="pre">add_result_objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem.add_result_objective" title="Link to this definition"></a></dt>
-<dd><p>Add an objective corresponding to a possible desired_result.</p>
+<dd><p>Add an objective corresponding to a possible to_return.</p>
 <p>Associates a callable to the problem with name ‘name’ which may be called to
 evaluate the objective at a value of x.</p>
 <dl class="field-list simple">
@@ -4085,10 +4085,10 @@ than the full set of potential timesteps.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseSimProblem.obj_con_des_res">
 <span class="sig-name descname"><span class="pre">obj_con_des_res</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem.obj_con_des_res" title="Link to this definition"></a></dt>
-<dd><p>Get the desired_result argument for the problem given objectives/constraints.</p>
+<dd><p>Get the to_return argument for the problem given objectives/constraints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>des_res</strong> – desired_result argument to prop_method.</p>
+<dd class="field-odd"><p><strong>des_res</strong> – to_return argument to prop_method.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
@@ -4273,7 +4273,7 @@ g(x) = value - threshold &gt; 0.0 for ‘less’ constraints.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.DynamicInterface">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">DynamicInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'track_pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_end_condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.DynamicInterface" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">DynamicInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'track_pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_return</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_end_condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.DynamicInterface" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Interface for dynamic search of model states (e.g., AST).</p>
 <p>…</p>
@@ -4311,8 +4311,8 @@ g(x) = value - threshold &gt; 0.0 for ‘less’ constraints.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.sim.search.DynamicInterface.desired_result">
-<span class="sig-name descname"><span class="pre">desired_result</span></span><a class="headerlink" href="#fmdtools.sim.search.DynamicInterface.desired_result" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.sim.search.DynamicInterface.to_return">
+<span class="sig-name descname"><span class="pre">to_return</span></span><a class="headerlink" href="#fmdtools.sim.search.DynamicInterface.to_return" title="Link to this definition"></a></dt>
 <dd><p>variables to get from the model at each time-step</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -4364,7 +4364,7 @@ The default is {}.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>returns</strong> – dictionary of returns with values corresponding to desired_result</p>
+<dd class="field-even"><p><strong>returns</strong> – dictionary of returns with values corresponding to to_return</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>

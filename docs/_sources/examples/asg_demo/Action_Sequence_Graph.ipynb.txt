@@ -1533,7 +1533,7 @@
    },
    "outputs": [],
    "source": [
-    "result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard.aa.acts.perceive','failed', time=4, desired_result='graph')"
+    "result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard.aa.acts.perceive','failed', time=4, to_return='graph')"
    ]
   },
   {
@@ -2131,7 +2131,7 @@
    ],
    "source": [
     "endstate_unable, mdlhist_unable = prop.one_fault(mdl, 'detect_hazard.aa.acts.act','unable', time=4, \n",
-    "                                                 desired_result={'graph','graph.fxns.detect_hazard.aa'})\n",
+    "                                                 to_return={'graph','graph.fxns.detect_hazard.aa'})\n",
     "\n",
     "fig, axs = mdlhist_unable.plot_line('fxns.pass_hazard.s.hazards_mitigated',\n",
     "                                'fxns.pass_hazard.s.hazards_propagated',\n",

@@ -249,6 +249,11 @@ def fault_sample(mdl, fs, **kwargs):
     return sim(**get_sim_call_kwargs(sim, **kwargs))
 
 
+def fault_sample_from(mdl, **kwargs):
+    """Injects and propagates faults in a model given SampleApproach arguments."""
+    return nested_sample(mdl, ps=Scenario(), **kwargs)
+
+
 def single_faults(mdl, times=[0.0], **kwargs):
     """
     Create and propagates a list of failure scenarios in a model.
@@ -1074,6 +1079,8 @@ class NestedSimulation(MultiSimulation):
         Whether to use the phasemap to generate the SampleApproaches
     apps : dict
         Returned approaches from MultiEventSimulation
+    include_nominal : bool
+        Whether to include the nominal scenario in the results
 
     Examples
     --------
@@ -1137,6 +1144,7 @@ class NestedSimulation(MultiSimulation):
     staged: bool = True
     get_phasemap: bool = False
     apps: dict = {}
+    include_nominal: bool = True
 
     def __repr__(self):
         """Add str representing sample arguments."""
@@ -1169,6 +1177,7 @@ class NestedSimulation(MultiSimulation):
                         indiv_id=True,
                         overwrite=self.overwrite,
                         to_return=self.to_return,
+                        include_nominal=self.include_nominal,
                         staged=self.staged,
                         showprogress=False,
                         gen_samp=True)

@@ -327,7 +327,7 @@
     "### 2a.) Simulate nominal\n",
     "\n",
     "To simulate the model in the nominal scenario, use the `propagate.nominal` method, which returns:\n",
-    "endresults, which is a result (or a dict of multiple results) specified by the `desired_result` option, e.g.:\n",
+    "endresults, which is a result (or a dict of multiple results) specified by the `to_return` option, e.g.:\n",
     "- 'endclass' (default), which provides the dict from `mdl.find_classification`\n",
     "- 'graph' or `fmdtools.define.graph.Graph` subclass for the model.\n",
     "- 'fxnname.varname'/'flowname.varname': which gets the values of these variables at a the end\n",
@@ -361,7 +361,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "What do the results look like? Explore results structures using the `desired_results` and `track` arguments."
+    "What do the results look like? Explore results structures using the `to_returns` and `track` arguments."
    ]
   },
   {
@@ -411,7 +411,7 @@
    "metadata": {},
    "source": [
     "### 2b.) Visualize nominal model\n",
-    "First, we can show the model graph using `Graph.draw` to see that it was set up correctly. We can do this both on the model graph itself (using `ModelGraph`) and the results of the nominal run (by passing `graph` as an argument in `desired_result`) to verify both are fault-free.\n",
+    "First, we can show the model graph using `Graph.draw` to see that it was set up correctly. We can do this both on the model graph itself (using `ModelGraph`) and the results of the nominal run (by passing `graph` as an argument in `to_return`) to verify both are fault-free.\n",
     "\n",
     "Note that the underlyign `Graph` class is very flexible and enables a wide range of display options: \n",
     "- [Graph docs](https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html#fmdtools.analyze.graph.Graph)\n",
