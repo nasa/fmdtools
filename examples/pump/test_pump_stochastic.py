@@ -36,7 +36,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     maxDiff = None
 
     def setUp(self):
-        self.mdl = Pump()
+        self.mdl = Pump(sp=dict(run_stochastic=True))
 
     def tearDown(self):
         plt.close('all')
@@ -44,37 +44,33 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def test_stochastic_pdf(self):
         """Tests that (1) track_pdf option runs and (2) gives repeated
         probability density results under the same seed(s)"""
-        testvals = [35.23570453993965,
+        testvals = [8.695319186944289,
                     49.32124529702974,
                     0.31327201999190035,
                     21.386958080811567,
-                    1.1103965455215503,
+                    3.3311929677576186,
                     9.066120598345039,
                     131.79987407014573,
                     5.81402243889764,
                     19.01081621541118]
-        mdl = Pump(r={'run_stochastic': 'track_pdf'})
+        mdl = Pump(sp={'run_stochastic': True, 'track_pdf': True})
         for i in range(1, 10):
             mdl.update_seed(i)
-            mdl.propagate(i, run_stochastic='track_pdf')
+            mdl(time=i)
             pd = mdl.return_probdens()
             self.assertAlmostEqual(pd, testvals[i-1])
 
     def test_run_safety(self):
         """Test so models with the same seed will run the same/produce same results."""
         for seed in [1, 10, 209840]:
-            mdl = Pump(r={'seed': seed})
-            res_1, hist_1 = prop.nominal(mdl, run_stochastic=True, showprogress=False,
-                                         warn_faults=False)
-            res_f1, hist_f1 = prop.single_faults(mdl, run_stochastic=True,
-                                                 showprogress=False)
+            mdl = Pump(r={'seed': seed}, sp=dict(run_stochastic=True))
+            res_1, hist_1 = prop.nominal(mdl, showprogress=False, warn_faults=False)
+            res_f1, hist_f1 = prop.single_faults(mdl, showprogress=False)
             if seed is None:
                 seed = mdl.r.seed
-            mdl2 = Pump(r={'seed': seed})
-            res_2, hist_2 = prop.nominal(mdl2, run_stochastic=True, showprogress=False,
-                                         warn_faults=False)
-            res_f2, hist_f2 = prop.single_faults(mdl2, run_stochastic=True,
-                                                 showprogress=False)
+            mdl2 = Pump(r={'seed': seed}, sp=dict(run_stochastic=True))
+            res_2, hist_2 = prop.nominal(mdl2, showprogress=False, warn_faults=False)
+            res_f2, hist_f2 = prop.single_faults(mdl2, showprogress=False)
             self.assertTrue(all(hist_1.fxns.move_water.s.eff ==
                             hist_2.fxns.move_water.s.eff))
             self.check_same_hist(hist_f1, hist_f2)
@@ -89,12 +85,12 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
     def test_run_approach(self):
         """Test that random behaviors average out."""
-        mdl = Pump(track={'fxns': {'move_water': "r"}})
+        mdl = Pump(track={'fxns': {'move_water': "r"}}, sp=dict(run_stochastic=True))
         ps = ParameterSample()
         ps.add_variable_replicates([], replicates=1000)
         res, hist = prop.parameter_sample(mdl, ps, showprogress=False,
-                                          run_stochastic=True, warn_faults=False,
-                                          desired_result={})
+                                          warn_faults=False,
+                                          to_return={})
         ave_effs = []
         std_effs = []
         for scen in ps.named_scenarios():
@@ -107,47 +103,45 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         self.assertLess(abs(std_eff-mdl.fxns['move_water'].r.s.eff_update[1][1]), 0.05)
 
     def test_model_copy_same(self):
-        self.check_model_copy_same(Pump(), Pump(), [10, 20, 30], 25,
-                                   max_time=55, run_stochastic=True)
+        self.check_model_copy_same(self.mdl, Pump(sp=dict(run_stochastic=True)),
+                                   [10, 20, 30], 25, max_time=55)
 
     def test_model_copy_different(self):
-        self.check_model_copy_different(Pump(), [10, 20, 30],
-                                        max_time=55, run_stochastic=True)
+        self.check_model_copy_different(self.mdl, [10, 20, 30], max_time=55)
 
     @unittest.skip('Reset not fully implemented yet and unused throughout.')
     def test_model_reset(self):
         mdl = Pump()
         mdl2 = Pump()
         mdl2.update_seed(mdl.r.seed)
-        self.check_model_reset(mdl, mdl2, [10, 20, 30],
-                               max_time=55, run_stochastic=True)
+        self.check_model_reset(mdl, mdl2, [10, 20, 30], max_time=55)
 
     def test_param_sample_save(self):
         ps = ParameterSample()
         ps.add_variable_replicates([], replicates=10)
         self.check_ps_save(self.mdl, ps, "stochpump_res.npz", "spump_hist.npz",
-                           run_stochastic=True, pool=mp.Pool(4))
+                           pool=mp.Pool(4))
         self.check_ps_save(self.mdl, ps, "stochpump_res.csv", "spump_hist.csv",
-                           run_stochastic=True, pool=mp.Pool(4))
+                           pool=mp.Pool(4))
         self.check_ps_save(self.mdl, ps, "stochpump_res.json", "spump_hist.json",
-                           run_stochastic=True, pool=mp.Pool(4))
+                           pool=mp.Pool(4))
 
     def test_param_sample_isave(self):
         ps = ParameterSample()
         ps.add_variable_replicates([], replicates=10)
         fnames = ("spump_res", "spump_hist")
-        self.check_ps_isave(self.mdl, ps, *fnames, "npz", run_stochastic=True, pool=mp.Pool(4))
-        self.check_ps_isave(self.mdl, ps, *fnames, "csv", run_stochastic=True, pool=mp.Pool(4))
-        self.check_ps_isave(self.mdl, ps, *fnames, "json", run_stochastic=True, pool=mp.Pool(4))
+        self.check_ps_isave(self.mdl, ps, *fnames, "npz", pool=mp.Pool(4))
+        self.check_ps_isave(self.mdl, ps, *fnames, "csv", pool=mp.Pool(4))
+        self.check_ps_isave(self.mdl, ps, *fnames, "json", pool=mp.Pool(4))
 
     def test_nested_sample_save(self):
         ps = ParameterSample()
         ps.add_variable_replicates([], replicates=10)
         faultdomains = {'fd': (('all', ), {})}
         faultsamples = {'fs': (('fault_phases', 'fd'), {})}
-        self.check_ns_save(self.mdl, ps, faultdomains, faultsamples, "spump_res.npz", "spump_hist.npz", run_stochastic=True, pool=mp.Pool(4))
-        self.check_ns_save(self.mdl, ps, faultdomains, faultsamples, "spump_res.csv", "spump_hist.csv", run_stochastic=True, pool=mp.Pool(4))
-        self.check_ns_save(self.mdl, ps, faultdomains, faultsamples, "spump_res.json", "spump_hist.json", run_stochastic=True, pool=mp.Pool(4))
+        self.check_ns_save(self.mdl, ps, faultdomains, faultsamples, "spump_res.npz", "spump_hist.npz", pool=mp.Pool(4))
+        self.check_ns_save(self.mdl, ps, faultdomains, faultsamples, "spump_res.csv", "spump_hist.csv", pool=mp.Pool(4))
+        self.check_ns_save(self.mdl, ps, faultdomains, faultsamples, "spump_res.json", "spump_hist.json", pool=mp.Pool(4))
 
     def test_nested_sample_isave(self):
         ps = ParameterSample()
@@ -155,16 +149,16 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         faultdomains = {'fd': (('all', ), {})}
         faultsamples = {'fs': (('fault_phases', 'fd'), {})}
         fnames = ("spump_res", "spump_hist")
-        self.check_ns_isave(self.mdl, ps, faultdomains, faultsamples, *fnames, "npz", run_stochastic=True, pool=mp.Pool(4))
-        self.check_ns_isave(self.mdl, ps, faultdomains, faultsamples, *fnames, "csv", run_stochastic=True, pool=mp.Pool(4))
-        self.check_ns_isave(self.mdl, ps, faultdomains, faultsamples, *fnames, "json", run_stochastic=True, pool=mp.Pool(4))
+        self.check_ns_isave(self.mdl, ps, faultdomains, faultsamples, *fnames, "npz", pool=mp.Pool(4))
+        self.check_ns_isave(self.mdl, ps, faultdomains, faultsamples, *fnames, "csv", pool=mp.Pool(4))
+        self.check_ns_isave(self.mdl, ps, faultdomains, faultsamples, *fnames, "json", pool=mp.Pool(4))
 
     def test_plot_nominal_vals(self):
         """tests nominal_vals_1d"""
-        mdl = Pump()
+        mdl = Pump(sp=dict(run_stochastic=True))
         ps = ParameterSample()
         ps.add_variable_replicates([], replicates=10)
-        res, hist = prop.parameter_sample(mdl, ps, run_stochastic=True,
+        res, hist = prop.parameter_sample(mdl, ps,
                                           showprogress=False, warn_faults=False)
         res['rep0_var_0.endclass.cost'] = 10.0
         # an.plot.nominal_vals_1d(app, endres, 'r.seed', metric="nonsense")
@@ -175,7 +169,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
     def test_plot_nominal_vals_xd(self):
         """tests nominal_vals_2d and nominal_vals_3d"""
-        mdl = Pump()
+        mdl = Pump(sp=dict(run_stochastic=True))
 
         pd = ParameterDomain(PumpParam)
         pd.add_variable("delay")
@@ -187,7 +181,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         nomres, nomhist = prop.parameter_sample(mdl, ps2, warn_faults=False,
                                                 showprogress=False)
 
-        res, hist = prop.parameter_sample(mdl, ps2, run_stochastic=True,
+        res, hist = prop.parameter_sample(mdl, ps2,
                                           showprogress=False, warn_faults=False)
         res['delay_10_20.endclass.cost'] = 10.0
         title = ("should show at least one red x over range of seeds," +
@@ -204,7 +198,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def test_plot_nested_hists(self):
         """Qualitative test to show that distributions carry over to fault scenarios
         in a nested approach."""
-        mdl = Pump()
+        mdl = Pump(sp=dict(run_stochastic=True))
         pd = ParameterDomain(PumpParam)
         pd.add_variable("delay")
 
@@ -215,7 +209,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         faultdomains = {'fd': (('fault', 'export_water', 'block'), {})}
         faultsamples = {'fs': (('fault_phases', 'fd'), {})}
 
-        ecs, hists, apps = prop.nested_sample(mdl, ps, run_stochastic=True,
+        ecs, hists, apps = prop.nested_sample(mdl, ps,
                                               showprogress=False,
                                               faultdomains=faultdomains,
                                               faultsamples=faultsamples,
@@ -246,9 +240,8 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def test_rand_paramsample_plot(self):
         ps = ParameterSample()
         ps.add_variable_replicates([], 20)
-        mdl = Pump()
-        res, hist = prop.parameter_sample(mdl, ps, run_stochastic=True,
-                                          warn_faults=False, showprogress=False)
+        mdl = Pump(sp=dict(run_stochastic=True))
+        res, hist = prop.parameter_sample(mdl, ps, warn_faults=False, showprogress=False)
 
         title = "should show bounds and perc of random variables over time"
         hist.plot_line('fxns.move_water.r.s.eff', 'fxns.move_water.s.total_flow',
@@ -284,9 +277,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
 if __name__ == '__main__':
     # suite = unittest.TestSuite()
-    # suite.addTest(StochasticPumpTests("test_stochastic_pdf"))
-
-    # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach"))
+    # suite.addTest(StochasticPumpTests("test_param_sample_isave"))
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach_indiv"))
     # runner = unittest.TextTestRunner()
     # runner.run(suite)
@@ -294,6 +285,6 @@ if __name__ == '__main__':
     # runner = unittest.TextTestRunner()
     # runner.run(suite_for_plots(StochasticPumpTests))
 
-    runner = unittest.TextTestRunner()
-    runner.run(suite_for_plots(StochasticPumpTests, True))
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite_for_plots(StochasticPumpTests, True))
     unittest.main()

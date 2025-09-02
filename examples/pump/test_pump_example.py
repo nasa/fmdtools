@@ -65,19 +65,19 @@ class ImportEE_Tests(unittest.TestCase):
 
     def test_behave_nom(self):
         """Tests the nominal behavior - voltage should be 500"""
-        self.import_ee.static_behavior(1)
+        self.import_ee.static_behavior()
         self.assertEqual(self.ee_1.s.voltage, 500.0)
 
     def test_behave_inf_v(self):
         """Tests the inf_v behavior - voltage should be 500*100"""
         self.import_ee.m.add_fault('inf_v')
-        self.import_ee.static_behavior(1)
+        self.import_ee.static_behavior()
         self.assertEqual(self.ee_1.s.voltage, 50000.0)
 
     def test_behave_no_v(self):
         """Tests the no_v behavior - voltage should be 0.0"""
         self.import_ee.m.add_fault('no_v')
-        self.import_ee.static_behavior(1)
+        self.import_ee.static_behavior()
         self.assertEqual(self.ee_1.s.voltage, 0.0)
 
 
@@ -97,9 +97,9 @@ class MoveWat_Tests(unittest.TestCase):
         self.assertEqual(self.move_wat.s.eff, 1.0)
 
     def test_nom(self):
-        self.move_wat.static_behavior(1.0)
+        self.move_wat.static_behavior()
         self.assertEqual(self.move_wat.ee_in.s.current, 0.002)
-        self.move_wat.static_behavior(1.0)
+        self.move_wat.static_behavior()
         self.assertEqual(self.move_wat.wat_in.s.pressure, 0.02)
         self.assertEqual(self.move_wat.wat_in.s.flowrate, 0.0006)
 
@@ -107,7 +107,8 @@ class MoveWat_Tests(unittest.TestCase):
         """Test that blockage dynamic behavior results in a mech failure after 10 dt."""
         self.move_wat.wat_out.s.area = 0.0001
         for t in range(0, 20):
-            self.move_wat.static_behavior(t)
+            self.move_wat.t.time = t
+            self.move_wat.static_behavior()
             if t < 10:
                 # checks each time-step that fault has not been added until the delay
                 self.assertFalse(self.move_wat.m.has_fault('mech_break'))
@@ -147,39 +148,41 @@ class Integration_Tests(unittest.TestCase):
 
     def test_blockage_results(self):
         """Tests the output of the model when integrated in a faulty scenario."""
-        endfaults, mdlhist = propagate.one_fault(self.mdl, 'export_water', 'block',
-                                                 time=10, desired_result='endfaults')
-        self.assertIn('move_water.mech_break', endfaults['endfaults'])
-        self.assertIn('export_water.block', endfaults['endfaults'])
+        res, mdlhist = propagate.one_fault(self.mdl, 'export_water', 'block',
+                                           time=10, to_return='faults')
+        endfaults = res.get_faulty().tend.faults
+        self.assertIn('move_water.mech_break', endfaults)
+        self.assertIn('export_water.block', endfaults)
+        faulthist = mdlhist.get_faulty()
         # are the values of the function/flow states what we wanted?
         for t in range(0, int(self.mdl.sp.end_time)):
             if t < 5 or t >= 50:
-                self.assertEqual(mdlhist.faulty.flows.sig_1.s.power[t], 0.0)
-                self.assertEqual(mdlhist.faulty.flows.ee_1.s.current[t], 0.0)
-                self.assertEqual(mdlhist.faulty.flows.wat_1.s.flowrate[t], 0.0)
-                self.assertEqual(mdlhist.faulty.flows.wat_2.s.flowrate[t], 0.0)
+                self.assertEqual(faulthist.flows.sig_1.s.power[t], 0.0)
+                self.assertEqual(faulthist.flows.ee_1.s.current[t], 0.0)
+                self.assertEqual(faulthist.flows.wat_1.s.flowrate[t], 0.0)
+                self.assertEqual(faulthist.flows.wat_2.s.flowrate[t], 0.0)
             elif t < 10:  # should see faulty behavior at t=10
-                self.assertEqual(mdlhist.faulty.flows.sig_1.s.power[t], 1.0)
-                self.assertEqual(mdlhist.faulty.flows.ee_1.s.current[t], 10.0)
-                self.assertEqual(mdlhist.faulty.flows.wat_1.s.flowrate[t], 0.3)
-                self.assertEqual(mdlhist.faulty.flows.wat_2.s.flowrate[t], 0.3)
-                self.assertEqual(mdlhist.faulty.fxns.move_water.s.eff[t], 1.0)
+                self.assertEqual(faulthist.flows.sig_1.s.power[t], 1.0)
+                self.assertEqual(faulthist.flows.ee_1.s.current[t], 10.0)
+                self.assertEqual(faulthist.flows.wat_1.s.flowrate[t], 0.3)
+                self.assertEqual(faulthist.flows.wat_2.s.flowrate[t], 0.3)
+                self.assertEqual(faulthist.fxns.move_water.s.eff[t], 1.0)
             # at t=20, the conditional damage occurs (depending on the delay)
             elif t < 20:
-                self.assertEqual(mdlhist.faulty.flows.sig_1.s.power[t], 1.0)
-                self.assertEqual(mdlhist.faulty.flows.ee_1.s.current[t], 13.0)
-                self.assertEqual(mdlhist.faulty.flows.wat_1.s.flowrate[t], 0.003)
-                self.assertEqual(mdlhist.faulty.flows.wat_2.s.flowrate[t], 0.003)
-                self.assertTrue(mdlhist.faulty.fxns.export_water.m.faults.block[t])
+                self.assertEqual(faulthist.flows.sig_1.s.power[t], 1.0)
+                self.assertEqual(faulthist.flows.ee_1.s.current[t], 13.0)
+                self.assertEqual(faulthist.flows.wat_1.s.flowrate[t], 0.003)
+                self.assertEqual(faulthist.flows.wat_2.s.flowrate[t], 0.003)
+                self.assertTrue(faulthist.fxns.export_water.m.faults.block[t])
             else:
-                self.assertEqual(mdlhist.faulty.fxns.move_water.s.eff[t], 0.0)
-                self.assertTrue(mdlhist.faulty.fxns.export_water.m.faults.block[t])
-                self.assertTrue(mdlhist.faulty.fxns.move_water.m.faults.mech_break[t])
-                self.assertEqual(mdlhist.faulty.flows.ee_1.s.current[t], 0.2)
-                self.assertEqual(mdlhist.faulty.flows.wat_1.s.flowrate[t], 0.0)
-                self.assertEqual(mdlhist.faulty.flows.wat_2.s.flowrate[t], 0.0)
+                self.assertEqual(faulthist.fxns.move_water.s.eff[t], 0.0)
+                self.assertTrue(faulthist.fxns.export_water.m.faults.block[t])
+                self.assertTrue(faulthist.fxns.move_water.m.faults.mech_break[t])
+                self.assertEqual(faulthist.flows.ee_1.s.current[t], 0.2)
+                self.assertEqual(faulthist.flows.wat_1.s.flowrate[t], 0.0)
+                self.assertEqual(faulthist.flows.wat_2.s.flowrate[t], 0.0)
 
-            self.assertEqual(mdlhist.faulty.flows.ee_1.s.voltage[t], 500.0)
+            self.assertEqual(faulthist.flows.ee_1.s.voltage[t], 500.0)
 
     def test_blockage_static(self):
         """
@@ -188,10 +191,9 @@ class Integration_Tests(unittest.TestCase):
         Useful when the model has states which are not recorded.
         """
         for t in range(0, 10):
-            self.mdl.propagate(t)  # simulate time up until t=10
+            self.mdl(time=t)  # simulate time up until t=10
 
-        self.mdl.propagate(10, {'move_water': 'mech_break'}
-                           )  # instantiate fault at time
+        self.mdl(time=10, faults={'move_water': 'mech_break'})  # instantiate fault
         self.assertTrue(self.mdl.fxns['move_water'].m.has_fault(
             'mech_break'))  # check model properties
         self.assertEqual(self.mdl.flows['ee_1'].s.current, 0.2)

@@ -88,25 +88,25 @@ class UrbanGridParam(CoordsParam):
     y_size: int = 10
     blocksize: float = 100.0
     num_allowed: int = 10
-    num_unsafe: int = 10
+    num_unsafe: int = 60
     num_occupied: int = 10
     max_height: float = 100.0
     roadwidth: int = 15
     loc: str = 'urban'
-    feature_safe: tuple = (bool, True)
-    feature_allowed: tuple = (bool, False)
-    feature_occupied: tuple = (bool, False)
-    feature_height: tuple = (float, 0.0)
-    point_start: tuple = (0, 0)
-    point_end: tuple = (900, 900)
-    collect_all_occupied: tuple = ("occupied", True)
-    collect_all_safe: tuple = ("safe", True)
-    collect_all_allowed: tuple = ("allowed", True)
 
 
 class StreetGrid(Coords):
     """Define the urban environment (buildings, streets, etc)."""
 
+    feature_safe = (bool, True)
+    feature_allowed = (bool, False)
+    feature_occupied = (bool, False)
+    feature_height = (float, 0.0)
+    point_start = (0, 0)
+    point_end = (900, 900)
+    collection_all_occupied = ("occupied", True)
+    collection_all_safe = ("safe", True)
+    collection_all_allowed = ("allowed", True)
     container_p = UrbanGridParam
 
     def init_properties(self, *args, **kwargs):
@@ -154,7 +154,6 @@ class UrbanDroneEnvironment(Environment):
 class AffectDOF(AffectDOFRural):
     """Adaptation of AffectDOF for urban environment."""
 
-    __slots__ = ('environment',)
     flow_environment = UrbanDroneEnvironment
 
     def get_fall_dist(self):
@@ -186,7 +185,6 @@ class ComputerVisionMode(Mode):
 class ComputerVision(Component):
     """Component for percieving if a landing location is occupied."""
 
-    __slots__ = ()
     container_m = ComputerVisionMode
 
     def check_if_occupied(self, environment, dofs):
@@ -229,7 +227,6 @@ class PlanPathParam(Parameter):
 class PlanPath(PlanPathRural):
     """Path planning adaptation for urban environment."""
 
-    __slots__ = ('environment',)
     flow_environment = UrbanDroneEnvironment
     arch_ca = VisionArch
     container_p = PlanPathParam
@@ -289,7 +286,6 @@ class PlanPath(PlanPathRural):
 class HoldPayload(HoldPayloadRural):
     """Adaptation of HoldPayload given a changing ground height."""
 
-    __slots__ = ('environment',)
     flow_environment = UrbanDroneEnvironment
 
     def at_ground(self):
@@ -361,9 +357,9 @@ class Drone(DroneRural):
         self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st',
                      'environment')
 
-    def indicate_landed(self, time):
+    def indicate_landed(self):
         """Return true if the drone has entered the "landed" state."""
-        return time > 1 and self.fxns['plan_path'].m.mode == 'taxi'
+        return self.t.time > 1 and self.fxns['plan_path'].m.mode == 'taxi'
 
     def at_safe(self, dofs):
         """Check if drone is at a safe location (if in designated safe collection)."""
@@ -373,7 +369,7 @@ class Drone(DroneRural):
         """Check if drone is at a dangerous location (if occupied)."""
         return self.flows['environment'].c.in_area(dofs.s.x, dofs.s.y, "all_occupied")
 
-    def find_classification(self, scen, mdlhist):
+    def classify(self, scen={}, mdlhist={}, **kwargs):
         """Classify a given scenario based on land_metrics and expected cost model."""
         faulttime = self.h.get_fault_time(metric='total')
 
@@ -506,12 +502,13 @@ if __name__ == "__main__":
 
     e.c.show_collection('all_safe', z='height')
 
-    mdl = Drone(p={'respolicy': ResPolicy(bat="to_nearest", line="to_nearest")})
+    mdl = Drone(p={'respolicy': ResPolicy(bat="to_nearest", line="to_nearest")},
+                sp={'dt': 1.0})
     # ec, mdlhist_fault = propagate.one_fault(mdl, "plan_path", "vision_lack_of_detection", time=4.5)
 
-    ec, mdlhist = propagate.nominal(mdl, dt=1.0)
+    ec, mdlhist = propagate.nominal(mdl)
 
-    phasemaps = phases.from_hist(mdlhist)
+    phasemaps = phases.from_hist(mdlhist, dt=mdl.sp.dt)
     phases.phaseplot(phasemaps['plan_path'])
 
     mdlhist.plot_line("flows.dofs.s.planvel",

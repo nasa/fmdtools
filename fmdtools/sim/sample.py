@@ -396,9 +396,10 @@ def sample_times_quad(times, nodes, weights):
     quantiles = np.array(nodes)/2 + 0.5
     if len(quantiles) > len(times):
         raise Exception("Nodes length " + str(len(nodes))
-                        + "longer than times" + str(len(times)))
+                        + " longer than times " + str(len(times)))
     else:
-        sampletimes = [int(round(np.quantile(times, q))) for q in quantiles]
+        exac_times = [np.quantile(times, q) for q in quantiles]
+        sampletimes = [times[np.argmin(np.abs(np.array(times)-t))] for t in exac_times]
         weights = np.array(weights)/sum(weights)
     return sampletimes, list(weights)
 
@@ -444,8 +445,8 @@ class FaultDomain(object):
         Examples
         --------
         >>> exfd2 = FaultDomain(ExFxnArch())
-        >>> exfd2.add_fault('ex_fxn', 'low', '10', disturbances={'s.charge': 10.0})
-        >>> exfd2.add_fault('ex_fxn', 'low', '15', disturbances={'s.charge': 15.0})
+        >>> exfd2.add_fault('ex_fxn', 'low', '10', disturbances={'s.x': 10.0})
+        >>> exfd2.add_fault('ex_fxn', 'low', '15', disturbances={'s.x': 15.0})
         >>> exfd2.add_fault('ex_fxn', 'low')
         >>> exfd2
         FaultDomain with faults:
@@ -453,7 +454,7 @@ class FaultDomain(object):
          -('ex_fxn', 'low', '15')
          -('ex_fxn', 'low')
         >>> [*exfd2.faults.values()]
-        [Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.charge': 10.0}, units='sim'), Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.charge': 15.0}, units='sim'), Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.charge': 20.0}, units='sim')]
+        [Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.x': 10.0}, units='sim'), Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.x': 15.0}, units='sim'), Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.x': 20.0}, units='sim')]
         """
         fault = self.mdl.get_fault(fxnname, faultmode, **kwargs)
         if not ind:
@@ -489,7 +490,7 @@ class FaultDomain(object):
         Examples
         --------
         >>> exfd2 = FaultDomain(ExFxnArch())
-        >>> exfd2.add_fault_space('ex_fxn', 'low', {'s.charge': (0, 10, 11)})
+        >>> exfd2.add_fault_space('ex_fxn', 'low', {'s.x': (0, 10, 11)})
         >>> exfd2
         FaultDomain with faults:
          -('ex_fxn', 'low', '0')
@@ -689,8 +690,8 @@ exfd = FaultDomain(ExFxnArch())
 exfd.add_all_modes("no_charge", "short")
 
 exfd2 = FaultDomain(ExFxnArch())
-exfd2.add_fault('ex_fxn', 'low', '10', disturbances={'s.charge': 10.0})
-exfd2.add_fault('ex_fxn', 'low', '15', disturbances={'s.charge': 15.0})
+exfd2.add_fault('ex_fxn', 'low', '10', disturbances={'s.x': 10.0})
+exfd2.add_fault('ex_fxn', 'low', '15', disturbances={'s.x': 15.0})
 exfd2.add_fault('ex_fxn', 'low')
 
 
@@ -700,7 +701,7 @@ class BaseSample():
 
     Subclasses should have methods:
         - scenarios() for getting all scenarios from the sample
-        - times() for getting all times from the sample
+        - get_times() for getting all times from the sample
     """
 
     def get_scens(self, **kwargs):
@@ -908,7 +909,7 @@ class FaultSample(BaseSample):
         self._scenarios = [scen for scen in self._scenarios
                            if comparator(get_var(scen, scen_var), value)]
 
-    def times(self):
+    def get_times(self):
         """Get all sampled times."""
         return list(self._times)
 
@@ -945,7 +946,7 @@ class FaultSample(BaseSample):
         >>> fs2 = FaultSample(exfd2)
         >>> fs2.add_single_fault_scenario(('ex_fxn', 'low', '15'), 5)
         >>> fs2.scenarios()
-        [SingleFaultScenario(sequence={5.0: Injection(faults={'ex_fxn': {'low': {'prob': 1.0, 'cost': 0.0, 'phases': (), 'disturbances': {'s.charge': 15.0}, 'units': 'sim'}}}, disturbances={})}, times=(5,), function='ex_fxn', fault='low', rate=1.0, name='ex_fxn_low_15_t5', time=5, phase='na')]
+        [SingleFaultScenario(sequence={5.0: Injection(faults={'ex_fxn': {'low': {'prob': 1.0, 'cost': 0.0, 'phases': (), 'disturbances': {'s.x': 15.0}, 'units': 'sim'}}}, disturbances={})}, times=(5,), function='ex_fxn', fault='low', rate=1.0, name='ex_fxn_low_15_t5', time=5, phase='na')]
         """
         self._times.add(time)
         if len(faulttup) > 2:
@@ -1100,7 +1101,7 @@ class FaultSample(BaseSample):
         if self.phasemap:
             phasetimes = self.phasemap.get_sample_times(*phases_to_sample)
         else:
-            interval = [0, self.faultdomain.mdl.sp.times[-1]]
+            interval = [0, self.faultdomain.mdl.sp.end_time]
             tstep = self.faultdomain.mdl.sp.dt
             phasetimes = {'phase': gen_timerange(interval[0], interval[-1], tstep)}
 
@@ -1314,9 +1315,9 @@ class SampleApproach(BaseSample):
         for fs in faultsamples:
             self.add_faultsample(fs, *faultsamples[fs][0], **faultsamples[fs][1])
 
-    def times(self):
+    def get_times(self):
         """Get all sampletimes covered by the SampleApproach."""
-        return list(set(np.concatenate([list(samp.times())
+        return list(set(np.concatenate([list(samp.get_times())
                                         for samp in self.faultsamples.values()])))
 
     def scenarios(self):
@@ -1932,7 +1933,7 @@ class ParameterHistSample(ParameterResultSample):
         """Add a scenario from a history (extends add_res_scenario)."""
         self.add_res_scenario(comp_group, rep, t, name, **kwargs)
 
-    def _get_times(self, comp_group, rep, ts):
+    def _get_hist_times(self, comp_group, rep, ts):
         """
         Get the available times to sample in a given comparison group and replicate.
 
@@ -1983,7 +1984,7 @@ class ParameterHistSample(ParameterResultSample):
             Keyword arguments to .add_hist_scenario
         """
         rep = self._get_repname(comp_group, rep)
-        ts_to_sample = self._get_times(comp_group, rep, ts)
+        ts_to_sample = self._get_hist_times(comp_group, rep, ts)
         for t in ts_to_sample:
             self.add_hist_scenario(comp_group, rep, t, **kwargs)
 
@@ -2071,6 +2072,9 @@ def combine_orthogonal(defaults, ranges):
 exp_ps = ParameterSample(expd, seed=1)
 exp_ps.add_variable_scenario(1, 2)
 exp_ps.add_variable_ranges(replicates=10)
+
+exp_ps_45 = ParameterSample(expd, seed=1)
+exp_ps_45.add_variable_ranges()
 
 
 if __name__ == "__main__":

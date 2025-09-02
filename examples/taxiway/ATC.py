@@ -30,7 +30,7 @@ class ATCModes(Mode):
 
 class ATC(Function):
 
-    __slots__ = ('location', 'requests', 'ground', 'perc_requests', 'perc_ground')
+    __slots__ = ('perc_requests', 'perc_ground')
     container_p = TaxiwayParams
     container_m = ATCModes
     flow_location = Location
@@ -43,7 +43,7 @@ class ATC(Function):
         self.perc_ground = self.ground.create_local(self.name, "area_allocation",
                                                     p=self.p)
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         # get communications, look at aircraft
         self.perc_requests.receive()
         if not self.m.has_fault("lost_ground_perception"):

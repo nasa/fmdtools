@@ -22,14 +22,12 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.base import Block
 from fmdtools.define.container.state import ExampleState
 from fmdtools.define.container.parameter import ExampleParameter
 from fmdtools.define.container.mode import ExampleMode
 from fmdtools.define.flow.base import ExampleFlow
 
-from decimal import Decimal
 
 class Function(Block):
     """
@@ -50,27 +48,33 @@ class Function(Block):
     >>> exf = ExampleFunction("exf")
     >>> exf
     exf ExampleFunction
-    - ExampleState(x=1.0, y=1.0)
-    - ExampleMode(mode=standby, faults=set())
+    - t=Time(time=-0.1, timers={})
+    - s=ExampleState(x=0.0, y=0.0)
+    - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
+    - exf=ExampleFlow(s=(x=1.0, y=1.0))
 
     Behavior can be called using __call__ or the user-defined behavior method:
 
-    >>> exf("dynamic", time=1.0)
+    >>> exf(time=1.0, proptype="dynamic")
     >>> exf
     exf ExampleFunction
-    - ExampleState(x=2.0, y=1.0)
-    - ExampleMode(mode=standby, faults=set())
+    - t=Time(time=1.0, timers={})
+    - s=ExampleState(x=1.0, y=0.0)
+    - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
+    - exf=ExampleFlow(s=(x=2.0, y=1.0))
 
     Which can also be used to inject faults:
 
-    >>> exf("dynamic", time=2.0, faults=['no_charge'])
+    >>> exf(time=2.0, proptype="dynamic", faults=['no_charge'])
     >>> exf
     exf ExampleFunction
-    - ExampleState(x=2.0, y=4.0)
-    - ExampleMode(mode=no_charge, faults={'no_charge'})
+    - t=Time(time=2.0, timers={})
+    - s=ExampleState(x=1.0, y=3.0)
+    - m=ExampleMode(mode='no_charge', faults={'no_charge'}, sub_faults=False)
+    - exf=ExampleFlow(s=(x=3.0, y=1.0))
     """
 
-    __slots__ = ["ca", "aa", "fa", "args_f", "archs"]
+    __slots__ = ["ca", "aa", "fa", "args_f"]
     default_track = ["ca", "aa", "fa"]+Block.default_track
     roletypes = ['container', 'flow', 'arch']
 
@@ -95,92 +99,6 @@ class Function(Block):
         """Return fmdtools type of the model class."""
         return Function
 
-    def update_seed(self, seed=[]):
-        """
-        Update seed and propagates update to contained actions/components.
-
-        (keeps seeds in sync)
-
-        Parameters
-        ----------
-        seed : int, optional
-            Random seed. The default is [].
-        """
-        super().update_seed(seed)
-        for at in self.get_roles('arch'):
-            arch = getattr(self, at)
-            if hasattr(arch, 'r'):
-                arch.update_seed(self.r.seed)
-
-    def prop_arch_behaviors(self, proptype, time, run_stochastic):
-        """Propagate behaviors into contained architectures."""
-        for objname in self.get_roles('arch'):
-            try:
-                obj = getattr(self, objname)
-                # TODO: this should be more general
-                if objname == 'aa':
-                    obj(proptype, time, run_stochastic, self.t.dt)
-                elif objname == 'fa':
-                    obj.propagate(time, proptype=proptype, run_stochastic=run_stochastic)
-            except TypeError as e:
-                raise Exception("Poorly specified Architecture: "
-                                + str(obj.__class__)) from e
-
-    def __call__(self, proptype, faults=[], time=0, run_stochastic=False):
-        """
-        Update the state of the function at a given time and injects faults.
-
-        Parameters
-        ----------
-        proptype : str
-            Type of propagation step to update
-            ('static_behavior', or 'dynamic_behavior')
-        faults : list, optional
-            Faults to inject in the function. The default is [].
-        time : float, optional
-            Model time. The default is 0.
-        run_stochastic : book
-            Whether to run the simulation using stochastic or deterministic behavior
-        """
-        if hasattr(self, 'r'):
-            self.r.run_stochastic = run_stochastic
-        # if there is a fault, it is instantiated
-        if faults:
-            self.inject_faults(faults)
-
-        if time > self.t.time:
-            if hasattr(self, 'r'):
-                self.r.update_stochastic_states()
-        self.prop_arch_behaviors(proptype, time, run_stochastic)
-
-        if proptype == 'static' and hasattr(self, 'static_behavior'):
-            self.static_behavior(time)
-        elif proptype == 'dynamic' and hasattr(self, 'dynamic_behavior') and time > self.t.time:
-            if self.t.run_times >= 1:
-                for i in range(self.t.run_times):
-                    self.dynamic_behavior(time)
-            elif not Decimal(str(time)) % Decimal(str(self.t.dt)):
-                self.dynamic_behavior(time)
-
-        self.t.time = time
-        self.set_sub_faults()
-        if run_stochastic == 'track_pdf':
-            if hasattr(self, 'r'):
-                self.r.probdens = self.r.return_probdens()
-        if hasattr(self, 'm') and self.m.exclusive is True and len(self.m.faults) > 1:
-            raise Exception("More than one fault present in " + self.name +
-                            "\n at t= " + str(time) +
-                            "\n faults: " + str(self.m.faults) +
-                            "\n Is the mode representation nonexclusive?")
-        return
-
-    def return_probdens(self):
-        """Get the probability density associated with FxnBlock and its archs."""
-        pd = super().return_probdens()
-        for arch in self.archs:
-            pd *= getattr(self, arch).return_probdens()
-        return pd
-
 
 class ExampleFunction(Function):
     """Example Function block for testing."""
@@ -190,18 +108,17 @@ class ExampleFunction(Function):
     container_s = ExampleState
     container_m = ExampleMode
     flow_exf = ExampleFlow
+    default_s = {'x': 0.0, 'y': 0.0}
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Increment x if nominal, else increment y."""
         if not self.m.any_faults():
             self.s.x += self.p.x
         else:
             self.s.y += self.p.y
-        if time < 1.0:
-            self.s.put(x=0.0, y=0.0)
         self.exf.s.inc(x=self.s.x)
 
-    def find_classification(self, scen, hist):
+    def classify(self, **kwargs):
         """Classify via metric xy = s.x + s.y."""
         return {"xy": self.s.x + self.s.y}
 
@@ -227,5 +144,5 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
     exf = ExampleFunction("exf")
-    from fmdtools.sim import propagate
-    res, hist = propagate.one_fault(exf, "exf", "short", 2)
+    # from fmdtools.sim import propagate
+    # res, hist = propagate.one_fault(exf, "exf", "short", 2)

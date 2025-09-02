@@ -47,7 +47,6 @@ class EEState(State):
 class EE(Flow):
     """Electrical Energy Flow."""
 
-    __slots__ = ()
     container_s = EEState
 
 
@@ -60,7 +59,6 @@ class ForceState(State):
 class Force(Flow):
     """Force flow."""
 
-    __slots__ = ()
     container_s = ForceState
 
 
@@ -83,7 +81,6 @@ class ControlState(State):
 class Control(Flow):
     """Control Flow."""
 
-    __slots__ = ()
     container_s = ControlState
 
 
@@ -127,7 +124,6 @@ class DOFParam(Parameter):
 class DOFs(Flow):
     """Flow defining the Drone degrees of freedom."""
 
-    __slots__ = ()
     container_s = DOFstate
     container_p = DOFParam
 
@@ -193,7 +189,6 @@ class DesTrajState(State):
 class DesTraj(Flow):
     """Desired trajectory flow."""
 
-    __slots__ = ()
     container_s = DesTrajState
 
 
@@ -215,14 +210,13 @@ class StoreEEState(State):
 class StoreEE(Function):
     """Class for the battery architecture/energy storage."""
 
-    __slots__ = ("ee_out", "fs")
     container_s = StoreEEState
     container_m = StoreEEMode
     flow_ee_out = EE
     flow_fs = Force
     flownames = {"ee_1": "ee_out", "force_st": "fs"}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Source loses voltage in nocharge mode."""
         if self.m.has_fault("nocharge"):
             self.ee_out.s.effort = 0.0
@@ -274,7 +268,6 @@ class DistEE(Function):
     systems/avionics.
     """
 
-    __slots__ = ("ee_in", "ee_mot", "ee_ctl", "st")
     container_s = DistEEState
     container_m = DistEEMode
     flow_ee_in = EE
@@ -290,7 +283,7 @@ class DistEE(Function):
         if self.ee_in.s.rate > 2:
             self.m.add_fault("short")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Power distribution behavior.
 
@@ -298,18 +291,21 @@ class DistEE(Function):
         e.g., when nominal, high effort gets passed to outgoing EE flows::
         >>> d = DistEE()
         >>> d.ee_in.s.effort = 2.0
-        >>> d.static_behavior(1.0)
+        >>> d.static_behavior()
         >>> d.ee_mot
-        ee EE flow: EEState(rate=1.0, effort=2.0)
+        ee EE
+        - s=EEState(rate=1.0, effort=2.0)
 
         while fault modes modify this relationship::
         >>> d = DistEE()
         >>> d.m.add_fault("short")
-        >>> d.static_behavior(1.0)
+        >>> d.static_behavior()
         >>> d.ee_mot
-        ee EE flow: EEState(rate=1.0, effort=0.0)
+        ee EE
+        - s=EEState(rate=1.0, effort=0.0)
         >>> d.ee_in
-        ee EE flow: EEState(rate=10.0, effort=1.0)
+        ee EE
+        - s=EEState(rate=10.0, effort=1.0)
         """
         self.set_faults()
         if self.m.has_fault("short"):
@@ -357,7 +353,6 @@ class HoldPayloadState(State):
 class HoldPayload(Function):
     """Drone landing gear."""
 
-    __slots__ = ('dofs', 'force_st', 'force_lin')
     container_m = HoldPayloadMode
     container_s = HoldPayloadState
     flow_dofs = DOFs
@@ -375,7 +370,7 @@ class HoldPayload(Function):
         else:
             self.s.force_gr = 0.0
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Ground support behavior.
 
@@ -385,13 +380,13 @@ class HoldPayload(Function):
         e.g., in the nominal case::
         >>> h = HoldPayload()
         >>> h.dofs.s.z = 1.0
-        >>> h.static_behavior(1.0)
+        >>> h.static_behavior()
         >>> h.force_st.s
         ForceState(support=1.0)
 
         Or, in the drone has fallen::
         >>> h.dofs.s.z = 0.0
-        >>> h.static_behavior(2.0)
+        >>> h.static_behavior()
         >>> h.m.faults
         {'break'}
         >>> h.force_st.s
@@ -513,7 +508,6 @@ class BaseLine(object):
 class AffectDOF(Function, BaseLine):
     """Drone rotors that the drone through the air."""
 
-    __slots__ = ("ee_in", "ctl_in", "dofs", "force")
     container_s = AffectDOFState
     container_m = AffectDOFMode
     flow_ee_in = EE
@@ -524,7 +518,7 @@ class AffectDOF(Function, BaseLine):
                  "ctl": "ctl_in",
                  "force_lin": "force"}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Drone locomotive behaviors.
 
@@ -534,13 +528,13 @@ class AffectDOF(Function, BaseLine):
         >>> a = AffectDOF()
         >>> a.dofs.s.z
         0.0
-        >>> a.static_behavior(0.0)
+        >>> a.static_behavior()
         >>> a.dofs.s.z
         1.0
 
         Mechanical breakages (And other faults) cause a fall::
         >>> a.m.add_fault("mechbreak")
-        >>> a.static_behavior(0.0)
+        >>> a.static_behavior()
         >>> a.s.mt
         0.0
         >>> a.dofs.s.uppwr
@@ -601,7 +595,6 @@ class CtlDOFMode(Mode):
 class CtlDOF(Function):
     """Drone rotor control."""
 
-    __slots__ = ("ee_in", "des_traj", "ctl", "dofs", "fs")
     container_s = CtlDOFstate
     container_m = CtlDOFMode
     flow_ee_in = EE
@@ -616,19 +609,19 @@ class CtlDOF(Function):
         if self.fs.s.support < 0.5:
             self.m.add_fault("noctl")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Translate desired trajectory into control signals.
 
         e.g., in the nominal case::
         >>> c = CtlDOF()
-        >>> c.static_behavior(0.0)
+        >>> c.static_behavior()
         >>> c.ctl.s
         ControlState(forward=1.0, upward=1.0)
 
         and in the off-nominal case::
         >>> c.m.add_fault("noctl")
-        >>> c.static_behavior(0.0)
+        >>> c.static_behavior()
         >>> c.ctl.s
         ControlState(forward=0.0, upward=0.0)
         """
@@ -675,7 +668,6 @@ class PlanPathMode(Mode):
 class PlanPath(Function):
     """Drone path planning function."""
 
-    __slots__ = ("ee_in", "dofs", "des_traj", "fs")
     container_m = PlanPathMode
     flow_ee_in = EE
     flow_dofs = DOFs
@@ -690,20 +682,20 @@ class PlanPath(Function):
         if self.dofs.s.planvel > 1.5 or self.dofs.s.planvel < 0.5:
             self.m.add_fault("noloc")
 
-    def static_behavior(self, t):
+    def static_behavior(self):
         """
         Path planning behavior.
 
         Assigns trajectory based on current point. In the static case, this is just
         going forward 1.0 in the x, e.g.::
         >>> p = PlanPath()
-        >>> p.static_behavior(0.0)
+        >>> p.static_behavior()
         >>> p.des_traj.s
         DesTrajState(dx=1.0, dy=0.0, dz=0.0, power=1.0)
 
         If it loses location, navigation not provided:
         >>> p.m.add_fault("noloc")
-        >>> p.static_behavior(0.0)
+        >>> p.static_behavior()
         >>> p.des_traj.s
         DesTrajState(dx=0.0, dy=0.0, dz=0.0, power=1.0)
         """
@@ -758,7 +750,6 @@ class ViewModes(Mode):
 class ViewEnvironment(Function):
     """Drone camera placeholder."""
 
-    __slots__ = ('dofs',)
     container_m = ViewModes
     flow_dofs = DOFs
 
@@ -766,7 +757,6 @@ class ViewEnvironment(Function):
 class Drone(FunctionArchitecture):
     """Static multirotor drone model (executes in a single timestep)."""
 
-    __slots__ = ()
     default_sp = {'end_time': 0}
 
     def init_architecture(self, **kwargs):
@@ -788,7 +778,7 @@ class Drone(FunctionArchitecture):
         self.add_fxn("hold_payload", HoldPayload, "dofs", "force_lin", "force_st")
         self.add_fxn("view_env", ViewEnvironment, "dofs")
 
-    def find_classification(self, scen, mdlhist):
+    def classify(self, scen={}, mdlhist={}, **kwargs):
         """Calculate rate, cost, expected cost based on cost of repair information."""
         modeprops = self.return_faultmodes()
         repcost = sum([m["cost"] for f, m in modeprops.items()])

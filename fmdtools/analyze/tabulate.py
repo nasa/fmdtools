@@ -27,7 +27,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from fmdtools.define.base import is_numeric
+from fmdtools.define.base import is_numeric, t_key
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.common import multiplot_helper, consolidate_legend
 from fmdtools.analyze.common import set_empty_multiplots
@@ -40,13 +40,13 @@ from matplotlib import colors as mcolors
 from matplotlib import pyplot as plt
 
 
-def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
+def result_summary_fmea(result, mdlhist, *attrs, metrics=()):
     """
     Make full fmea table with degraded attributes noted.
 
     Parameters
     ----------
-    endresult : Result
+    result : Result
         Result (over scenarios) to get metrics from
     mdlhist : History
         History (over scenarios) to get degradations/faults from
@@ -68,47 +68,49 @@ def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
     >>> mdl = ExFxnArch()
     >>> res, hist = fault_sample(mdl, exfs)
     >>> result_summary_fmea(res, hist, *mdl.fxns, *mdl.flows)
-                                                             degraded  ... expected_cost
-    exfxnarch_fxns_ex_fxn_no_charge_t1              ['ex_fxn', 'exf']  ...           0.0
-    exfxnarch_fxns_ex_fxn_no_charge_t2              ['ex_fxn', 'exf']  ...           0.0
-    exfxnarch_fxns_ex_fxn2_no_charge_t1  ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
-    exfxnarch_fxns_ex_fxn2_no_charge_t2  ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
-    exfxnarch_fxns_ex_fxn_short_t1                  ['ex_fxn', 'exf']  ...           0.0
-    exfxnarch_fxns_ex_fxn_short_t2                  ['ex_fxn', 'exf']  ...           0.0
-    exfxnarch_fxns_ex_fxn2_short_t1      ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
-    exfxnarch_fxns_ex_fxn2_short_t2      ['ex_fxn', 'ex_fxn2', 'exf']  ...           0.0
-    nominal                                                        []  ...           1.0
+                                                             degraded  ...  flowval
+    nominal                                                        []  ...  10100.0
+    exfxnarch_fxns_ex_fxn_no_charge_t1              ['ex_fxn', 'exf']  ...   5050.0
+    exfxnarch_fxns_ex_fxn_no_charge_t2              ['ex_fxn', 'exf']  ...   5150.0
+    exfxnarch_fxns_ex_fxn2_no_charge_t1  ['ex_fxn', 'ex_fxn2', 'exf']  ...   5050.0
+    exfxnarch_fxns_ex_fxn2_no_charge_t2  ['ex_fxn', 'ex_fxn2', 'exf']  ...   5150.0
+    exfxnarch_fxns_ex_fxn_short_t1                  ['ex_fxn', 'exf']  ...   5050.0
+    exfxnarch_fxns_ex_fxn_short_t2                  ['ex_fxn', 'exf']  ...   5150.0
+    exfxnarch_fxns_ex_fxn2_short_t1      ['ex_fxn', 'ex_fxn2', 'exf']  ...   5050.0
+    exfxnarch_fxns_ex_fxn2_short_t2      ['ex_fxn', 'ex_fxn2', 'exf']  ...   5150.0
     <BLANKLINE>
-    [9 rows x 5 columns]
+    [9 rows x 3 columns]
     """
     from fmdtools.analyze.history import History
     deg_summaries = {}
     fault_summaries = {}
     mdlhist = mdlhist.nest(levels=1)
     for scen, hist in mdlhist.items():
-        hist_comp = History(faulty=hist, nominal=mdlhist.nominal)
+        hist_comp = History({'scenario': hist, 'nominal': mdlhist.nominal})
         hist_summary = hist_comp.get_fault_degradation_summary(*attrs)
         deg_summaries[scen] = str(hist_summary.degraded)
-        fault_summaries[scen] = str(hist_summary.faulty)
+        fault_summaries[scen] = str(hist_summary.has_faults)
     degradedtable = pd.DataFrame(deg_summaries, index=['degraded'])
     faulttable = pd.DataFrame(fault_summaries, index=['faulty'])
-    simplefmea = endresult.create_simple_fmea(*metrics)
+    simplefmea = result.create_simple_fmea(*metrics)
     fulltable = pd.concat([degradedtable, faulttable, simplefmea.transpose()])
     return fulltable.transpose()
 
 
-def result_summary(endresult, mdlhist, *attrs):
+def result_summary(result, mdlhist, *attrs, t="end"):
     """
     Make a pandas table of results (degraded functions/flows, etc.) of a single run.
 
     Parameters
     ----------
-    endresult : Result
+    result : Result
         Result with end-state classification
     mdlhist : History
         History of model states
     *attrs : str
         Names of attributes to check in the history for degradation/faulty.
+    t : float
+        Time to get the endclass from. Default is "end".
 
     Returns
     -------
@@ -122,17 +124,14 @@ def result_summary(endresult, mdlhist, *attrs):
     >>> mdl = ExFxnArch()
     >>> res, hist = one_fault(mdl, "ex_fxn", "short", time=2)
     >>> result_summary(res, hist, *mdl.fxns, *mdl.flows)
-       endclass.rate  endclass.cost  ...       degraded    faulty
-    0        0.00001              1  ...  [ex_fxn, exf]  [ex_fxn]
-    <BLANKLINE>
-    [1 rows x 5 columns]
+       flowval       degraded    faulty
+    0   5150.0  [ex_fxn, exf]  [ex_fxn]
     """
     hist_summary = mdlhist.get_fault_degradation_summary(*attrs)
-    if 'endclass' in endresult:
-        endresult = endresult['endclass']
-    table = pd.DataFrame(endresult.data, index=[0])
+    classif = result.get_faulty().get(t_key(t)).get("classify")
+    table = pd.DataFrame(classif.data, index=[0])
     table['degraded'] = [hist_summary.degraded]
-    table['faulty'] = [hist_summary.faulty]
+    table['faulty'] = [hist_summary.has_faults]
     return table
 
 
@@ -431,7 +430,7 @@ class FMEA(BaseTab):
         The default is ('function', 'fault').
     prefix : str
         Prefix for the metrics to use for get_metric. Default is 'endclass.', which
-        gets the metrics from endclass (output of find_classification method) only.
+        gets the metrics from endclass (output of classify() method) only.
     rates/weights : str(s)
         Weighting or rate factor to use for weighted averages and expectations.
         Can be any value from the result (e,g. rates='rate') or the FaultSample
@@ -446,7 +445,7 @@ class FMEA(BaseTab):
     Examples
     --------
     >>> from fmdtools.sim.sample import exfs
-    >>> res = Result({scen.name+'.endclass': {'rate': scen.time, 'cost': i} for i, scen in enumerate(exfs.scenarios())}).flatten()
+    >>> res = Result({scen.name+'.tend.classify': {'rate': scen.time, 'cost': i} for i, scen in enumerate(exfs.scenarios())}).flatten()
     >>> FMEA(res, exfs).as_table(sort_by="sum_cost")
                                       average_scenario_rate  ...  expected_cost
     exfxnarch.fxns.ex_fxn2 short                        0.0  ...            0.0
@@ -470,7 +469,7 @@ class FMEA(BaseTab):
     """
 
     def __init__(self, res, fs, add_res={}, group_by=('function', 'fault'),
-                 prefix="endclass.", **kwargs):
+                 prefix="tend.classify.", **kwargs):
         self.factors = group_by
         grouped_scens = fs.get_scen_groups(*group_by)
         all_metrics = {k[:-7]: [v] if not isinstance(v, list) else v

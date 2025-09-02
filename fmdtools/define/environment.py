@@ -49,6 +49,11 @@ class Environment(CommsFlow):
     ...    coords_c = ExampleCoords
     ...    arch_ga = ExGeomArch
     >>> env = ExampleEnvironment('env')
+    >>> env
+    env ExampleEnvironment
+    - r=Rand(seed=42)
+    - c=ExampleCoords()
+    - ga=ExGeomArch()
     >>> env.create_hist([1.0])
     c.r.probdens:                   array(1)
     c.st:                           array(1)
@@ -60,7 +65,7 @@ class Environment(CommsFlow):
     ga.polys.ex_poly.s.buffer_around: array(1)
     """
 
-    slots = ["c", "r", "ga"]
+    __slots__ = ["c", "r", "ga"]
     container_r = Rand
     container_sp = SimParam
     default_sp = {}
@@ -82,12 +87,19 @@ class Environment(CommsFlow):
             ga = {**ga, 'p': p}
         r_kwargs = {'run_stochastic': self.r.run_stochastic, 'seed': self.r.seed}
         c = {**{'r': r_kwargs}, **c}
-        ga = {**{'r': r_kwargs, 'sp': self.sp}, **ga}
+        ga = {**{'r': r_kwargs, 'sp': self.sp.get_sub_kwargs()}, **ga}
         self.init_roletypes('coords', 'arch', c=c, ga=ga)
 
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Environment
+
+    def __repr__(self, rolenames=["s", "r", "c", "ga"], **kwargs):
+        return self.create_repr(rolenames, **kwargs)
+
+    def create_repr(self, rolenames=["s", "c", "ga"], **kwargs):
+        """Add details to repr."""
+        return super().create_repr(rolenames=rolenames, **kwargs)
 
     def copy(self, glob=[], p={}, s={}):
         """

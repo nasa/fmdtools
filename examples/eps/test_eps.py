@@ -39,16 +39,18 @@ class epsTests(unittest.TestCase, CommonTests):
         backwards through the graph as expected - distributor short leads to empty battery
         """
         res, hist = prop.one_fault(self.mdl, "distribute_ee", "short",
-                                   desired_result="endfaults")
-        self.assertEqual(res["endfaults"], ['store_ee.no_storage', 'distribute_ee.short'])
+                                   to_return="faults")
+        self.assertEqual(res.get_faulty().tend.faults,
+                         ['store_ee.no_storage', 'distribute_ee.short'])
 
     def test_backward_fault_prop_2(self):
         """Tests that defined fault cases that require reverse propagation propagate
         backwards through the graph as expected - motor short leads to distributor short
         """
         res, hist = prop.one_fault(self.mdl, "ee_to_me", "short",
-                                   desired_result="endfaults")
-        self.assertEqual(res["endfaults"], ['store_ee.no_storage', 'distribute_ee.short', 'ee_to_me.short'])
+                                   to_return="faults")
+        self.assertEqual(res.get_faulty().tend.faults,
+                         ['store_ee.no_storage', 'distribute_ee.short', 'ee_to_me.short'])
 
     def test_all_faults(self):
         """Some basic tests for propagating lists of faults in the model--
@@ -82,7 +84,6 @@ class epsTests(unittest.TestCase, CommonTests):
             fs.add_fault_phases(n_joint=n_joint)
             # tests the length
             self.assertEqual(len(fs.scenarios()), math.comb(actual_num_faults, n_joint))
-            ec, hists = prop.fault_sample(self.mdl, fs, showprogress=False)
 
     def test_pickleability(self):
         unpickleable = check_pickleability(self.mdl, verbose=False)
@@ -117,9 +118,17 @@ class epsTests(unittest.TestCase, CommonTests):
 
 
 if __name__ == "__main__":
+    import sys
+    sys.path.append("../..")
+
+    # suite = unittest.TestSuite()
+    # suite.addTest(epsTests("test_fault_app"))
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite)
+
     unittest.main()
 
-    mdl = EPS()
+    # mdl = EPS()
 
 
     # endresults, resgraph, mdlhist = propagate.one_fault(mdl, 'Distribute_EE', 'short')

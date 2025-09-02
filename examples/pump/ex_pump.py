@@ -68,7 +68,6 @@ class WaterStates(State):
 class Water(Flow):
     """Flow connecting water from input to pump."""
 
-    __slots__ = ()
     container_s = WaterStates
 
 
@@ -82,7 +81,6 @@ class EEStates(State):
 class Electricity(Flow):
     """Flow connecting electricity from input to pump."""
 
-    __slots__ = ()
     container_s = EEStates
 
 
@@ -95,13 +93,12 @@ class SignalStates(State):
 class Signal(Flow):
     """Flow connecting signal from input to pump."""
 
-    __slots__ = ()
     container_s = SignalStates
 
 
 """
 DEFINING RESILIENCE METRICS
-Below we define certain functions used in the value function in find_classification
+Below we define certain functions used in the value function in classify()
 """
 
 
@@ -146,7 +143,7 @@ Below we define a class that defines the parameter of the model
 class PumpParam(Parameter, readonly=True):
     """PumpParam defines the parameters which the pump may be simulated over."""
 
-    # costs to tabulate in cost model (see find_classification)
+    # costs to tabulate in cost model (see classify())
     cost: tuple = ("repair", "water")
     # delay to use in MoveWater function
     delay: int = 10
@@ -211,7 +208,6 @@ class ImportEE(Function):
     (which isn't necessary if they are given the same name).
     """
 
-    __slots__ = ['ee_out']
     container_m = ImportEEMode
     container_s = ImportEEState
     flow_ee_out = Electricity
@@ -234,7 +230,7 @@ class ImportEE(Function):
         if self.ee_out.s.current > 15.0:
             self.m.add_fault('no_v')
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Electricity input behavior.
 
@@ -262,12 +258,11 @@ class ImportWaterMode(Mode):
 class ImportWater(Function):
     """Import Water is the pipe with water going into the pump."""
 
-    __slots__ = ['wat_out']
     container_m = ImportWaterMode
     flow_wat_out = Water
     flownames = {"wat_1": "wat_out"}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """If the flow has a no_wat fault, the water level goes to zero."""
         if self.m.has_fault('no_wat'):
             self.wat_out.s.level = 0.0
@@ -288,12 +283,11 @@ class ExportWaterMode(Mode):
 class ExportWater(Function):
     """Export Water is the pipe with water going out of the pump."""
 
-    __slots__ = ['wat_in']
     container_m = ExportWaterMode
     flow_wat_in = Water
     flownames = {'wat_2': 'wat_in'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Blockage changes the area the output water flows through."""
         if self.m.has_fault('block'):
             self.wat_in.s.area = 0.01
@@ -309,12 +303,11 @@ class ImportSigMode(Mode):
 class ImportSig(Function):
     """Import Signal is the on/off switch."""
 
-    __slots__ = ['sig_out']
     container_m = ImportSigMode
     flow_sig_out = Signal
     flownames = {'sig_1': 'sig_out'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Time-dependent behavior for the function.
 
@@ -327,9 +320,9 @@ class ImportSig(Function):
             self.sig_out.s.power = 0.0
             # an open circuit means no voltage is exported
         else:
-            if time < 5:
+            if self.t.time < 5:
                 self.sig_out.s.power = 0.0
-            elif time < 50:
+            elif self.t.time < 50:
                 self.sig_out.s.power = 1.0
             else:
                 self.sig_out.s.power = 0.0
@@ -375,7 +368,6 @@ class MoveWat(Function):
     - t (time) by MoveWatTime, which will be used so we can have a timer
     """
 
-    __slots__ = ['ee_in', 'sig_in', 'wat_in', 'wat_out']
     container_s = MoveWatStates
     container_p = MoveWatParams
     container_m = MoveWatMode
@@ -387,7 +379,7 @@ class MoveWat(Function):
     flownames = {"ee_1": "ee_in", "sig_1": "sig_in",
                  "wat_1": "wat_in", "wat_2": "wat_out"}
 
-    def set_faults(self, time):
+    def set_faults(self):
         """
         Here we use the timer to define a conditional fault that only occurs after a
         state is present after X seconds.
@@ -402,16 +394,16 @@ class MoveWat(Function):
         added.
         """
         if self.p.delay:
-            if self.indicate_over_pressure(time):
-                if time > self.t.time:
+            if self.indicate_over_pressure():
+                if not self.t.executed_static:
                     self.t.pressure_limit.inc(self.t.dt)
                 if self.t.pressure_limit.time >= self.p.delay:
                     self.m.add_fault('mech_break')
         else:
-            if self.indicate_over_pressure(time):
+            if self.indicate_over_pressure():
                 self.m.add_fault('mech_break')
 
-    def indicate_over_pressure(self, time):
+    def indicate_over_pressure(self):
         """
         Use methods with names indicate_XXX to mark conditions met by the model.
 
@@ -420,9 +412,9 @@ class MoveWat(Function):
         """
         return self.wat_out.s.pressure > 15.0
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Define how the function will behave with different faults."""
-        self.set_faults(time)
+        self.set_faults()
         if self.m.has_fault('short'):
             self.ee_in.s.current = 500*10/5000*self.sig_in.s.power*self.ee_in.s.voltage
             self.s.eff = 0.0
@@ -441,6 +433,7 @@ class MoveWat(Function):
         self.wat_out.s.flowrate = 0.3/500 * velocity*self.wat_out.s.area
 
         self.wat_in.s.assign(self.wat_out.s, 'pressure', 'flowrate')
+        print(a)
 
 
 # DEFINE MODEL OBJECT
@@ -461,7 +454,6 @@ class Pump(FunctionArchitecture):
     be tuned, we can easily use the timestep t=1 OR t=5.
     """
 
-    __slots__ = ()
     container_p = PumpParam
     default_sp = dict(phases=(('start', 0, 4), ('on', 5, 49), ('end', 50, 55)),
                       end_time=55.0, dt=1.0, units='hr')
@@ -496,7 +488,7 @@ class Pump(FunctionArchitecture):
                      'wat_1', 'wat_2', p={'delay': self.p.delay})
         self.add_fxn('export_water', ExportWater, 'wat_2')
 
-    def indicate_finished(self, time):
+    def indicate_finished(self):
         """
         Indicate that the pump is finished.
 
@@ -510,20 +502,20 @@ class Pump(FunctionArchitecture):
         a dummy method is provided to demonstrate, in practice this would depend on
         the intended end-states of the model.
         """
-        if time > self.sp.end_time:
+        if self.t.time > self.sp.end_time:
             return True
         else:
             return False
 
-    def indicate_on(self, time):
+    def indicate_on(self):
         """Indicate that the pump is on."""
         return self.flows['wat_1'].s.flowrate > 0
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, scen={}, nomhist={}, **kwargs):
         """
         Classify the simulation run/scenario.
 
-        Propagation methods use find_classification() to classify the results based on
+        Propagation methods use classify() to classify the results based on
         the effects of a fault scenario, returning whatever metrics are desired. In this
         case, a dictionary with rate, cost, and expected cost is calculated.
 
@@ -536,19 +528,19 @@ class Pump(FunctionArchitecture):
             repcost = self.calc_repaircost()
         else:
             repcost = 0.0
-        if 'water' in self.p.cost:
-            lostwat = sum(mdlhists['nominal'].flows.wat_2.s.flowrate -
-                          mdlhists['faulty'].flows.wat_2.s.flowrate)
+        if 'water' in self.p.cost and nomhist:
+            lostwat = sum(nomhist.flows.wat_2.s.flowrate -
+                          self.h.flows.wat_2.s.flowrate)
             watcost = 750 * lostwat * self.sp.dt
-        elif 'water_exp' in self.p.cost:
-            wat = mdlhists['nominal'].flows.wat_2.s.flowrate - \
-                mdlhists['faulty'].flows.wat_2.s.flowrate
+        elif 'water_exp' in self.p.cost and nomhist:
+            wat = nomhist.flows.wat_2.s.flowrate - \
+                self.h.flows.wat_2.s.flowrate
             watcost = 100 * sum(np.array(accumulate(wat))**2) * self.sp.dt
         else:
             watcost = 0.0
-        if 'ee' in self.p.cost:
-            eespike = [spike for spike in mdlhists['faulty'].flows.ee_1.s.current -
-                       mdlhists['nominal'].flows.ee_1.s.current if spike > 1.0]
+        if 'ee' in self.p.cost and nomhist:
+            eespike = [spike for spike in self.h.flows.ee_1.s.current -
+                       nomhist.flows.ee_1.s.current if spike > 1.0]
             if len(eespike) > 0:
                 eecost = 14 * \
                     sum(np.array(reseting_accumulate(eespike))) * self.sp.dt
@@ -668,6 +660,10 @@ def script_sample_faults(track='all', **kwargs):
 
 
 if __name__ == "__main__":
+
+    mdl = Pump()
+    endfaults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
+                                             time=10, to_return='faults')
     # import doctest
     # doctest.testmod(verbose=True)
     Pump().get_vars("flows.ee_1")
@@ -684,7 +680,7 @@ if __name__ == "__main__":
     script_fault_degradation_tables()
     script_try_faults()
     script_sample_faults()
-    check_model_pickleability(Pump(), try_pick=True)
+    # check_model_pickleability(Pump(), try_pick=True)
     import inspect
     source = inspect.getsource(Pump)
     og = ObjectGraph(Pump(), get_source=True)

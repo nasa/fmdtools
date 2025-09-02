@@ -32,7 +32,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.analyze.common import setup_plot
-from fmdtools.define.base import gen_timerange
+from fmdtools.define.base import gen_timerange, t_key
 
 import numpy as np
 from ordered_set import OrderedSet
@@ -363,7 +363,7 @@ class PhaseMap(object):
         plt.grid(which='major', axis='x')
 
 
-def from_hist(hist, fxn_modephases='all'):
+def from_hist(hist, fxn_modephases='all', dt=1.0):
     """
     Identify the phases of operation for the system based on its modes.
 
@@ -428,7 +428,7 @@ def from_hist(hist, fxn_modephases='all'):
                 mph = modephases
             else:
                 mph = {}
-            modephasemaps[fxn] = PhaseMap(phases=phases, modephases=mph)
+            modephasemaps[fxn] = PhaseMap(phases=phases, modephases=mph, dt=dt)
     return modephasemaps
 
 
@@ -510,7 +510,8 @@ def phaseplot(phasemaps, modephases=[], mdl=[], dt=1.0, singleplot=True,
 
 
 def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.01,
-                 label_rad="{:.2e}", line='stem', title="", ylims=None, **scen_kwargs):
+                 label_rad="{:.2e}", line='stem', title="", ylims=None, time="end",
+                 **scen_kwargs):
     """
     Plot the sample metric and rate of a given fault over sample times.
 
@@ -553,7 +554,8 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
     ax = faultsamp.phasemap.plot(ax=axes[1], fig=fig)
 
     # cost/metric plots
-    costs = np.array([endclasses.get(scen).endclass[metric] for scen in scens])
+    costs = np.array([endclasses.get(scen+'.'+t_key(time)).classify[metric]
+                      for scen in scens])
     times = np.array([v.time for v in scens.values()])
     timesort = np.argsort(times)
     times = times[timesort]
@@ -566,7 +568,7 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
 
     # rate/metric plot
     if rad:
-        sizes = np.array([endclasses.get(scen).endclass[rad] for scen in scens])
+        sizes = np.array([endclasses.get(scen+'.'+t_key(time)).classify[rad] for scen in scens])
         sizes = sizes[timesort]
         rad_scale *= np.max(abs(costs))/np.max(abs(sizes))
         axes[0].scatter(times, costs, s=rad_scale*sizes, label=rad, alpha=0.5)

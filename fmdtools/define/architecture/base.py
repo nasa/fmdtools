@@ -21,7 +21,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.object.base import check_pickleability, BaseObject
+from fmdtools.define.object.base import check_pickleability, BaseObject, get_dict_repr
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.block.base import Simulable
 from fmdtools.define.object.base import init_obj, get_obj_name
@@ -30,6 +30,8 @@ from fmdtools.analyze.graph.model import add_meth_edge, add_edge
 from fmdtools.analyze.graph.model import ExtModelGraph, set_node_states
 
 import time
+import networkx as nx
+from ordered_set import OrderedSet
 
 
 class ArchitectureGraph(ExtModelGraph):
@@ -62,7 +64,7 @@ class ArchitectureGraph(ExtModelGraph):
         for role, roleobj in mdl.get_roles_as_dict().items():
             name = get_obj_name(roleobj, role, basename=basename)
             if name in self.g.nodes:
-                set_node_states(self.g, roleobj, name, time=self.time)
+                set_node_states(self.g, roleobj, name)
 
 
 class Architecture(Simulable):
@@ -75,13 +77,30 @@ class Architecture(Simulable):
 
     This method is called for a copy using the as_copy option, which copies passed
     flexible roles.
+
+    Attributes
+    ----------
+    simorder : OrderedSet
+        Keeps track of simulable dynamic execution order
+    staticsims : OrderedSet
+        Keeps track of which simulables run in static execution step
+    dynamicsims : Orderedset
+        Keeps track of which simulables run in dynamic execution step
+    staticflows : list
+        Flows to keep track of in static execution step
+    graph : networkx graph
+        multigraph view of sims and flows
     """
 
-    __slots__ = ['flows', 'as_copy', 'h', '_init_flexroles', 'm']
-    flexible_roles = ['flows']
+    __slots__ = ['flows', 'as_copy', 'h', '_init_flexroles', 'm', 'simorder',
+                 '_simflows', 'graph', 'staticsims', 'dynamicsims',
+                 'staticflows']
+    flexible_roles = ['flow']
     roletype = 'arch'
 
     def __init__(self, *args, as_copy=False, h={}, **kwargs):
+        self.simorder = OrderedSet()
+        self._simflows = []
         self.as_copy = as_copy
         Simulable.__init__(self, *args, h=h, roletypes=['container'], **kwargs)
         self.init_hist(h=h)
@@ -89,6 +108,22 @@ class Architecture(Simulable):
         self.init_flexible_roles(**kwargs)
         self.init_architecture(**kwargs)
         self.build(**kwargs)
+        self.mut_kwargs = {role: kwargs.get(role)
+                           for role in self.get_roles('container', with_immutable=False)
+                           if role in kwargs}
+
+    def create_repr(self, rolenames=['s', 'm'], sim_rolenames=['s', 'm'],
+                    with_classname=True, with_name=True, one_line=False):
+        """Show string with sims and flows."""
+        repstr = super().create_repr(rolenames=rolenames, with_classname=with_classname,
+                                     with_name=with_name, one_line=one_line)
+        if not one_line:
+            for flex_role in self.flexible_roles:
+                roledict = self.get_flex_role_objs(flex_role)
+                if roledict:
+                    rolestr = get_dict_repr(roledict, one_line=one_line)
+                    repstr += "\n"+flex_role.upper()+"S:"+rolestr
+        return repstr
 
     def base_type(self):
         """Return fmdtools type of the model class."""
@@ -104,12 +139,100 @@ class Architecture(Simulable):
                             ", should be: " + self.rolename)
 
     def is_static(self):
-        """Determine if static (False by default)."""
-        return False
+        """Determine if static based on containment of static sims."""
+        return super().is_static() or any(self.staticsims)
 
     def is_dynamic(self):
-        """Determine if dynamic (False by default)."""
-        return False
+        """Determine if dynamic based on containment of dynamic sims."""
+        return super().is_dynamic() or any(self.dynamicsims)
+
+    def update_arch_behaviors(self, proptype):
+        """
+        Update/propagate behavior in the architecture.
+
+        Parameters
+        ----------
+        proptype : str
+            Type of propagation step to update ('dynamic', 'static', or 'both'). If
+            'dynamic', this method calls self.prop_dynamic(). If 'static', this method
+            calls self.prop_static()
+        """
+        if proptype in ["dynamic", "both"] and hasattr(self, 'prop_dynamic'):
+            self.prop_dynamic()
+        if proptype in ["static", "static-once", "both"] and hasattr(self, 'prop_static'):
+            self.prop_static()
+
+    def prop_dynamic(self):
+        """
+        Run dynamic propagation functions.
+
+        Calls the defined dynamaic functions
+        (e.g., those with dynamic_behavior() methods) in order the specified by the
+        init_architecture method.
+        """
+        sims = self.get_sims()
+        for simname in self.dynamicsims:
+            sim = sims[simname]
+            sim(time=self.t.time, proptype='dynamic', inc_at="")
+
+    def prop_static(self):
+        """
+        Propagate behaviors through model graph (static propagation step).
+
+        Runs by maintaining a list of "active" sims to update, starting with all
+        sims with a static_behavior() method to call. For each of these sims,
+        it updates the static_behavior() method. If new mutables are present, the
+        simulable is kept in the list (otherwise it is removed). If its connected flows
+        have new mutables, other sims connected to that flow are added to the list.
+        This algorithm is run until there are no more "active" sims, which may
+        require several executions of each simulable's static_behavior() method to
+        propagate behavior through the entire model graph.
+        """
+        # set up history of flows to see if any has changed
+        activesims = self.staticsims.copy()
+        nextsims = set()
+        self.set_flow_mutables(self.staticflows)
+        sims = self.get_sims()
+        n = 0
+        while activesims:
+            flows_to_check = {*self.staticflows}
+            for simname in list(activesims).copy():
+                sim = sims[simname]
+                # Update functions with new values, check to see if new faults or states
+                sim.set_mutables(exclude=[*self.staticflows])
+                sim(time=self.t.time, proptype='static-once', inc_at="")
+                if sim.has_changed(update=True, exclude=[*self.staticflows]):
+                    nextsims.update([simname])
+
+                # Check what flows now have new values and add connected functions
+                # (done for each because of communications potential)
+                for flowname in sim.flows:
+                    if flowname in flows_to_check:
+                        if self.flows[flowname].has_changed(update=True):
+                            nextsims.update(self.get_connected_sims(flowname))
+                            flows_to_check.remove(flowname)
+            # check remaining flows that have not been checked already
+            for flowname in flows_to_check:
+                if self.flows[flowname].has_changed(update=True):
+                    nextsims.update(self.get_connected_sims(flowname))
+            # update flowstates
+            self.set_flow_mutables(self.staticflows)
+            activesims = nextsims.copy()
+            nextsims.clear()
+            n += 1
+            if n > 1000:  # break if this is going for too long
+                raise Exception("Undesired looping for Simulables in static",
+                                "propagation at t=" + str(self.t.time) + ", these",
+                                "Simulables remain active: " + str(activesims))
+
+    def get_connected_sims(self, flowname):
+        """Get the simulables connected to a given flow."""
+        return set([n for n in self.graph.neighbors(flowname) if n in self.staticsims])
+
+    def set_flow_mutables(self, flows):
+        """Set the flowstates from the current state of the given flows."""
+        for flowname in flows:
+            self.flows[flowname].set_mutables()
 
     def init_flexible_roles(self, **kwargs):
         """
@@ -123,14 +246,42 @@ class Architecture(Simulable):
             Existing roles (if any).
         """
         for role in self.flexible_roles:
-            if self.as_copy and role in kwargs:
-                setattr(self, role, {**kwargs[role]})
+            rname = role+'s'
+            if self.as_copy and rname in kwargs:
+                setattr(self, rname, {**kwargs[rname]})
             elif self.as_copy:
                 raise Exception("No role argument "+role+" to copy.")
-            elif role in kwargs:
-                setattr(self, role, {**kwargs[role]})
+            elif rname in kwargs:
+                setattr(self, rname, {**kwargs[role]})
             else:
-                setattr(self, role, dict())
+                setattr(self, rname, dict())
+
+    def get_flex_role_kwargs(self, objclass, **kwargs):
+        """
+        Get role keyword arguments for init_obj.
+
+        Ensures that (1) Rands are synced and (2) SimParams are passed down.
+
+        Parameters
+        ----------
+        objclass : class/obj
+            Class or object being instantiated.
+        **kwargs : kwargs
+            Keyword arguments to self.add_sim.
+
+        Returns
+        -------
+        **kwargs : kwargs
+            Keyword arguments to self.add_flex_role_obj
+        """
+        kwar = {}
+        # ensure global seed
+        if hasattr(self, 'r') and hasattr(objclass, "container_r"):
+            kwar['r'] = {"seed": self.r.seed}
+        # pass simparam from arch
+        if hasattr(objclass, "container_sp"):
+            kwar['sp'] = self.sp.get_sub_kwargs()
+        return {**kwar, **kwargs}
 
     def add_flex_role_obj(self, flex_role, name, objclass=BaseObject, use_copy=False,
                           **kwargs):
@@ -164,11 +315,7 @@ class Architecture(Simulable):
             as_copy = self.as_copy
 
         track = get_sub_include(name, get_sub_include(flex_role, self.track))
-        # sync rands, if present
-        if hasattr(self, 'r') and hasattr(objclass, "container_r"):
-            kwargs = {**{'r': {"seed": self.r.seed}}, **kwargs}
-        if hasattr(objclass, "container_sp"):
-            kwargs = {**{'sp': self.sp.asdict()}, **kwargs}
+        kwargs = self.get_flex_role_kwargs(objclass, **kwargs)
         obj = init_obj(name=name, objclass=objclass, track=track,
                        as_copy=as_copy, root=self.get_full_name()+"."+flex_role,
                        **kwargs)
@@ -243,16 +390,30 @@ class Architecture(Simulable):
             Flows, dicts for non-default values to p, s, etc.
         """
         flows = self.get_flows(*flownames, all_if_empty=False)
-        if not self.sp.use_local:
-            kwargs = {**{'t': {'dt': self.sp.dt}}, **kwargs}
+        self.add_flex_role_obj(flex_role, name,
+                               objclass=simclass, flows=flows, **kwargs)
+        for flowname in flownames:
+            self._simflows.append((name, flowname))
+        self.simorder.update([name])
 
-        self.add_flex_role_obj(flex_role, name, objclass=simclass, flows=flows, **kwargs)
+    def set_simorder(self, simorder):
+        """
+        Manually set the order of sims to be executed.
+
+        (otherwise it will be executed based on the sequence of add_sim calls)
+        """
+        if not self.simorder.difference(simorder):
+            self.simorder = OrderedSet(simorder)
+        else:
+            raise Exception("Invalid list: "+str(simorder) +
+                            " should have elements: "+str(self.simorder))
 
     def init_architecture(self, *args, **kwargs):
         """Use to initialize architecture."""
         return 0
 
-    def build(self, update_seed=True, **kwargs):
+    def build(self, update_seed=True, construct_graph=False, require_connections=False,
+              **kwargs):
         """
         Construct the overall model structure.
 
@@ -262,51 +423,134 @@ class Architecture(Simulable):
         ----------
         update_seed : bool
             Whether to update the seed
+        construct_graph : bool
+            Whether to construct a graph at self.graph using construct_graph().
+            Default is True.
+        require_connections : bool
+            Whether to require that all sims/flows be connected. Default is True.
         """
         # remove any dangling objects (flows usually) passed from above but not
         # initialized
         for role in self.flexible_roles:
-            roledict = getattr(self, role)
+            roledict = getattr(self, role+'s')
             roledict = {k: v for k, v in roledict.items() if k in self._init_flexroles}
 
         if update_seed and not self.as_copy:
             self.update_seed()
         if hasattr(self, 'h'):
             self.h = self.h.flatten()
+        self.staticsims = OrderedSet([name for name, sim in self.get_sims().items()
+                                      if sim.is_static()])
+        self.dynamicsims = OrderedSet([name for name, sim in self.get_sims().items()
+                                       if sim.is_dynamic()])
+        if construct_graph:
+            self.construct_graph(require_connections=require_connections)
+            self.staticflows = [flow for flow in self.flows
+                                if any([n in self.staticsims
+                                        for n in self.graph.neighbors(flow)])]
+
+    def construct_graph(self, require_connections=True):
+        """Create .graph nx.graph representation of the model."""
+        self.graph = nx.Graph()
+        self.graph.add_nodes_from(self.get_sims(), bipartite=0)
+        self.graph.add_nodes_from(self.flows, bipartite=1)
+        self.graph.add_edges_from(self._simflows)
+
+        # check to see that all functions/flows are connected
+        dangling_nodes = [e for e in nx.isolates(self.graph)]
+        if dangling_nodes and require_connections:
+            raise Exception("Fxns/flows disconnected from model: "+str(dangling_nodes))
+
+    def plot_dynamic_run_order(self, rotateticks=False, title="Dynamic Run Order"):
+        """
+        Plot the run order for the model during the dynamic propagation step.
+
+        The x-direction is the order of each function executed and the y are the
+        corresponding flows acted on by the given methods.
+
+        Parameters
+        ----------
+        rotateticks : Bool, optional
+            Whether to rotate the x-ticks (for bigger plots). The default is False.
+        title : str, optional
+            String to use for the title (if any). The default is "Dynamic Run Order".
+
+        Returns
+        -------
+        fig : figure
+            Matplotlib figure object
+        ax : axis
+            Corresponding matplotlib axis
+        """
+        from matplotlib import pyplot as plt
+        from matplotlib.collections import PolyCollection
+        from matplotlib.ticker import AutoMinorLocator
+        if not hasattr(self, 'graph'):
+            raise Exception("Unable to plot run order without graph attribute.")
+        fxnorder = list(self.dynamicsims)
+        times = [i+0.5 for i in range(len(fxnorder))]
+        fxntimes = {f: i for i, f in enumerate(fxnorder)}
+
+        flowtimes = {f: [fxntimes[n] for n in self.graph.neighbors(
+            f) if n in self.dynamicsims] for f in self.flows}
+
+        lengthorder = {k: v for k, v in
+                       sorted(flowtimes.items(), key=lambda x: len(x[1]), reverse=True)
+                       if len(v) > 0}
+        starttimeorder = {k: v for k, v in sorted(lengthorder.items(),
+                                                  key=lambda x: x[1][0], reverse=True)}
+        endtimeorder = [k for k, v in sorted(starttimeorder.items(),
+                                             key=lambda x: x[1][-1], reverse=True)]
+        flowtimedict = {flow: i for i, flow in enumerate(endtimeorder)}
+
+        fig, ax = plt.subplots()
+
+        for flow in flowtimes:
+            phaseboxes = [((t, flowtimedict[flow]-0.5),
+                           (t, flowtimedict[flow]+0.5),
+                           (t+1.0, flowtimedict[flow]+0.5),
+                           (t+1.0, flowtimedict[flow]-0.5))
+                          for t in flowtimes[flow]]
+            bars = PolyCollection(phaseboxes)
+            ax.add_collection(bars)
+
+        flowtimes = [i+0.5 for i in range(len(self.flows))]
+        ax.set_yticks(list(flowtimedict.values()))
+        ax.set_yticklabels(list(flowtimedict.keys()))
+        ax.set_ylim(-0.5, len(flowtimes)-0.5)
+        ax.set_xticks(times)
+        ax.set_xticklabels(fxnorder, rotation=90*rotateticks)
+        ax.set_xlim(0, len(times))
+        ax.xaxis.set_minor_locator(AutoMinorLocator(2))
+        ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+        ax.grid(which='minor', linewidth=2)
+        ax.tick_params(axis='x', bottom=False, top=False,
+                       labelbottom=False, labeltop=True)
+        if title:
+            if rotateticks:
+                fig.suptitle(title, fontweight='bold', y=1.15)
+            else:
+                fig.suptitle(title, fontweight='bold')
+        return fig, ax
 
     def get_flows(self, *flownames, all_if_empty=True):
         """Return a list of the model flow objects."""
-        if all_if_empty and not flownames:
-            flownames = self.flows
-        return {flowname: self.flows[flowname] for flowname in flownames}
+        if hasattr(self, 'flows'):
+            if all_if_empty and not flownames:
+                flownames = self.flows
+            return {flowname: self.flows[flowname] for flowname in flownames}
+        else:
+            return {}
 
     def flowtypes(self):
         """Return the set of flow types used in the model."""
         return {obj.__class__.__name__: obj.get_typename()
-                for f, obj in self.flows.items()}
+                for f, obj in self.get_flows().items()}
 
     def flows_of_type(self, ftype):
         """Return the set of flows for each flow type."""
-        return {flow for flow, obj in self.flows.items()
+        return {flow for flow, obj in self.get_flows().items()
                 if obj.__class__.__name__ == ftype}
-
-    def update_seed(self, seed=[]):
-        """
-        Update model seed and the seed in all contained roles.
-
-        Must have an associated Rand role.
-
-        Parameters
-        ----------
-        seed : int, optional
-            Seed to use. The default is [].
-        """
-        if hasattr(self, 'r'):
-            super().update_seed(seed)
-            role_objs = self.get_flex_role_objs()
-            for obj in role_objs.values():
-                if hasattr(obj, 'update_seed'):
-                    obj.update_seed(self.r.seed)
 
     def get_rand_states(self, auto_update_only=False):
         """Get dictionary of random states throughout the model objs."""
@@ -348,7 +592,7 @@ class Architecture(Simulable):
                      as_copy=True)
         # send role dicts in to be copied via as_copy param.
         for flex_role in self.flexible_roles:
-            cargs[flex_role] = getattr(self, flex_role)
+            cargs[flex_role+'s'] = getattr(self, flex_role+'s')
         # if flows provided from above, use those flows. Otherwise copy own.
         if hasattr(self, 'flows'):
             cargs['flows'] = {f: flows[f] if f in flows else obj.copy()

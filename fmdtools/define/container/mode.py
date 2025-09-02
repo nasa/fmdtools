@@ -29,7 +29,6 @@ from fmdtools.analyze.history import History
 
 from typing import ClassVar
 import numpy as np
-import itertools
 import copy
 
 
@@ -215,14 +214,9 @@ class Mode(BaseContainer, readonly=False):
         if not self.faults:
             self.faults = set()
 
-    def __repr__(self):
-        reprstr = (self.__class__.__name__ +
-                   "(mode=" +
-                   self.mode +
-                   ", faults=" +
-                   str(self.faults) +
-                   ")")
-        return reprstr
+    def create_repr(self, fields=["mode", "faults", "sub_faults"], **kwargs):
+        """Limit default repr to relevant fields."""
+        return super().create_repr(fields=fields, **kwargs)
 
     def base_type(self):
         """Return fmdtools type of the model class."""
@@ -369,12 +363,12 @@ class Mode(BaseContainer, readonly=False):
         --------
         >>> exm = ExampleMode()
         >>> exm.get_fault('low')
-        Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.charge': 20.0}, units='sim')
-        >>> exm.add_fault(dict(low={'disturbances': {'s.charge': 40.0}}))
+        Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.x': 20.0}, units='sim')
+        >>> exm.add_fault(dict(low={'disturbances': {'s.x': 40.0}}))
         >>> exm
-        ExampleMode(mode=low, faults={'low'})
+        ExampleMode(faults={'low'}, sub_faults=False, fault_low={'disturbances': {'s.x': 40.0}}, mode='low')
         >>> exm.get_fault('low')
-        Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.charge': 40.0}, units='sim')
+        Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.x': 40.0}, units='sim')
         """
         if len(faults) == 1 and (isinstance(faults[0], list) or isinstance(faults[0], dict)):
             faults = faults[0]
@@ -544,7 +538,7 @@ class ExampleMode(Mode):
 
     fault_no_charge = Fault(1e-5, 100, (('standby', 1.0),))
     fault_short = (1e-5, 100, (('supply', 1.0),))
-    fault_low: dict = {'disturbances': {'s.charge': 20.0}}
+    fault_low: dict = {'disturbances': {'s.x': 20.0}}
     opermodes = ("supply", "charge", "standby")
     exclusive = True
     mode: str = "standby"

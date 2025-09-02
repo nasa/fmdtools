@@ -83,12 +83,11 @@ class DriveRand(Rand):
 class DriveDegradation(Function):
     """Function defining the stochastic degradation of the Drive function."""
 
-    __slots__ = ()
     container_s = DriveDegradationStates
     container_r = DriveRand
     default_sp = dict(end_time=100)
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.s.inc(corrosion=self.r.s.corrode_rate, wear=self.r.s.wear_rate)
         opp_drift = (np.sign(self.s.drift) == np.sign(self.r.s.yaw_load))
         self.s.inc(drift=self.r.s.yaw_load / 1000 + opp_drift * self.r.s.yaw_load)
@@ -156,7 +155,6 @@ class PSFShortParams(Parameter, readonly=True):
 class PSFDegradationShort(Function):
     """Function defining short-term operator performance shaping factor degradation."""
 
-    __slots__ = ()
     container_s = PSFDegradationShortStates
     container_r = PSFDegShortRand
     container_p = PSFShortParams
@@ -168,7 +166,7 @@ class PSFDegradationShort(Function):
         self.s.experience = self.p.experience
         self.r.s.fatigue_param = self.p.fatigue_param
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.s.inc(fatigue=self.r.s.fatigue_param)
 
         if self.s.stress < 100:
@@ -212,12 +210,11 @@ class PSFDegradationLongStates(State):
 class PSFDegradationLong(Function):
     """Long-term degradation of operator behavior."""
 
-    __slots__ = ()
     container_s = PSFDegradationLongStates
     container_p = LongParams
     default_sp = dict(end_time=100)
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         # normalize time between -1 and 1 to enable sigmoid usage
         norm_time = (((self.t.time - 0) * 2) / (self.sp.end_time - self.sp.start_time)
                      - 1)
@@ -233,8 +230,8 @@ if __name__ == "__main__":
     endresults, mdlhist = prop.nominal(deg_mdl)
     mdlhist.plot_line("s.wear")
     # stochastic
-    deg_mdl = DriveDegradation('DriveDeg')
-    endresults, mdlhist = prop.nominal(deg_mdl, run_stochastic=True)
+    deg_mdl = DriveDegradation('DriveDeg', sp=dict(run_stochastic=True))
+    endresults, mdlhist = prop.nominal(deg_mdl)
     mdlhist.plot_line("s.friction")
 
 

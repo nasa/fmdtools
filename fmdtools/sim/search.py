@@ -30,12 +30,13 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import t_key, unpack_x
+from fmdtools.define.base import t_key, unpack_x, filter_kwargs
 from fmdtools.define.object.base import init_obj
 from fmdtools.define.object.coords import BaseCoords
 from fmdtools.define.block.function import ExampleFunction
-from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
+from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario, ParameterScenario
 from fmdtools.sim.sample import FaultDomain
+from fmdtools.sim.propagate import Simulation, get_sim_call_kwargs, exec_sim
 import fmdtools.sim.propagate as propagate
 from fmdtools.analyze.common import setup_plot
 from fmdtools.analyze.history import History, init_dicthist
@@ -51,8 +52,6 @@ class BaseObjCon(dataobject):
     """
     Base class for objectives and constraints.
 
-    ...
-
     Fields
     ------
     name : str
@@ -67,7 +66,7 @@ class BaseObjCon(dataobject):
 
 class Objective(BaseObjCon):
     """
-    ...
+    Base class for objectives which derive from simulation results.
 
     Fields
     ------
@@ -649,7 +648,7 @@ class BaseSimProblem(BaseProblem):
         *args : args
             Arguments to the propagate method.
         keep_ec : bool, optional
-            Whether to keep the endclass. The default is False.
+            Whether to keep the classify dict. The default is False.
         **kwargs : kwargs
             Keyword arguments to the propagate method.
         """
@@ -671,7 +670,7 @@ class BaseSimProblem(BaseProblem):
 
     def add_result_objective(self, name, varname, **kwargs):
         """
-        Add an objective corresponding to a possible desired_result.
+        Add an objective corresponding to a possible to_return.
 
         Associates a callable to the problem with name 'name' which may be called to
         evaluate the objective at a value of x.
@@ -689,7 +688,7 @@ class BaseSimProblem(BaseProblem):
 
     def add_result_constraint(self, name, varname, **kwargs):
         """
-        Add an objective corresponding to a possible desired_result.
+        Add an objective corresponding to a possible to_return.
 
         Associates a callable to the problem with name 'name' which may be called to
         evaluate the constraint at a value of x.
@@ -733,15 +732,15 @@ class BaseSimProblem(BaseProblem):
 
     def obj_con_des_res(self):
         """
-        Get the desired_result argument for the problem given objectives/constraints.
+        Get the to_return argument for the problem given objectives/constraints.
 
         Returns
         -------
         des_res : dict
-            desired_result argument to prop_method.
+            to_return argument to prop_method.
         """
         if self.keep_ec:
-            des_res = {'end': ['endclass']}
+            des_res = {'end': ['classify']}
         else:
             des_res = {}
         for n in {**self.objectives, **self.constraints}.values():
@@ -768,7 +767,7 @@ class BaseSimProblem(BaseProblem):
 
     def close_pool(self):
         """Close pool if instantiated in the Problem."""
-        propagate.close_pool({**self.kwargs, 'close_pool': True})
+        propagate.close_pool(self.kwargs.get('pool', None))
 
 
 class ParameterSimProblem(BaseSimProblem):
@@ -816,13 +815,13 @@ class ParameterSimProblem(BaseSimProblem):
     >>> exprob.g1(1, 2)
     -10.0
 
-    below, we use the endclass as an objective instead of the variable:
+    below, we use the classify dict as an objective instead of the variable:
 
     >>> class ExampleParameterSimProblemObj(ParameterSimProblem):
     ...     def init_problem(self, **kwargs):
     ...         self.add_sim(ExampleFunction(), "nominal")
     ...         self.add_parameterdomain(expd)
-    ...         self.add_result_objective("f1", "endclass.xy")
+    ...         self.add_result_objective("f1", "classify.xy")
 
     >>> ex_obj_prob = ExampleParameterSimProblemObj()
     >>> ex_obj_prob.f1(1, 1)
@@ -834,7 +833,7 @@ class ParameterSimProblem(BaseSimProblem):
 
     >>> class ExampleParameterSimProblemShort(ParameterSimProblem):
     ...     def init_problem(self, **kwargs):
-    ...         self.add_sim(ExampleFunction(),"one_fault", "examplefunction", "short", 3)
+    ...         self.add_sim(ExampleFunction(),"one_fault", "examplefunction", "short", 3, include_nominal=False)
     ...         self.add_parameterdomain(expd)
     ...         self.add_result_objective("f1", "s.x", time=3)
     ...         self.add_result_objective("f2", "s.y", time=5)
@@ -877,11 +876,11 @@ class ParameterSimProblem(BaseSimProblem):
         p = self.parameterdomain(*x)
         end_time = self.get_end_time()
         mdl_kwargs = {'p': p, 'sp': {'end_time': end_time}}
-        desired_result = self.obj_con_des_res()
-        all_res = self.prop_method(self.mdl.new(),
+        to_return = self.obj_con_des_res()
+        all_res = self.prop_method(self.mdl.new(**mdl_kwargs),
                                    *self.args,
-                                   mdl_kwargs=mdl_kwargs,
-                                   desired_result=desired_result,
+                                   protect=False,
+                                   to_return=to_return,
                                    showprogress=False,
                                    **self.kwargs)
         return all_res[0].flatten(), all_res[1].flatten()
@@ -902,39 +901,27 @@ class ScenarioProblem(BaseSimProblem):
     """
     Base class for optimizing scenario parameters.
 
-    Attributes
-    ----------
-    prepped_sims : dict
-        Dict of outputs from propagate.nom_helper. Used for staged execution of
-        scenarios (where the model is copied instead of re-simulated).
+    ScenarioProblem simulates in a staged fashion, first initializing the base_sim
+    (usually, the nominal scenario) which it copies models from
     """
 
     def __init__(self, **kwargs):
-        self.prepped_sims = {}
+        self.base_sim = None
         super().__init__(**kwargs)
 
     def add_sim(self, mdl, **kwargs):
-        """Add a simulation - always uses prop_one_scen method."""
-        super().add_sim(mdl, "prop_one_scen", **kwargs)
+        """Add a simulation - always use Simulation."""
+        super().add_sim(mdl, exec_sim, **kwargs)
 
     def prep_sim(self):
         """Prepare simulation by simulating it until the start of the scenario."""
-        end_time = self.get_end_time()
-        mdl_kwargs = {'sp': {'end_time': end_time}}
-        run_kwarg = propagate.pack_run_kwargs(**self.kwargs, mdl_kwargs=mdl_kwargs)
-        desired_result = self.obj_con_des_res()
-        sim_kwarg = propagate.pack_sim_kwargs(**self.kwargs,
-                                              desired_result=desired_result,
-                                              staged=True)
-        n_outs = propagate.nom_helper(self.mdl.copy(),
-                                      [self.get_start_time()],
-                                      **{**sim_kwarg, 'use_end_condition': False},
-                                      **run_kwarg)
-        self.prepped_sims = {"result": n_outs[0],
-                             "hist": n_outs[1],
-                             "scen": n_outs[2],
-                             "mdls": n_outs[3],
-                             "t_end_nom": n_outs[4]}
+        sim_kwar = {**filter_kwargs(Simulation, **self.kwargs),
+                    'scen': ParameterScenario(sp={'end_time': self.get_end_time()}),
+                    'to_return': self.obj_con_des_res(),
+                    'mdl': self.mdl,
+                    'ctimes': [self.get_start_time()]}
+        self.base_sim = Simulation(**sim_kwar)
+        self.base_sim(**get_sim_call_kwargs(self.base_sim, **self.kwargs))
 
     def sim_mdl(self, *x):
         """
@@ -952,24 +939,18 @@ class ScenarioProblem(BaseSimProblem):
         hist : History
             history for the sim.
         """
-        if not self.prepped_sims:
+        if not self.base_sim:
             self.prep_sim()
 
-        scen = self.gen_scenario(*x)
-
-        mdl = [*self.prepped_sims['mdls'].values()][0].copy()
-        nomhist = self.prepped_sims['hist'].copy()
-        nomresult = self.prepped_sims['result'].copy()
-        desired_result = self.obj_con_des_res()
-        sim_kwarg = propagate.pack_sim_kwargs(**self.kwargs,
-                                              desired_result=desired_result,
-                                              staged=True)
-        res, hist, _, t_end = self.prop_method(mdl,
-                                               scen,
-                                               nomhist=nomhist,
-                                               nomresult=nomresult,
-                                               **sim_kwarg)
-        return res.flatten(), hist.flatten()
+        kwargs = {**self.kwargs,
+                  'scen': self.gen_scenario(*x),
+                  'mdl': [*self.base_sim.get_models().values()][0],
+                  'to_return': self.obj_con_des_res(),
+                  'protect': False,
+                  'copy': True}
+        sim_kwar = {'nomhist': self.base_sim.history.copy(),
+                    'nomresult': self.base_sim.result.copy()}
+        return self.prop_method((kwargs, sim_kwar))
 
 
 class SingleFaultScenarioProblem(ScenarioProblem):
@@ -998,9 +979,9 @@ class SingleFaultScenarioProblem(ScenarioProblem):
     objective value should be 1.0 (init value) + 3 * time_with_fault
     >>> ex_scenprob = ExScenProb()
     >>> ex_scenprob.f1(5.0)
-    4.0
+    3.0
     >>> ex_scenprob.f1(4.0)
-    7.0
+    6.0
     """
 
     def name_repr(self):
@@ -1299,14 +1280,14 @@ class ProblemArchitecture(BaseProblem):
     >>> ex_pa.ex_sp_f1(1, 1)
     2.0
     >>> ex_pa.ex_scenprob_f1()
-    16.0
+    15.0
     >>> ex_pa.ex_dp_f1()
     1.0
 
     We can also call these in terms of the full set of variables:
 
     >>> ex_pa.ex_scenprob_f1_full(2, 2)
-    13.0
+    12.0
     >>> ex_pa.ex_dp_f1_full(3, 3)
     3.0
     """
@@ -1585,7 +1566,7 @@ class ProblemArchitecture(BaseProblem):
          -ex_sp_xloc                                                [1. 2.]
         OBJECTIVES
          -ex_sp_f1                                                   3.0000
-         -ex_scenprob_f1                                            16.0000
+         -ex_scenprob_f1                                            15.0000
          -ex_dp_f1                                                   2.0000
         CONSTRAINTS
          -ex_sp_g1                                                  -4.0000
@@ -1656,7 +1637,7 @@ class ProblemArchitecture(BaseProblem):
         VARIABLES
          -time                                                       1.0000
         OBJECTIVES
-         -f1                                                        16.0000
+         -f1                                                        15.0000
         """
         inconsistent_upstream = self.find_inconsistent_upstream(probname)
         for upstream_prob in inconsistent_upstream:
@@ -1823,14 +1804,14 @@ class DynamicInterface():
         max time
     t_ind : int
         time index in log
-    desired_result : list
+    to_return : list
         variables to get from the model at each time-step
     hist : History
         mdlhist for simulation
     """
 
     def __init__(self, mdl, mdl_kwargs={}, t_max=False, track="all",
-                 run_stochastic="track_pdf", desired_result=[], use_end_condition=None):
+                 run_stochastic="track_pdf", to_return=[], use_end_condition=None):
         """
         Initialize the problem.
 
@@ -1847,7 +1828,7 @@ class DynamicInterface():
         run_stochastic : bool/str, optional
             Whether to run stochastic behaviors (True/False) and/or
             return pdf ("track_pdf"). The default is "track_pdf".
-        desired_result : list, optional
+        to_return : list, optional
             List of desired results to return at each update. The default is [].
         use_end_condition : bool, optional
             Whether to use model end-condition. The default is None.
@@ -1858,12 +1839,11 @@ class DynamicInterface():
             self.t_max = mdl.sp.end_time
         else:
             self.t_max = t_max
-        if isinstance(desired_result, str):
-            self.desired_result = [desired_result]
+        if isinstance(to_return, str):
+            self.to_return = [to_return]
         else:
-            self.desired_result = desired_result
+            self.to_return = to_return
         self.mdl = mdl.new(**mdl_kwargs, track=track, sp={'end_time': self.t_max})
-        self.mdl.init_time_hist()
         self.hist = self.mdl.h
         self.run_stochastic = run_stochastic
         self.use_end_condition = use_end_condition
@@ -1886,16 +1866,15 @@ class DynamicInterface():
         Returns
         -------
         returns : dict
-            dictionary of returns with values corresponding to desired_result
+            dictionary of returns with values corresponding to to_return
         """
         if seed:
             self.mdl.update_seed(seed)
-        self.mdl.propagate(self.t, fxnfaults=faults, disturbances=disturbances,
-                           run_stochastic=self.run_stochastic)
-        self.mdl.log_hist(self.t_ind, self.t, 0)
+        self.mdl(time=self.t, fxnfaults=faults, disturbances=disturbances,
+                 run_stochastic=self.run_stochastic)
 
         returns = {}
-        for result in self.desired_result:
+        for result in self.to_return:
             returns[result] = self.mdl.get_vars(result)
         if self.run_stochastic == "track_pdf":
             returns['pdf'] = self.mdl.return_probdens()
@@ -1988,10 +1967,10 @@ if __name__ == "__main__":
     exprob.f2(1, 1)
     exf = ExampleFunction()
     res, hist = propagate.one_fault(exf, 'examplefunction', 'short', 2,
-                                    desired_result = {3: ['s.y'], 5: ['s.y']},
+                                    to_return = {3: ['s.y'], 5: ['s.y']},
                                     mdl_kwargs={'p': expd(1, 0)})
     res, hist = propagate.one_fault(exf, 'examplefunction', 'short', 2,
-                                    desired_result = {3: ['s.y'], 5: ['s.y']},
+                                    to_return = {3: ['s.y'], 5: ['s.y']},
                                     mdl_kwargs={'p': expd(1, 1), 'sp': {'end_time': 5}},
                                     staged=True)
     import doctest

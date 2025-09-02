@@ -39,30 +39,30 @@ class define_Tests(unittest.TestCase):
         np.testing.assert_array_equal(self.mdlhist.flows.location.s.y,
                                       np.zeros(11))
         np.testing.assert_array_equal(self.mdlhist.flows.location.mover_1.s.x,
-                                      [i+1.0 for i in range(11)])
+                                      [i for i in range(11)])
         np.testing.assert_array_equal(self.mdlhist.flows.location.mover_1.s.y,
                                       np.zeros(11))
         np.testing.assert_array_equal(self.mdlhist.flows.location.mover_2.s.x,
                                       np.zeros(11))
         np.testing.assert_array_equal(self.mdlhist.flows.location.mover_2.s.y,
-                                      [i+1.0 for i in range(11)])
+                                      [i for i in range(11)])
 
     def test_multiflow_combination(self):
         """Check that communications combined such that both Movers have iterating x-y
         values."""
         np.testing.assert_array_equal(self.mdlhist.flows.communications.mover_1.s.x,
-                                      [i+1.0 for i in range(11)])
+                                      [i for i in range(11)])
         np.testing.assert_array_equal(self.mdlhist.flows.communications.mover_1.s.y,
-                                      [i+1.0 for i in range(11)])
+                                      [i for i in range(11)])
         np.testing.assert_array_equal(self.mdlhist.flows.communications.mover_2.s.x,
-                                      [i+1.0 for i in range(11)])
+                                      [i for i in range(11)])
         np.testing.assert_array_equal(self.mdlhist.flows.communications.mover_2.s.y,
-                                      [i+1.0 for i in range(11)])
+                                      [i for i in range(11)])
         # check that coordinator parses communiations from each Mover
         x1 = self.mdlhist.flows.communications.coordinator.mover_1.s.x
-        np.testing.assert_array_equal(x1, [i+1.0 for i in range(11)])
+        np.testing.assert_array_equal(x1, [i for i in range(11)])
         y1 = self.mdlhist.flows.communications.coordinator.mover_2.s.y
-        np.testing.assert_array_equal(y1, [i+1.0 for i in range(11)])
+        np.testing.assert_array_equal(y1, [i for i in range(11)])
 
     def test_mutliflow_copying(self):
         """Check that multiflow copies as expected."""

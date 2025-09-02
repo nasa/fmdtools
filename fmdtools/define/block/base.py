@@ -22,12 +22,13 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import set_var, gen_timerange, is_iter
+from fmdtools.define.base import gen_timerange, is_iter, get_var, filter_kwargs
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
 from fmdtools.define.container.mode import Fault
 from fmdtools.analyze.result import Result
+from fmdtools.analyze.graph.base import Graph
 
 import itertools
 import copy
@@ -64,6 +65,13 @@ class SimParam(Parameter, readonly=True):
     use_local : bool
         Whether to use locally-defined time-steps in functions (if any).
         Default is True.
+    with_loadings : bool
+        Whether to execute simulable with defined loading methods. Default is False.
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values. Default is False.
+    track_pdf : bool
+        If run_stochastic=True, track_pdf is used to calculate/track the probability
+        densities of random states over time.
     """
 
     rolename = "sp"
@@ -76,6 +84,9 @@ class SimParam(Parameter, readonly=True):
     units_set = ('sec', 'min', 'hr', 'day', 'wk', 'month', 'year')
     end_condition: str = ''
     use_local: bool = True
+    with_loadings: bool = False
+    run_stochastic: bool = False
+    track_pdf: bool = False
 
     def __init__(self, *args, **kwargs):
         if 'phases' not in kwargs:
@@ -169,6 +180,14 @@ class SimParam(Parameter, readonly=True):
             raise Exception("Invalid argument, track_times=" + str(self.track_times))
         return t_ind_rec
 
+    def get_sub_kwargs(self):
+        """Get keyword arguments for contained sim from larger sim."""
+        kwargs = self.asdict()
+        if not self.use_local:
+            kwargs.pop("dt")
+        kwargs['end_condition'] = ""
+        return kwargs
+
 
 class Simulable(BaseObject):
     """
@@ -186,14 +205,14 @@ class Simulable(BaseObject):
         Non-default kwargs for mutable containers/roles (to use for reset)
     """
 
-    __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'flows', 'mut_kwargs')
+    __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'mut_kwargs')
     container_t = Time
     default_track = ["all"]
     immutable_roles = BaseObject.immutable_roles + ['sp']
     default_sp = {}
     container_sp = SimParam
 
-    def __init__(self, sp={}, **kwargs):
+    def __init__(self, **kwargs):
         """
         Instantiate internal Simulable attributes.
 
@@ -204,13 +223,23 @@ class Simulable(BaseObject):
         **kwargs : kwargs
             Keyword arguments to BaseObject
         """
-        loc_kwargs = {**kwargs, 'sp': {**self.default_sp, **sp}}
-        if 't' not in loc_kwargs:
-            loc_kwargs['t'] = {'dt': loc_kwargs.get('sp').get('dt', 1.0), 'use_local': False}
-        BaseObject.__init__(self, **loc_kwargs)
-        self.mut_kwargs = {role: kwargs.get(role)
-                           for role in self.get_roles('container', with_immutable=False)
-                           if role in kwargs}
+        BaseObject.__init__(self, **kwargs)
+        self.set_time()
+
+    def is_static(self):
+        """Check if Block has static execution step."""
+        return (getattr(self, 'behavior', False) or
+                getattr(self, 'static_behavior', False) or
+                any([r.is_static() for r in self.get_sims().values()]))
+
+    def is_dynamic(self):
+        """Check if Block has dynamic execution step."""
+        return (hasattr(self, 'dynamic_behavior') or
+                any([r.is_dynamic() for r in self.get_sims().values()]))
+
+    def set_time(self):
+        """Set time from SimParam."""
+        self.t.set_timestep(dt=self.sp.dt, use_local=self.sp.use_local)
 
     def init_hist(self, h={}):
         """Initialize the history of the sim using SimParam parameters and track."""
@@ -219,18 +248,14 @@ class Simulable(BaseObject):
             self.h = self.create_hist(timerange)
         else:
             self.h = h.copy()
+        if not self.root:
+            self.init_time_hist()
 
     def init_time_hist(self):
         """Add time history to the model (only done at top level)."""
         if 'time' not in self.h:
             timerange = self.sp.get_histrange()
             self.h['time'] = timerange
-
-    def log_hist(self, t_ind, t, shift):
-        """Log the history over time."""
-        if self.sp.track_times:
-            t_ind_rec = self.sp.get_hist_ind(t_ind, t, shift)
-            self.h.log(self, t_ind_rec, time=t)
 
     def update_seed(self, seed=[]):
         """
@@ -243,26 +268,150 @@ class Simulable(BaseObject):
         seed : int, optional
             Random seed. The default is [].
         """
-        if seed and hasattr(self, 'r'):
-            self.r.update_seed(seed)
+        if hasattr(self, 'r'):
+            self.r.assign(self.sp, 'run_stochastic', 'track_pdf')
+            if seed:
+                self.r.update_seed(seed)
+            else:
+                seed = self.r.seed
+        for simname, sim in self.get_sims().items():
+            sim.update_seed(seed)
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, scen={}, **kwargs):
+        """Classify the results of the simulation (placeholder)."""
+        return {}
+
+    def get_result(self, to_return={}, nomresult={}, **kwargs):
         """
-        Classify the results of the simulation (placeholder).
+        Get the Result for the simulation corresponding to to_return.
 
         Parameters
         ----------
-        scen     : Scenario
-            Scenario defining the model run.
-        mdlhists : History
-            History for the simulation(s)
+        to_return : iterable, optional
+            Iterable of stings to get. The default is {}.
+        **kwargs : kwargs
+            Keyword arguments to self.classify or self.as_modelgraph.
 
         Returns
         -------
-        endclass: Result
-            Result dictionary with rate, cost, and expecte_cost values
+        result : TYPE
+            DESCRIPTION.
         """
-        return Result({'rate': scen.rate, 'cost': 1, 'expected_cost': scen.rate})
+        result = Result()
+        self.get_endclass(to_return=to_return, result=result, nomresult=nomresult,
+                          **kwargs)
+        if 'faults' in to_return:
+            result['faults'] = [*self.return_faultmodes()]
+        self.get_resgraph(to_return=to_return, result=result, nomresult=nomresult)
+        self.get_resvars(to_return=to_return, result=result)
+        return result
+
+    def get_endclass(self, to_return={}, result={}, **kwargs):
+        """
+        Get the end-state classification from self.classify().
+
+        Parameters
+        ----------
+        to_return : iterable, optional
+            Iterable with attributes to get from model. If "class" is in to_return,
+            it returns the whole dictionary. If "class.att" is in to_return, it gets
+            the attribute "att" from dict returned by classify(). The default is {}.
+        result : Result, optional
+            Result to add the result to. The default is Result().
+        **kwargs : kwargs
+            Keyword arguments to self.classify().
+
+        Returns
+        -------
+        result : Result
+            Result with returned class attributes.
+        """
+        sub_returns = [x.split('.')[1] for x in to_return
+                       if isinstance(x, str) and 'classify.' in x]
+        get_endclass = 'classify' in to_return
+        if get_endclass or sub_returns:
+            res = self.classify(**filter_kwargs(self.classify, **kwargs))
+            if get_endclass:
+                result['classify'] = Result(res)
+            for sub_r in sub_returns:
+                result['classify.'+sub_r] = res[sub_r]
+        return result
+
+    def get_resgraph(self, to_return={}, result={}, nomresult={}):
+        """
+        Get the graph corresponding to the state of the simulation.
+
+        Parameters
+        ----------
+        to_return : iterable, optional
+            Iterable with attributes to get from the model. If "graph" is in to_return,
+            it returns the graph from self.get_modelgraph. If "graph.obj" is in
+            to_return, it returns the graph from obj.get_modelgraph. If to_return is a
+            dict, the values of the dict can specify arguments to get_modelgraph. The
+            default is {}.
+        result : Result, optional
+            Result to add the graph to. The default is Result().
+        nomresult : dict, optional
+            Nominal result. If provided, set_resgraph() adds degradations to the graph
+            attributes. The default is {}.
+
+        Returns
+        -------
+        result : Result
+            Result with graph added.
+        """
+        if not isinstance(to_return, dict):
+            to_return = dict.fromkeys(to_return)
+        graphs_to_get = {g: arg for g, arg in to_return.items()
+                         if type(g) is str and (g.startswith('graph')
+                                                or g.startswith('Graph'))}
+        for g, arg in graphs_to_get.items():
+            if '.' in g:
+                strs = g.split(".")
+                obj = get_var(self, strs[1:])
+            else:
+                obj = self
+            kwar = {}
+            if isinstance(arg, tuple):
+                kwar = {**kwar, **arg[1], 'gtype': arg[0]}
+            elif isinstance(arg, Graph):
+                kwar = {**kwar, 'gtype': arg}
+
+            rgraph = obj.as_modelgraph(time=self.t.time, **kwar)
+
+            if nomresult and g in nomresult:
+                rgraph.set_resgraph(nomresult[g])
+            else:
+                rgraph.set_resgraph()
+            result[g] = rgraph
+        return result
+
+    def get_resvars(self, to_return={}, result={}):
+        """
+        Get variables specified in to_return.
+
+        Parameters
+        ----------
+        to_return : Iterable, optional
+            Iterable of values to get from the object. Keys could start with "vars" or
+            simply not be "class", "faults", or "graph". The default is {}.
+        result : Result, optional
+            REsult to add the variables to. The default is Result().
+
+        Returns
+        -------
+        result : Result
+            Result with variables added.
+        """
+        vars_to_get = [v for v in to_return if isinstance(v, str) and
+                       (not 'class' in v and not 'vars' in v and not 'faults' in v
+                        and not 'graph' in v and not 'Graph' in v)]
+        if 'vars' in to_return:
+            vars_to_get.append(to_return['vars'])
+        var_result = self.get_vars(*vars_to_get, trunc_tuple=False)
+        for i, var in enumerate(vars_to_get):
+            result[var] = var_result[i]
+        return result
 
     def new_params(self, name='', p={}, sp={}, r={}, track={}, **kwargs):
         """
@@ -284,7 +433,7 @@ class Simulable(BaseObject):
         param_dict: dict
             Dict with immutable parameters/options. (e.g., 'p', 'sp', 'track')
         """
-        param_dict = {**copy.deepcopy(self.mut_kwargs)}
+        param_dict = {**copy.deepcopy(getattr(self, 'mut_kwargs', {}))}
 
         if hasattr(self, 'p'):
             param_dict['p'] = self.p.copy_with_vals(**p)
@@ -322,7 +471,20 @@ class Simulable(BaseObject):
         return fxns
 
     def get_fault(self, scope, faultmode, **kwargs):
-        """Get the faultmode in the given scope of the model."""
+        """
+        Get the named Fault for the Simulable in the given scope of the model.
+
+        Will also get a Fault for a contained object at the given scope.
+
+        Parameters
+        ----------
+        scope : str
+            Scope to get the fault from (e.g., self.name, 'self', or 'global')
+        faultmode: str
+            Name of the fault (e.g., "short").
+        **kwargs: kwargs
+            Keyword arguments to Mode.get_fault.
+        """
         name = self.get_full_name()
         if name.endswith(scope) or scope in ['self', 'global']:
             obj = self
@@ -377,27 +539,28 @@ class Simulable(BaseObject):
         faults : str/list/dict, optional
             Faults to inject. The default is [].
         """
-        if isinstance(faults, str):
-            faults = [faults]
-        if faults and (isinstance(faults, list)
-                       or Fault.valid_fault([*faults.values()][0])):
-            faults = {self.name: faults}
-        full_name = self.get_full_name()
-        for faultscope, fault in faults.items():
-            if faultscope == self.name or faultscope == full_name:
-                self.m.add_fault(fault)
-                self.set_fault_disturbances(fault)
-            else:
-                if faultscope.startswith(self.name):
-                    faultscope = faultscope[len(self.name)+1:]
-                if faultscope.startswith(full_name):
-                    faultscope = faultscope[len(full_name)+1:]
-                fs_split = faultscope.split(".")
-                roles = self.get_roles()
-                if fs_split[0] in roles or fs_split[1] in roles:
-                    obj = self.get_vars(faultscope)
-                    obj.inject_faults(fault)
-        self.set_sub_faults()
+        if faults:
+            if isinstance(faults, str):
+                faults = [faults]
+            if faults and (isinstance(faults, list)
+                           or Fault.valid_fault([*faults.values()][0])):
+                faults = {self.name: faults}
+            full_name = self.get_full_name()
+            for faultscope, fault in faults.items():
+                if faultscope == self.name or faultscope == full_name:
+                    self.m.add_fault(fault)
+                    self.set_fault_disturbances(fault)
+                else:
+                    if faultscope.startswith(self.name):
+                        faultscope = faultscope[len(self.name)+1:]
+                    if faultscope.startswith(full_name):
+                        faultscope = faultscope[len(full_name)+1:]
+                    fs_split = faultscope.split(".")
+                    roles = self.get_roles()
+                    if fs_split[0] in roles or fs_split[1] in roles:
+                        obj = self.get_vars(faultscope)
+                        obj.inject_faults(fault)
+            self.set_sub_faults()
 
     def set_fault_disturbances(self, *faults):
         """Set Mode-based disturbances (if present)."""
@@ -415,6 +578,10 @@ class Simulable(BaseObject):
         if hasattr(self, 'm'):
             sub_faults = self.get_faults(with_base_faults=False)
             self.m.sub_faults = bool(sub_faults)
+        if hasattr(self, 'm') and self.m.exclusive is True and len(self.m.faults) > 1:
+            raise Exception("More than one fault present in " + self.name +
+                            "\n faults: " + str(self.m.faults) +
+                            "\n Is the mode representation nonexclusive?")
 
     def get_faults(self, with_sub_faults=True, with_base_faults=True,
                    only_present=True):
@@ -451,10 +618,7 @@ class Simulable(BaseObject):
             if not isinstance(with_sub_faults, bool):
                 with_sub_faults -= 1
             sub_kwar = dict(only_present=only_present, with_sub_faults=with_sub_faults)
-            for objname in self.get_roles('arch'):
-                obj = getattr(self, objname)
-                all_faults.update(obj.get_faults(**sub_kwar))
-            for objname, obj in self.get_flex_role_objs().items():
+            for objname, obj in self.get_sims().items():
                 if hasattr(obj, 'get_faults'):
                     all_faults.update(obj.get_faults(**sub_kwar))
         return all_faults
@@ -471,7 +635,179 @@ class Simulable(BaseObject):
             state_pd = self.r.return_probdens()
         else:
             state_pd = 1.0
+        for arch, sim in self.get_sims().items():
+            state_pd *= sim.return_probdens()
         return state_pd
+
+    def update_stochastic_states(self):
+        """Update stochastic states if in run_stochastic configuration."""
+        if not self.t.has_executed() and self.sp.run_stochastic and hasattr(self, 'r'):
+            self.r.update_stochastic_states()
+            if self.sp.track_pdf:
+                self.r.probdens = self.r.return_probdens()
+
+    def get_sims(self):
+        """Return dict of simulable objects within the object."""
+        all_roles = self.get_roles_as_dict(with_immutable=False, no_flows=True)
+        return {rolename: roleobj for rolename, roleobj in all_roles.items()
+                if isinstance(roleobj, Simulable)}
+
+    def update_arch_behaviors(self, proptype):
+        """
+        Propagate behaviors into contained architectures.
+
+        Iterates through the Block's contained architectures and calls the corresponding
+        propagation type.
+
+        Parameters
+        ----------
+        time : float
+            Time to update the architecture behaviors at.
+        proptype : str
+            Propagation step to perform ('dynamic' or 'static').
+        """
+        for objname, obj in self.get_sims().items():
+            try:
+                obj(time=self.t.time, proptype=proptype, inc_at="")
+            except TypeError as e:
+                raise Exception("Poorly specified Architecture: "
+                                + str(obj.__class__)) from e
+
+    def update_dynamic_behaviors(self, proptype="dynamic"):
+        """
+        Run the dynamic behaviors of the block, including loadings (if specified).
+
+        Runs in the defined order:
+            1.) running dynamic_loading_before() (if sp.with_loadings is set to True)
+            2.) updating contained architecture dynamic behaviors/propagation
+            3.) running dynamic_behavior())
+            4.) running dynamic_loading_after (if sp.with_loadings is set to True)
+
+        Parameters
+        ----------
+        proptype : str
+            Propagation the system is in. Skips if proptype="static."
+            Default is "dynamic"
+        """
+        if not self.t.executed_dynamic and proptype in ['dynamic', 'both'] and self.t.time > 0.0:
+            if self.sp.with_loadings and hasattr(self, 'dynamic_loading_before'):
+                self.dynamic_loading_before()
+            self.update_arch_behaviors("dynamic")
+            if hasattr(self, "dynamic_behavior"):
+                self.dynamic_behavior()
+            if self.sp.with_loadings and hasattr(self, 'dynamic_loading_after'):
+                self.dynamic_loading_after()
+            self.t.executed_dynamic = True
+
+    def update_static_behaviors(self, proptype="static"):
+        """
+        Run the static behaviors of the block, including loadings (if specified).
+
+        Runs in the defined order:
+            1.) updating contained architecture static behaviors/propagation
+            2.) running static_behavior())
+            3.) running static_loading (if sp.with_loadings is set to True)
+
+        Parameters
+        ----------
+        time : float
+            Time to update the static behavior at.
+        proptype : str
+            Propagation the system is in. Skips if proptype="dynamic."
+            If "static-once", static behaviors are only executed once. This option is
+            used when executing in architectures. Default is "static"
+        """
+        if proptype in ['static', 'both']:
+            active = True
+            self.set_mutables()
+            while active:
+                self.execute_static_behaviors()
+                # determine if propagation should continue due to new states
+                active = self.has_changed(update=True)
+        elif proptype in ['static-once']:
+            self.execute_static_behaviors()
+
+    def execute_static_behaviors(self):
+        """Execute static behaviors."""
+        self.update_arch_behaviors("static")
+        if hasattr(self, 'static_behavior'):
+            self.static_behavior()
+        if self.sp.with_loadings and hasattr(self, 'static_loading'):
+            self.static_loading()
+        self.t.executed_static = True
+
+    def inc_sim_time(self, **kwargs):
+        """Update the simulation time t_ind at the end of the timestep."""
+        if self.t.time > 0.0:
+            self.t.t_ind += 1
+            self.t.executing = False
+        for objname, obj in self.get_roles_as_dict().items():
+            if hasattr(obj, 'inc_sim_time'):
+                obj.inc_sim_time(**kwargs)
+
+    def cut_hist(self):
+        """Cut the simulation history to the current time."""
+        self.h.cut(end_ind=self.t.t_ind)
+
+    def __call__(self, time=None, proptype="both", faults=[], disturbances={},
+                 inc_at="all", end_of_simulation=False, copy=False):
+        """
+        Call the Simulable to propagate behavior at a single time-step.
+
+        Parameters
+        ----------
+        time : float/'end'
+            Time at which to simulate the Simulable. Default is None, which uses
+            self.t.time. If 'end' is provided, will be simulated until the end of
+            the simulation (sp.end_time or sp.end_condition)
+        proptype : str
+            Type of propagation step to update ('static', 'dynamic', or 'both')
+        faults : dict/list
+            Faults to inject during this propagation step. (to be injected at time.)
+            With structure ['fault1', 'fault2'...]
+        disturbances : dict
+            Variables to change during this propagation step. (to be injected at time.)
+            With structure {'var1': value}
+        inc_at : bool
+            When to increment the history. If "all", increment at each time the sim
+            iterates through. If "time", increment only at t==time.
+        end_of_simulation : bool
+            Whether this is the end of the simulation (and history should be cut).
+        copy : bool
+            If true, returns a copy of the model just before fault injection and
+            stops simulation
+        """
+        try:
+            if time == 'end':
+                time = self.sp.end_time
+            start_time, end_time = self.t.get_sim_times(time)
+            sim_times = self.sp.get_timerange(start_time, end_time)
+            for t in sim_times:
+                if t == end_time:
+                    if copy:
+                        return self.copy()
+                    if t != self.t.time:  # faults are only injected if not run yet
+                        self.set_vars(**disturbances)
+                        self.inject_faults(faults)
+                self.t.update_time(t)
+                if self.t.executing:
+                    self.update_stochastic_states()
+                    self.update_dynamic_behaviors(proptype=proptype)
+                    self.update_static_behaviors(proptype=proptype)
+                    self.set_sub_faults()
+                    if inc_at == "all" or (inc_at == "time" and t == time):
+                        self.inc_sim_time()
+                        self.h.log(self, self.t.t_ind, self.t.time)
+                    if self.sp.end_condition:
+                        if get_var(self, self.sp.end_condition)():
+                            break
+
+            if end_of_simulation:
+                self.cut_hist()
+        except Exception as e:
+            raise Exception("Error simulating " + self.name +
+                            " of class " + self.__class__.__name__ +
+                            " at time=" + str(self.t.time)) from e
 
 
 class Block(Simulable):
@@ -526,6 +862,10 @@ class Block(Simulable):
         # send flows from block level to arch level
         if 'arch' in self.roletypes:
             self.init_roletypes('arch', **self.create_arch_kwargs(**kwargs))
+        self.mut_kwargs = {role: kwargs.get(role)
+                           for role in self.get_roles(with_flex=False,
+                                                      with_immutable=False)
+                           if role in kwargs}
         self.check_flows(flows=flows)
         self.update_seed()
         # finally, allow for user-defined role/state changing
@@ -533,8 +873,12 @@ class Block(Simulable):
         self.init_hist(h=h)
         self.check_slots()
 
+    def create_repr(self, rolenames=['s', 'm'], **kwargs):
+        """Restricts default repr to state and mode."""
+        return super().create_repr(rolenames=rolenames, **kwargs)
+
     def init_block(self, **kwargs):
-        """Placeholder initialization method to set initial states etc."""
+        """Initilialization method to set initial states etc (placeholder)."""
         return
 
     def create_arch_kwargs(self, **kwargs):
@@ -545,16 +889,17 @@ class Block(Simulable):
         """
         archs = self.find_roletype_initiators("arch")
         b_flows = {f: getattr(self, f) for f in self.flows}
-        arch_kwargs = {}
+        spk = self.sp.get_sub_kwargs()
+        arch_kw = {}
         for k in archs:
             if k in kwargs and isinstance(kwargs[k], dict):
-                arch_kwargs[k] = {**kwargs[k], **{'flows': b_flows}, 'name': k, 'sp': self.sp}
+                arch_kw[k] = {**kwargs[k], **{'flows': b_flows}, 'name': k, 'sp': spk}
             elif k in kwargs and isinstance(kwargs[k], BaseObject):
-                arch_kwargs[k] = kwargs[k].copy(flows=b_flows, name=k, sp=self.sp)
+                arch_kw[k] = kwargs[k].copy(flows=b_flows, name=k, sp=spk)
             else:
-                arch_kwargs[k] = {'flows': b_flows, 'name': k, 'sp': self.sp}
+                arch_kw[k] = {'flows': b_flows, 'name': k, 'sp': spk}
 
-        return {'flows': b_flows, **arch_kwargs}
+        return {'flows': b_flows, **arch_kw}
 
     def check_flows(self, flows={}):
         """
@@ -589,36 +934,6 @@ class Block(Simulable):
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Block
-
-    def is_static(self):
-        """Check if Block has static execution step."""
-        return (getattr(self, 'behavior', False) or
-                getattr(self, 'static_behavior', False) or
-                any([getattr(self, r).is_static() for r in self.get_roles('arch')]))
-
-    def is_dynamic(self):
-        """Check if Block has dynamic execution step."""
-        return (hasattr(self, 'dynamic_behavior') or
-                any([getattr(self, r).is_dynamic() for r in self.get_roles('arch')]))
-
-    def __repr__(self):
-        """
-        Provide a repl-friendly string showing the states of the Block.
-
-        Returns
-        -------
-        repr: str
-            console string
-        """
-        if hasattr(self, 'name'):
-            fxnstr = getattr(self, 'name', '')+' '+self.__class__.__name__
-            for at in ['s', 'm']:
-                at_container = getattr(self, at, False)
-                if at_container:
-                    fxnstr = fxnstr+'\n'+"- "+at_container.__repr__()
-            return fxnstr
-        else:
-            return 'New uninitialized '+self.__class__.__name__
 
     def get_rand_states(self, auto_update_only=False):
         """
@@ -711,63 +1026,6 @@ class Block(Simulable):
         if hasattr(self, 'h'):
             cop.h = self.h.copy()
         return cop
-
-    def propagate(self, time, faults=[], disturbances={}, run_stochastic=False):
-        """
-        Inject and propagates faults through the graph at one time-step.
-
-        Parameters
-        ----------
-        time : float
-            The current time-step.
-        faults : dict
-            Faults to inject during this propagation step.
-            With structure ['fault1', 'fault2'...]
-        disturbances : dict
-            Variables to change during this propagation step.
-            With structure {'var1': value}
-        run_stochastic : bool
-            Whether to run stochastic behaviors or use default values. Default is False.
-            Can set as 'track_pdf' to calculate/track the probability densities of
-            random states over time.
-        """
-        # Step 0: Update block states with disturbances
-        for var, val in disturbances.items():
-            set_var(self, var, val)
-        if faults:
-            self.inject_faults(faults)
-
-        # Step 1: Run Dynamic Propagation Methods in Order Specified
-        # and Inject Faults if Applicable
-        if hasattr(self, 'dynamic_loading_before'):
-            self.dynamic_loading_before(time)
-        if self.is_dynamic():
-            self("dynamic", time=time, run_stochastic=run_stochastic)
-        if hasattr(self, 'dynamic_loading_after'):
-            self.dynamic_loading_after(time)
-
-        # Step 2: Run Static Propagation Methods
-        active = True
-        oldmutables = self.return_mutables()
-        flows_mutables = {f: fl.return_mutables() for f, fl in self.get_flows().items()}
-        while active:
-            if self.is_static():
-                self("static", time=time, run_stochastic=run_stochastic)
-
-            if hasattr(self, 'static_loading'):
-                self.static_loading(time)
-            # Check to see what flows now have new values and add connected functions
-            # (done for each because of communications potential)
-            active = False
-            newmutables = self.return_mutables()
-            if oldmutables != newmutables:
-                active = True
-                oldmutables = newmutables
-            for flowname, fl in self.get_flows().items():
-                newflowmutables = fl.return_mutables()
-                if flows_mutables[flowname] != newflowmutables:
-                    active = True
-                    flows_mutables[flowname] = newflowmutables
 
 
 if __name__ == "__main__":

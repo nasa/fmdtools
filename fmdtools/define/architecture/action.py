@@ -184,8 +184,6 @@ class ActionArchitectureFlowGraph(ActionArchitectureGraph):
         return set_aa_nx_types(aa, aa.flow_graph.copy())
 
 
-
-
 class ActionArchitecture(Architecture):
     """
     Construct the Action Sequence Graph with the given parameters.
@@ -207,25 +205,51 @@ class ActionArchitecture(Architecture):
             - 'until_false' means actions are simulated until all outgoing conditions are false
             - providing an integer places a limit on the number of actions that can be
             performed per timestep
-    proptype : 'static'/'dynamic'/'manual'
-        Which propagation step to execute the Action Sequence Graph in.
-        Default is 'dynamic'
-            - 'manual' means that the propagation is performed manually
-            (defined in a behavior method)
     per_timestep : bool
         Defines whether the action sequence graph is reset to the initial state each
         time-step (True) or stays in the current action (False). Default is False.
+
+    Examples
+    --------
+    >>> exaa = ExampleActionArchitecture()
+    >>> exaa
+    exampleactionarchitecture ExampleActionArchitecture
+    - t=Time(time=-0.1, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
+    FLOWS:
+    - exf=ExampleFlow(s=(x=1.0, y=1.0))
+    ACTS:
+    - act_1=ExampleAction()
+    - act_2=ExampleAction()
+    CONDS:
+    - act_1_done=<method act_1.indicate_done()>
+    >>> exaa()
+    >>> exaa.active_actions
+    {'act_1'}
+    >>> exaa()
+    >>> exaa
+    exampleactionarchitecture ExampleActionArchitecture
+    - t=Time(time=2.0, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
+    FLOWS:
+    - exf=ExampleFlow(s=(x=4.0, y=1.0))
+    ACTS:
+    - act_1=ExampleAction()
+    - act_2=ExampleAction()
+    CONDS:
+    - act_1_done=<method act_1.indicate_done()>
+    >>> exaa.active_actions
+    {'act_2'}
     """
 
     __slots__ = ['acts', 'conds', 'action_graph', 'flow_graph', 'active_actions', 'm']
     initial_action = "auto"
     state_rep = "finite-state"
     max_action_prop = "until_false"
-    proptype = 'dynamic'
     per_timestep = False
     default_track = ('acts', 'flows', 'active_actions', 'i')
-    flexible_roles = ['flows', 'acts', 'conds']
-    roletypes = ['container', 'flow', 'act', 'cond']
+    flexible_roles = ['flow', 'act', 'cond']
+    roletypes = ['container']
     rolename = 'aa'
     container_m = Mode
 
@@ -240,12 +264,14 @@ class ActionArchitecture(Architecture):
         return ActionArchitecture
 
     def is_static(self):
-        """Determine if static based on self.proptype."""
-        return self.proptype in ['static', 'both']
+        """Determine if static based on containment of static actions."""
+        any_static_actions = any([obj.is_static() for obj in self.acts.values()])
+        return super().is_static() or any_static_actions
 
     def is_dynamic(self):
-        """Determine if dynamic based on self.proptype."""
-        return self.proptype in ['dynamic', 'both']
+        """Determine if dynamic based on containment of dynamic actions."""
+        any_dynamic_actions = any([obj.is_dynamic() for obj in self.acts.values()])
+        return super().is_dynamic() or any_dynamic_actions
 
     def copy(self, **kwargs):
         cop = super().copy(**kwargs)
@@ -266,8 +292,9 @@ class ActionArchitecture(Architecture):
             initial_action = [self.initial_action]
         self.set_active_actions(initial_action)
 
-    def build(self, **kwargs):
-        super().build(**kwargs)
+    def build(self, construct_graph=False, **kwargs):
+        """Build the action graph."""
+        super().build(construct_graph=construct_graph, **kwargs)
         self.set_initial_active_action()
         if self.state_rep == 'finite-state' and len(self.active_actions) > 1:
             raise Exception("Cannot have more than one initial action with" +
@@ -346,59 +373,81 @@ class ActionArchitecture(Architecture):
         else:
             raise Exception("Invalid option for initial_action.")
 
-    def __call__(self, proptype, time, run_stochastic, dt):
-        """
-        Propagates behaviors through the ActionArchitecture.
+    def prop_dynamic(self):
+        """Propagate dynamic behavior through the ActionArchitecture graph.
 
-        Parameters
-        ----------
-        time : float, optional
-            Model time. The default is 0.
-        run_stochastic : bool/str
-            Whether to run the simulation using stochastic or deterministic behavior
-        proptype : str
-            Type of propagation step to update
-            ('behavior', 'static_behavior', or 'dynamic_behavior')
-        dt : float
-            Timestep to propagate over.
+        If self.per_timestep is set to True, this will also reset the active actions
+        each timestep to ensure the graph is reset to the initial active action.
         """
         if self.per_timestep:
             self.set_active_actions(self.initial_action)
             for action in self.active_actions:
                 self.acts[action].t.t_loc = 0.0
+        self.prop_graph('dynamic')
 
-        if proptype == self.proptype:
-            active_actions = self.active_actions
-            num_prop = 0
-            while active_actions:
-                new_active_actions = set(active_actions)
-                for action in active_actions:
-                    self.acts[action](time, run_stochastic, proptype=proptype, dt=dt)
-                    action_cond_edges = self.action_graph.out_edges(action, data=True)
-                    for act_in, act_out, atts in action_cond_edges:
-                        try:
-                            cond = self.conds[atts['name']]()
-                        except TypeError as e:
-                            raise TypeError("Poorly specified condition " +
-                                            str(atts['name'])+": ") from e
-                        if cond and getattr(self.acts[action], 'duration', 0.0)+dt <= self.acts[action].t.t_loc:
-                            self.acts[action].t.t_loc = 0.0
+    def prop_static(self):
+        """
+        Propagate static behavior through the ActionArchitecture graph.
+
+        Parameters
+        ----------
+        time : float
+            Model time.
+        """
+        self.prop_graph('static')
+
+    def inc_sim_time(self, **kwargs):
+        """Increment action simulation times to current."""
+        super().inc_sim_time(**{**kwargs, 'time': self.t.time})
+
+    def prop_graph(self, proptype):
+        """
+        Propagate behavior through the ActionArchitecture graph.
+
+        Parameters
+        ----------
+        proptype : str
+            Type of propagation to perform (static or dynamic). If proptype="static",
+            the static_behavior methods are called and local time is not incremented. If
+            proptype="dynamic", the dynamic behavior methods are run and local time is
+            incremented.
+        """
+        active_actions = self.active_actions
+        num_prop = 0
+        while active_actions:
+            new_active_actions = set(active_actions)
+            for action in active_actions:
+                act = self.acts[action]
+                act.t.update_time(self.t.time)
+                act(time=self.t.time, proptype=proptype, inc_at="")
+                action_cond_edges = self.action_graph.out_edges(action, data=True)
+                for act_in, act_out, atts in action_cond_edges:
+                    try:
+                        cond = self.conds[atts['name']]()
+                    except TypeError as e:
+                        raise TypeError("Poorly specified condition " +
+                                        str(atts['name'])+": ") from e
+                    if cond:
+                        if act.t.complete():
+                            act.t.t_loc = 0.0
                             new_active_actions.add(act_out)
                             new_active_actions.discard(act_in)
-                if len(new_active_actions) > 1 and self.state_rep == 'finite-state':
-                    raise Exception("Multiple active actions in a finite-state " +
-                                    "representation: "+str(new_active_actions))
-                num_prop += 1
-                if isinstance(self.proptype, int) and num_prop >= self.proptype:
-                    break
-                if new_active_actions == set(active_actions):
-                    break
-                else:
-                    active_actions = new_active_actions
-                if num_prop > 10000:
-                    raise Exception("Undesired looping in Function ASG for: "+self.name)
-            self.active_actions = active_actions
-        self.set_sub_faults()
+                        elif proptype in ['dynamic', 'both']:
+                            act.t.t_loc += self.acts[action].t.dt
+                    else:
+                        act.t.t_loc = 0.0
+
+            if len(new_active_actions) > 1 and self.state_rep == 'finite-state':
+                raise Exception("Multiple active actions in a finite-state " +
+                                "representation: "+str(new_active_actions))
+            num_prop += 1
+            if new_active_actions == set(active_actions):
+                break
+            else:
+                active_actions = new_active_actions
+            if num_prop > 10000:
+                raise Exception("Undesired looping in Function ASG for: "+self.name)
+        self.active_actions = active_actions
 
     def as_modelgraph(self, gtype=ActionArchitectureGraph, **kwargs):
         """Create and return the corresponding ModelGraph for the Object."""
@@ -410,8 +459,8 @@ class ExampleActionArchitecture(ActionArchitecture):
 
     def init_architecture(self, **kwargs):
         self.add_flow("exf", ExampleFlow)
-        self.add_act("act_1", ExampleAction, "exf", p={'x': 5.0})
-        self.add_act("act_2", ExampleAction, "exf", p={'x': 10.0})
+        self.add_act("act_1", ExampleAction, "exf", p={'x': 2.0})
+        self.add_act("act_2", ExampleAction, "exf", p={'x': 4.0})
         self.add_cond("act_1", "act_2", "act_1_done", self.acts['act_1'].indicate_done)
 
 

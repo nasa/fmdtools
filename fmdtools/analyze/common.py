@@ -40,6 +40,7 @@ import os
 import matplotlib.pyplot as plt
 import inspect
 from scipy.stats import bootstrap
+from fmdtools.define.base import filter_kwargs
 
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -91,12 +92,6 @@ def to_include_keys(to_include):
         return tuple(keys)
 
 
-def get_func_kwargs(func, **kwargs):
-    """Get keyword arguments for a function."""
-    params = inspect.signature(func).parameters
-    return {k: v for k, v in kwargs.items() if k in params and v is not None}
-
-
 def diff(val1, val2, difftype='bool'):
     """
     Find inconsistent states between val1, val2.
@@ -137,8 +132,10 @@ def file_check(filename, overwrite):
     if "/" in filename:
         last_split_index = filename.rfind("/")
         foldername = filename[:last_split_index]
-        if not os.path.exists(foldername):
+        try:
             os.makedirs(foldername)
+        except FileExistsError:
+            0  # in this case, just don't make the directory
 
 
 def auto_filetype(filename, filetype="", filetypes=['npz', 'csv', 'json']):
@@ -282,7 +279,7 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
                       r_dtype=r_dtype, r_norm=r_norm, **kwargs)
     else:
         vals = metric_preamble(data, dtype, rates, r_dtype, r_norm)
-        return method(vals, *args, **get_func_kwargs(method, **kwargs, axis=axis))
+        return method(vals, *args, **filter_kwargs(method, **kwargs, axis=axis))
 
 
 def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
@@ -320,18 +317,18 @@ def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
     >>> calc_metric_ci([[1,2,3], [2,3,4]], rates=[0.01, 1.0], method=np.sum)
     (array([2.01, 3.02, 4.03]), array([0.02, 0.04, 0.06]), array([4., 6., 8.]))
     """
-    bs_kwar = get_func_kwargs(bootstrap, **kwargs)
+    bs_kwar = filter_kwargs(bootstrap, **kwargs)
     if interval is not None:
         bs_kwar['confidence_level'] = interval*0.01
 
-    vals = metric_preamble(data, **get_func_kwargs(metric_preamble, **kwargs))
+    vals = metric_preamble(data, **filter_kwargs(metric_preamble, **kwargs))
     if len(np.shape(vals)) > 1:
         val = vals[axis, 0]
     else:
         val = np.array(vals).flatten()[0]
     if "weights" in kwargs and kwargs['weights'] is not None:
         raise Exception("Weights not able to be used w- bootstrap--use rates instead.")
-    met_val = method(vals, axis=axis, **get_func_kwargs(method, **kwargs))
+    met_val = method(vals, axis=axis, **filter_kwargs(method, **kwargs))
     if not np.all(vals == val):
         bs = bootstrap([vals], method, axis=axis, **bs_kwar)
         return met_val, bs.confidence_interval.low, bs.confidence_interval.high

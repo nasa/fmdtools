@@ -85,6 +85,10 @@ class BaseScenObj(dataobject, readonly=True, mapping=True):
         existing_kwargs = asdict(self)
         return self.__class__(**{**existing_kwargs, **kwargs})
 
+    def asdict(self):
+        """Return as dictionary."""
+        return asdict(self)
+
 
 class Injection(BaseScenObj):
     """
@@ -205,7 +209,15 @@ class BaseScenario(BaseScenObj):
 
     def start_time(self):
         """Get the first time in the scenario."""
-        return np.min(self.sequence)
+        return np.min([*self.sequence])
+
+    def get_times(self):
+        """Get time that the scenario branches off."""
+        return [self.start_time()]
+
+    def scenarios(self):
+        """Return list with scenario."""
+        return [self]
 
 
 class Scenario(BaseScenario):

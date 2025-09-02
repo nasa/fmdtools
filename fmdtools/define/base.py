@@ -57,8 +57,11 @@ def get_var(obj, var):
 
     Parameters
     ----------
+    obj : Object
+        Object to get the value from.
     var : str/list
-        list specifying the attribute (or sub-attribute of the object
+        list specifying the attribute (or sub-attribute of the object)
+
     Returns
     -------
     var_value: any
@@ -335,7 +338,7 @@ def nan_to_x(metric, x=0.0):
 
 def gen_timerange(start_time, end_time, dt=1.0, min_r=7):
     """Generate the times in a given interval given the timestep dt."""
-    return np.round(np.arange(start_time, end_time + dt, dt), min_r)
+    return np.round(np.arange(start_time, end_time + np.power(10.0, -min_r), dt), min_r)
 
 
 def get_code_attrs(obj):
@@ -373,6 +376,76 @@ def get_code_attrs(obj):
         if str(obj.__doc__) not in source or 'fmdtools.' in objcl.__module__:
             docs = ""
     return {'source': source, 'code': code, 'docs': docs}
+
+
+def get_repr(obj, name, with_classname=True, with_name=False, one_line=True):
+    """
+    Get the appropriate repr for the object from a larger object.
+
+    Parameters
+    ----------
+    obj : object
+        Object to get repr from.
+    name : str
+        Name of the object in the larger object.
+    with_classname : bool, optional
+        Whether to include the classname of the object. The default is True.
+    with_name : bool, optional
+        Whether to include the name of the object. The default is False.
+    one_line : bool, optional
+        Whether the repr should fit on one line. The default is True.
+
+    Returns
+    -------
+    objrep: str
+        String to use for the repr of the object.
+    """
+    if hasattr(obj, 'create_repr'):
+        objrepr = obj.create_repr(with_classname=with_classname, with_name=with_name,
+                                  one_line=one_line)
+    elif inspect.isfunction(obj):
+        objrepr = " <function " + obj.__name__ + "()>"
+    elif inspect.ismethod(obj):
+        objrepr = obj.__name__+"()>"
+        if hasattr(obj.__self__, 'name'):
+            objrepr = obj.__self__.name+"."+objrepr
+        objrepr = "<method "+objrepr
+    else:
+        objrepr = obj.__repr__()
+    return name+"="+objrepr
+
+
+def get_dict_repr(objdict, one_line=True, with_classname=None):
+    """
+    Get repr for a dict of items in a larger object.
+
+    Parameters
+    ----------
+    objdict : dict
+        Dict of objects to get the repr for.
+    one_line : bool, optional
+        Whether the repr string should fit on one line. The default is True.
+    with_classname : bool, optional
+        Whether to include classnames. The default is None, which includes only if
+        one_line is False.
+
+    Returns
+    -------
+    dict_rep : str
+        String to use for the repr of the dict.
+    """
+    if with_classname is None:
+        with_classname = not one_line
+    objstrs = [get_repr(obj, name, one_line=True, with_classname=with_classname)
+               for name, obj in objdict.items()]
+    if one_line:
+        return "("+", ".join(objstrs)+")"
+    else:
+        objstrs = [fstr[:115] + '...' if len(fstr) > 120 else fstr
+                   for fstr in objstrs]
+        if len(objstrs) > 15:
+            objstrs = objstrs[:15]+["...("+str(len(objstrs))+' total)\n']
+        return "\n- "+"\n- ".join(objstrs)
 
 
 def remove_para(source):
@@ -448,3 +521,16 @@ def get_inheritance(obj):
                       if b is not object and b is not dataobject])
     else:
         return (obj.__class__, )
+
+
+def filter_kwargs(obj, **kwargs):
+    """
+    Get keyword arguments just related to the method being called.
+
+    May not work with **kwargs.
+    """
+    if inspect.isclass(obj) and hasattr(obj, "__fields__"):
+        params = obj.__fields__
+    else:
+        params = inspect.signature(obj).parameters
+    return {k: v for k, v in kwargs.items() if k in params and v is not None}

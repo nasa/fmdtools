@@ -52,7 +52,7 @@ class WatState(State):
 
 
 class Liquid(Flow):
-    __slots__ = ()
+
     container_s = WatState
 
 
@@ -62,7 +62,7 @@ class SigState(State):
 
 
 class Signal(Flow):
-    __slots__ = ()
+
     container_s = SigState
 
 
@@ -78,14 +78,13 @@ class TransportLiquidMode(Mode):
 
 class ImportLiquid(Function):
 
-    __slots__ = ('sig', 'watout')
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
     flow_sig = Signal
     flow_watout = Liquid
     flownames = {'wat_in_1': 'watout', 'valve1_sig': 'sig'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if not self.m.has_fault('stuck'):
             if self.sig.s.action >= 2:
                 self.s.amt_open = 2
@@ -98,14 +97,14 @@ class ImportLiquid(Function):
 
 
 class ExportLiquid(Function):
-    __slots__ = ('sig', 'watin')
+
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
     flow_sig = Signal
     flow_watin = Liquid
     flownames = {'wat_out_2': 'watin', 'valve2_sig': 'sig'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if not self.m.has_fault('stuck'):
             if self.sig.s.action >= 1:
                 self.s.amt_open = 1
@@ -122,12 +121,12 @@ class GuideLiquidMode(Mode):
 
 
 class GuideLiquid(Function):
-    __slots__ = ('watin', 'watout')
+
     flow_watin = Liquid
     flow_watout = Liquid
     container_m = GuideLiquidMode
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault('clogged'):
             self.watin.s.put(rate=0.0)
             self.watout.s.put(effort=0.0)
@@ -140,12 +139,12 @@ class GuideLiquid(Function):
 
 
 class GuideLiquidIn(GuideLiquid):
-    __slots__ = ()
+
     flownames = {'wat_in_1': 'watin', 'wat_in_2': 'watout'}
 
 
 class GuideLiquidOut(GuideLiquid):
-    __slots__ = ()
+
     flownames = {'wat_out_1': 'watin', 'wat_out_2': 'watout'}
 
 
@@ -159,7 +158,7 @@ class StoreLiquidMode(Mode):
 
 
 class StoreLiquid(Function):
-    __slots__ = ('watin', 'watout', 'sig')
+
     container_s = StoreLiquidState
     container_m = StoreLiquidMode
     flow_watin = Liquid
@@ -167,7 +166,7 @@ class StoreLiquid(Function):
     flow_sig = Signal
     flownames = {'wat_in_2': 'watin', 'wat_out_1': 'watout', 'tank_sig': 'sig'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.s.level >= 20.0:
             self.watin.s.rate = 0.0 * self.watin.s.effort
             self.watout.s.effort = 2.0 * self.watin.s.effort
@@ -189,7 +188,7 @@ class StoreLiquid(Function):
         else:
             self.s.net_flow = self.watin.s.rate - self.watout.s.rate
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.s.inc(level=self.s.net_flow*self.t.dt)
         self.s.limit(level=(0.0, 25))
         # self.s.level = self.s.level + self.s.net_flow*self.dt
@@ -228,7 +227,7 @@ class HumanASG(ActionArchitecture):
 
 
 class HumanActions(Function):
-    __slots__ = ('valve1_sig', 'tank_sig', 'valve2_sig')
+
     container_p = HumanParam
     container_m = Mode
     arch_aa = HumanASG
@@ -236,7 +235,7 @@ class HumanActions(Function):
     flow_tank_sig = Signal
     flow_valve2_sig = Signal
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """
         Some testing code for ASG behavior and copying, etc. Raises exceptions when
         flows aren't copied correctly
@@ -271,7 +270,7 @@ class LookMode(HumanErrorMode):
 
 
 class Look(Action):
-    __slots__ = ()
+
     container_m = LookMode
 
     def looked(self):
@@ -293,12 +292,12 @@ class DetectMode(HumanErrorMode):
 
 
 class Detect(Action):
-    __slots__ = ('tank_sig', 'detect_sig')
+
     container_m = DetectMode
     flow_detect_sig = Signal
     flow_tank_sig = Signal
 
-    def behavior(self, time):
+    def dynamic_behavior(self):
         if self.m.has_fault('not_detected'):
             self.detect_sig.s.put(indicator=0, action=0)
         elif self.m.has_fault('false_high'):
@@ -331,7 +330,7 @@ class ReachMode(HumanErrorMode):
 
 
 class Reach(Action):
-    __slots__ = ()
+
     container_m = ReachMode
 
     def reached(self):
@@ -346,7 +345,7 @@ class GraspMode(Mode):
 
 
 class Grasp(Action):
-    __slots__ = ()
+
     container_m = GraspMode
 
     def grasped(self):
@@ -367,13 +366,13 @@ class TurnMode(HumanErrorMode):
 
 
 class Turn(Action):
-    __slots__ = ('detect_sig', 'valve1_sig', 'valve2_sig')
+
     container_m = TurnMode
     flow_detect_sig = Signal
     flow_valve1_sig = Signal
     flow_valve2_sig = Signal
 
-    def behavior(self, time):
+    def dynamic_behavior(self):
         if self.m.has_fault('cannot'):
             turned = 0
         else:
@@ -393,7 +392,7 @@ class TankParam(Parameter, readonly=True):
 
 
 class Tank(FunctionArchitecture):
-    __slots__ = ()
+
     container_p = TankParam
     default_sp = dict(phases=(('na', 0, 0), ('operation', 1, 20)),
                       end_time=20, units='min')
@@ -416,7 +415,7 @@ class Tank(FunctionArchitecture):
         self.add_fxn('human', HumanActions, 'valve1_sig', 'tank_sig',
                      'valve2_sig', aa={'reacttime': self.p.reacttime})
 
-    def find_classification(self, scen, hist):
+    def classify(self, scen={}, hist={}, **kwargs):
         # here we define failure in terms of the water level getting too low or too high
         if any(self.h.fxns.store_water.s.level >= 20):
             totcost = 1000000
@@ -433,6 +432,8 @@ if __name__ == '__main__':
     import fmdtools.sim.propagate as propagate
     from fmdtools.sim.sample import FaultDomain, FaultSample
 
+    mdl = Tank()
+
     mdl = Tank(track='all')
 
     endclass, mdlhist = propagate.one_fault(mdl, 'human.aa.acts.look', 'not_visible', time=2,
@@ -443,37 +444,37 @@ if __name__ == '__main__':
     fig, ax = mg.draw_from(10, mdlhist)
 
     # nominal run
-    endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass', 'graph'])
+    res, mdlhist = propagate.nominal(mdl, to_return=['classify', 'graph'])
     mdlhist.plot_line("fxns.store_water.s.level")
-    endresults.graph.draw()
+    res.tend.graph.draw()
 
     # faulty run
     endres, mdlhist = propagate.one_fault(
-        mdl, 'store_water', 'leak', time=2, desired_result='graph')
+        mdl, 'store_water', 'leak', time=2, to_return='graph')
     mdlhist.plot_line("fxns.store_water.s.level",
                       title='Leak Response', time_slice=2)
-    endres.graph.draw(title="leak response at time=end")
+    endres.store_water_leak_t2.tend.graph.draw(title="leak response at time=end")
 
     resgraph, mdlhist = propagate.one_fault(
-        mdl, 'human.aa.acts.detect', 'false_high', time=2, desired_result='graph')
+        mdl, 'human.aa.acts.detect', 'false_high', time=2, to_return='graph')
 
     mdlhist.plot_line("fxns.store_water.s.level",
                       title='detect_false_high', time_slice=2)
-    resgraph.graph.draw(title='detect_false_high, t=2')
+    resgraph.get_faulty().tend.graph.draw(title='detect_false_high, t=2')
 
     resgraph, mdlhist = propagate.one_fault(
-        mdl, 'human.aa.acts.turn', 'wrong_valve', time=2, desired_result='graph')
+        mdl, 'human.aa.acts.turn', 'wrong_valve', time=2, to_return='graph')
 
     mdlhist.plot_line("fxns.store_water.s.level",
                       title='turn_wrong_valve', time_slice=2)
-    resgraph.graph.draw(title='turn_wrong_valve, t=2')
+    resgraph.get_faulty().tend.graph.draw(title='turn_wrong_valve, t=2')
 
     mdl = Tank(p=TankParam(reacttime=2), sp=dict(dt=1.0))
     resgraph, mdlhist = propagate.one_fault(
-        mdl, 'store_water', 'leak', time=3, desired_result='graph')
+        mdl, 'store_water', 'leak', time=3, to_return='graph')
     mdlhist.plot_line("fxns.store_water.s.level",
                       title='Leak Response', time_slice=2)
-    resgraph.graph.draw(title='turn_wrong_valve, t=end')
+    resgraph.get_faulty().tend.graph.draw(title='turn_wrong_valve, t=end')
 
     # run all faults - note: all faults get caught!
     endclasses, hist = propagate.single_faults(mdl)

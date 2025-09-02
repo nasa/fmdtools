@@ -40,8 +40,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import t_key, nest_dict, is_numeric, is_bool
-from fmdtools.analyze.common import to_include_keys
+from fmdtools.define.base import t_key, nest_dict, is_numeric, is_bool, is_iter
+from fmdtools.analyze.common import to_include_keys, create_indiv_filename
 from fmdtools.analyze.common import calc_metric, calc_metric_ci, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
@@ -49,6 +49,7 @@ from fmdtools.analyze.common import set_empty_multiplots
 from fmdtools.analyze.common import auto_filetype, file_check, load_folder
 
 import numpy as np
+import copy
 import pandas as pd
 import sys
 import os
@@ -92,10 +93,11 @@ def clean_resultdict_keys(resultdict_dirty):
 
 def get_dict_attr(dict_in, des_class, *attr):
     """Get attributes *attr from a given nested dict dict_in of class des_class."""
+    sub_dict = dict_in[attr[0]]
     if len(attr) == 1:
-        return dict_in[attr[0]]
+        return sub_dict
     else:
-        return get_dict_attr(des_class(dict_in[attr[0]]), des_class, *attr[1:])
+        return get_dict_attr(des_class(sub_dict), des_class, *attr[1:])
 
 
 def fromdict(resultclass, inputdict):
@@ -123,6 +125,21 @@ def check_include_error(result, to_include):
     if to_include not in ('all', 'default') and to_include not in result:
         raise Exception("to_include key " + to_include +
                         " not in result keys: " + str(result.keys()))
+
+
+def clean_to_return(to_return):
+    """Clean the to_return dictionary."""
+    to_return = copy.deepcopy(to_return)
+    if not isinstance(to_return, dict):
+        to_return = {"end": to_return}
+
+    for k, v in to_return.items():
+        if not isinstance(v, dict):
+            if is_iter(v):
+                to_return[k] = {i: None for i in v}
+            else:
+                to_return[k] = {v: None}
+    return to_return
 
 
 class Result(UserDict):
@@ -337,7 +354,15 @@ class Result(UserDict):
         """Get attribute (custom method)."""
         try:
             args = argstr.split(".")
-            return get_dict_attr(self.data, self.__class__, *args)
+            if args[0] == 'faulty':
+                obj = self.get_faulty()
+                if len(args) > 1:
+                    args = args[1:]
+                else:
+                    return obj
+            else:
+                obj = self
+            return get_dict_attr(obj.data, self.__class__, *args)
         except KeyError:
             try:
                 return self.all_with(argstr)
@@ -550,6 +575,11 @@ class Result(UserDict):
                             ", resulting grouped result is empty")
         return group_hist
 
+    def get_faulty(self):
+        """Get just the results related to fault scenarios from the Result."""
+        faulty = self.get_default_comp_groups()['faulty']
+        return self.get(*faulty).flatten()
+
     def get_default_comp_groups(self):
         """
         Get a dict of nominal and faulty scenario keys from the Result.
@@ -605,7 +635,7 @@ class Result(UserDict):
                 newname = prevname+"."+att
             else:
                 newname = att
-            if isinstance(val, Result):
+            if isinstance(val, self.__class__):
                 new_to_include = get_sub_include(att, to_include)
                 if new_to_include:
                     val.flatten(newhist, newname, new_to_include)
@@ -685,6 +715,9 @@ class Result(UserDict):
         """
         import json
         import csv
+        if result_id:
+            filename = create_indiv_filename(filename, result_id, splitchar="/")
+
         file_check(filename, overwrite)
 
         variable = self
@@ -736,7 +769,7 @@ class Result(UserDict):
     def create_simple_fmea(self, *metrics):
         """Make a simple FMEA-stype table of the metrics in the endclasses
         of a list of fault scenarios run. If metrics not provided, returns all"""
-        nested = {k: {**v.endclass} for k, v in self.nest(levels=1).items()}
+        nested = {k: {**v.tend.classify} for k, v in self.nest(levels=1).items()}
         tab = pd.DataFrame.from_dict(nested).transpose()
         if not metrics:
             return tab

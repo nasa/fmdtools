@@ -16,12 +16,12 @@ import unittest
 
 class OverFxn(Function):
     """Test function containing a FunctionArchitecture."""
-    __slots__ = ('fa')
+
     arch_fa = ExFxnArch
     container_s = ExampleState
     container_m = Mode
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.s.assign(self.fa.flows['exf'].s)
 
 
@@ -31,11 +31,11 @@ class define_Tests(unittest.TestCase):
 
     def test_propagation(self):
         """Check that contained functionarch propagates as expected."""
-        self.mdl.propagate(1.0)
+        self.mdl(time=1.0)
         # should match values from functionarch propagation, see docstrings
-        self.assertEqual(self.mdl.s.x, 4.0)
-        self.mdl.propagate(2.0)
-        self.assertEqual(self.mdl.s.x, 10.0)
+        self.assertEqual(self.mdl.s.x, 2.0)
+        self.mdl(time=2.0)
+        self.assertEqual(self.mdl.s.x, 6.0)
 
     def test_fault_injection(self):
         """Check that faults get injected into contained functionarch."""
@@ -52,11 +52,20 @@ class define_Tests(unittest.TestCase):
         self.assertFalse(hist.faulty.fa.fxns.ex_fxn.m.faults.no_charge[4])
         self.assertTrue(hist.faulty.fa.fxns.ex_fxn.m.faults.no_charge[5])
 
+    def test_arg_passdown(self):
+        """Check that function args get passed to functionarch."""
+        oa = OverFxn(fa={'p': {'x': 3.0}})
+        self.assertEqual(oa.fa.p.x, 3.0)
+        oa2 = oa.new()
+        self.assertEqual(oa2.fa.p.x, 3.0)
+
 
 if __name__ == '__main__':
+    oa = OverFxn(fa={'p': {'x': 3.0}})
 
     oa = OverFxn()
     res, hist = propagate.one_fault(oa, "overfxn.fa.fxns.ex_fxn", "no_charge", time=5.0)
+
 
     # oa.inject_faults(['ex_fxn_no_charge'])
     # oa.inject_faults({'overfxn': {'ex_fxn': 'no_charge'}})

@@ -72,20 +72,21 @@ class ModelGraphTests(unittest.TestCase):
 
     def test_fault_plot(self):
         er, mh = propagate.one_fault(self.mdl, 'move_water', 'short', time=10,
-                                     desired_result=['graph', 'endclass', 'endfaults'])
-        er.graph.set_node_styles(degraded={}, faulty={})
-        er.graph.draw(title="Should show Faults (color edges) as well as"
-                              + "degradations (orange color)")
+                                     to_return=['graph', 'classify', 'faults'])
+        graph = er.faulty.tend.graph
+        graph.set_node_styles(degraded={}, faulty={})
+        graph.draw(title="Should show Faults (color edges) as well as"
+                   + "degradations (orange color)")
         degraded = {'node_color': 'green'}
         faulty = {'node_size': 1500, 'edgecolors': 'purple'}
-        er.graph.set_node_styles(degraded=degraded, faulty=faulty)
-        er.graph.draw(title="Should be identical but faulty nodes are large"
-                              + " and have purple edges while degradations are green")
+        graph.set_node_styles(degraded=degraded, faulty=faulty)
+        graph.draw(title="Should be identical but faulty nodes are large"
+                   + " and have purple edges while degradations are green")
 
     def test_result_from_plot(self):
-        des_res = ['graph', 'endclass', 'endfaults']
+        des_res = ['graph', 'classify', 'faults']
         er, hist = propagate.one_fault(self.mdl, 'move_water', 'short',
-                                       time=10, track='all', desired_result=des_res)
+                                       time=10, track='all', to_return=des_res)
         mg = FunctionArchitectureGraph(self.mdl)
         mg.draw_from(11, hist)
         mg.draw_graphviz_from(11, hist, disp=False)
@@ -103,7 +104,7 @@ if __name__ == '__main__':
     mdl = Pump()
     des_res = ['graph', 'endclass', 'endfaults']
     endresults, mdlhist = propagate.one_fault(mdl, 'move_water', 'short', time=10,
-                                              desired_result=des_res, track='all')
+                                              to_return=des_res, track='all')
 
     # p = endresults.graph.move_nodes()
     # endresults.graph.set_node_styles(degraded={}, faulty={})

@@ -63,7 +63,7 @@ class taxiway_model(FunctionArchitecture):
                 p=self.p.assetparams,
             )
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, **kwargs):
         num_cycled = len(
             [f for f, fxn in self.fxns.items() if f != "atc" and fxn.s.cycled]
         )
@@ -142,11 +142,11 @@ if __name__ == "__main__":
                                   "asset_assignment":"asset_assignment"}}
     req_args = {'include_glob':False, "ports_only":True}
     endresults, mdlhist = prop.sequence(mdl, faultseq={7:{"atc": ["wrong_land_command"]}, 9: {"ua2":["lost_sight"]}}, 
-                                         desired_result={10:{"graph.flows.requests":(CommsFlowGraph, req_args)},
-                                                         11:{"graph.flows.requests":(CommsFlowGraph, req_args),
-                                                            "graph.flows.ground":(MultiFlowGraph, ground_args)},
-                                                         19:{"graph.flows.requests":{'include_glob':False, "ports_only":True}},
-                                                         20:["graph"], 120:"endclass"})
+                                         to_return={10:{"graph.flows.requests":(CommsFlowGraph, req_args)},
+                                                    11:{"graph.flows.requests":(CommsFlowGraph, req_args),
+                                                        "graph.flows.ground":(MultiFlowGraph, ground_args)},
+                                                    19:{"graph.flows.requests":{'include_glob':False, "ports_only":True}},
+                                                    20:["graph"], 120:"endclass"})
     ind_hist = create_fault_scen_metrics(mdlhist)
     fig, ax = ind_hist.plot_line("degraded_fields",
                                  "cycled_assets",
@@ -159,7 +159,7 @@ if __name__ == "__main__":
         mdl,
         "ma3",
         "lost_sight",
-        desired_result={
+        to_return={
             93: {"graph.flows.location": {"include_glob": False}},
             110: {"graph.flows.location": {"include_glob": False}},
             20: ["graph"],
@@ -203,9 +203,8 @@ if __name__ == "__main__":
 
     endresults, mdlhist = prop.sequence(
         mdl,
-        {8: {"atc": ["single_wrong_command"]}, 10: {"ua2": ["lost_sight"]}},
-        {},
-        desired_result={
+        faultseq = {8: {"atc": ["single_wrong_command"]}, 10: {"ua2": ["lost_sight"]}},
+        to_return={
             11: {"graph.flows.requests": {}},
             20: ["graph"],
             120: "endclass",
@@ -221,7 +220,6 @@ if __name__ == "__main__":
                                  "assets_without_sight",
                                  "faulty_functions", time_slice=[8, 10])
 
-    endresults.get("t120p0")
 
     degraded = mdlhist.get_degraded_hist(*mdl.fxns, *mdl.flows)
     faulty = mdlhist.get_faulty_hist(*mdl.fxns)
@@ -229,7 +227,7 @@ if __name__ == "__main__":
     # rd.graph.result_from(mdl, reshists['faulty'], 10, pos=pos)
     # rd.graph.result_from(mdl, reshists['faulty'], 25, pos=pos)
 
-    endresults.t11p0.graph.flows.requests.draw()
-    endresults.t20p0.graph.draw()
+    endresults.sequence.t11p0.graph.flows.requests.draw()
+    endresults.sequence.t20p0.graph.draw()
 
 

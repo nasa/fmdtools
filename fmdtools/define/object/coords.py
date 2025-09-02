@@ -60,35 +60,6 @@ class CoordsParam(Parameter):
         Coordinate resolution
     gapwidth : float
         Width between coordinate cells (if any). Blocksize is inclusive of this width.
-
-    Other Modifiers
-    ---------------
-    feature_featurename : tuple
-        Tuple (datatype, defaultvalue) defining immutable grid features to instantiate
-        as arrays.
-    state_statename : tuple
-        Tuple (datatype, defaultvalue) defining mutable grid features to instantiate
-        as arrays.
-    collect_collectionname : tuple
-        Tuple (propertyname, value, comparator) defining a collection of points to
-        instantiate as a list, where the tuple is arguments to Coords.find_all_prop or
-        to find_all_props
-    point_pointname: tuple
-        Tuple (x, y) referring to a point in the grid with a given name.
-
-    Examples
-    --------
-    Defining the following classes will define a grid with a, v features, an
-    h state, a point "start", and a "high_v" collection:
-
-    >>> class ExampleCoordsParam(CoordsParam):
-    ...     feature_a: tuple = (bool, False)
-    ...     feature_v: tuple = (float, 1.0)
-    ...     state_st: tuple = (float, 0.0)
-    ...     point_start: tuple = (0.0, 0.0)
-    ...     collect_high_v: tuple = ("v", 5.0, np.greater)
-    ...     collect_hi_v_not_a: tuple = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
-    >>> ex = ExampleCoordsParam()
     """
 
     x_size: ClassVar[int] = 10
@@ -96,8 +67,28 @@ class CoordsParam(Parameter):
     blocksize: ClassVar[float] = 10.0
     gapwidth: ClassVar[float] = 0.0
 
+    def create_repr(self, fields=['x_size', 'y_size', 'blocksize', 'gapwidth'],
+                    **kwargs):
+        return super().create_repr(fields=fields, **kwargs)
 
-class DefaultCoordsParam(Parameter):
+    def create_grid(self, dtype, default):
+        """Create an array with datatype dtype and default value default."""
+        return np.full((self.x_size, self.y_size), default, dtype=dtype)
+
+    def create_collection(self, *args):
+        return self.create_grid(bool, True)
+
+    def create_points(self, *points):
+        return points
+
+    def create_grid_mesh(self):
+        """Create array of grid indexes."""
+        unscaled_grid = np.array([[(i, j)
+                                   for j in range(0, self.y_size)]
+                                  for i in range(0, self.x_size)])
+        return unscaled_grid * self.blocksize
+
+class DefaultCoordsParam(CoordsParam):
     """Default Parameter for Coords (with no states/features)."""
 
     x_size: int = 10
@@ -123,17 +114,8 @@ class BaseCoords(BaseObject):
 
     def init_grid_mesh(self):
         """Initialize grid and points arrays."""
-        self.grid = np.array([[(i, j) for j in range(0, self.p.y_size)]
-                             for i in range(0, self.p.x_size)]) * self.p.blocksize
+        self.grid = self.p.create_grid_mesh()
         self.pts = self.grid.reshape(int(self.grid.size/2), 2)
-
-    def add_property_arrays(self, properties):
-        """Add arrays for the given properties of the mesh."""
-        for propname, prop in properties.items():
-            prop_type, prop_default = prop
-            proparray = np.full((self.p.x_size, self.p.y_size),
-                                prop[1], dtype=prop[0])
-            setattr(self, propname, proparray)
 
     def find_all_props(self, *args):
         """
@@ -1016,31 +998,64 @@ class Coords(BaseCoords):
 
     Class Variables/Modifiers
     ---------------
-    init_p: CoordsParam
+    container_p: CoordsParam
         Parameter controlling default grid matrix (see CoordsParam), along with other
         properties of interest. Sets the .p container.
-    init_r: Rand
+    container_r: Rand
         Random number generator. sets the .r container.
     init_properties: method
         Method that initializes the (non-default) properties of the Coords.
 
+    Other Modifiers
+    ---------------
+    feature_featurename : tuple
+        Tuple (datatype, defaultvalue) defining immutable grid features to instantiate
+        as arrays.
+    state_statename : tuple
+        Tuple (datatype, defaultvalue) defining mutable grid features to instantiate
+        as arrays.
+    collection_collectionname : tuple
+        Tuple (propertyname, value, comparator) defining a collection of points to
+        instantiate as a list, where the tuple is arguments to Coords.find_all_prop or
+        to find_all_props
+    point_pointname: tuple
+        Tuple (x, y) referring to a point in the grid with a given name.
+
     Examples
     --------
-    >>> class ExampleCoords(Coords):
-    ...    container_p = ExampleCoordsParam
-    ...    def init_properties(self, *args, **kwargs):
-    ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
+    Defining the following classes will define a grid with a, v features, an
+    h state, a point "start", and a "high_v" collection:
 
-    Instantiating a class with (see ExampleCoordsParam):
+    Examples
+    --------
+    Instantiating a class with:
 
     - immutable arrays a and v,
     - mutable array st,
     - point start at (0.0), and
     - collection high made up of all points where v > 10.0.
 
+    >>> class ExampleCoords(Coords):
+    ...    feature_a = (bool, False)
+    ...    feature_v = (float, 1.0)
+    ...    state_st = (float, 0.0)
+    ...    point_start = (0.0, 0.0)
+    ...    collection_high_v = ("v", 5.0, np.greater)
+    ...    collection_hi_v_not_a = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
+    ...    default_p = {'blocksize': 10.0}
+    ...    def init_properties(self, *args, **kwargs):
+    ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
+
     As shown, features are normal numpy arrays set to readonly:
 
     >>> ex = ExampleCoords()
+    >>> ex
+    examplecoords ExampleCoords
+    - p=DefaultCoordsParam(x_size=10, y_size=10, blocksize=10.0, gapwidth=0.0)
+    - r=Rand(seed=42)
+    - COLLECTIONS: high_v(bool), hi_v_not_a(bool)
+    - FEATURES: a(bool), v(float64)
+    - STATES: st(float64)
     >>> type(ex.a)
     <class 'numpy.ndarray'>
     >>> np.size(ex.a)
@@ -1086,24 +1101,38 @@ class Coords(BaseCoords):
            [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])
     """
 
-    __slots__ = ("r", "points", "collections", "features", "states",
-                 "properties", "_args", "_kwargs")
+    __slots__ = ("r", "properties", "_args", "_kwargs")
     container_r = Rand
-    roledicts = ['points', 'collections', 'features', 'states']
+    roletypes = ['container',  'point', 'collection', 'feature', 'state']
     immutable_roles = BaseObject.immutable_roles + \
         ['points', 'collections', 'features']
-    default_track = ["r", "states"]
+    default_track = ["r", "state"]
 
     def __init__(self, *args, track='default', **kwargs):
         """Initialize class with properties in init_properties."""
         self._args = args
         self._kwargs = kwargs
-        super().__init__(*args, track=[], **kwargs)
+        super().__init__(*args, roletypes=['container'], track=[], **kwargs)
         self.add_coords_roles()
-        self.add_property_arrays(self.properties)
         self.init_properties(*args, **kwargs)
         self.build()
         self.init_track(track)
+
+    def __repr__(self):
+        return self.create_repr(rolenames=["p", "s", "r"])
+
+    def create_repr(self, rolenames=[""], one_line=False, **kwargs):
+        """Create repr with showing grid properties."""
+        repstr = super().create_repr(rolenames=rolenames, one_line=one_line,
+                                     **kwargs)
+        if not one_line:
+            repstr += "\n- COLLECTIONS: "+", ".join([k+"(bool"+")"
+                                                     for k in self.collections])
+            repstr += "\n- FEATURES: "+", ".join([k+"("+str(getattr(self, k).dtype)+")"
+                                                  for k in self.features])
+            repstr += "\n- STATES: "+", ".join([k+"("+str(getattr(self, k).dtype)+")"
+                                                  for k in self.states])
+        return repstr
 
     def base_type(self):
         """Return fmdtools type of the model class."""
@@ -1118,30 +1147,31 @@ class Coords(BaseCoords):
 
     def add_coords_roles(self):
         """Add points, collections, features, and states as roles to Coords."""
-        self.init_role_dict("point", set_attr=True)
-        self.init_role_dict("collect", "ions")
-        self.init_role_dict("feature")
-        self.init_role_dict("state")
-        self.properties = {**self.features, **self.states}
+        self.init_roletypes("point", initializer=self.p.create_points)
+        self.init_roletypes("feature", initializer=self.p.create_grid)
+        self.init_roletypes("state", initializer=self.p.create_grid)
+        self.properties = tuple([*self.features]+[*self.states])
 
     def init_properties(self, *args, **kwargs):
         """Initialize arrays with non-default values."""
         return 0
 
+    def create_collection(self, *cargs):
+        """Create a collection based on arguments to find_all_prob(s)."""
+        if cargs[0] in self.features:
+            return self.find_all_prop(*cargs)
+        elif isinstance(cargs[0], tuple) and cargs[0][0] in self.features:
+            return self.find_all_props(*cargs)
+        else:
+            raise Exception("Collections may only map to (immutable) features")
+
     def build(self):
         """Set features as immutable."""
-        for propname, prop in self.properties.items():
+        for propname in self.properties:
             if propname in self.features:
                 proparray = getattr(self, propname)
                 proparray.flags.writeable = False
-        for cname, collection in self.collections.items():
-            if collection[0] in self.features:
-                setattr(self, cname, self.find_all_prop(*collection))
-            elif isinstance(collection[0], tuple) and collection[0][0] in self.features:
-                setattr(self, cname, self.find_all_props(*collection))
-            else:
-                raise Exception("Invalid collection: " + cname +
-                                " collections may only map to (immutable) features")
+        self.init_roletypes("collection", initializer=self.create_collection)
 
     def find_all(self, *points_colls, in_points_colls=True, **prop_kwargs):
         """
@@ -1615,21 +1645,15 @@ def replace_array_nan(array):
         return array
 
 
-class ExampleCoordsParam(CoordsParam):
-    """Example of a Coords param for use in documentation/testing."""
-
-    feature_a: tuple = (bool, False)
-    feature_v: tuple = (float, 1.0)
-    state_st: tuple = (float, 0.0)
-    point_start: tuple = (0.0, 0.0)
-    collect_high_v: tuple = ("v", 5.0, np.greater)
-    collect_hi_v_not_a: tuple = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
-
-
 class ExampleCoords(Coords):
     """Example of Coords class for use in documentation and testing."""
-
-    container_p = ExampleCoordsParam
+    feature_a = (bool, False)
+    feature_v = (float, 1.0)
+    state_st = (float, 0.0)
+    point_start = (0.0, 0.0)
+    collection_high_v = ("v", 5.0, np.greater)
+    collection_hi_v_not_a = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
+    default_p = {'blocksize': 10.0}
 
     def init_properties(self, *args, **kwargs):
         """Initialize points where v=10.0."""
@@ -1665,9 +1689,12 @@ class MetricCoords(BaseCoords):
     array([[0, 1],
            [0, 4]])
     """
+    __slots__ = ('__dict__', )
+    roletypes = ['container', 'value']
 
     def __init__(self, res, *args, values=[], metric=np.mean, **kwargs):
         super().__init__(*args, **kwargs)
+        self.values = values
         for value in values:
             setattr(self, value, metric([*res.get_values(value).values()], 0))
 

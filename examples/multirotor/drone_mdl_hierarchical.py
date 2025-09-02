@@ -155,11 +155,10 @@ class AffectDOFArch(ComponentArchitecture):
 class AffectDOF(AffectDOFDynamic):
     """Rotor locomotion (multi-component extension)."""
 
-    __slots__ = ()
     container_s = OverallAffectDOFState
     arch_ca = AffectDOFArch
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Rotor dynamic behavior with architecture-base recovery."""
         if self.ca.p.opposite:
             self.reconfig_faults()
@@ -235,7 +234,6 @@ class AffectDOF(AffectDOFDynamic):
 class Line(Component, BaseLine):
     """Individual version of a line (extends BaseLine in static model)."""
 
-    __slots__ = ()
     container_s = AffectDOFState
     container_m = AffectDOFMode
 
@@ -324,7 +322,7 @@ if __name__ == "__main__":
 
     # plot a single scen (at t=8)
     fault_kwargs = {'alpha': 0.2, 'color': 'red'}
-    h_plot = hist.get('nominal', 'affect_dof_ca_comps_rr2_propstuck_t8p0').flatten()
+    h_plot = hist.get('nominal', 'drone_fxns_affect_dof_ca_comps_rr2_propstuck_t8p0').flatten()
     h_plot.plot_line('flows.dofs.s.x', 'flows.dofs.s.y', 'flows.dofs.s.z', 'fxns.store_ee.s.soc')
 
     # plot all scens

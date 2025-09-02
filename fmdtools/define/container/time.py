@@ -35,12 +35,14 @@ class Time(BaseContainer):
     dt : float
         timestep size
     t_ind : int
-        index of the given time
-    t_loc : float
-        local time (e.g., for actions with durations)
-    run_times : int
-        number of times to run the behavior if running at a different timestep than
-        global
+        index of the given time in the history.
+    executed_static: bool
+        Whether a sim's static behavior has executed yet this timestep (or not).
+    executed_dynamic: bool
+        Whether a sim's dynamic behavior has executed yet this timestep (or not).
+    executing : bool
+        Whether the timestep of the sim is executing or has finished executing.
+        Gets set as true when time is updated and false when the timestep is incremented
     timers : dict
         dictionary of instantiated timers
     use_local : bool
@@ -80,11 +82,12 @@ class Time(BaseContainer):
     rolename = "t"
     time: float = -0.1
     t_ind: int = 0
-    t_loc: float = 0.0
     timers: dict = {}
     use_local: bool = True
     dt: float = 1.0
-    run_times: int = 1
+    executed_static: bool = False
+    executed_dynamic: bool = False
+    executing: bool = False
     local_dt = 1.0
     timernames = ()
     default_track = ('timers')
@@ -97,9 +100,17 @@ class Time(BaseContainer):
             self.timers[timername] = Timer(timername)
         self.set_timestep()
 
+    def create_repr(self, fields=['time', "timers"], **kwargs):
+        """Limit model repr to relevant time/timers fields."""
+        return super().create_repr(fields=fields, **kwargs)
+
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Time
+
+    def has_executed(self):
+        """Return whether the Simulabe has been called."""
+        return self.executed_static or self.executed_dynamic
 
     def __getattr__(self, item):
         if item in self.timers:
@@ -111,43 +122,44 @@ class Time(BaseContainer):
         return (*(t.time for t in self.timers.values()),
                 self.time,
                 self.t_ind,
-                self.t_loc,
-                self.run_times)
+                self.executed_dynamic,
+                self.executed_static,
+                self.executing)
 
-    def set_timestep(self):
+    def update_time(self, time):
+        """Update the current time from the overall simulation."""
+        if time > self.time:
+            self.assign(dict(time=time,
+                             executed_static=False,
+                             executed_dynamic=False,
+                             executing=True))
+
+    def set_timestep(self, **kwargs):
         """
         Set the timestep of the function given.
 
         If using the option use_local, local_timestep is used instead of
         global_timestep.
         """
+        self.assign(kwargs)
         global_tstep = Decimal(str(self.dt))
         local_tstep = Decimal(self.local_dt)
         if self.use_local:
             dt = local_tstep
-            if dt < global_tstep:
-                if global_tstep % dt:
-                    raise Exception("Local timestep: " + str(dt) +
-                                    " doesn't line up with global timestep: " +
-                                    str(global_tstep))
-            else:
-                if dt % global_tstep:
-                    raise Exception(
-                        "Local timestep: " + str(dt) +
-                        " doesn't line up with global timestep: " + str(global_tstep))
-            self.run_times = int(global_tstep/dt)
+            if (dt < global_tstep and global_tstep % dt) or dt % global_tstep:
+                raise Exception("Local timestep: " + str(dt) +
+                                " doesn't line up with global timestep: " +
+                                str(global_tstep))
         else:
             dt = global_tstep
-            self.run_times = 1
         self.dt = float(dt)
         for timer in self.timers.values():
-            timer.dt = -self.dt
+            timer.tstep = -self.dt
 
     def reset(self):
         """Reset time to the initial state."""
-        self.time = -0.1
-        self.t_ind = 0
-        self.t_loc = 0.0
+        self.assign(dict(time=-0.1, t_ind=0,
+                         executed_static=False, executed_dynamic=False))
         for timer in self.timers.values():
             timer.reset()
 
@@ -161,6 +173,30 @@ class Time(BaseContainer):
                     hist[tname] = timer.create_hist(timerange)
         else:
             BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
+
+    def get_sim_times(self, time):
+        """
+        Get the start and end time for the end of the timestep (if not provided).
+
+        If the current time is -0.1, sets start_time at 0.0 for static propagation.
+        Otherwise gets the time at the next timestep.
+
+        Returns
+        -------
+        start_time : float
+            Starting time for the timestep
+        end_time : float
+            Ending time for the timestep.
+        """
+        if self.time == -0.1:
+            start_time = 0.0
+        else:
+            start_time = self.time
+        if time is None:
+            end_time = start_time + self.dt
+        else:
+            end_time = time
+        return start_time, end_time
 
 
 class ExtendedTime(Time):

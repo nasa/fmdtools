@@ -83,7 +83,6 @@ class PSFState(State):
 class PSFs(Flow):
     """Flow of operator performance shaping factors."""
 
-    __slots__ = ()
     container_s = PSFState
     container_p = PSFParam
 
@@ -91,7 +90,6 @@ class PSFs(Flow):
 class OperatorSignal(Flow):
     """Flow of operator path planning information."""
 
-    __slots__ = ()
     container_s = PlanPathState
 
 
@@ -130,8 +128,6 @@ class Look(Action, GenericHumanAction):
     >>> l.complete()
     False
     """
-
-    __slots__ = ()
 
 
 class PerceptionMode(HumanActionMode):
@@ -173,7 +169,6 @@ class Percieve(Action, GenericHumanAction):
     2.0
     """
 
-    __slots__ = ('comms', 'pos_signal', 'video', 'psfs')
     container_m = PerceptionMode
     flow_comms = Comms
     flow_pos_signal = Pos
@@ -215,7 +210,6 @@ class Comprehend(Action, GenericHumanAction):
     array([1., 1.])
     """
 
-    __slots__ = ('signal', 'pos_signal', 'video', 'psfs')
     container_m = HumanActionMode
     flow_signal = OperatorSignal
     flow_pos_signal = Pos
@@ -269,7 +263,6 @@ class Project(Action, GenericHumanAction):
     -0.7854052343902613
     """
 
-    __slots__ = ('signal', 'psfs')
     container_m = ProjectMode
     flow_signal = OperatorSignal
     flow_psfs = PSFs
@@ -328,7 +321,6 @@ class Decide(Action, GenericHumanAction):
     ControlState(rpower=2, lpower=0.0)
     """
 
-    __slots__ = ('signal', 'control')
     container_m = ProjectMode
     flow_signal = OperatorSignal
     flow_control = Control
@@ -346,7 +338,6 @@ class Reach(Action, GenericHumanAction):
     (passthrough)
     """
 
-    __slots__ = ()
     container_m = HumanActionMode
 
 
@@ -382,7 +373,6 @@ class Press(Action, GenericHumanAction):
     ControlState(rpower=0.0, lpower=1.0)
     """
 
-    __slots__ = ('control', 'comms')
     container_m = PressMode
     flow_control = Control
     flow_comms = Comms
@@ -408,11 +398,11 @@ class HumanActions(ActionArchitecture):
     >>> ha.flows['comms'].s.on = True
     >>> ha.active_actions
     {'look'}
-    >>> ha('dynamic', 1, False, 1)
+    >>> ha(proptype='dynamic', time=1.0)
     >>> ha.active_actions
     {'press'}
     """
-    __slots__ = ()
+
     initial_action = "look"
     per_timestep = True
     container_p = PSFParam
@@ -448,7 +438,6 @@ class HumanActions(ActionArchitecture):
 class Operator(BaseOperator):
     """Overall function for operator (adds ASG to flipping switch)."""
 
-    __slots__ = ('switch', 'control', 'comms', 'pos_signal', 'video', 'psfs', 'ground')
     flow_switch = Switch
     flow_control = Control
     flow_pos_signal = Pos
@@ -460,8 +449,8 @@ class Operator(BaseOperator):
     arch_aa = HumanActions
     container_m = Mode
 
-    def dynamic_behavior(self, t):
-        self.set_power(t)
+    def dynamic_behavior(self):
+        self.set_power()
         if self.ground.at_end(self.pos_signal.s):
             self.switch.s.power = False
             self.comms.s.ctl.put(rpower=0, lpower=0)
@@ -518,6 +507,7 @@ asg_pos = {'look': [-0.9, 0.88], 'percieve': [-0.68, 0.62], 'comms': [-0.66, -0.
 
 
 if __name__ == "__main__":
+    mdl = RoverHuman()
     import doctest
     doctest.testmod(verbose=True)
 
@@ -530,7 +520,6 @@ if __name__ == "__main__":
 
     from examples.rover.rover_model import plot_map
     from fmdtools.sim import propagate as prop
-    mdl = RoverHuman()
     endresults, mdlhist = prop.nominal(mdl)
     ec1, hist = prop.nominal(mdl)
     fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',

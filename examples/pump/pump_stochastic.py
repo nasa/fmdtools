@@ -43,25 +43,24 @@ class ImportEERand(Rand, copy_default=True):
 
 class ImportEE(DetImportEE):
 
-    __slots__ = ()
     container_r = ImportEERand
 
     def set_faults(self):
         if self.ee_out.s.current > 20.0:
             self.m.add_fault('no_v')
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.set_faults()
         if self.m.has_fault('no_v'):
             self.r.s.effstate = 0.0  # an open circuit means no voltage is exported
         elif self.m.has_fault('inf_v'):
             self.r.s.effstate = 100.0  # a voltage spike means voltage is much higher
         else:
-            if time > self.t.time:
+            if not self.t.executed_static:
                 self.r.set_rand_state('effstate', 'triangular', 0.9, 1, 1.1)
-        if time > self.t.time:
+        if not self.t.executed_static:
             self.r.set_rand_state('grid_noise', 'normal',
-                                  1, 0.05*(2+np.sin(np.pi/2*time)))
+                                  1, 0.05*(2+np.sin(np.pi/2*self.t.time)))
         self.ee_out.s.voltage = self.r.s.grid_noise*self.r.s.effstate * 500
 
 
@@ -75,18 +74,17 @@ class ImportSigRand(Rand):
 
 class ImportSig(DetImportSig):
 
-    __slots__ = ()
     container_r = ImportSigRand
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault('no_sig'):
             self.sig_out.s.power = 0.0  # an open circuit means no voltage is exported
         else:
-            if time < 5:
+            if self.t.time < 5:
                 self.sig_out.s.power = 0.0
                 self.r.s.to_default('sig_noise')
-            elif time < 50:
-                if not time % 5:
+            elif self.t.time < 50:
+                if not self.t.time % 5 and not self.t.executed_static:
                     self.r.set_rand_state('sig_noise', 'choice', [1.0, 0.9, 1.1])
                 self.sig_out.s.power = 1.0*self.r.s.sig_noise
             else:
@@ -110,20 +108,18 @@ class MoveWatRand(Rand):
 
 class MoveWat(DetMoveWat):
 
-    __slots__ = ()
     container_s = MoveWatStates
     container_r = MoveWatRand
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.s.eff = self.r.s.eff
-        super().static_behavior(time)
-        if time > self.t.time:
+        super().static_behavior()
+        if not self.t.executed_static:
             self.s.inc(total_flow=self.wat_out.s.flowrate)
 
 
 class Pump(DetPump):
 
-    __slots__ = ()
     default_track = 'all'
     container_r = Rand
 
@@ -145,8 +141,35 @@ if __name__ == "__main__":
     import multiprocessing as mp
     from fmdtools.sim.sample import ParameterDomain, ParameterSample
 
+    # test prob dense?
+    mdl = Pump(sp={'run_stochastic': True, 'track_pdf': True})
+    for i in range(1, 10):
+        mdl.update_seed(i)
+        mdl(i)
+        print(mdl.return_probdens())
+        print(mdl.r.seed)
+
+        #for fxnname, fxn in mdl.fxns.items():
+        #    print(fxnname+': ')
+        #    print(fxn.return_probdens())
+        #    print(getattr(fxn, 'pds', None))
+
+    mdl = Pump(sp={'run_stochastic': True, 'track_pdf': True})
+    endresults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
+                                              time=20, staged=False,
+                                              new_params={'modelparams': {'seed': 50}})
+    mdl = Pump(sp={'run_stochastic': True, 'track_pdf': True})
+    endresults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
+                                              time=20, staged=False,
+                                              new_params={'modelparams': {'seed': 50}})
+
+    # mdlhist['faulty']['functions']['ImportEE']['probdens']
+
+    mdlhist.plot_line('fxns.import_ee.s.effstate', 'fxns.import_ee.r.s.grid_noise',
+                      'flows.ee_1.s.voltage', 'flows.ee_1.s.current')
+
     # convert to tests 1:
-    mdl = Pump()
+    mdl = Pump(sp={'run_stochastic': True})
 
     # now tested in test_plot_nested_hist
     pd = ParameterDomain(PumpParam)
@@ -160,7 +183,7 @@ if __name__ == "__main__":
     faultsamples = {'fs': (('fault_phases', 'fd'), {})}
 
     pool = mp.Pool(4)
-    ecs, hists, apps = propagate.nested_sample(mdl, ps, run_stochastic=True,
+    ecs, hists, apps = propagate.nested_sample(mdl, ps,
                                                faultdomains=faultdomains,
                                                faultsamples=faultsamples,
                                                pool=pool)
@@ -202,30 +225,7 @@ if __name__ == "__main__":
     nomhist, nomres, = propagate.parameter_sample(mdl, ps)
     ps2.group_scens("p.delay")
 
-    # test prob dense?
-    for i in range(1, 10):
-        mdl.update_seed(i)
-        mdl.propagate(i, run_stochastic='track_pdf')
-        print(mdl.return_probdens())
-        #print(mdl.seed)
 
-        #for fxnname, fxn in mdl.fxns.items():
-        #    print(fxnname+': ')
-        #    print(fxn.return_probdens())
-        #    print(getattr(fxn, 'pds', None))
-
-    endresults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
-                                              time=20, staged=False, run_stochastic=False,
-                                              new_params={'modelparams': {'seed': 50}})
-
-    endresults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
-                                              time=20, staged=False, run_stochastic=True,
-                                              new_params={'modelparams': {'seed': 50}})
-
-    # mdlhist['faulty']['functions']['ImportEE']['probdens']
-
-    mdlhist.plot_line('fxns.import_ee.s.effstate', 'fxns.import_ee.r.s.grid_noise',
-                      'flows.ee_1.s.voltage', 'flows.ee_1.s.current')
 
     # an.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
 

@@ -41,8 +41,7 @@ class CommonTests():
         values_to_check = mdl.get_vars(*new_val_dict)
         np.testing.assert_array_equal(values_to_check, [*new_val_dict.values()])
 
-    def check_model_copy_same(self, mdl, mdl2, inj_times, copy_time, max_time=55,
-                              run_stochastic=False):
+    def check_model_copy_same(self, mdl, mdl2, inj_times, copy_time, max_time=55):
         """
         Model copying tests.
 
@@ -54,21 +53,22 @@ class CommonTests():
                       if f.m.get_faults()]
         for faultscen in faultscens:
             for inj_time in inj_times:
+                mdla = mdl.new()
+                mdlb = mdl2.new()
                 for t in range(max_time):
                     if t == inj_time:
                         scen = faultscen
                     else:
                         scen = {}
-                    mdl.propagate(t, run_stochastic=run_stochastic, fxnfaults=scen)
-                    mdl2.propagate(t, run_stochastic=run_stochastic, fxnfaults=scen)
-                    self.check_same_model(mdl, mdl2)
+                    mdla(time=t, faults=scen)
+                    mdlb(time=t, faults=scen)
+                    self.check_same_model(mdla, mdlb)
                     if t == copy_time:
-                        mdl_copy = mdl.copy()
-                        self.check_same_model(mdl, mdl_copy)
+                        mdl_copy = mdla.copy()
+                        self.check_same_model(mdla, mdl_copy)
                     if t > copy_time:
-                        mdl_copy.propagate(t, run_stochastic=run_stochastic,
-                                           fxnfaults=scen)
-                        self.check_same_model(mdl, mdl_copy)
+                        mdl_copy(time=t, faults=scen)
+                        self.check_same_model(mdla, mdl_copy)
 
     def check_fs_parallel(self, mdl, fs, track="all"):
         """
@@ -142,8 +142,7 @@ class CommonTests():
                                  + "\n" + hist1name + "= " + str(hist1[err_key])
                                  + " \n see also: " + "\n".join(err_keys))
 
-    def check_model_reset(self, mdl, mdl_reset, res_times, max_time=55,
-                          run_stochastic=False):
+    def check_model_reset(self, mdl, mdl_reset, res_times, max_time=55):
         """
         Check if model attributes reset with the reset() method.
 
@@ -159,13 +158,12 @@ class CommonTests():
                         scen = faultscen
                     else:
                         scen = {}
-                    mdl_reset.propagate(t, run_stochastic=run_stochastic,
-                                        fxnfaults=scen)
+                    mdl_reset(time=t, fxnfaults=scen)
                 mdl_reset.reset()
                 mdl = mdls.pop()
                 for t in range(max_time):
-                    mdl_reset.propagate(t, run_stochastic=run_stochastic)
-                    mdl.propagate(t, run_stochastic=run_stochastic)
+                    mdl_reset(t)
+                    mdl(t)
                     try:
                         self.check_same_model(mdl, mdl_reset)
                     except AssertionError as e:
@@ -173,8 +171,7 @@ class CommonTests():
                                              " and faultscen: " + str(faultscen) +
                                              " injected at t=" + str(inj_time)) from e
 
-    def check_model_copy_different(self, mdl, cop_times, max_time=55,
-                                   run_stochastic=False):
+    def check_model_copy_different(self, mdl, cop_times, max_time=55):
         """
         Check that a copied model has different states from the original.
 
@@ -184,13 +181,14 @@ class CommonTests():
                       if f.m.get_faults()]
         for faultscen in faultscens:
             for inj_time in cop_times:
+                mdlc = mdl.new()
                 for t in range(max_time):
-                    mdl.propagate(t, run_stochastic=run_stochastic)
+                    mdlc(time=t)
                     if t == inj_time:
-                        mdl_copy = mdl.copy()
+                        mdl_copy = mdlc.copy()
                     if t > inj_time:
-                        mdl_copy.propagate(t, fxnfaults=faultscen)
-                        self.check_diff_model(mdl, mdl_copy)
+                        mdl_copy(time=t, faults=faultscen)
+                        self.check_diff_model(mdlc, mdl_copy)
 
     def check_same_model(self, mdl, mdl2):
         """Check if models mdl and mdl2 have the same attributes."""
@@ -247,15 +245,16 @@ class CommonTests():
         if os.path.exists(ecfile):
             os.remove(ecfile)
         check_link = False
-        save_args = {'mdlhist': {'filename': mfile}, 'endclass': {'filename': ecfile}}
+        kw = {'history_filename': mfile, 'result_filename': ecfile, 'tosave': True,
+              'showprogress': False}
         if runtype == 'nominal':
-            res, hist = prop.nominal(mdl, save_args=save_args)
+            res, hist = prop.nominal(mdl, **kw)
             check_link = True
         elif runtype == 'one_fault':
             fxn, mode, time = faultscen
-            res, hist = prop.one_fault(mdl, fxn, mode, time, save_args=save_args)
+            res, hist = prop.one_fault(mdl, fxn, mode, time, **kw)
         elif runtype == 'sequence':
-            res, hist = prop.sequence(mdl, faultscen, {}, save_args=save_args)
+            res, hist = prop.sequence(mdl, faultseq=faultscen, **kw)
         else:
             raise Exception("Invalid Run Type" + runtype)
 
@@ -373,9 +372,10 @@ class CommonTests():
         **kwargs : kwargs to send to the propagate method (if any)
         """
         self.start_sample_test(histfile, resfile)
-        save_args = {'mdlhist': {'filename': histfile},
-                     'endclass': {'filename': resfile}}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False, **kwargs}
+        loc_kwargs = {'result_filename': resfile,
+                      'history_filename': histfile,
+                      'tosave': True,
+                      'showprogress': False, **kwargs}
         res, hist = prop.fault_sample(mdl, fs, **loc_kwargs)
 
         self.end_sample_test(hist, histfile, res, resfile)
@@ -383,9 +383,10 @@ class CommonTests():
     def check_sf_save(self, mdl, resfile='file', histfile='file', **kwargs):
         """Check that prop.single_faults results save/load correctly."""
         self.start_sample_test(histfile, resfile)
-        save_args = {'mdlhist': {'filename': histfile},
-                     'endclass': {'filename': resfile}}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False, **kwargs}
+        loc_kwargs = {'result_filename': resfile,
+                      'history_filename': histfile,
+                      'tosave': True,
+                      'showprogress': False, **kwargs}
         res, hist = prop.single_faults(mdl, **loc_kwargs)
 
         self.end_sample_test(hist, histfile, res, resfile)
@@ -393,9 +394,10 @@ class CommonTests():
     def check_ps_save(self, mdl, ps, resfile='file', histfile='file', **kwargs):
         """Check that prop.parameter_sample results save/load correctly."""
         self.start_sample_test(histfile, resfile)
-        save_args = {'mdlhist': {'filename': histfile},
-                     'endclass': {'filename': resfile}}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False, **kwargs}
+        loc_kwargs = {'result_filename': resfile,
+                      'history_filename': histfile,
+                      'tosave': True,
+                      'showprogress': False, **kwargs}
         res, hist = prop.parameter_sample(mdl, ps, **loc_kwargs)
 
         self.end_sample_test(hist, histfile, res, resfile)
@@ -404,11 +406,12 @@ class CommonTests():
                       histfile='file', resfile='file', **kwargs):
         """Check that prop.nested_sample results save/load correctly."""
         self.start_sample_test(histfile, resfile)
-        save_args = {'mdlhist': {'filename': histfile},
-                     'endclass': {'filename': resfile}}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False,
-                      'faultdomains': faultdomains, 'faultsamples': faultsamples,
-                      **kwargs}
+        loc_kwargs = {'result_filename': resfile,
+                      'history_filename': histfile,
+                      'tosave': True,
+                      'faultdomains': faultdomains,
+                      'faultsamples': faultsamples,
+                      'showprogress': False, **kwargs}
         res, hist, apps = prop.nested_sample(mdl, ps, **loc_kwargs)
         self.end_sample_test(hist, histfile, res, resfile)
 
@@ -443,30 +446,21 @@ class CommonTests():
             kwargs to send to the propagate method (if any)
         """
         self.start_indiv_save(resfolder, histfolder)
-        save_args = {'mdlhist': {'filename': histfolder+"."+ext},
-                     'endclass': {'filename': resfolder+"."+ext},
-                     'indiv': True}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False, **kwargs}
+        loc_kwargs = gen_save_kwargs(resfolder, histfolder, ext, **kwargs)
         res, hist = prop.single_faults(mdl, **loc_kwargs)
         self.end_indiv_save(res, hist, resfolder, histfolder, ext)
 
     def check_fs_isave(self, mdl, fs, resfolder, histfolder, ext, **kwargs):
         """Check that individually saved results for prop.fault_sample match outputs."""
         self.start_indiv_save(resfolder, histfolder)
-        save_args = {'mdlhist': {'filename': histfolder+"."+ext},
-                     'endclass': {'filename': resfolder+"."+ext},
-                     'indiv': True}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False, **kwargs}
+        loc_kwargs = gen_save_kwargs(resfolder, histfolder, ext, **kwargs)
         res, hist = prop.fault_sample(mdl, fs, **loc_kwargs)
         self.end_indiv_save(res, hist, resfolder, histfolder, ext)
 
     def check_ps_isave(self, mdl, ps, resfolder, histfolder, ext, **kwargs):
         """Check that individually saved prop.parameter_sample results match outputs."""
         self.start_indiv_save(resfolder, histfolder)
-        save_args = {'mdlhist': {'filename': histfolder+"."+ext},
-                     'endclass': {'filename': resfolder+"."+ext},
-                     'indiv': True}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False, **kwargs}
+        loc_kwargs = gen_save_kwargs(resfolder, histfolder, ext, **kwargs)
         res, hist = prop.parameter_sample(mdl, ps, **loc_kwargs)
         self.end_indiv_save(res, hist, resfolder, histfolder, ext)
 
@@ -474,11 +468,19 @@ class CommonTests():
                        resfolder, histfolder, ext, **kwargs):
         """Check that individually saved prop.nested_sample results match outputs."""
         self.start_indiv_save(resfolder, histfolder)
-        save_args = {'mdlhist': {'filename': histfolder+"."+ext},
-                     'endclass': {'filename': resfolder+"."+ext},
-                     'indiv': True}
-        loc_kwargs = {'save_args': save_args, 'showprogress': False,
-                      'faultdomains': faultdomains, 'faultsamples': faultsamples,
-                      **kwargs}
+        loc_kwargs = gen_save_kwargs(resfolder, histfolder, ext,
+                                     faultdomains=faultdomains,
+                                     faultsamples=faultsamples, **kwargs)
+
         res, hist, apps = prop.nested_sample(mdl, ps, **loc_kwargs)
         self.end_indiv_save(res, hist, resfolder, histfolder, ext)
+
+
+def gen_save_kwargs(resfolder, histfolder, ext, **kwargs):
+    return {'history_filename': histfolder+"."+ext,
+            'result_filename': resfolder+"."+ext,
+            'tosave': True,
+            'save_indiv': True,
+            'showprogress': False,
+            'overwrite': True,
+            **kwargs}

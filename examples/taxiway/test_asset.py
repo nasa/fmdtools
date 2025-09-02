@@ -39,7 +39,7 @@ import unittest
 # test_setup
 class LoadingForAircraft(Function):
 
-    __slots__ = ('requests', 'ground', 'perc_requests')
+    __slots__ = ('perc_requests',)
     flow_requests = Requests
     flow_ground = Environment
     container_p = AssetParams
@@ -48,8 +48,8 @@ class LoadingForAircraft(Function):
         self.perc_requests = self.requests.create_comms("atc", ports=self.p.mas)
         self.ground.area_to_standby("ma1", "air_loc")
 
-    def dynamic_behavior(self, t):
-        if t == 1.0:
+    def dynamic_behavior(self):
+        if self.t.time == 1.0:
             self.perc_requests.ma1.s.put(atc_com="land")
             self.ground.s.asset_assignment["ma1"] = "landing1"
         # if t>7.0:
@@ -96,15 +96,15 @@ class test_aircraft_model(FunctionArchitecture):
 
 
 class LoadingForHeli(Function):
-    __slots__ = ('requests', 'ground', 'perc_requests')
+    __slots__ = ('perc_requests', )
     flow_requests = Requests
     flow_ground = Environment
 
     def init_block(self, **kwargs):
         self.perc_requests = self.requests.create_comms("atc", ports=["h1"])
 
-    def dynamic_behavior(self, t):
-        if t == 1.0:
+    def dynamic_behavior(self):
+        if self.t.time == 1.0:
             self.perc_requests.h1.s.put(atc_com="land")
             self.ground.s.asset_assignment["h1"] = "helipad1"
         self.perc_requests.receive()
@@ -154,7 +154,7 @@ class AssetTests(unittest.TestCase):
     def test_one_cycle(self):
         """Test that a single airborne asset will land, park at a gate, and take off."""
         for t in range(100):
-            self.single_ac_model.propagate(t)
+            self.single_ac_model(t)
             ma_xy = self.single_ac_model.flows["location"].ma1.s.get("x", "y")
             if t == 5:  # test - does it make it to the landing spot?
                 self.assertTrue(
@@ -182,7 +182,7 @@ class AssetTests(unittest.TestCase):
         """Test that a single airborne asset will land, park at a gate, and take off as
         desired"""
         for t in range(100):
-            self.two_ac_model.propagate(t)
+            self.two_ac_model(t)
             if t == 77:
                 self.assertAlmostEqual(
                     self.two_ac_model.flows["location"].ma1.s.speed, 1.0, places=3
@@ -257,7 +257,7 @@ class AssetTests(unittest.TestCase):
     def test_heli_cycle(self):
         """Tests that a single helicopter will land and take off as desired"""
         for t in range(100):
-            self.heli_model.propagate(t)
+            self.heli_model(t)
             heli_xy = self.heli_model.flows["location"].h1.s.get("x", "y")
             if t == 7:  # lands
                 self.assertTrue(

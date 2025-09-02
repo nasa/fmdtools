@@ -22,7 +22,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.flow.base import Flow, ExampleFlow
+from fmdtools.define.base import get_dict_repr
+from fmdtools.define.container.state import ExampleState
 from fmdtools.define.flow.multiflow import MultiFlow, MultiFlowGraph
 from fmdtools.define.base import get_obj_name
 from fmdtools.analyze.graph.model import add_edge, ModelGraph
@@ -31,14 +32,7 @@ import copy
 
 
 class CommsFlowGraph(MultiFlowGraph):
-    """
-    Create graph representation of the CommsFlow.
-
-    Returns
-    -------
-    g : networkx.DiGraph
-        Graph of the commsflow connections.
-    """
+    """Create graph representation of the CommsFlow."""
 
     def __init__(self, flow, role_nodes=['local'], recursive=True, **kwargs):
         ModelGraph.__init__(self, flow, role_nodes=role_nodes, recursive=recursive,
@@ -66,36 +60,35 @@ class CommsFlow(MultiFlow):
     >>> t1 = ecf.create_comms("t1")
     >>> t2 = ecf.create_comms("t2")
     >>> ecf
-    examplecommsflow ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-       t1: t1 ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           out: t1_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           in: {}
-           received: {}
-       t2: t2 ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           out: t2_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           in: {}
-           received: {}
+    examplecommsflow ExampleCommsFlow
+    - s=ExampleState(x=1.0, y=1.0)
+    COMMS:
+    - t1=(s=(x=1.0, y=1.0))
+    - t2=(s=(x=1.0, y=1.0))
     >>> t1.s.put(x=10.0, y=10.0)
     >>> t1.send("t2", "x")
     >>> t1
-    t1 ExampleCommsFlow flow: ExampleState(x=10.0, y=10.0)
-           out: t1_out ExampleCommsFlow flow: ExampleState(x=10.0, y=1.0)
-           in: {}
-           received: {}
+    t1 ExampleCommsFlow
+    - s=ExampleState(x=10.0, y=10.0)
+    - out(): t1_out(s=(x=10.0, y=1.0))
+    - inbox(): {}
+    - received(): {}
     >>> t2
-    t2 ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           out: t2_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           in: {'t1': ('x',)}
-           received: {}
+    t2 ExampleCommsFlow
+    - s=ExampleState(x=1.0, y=1.0)
+    - out(): t2_out(s=(x=1.0, y=1.0))
+    - inbox(): {'t1': ('x',)}
+    - received(): {}
     >>> t2.receive()
     >>> t2
-    t2 ExampleCommsFlow flow: ExampleState(x=10.0, y=1.0)
-           out: t2_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)
-           in: {}
-           received: {'t1': ('x',)}
+    t2 ExampleCommsFlow
+    - s=ExampleState(x=10.0, y=1.0)
+    - out(): t2_out(s=(x=1.0, y=1.0))
+    - inbox(): {}
+    - received(): {'t1': ('x',)}
     """
 
-    slots = ['fxns', '__dict__']
+    __slots__ = ['fxns']
     check_dict_creation = False
 
     def __init__(self, name='', glob=[], track=['s'], **kwargs):
@@ -109,17 +102,17 @@ class CommsFlow(MultiFlow):
 
     def __repr__(self):
         """Print console representation of CommsFlow."""
-        rep_str = Flow.__repr__(self)
-        if self.name == self.glob.name:
-            for fname, func in self.fxns.items():
-                rep_str = rep_str+"\n   "+fname+": "+func["internal"].__repr__()
+        rep_str = self.create_repr(one_line=False)
+        if self.name == self.glob.name and self.locals:
+            rep_str += "\nCOMMS:"
+            comms = {f: func['internal'] for f, func in self.fxns.items()}
+            rep_str += get_dict_repr(comms, with_classname=False, one_line=False)
         elif self.name in self.glob.fxns:
             rep_str = (rep_str +
-                       "\n       out: " + self.out().__repr__() +
-                       "\n       in: " + str(self.inbox()) +
-                       "\n       received: " + str(self.received()))
-            for lo in self.locals:
-                rep_str = rep_str+"\n       "+lo+": "+getattr(self, lo).__repr__()
+                       "\n- out(): " + self.out().create_repr(with_classname=False, one_line=True) +
+                       "\n- inbox(): " + str(self.inbox()) +
+                       "\n- received(): " + str(self.received()))
+            rep_str += self.create_local_repr()
         return rep_str
 
     def create_comms(self, name, ports=[], as_copy=False, **kwargs):
@@ -275,9 +268,9 @@ class CommsFlow(MultiFlow):
                              as_copy=True)
         return cop
 
-    def find_mutables(self):
+    def find_mutables(self, **kwargs):
         """Add in/received dicts to mutables."""
-        mutes = super().find_mutables()
+        mutes = super().find_mutables(**kwargs)
         for f in self.fxns.values():
             mutes.append([f['in'], f['received']])
         return mutes
@@ -324,9 +317,10 @@ class CommsFlow(MultiFlow):
         return gtype(self, **kwargs)
 
 
-class ExampleCommsFlow(ExampleFlow, CommsFlow):
+class ExampleCommsFlow(CommsFlow):
     """Extension of ExampleFlow to CommsFlow case."""
 
+    container_s = ExampleState
     __slots__ = ()
 
 

@@ -45,7 +45,7 @@ class MoveParam(Parameter):
 
 class Mover(Function):
 
-    __slots__ = ('communications', 'location', 'internal_info', 'loc')
+    __slots__ = ('internal_info', 'loc')
     container_p = MoveParam
     flow_communications = Communications
     flow_location = Location
@@ -54,13 +54,13 @@ class Mover(Function):
         self.internal_info = self.communications.create_comms(self.name)
         self.loc = self.location.create_local(self.name)
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         # move
         self.loc.s.inc(x=self.p.x_up, y=self.p.y_up)
         # the inbox should be cleared each timestep to allow new messages
         self.internal_info.clear_inbox()
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         # recieve messages
         self.internal_info.receive()
         # communicate
@@ -71,30 +71,29 @@ class Mover(Function):
             self.internal_info.s.y = self.loc.s.y
             self.internal_info.send("all", "y")
 
-    def find_classification(self, scen, fxnhist):
+    def classify(self, scen={}, fxnhist={}, **kwargs):
         return {"last_x": self.loc.s.x, "min_x": fxnhist.faulty.location.get(self.name).x}
 
 
 class Coordinator(Function):
 
-    __slots__ = ('communications', 'coord_view')
+    __slots__ = ('coord_view',)
     flow_communications = Communications
 
     def init_block(self, **kwargs):
         self.coord_view = self.communications.create_comms(self.name,
                                                            ports=["mover_1", "mover_2"])
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.coord_view.clear_inbox()
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.coord_view.receive()
         self.coord_view.update("y", to_update="local", to_get="mover_1")
         self.coord_view.update("x", to_update="local", to_get="mover_2")
 
 
 class ExModel(FunctionArchitecture):
-    __slots__ = ()
     default_sp = dict(end_time=10)
 
     def init_architecture(self, **kwargs):
@@ -109,6 +108,7 @@ class ExModel(FunctionArchitecture):
 
 if __name__ == '__main__':
     mdl = ExModel()
+
     mdl.flows["communications"].mover_1.s.x = 25
     mdl.flows["communications"].mover_1.send("mover_2")
     from fmdtools.sim import propagate
@@ -133,8 +133,8 @@ if __name__ == '__main__':
     MultiFlowGraph(mdl.flows['communications']).draw()
     CommsFlowGraph(mdl.flows['communications']).draw()
 
-    # endres, mdlhist = propagate.nominal(mdl, desired_result='graph.flows.communications')
+    # endres, mdlhist = propagate.nominal(mdl, to_return='graph.flows.communications')
 
-    # endres.graph.flows.communications.set_node_labels(title='id', subtext='s')
-    # endres.graph.flows.communications.draw()
-    # endres.graph.flows.communications.draw_graphviz()
+    # endres.tend.graph.flows.communications.set_node_labels(title='id', subtext='s')
+    # endres.tend.graph.flows.communications.draw()
+    # endres.tend.graph.flows.communications.draw_graphviz()

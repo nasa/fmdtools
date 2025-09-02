@@ -52,9 +52,13 @@ doctest_modules = ["fmdtools/define/container/base.py",
                    "fmdtools/define/object/coords.py",
                    "fmdtools/define/flow/base.py",
                    "fmdtools/define/architecture/function.py",
+                   "fmdtools/define/architecture/action.py",
+                   "fmdtools/define/architecture/component.py",
                    "fmdtools/define/architecture/geom.py",
                    "fmdtools/define/block/base.py",
                    "fmdtools/define/block/function.py",
+                   "fmdtools/define/block/action.py",
+                   "fmdtools/define/block/component.py",
                    "fmdtools/define/environment.py",
                    "fmdtools/sim/scenario.py",
                    "fmdtools/sim/sample.py",
@@ -194,7 +198,8 @@ if __name__ == "__main__":
     parser.add_argument("--pyver", default="py311", required=False)
     parsed_args = parser.parse_args()
     kwargs = {k: v for k, v in vars(parsed_args).items() if v is not None}
-    main(**kwargs)
+    # main(**kwargs)
+    main(notebooks=False, testtype="doctests", cov=False, report=False)
     # main(testtype="custom", testlist=["examples/tank/Tank_Analysis.ipynb", "examples/tank/test_tank.py"])
     # main(testtype="custom", testlist=["examples/pump/test_pump.py"])
     # main(testtype="custom", testlist=["examples/rover/test_rover.py"])

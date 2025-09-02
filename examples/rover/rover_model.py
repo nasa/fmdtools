@@ -227,7 +227,6 @@ class DestState(State):
 class Dest(GeomPoint):
     """Start/end/point."""
 
-    __slots__ = ()
     container_p = DestParam
     container_s = DestState
 
@@ -293,7 +292,6 @@ class Ground(Environment):
 class PathLine(GeomLine):
     """Rover Line."""
 
-    __slots__ = ()
     container_p = PathParam
 
 
@@ -325,7 +323,6 @@ class PosState(State):
 class Pos(Flow):
     """Rover position/velocity flow."""
 
-    __slots__ = ()
     container_s = PosState
 
 
@@ -339,7 +336,6 @@ class EEState(State):
 class EE(Flow):
     """Electricity flow."""
 
-    __slots__ = ()
     container_s = EEState
 
 
@@ -371,7 +367,6 @@ class VideoState(State):
 class Video(Flow):
     """Video flow."""
 
-    __slots__ = ()
     container_s = VideoState
 
 
@@ -394,7 +389,6 @@ class ControlState(State):
 class Control(Flow):
     """Control flow."""
 
-    __slots__ = ()
     container_s = ControlState
 
 
@@ -407,7 +401,6 @@ class SwitchState(State):
 class Switch(Flow):
     """Power switch."""
 
-    __slots__ = ()
     container_s = SwitchState
 
 
@@ -429,7 +422,6 @@ class CommsState(State):
 class Comms(Flow):
     """External communications flow."""
 
-    __slots__ = ()
     container_s = CommsState
 
 
@@ -444,7 +436,6 @@ class FaultStates(State):
 class FaultSig(Flow):
     """Rover fault signal."""
 
-    __slots__ = ()
     container_s = FaultStates
 
 
@@ -527,7 +518,6 @@ class PlanPathState(State):
 class PlanPath(Function):
     """Plan the next drive move based on the current state of the rover."""
 
-    __slots__ = ("video", "pos_signal", "ground", "control", "fault_sig")
     container_m = PlanPathMode
     container_p = ResCorrection
     container_s = PlanPathState
@@ -538,7 +528,7 @@ class PlanPath(Function):
     flow_fault_sig = FaultSig
     flownames = {"auto_control": "control"}
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """
         Dynamic Behavior of Planning Module.
 
@@ -552,9 +542,9 @@ class PlanPath(Function):
         right power control signal to 0.
         """
         if not self.m.in_mode("no_con"):
-            if time == 5:
+            if self.t.time == 5:
                 self.m.set_mode("drive")
-            if time == 149:
+            if self.t.time == 149:
                 self.m.set_mode("standby")
 
         if self.m.in_mode("drive") and not self.m.in_mode("no_con"):
@@ -635,7 +625,6 @@ class DriveMode(Mode):
 class Drive(Function):
     """The drive function determines the rover drive functionality."""
 
-    __slots__ = ("ground", "motor_control", "ee_in", 'fault_sig', 'pos')
     container_m = DriveMode
     container_p = DegParam
     container_s = FaultStates
@@ -653,7 +642,7 @@ class Drive(Function):
             self.m.update_degradation_modes(friction=self.p.friction,
                                             drift=self.p.drift)
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Define the drive behavior for a given time step."""
         # calculate left and right motor power
         self.fault_sig.s.assign(self.s, "friction", "transfer", "drift")
@@ -742,7 +731,6 @@ class PerceptionMode(Mode):
 class Perception(Function):
     """Rover function that percieves the environment and creates the video feed."""
 
-    __slots__ = ("ground", "ee", "video", 'pos', 'pos_signal')
     container_m = PerceptionMode
     flow_pos = Pos
     flow_pos_signal = Pos
@@ -751,7 +739,7 @@ class Perception(Function):
     flow_video = Video
     flownames = {"ee_12": "ee"}
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Set the video feed based on the behavior mode at each timestep."""
         # Nominal Behavior
         if self.ee.s.v > 8:
@@ -837,7 +825,6 @@ class PowerMode(Mode):
 class Power(Function):
     """Rover power supply."""
 
-    __slots__ = ("ee_15", "ee_5", "ee_12", "switch")
     container_s = PowerState
     container_m = PowerMode
     flow_ee_15 = EE
@@ -845,7 +832,7 @@ class Power(Function):
     flow_ee_12 = EE
     flow_switch = Switch
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Determine power use based on mode."""
         if self.m.in_mode("off"):
             self.off_power()
@@ -863,7 +850,7 @@ class Power(Function):
             if self.m.in_mode("short"):
                 self.short_power_usage()
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Charge increment over time."""
         self.s.inc(charge=-self.s.power / 100)
         self.s.limit(charge=(0, 100))
@@ -938,7 +925,7 @@ class OverrideMode(Mode):
 
 
 class Override(Function):
-    __slots__ = ("comms", "ee", "motor_control", "auto_control")
+
     container_m = OverrideMode
     flow_comms = Comms
     flow_ee = EE
@@ -946,7 +933,7 @@ class Override(Function):
     flow_auto_control = Control
     flownames = {"ee_5": "ee"}
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         if self.ee.s.v > 4:
             if self.comms.s.active and self.comms.s.on:
                 self.m.set_mode("override")
@@ -968,13 +955,12 @@ class Override(Function):
 class Communications(Function):
     """Rover communications to the user."""
 
-    __slots__ = ("ee_12", "comms", "pos_signal", "video")
     flow_ee_12 = EE
     flow_comms = Comms
     flow_pos_signal = Pos
     flow_video = Video
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """When active, convert position signals to communication signals."""
         if self.ee_12.s.v == 12:
             self.ee_12.s.a = 1
@@ -989,17 +975,16 @@ class Communications(Function):
 class Operator(Function):
     """Operator turns on or off the rover."""
 
-    __slots__ = ("switch",)
     flow_switch = Switch
 
-    def set_power(self, t):
-        if t == 1:
+    def set_power(self):
+        if self.t.time == 1.0:
             self.switch.s.power = True
-        elif t == 200:
+        elif self.t.time == 200:
             self.switch.s.power = False
 
-    def dynamic_behavior(self, t):
-        self.set_power(t)
+    def dynamic_behavior(self):
+        self.set_power()
 
 
 class Rover(FunctionArchitecture):
@@ -1021,7 +1006,6 @@ class Rover(FunctionArchitecture):
                          ground is expected to be high).
     """
 
-    __slots__ = ()
     container_p = RoverParam
     default_sp = dict(end_time=150,
                       phases=(("start", 0, 30), ("end", 31, 150)),
@@ -1056,16 +1040,16 @@ class Rover(FunctionArchitecture):
         self.add_fxn("drive", Drive, "ground", 'pos', "ee_15", "motor_control",
                      "fault_sig", m=self.p.drive_modes, p=self.p.degradation)
 
-    def indicate_finished(self, time):
+    def indicate_finished(self):
         """Determine if the rover has completed its mission (successful or not)."""
         if  (self.flows['ground'].at_end(self.flows['pos'].s)
-             or (time > 5 and self.fxns["plan_path"].m.in_mode("standby"))
+             or (self.t.time > 5 and self.fxns["plan_path"].m.in_mode("standby"))
              or self.fxns["plan_path"].m.in_mode("em_off", "finished")):
             return True
         else:
             return False
 
-    def find_classification(self, scen, mdlhist):
+    def classify(self, scen={}, mdlhist={}, **kwargs):
         """
         Calculate metric that need to be tracked for the simulation.
 
@@ -1122,9 +1106,9 @@ class Rover(FunctionArchitecture):
 
         endpt = [self.flows["pos"].s.x, self.flows["pos"].s.y]
 
-        in_bound = all(mdlhist.faulty.flows.ground.s.in_bound)
+        in_bound = all(self.h.flows.ground.s.in_bound)
         line_dist = 1  # looks like this is not used. Is this needed? TODO: reimplement
-        hist_xy = mdlhist.faulty.flows.pos.s.get('x', 'y')
+        hist_xy = self.h.flows.pos.s.get('x', 'y')
         tot_deviation = self.flows['ground'].max_line_dist(hist_xy)
         return {"rate": scen.rate,
                 "cost": 0,

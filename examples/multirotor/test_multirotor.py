@@ -46,7 +46,7 @@ expd1.add_variable("phys_param.linearch", var_map=line_arch_map, var_lim=(0, 2))
 
 class ExSOCProb(ParameterSimProblem):
     def init_problem(self, **kwargs):
-        self.add_sim(Drone(track=None), 'nominal', track=None)
+        self.add_sim(Drone(track=None), 'nominal')
         self.add_parameterdomain(expd1)
         self.add_result_objective("f1", "store_ee.s.soc", time=16)
         self.add_result_constraint("g1", "store_ee.s.soc", time=16)
@@ -99,7 +99,7 @@ class DroneParameterTests(unittest.TestCase):
 class ExSingleFaultProblem(SingleFaultScenarioProblem):
     def init_problem(self, **kwargs):
         self.add_sim(Drone(track=None), ("affect_dof.ca.comps.rf", "propwarp"),
-                     sim_start=2.0, track=None)
+                     sim_start=2.0)
         self.add_result_objective("f1", "plan_path.t.time", time=15)
         self.add_result_objective("f2", "dofs.s.x", time=15)
 
@@ -157,9 +157,9 @@ class DroneDisturbanceTest(unittest.TestCase):
         self.assertLess(soc_later, soc_res)
 
 
-
-
-
-
 if __name__ == '__main__':
+    # suite = unittest.TestSuite()
+    # suite.addTest(DroneDisturbanceTest("test_disturbance_set"))
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite)
     unittest.main()

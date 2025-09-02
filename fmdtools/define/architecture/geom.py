@@ -28,6 +28,7 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.analyze.common import setup_plot
 from fmdtools.define.object.geom import GeomPoint, GeomLine, GeomPoly
 from fmdtools.define.object.geom import ExPoint, ExLine, ExPoly
+from fmdtools.define.block.base import Block
 
 
 class GeomArchitecture(Architecture):
@@ -45,14 +46,29 @@ class GeomArchitecture(Architecture):
     ...        self.add_point("ex_point", ExPoint)
     ...        self.add_line("ex_line", ExLine)
     ...        self.add_poly("ex_poly", ExPoly)
+    ...    def dynamic_behavior(self):
+    ...        if self.t.time >= 1.0:
+    ...            self.points["ex_point"].s.buffer_around = self.t.time
+    ...    def static_behavior(self):
+    ...        self.lines["ex_line"].s.buffer_around = self.points["ex_point"].s.buffer_around
 
     This can then be used in containing classes (e.g., environments) that need multiple
     geoms. We can then access the individual geoms in the geoms dict, e.g.,:
 
     >>> ega = ExGeomArch()
+    >>> ega
+    exgeomarch ExGeomArch
+    - t=Time(time=-0.1, timers={})
+    POINTS:
+    - ex_point=ExPoint(s=(occupied=False, buffer_around=1.0))
+    LINES:
+    - ex_line=ExLine(s=(occupied=False, buffer_around=1.0))
+    POLYS:
+    - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
     >>> ega.geoms()['ex_point'].s
     ExGeomState(occupied=False, buffer_around=1.0)
     >>> ega.h
+    time:                         array(101)
     points.ex_point.s.occupied:   array(101)
     points.ex_point.s.buffer_around: array(101)
     lines.ex_line.s.occupied:     array(101)
@@ -60,13 +76,29 @@ class GeomArchitecture(Architecture):
     polys.ex_poly.s.occupied:     array(101)
     polys.ex_poly.s.buffer_around: array(101)
     >>> ega.return_mutables()
-    ((False, 1.0), (False, 1.0), (False, 1.0), (-0.1, 0, 0.0, 1))
+    ((-0.1, 0, False, False, False), (False, 1.0), (False, 1.0), (False, 1.0))
+
+    GeomArchitectures are also simulable provided dynamic_behavior and static_behavior
+    methods as shown below. Note that this behavior must be called externally,
+    such as from a function, to have meaning in a broader modelling context.
+
+    >>> ega(time=2.0)
+    >>> ega
+    exgeomarch ExGeomArch
+    - t=Time(time=2.0, timers={})
+    POINTS:
+    - ex_point=ExPoint(s=(occupied=False, buffer_around=2.0))
+    LINES:
+    - ex_line=ExLine(s=(occupied=False, buffer_around=2.0))
+    POLYS:
+    - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
     """
 
     container_p = Parameter
+    __slots__= ("points", "lines", "polys")
     default_track = ['points', 'lines', 'polys']
     all_possible = ['points', 'lines', 'polys']
-    flexible_roles = ['points', 'lines', 'polys']
+    flexible_roles = ['point', 'line', 'poly']
     rolename = 'ga'
 
     def base_type(self):
@@ -230,8 +262,16 @@ class GeomArchitecture(Architecture):
         """
         for flex_role in self.flexible_roles:
             for geomname, geom in self.get_flex_role_objs(flex_role).items():
-                geom.assign_from(hist.get(flex_role+"."+geomname), t)
+                geom.assign_from(hist.get(flex_role+"s."+geomname), t)
         return self.show(**kwargs)
+
+    def prop_static(self):
+        """Since geoms are not connected, just run in sequence."""
+        Block.update_arch_behaviors(self, "static")
+
+    def build(self, construct_graph=False, **kwargs):
+        """Build the action graph."""
+        super().build(construct_graph=construct_graph, **kwargs)
 
 
 class ExGeomArch(GeomArchitecture):
@@ -242,6 +282,14 @@ class ExGeomArch(GeomArchitecture):
         self.add_point("ex_point", ExPoint)
         self.add_line("ex_line", ExLine)
         self.add_poly("ex_poly", ExPoly)
+
+    def dynamic_behavior(self):
+        """Example dynamic behavior demonstrating dynamic buffers."""
+        if self.t.time >= 0.0:
+            self.points["ex_point"].s.buffer_around = self.t.time
+
+    def static_behavior(self):
+        self.lines["ex_line"].s.buffer_around = self.points["ex_point"].s.buffer_around
 
 
 if __name__ == "__main__":

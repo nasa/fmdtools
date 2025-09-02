@@ -147,7 +147,7 @@ def create_inheritance_subgraph(obj, g=None, name='', end_at_fmdtools=True):
     return g
 
 
-def set_node_states(g, obj, name, time=None):
+def set_node_states(g, obj, name):
     """
     Attach stateful attributes to the given node.
 
@@ -166,7 +166,7 @@ def set_node_states(g, obj, name, time=None):
     """
     if name in g.nodes:
         if hasattr(obj, 'set_node_attrs'):
-            obj.set_node_attrs(g, time=time)
+            obj.set_node_attrs(g)
         elif inspect.ismethod(obj):
             g.nodes[name]['condition'] = obj()
         else:

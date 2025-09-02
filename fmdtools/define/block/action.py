@@ -19,7 +19,44 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.block.base import Block
 from fmdtools.define.container.parameter import ExampleParameter
+from fmdtools.define.container.time import Time
 from fmdtools.define.flow.base import ExampleFlow
+
+
+class ActionTime(Time):
+    """
+    Time class with extra attributes for Actions.
+
+    Attributes
+    ----------
+    out_delay: float
+        Time after which the duration is complete before moving to the next action(s)
+    duration : float
+        Duration of the Action.
+    t_loc : float
+        local time (e.g., for actions with durations)
+    """
+
+    out_delay: float = 0.0
+    duration: float = 0.0
+    t_loc: float = 0.0
+
+    def return_mutables(self):
+        """Return mutable attributes."""
+        return *super().return_mutables(), self.duration, self.t_loc
+
+    def reset(self):
+        """Reset the time."""
+        super().reset()
+        self.t_loc = 0.0
+
+    def duration_complete(self):
+        """Return True if the local time is over the given duration."""
+        return self.duration+self.dt <= self.t_loc
+
+    def complete(self):
+        """Return True if the duration and delay are over."""
+        return self.duration+self.out_delay <= self.t_loc
 
 
 class Action(Block):
@@ -31,54 +68,41 @@ class Action(Block):
     Examples
     --------
     >>> exa = ExampleAction()
-    >>> exa.exf
-    exampleflow ExampleFlow flow: ExampleState(x=1.0, y=1.0)
+    >>> exa
+    exampleaction ExampleAction
+    - t=ActionTime(time=-0.1, timers={})
+    - exf=ExampleFlow(s=(x=1.0, y=1.0))
     >>> exa(1.0)
-    >>> exa.exf
-    exampleflow ExampleFlow flow: ExampleState(x=2.0, y=1.0)
+    >>> exa
+    exampleaction ExampleAction
+    - t=ActionTime(time=1.0, timers={})
+    - exf=ExampleFlow(s=(x=2.0, y=1.0))
     >>> exa.indicate_done()
     True
     """
 
-    __slots__ = ('duration',)
+    __slots__ = ()
+    container_t = ActionTime
 
-    def __init__(self, name=None, duration=0.0, **kwargs):
-        self.duration = duration
+    def __init__(self, name=None, duration=0.0, out_delay=0.0, **kwargs):
+        kwargs['t'] = {'duration': duration, 'out_delay': out_delay,
+                       **kwargs.get('t', {})}
         super().__init__(name=name, **kwargs)
 
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Action
 
-    def __call__(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
-        """
-        Update the behaviors, faults, times, etc of the action.
+    def update_dynamic_behaviors(self, proptype="dynamic"):
+        """Update the behavior of the Action provided the action is not complete."""
+        if not self.t.duration_complete():
+            super().update_dynamic_behaviors(proptype=proptype)
 
-        Parameters
-        ----------
-        time : float, optional
-            Model time. The default is 0.
-        run_stochastic : bool
-            Whether to run the simulation using stochastic or deterministic behavior
-        """
-        if time > self.t.time:
-            if hasattr(self, 'r'):
-                self.r.update_stochastic_states()
-        if not proptype == 'dynamic' or self.t.time < time:
-            self.update_behavior(time, dt)
-        self.set_sub_faults()
-        self.t.time = time
-
-    def update_behavior(self, time, dt):
-        """Update the behavior of the Action."""
-        if hasattr(self, 'behavior'):
-            self.behavior(time)
-        self.t.t_loc += dt
-
-    def copy(self, *args, **kwargs):
-        cop = super().copy(*args, **kwargs)
-        cop.duration = self.duration
-        return cop
+    def inc_sim_time(self, time=None, **kwargs):
+        """Increment the simulation time (update from external time)."""
+        if time is not None:
+            self.t.update_time(time)
+        super().inc_sim_time(time=time, **kwargs)
 
 
 class ExampleAction(Action):
@@ -87,8 +111,8 @@ class ExampleAction(Action):
     container_p = ExampleParameter
     flow_exf = ExampleFlow
 
-    def behavior(self, time):
-        """The Action increases x when executed."""
+    def dynamic_behavior(self):
+        """Increase x when executed."""
         if not self.indicate_done():
             self.exf.s.inc(x=1.0)
 

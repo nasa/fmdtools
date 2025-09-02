@@ -133,7 +133,6 @@ class HSigState(State):
 class HSig(Flow):
     """Health signal flow."""
 
-    __slots__ = ()
     container_s = HSigState
 
 
@@ -146,7 +145,6 @@ class RSigState(State):
 class RSig(Flow):
     """Recovery signal flow."""
 
-    __slots__ = ()
     container_s = RSigState
 
 # DEFINE FUNCTIONS
@@ -242,12 +240,11 @@ class BatParam(Parameter):
 class Battery(Component):
     """Battery component used to hold energy in distributed architecture."""
 
-    __slots__ = ()
     container_s = BatState
     container_m = BatMode
     container_p = BatParam
 
-    def behavior(self, fs, ee_outr, time):
+    def behavior(self, fs, ee_outr, exec_dynamic):
         """Battery behavior returning electrical transference, soc, and fault state."""
         # If current is too high, battery breaks.
         if fs < 1.0 or ee_outr > self.p.maxa:
@@ -264,10 +261,9 @@ class Battery(Component):
             self.s.e_t = self.p.avail_eff
 
         # Increment power use/soc (once per timestep)
-        if time > self.t.time:
+        if exec_dynamic:
             self.s.inc(soc=-100*ee_outr*self.p.parallel *
-                       self.p.series*(time-self.t.time)/self.p.amt)
-            self.t.time = time
+                       self.p.series*self.t.dt/self.p.amt)
 
         # Calculate charge modes/values
         if self.s.soc < 20:
@@ -357,7 +353,6 @@ class StoreEEMode(Mode):
 class StoreEE(Function):
     """Class defining energy storage function with battery architecture."""
 
-    __slots__ = ('hsig_bat', 'ee_1', 'force_st')
     container_s = StoreEEState
     container_m = StoreEEMode
     arch_ca = BatArch
@@ -382,7 +377,7 @@ class StoreEE(Function):
             for batname, bat in self.ca.comps.items():
                 bat.s.soc = 0
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Calculate overall behavior for StoreEE architecture."""
         self.set_faults()
         ee, soc = {}, {}
@@ -390,7 +385,8 @@ class StoreEE(Function):
         for batname, bat in self.ca.comps.items():
             ee[bat.name], soc[bat.name], rate_res = \
                 bat.behavior(self.force_st.s.support, self.ee_1.s.rate /
-                             (self.ca.p.series*self.ca.p.parallel)+rate_res, time)
+                             (self.ca.p.series*self.ca.p.parallel)+rate_res,
+                             not self.t.executed_static)
         # need to incorporate max current draw somehow + draw when reconfigured
         if self.ca.p.archtype == 'monolithic':
             self.ee_1.s.effort = ee['s1p1']
@@ -431,7 +427,6 @@ class HoldPayloadMode(Mode):
 class HoldPayload(HoldPayloadDyn):
     """Adaptation of HoldPayload with new mode information."""
 
-    __slots__ = ()
     container_m = HoldPayloadMode
 
 
@@ -453,7 +448,6 @@ class ManageHealthMode(Mode):
 class ManageHealth(Function):
     """Health management function for rotor and battery."""
 
-    __slots__ = ('force_st', 'ee_ctl', 'hsig_dofs', 'hsig_bat', 'rsig_traj')
     container_m = ManageHealthMode
     container_p = ResPolicy
     flow_force_st = Force
@@ -467,7 +461,7 @@ class ManageHealth(Function):
         if self.force_st.s.support < 0.5 or self.ee_ctl.s.effort > 2.0:
             self.m.add_fault('lostfunction')
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Assign recovery trajectory from ResPolicy for a fault mode, if found."""
         self.set_faults()
         if self.m.has_fault('lostfunction'):
@@ -489,7 +483,6 @@ class AffectMode(Mode):
 class AffectDOF(AffectDOFHierarchical):
     """Adaptation of hierarchical AffecDOF function which returns fault signals."""
 
-    __slots__ = ('hsig_dofs',)
     container_m = AffectMode
     flow_hsig_dofs = HSig
 
@@ -524,7 +517,6 @@ class CtlDOFMode(Mode):
 class CtlDOF(CtlDOFStat):
     """Adaptation of CtlDOFMode with more mode information."""
 
-    __slots__ = ()
     container_m = CtlDOFMode
 
 
@@ -581,7 +573,6 @@ class PlanPathState(PlanPathStateDyn):
 class PlanPath(PlanPathDyn):
     """Path planning function of the drone. Follows a sequence defined in flightplan."""
 
-    __slots__ = ('rsig_traj', )
     container_s = PlanPathState
     container_m = PlanPathMode
     container_p = DroneParam
@@ -592,7 +583,7 @@ class PlanPath(PlanPathDyn):
         """Initialize path planning goals based on initial flightplan."""
         self.s.goals = {i: list(vals) for i, vals in enumerate(self.p.flightplan)}
 
-    def static_behavior(self, t):
+    def static_behavior(self):
         """
         Path planning behavior for the drone.
 
@@ -603,7 +594,7 @@ class PlanPath(PlanPathDyn):
         self.increment_point()
         self.calc_ground_height()
 
-        self.update_mode(t)
+        self.update_mode()
         self.update_goal()
         if self.ee_ctl.s.effort < 0.5 or self.m.in_mode('taxi'):
             self.des_traj.s.assign([0.0, 0.0, 0.0, 0.0], 'dx', 'dy', 'dz', 'power')
@@ -615,13 +606,13 @@ class PlanPath(PlanPathDyn):
         """Assigns the ground height state."""
         self.s.ground_height = self.dofs.s.z
 
-    def update_mode(self, t):
+    def update_mode(self):
         """Update mode based on current mode and state."""
         if not self.m.any_faults():
             # if in reconfigure mode, copy that mode, otherwise complete mission
             if self.rsig_traj.s.mode != 'continue' and not self.m.in_mode("move_em", "emland"):
                 self.m.set_mode(self.rsig_traj.s.mode)
-            elif self.m.in_mode('taxi') and t < 5 and t > 1:
+            elif self.m.in_mode('taxi') and self.t.time < 5 and self.t.time > 1:
                 self.m.set_mode("move")
             # if mission is over, enter landing mode when you get close
             if self.mission_over():
@@ -679,7 +670,6 @@ class PlanPath(PlanPathDyn):
 class Drone(FunctionArchitecture):
     """Rural surveillance Drone model."""
 
-    __slots__ = ('start_area', 'safe_area', 'target_area')
     container_p = DroneParam
     default_sp = dict(phases=(('taxi', 0, 0),
                               ('move', 1, 11),
@@ -786,7 +776,7 @@ class Drone(FunctionArchitecture):
                                  'minor': scen.rate * (1 - metrics['p_safety'])}
         return metrics
 
-    def find_classification(self, scen, mdlhist):
+    def classify(self, scen={}, mdlhist={}, **kwargs):
         """Classify a given scenario based on land_metrics and expected cost model."""
         viewed = 0.5 + np.sum(self.flows['environment'].c.viewed*self.flows['environment'].c.target)
         # to fix: need to find fault time more efficiently (maybe in the toolkit?)

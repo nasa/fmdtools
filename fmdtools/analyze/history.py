@@ -226,10 +226,7 @@ class History(Result):
                     i_ind = split_att.index('i')
                     new_split_att = split_att[:i_ind] + ['indicate_'+split_att[-1]]
                     methname = '.'.join(new_split_att)
-                    try:
-                        val = get_var(obj, methname)(time)
-                    except TypeError:
-                        val = get_var(obj, methname)()
+                    val = get_var(obj, methname)()
                 elif 'faults' in att and not att.endswith('m.sub_faults'):
                     split_att = att.split('.')
                     faultind = split_att.index('faults')
@@ -275,7 +272,7 @@ class History(Result):
         Parameters
         ----------
         end_ind : int, optional
-            the index of the array that you want to cut the history upto.
+            the index of the array that you want to cut the history up to.
             Default is None.
         start_ind: int, optional
             the index of the array that you want to start cutting the history from.
@@ -319,7 +316,8 @@ class History(Result):
                     if end_ind is None:
                         ei = len(att)
                     else:
-                        ei = end_ind+1
+                        ei = end_ind + 1
+
                     if start_ind is None:
                         start_ind = 0
                     hist[name] = att[start_ind:ei]
@@ -391,10 +389,10 @@ class History(Result):
 
     def _prep_faulty(self):
         """Create a faulty history of states from the current history."""
-        if self.is_in('faulty'):
-            return self.faulty.flatten()
-        else:
-            return self.flatten()
+        try:
+            return self.get_faulty()
+        except KeyError:
+            return self
 
     def _prep_nom_faulty(self, nomhist={}, align=True):
         """Create a nominal history of states from the current history."""
@@ -466,7 +464,7 @@ class History(Result):
 
         Examples
         --------
-        >>> h = History({'nominal.a': np.array([1,2,3]), 'nominal.time': [0,1,2], 'faulty.a': np.array([1,1,1]), 'faulty.time': [0,1,2]})
+        >>> h = History({'nominal.a': np.array([1,2,3]), 'nominal.time': [0,1,2], 'fault1.a': np.array([1,1,1]), 'fault1.time': [0,1,2]})
         >>> dh = h.get_degraded_hist("a")
         >>> dh['total']
         array([0, 1, 1])
@@ -617,7 +615,7 @@ class History(Result):
         faulty = [k for k, v in faulty_hist.items() if np.any(v)]
         deg_hist = self.get_degraded_hist(*attrs, withtotal=False, withtime=False)
         degraded = [k for k, v in deg_hist.items() if np.any(v)]
-        return Result(faulty=faulty, degraded=degraded)
+        return Result(has_faults=faulty, degraded=degraded)
 
     def plot_line(self, *plot_values, cols=2, aggregation='individual',
                   legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', titles={},

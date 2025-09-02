@@ -31,13 +31,13 @@ Generally, it is the intent of fmdtools to comply with the :term:`FRDL` specific
 
 .. |frdl_flowcon| image:: ../docs-source/figures/frdl/primitives/flowconnection.svg
 .. |nx_flowc| image:: ../docs-source/figures/frdl/primitives/nx/flowconnection.svg
-.. |gv_flowc| image:: ../docs-source/figures/frdl/primitives/nx/flowconnection.svg
+.. |gv_flowc| image:: ../docs-source/figures/frdl/primitives/gv/flowconnection.svg
 .. |frdl_activ| image:: ../docs-source/figures/frdl/primitives/activation.svg
 .. |nx_activ| image:: ../docs-source/figures/frdl/primitives/nx/activation.svg
-.. |gv_activ| image:: ../docs-source/figures/frdl/primitives/nx/activation.svg
+.. |gv_activ| image:: ../docs-source/figures/frdl/primitives/gv/activation.svg
 .. |frdl_prop| image:: ../docs-source/figures/frdl/primitives/propagation.svg
 .. |nx_conn| image:: ../docs-source/figures/frdl/primitives/nx/connection.svg
-.. |gv_conn| image:: ../docs-source/figures/frdl/primitives/nx/connection.svg
+.. |gv_conn| image:: ../docs-source/figures/frdl/primitives/gv/connection.svg
 
 **Edges**
 
@@ -55,26 +55,26 @@ Generally, it is the intent of fmdtools to comply with the :term:`FRDL` specific
  
  .. |frdl_flow| image:: ../docs-source/figures/frdl/primitives/flow.svg
  .. |nx_flow| image:: ../docs-source/figures/frdl/primitives/nx/flow.svg
- .. |gv_flow| image:: ../docs-source/figures/frdl/primitives/nx/flow.svg
+ .. |gv_flow| image:: ../docs-source/figures/frdl/primitives/gv/flow.svg
  .. |frdl_mflow| image:: ../docs-source/figures/frdl/primitives/multiflow.svg
  .. |nx_mflow| image:: ../docs-source/figures/frdl/primitives/nx/multiflow.svg
- .. |gv_mflow| image:: ../docs-source/figures/frdl/primitives/nx/multiflow.svg
+ .. |gv_mflow| image:: ../docs-source/figures/frdl/primitives/gv/multiflow.svg
  .. |frdl_cflow| image:: ../docs-source/figures/frdl/primitives/commsflow.svg
  .. |nx_cflow| image:: ../docs-source/figures/frdl/primitives/nx/commsflow.svg
- .. |gv_cflow| image:: ../docs-source/figures/frdl/primitives/nx/commsflow.svg
+ .. |gv_cflow| image:: ../docs-source/figures/frdl/primitives/gv/commsflow.svg
  .. |frdl_fxn| image:: ../docs-source/figures/frdl/primitives/function.svg
  .. |nx_fxn| image:: ../docs-source/figures/frdl/primitives/nx/function.svg
- .. |gv_fxn| image:: ../docs-source/figures/frdl/primitives/nx/function.svg
+ .. |gv_fxn| image:: ../docs-source/figures/frdl/primitives/gv/function.svg
  .. |frdl_act| image:: ../docs-source/figures/frdl/primitives/action.svg
  .. |nx_act| image:: ../docs-source/figures/frdl/primitives/nx/action.svg
- .. |gv_act| image:: ../docs-source/figures/frdl/primitives/nx/action.svg
+ .. |gv_act| image:: ../docs-source/figures/frdl/primitives/gv/action.svg
  .. |frdl_com| image:: ../docs-source/figures/frdl/primitives/component.svg
  .. |nx_com| image:: ../docs-source/figures/frdl/primitives/nx/component.svg
- .. |gv_com| image:: ../docs-source/figures/frdl/primitives/nx/component.svg
+ .. |gv_com| image:: ../docs-source/figures/frdl/primitives/gv/component.svg
  .. |nx_con| image:: ../docs-source/figures/frdl/primitives/nx/container.svg
- .. |gv_con| image:: ../docs-source/figures/frdl/primitives/nx/container.svg
+ .. |gv_con| image:: ../docs-source/figures/frdl/primitives/gv/container.svg
  .. |nx_arch| image:: ../docs-source/figures/frdl/primitives/nx/architecture.svg
- .. |gv_arch| image:: ../docs-source/figures/frdl/primitives/nx/architecture.svg
+ .. |gv_arch| image:: ../docs-source/figures/frdl/primitives/gv/architecture.svg
  
  **Nodes**
  
@@ -114,7 +114,7 @@ See the following examples for "typical" representation of an architecture. In t
 
  .. |frdl_dec| image:: ../docs-source/figures/frdl/primitives/funcdecomp.svg
  .. |nx_dec| image:: ../docs-source/figures/frdl/primitives/nx/funcdecomp.svg
- .. |gv_dec| image:: ../docs-source/figures/frdl/primitives/nx/funcdecomp.svg
+ .. |gv_dec| image:: ../docs-source/figures/frdl/primitives/gv/funcdecomp.svg
 
  +--------------------+----------------+-----------+-----------+
  | Use-case           +  FRDL          + graphviz  + networkx  |

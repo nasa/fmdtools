@@ -44,7 +44,6 @@ class GenericState(State):
 
 class GenericFlow(Flow):
 
-    __slots__ = ()
     container_s = GenericState
 
 
@@ -53,7 +52,6 @@ class SigState(State):
 
 
 class Signal(Flow):
-    __slots__ = ()
     container_s = SigState
 
 
@@ -65,7 +63,6 @@ class ImportEEModes(Mode):
 
 class ImportEE(Function):
 
-    __slots__ = ("ee_out",)
     container_m = ImportEEModes
     flow_ee_out = GenericFlow
     flownames = {"ee_1": "ee_out"}
@@ -84,7 +81,7 @@ class ImportEE(Function):
     Both representations can be used--this just shows this representation.
     """
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault("no_v"):
             self.ee_out.s.effort = 0.0
         elif self.m.has_fault("high_v"):
@@ -102,12 +99,11 @@ class ImportSigModes(Mode):
 
 class ImportSig(Function):
 
-    __slots__ = ("sig_out",)
     container_m = ImportSigModes
     flow_sig_out = Signal
     flownames = {"sig_in": "sig_out"}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault("partial_signal"):
             self.sig_out.s.value = 0.5
         elif self.m.has_fault("no_signal"):
@@ -123,7 +119,6 @@ class StoreEEModes(Mode):
 
 class StoreEE(Function):
 
-    __slots__ = ("ee_in", "ee_out")
     container_m = StoreEEModes
     flow_ee_in = GenericFlow
     flow_ee_out = GenericFlow
@@ -135,7 +130,7 @@ class StoreEE(Function):
         elif self.ee_out.s.effort * self.ee_out.s.rate >= 2.0:
             self.m.add_fault("low_storage")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.set_faults()
         if self.m.has_fault("no_storage"):
             self.ee_out.s.effort = 0.0
@@ -158,7 +153,6 @@ class SupplyEEModes(Mode):
 
 class SupplyEE(Function):
 
-    __slots__ = ("ee_in", "ee_out", "heat_out")
     container_m = SupplyEEModes
     flow_ee_in = GenericFlow
     flow_ee_out = GenericFlow
@@ -171,7 +165,7 @@ class SupplyEE(Function):
         elif self.ee_out.s.rate > 1.0:
             self.m.add_fault("open_circuit")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.set_faults()
         if self.m.has_fault("open_circuit"):
             self.ee_out.s.effort = 0.0
@@ -201,7 +195,6 @@ class DistEEModes(Mode):
 
 class DistEE(Function):
 
-    __slots__ = ("sig_in", "ee_in", "ee_m", "ee_h", "ee_o")
     container_m = DistEEModes
     flow_sig_in = Signal
     flow_ee_in = GenericFlow
@@ -214,7 +207,7 @@ class DistEE(Function):
         if max(self.ee_m.s.rate, self.ee_h.s.rate, self.ee_o.s.rate) > 2.0:
             self.m.add_fault("short")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.set_faults()
         if self.m.has_fault("short"):
             self.ee_in.s.rate = self.ee_in.s.effort * 4.0
@@ -253,12 +246,11 @@ class ExportHEModes(Mode):
 
 class ExportHE(Function):
 
-    __slots__ = ("he",)
     container_m = ExportHEModes
     flow_he = GenericFlow
     flownames = {"waste_he_1": "he", "waste_he_o": "he", "waste_he_m": "he"}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault("ineffective_sink"):
             self.he.s.rate = 4.0
         elif self.m.has_fault("hot_sink"):
@@ -269,19 +261,17 @@ class ExportHE(Function):
 
 class ExportME(Function):
 
-    __slots__ = ("me",)
     flow_me = GenericFlow
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.me.s.rate = self.me.s.effort
 
 
 class ExportOE(Function):
 
-    __slots__ = ("oe",)
     flow_oe = GenericFlow
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         self.oe.s.rate = self.oe.s.effort
 
 
@@ -295,14 +285,13 @@ class EEtoMEModes(Mode):
 
 class EEtoME(Function):
 
-    __slots__ = ("ee_in", "me", "he_out")
     container_m = EEtoMEModes
     flow_ee_in = GenericFlow
     flow_me = GenericFlow
     flow_he_out = GenericFlow
     flownames = {"ee_m": "ee_in", "waste_he_m": "he_out"}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault("high_torque"):
             self.he_out.s.effort = self.ee_in.s.effort + 1.0
             self.me.s.effort = self.ee_in.s.effort + 1.0
@@ -341,7 +330,6 @@ class EEtoHEModes(Mode):
 
 class EEtoHE(Function):
 
-    __slots__ = ("ee_in", "he")
     container_m = EEtoHEModes
     flow_ee_in = GenericFlow
     flow_he = GenericFlow
@@ -353,7 +341,7 @@ class EEtoHE(Function):
         elif self.ee_in.s.effort > 1.0:
             self.m.add_fault("low_heat")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault("open_circuit"):
             self.he.s.effort = 0.0
             self.ee_in.s.rate = 0.0
@@ -378,7 +366,6 @@ class EEtoOEModes(Mode):
 
 class EEtoOE(Function):
 
-    __slots__ = ("ee_in", "oe", "he_out")
     container_m = EEtoOEModes
     flow_ee_in = GenericFlow
     flow_oe = GenericFlow
@@ -389,7 +376,7 @@ class EEtoOE(Function):
         if self.ee_in.s.effort >= 2.0:
             self.m.add_fault("burnt_out")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.m.has_fault("burnt_out"):
             self.ee_in.s.rate = 0.0
             self.he_out.s.effort = 0.0
@@ -406,7 +393,6 @@ class EEtoOE(Function):
 
 class EPS(FunctionArchitecture):
 
-    __slots__ = ()
     default_track = {"flows": ["he", "me", "oe"]}
     default_sp = {'end_time': 0}
 
@@ -444,7 +430,7 @@ class EPS(FunctionArchitecture):
         self.add_fxn("export_waste_ho", ExportHE, "waste_he_o")
         self.add_fxn("export_waste_hm", ExportHE, "waste_he_m")
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, scen={}, mdlhists={}, **kwargs):
         outflows = ["he", "me", "oe"]
 
         qualfunc = [
@@ -493,12 +479,12 @@ if __name__ == "__main__":
     result, mdlhists = propagate.one_fault(mdl, "distribute_ee", "short")
 
     result, mdlhists = propagate.one_fault(mdl, "distribute_ee", "short",
-                                           desired_result="graph")
+                                           to_return="graph")
 
-    result.graph.draw()
+    result.get_faulty().tend.graph.draw()
     # endclasses, mdlhists = propagate.single_faults(mdl)
 
-    # resgraph, mdlhists = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', desired_result="fxnflowgraph")
+    # resgraph, mdlhists = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', to_return="fxnflowgraph")
     # result.graph.draw()
     ks = [*mdl.get_roles_as_dict("fxn", "flow", flex_prefixes=True)]
 

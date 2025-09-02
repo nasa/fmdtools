@@ -33,7 +33,6 @@ class OutcomeStates(State):
 
 class Outcome(Flow):
 
-    __slots__ = ()
     container_s = OutcomeStates
 
 
@@ -47,7 +46,6 @@ class HazardState(State):
 
 class Hazard(Flow):
 
-    __slots__ = ()
     container_s = HazardState
 
 
@@ -61,12 +59,11 @@ class ActionMode(Mode):
 class Perceive(Action):
     """A user's perception abilities/behaviors for percieving the hazard."""
 
-    __slots__ = ('hazard', 'outcome')
     container_m = ActionMode
     flow_hazard = Hazard
     flow_outcome = Outcome
 
-    def behavior(self, time):
+    def dynamic_behavior(self):
         if not self.m.in_mode('failed', 'unable'):
             self.hazard.s.percieved = self.hazard.s.present
             self.outcome.s.num_perceptions += self.hazard.s.percieved
@@ -81,12 +78,11 @@ class Perceive(Action):
 class Act(Action):
     """User actions to mitigate the hazard."""
 
-    __slots__ = ('hazard', 'outcome')
     container_m = ActionMode
     flow_hazard = Hazard
     flow_outcome = Outcome
 
-    def behavior(self, time):
+    def dynamic_behavior(self):
         if not self.m.in_mode('failed', 'unable'):
             self.outcome.s.num_actions += 1
             self.hazard.s.mitigated = True
@@ -103,10 +99,9 @@ class Act(Action):
 class Done(Action):
     """User state after performing the action."""
 
-    __slots__ = ('hazard')
     flow_hazard = Hazard
 
-    def behavior(self, time):
+    def dynamic_behavior(self):
         if not self.hazard.s.present:
             self.hazard.s.mitigated = False
 
@@ -136,7 +131,6 @@ class Human(ActionArchitecture):
 class DetectHazard(Function):
     """Function containing the human."""
 
-    __slots__ = ('hazard')
     container_m = Mode
     arch_aa = Human
     flow_hazard = Hazard
@@ -145,11 +139,10 @@ class DetectHazard(Function):
 class ProduceHazard(Function):
     """Function producing Hazards."""
 
-    __slots__ = ('hazard',)
     flow_hazard = Hazard
 
-    def dynamic_behavior(self, time):
-        if not time % 4:
+    def dynamic_behavior(self):
+        if not self.t.time % 4:
             self.hazard.s.present = True
         else:
             self.hazard.s.present = False
@@ -165,11 +158,10 @@ class PassStates(State):
 class PassHazard(Function):
     """Accumulates total hazards/mitigations."""
 
-    __slots__ = ('hazard',)
     container_s = PassStates
     flow_hazard = Hazard
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         if self.hazard.s.present and self.hazard.s.mitigated:
             self.s.hazards_mitigated += 1
         elif self.hazard.s.present and not self.hazard.s.mitigated:
@@ -179,7 +171,6 @@ class PassHazard(Function):
 class HazardModel(FunctionArchitecture):
     """Overall model of the human in context."""
 
-    __slots__ = ()
     default_sp = dict(end_time=60, dt=1.0)
 
     def init_architecture(self, **kwargs):
@@ -194,9 +185,9 @@ if __name__ == '__main__':
     mdl = HazardModel()
     result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard.aa.acts.act',
                                                  'unable', time=4,
-                                                 desired_result='graph')
+                                                 to_return='graph')
 
-    result_fault.graph.draw()
+    result_fault.get_faulty().tend.graph.draw()
     ex_fxn = DetectHazard('detect_hazard')
     result_indiv, hist_indiv = prop.nominal(ex_fxn,
                                             disturbances={5:{'aa.flows.hazard.s.present':True}})
@@ -206,5 +197,5 @@ if __name__ == '__main__':
 
     result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard.aa.acts.perceive',
                                                  'failed', time=4,
-                                                 desired_result='graph.fxns.detect_hazard.aa')
-    result_fault.graph.fxns.detect_hazard.aa.draw_graphviz(layout='dot')
+                                                 to_return='graph.fxns.detect_hazard.aa')
+    result_fault.get_faulty().tend.graph.fxns.detect_hazard.aa.draw_graphviz(layout='dot')

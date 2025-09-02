@@ -83,7 +83,7 @@ class TransportLiquidMode(Mode):
 
 
 class ImportLiquid(Function):
-    __slots__ = ('sig', 'wat_out')
+
     container_p = TankParam
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
@@ -91,7 +91,7 @@ class ImportLiquid(Function):
     flow_wat_out = Liquid
     flownames = {'coolant_in': 'wat_out', 'input_sig': 'sig'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.sig.s.action >= 1:
             self.s.amt_open = 1 + self.p.turnup
         elif self.sig.s.action == 0:
@@ -111,7 +111,7 @@ class ImportLiquid(Function):
 
 
 class ExportLiquid(Function):
-    __slots__ = ('sig', 'wat_in')
+
     container_p = TankParam
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
@@ -119,7 +119,7 @@ class ExportLiquid(Function):
     flow_wat_in = Liquid
     flownames = {'coolant_out': 'wat_in', 'output_sig': 'sig'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.sig.s.action >= 1:
             self.s.amt_open = 1 + self.p.turnup
         elif self.sig.s.action == 0:
@@ -145,7 +145,7 @@ class StoreLiquidState(State):
 
 
 class StoreLiquid(Function):
-    __slots__ = ('wat_in', 'wat_out', 'sig')
+
     container_s = StoreLiquidState
     container_m = StoreLiquidMode
     container_p = TankParam
@@ -154,7 +154,7 @@ class StoreLiquid(Function):
     flow_sig = Signal
     flownames = {'coolant_in': 'wat_in', 'coolant_out': 'wat_out', 'tank_sig': 'sig'}
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.s.level >= self.p.capacity:
             self.wat_in.s.rate = 0.0 * self.wat_in.s.effort
             self.wat_out.s.effort = 2.0 * self.wat_in.s.effort
@@ -177,20 +177,19 @@ class StoreLiquid(Function):
         else:
             self.s.net_flow = self.wat_in.s.rate - self.wat_out.s.rate
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.s.inc(level=self.s.net_flow)
         self.s.coolingbuffer = max(self.s.coolingbuffer - 1.0 + self.wat_in.s.rate, 0)
 
 
 class ContingencyActions(Function):
 
-    __slots__ = ('input_sig', 'output_sig', 'tank_sig')
     container_p = TankParam
     flow_input_sig = Signal
     flow_output_sig = Signal
     flow_tank_sig = Signal
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.input_sig.s.action = self.p.policymap[self.input_sig.s.indicator,
                                                    self.tank_sig.s.indicator,
                                                    self.output_sig.s.indicator][0]
@@ -200,7 +199,7 @@ class ContingencyActions(Function):
 
 
 class Tank(FunctionArchitecture):
-    __slots__ = ()
+
     container_p = TankParam
     default_sp = dict(phases=(('na', 0, 0),
                               ('operation', 1, 20)),
@@ -227,7 +226,7 @@ class Tank(FunctionArchitecture):
         self.add_fxn('contingency', ContingencyActions,
                      'input_sig', 'tank_sig', 'output_sig', p=self.p)
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, scen={}, mdlhists={}, **kwargs):
         # here we define failure in terms of the water level getting too low or too high
         overfullcost, emptycost, buffercost = 0, 0, 0
         # calculate time the tank is overfull:
@@ -252,16 +251,16 @@ if __name__ == "__main__":
     vals = ['fxns.store_coolant.s.level',
             'fxns.store_coolant.s.net_flow',
             'fxns.store_coolant.s.coolingbuffer']
-    endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass', 'graph'])
+    endresults, mdlhist = propagate.nominal(mdl, to_Return=['endclass', 'graph'])
     mdlhist.plot_line(*vals)
 
     # check faulty run
     result, mdlhist = propagate.one_fault(mdl, 'export_coolant', 'blockage', time=2,
-                                          desired_result=['endclass', 'graph'])
+                                          to_return=['endclass', 'graph'])
 
     mdlhist.plot_line(*vals, time_slice=2, title='NotVisible')
-    result.graph.draw(title='NotVisible, time=2')
-    result.graph.draw_graphviz(title='NotVisible, time=2')
+    result.get_faulty().tend.graph.draw(title='NotVisible, time=2')
+    result.get_faulty().tend.graph.draw_graphviz(title='NotVisible, time=2')
 
     from fmdtools.sim.sample import ParameterDomain
     pd = ParameterDomain(TankParam)

@@ -52,17 +52,17 @@ class TankTests(unittest.TestCase, CommonTests):
         mdl_cop = self.mdl.copy()
         mdl_cop_2 = mdl_cop.copy()
 
-        self.assertEqual(self.mdl.fxns['human'].aa.acts['detect'].duration, 2)
-        self.assertEqual(mdl_cop.fxns['human'].aa.acts['detect'].duration, 2)
-        self.assertEqual(mdl_cop_2.fxns['human'].aa.acts['detect'].duration, 2)
+        self.assertEqual(self.mdl.fxns['human'].aa.acts['detect'].t.duration, 2)
+        self.assertEqual(mdl_cop.fxns['human'].aa.acts['detect'].t.duration, 2)
+        self.assertEqual(mdl_cop_2.fxns['human'].aa.acts['detect'].t.duration, 2)
 
     def test_approach(self):
         res, hists = prop.fault_sample(self.mdl, self.fs,
-                                      track="all", showprogress=False)
+                                       track="all", showprogress=False)
         for scen in self.fs.scenarios():
             seq = scen.sequence
             name = scen.name
-            res, hist = prop.sequence(self.mdl, seq=seq)
+            res, hist = prop.sequence(self.mdl, seq=seq, showprogress=False)
             faulthist = hist.faulty
             self.check_same_hist(faulthist, hists.get(name), "approach")
 
@@ -94,7 +94,7 @@ class TankTests(unittest.TestCase, CommonTests):
                  for mode in a.m.get_faults()}
         for modescope, mode in modes.items():
             mdl = Tank()
-            mdl.propagate(1, fxnfaults={modescope: mode})
+            mdl(time=1, faults={modescope: mode})
             faults = mdl.get_vars(modescope).m.faults
             self.assertIn(mode, faults)
             self.assertTrue(mdl.fxns['human'].m.sub_faults)
@@ -115,17 +115,20 @@ class TankTests(unittest.TestCase, CommonTests):
                                          ('operation', 1, 20)),
                               'end_time': 20.0, 'dt': 1.0,
                               'units': 'min', 'use_local': False})
-        _, hist_global = prop.one_fault(mdl_global, 'store_water', 'leak', time=2)
+        _, hist_global = prop.one_fault(mdl_global, 'store_water', 'leak', time=2,
+                                        showprogress=False)
         hist_global = hist_global.flatten()
 
         mdl_loc_low = Tank(p={'reacttime': 2, 'store_tstep': 0.1})
-        _, hist_loc_low = prop.one_fault(mdl_loc_low, 'store_water', 'leak', time=2)
+        _, hist_loc_low = prop.one_fault(mdl_loc_low, 'store_water', 'leak', time=2,
+                                         showprogress=False)
         hist_loc_low = hist_loc_low.flatten()
 
         self.compare_results(hist_global, hist_loc_low)
 
         mdl_loc_high = Tank(p={'reacttime': 2, 'store_tstep': 3.0})
-        _, hist_loc_high = prop.one_fault(mdl_loc_high, 'store_water', 'leak', time=2)
+        _, hist_loc_high = prop.one_fault(mdl_loc_high, 'store_water', 'leak', time=2,
+                                          showprogress=False)
         hist_loc_high = hist_loc_high.flatten()
         for i in [2, 5, 8, 12]:
             slice_global = hist_global.get_slice(i)
@@ -171,7 +174,7 @@ class TankTests(unittest.TestCase, CommonTests):
         self.check_ps_save(self.mdl, self.ps, "tank_res.csv", "tank_hists.csv")
         self.check_ps_save(self.mdl, self.ps, "tank_res.json", "tank_hists.json")
 
-    def test_param_sample_save(self):
+    def test_param_sample_isave(self):
         indiv_names = ("tank_res", "tank_hist")
         self.check_ps_isave(self.mdl, self.ps, *indiv_names, "npz")
         self.check_ps_isave(self.mdl, self.ps, *indiv_names, "csv")
@@ -227,7 +230,7 @@ def check_parallel():
 
     assert res == res_par
     print("staged-parallel")
-    res_par_staged, hist_par_staged = prop.fault_sample(mdl, fs,showprogress=False,
+    res_par_staged, hist_par_staged = prop.fault_sample(mdl, fs, showprogress=False,
                                                         pool=mp.Pool(4), staged=True,
                                                         track='all')
 
@@ -236,7 +239,7 @@ def check_parallel():
 
     hist_diff.guide_water_out_leak_t0p0.flows.wat_in_2.s.effort
 
-    #mc_diff.guide_water_in_leak_t0p0.flows.wat_in_2.s.effort
+    # mc_diff.guide_water_in_leak_t0p0.flows.wat_in_2.s.effort
 
     hist_diff.human_detect_false_low_t16p0.fxns.human.aa.active_actions[16]
 
@@ -249,24 +252,24 @@ if __name__ == '__main__':
     # NOTE: reset expected not to work since args are no longer being saved
 
     # suite = unittest.TestSuite()
-    # suite.addTest(TankTests("test_model_reset"))
+    # suite.addTest(TankTests("test_nested_sample_isave"))
     # runner = unittest.TextTestRunner()
     # runner.run(suite)
 
     # suite = unittest.TestSuite()
-    # suite.addTest(TankTests("test_model_copy_same"))
+    # suite.addTest(TankTests("test_save_load_multfault"))
     # runner = unittest.TextTestRunner()
     # runner.run(suite)
 
-    #suite = unittest.TestSuite()
-    #suite.addTest(TankTests("test_approach_parallelism_notrack"))
-    #suite.addTest(TankTests("test_approach_parallelism_0"))
-    #suite.addTest(TankTests("test_approach_parallelism_1"))
-    #runner = unittest.TextTestRunner()
-    #runner.run(suite)
+    # suite = unittest.TestSuite()
+    # suite.addTest(TankTests("test_approach_parallelism_notrack"))
+    # suite.addTest(TankTests("test_approach_parallelism_0"))
+    # suite.addTest(TankTests("test_approach_parallelism_1"))
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite)
 
     unittest.main()
 
-    #mdl = Tank()
-    #scen = {'human': 'NotDetected'}
-    #mdl.propagate(scen,1)    
+    # mdl = Tank()
+    # scen = {'human': 'NotDetected'}
+    # mdl.propagate(scen,1)    
