@@ -1,3 +1,3 @@
 digraph {
-	0 [label=ArchitectureNodeStyle color=grey fillcolor=lightgrey shape=triangle style=filled]
+	0 [label=ArchitectureNodeStyle color=grey fillcolor=lightgrey penwidth=0 shape=triangle style=filled]
 }

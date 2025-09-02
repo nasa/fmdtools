@@ -347,15 +347,6 @@ class Graph(object):
         ax : matplotlib axis
             Ax in the figure
         """
-        return self._draw_matplotlib(figsize=figsize, title=title, fig=fig, ax=ax, 
-                                   withlegend=withlegend, legend_bbox=legend_bbox, 
-                                   legend_loc=legend_loc, legend_labelspacing=legend_labelspacing,
-                                   legend_borderpad=legend_borderpad, saveas=saveas, **kwargs)
-
-    def _draw_matplotlib(self, figsize=(12, 10), title="", fig=False, ax=False, withlegend=True,
-                         legend_bbox=(1, 0.5), legend_loc="center left", legend_labelspacing=2,
-                         legend_borderpad=1, saveas='', **kwargs):
-        """Draw graph using matplotlib (original draw method)."""
         fig, ax = setup_plot(figsize=figsize, fig=fig, ax=ax)
         self.set_properties(**kwargs)
         # draw edges
@@ -384,63 +375,63 @@ class Graph(object):
     def draw_drawio(self, saveas='', **kwargs):
         """
         Generate DrawIO diagram using existing graph structure and positions.
-        
+
         Parameters
         ----------
         saveas : str, optional
             File path to save the DrawIO XML. If empty, returns XML content.
         **kwargs : dict
             Additional arguments for graph styling and positioning.
-            
+
         Returns
         -------
-        str
-            DrawIO XML content if saveas is empty, otherwise the filename.
-            
+        xml_content : str
+            DrawIO XML content.
+
         Examples
         --------
+        >>> graph = Graph(ex_nxgraph)
         >>> xml_content = graph.draw_drawio()  # Get XML content
-        >>> graph.draw_drawio("graph.drawio")  # Save to file
+        >>> xml_content = graph.draw_drawio("graph.drawio")  # Save to file
         """
         if not hasattr(self, 'pos') or not self.pos:
             # Set default positions if none exist
             self.set_pos(auto='spring')
-        
+
         # Improve spacing by scaling positions more aggressively
         self._improve_drawio_spacing()
-        
+
         xml_content = self._create_drawio_xml()
-        
+
         if saveas:
             with open(saveas, 'w') as f:
                 f.write(xml_content)
-            return saveas
         return xml_content
 
     def _improve_drawio_spacing(self):
         """Improve spacing between nodes for better DrawIO visualization."""
         if not hasattr(self, 'pos') or not self.pos:
             return
-        
+
         # Find the range of positions - positions should always be (x, y) tuples
         x_coords = [pos[0] for pos in self.pos.values()]
         y_coords = [pos[1] for pos in self.pos.values()]
-        
+
         if not x_coords or not y_coords:
             return
-        
+
         x_min, x_max = min(x_coords), max(x_coords)
         y_min, y_max = min(y_coords), max(y_coords)
-        
+
         # Calculate scaling factors to ensure minimum spacing
         min_spacing = 500  # Minimum pixels between node centers
         current_x_range = x_max - x_min if x_max != x_min else 1
         current_y_range = y_max - y_min if y_max != y_min else 1
-        
+
         # Scale to ensure minimum spacing
         x_scale = max(1, min_spacing / current_x_range)
         y_scale = max(1, min_spacing / current_y_range)
-        
+
         # Apply improved scaling to all positions
         for node, pos in self.pos.items():
             # Scale and center the positions with more aggressive spacing
@@ -461,7 +452,7 @@ class Graph(object):
                 canvas_width, canvas_height = 1000, 800
         else:
             canvas_width, canvas_height = 1000, 800
-        
+
         xml_parts = [
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<mxfile host="fmdtools" version="1.0">',
@@ -471,16 +462,16 @@ class Graph(object):
             '        <mxCell id="0"/>',
             '        <mxCell id="1" parent="0"/>'
         ]
-        
+
         # Add nodes with proper positioning
         for node, pos in self.pos.items():
             # Use the improved positions directly
             x = float(pos[0])
             y = float(pos[1])
-            
+
             node_data = self.g.nodes[node]
             nodetype = node_data.get('nodetype', 'default')
-            
+
             # Infer nodetype from node name if it's 'default'
             if nodetype == 'default':
                 if '.flows.' in node:
@@ -491,9 +482,9 @@ class Graph(object):
                     nodetype = 'action'
                 elif '.components.' in node:
                     nodetype = 'component'
-            
+
             style = self._get_node_style(nodetype)
-            
+
             xml_parts.append(
                 f'        <mxCell id="{node}" value="{node}" style="{style}" vertex="1" parent="1">'
             )
@@ -501,33 +492,33 @@ class Graph(object):
                 f'          <mxGeometry x="{x}" y="{y}" width="80" height="40" as="geometry"/>'
             )
             xml_parts.append('        </mxCell>')
-        
+
         # Add edges
         for edge in self.g.edges():
             source, target = edge
             edge_data = self.g.edges[edge]
             edgetype = edge_data.get('edgetype', 'default')
             style = self._get_edge_style(edgetype)
-            
+
             xml_parts.append(
                 f'        <mxCell id="edge_{source}_{target}" style="{style}" edge="1" parent="1" source="{source}" target="{target}">'
             )
             xml_parts.append('          <mxGeometry relative="1" as="geometry"/>')
             xml_parts.append('        </mxCell>')
-        
+
         xml_parts.extend([
             '      </root>',
             '    </mxGraphModel>',
             '  </diagram>',
             '</mxfile>'
         ])
-        
+
         return '\n'.join(xml_parts)
 
     def _get_node_style(self, nodetype):
         """
         Get DrawIO style for node type using the existing style system.
-        
+
         Examples
         --------
         >>> graph = Graph(nx.DiGraph())
@@ -536,13 +527,13 @@ class Graph(object):
         True
         >>> 'strokeColor=#6699cc' in style
         True
-        
+
         >>> style = graph._get_node_style('Flow')
         >>> 'ellipse' in style
         True
         >>> 'fillColor=#90EE90' in style
         True
-        
+
         >>> style = graph._get_node_style('Environment')
         >>> 'fillColor=#ffccff' in style
         True
@@ -551,10 +542,10 @@ class Graph(object):
             # Use the existing style system
             style_obj = node_style_factory(nodetype)
             drawio_props = style_obj.drawio_kwargs()
-            
+
             # Convert style properties to DrawIO XML format
             style_parts = []
-            
+
             # Shape
             if 'shape' in drawio_props:
                 if drawio_props['shape'] == 'ellipse':
@@ -569,24 +560,24 @@ class Graph(object):
                     style_parts.append('rounded=0')
             else:
                 style_parts.append('rounded=0')
-            
+
             # Basic properties
             style_parts.extend(['whiteSpace=wrap', 'html=1'])
-            
+
             # Colors
             if 'fillcolor' in drawio_props:
                 style_parts.append(f"fillColor={drawio_props['fillcolor']}")
             if 'strokecolor' in drawio_props:
                 style_parts.append(f"strokeColor={drawio_props['strokecolor']}")
-            
+
             # Font properties
             if 'fontsize' in drawio_props:
                 style_parts.append(f"fontSize={drawio_props['fontsize']}")
             if 'fontstyle' in drawio_props:
                 style_parts.append(f"fontStyle={drawio_props['fontstyle']}")
-            
+
             return ';'.join(style_parts)
-            
+
         except Exception:
             # Fallback to default style
             return 'rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;'
@@ -594,14 +585,14 @@ class Graph(object):
     def _get_edge_style(self, edgetype):
         """
         Get DrawIO style for edge type using the existing style system.
-        
+
         Examples
         --------
         >>> graph = Graph(nx.DiGraph())
         >>> style = graph._get_edge_style('connection')
         >>> 'strokeWidth=1' in style
         True
-        
+
         >>> style = graph._get_edge_style('activation')
         >>> 'dashed=1' in style
         True
@@ -610,28 +601,28 @@ class Graph(object):
             # Use the existing style system
             style_obj = edge_style_factory(edgetype)
             drawio_props = style_obj.drawio_kwargs()
-            
+
             # Convert style properties to DrawIO XML format
             style_parts = []
-            
+
             # Stroke properties
             if 'strokewidth' in drawio_props:
                 style_parts.append(f"strokeWidth={drawio_props['strokewidth']}")
             if 'strokecolor' in drawio_props:
                 style_parts.append(f"strokeColor={drawio_props['strokecolor']}")
-            
+
             # Arrow properties
             if 'startarrow' in drawio_props:
                 style_parts.append(f"startArrow={drawio_props['startarrow']}")
             if 'endarrow' in drawio_props:
                 style_parts.append(f"endArrow={drawio_props['endarrow']}")
-            
+
             # Line style
             if 'dashed' in drawio_props and drawio_props['dashed']:
                 style_parts.append('dashed=1')
-            
+
             return ';'.join(style_parts)
-            
+
         except Exception:
             # Fallback to default style
             return 'strokeWidth=1;strokeColor=#cccccc;endArrow=classic;'
@@ -699,8 +690,6 @@ class Graph(object):
                          **gv_kwargs)
         gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
-
-
 
     def calc_aspl(self):
         """
@@ -902,9 +891,9 @@ class Graph(object):
         maxFreq = max(freq)
         freqint = list(range(0, maxFreq+1))
         degreeint = list(range(min(degrees), math.ceil(max(degrees))+1))
-        # TODO degreeSet looks to be not used, consider removing - JLO
+
         degreesSet = set(degrees)
-        degreesUnique = list(degrees)
+        degreesUnique = list(degreesSet)
         numDegreesUnique = len(degreesUnique)
 
         fig = plt.figure()
@@ -988,30 +977,6 @@ class Graph(object):
         plt.ylabel('Number of nodes')
         plt.show()
         return fig
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):

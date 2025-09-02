@@ -1,0 +1,3 @@
+digraph {
+	0 -> 1 [label=InheritanceEdgeStyle arrowhead=empty arrowtail=none color=black dir=forward style=solid]
+}

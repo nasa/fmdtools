@@ -101,10 +101,9 @@ class HumanActionMode(Mode):
     exclusive = True
 
 
-class GenericHumanAction(object):
+class GenericHumanAction(Action):
     """Shared properties of human actions."""
 
-    __slots__ = ()
     container_m = HumanActionMode
 
     def complete(self):
@@ -112,7 +111,7 @@ class GenericHumanAction(object):
         return not self.m.in_mode('no_action', 'failed_no_action')
 
 
-class Look(Action, GenericHumanAction):
+class Look(GenericHumanAction):
     """
     Operator looking at the state of comms signals, switches, etc.
 
@@ -150,7 +149,7 @@ class PerceptionMode(HumanActionMode):
     opermodes = ('nominal', 'no_action')
 
 
-class Percieve(Action, GenericHumanAction):
+class Percieve(GenericHumanAction):
     """
     Operator percieving the state of comms signals, switches, etc.
 
@@ -193,7 +192,7 @@ class Percieve(Action, GenericHumanAction):
             self.pos_signal.s.assign(self.comms.s.pos)
 
 
-class Comprehend(Action, GenericHumanAction):
+class Comprehend(GenericHumanAction):
     """
     Operator comprehending the input state.
 
@@ -248,7 +247,7 @@ class ProjectMode(HumanActionMode):
     fault_failed_no_action = ()
 
 
-class Project(Action, GenericHumanAction):
+class Project(GenericHumanAction):
     """
     Operator projecting out how control actions might affect input state.
 
@@ -308,7 +307,7 @@ class DecideMode(Mode):
     fault_failed_continue = ()
 
 
-class Decide(Action, GenericHumanAction):
+class Decide(GenericHumanAction):
     """
     Operator deciding how to control actions based on projection of input state.
 
@@ -331,7 +330,7 @@ class Decide(Action, GenericHumanAction):
             self.signal.s.set_control(self.control)
 
 
-class Reach(Action, GenericHumanAction):
+class Reach(GenericHumanAction):
     """
     Operator reaching for controls to operate.
 
@@ -360,7 +359,7 @@ class PressMode(Mode):
     fault_no_press = ()
 
 
-class Press(Action, GenericHumanAction):
+class Press(GenericHumanAction):
     """
     Operator presses the button/toggle for the controls.
 

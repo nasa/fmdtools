@@ -11,7 +11,7 @@
 <!-- 0 -->
 <g id="node1" class="node">
 <title>0</title>
-<polygon fill="lightgrey" stroke="grey" points="209.4,-36 54.99,-36 0,0 264.4,0 209.4,-36"/>
+<polygon fill="lightgrey" stroke="grey" stroke-width="0" points="209.4,-36 54.99,-36 0,0 264.4,0 209.4,-36"/>
 <text text-anchor="middle" x="132.2" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">ComponentNodeStyle</text>
 </g>
 </g>

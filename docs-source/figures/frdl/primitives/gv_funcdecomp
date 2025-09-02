@@ -18,7 +18,7 @@ digraph {
 	function_c -> external_material_in [label="" arrowhead=none arrowtail=ediamond color=black dir=both style=solid]
 	function_c -> external_material_out [label="" arrowhead=none arrowtail=ediamond color=black dir=both style=solid]
 	function_c -> external_energy_out [label="" arrowhead=none arrowtail=ediamond color=black dir=both style=solid]
-	function_a -> function_b [label=new_control_signal arrowhead=open color=black style=dashed]
-	function_b -> function_c [label=change_in_energy_usage arrowhead=open color=black style=dashed]
-	function_c -> function_b [label=change_in_energy_potential arrowhead=open color=black style=dashed]
+	function_a -> function_b [label=new_control_signal arrowhead=open arrowtail=none color=black dir=forward style=dashed]
+	function_b -> function_c [label=change_in_energy_usage arrowhead=open arrowtail=none color=black dir=forward style=dashed]
+	function_c -> function_b [label=change_in_energy_potential arrowhead=open arrowtail=none color=black dir=forward style=dashed]
 }

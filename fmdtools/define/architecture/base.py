@@ -252,7 +252,7 @@ class Architecture(Simulable):
             elif self.as_copy:
                 raise Exception("No role argument "+role+" to copy.")
             elif rname in kwargs:
-                setattr(self, rname, {**kwargs[role]})
+                setattr(self, rname, {**kwargs[rname]})
             else:
                 setattr(self, rname, dict())
 
@@ -628,23 +628,25 @@ class Architecture(Simulable):
     def as_drawio(self, saveas='', **kwargs):
         """
         Generate DrawIO diagram from the architecture.
-        
+
         Parameters
         ----------
         saveas : str, optional
             File path to save the DrawIO XML. If empty, returns XML content.
         **kwargs : dict
             Additional arguments passed to the graph creation.
-            
+
         Returns
         -------
-        str
-            DrawIO XML content if saveas is empty, otherwise None.
-            
+        xml_content: str
+            DrawIO XML content.
+
         Examples
         --------
+        >>> from fmdtools.define.architecture.function import ExFxnArch
+        >>> arch = ExFxnArch()
         >>> xml_content = arch.as_drawio()  # Get XML content
-        >>> arch.as_drawio("architecture.drawio")  # Save to file
+        >>> xml_content = arch.as_drawio("architecture.drawio")  # Save to file
         """
         graph = self.as_modelgraph(**kwargs)
         return graph.draw_drawio(saveas=saveas, **kwargs)
@@ -667,3 +669,10 @@ def check_model_pickleability(model, try_pick=False):
     time.sleep(0.2)
     print('MODEL')
     unpickleable = check_pickleability(model, try_pick=try_pick)
+
+
+if __name__ == "__main__":
+
+    import doctest
+    doctest.testmod(verbose=True)
+

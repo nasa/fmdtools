@@ -11,7 +11,7 @@
 <!-- 0 -->
 <g id="node1" class="node">
 <title>0</title>
-<polygon fill="lightgrey" stroke="grey" points="189.95,-47.5 0,-11.88 379.9,-11.87 189.95,-47.5"/>
+<polygon fill="lightgrey" stroke="grey" stroke-width="0" points="189.95,-47.5 0,-11.88 379.9,-11.87 189.95,-47.5"/>
 <text text-anchor="middle" x="189.95" y="-18.32" font-family="Times New Roman,serif" font-size="14.00">ArchitectureNodeStyle</text>
 </g>
 </g>

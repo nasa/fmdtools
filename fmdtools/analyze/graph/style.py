@@ -94,17 +94,17 @@ def mod_prefix():
 @dataclass
 class BaseStyle:
     """Base class to define node/edge styles."""
-    
+
     modifiers: ClassVar[dict] = {}
-    
+
     def __post_init__(self):
         # no args; keep for future internal normalization if needed
         pass
-    
+
     def set_styles(self, **styles):
         """
         Modify the style based on a modifier.
-        
+
         Note: If multiple style tags are provided, later tags override earlier ones
         due to dictionary insertion order preservation. Passing None for a value
         will ignore that key.
@@ -118,17 +118,17 @@ class BaseStyle:
             for k, v in style_kwargs.items():
                 if v is not None:  # Allow callers to "ignore" values
                     setattr(self, k, v)
-    
+
     def gv_kwargs(self):
         """Return keyword arguments for Graphviz (node/edge)."""
         d = asdict(self)
         return {k[3:]: v for k, v in d.items() if k.startswith('gv_') and v is not None}
-    
+
     def nx_kwargs(self):
         """Return nx_* kwargs."""
         d = asdict(self)
         return {k[3:]: v for k, v in d.items() if k.startswith('nx_') and v is not None}
-    
+
     def drawio_kwargs(self):
         """Return keyword arguments for DrawIO."""
         d = asdict(self)
@@ -181,7 +181,7 @@ class EdgeStyle(BaseStyle):
     modifiers : dict
         Modifiers to previous parameters to apply based on particular styles.
     """
-    
+
     # Default values as dataclass fields
     nx_edge_color: str = 'black'
     nx_style: str = 'solid'
@@ -194,30 +194,30 @@ class EdgeStyle(BaseStyle):
     gv_color: str = 'black'
     gv_style: str = 'solid'
     drawio_strokewidth: int = 1
-    drawio_strokecolor: str = 'white'
+    drawio_strokecolor: str = 'black'
     drawio_startarrow: str = 'none'
     drawio_endarrow: str = 'none'
     drawio_dashed: bool = False
-    
+
     modifiers: ClassVar[dict] = dict(
         degraded=dict(nx_edge_color='orange', gv_color='orange'),
         active=dict(nx_edge_color='green', gv_color='green')
     )
-    
+
     def nx_kwargs(self):
         """Return the style-defined arguments for nx.draw_networkx_edges."""
         kwargs = {k[3:]: v for k, v in asdict(self).items() 
                  if (k.startswith('nx_') and v is not None and 
                      not (not self.nx_arrows and k in ('nx_arrowstyle', 'nx_arrowsize')))}
         return kwargs
-    
+
     def nx_legend_line(self, legend_label=''):
         """Return mlines.Line2D patch for legend."""
         if not legend_label:
             legend_label = self.__class__.__name__
         return mlines.Line2D([], [], color=self.nx_edge_color, linestyle=self.nx_style,
                              label=legend_label)
-    
+
     def show_nx(self, fig=None, ax=None, figsize=(1, 1), withlegend=False, saveas=''):
         """Show how the edge will look in networkx."""
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
@@ -230,7 +230,7 @@ class EdgeStyle(BaseStyle):
         nx_plot_ending(fig, ax, title=self.__class__.__name__, withlegend=withlegend,
                        add_handles=[lin], saveas=saveas)
         return fig, ax
-    
+
     def show_gv(self, disp=True, saveas=''):
         """Show how the edge will look in graphviz."""
         Digraph, Graph = gv_import_check()
@@ -238,7 +238,7 @@ class EdgeStyle(BaseStyle):
         dot.edge('0', '1', label=self.__class__.__name__, **self.gv_kwargs())
         gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
-    
+
     def draw_nx(self, g, pos, edges, label='', ax=None):
         """Draw the edges of a graph with networkx."""
         nx.draw_networkx_edges(g, pos, edges, label=label, ax=ax, **self.nx_kwargs())
@@ -246,14 +246,14 @@ class EdgeStyle(BaseStyle):
 
 def save_dot(dot, saveas=''):
     """Save a graphviz diagram.
-    
+
     Parameters
     ----------
     dot : graphviz.Digraph
         The graphviz diagram to save
     saveas : str
         Filename to save as. Must include an extension (e.g., "diagram.svg")
-        
+
     Note: Graphviz will create additional sidecar files (e.g., .svg output plus .gv cache files)
     next to the root filename. The root filename is derived from saveas minus the extension.
     """
@@ -276,12 +276,12 @@ class FlowEdgeStyle(EdgeStyle):
     {'edge_color': 'black', 'style': 'solid', 'arrows': False}
     >>> FlowEdgeStyle(nx_arrows=True).nx_kwargs()
     {'edge_color': 'black', 'style': 'solid', 'arrows': True, 'arrowstyle': '-|>', 'arrowsize': 15}
-    
+
     # Edge: no arrows suppresses arrow kwargs
     >>> EdgeStyle(nx_arrows=False).nx_kwargs().get('arrowstyle', None) is None
     True
     """
-    
+
     nx_arrows: bool = True
     gv_arrowhead: str = 'none'
     gv_arrowtail: str = 'ediamond'
@@ -293,7 +293,7 @@ class FlowEdgeStyle(EdgeStyle):
 @dataclass
 class ActivationEdgeStyle(EdgeStyle):
     """EdgeStyle representing activation/conditions."""
-    
+
     nx_style: str = 'dashed'
     nx_arrows: bool = True
     nx_arrowstyle: str = '->'
@@ -306,7 +306,7 @@ class ActivationEdgeStyle(EdgeStyle):
 @dataclass
 class ContainmentEdgeStyle(EdgeStyle):
     """EdgeStyle representing containment."""
-    
+
     nx_arrows: bool = True
     gv_arrowhead: str = 'none'
     gv_arrowtail: str = 'diamond'
@@ -317,7 +317,7 @@ class ContainmentEdgeStyle(EdgeStyle):
 @dataclass
 class ConnectionEdgeStyle(EdgeStyle):
     """EdgeStyle representing weak connections."""
-    
+
     nx_edge_color: str = 'grey'
     nx_style: str = 'dashed'
     gv_arrowhead: str = 'none'
@@ -328,7 +328,7 @@ class ConnectionEdgeStyle(EdgeStyle):
 @dataclass
 class InheritanceEdgeStyle(EdgeStyle):
     """EdgeStyle representing inheritance."""
-    
+
     nx_edge_color: str = 'grey'
     nx_arrows: bool = True
     gv_arrowhead: str = 'empty'
@@ -369,16 +369,16 @@ def edge_style_factory(style_tag, styles=None, **kwargs) -> EdgeStyle:
     >>> i_s = edge_style_factory('inheritance')
     >>> fig, ax = i_s.show_nx(saveas=loc+'nx/inheritance.svg')
     >>> sv = i_s.show_gv(disp=False, saveas=loc+'gv/inheritance.svg')
-    
+
     # Factory covers inheritance
     >>> isinstance(edge_style_factory('inheritance'), InheritanceEdgeStyle)
     True
-    
+
     # Custom modifier wins
     >>> s = edge_style_factory('flow', styles={'active': {'nx_edge_color': 'purple'}})
     >>> s.nx_edge_color
     'purple'
-    
+
     # User kwargs beat defaults
     >>> s = edge_style_factory('flow', nx_edge_color='blue')
     >>> s.nx_edge_color
@@ -447,7 +447,7 @@ class NodeStyle(BaseStyle):
     modifiers : dict
         Modifiers to previous parameters to apply based on particular styles.
     """
-    
+
     # Default values as dataclass fields
     nx_node_shape: str = 'o'
     nx_linewidths: int = 0
@@ -472,7 +472,7 @@ class NodeStyle(BaseStyle):
     drawio_rounded: bool = False
     drawio_strokewidth: int = 1
     drawio_opacity: float = 1.0
-    
+
     modifiers: ClassVar[dict] = dict(
         active=dict(nx_node_color='green', gv_fillcolor='green'),
         degraded=dict(nx_node_color='orange', gv_fillcolor='orange'),
@@ -481,7 +481,7 @@ class NodeStyle(BaseStyle):
         static=dict(nx_node_color='cyan', gv_fillcolor='cyan'),
         dynamic=dict(nx_edgecolors='teal', gv_color='teal')
     )
-    
+
     def show_nx(self, fig=None, ax=None, figsize=(1, 1), withlegend=False, saveas=''):
         """Show how the node will look in networkx."""
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
@@ -493,7 +493,7 @@ class NodeStyle(BaseStyle):
         nx_plot_ending(fig, ax, title=self.__class__.__name__, withlegend=withlegend,
                        saveas=saveas)
         return fig, ax
-    
+
     def show_gv(self, disp=True, saveas=''):
         """Show how the edge will look in graphviz."""
         Digraph, Graph = gv_import_check()
@@ -503,7 +503,7 @@ class NodeStyle(BaseStyle):
             display(SVG(dot._repr_image_svg_xml()))
         gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
-    
+
     def draw_nx(self, g, pos, nodes, label='', ax=None):
         """Draw the nodes using networkx."""
         nx.draw_networkx_nodes(g, pos, nodes, **self.nx_kwargs(), label=label, ax=ax)
@@ -512,7 +512,7 @@ class NodeStyle(BaseStyle):
 @dataclass
 class BlockNodeStyle(NodeStyle):
     """Style representing Blocks."""
-    
+
     nx_node_shape: str = 's'
     nx_linewidths: int = 2
     gv_shape: str = 'rectangle'
@@ -523,7 +523,7 @@ class BlockNodeStyle(NodeStyle):
 @dataclass
 class FunctionNodeStyle(BlockNodeStyle):
     """Style representing Functions."""
-    
+
     drawio_fillcolor: str = '#cce5ff'  # Light blue
     drawio_strokecolor: str = '#6699cc'  # Darker blue
 
@@ -531,7 +531,7 @@ class FunctionNodeStyle(BlockNodeStyle):
 @dataclass
 class ActionNodeStyle(BlockNodeStyle):
     """Style representing Actions."""
-    
+
     gv_style: str = 'rounded, filled'
     drawio_shape: str = 'rhombus'
     drawio_fillcolor: str = '#ffffcc'  # Light yellow
@@ -541,7 +541,7 @@ class ActionNodeStyle(BlockNodeStyle):
 @dataclass
 class ComponentNodeStyle(NodeStyle):
     """Style representing Components."""
-    
+
     gv_style: str = 'filled'
     gv_shape: str = 'trapezium'
     drawio_shape: str = 'triangle'
@@ -552,7 +552,7 @@ class ComponentNodeStyle(NodeStyle):
 @dataclass
 class ArchitectureNodeStyle(NodeStyle):
     """Style representing Architectures."""
-    
+
     nx_node_shape: str = '^'
     gv_shape: str = 'triangle'
     drawio_shape: str = 'hexagon'
@@ -561,7 +561,7 @@ class ArchitectureNodeStyle(NodeStyle):
 @dataclass
 class FlowNodeStyle(NodeStyle):
     """Style representing Flow objects."""
-    
+
     nx_node_shape: str = 'o'
     nx_linewidths: int = 0
     gv_style: str = 'filled'
@@ -575,7 +575,7 @@ class FlowNodeStyle(NodeStyle):
 @dataclass
 class MultiFlowNodeStyle(NodeStyle):
     """Style representing MultiFlow objects."""
-    
+
     nx_node_shape: str = 'p'
     nx_linewidths: int = 0
     gv_style: str = 'filled'
@@ -586,7 +586,7 @@ class MultiFlowNodeStyle(NodeStyle):
 @dataclass
 class CommsFlowNodeStyle(NodeStyle):
     """Style representing CommsFlow objects."""
-    
+
     nx_node_shape: str = '8'
     nx_linewidths: int = 0
     gv_style: str = 'filled'
@@ -597,7 +597,7 @@ class CommsFlowNodeStyle(NodeStyle):
 @dataclass
 class ContainerNodeStyle(NodeStyle):
     """Style representing containers."""
-    
+
     nx_node_shape: str = 's'
     nx_linewidths: int = 0
     gv_style: str = 'filled'
@@ -608,7 +608,7 @@ class ContainerNodeStyle(NodeStyle):
 @dataclass
 class MethodNodeStyle(NodeStyle):
     """Style representing method nodes."""
-    
+
     nx_node_shape: str = 'd'
     nx_linewidths: int = 0
     gv_style: str = 'filled'
@@ -619,7 +619,7 @@ class MethodNodeStyle(NodeStyle):
 @dataclass
 class OtherNodeStyle(NodeStyle):
     """Style representing other properties."""
-    
+
     nx_node_shape: str = "P"
     nx_linewidths: int = 0
     gv_style: str = 'filled'
@@ -630,7 +630,7 @@ class OtherNodeStyle(NodeStyle):
 @dataclass
 class EnvironmentNodeStyle(NodeStyle):
     """Style representing Environment objects."""
-    
+
     nx_node_shape: str = 's'
     nx_linewidths: int = 1
     gv_style: str = 'filled'
@@ -686,11 +686,11 @@ def node_style_factory(style_tag, styles=None, **kwargs) -> NodeStyle:
     >>> a_s = node_style_factory('architecture')
     >>> fig, ax = a_s.show_nx(saveas=loc+'nx/architecture.svg')
     >>> sv = a_s.show_gv(disp=False, saveas=loc+'gv/architecture.svg')
-    
+
     # Factory covers architecture
     >>> isinstance(node_style_factory('architecture'), ArchitectureNodeStyle)
     True
-    
+
     # User kwargs beat defaults
     >>> n = node_style_factory('flow', nx_node_color='blue')
     >>> n.nx_node_color
