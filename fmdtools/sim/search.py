@@ -1912,6 +1912,8 @@ class DynamicInterface():
 
 
 class ResponseCoords(BaseCoords):
+    __slots__ = ('__dict__',)
+
     """
     Class for sampling functions and displaying them on maps.
 
@@ -1934,7 +1936,8 @@ class ResponseCoords(BaseCoords):
         if len(func_params) > 2:
             raise Exception("Too many function parameters: "+str(func_params))
         super().__init__(*args, **kwargs)
-        self.add_property_arrays(returns)
+        for ret, arg in returns.items():
+            setattr(self, ret, self.p.create_grid(*arg))
         self.init_properties(function, returns=[*returns], **kwargs)
 
     def init_properties(self, function, returns=['fval'], **kwargs):
