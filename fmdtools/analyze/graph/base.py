@@ -20,10 +20,10 @@ Private Methods:
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
 
-The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+The "Fault Model Design tools - fmdtools version 2" software is licensed
 under the Apache License, Version 2.0 (the "License"); you may not use this
 file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0. 
+License at http://www.apache.org/licenses/LICENSE/2.0. 
 
 Unless required by applicable law or agreed to in writing, software distributed
 under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -96,6 +96,8 @@ class Graph(object):
             raise Exception(str(g) + " not a networkx Graph object.")
         if check_info:
             self.check_type_info()
+        
+
 
     def check_type_info(self):
         """Check that nodes and edges have type data."""
@@ -214,11 +216,11 @@ class Graph(object):
         Parameters
         ----------
         title : str, optional
-            Property to get for title text. The default is ‘id’.
+            Property to get for title text. The default is 'id'.
         title2 : str, optional
-            Property to get for title text after the colon. The default is ‘’.
+            Property to get for title text after the colon. The default is ''.
         subtext : str, optional
-            property to get for the subtext. The default is ‘’.
+            property to get for the subtext. The default is ''.
         node_label_styles :  dict
             LabelStyle arguments to overwrite.
         """
@@ -345,6 +347,15 @@ class Graph(object):
         ax : matplotlib axis
             Ax in the figure
         """
+        return self._draw_matplotlib(figsize=figsize, title=title, fig=fig, ax=ax, 
+                                   withlegend=withlegend, legend_bbox=legend_bbox, 
+                                   legend_loc=legend_loc, legend_labelspacing=legend_labelspacing,
+                                   legend_borderpad=legend_borderpad, saveas=saveas, **kwargs)
+
+    def _draw_matplotlib(self, figsize=(12, 10), title="", fig=False, ax=False, withlegend=True,
+                         legend_bbox=(1, 0.5), legend_loc="center left", legend_labelspacing=2,
+                         legend_borderpad=1, saveas='', **kwargs):
+        """Draw graph using matplotlib (original draw method)."""
         fig, ax = setup_plot(figsize=figsize, fig=fig, ax=ax)
         self.set_properties(**kwargs)
         # draw edges
@@ -369,6 +380,261 @@ class Graph(object):
                        borderpad=legend_borderpad, bbox_to_anchor=legend_bbox,
                        loc=legend_loc, add_handles=edge_handles)
         return fig, ax
+
+    def draw_drawio(self, saveas='', **kwargs):
+        """
+        Generate DrawIO diagram using existing graph structure and positions.
+        
+        Parameters
+        ----------
+        saveas : str, optional
+            File path to save the DrawIO XML. If empty, returns XML content.
+        **kwargs : dict
+            Additional arguments for graph styling and positioning.
+            
+        Returns
+        -------
+        str
+            DrawIO XML content if saveas is empty, otherwise the filename.
+            
+        Examples
+        --------
+        >>> xml_content = graph.draw_drawio()  # Get XML content
+        >>> graph.draw_drawio("graph.drawio")  # Save to file
+        """
+        if not hasattr(self, 'pos') or not self.pos:
+            # Set default positions if none exist
+            self.set_pos(auto='spring')
+        
+        # Improve spacing by scaling positions more aggressively
+        self._improve_drawio_spacing()
+        
+        xml_content = self._create_drawio_xml()
+        
+        if saveas:
+            with open(saveas, 'w') as f:
+                f.write(xml_content)
+            return saveas
+        return xml_content
+
+    def _improve_drawio_spacing(self):
+        """Improve spacing between nodes for better DrawIO visualization."""
+        if not hasattr(self, 'pos') or not self.pos:
+            return
+        
+        # Find the range of positions - positions should always be (x, y) tuples
+        x_coords = [pos[0] for pos in self.pos.values()]
+        y_coords = [pos[1] for pos in self.pos.values()]
+        
+        if not x_coords or not y_coords:
+            return
+        
+        x_min, x_max = min(x_coords), max(x_coords)
+        y_min, y_max = min(y_coords), max(y_coords)
+        
+        # Calculate scaling factors to ensure minimum spacing
+        min_spacing = 500  # Minimum pixels between node centers
+        current_x_range = x_max - x_min if x_max != x_min else 1
+        current_y_range = y_max - y_min if y_max != y_min else 1
+        
+        # Scale to ensure minimum spacing
+        x_scale = max(1, min_spacing / current_x_range)
+        y_scale = max(1, min_spacing / current_y_range)
+        
+        # Apply improved scaling to all positions
+        for node, pos in self.pos.items():
+            # Scale and center the positions with more aggressive spacing
+            new_x = (pos[0] - x_min) * x_scale * 2.5 + 200  # Multiply by 2.5 for more spacing
+            new_y = (pos[1] - y_min) * y_scale * 2.5 + 200
+            self.pos[node] = (new_x, new_y)
+
+    def _create_drawio_xml(self):
+        """Create basic DrawIO XML from graph data."""
+        # Calculate canvas size based on node positions
+        if hasattr(self, 'pos') and self.pos:
+            x_coords = [pos[0] for pos in self.pos.values()]
+            y_coords = [pos[1] for pos in self.pos.values()]
+            if x_coords and y_coords:
+                canvas_width = max(x_coords) + 200  # Add padding
+                canvas_height = max(y_coords) + 200
+            else:
+                canvas_width, canvas_height = 1000, 800
+        else:
+            canvas_width, canvas_height = 1000, 800
+        
+        xml_parts = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<mxfile host="fmdtools" version="1.0">',
+            '  <diagram id="graph" name="Graph">',
+            f'    <mxGraphModel dx="{canvas_width}" dy="{canvas_height}" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{canvas_width + 50}" pageHeight="{canvas_height + 50}" math="0" shadow="0">',
+            '      <root>',
+            '        <mxCell id="0"/>',
+            '        <mxCell id="1" parent="0"/>'
+        ]
+        
+        # Add nodes with proper positioning
+        for node, pos in self.pos.items():
+            # Use the improved positions directly
+            x = float(pos[0])
+            y = float(pos[1])
+            
+            node_data = self.g.nodes[node]
+            nodetype = node_data.get('nodetype', 'default')
+            
+            # Infer nodetype from node name if it's 'default'
+            if nodetype == 'default':
+                if '.flows.' in node:
+                    nodetype = 'flow'
+                elif '.fxns.' in node:
+                    nodetype = 'function'
+                elif '.actions.' in node:
+                    nodetype = 'action'
+                elif '.components.' in node:
+                    nodetype = 'component'
+            
+            style = self._get_node_style(nodetype)
+            
+            xml_parts.append(
+                f'        <mxCell id="{node}" value="{node}" style="{style}" vertex="1" parent="1">'
+            )
+            xml_parts.append(
+                f'          <mxGeometry x="{x}" y="{y}" width="80" height="40" as="geometry"/>'
+            )
+            xml_parts.append('        </mxCell>')
+        
+        # Add edges
+        for edge in self.g.edges():
+            source, target = edge
+            edge_data = self.g.edges[edge]
+            edgetype = edge_data.get('edgetype', 'default')
+            style = self._get_edge_style(edgetype)
+            
+            xml_parts.append(
+                f'        <mxCell id="edge_{source}_{target}" style="{style}" edge="1" parent="1" source="{source}" target="{target}">'
+            )
+            xml_parts.append('          <mxGeometry relative="1" as="geometry"/>')
+            xml_parts.append('        </mxCell>')
+        
+        xml_parts.extend([
+            '      </root>',
+            '    </mxGraphModel>',
+            '  </diagram>',
+            '</mxfile>'
+        ])
+        
+        return '\n'.join(xml_parts)
+
+    def _get_node_style(self, nodetype):
+        """
+        Get DrawIO style for node type using the existing style system.
+        
+        Examples
+        --------
+        >>> graph = Graph(nx.DiGraph())
+        >>> style = graph._get_node_style('Function')
+        >>> 'fillColor=#cce5ff' in style
+        True
+        >>> 'strokeColor=#6699cc' in style
+        True
+        
+        >>> style = graph._get_node_style('Flow')
+        >>> 'ellipse' in style
+        True
+        >>> 'fillColor=#90EE90' in style
+        True
+        
+        >>> style = graph._get_node_style('Environment')
+        >>> 'fillColor=#ffccff' in style
+        True
+        """
+        try:
+            # Use the existing style system
+            style_obj = node_style_factory(nodetype)
+            drawio_props = style_obj.drawio_kwargs()
+            
+            # Convert style properties to DrawIO XML format
+            style_parts = []
+            
+            # Shape
+            if 'shape' in drawio_props:
+                if drawio_props['shape'] == 'ellipse':
+                    style_parts.append('ellipse')
+                elif drawio_props['shape'] == 'rhombus':
+                    style_parts.append('rhombus')
+                elif drawio_props['shape'] == 'triangle':
+                    style_parts.append('triangle')
+                elif drawio_props['shape'] == 'hexagon':
+                    style_parts.append('shape=hexagon;perimeter=hexagonPerimeter2')
+                else:
+                    style_parts.append('rounded=0')
+            else:
+                style_parts.append('rounded=0')
+            
+            # Basic properties
+            style_parts.extend(['whiteSpace=wrap', 'html=1'])
+            
+            # Colors
+            if 'fillcolor' in drawio_props:
+                style_parts.append(f"fillColor={drawio_props['fillcolor']}")
+            if 'strokecolor' in drawio_props:
+                style_parts.append(f"strokeColor={drawio_props['strokecolor']}")
+            
+            # Font properties
+            if 'fontsize' in drawio_props:
+                style_parts.append(f"fontSize={drawio_props['fontsize']}")
+            if 'fontstyle' in drawio_props:
+                style_parts.append(f"fontStyle={drawio_props['fontstyle']}")
+            
+            return ';'.join(style_parts)
+            
+        except Exception:
+            # Fallback to default style
+            return 'rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;'
+
+    def _get_edge_style(self, edgetype):
+        """
+        Get DrawIO style for edge type using the existing style system.
+        
+        Examples
+        --------
+        >>> graph = Graph(nx.DiGraph())
+        >>> style = graph._get_edge_style('connection')
+        >>> 'strokeWidth=1' in style
+        True
+        
+        >>> style = graph._get_edge_style('activation')
+        >>> 'dashed=1' in style
+        True
+        """
+        try:
+            # Use the existing style system
+            style_obj = edge_style_factory(edgetype)
+            drawio_props = style_obj.drawio_kwargs()
+            
+            # Convert style properties to DrawIO XML format
+            style_parts = []
+            
+            # Stroke properties
+            if 'strokewidth' in drawio_props:
+                style_parts.append(f"strokeWidth={drawio_props['strokewidth']}")
+            if 'strokecolor' in drawio_props:
+                style_parts.append(f"strokeColor={drawio_props['strokecolor']}")
+            
+            # Arrow properties
+            if 'startarrow' in drawio_props:
+                style_parts.append(f"startArrow={drawio_props['startarrow']}")
+            if 'endarrow' in drawio_props:
+                style_parts.append(f"endArrow={drawio_props['endarrow']}")
+            
+            # Line style
+            if 'dashed' in drawio_props and drawio_props['dashed']:
+                style_parts.append('dashed=1')
+            
+            return ';'.join(style_parts)
+            
+        except Exception:
+            # Fallback to default style
+            return 'strokeWidth=1;strokeColor=#cccccc;endArrow=classic;'
 
     def move_nodes(self, **kwargs):
         """
@@ -433,6 +699,8 @@ class Graph(object):
                          **gv_kwargs)
         gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
+
+
 
     def calc_aspl(self):
         """
@@ -722,6 +990,30 @@ class Graph(object):
         return fig
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
     Calculate one trial of the sff model.
@@ -819,8 +1111,8 @@ def data_error(data, average):
         current_array = np.array([float(x[i]) for x in data])
         q1.append(np.percentile(current_array, 25))
         q3.append(np.percentile(current_array, 75))
-    lower_error = [x - y for x, y in zip(average, q1)]
-    upper_error = [x - y for x, y in zip(q3, average)]
+    lower_error = [avg - low for avg, low in zip(average, q1)]
+    upper_error = [hi - avg for avg, hi in zip(average, q3)]
     return lower_error, upper_error
 
 
