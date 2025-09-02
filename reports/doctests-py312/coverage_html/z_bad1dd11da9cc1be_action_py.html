@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools/define/architecture/action.py: 84%</title>
+    <title>Coverage for fmdtools/define/architecture/action.py: 83%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools/define/architecture/action.py</b>:
-            <span class="pc_cov">84%</span>
+            <span class="pc_cov">83%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">160 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">134<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">26<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">133<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">27<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">13<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_bad1dd11da9cc1be_base_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:05 -0700
+            created at 2025-09-02 13:22 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -506,7 +506,7 @@
     <p class="run"><span class="n"><a id="t424" href="#t424">424</a></span><span class="t">                <span class="key">for</span> <span class="nam">act_in</span><span class="op">,</span> <span class="nam">act_out</span><span class="op">,</span> <span class="nam">atts</span> <span class="key">in</span> <span class="nam">action_cond_edges</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t425" href="#t425">425</a></span><span class="t">                    <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t426" href="#t426">426</a></span><span class="t">                        <span class="nam">cond</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">conds</span><span class="op">[</span><span class="nam">atts</span><span class="op">[</span><span class="str">'name'</span><span class="op">]</span><span class="op">]</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t427" href="#t427">427</a></span><span class="t">                    <span class="key">except</span> <span class="nam">TypeError</span> <span class="key">as</span> <span class="nam">e</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t427" href="#t427">427</a></span><span class="t">                    <span class="key">except</span> <span class="nam">TypeError</span> <span class="key">as</span> <span class="nam">e</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t428" href="#t428">428</a></span><span class="t">                        <span class="key">raise</span> <span class="nam">TypeError</span><span class="op">(</span><span class="str">"Poorly specified condition "</span> <span class="op">+</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc exc2 show_exc"><span class="n"><a id="t429" href="#t429">429</a></span><span class="t">                                        <span class="nam">str</span><span class="op">(</span><span class="nam">atts</span><span class="op">[</span><span class="str">'name'</span><span class="op">]</span><span class="op">)</span><span class="op">+</span><span class="str">": "</span><span class="op">)</span> <span class="key">from</span> <span class="nam">e</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t430" href="#t430">430</a></span><span class="t">                    <span class="key">if</span> <span class="nam">cond</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -560,7 +560,7 @@
             <a class="nav" href="z_bad1dd11da9cc1be_base_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:05 -0700
+            created at 2025-09-02 13:22 -0700
         </p>
     </div>
 </footer>

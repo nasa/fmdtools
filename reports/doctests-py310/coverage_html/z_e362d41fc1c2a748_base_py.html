@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">429 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">343<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">86<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">342<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">87<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">78<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_e362d41fc1c2a748_coords_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:04 -0700
+            created at 2025-09-02 13:22 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -394,7 +394,7 @@
     <p class="run"><span class="n"><a id="t312" href="#t312">312</a></span><span class="t">            <span class="nam">track</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t313" href="#t313">313</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t314" href="#t314">314</a></span><span class="t">        <span class="key">if</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">track</span><span class="op">,</span> <span class="nam">dict</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t315" href="#t315">315</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">track</span> <span class="op">=</span> <span class="nam">track</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t315" href="#t315">315</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">track</span> <span class="op">=</span> <span class="nam">track</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t316" href="#t316">316</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t317" href="#t317">317</a></span><span class="t">            <span class="com"># make sure role dict attributes are also tracked.</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t318" href="#t318">318</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">track</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
@@ -474,7 +474,7 @@
     <p class="run"><span class="n"><a id="t392" href="#t392">392</a></span><span class="t">                    <span class="nam">obj_args</span><span class="op">[</span><span class="str">'track'</span><span class="op">]</span> <span class="op">=</span> <span class="nam">get_sub_include</span><span class="op">(</span><span class="nam">rolename</span><span class="op">,</span> <span class="nam">self</span><span class="op">.</span><span class="nam">track</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t393" href="#t393">393</a></span><span class="t">                <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t394" href="#t394">394</a></span><span class="t">                    <span class="nam">obj</span> <span class="op">=</span> <span class="nam">obj_initializer</span><span class="op">(</span><span class="op">**</span><span class="nam">obj_args</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t395" href="#t395">395</a></span><span class="t">                <span class="key">except</span> <span class="nam">AttributeError</span> <span class="key">as</span> <span class="nam">ae</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t395" href="#t395">395</a></span><span class="t">                <span class="key">except</span> <span class="nam">AttributeError</span> <span class="key">as</span> <span class="nam">ae</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t396" href="#t396">396</a></span><span class="t">                    <span class="key">raise</span> <span class="nam">Exception</span><span class="op">(</span><span class="str">"Problem initializing "</span> <span class="op">+</span> <span class="nam">roletype</span> <span class="op">+</span> <span class="str">"_"</span> <span class="op">+</span> <span class="nam">rolename</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc exc2 show_exc"><span class="n"><a id="t397" href="#t397">397</a></span><span class="t">                                    <span class="op">+</span> <span class="str">": "</span> <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">initializer</span><span class="op">)</span><span class="op">)</span> <span class="key">from</span> <span class="nam">ae</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t398" href="#t398">398</a></span><span class="t">            <span class="key">elif</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">obj_args</span><span class="op">,</span> <span class="nam">BaseObject</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1263,7 +1263,7 @@
     <p class="pln"><span class="n"><a id="t1181" href="#t1181">1181</a></span><span class="t">    <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1182" href="#t1182">1182</a></span><span class="t">        <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1183" href="#t1183">1183</a></span><span class="t">            <span class="nam">fl</span> <span class="op">=</span> <span class="nam">objclass</span><span class="op">(</span><span class="nam">name</span><span class="op">=</span><span class="nam">name</span><span class="op">,</span> <span class="nam">track</span><span class="op">=</span><span class="nam">track</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t1184" href="#t1184">1184</a></span><span class="t">        <span class="key">except</span> <span class="nam">TypeError</span> <span class="key">as</span> <span class="nam">e</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t1184" href="#t1184">1184</a></span><span class="t">        <span class="key">except</span> <span class="nam">TypeError</span> <span class="key">as</span> <span class="nam">e</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t1185" href="#t1185">1185</a></span><span class="t">            <span class="key">raise</span> <span class="nam">TypeError</span><span class="op">(</span><span class="str">"Poorly specified class "</span><span class="op">+</span><span class="nam">str</span><span class="op">(</span><span class="nam">objclass</span><span class="op">)</span> <span class="op">+</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc exc2 show_exc"><span class="n"><a id="t1186" href="#t1186">1186</a></span><span class="t">                            <span class="str">" (or poor arguments) "</span><span class="op">+</span><span class="nam">str</span><span class="op">(</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">)</span> <span class="key">from</span> <span class="nam">e</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1187" href="#t1187">1187</a></span><span class="t">    <span class="key">return</span> <span class="nam">fl</span>&nbsp;</span><span class="r"></span></p>
@@ -1284,7 +1284,7 @@
             <a class="nav" href="z_e362d41fc1c2a748_coords_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:04 -0700
+            created at 2025-09-02 13:22 -0700
         </p>
     </div>
 </footer>

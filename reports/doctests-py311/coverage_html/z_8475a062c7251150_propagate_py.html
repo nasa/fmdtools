@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools/sim/propagate.py: 95%</title>
+    <title>Coverage for fmdtools/sim/propagate.py: 97%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools/sim/propagate.py</b>:
-            <span class="pc_cov">95%</span>
+            <span class="pc_cov">97%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">311 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">296<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">15<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">302<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">9<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">28<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8475a062c7251150_sample_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:19 -0700
+            created at 2025-09-02 13:58 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -392,7 +392,7 @@
     <p class="run"><span class="n"><a id="t310" href="#t310">310</a></span><span class="t">    <span class="nam">sim</span> <span class="op">=</span> <span class="nam">NestedSimulation</span><span class="op">(</span><span class="nam">mdl</span><span class="op">=</span><span class="nam">mdl</span><span class="op">,</span> <span class="nam">samp</span><span class="op">=</span><span class="nam">ps</span><span class="op">,</span> <span class="nam">name</span><span class="op">=</span><span class="str">"nested sample"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t311" href="#t311">311</a></span><span class="t">                           <span class="op">**</span><span class="nam">filter_kwargs</span><span class="op">(</span><span class="nam">NestedSimulation</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t312" href="#t312">312</a></span><span class="t">    <span class="nam">res</span><span class="op">,</span> <span class="nam">hist</span> <span class="op">=</span> <span class="nam">sim</span><span class="op">(</span><span class="op">**</span><span class="nam">get_sim_call_kwargs</span><span class="op">(</span><span class="nam">sim</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t313" href="#t313">313</a></span><span class="t">    <span class="key">return</span> <span class="nam">res</span><span class="op">,</span> <span class="nam">hist</span><span class="op">,</span> <span class="nam">sim</span><span class="op">.</span><span class="nam">apps</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t313" href="#t313">313</a></span><span class="t">    <span class="key">return</span> <span class="nam">res</span><span class="op">,</span> <span class="nam">hist</span><span class="op">,</span> <span class="nam">sim</span><span class="op">.</span><span class="nam">apps</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t314" href="#t314">314</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t315" href="#t315">315</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t316" href="#t316">316</a></span><span class="t"><span class="key">class</span> <span class="nam">SimEvent</span><span class="op">(</span><span class="nam">BaseContainer</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -545,7 +545,7 @@
     <p class="run"><span class="n"><a id="t463" href="#t463">463</a></span><span class="t">    <span class="key">def</span> <span class="nam">save</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t464" href="#t464">464</a></span><span class="t">        <span class="str">"""Save the results of the sim."""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t465" href="#t465">465</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">indiv_id</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t466" href="#t466">466</a></span><span class="t">            <span class="nam">result_id</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t466" href="#t466">466</a></span><span class="t">            <span class="nam">result_id</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t467" href="#t467">467</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t468" href="#t468">468</a></span><span class="t">            <span class="nam">result_id</span> <span class="op">=</span> <span class="str">''</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t469" href="#t469">469</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -767,9 +767,9 @@
     <p class="run"><span class="n"><a id="t685" href="#t685">685</a></span><span class="t"><span class="key">def</span> <span class="nam">close_pool</span><span class="op">(</span><span class="nam">pool</span><span class="op">=</span><span class="key">None</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t686" href="#t686">686</a></span><span class="t">    <span class="str">"""Close a pool if present."""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t687" href="#t687">687</a></span><span class="t">    <span class="key">if</span> <span class="nam">pool</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t688" href="#t688">688</a></span><span class="t">        <span class="nam">pool</span><span class="op">.</span><span class="nam">close</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t689" href="#t689">689</a></span><span class="t">        <span class="nam">pool</span><span class="op">.</span><span class="nam">terminate</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t690" href="#t690">690</a></span><span class="t">        <span class="nam">pool</span><span class="op">.</span><span class="nam">join</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t688" href="#t688">688</a></span><span class="t">        <span class="nam">pool</span><span class="op">.</span><span class="nam">close</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t689" href="#t689">689</a></span><span class="t">        <span class="nam">pool</span><span class="op">.</span><span class="nam">terminate</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t690" href="#t690">690</a></span><span class="t">        <span class="nam">pool</span><span class="op">.</span><span class="nam">join</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t691" href="#t691">691</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t692" href="#t692">692</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t693" href="#t693">693</a></span><span class="t"><span class="key">class</span> <span class="nam">MultiSimulation</span><span class="op">(</span><span class="nam">BaseSimulation</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1085,7 +1085,7 @@
     <p class="run"><span class="n"><a id="t1003" href="#t1003">1003</a></span><span class="t">        <span class="nam">nomsim</span> <span class="op">=</span> <span class="nam">Simulation</span><span class="op">(</span><span class="op">**</span><span class="nam">kwar</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1004" href="#t1004">1004</a></span><span class="t">        <span class="nam">sim_kwar</span> <span class="op">=</span> <span class="nam">dict</span><span class="op">(</span><span class="nam">with_mdls</span><span class="op">=</span><span class="nam">with_copy</span><span class="op">,</span> <span class="nam">gen_samp</span><span class="op">=</span><span class="nam">gen_samp</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1005" href="#t1005">1005</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">pool</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1006" href="#t1006">1006</a></span><span class="t">            <span class="nam">outs</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">pool</span><span class="op">.</span><span class="nam">apply</span><span class="op">(</span><span class="nam">nomsim</span><span class="op">,</span> <span class="op">(</span><span class="op">)</span><span class="op">,</span> <span class="nam">sim_kwar</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1006" href="#t1006">1006</a></span><span class="t">            <span class="nam">outs</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">pool</span><span class="op">.</span><span class="nam">apply</span><span class="op">(</span><span class="nam">nomsim</span><span class="op">,</span> <span class="op">(</span><span class="op">)</span><span class="op">,</span> <span class="nam">sim_kwar</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1007" href="#t1007">1007</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1008" href="#t1008">1008</a></span><span class="t">            <span class="nam">outs</span> <span class="op">=</span> <span class="nam">nomsim</span><span class="op">(</span><span class="op">**</span><span class="nam">sim_kwar</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1009" href="#t1009">1009</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">result</span><span class="op">[</span><span class="str">'nominal'</span><span class="op">]</span> <span class="op">=</span> <span class="nam">outs</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
@@ -1280,7 +1280,7 @@
             <a class="nav" href="z_8475a062c7251150_sample_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:19 -0700
+            created at 2025-09-02 13:58 -0700
         </p>
     </div>
 </footer>

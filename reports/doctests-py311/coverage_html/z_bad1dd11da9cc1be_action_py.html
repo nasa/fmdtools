@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools/define/architecture/action.py: 84%</title>
+    <title>Coverage for fmdtools/define/architecture/action.py: 88%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools/define/architecture/action.py</b>:
-            <span class="pc_cov">84%</span>
+            <span class="pc_cov">88%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">160 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">134<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">26<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">140<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">20<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">13<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_bad1dd11da9cc1be_base_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:19 -0700
+            created at 2025-09-02 13:58 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -347,8 +347,8 @@
     <p class="pln"><span class="n"><a id="t265" href="#t265">265</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t266" href="#t266">266</a></span><span class="t">    <span class="key">def</span> <span class="nam">is_static</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t267" href="#t267">267</a></span><span class="t">        <span class="str">"""Determine if static based on containment of static actions."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t268" href="#t268">268</a></span><span class="t">        <span class="nam">any_static_actions</span> <span class="op">=</span> <span class="nam">any</span><span class="op">(</span><span class="op">[</span><span class="nam">obj</span><span class="op">.</span><span class="nam">is_static</span><span class="op">(</span><span class="op">)</span> <span class="key">for</span> <span class="nam">obj</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">acts</span><span class="op">.</span><span class="nam">values</span><span class="op">(</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t269" href="#t269">269</a></span><span class="t">        <span class="key">return</span> <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">is_static</span><span class="op">(</span><span class="op">)</span> <span class="key">or</span> <span class="nam">any_static_actions</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t268" href="#t268">268</a></span><span class="t">        <span class="nam">any_static_actions</span> <span class="op">=</span> <span class="nam">any</span><span class="op">(</span><span class="op">[</span><span class="nam">obj</span><span class="op">.</span><span class="nam">is_static</span><span class="op">(</span><span class="op">)</span> <span class="key">for</span> <span class="nam">obj</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">acts</span><span class="op">.</span><span class="nam">values</span><span class="op">(</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t269" href="#t269">269</a></span><span class="t">        <span class="key">return</span> <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">is_static</span><span class="op">(</span><span class="op">)</span> <span class="key">or</span> <span class="nam">any_static_actions</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t270" href="#t270">270</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t271" href="#t271">271</a></span><span class="t">    <span class="key">def</span> <span class="nam">is_dynamic</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t272" href="#t272">272</a></span><span class="t">        <span class="str">"""Determine if dynamic based on containment of dynamic actions."""</span>&nbsp;</span><span class="r"></span></p>
@@ -356,9 +356,9 @@
     <p class="mis show_mis"><span class="n"><a id="t274" href="#t274">274</a></span><span class="t">        <span class="key">return</span> <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">is_dynamic</span><span class="op">(</span><span class="op">)</span> <span class="key">or</span> <span class="nam">any_dynamic_actions</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t275" href="#t275">275</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t276" href="#t276">276</a></span><span class="t">    <span class="key">def</span> <span class="nam">copy</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">        <span class="nam">cop</span> <span class="op">=</span> <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">        <span class="nam">cop</span><span class="op">.</span><span class="nam">active_actions</span> <span class="op">=</span> <span class="op">{</span><span class="op">*</span><span class="nam">self</span><span class="op">.</span><span class="nam">active_actions</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">        <span class="key">return</span> <span class="nam">cop</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">        <span class="nam">cop</span> <span class="op">=</span> <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">        <span class="nam">cop</span><span class="op">.</span><span class="nam">active_actions</span> <span class="op">=</span> <span class="op">{</span><span class="op">*</span><span class="nam">self</span><span class="op">.</span><span class="nam">active_actions</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">        <span class="key">return</span> <span class="nam">cop</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">    <span class="key">def</span> <span class="nam">reset</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">        <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">reset</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -506,7 +506,7 @@
     <p class="run"><span class="n"><a id="t424" href="#t424">424</a></span><span class="t">                <span class="key">for</span> <span class="nam">act_in</span><span class="op">,</span> <span class="nam">act_out</span><span class="op">,</span> <span class="nam">atts</span> <span class="key">in</span> <span class="nam">action_cond_edges</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t425" href="#t425">425</a></span><span class="t">                    <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t426" href="#t426">426</a></span><span class="t">                        <span class="nam">cond</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">conds</span><span class="op">[</span><span class="nam">atts</span><span class="op">[</span><span class="str">'name'</span><span class="op">]</span><span class="op">]</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t427" href="#t427">427</a></span><span class="t">                    <span class="key">except</span> <span class="nam">TypeError</span> <span class="key">as</span> <span class="nam">e</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t427" href="#t427">427</a></span><span class="t">                    <span class="key">except</span> <span class="nam">TypeError</span> <span class="key">as</span> <span class="nam">e</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t428" href="#t428">428</a></span><span class="t">                        <span class="key">raise</span> <span class="nam">TypeError</span><span class="op">(</span><span class="str">"Poorly specified condition "</span> <span class="op">+</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc exc2 show_exc"><span class="n"><a id="t429" href="#t429">429</a></span><span class="t">                                        <span class="nam">str</span><span class="op">(</span><span class="nam">atts</span><span class="op">[</span><span class="str">'name'</span><span class="op">]</span><span class="op">)</span><span class="op">+</span><span class="str">": "</span><span class="op">)</span> <span class="key">from</span> <span class="nam">e</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t430" href="#t430">430</a></span><span class="t">                    <span class="key">if</span> <span class="nam">cond</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -514,8 +514,8 @@
     <p class="run"><span class="n"><a id="t432" href="#t432">432</a></span><span class="t">                            <span class="nam">act</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">t_loc</span> <span class="op">=</span> <span class="num">0.0</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t433" href="#t433">433</a></span><span class="t">                            <span class="nam">new_active_actions</span><span class="op">.</span><span class="nam">add</span><span class="op">(</span><span class="nam">act_out</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t434" href="#t434">434</a></span><span class="t">                            <span class="nam">new_active_actions</span><span class="op">.</span><span class="nam">discard</span><span class="op">(</span><span class="nam">act_in</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t435" href="#t435">435</a></span><span class="t">                        <span class="key">elif</span> <span class="nam">proptype</span> <span class="key">in</span> <span class="op">[</span><span class="str">'dynamic'</span><span class="op">,</span> <span class="str">'both'</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t436" href="#t436">436</a></span><span class="t">                            <span class="nam">act</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">t_loc</span> <span class="op">+=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">acts</span><span class="op">[</span><span class="nam">action</span><span class="op">]</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">dt</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t435" href="#t435">435</a></span><span class="t">                        <span class="key">elif</span> <span class="nam">proptype</span> <span class="key">in</span> <span class="op">[</span><span class="str">'dynamic'</span><span class="op">,</span> <span class="str">'both'</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t436" href="#t436">436</a></span><span class="t">                            <span class="nam">act</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">t_loc</span> <span class="op">+=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">acts</span><span class="op">[</span><span class="nam">action</span><span class="op">]</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">dt</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t437" href="#t437">437</a></span><span class="t">                    <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t438" href="#t438">438</a></span><span class="t">                        <span class="nam">act</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">t_loc</span> <span class="op">=</span> <span class="num">0.0</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t439" href="#t439">439</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -560,7 +560,7 @@
             <a class="nav" href="z_bad1dd11da9cc1be_base_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:19 -0700
+            created at 2025-09-02 13:58 -0700
         </p>
     </div>
 </footer>
