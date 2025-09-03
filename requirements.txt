@@ -2,12 +2,12 @@ scipy
 tqdm
 multiprocessing
 networkx
-numpy >1.10, <= 1.26.4
+numpy >= 2.0
 matplotlib >= 3.7.0
 pandas
 ordered-set
 dill
-recordclass == 0.22.1
+recordclass == 0.23.1
 pytest
 graphviz
 shapely >= 2.0
