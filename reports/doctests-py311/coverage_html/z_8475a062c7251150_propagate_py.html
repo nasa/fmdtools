@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8475a062c7251150_sample_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 01:31 -0700
+            created at 2025-09-03 12:41 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -432,9 +432,9 @@
     <p class="pln"><span class="n"><a id="t350" href="#t350">350</a></span><span class="t"><span class="str">    >>> se.run(ExampleFunction())</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t351" href="#t351">351</a></span><span class="t"><span class="str">    >>> se.mdl_copy # note that copied models are gotten just before the simulation</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t352" href="#t352">352</a></span><span class="t"><span class="str">    examplefunction ExampleFunction</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t353" href="#t353">353</a></span><span class="t"><span class="str">    - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t353" href="#t353">353</a></span><span class="t"><span class="str">    - t=Time(time=4.0, timers={})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t354" href="#t354">354</a></span><span class="t"><span class="str">    - s=ExampleState(x=4.0, y=0.0)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t355" href="#t355">355</a></span><span class="t"><span class="str">    - t=Time(time=4.0, timers={})</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t355" href="#t355">355</a></span><span class="t"><span class="str">    - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t356" href="#t356">356</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=1.0, y=1.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t357" href="#t357">357</a></span><span class="t"><span class="str">    >>> se.result</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t358" href="#t358">358</a></span><span class="t"><span class="str">    classify: </span>&nbsp;</span><span class="r"></span></p>
@@ -629,21 +629,21 @@
     <p class="pln"><span class="n"><a id="t547" href="#t547">547</a></span><span class="t"><span class="str">    >>> res, hist = sim()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t548" href="#t548">548</a></span><span class="t"><span class="str">    >>> sim.mdl</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t549" href="#t549">549</a></span><span class="t"><span class="str">    examplefunction ExampleFunction</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t550" href="#t550">550</a></span><span class="t"><span class="str">    - m=ExampleMode(mode='low', faults={'low'}, sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t550" href="#t550">550</a></span><span class="t"><span class="str">    - t=Time(time=100.0, timers={})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t551" href="#t551">551</a></span><span class="t"><span class="str">    - s=ExampleState(x=20.0, y=294.0)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t552" href="#t552">552</a></span><span class="t"><span class="str">    - t=Time(time=100.0, timers={})</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t552" href="#t552">552</a></span><span class="t"><span class="str">    - m=ExampleMode(mode='low', faults={'low'}, sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t553" href="#t553">553</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=1964.0, y=1.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t554" href="#t554">554</a></span><span class="t"><span class="str">    >>> [*res.keys()]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t555" href="#t555">555</a></span><span class="t"><span class="str">    ['t1p0.s.x', 'tend.classify.xy', 'tend.graph']</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t556" href="#t556">556</a></span><span class="t"><span class="str">    >>> sim.get_models()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t557" href="#t557">557</a></span><span class="t"><span class="str">    {2.0: examplefunction ExampleFunction</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t558" href="#t558">558</a></span><span class="t"><span class="str">    - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t558" href="#t558">558</a></span><span class="t"><span class="str">    - t=Time(time=1.0, timers={})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t559" href="#t559">559</a></span><span class="t"><span class="str">    - s=ExampleState(x=1.0, y=0.0)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t560" href="#t560">560</a></span><span class="t"><span class="str">    - t=Time(time=1.0, timers={})</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t560" href="#t560">560</a></span><span class="t"><span class="str">    - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t561" href="#t561">561</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=1.0, y=1.0)), 4.0: examplefunction ExampleFunction</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t562" href="#t562">562</a></span><span class="t"><span class="str">    - m=ExampleMode(mode='low', faults={'low'}, sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t562" href="#t562">562</a></span><span class="t"><span class="str">    - t=Time(time=3.0, timers={})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t563" href="#t563">563</a></span><span class="t"><span class="str">    - s=ExampleState(x=20.0, y=3.0)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t564" href="#t564">564</a></span><span class="t"><span class="str">    - t=Time(time=3.0, timers={})</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t564" href="#t564">564</a></span><span class="t"><span class="str">    - m=ExampleMode(mode='low', faults={'low'}, sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t565" href="#t565">565</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=1.0, y=1.0))}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t566" href="#t566">566</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t567" href="#t567">567</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -1289,7 +1289,7 @@
             <a class="nav" href="z_8475a062c7251150_sample_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 01:31 -0700
+            created at 2025-09-03 12:41 -0700
         </p>
     </div>
 </footer>

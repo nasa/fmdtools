@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools/sim/sample.py: 84%</title>
+    <title>Coverage for fmdtools/sim/sample.py: 85%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools/sim/sample.py</b>:
-            <span class="pc_cov">84%</span>
+            <span class="pc_cov">85%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">492 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">414<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">78<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">420<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">72<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">61<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8475a062c7251150_scenario_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 13:22 -0700
+            created at 2025-09-03 11:25 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -1378,8 +1378,8 @@
     <p class="pln"><span class="n"><a id="t1296" href="#t1296">1296</a></span><span class="t"><span class="str">            where args and kwargs are arguments/kwargs to SampleApproach.add_faultdomain</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1297" href="#t1297">1297</a></span><span class="t"><span class="str">            (after name).</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1298" href="#t1298">1298</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1299" href="#t1299">1299</a></span><span class="t">        <span class="key">for</span> <span class="nam">fd</span> <span class="key">in</span> <span class="nam">faultdomains</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1300" href="#t1300">1300</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">add_faultdomain</span><span class="op">(</span><span class="nam">fd</span><span class="op">,</span> <span class="op">*</span><span class="nam">faultdomains</span><span class="op">[</span><span class="nam">fd</span><span class="op">]</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">,</span> <span class="op">**</span><span class="nam">faultdomains</span><span class="op">[</span><span class="nam">fd</span><span class="op">]</span><span class="op">[</span><span class="num">1</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1299" href="#t1299">1299</a></span><span class="t">        <span class="key">for</span> <span class="nam">fd</span> <span class="key">in</span> <span class="nam">faultdomains</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1300" href="#t1300">1300</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">add_faultdomain</span><span class="op">(</span><span class="nam">fd</span><span class="op">,</span> <span class="op">*</span><span class="nam">faultdomains</span><span class="op">[</span><span class="nam">fd</span><span class="op">]</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">,</span> <span class="op">**</span><span class="nam">faultdomains</span><span class="op">[</span><span class="nam">fd</span><span class="op">]</span><span class="op">[</span><span class="num">1</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1301" href="#t1301">1301</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1302" href="#t1302">1302</a></span><span class="t">    <span class="key">def</span> <span class="nam">add_faultsamples</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">**</span><span class="nam">faultsamples</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1303" href="#t1303">1303</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
@@ -1394,18 +1394,18 @@
     <p class="pln"><span class="n"><a id="t1312" href="#t1312">1312</a></span><span class="t"><span class="str">            where args and kwargs are arguments/kwargs to SampleApproach.add_faultsample</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1313" href="#t1313">1313</a></span><span class="t"><span class="str">            (after name).</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1314" href="#t1314">1314</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1315" href="#t1315">1315</a></span><span class="t">        <span class="key">for</span> <span class="nam">fs</span> <span class="key">in</span> <span class="nam">faultsamples</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1316" href="#t1316">1316</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">add_faultsample</span><span class="op">(</span><span class="nam">fs</span><span class="op">,</span> <span class="op">*</span><span class="nam">faultsamples</span><span class="op">[</span><span class="nam">fs</span><span class="op">]</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">,</span> <span class="op">**</span><span class="nam">faultsamples</span><span class="op">[</span><span class="nam">fs</span><span class="op">]</span><span class="op">[</span><span class="num">1</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1315" href="#t1315">1315</a></span><span class="t">        <span class="key">for</span> <span class="nam">fs</span> <span class="key">in</span> <span class="nam">faultsamples</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1316" href="#t1316">1316</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">add_faultsample</span><span class="op">(</span><span class="nam">fs</span><span class="op">,</span> <span class="op">*</span><span class="nam">faultsamples</span><span class="op">[</span><span class="nam">fs</span><span class="op">]</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">,</span> <span class="op">**</span><span class="nam">faultsamples</span><span class="op">[</span><span class="nam">fs</span><span class="op">]</span><span class="op">[</span><span class="num">1</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1317" href="#t1317">1317</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1318" href="#t1318">1318</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_times</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1319" href="#t1319">1319</a></span><span class="t">        <span class="str">"""Get all sampletimes covered by the SampleApproach."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1320" href="#t1320">1320</a></span><span class="t">        <span class="key">return</span> <span class="nam">list</span><span class="op">(</span><span class="nam">set</span><span class="op">(</span><span class="nam">np</span><span class="op">.</span><span class="nam">concatenate</span><span class="op">(</span><span class="op">[</span><span class="nam">list</span><span class="op">(</span><span class="nam">samp</span><span class="op">.</span><span class="nam">get_times</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis mis2 show_mis"><span class="n"><a id="t1321" href="#t1321">1321</a></span><span class="t">                                        <span class="key">for</span> <span class="nam">samp</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">faultsamples</span><span class="op">.</span><span class="nam">values</span><span class="op">(</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1320" href="#t1320">1320</a></span><span class="t">        <span class="key">return</span> <span class="nam">list</span><span class="op">(</span><span class="nam">set</span><span class="op">(</span><span class="nam">np</span><span class="op">.</span><span class="nam">concatenate</span><span class="op">(</span><span class="op">[</span><span class="nam">list</span><span class="op">(</span><span class="nam">samp</span><span class="op">.</span><span class="nam">get_times</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t1321" href="#t1321">1321</a></span><span class="t">                                        <span class="key">for</span> <span class="nam">samp</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">faultsamples</span><span class="op">.</span><span class="nam">values</span><span class="op">(</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1322" href="#t1322">1322</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1323" href="#t1323">1323</a></span><span class="t">    <span class="key">def</span> <span class="nam">scenarios</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1324" href="#t1324">1324</a></span><span class="t">        <span class="str">"""Get all scenarios in the SampleApproach."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1325" href="#t1325">1325</a></span><span class="t">        <span class="key">return</span> <span class="op">[</span><span class="nam">scen</span> <span class="key">for</span> <span class="nam">faultsample</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">faultsamples</span><span class="op">.</span><span class="nam">values</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis mis2 show_mis"><span class="n"><a id="t1326" href="#t1326">1326</a></span><span class="t">                <span class="key">for</span> <span class="nam">scen</span> <span class="key">in</span> <span class="nam">faultsample</span><span class="op">.</span><span class="nam">scenarios</span><span class="op">(</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1325" href="#t1325">1325</a></span><span class="t">        <span class="key">return</span> <span class="op">[</span><span class="nam">scen</span> <span class="key">for</span> <span class="nam">faultsample</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">faultsamples</span><span class="op">.</span><span class="nam">values</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t1326" href="#t1326">1326</a></span><span class="t">                <span class="key">for</span> <span class="nam">scen</span> <span class="key">in</span> <span class="nam">faultsample</span><span class="op">.</span><span class="nam">scenarios</span><span class="op">(</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1327" href="#t1327">1327</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1328" href="#t1328">1328</a></span><span class="t">    <span class="key">def</span> <span class="nam">prune_scenarios</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">scen_var</span><span class="op">=</span><span class="str">'rate'</span><span class="op">,</span> <span class="nam">comparator</span><span class="op">=</span><span class="nam">np</span><span class="op">.</span><span class="nam">greater</span><span class="op">,</span> <span class="nam">value</span><span class="op">=</span><span class="num">0.0</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1329" href="#t1329">1329</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
@@ -2190,7 +2190,7 @@
             <a class="nav" href="z_8475a062c7251150_scenario_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 13:22 -0700
+            created at 2025-09-03 11:25 -0700
         </p>
     </div>
 </footer>

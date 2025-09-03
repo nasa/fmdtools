@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools/analyze/graph/style.py: 96%</title>
+    <title>Coverage for fmdtools/analyze/graph/style.py: 97%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools/analyze/graph/style.py</b>:
-            <span class="pc_cov">96%</span>
+            <span class="pc_cov">97%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">329 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">315<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">14<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">320<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">9<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">8<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_cb0e7a8cec84cab4_history_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 13:22 -0700
+            created at 2025-09-03 11:25 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -799,12 +799,12 @@
     <p class="run"><span class="n"><a id="t717" href="#t717">717</a></span><span class="t">        <span class="nam">node_style</span> <span class="op">=</span> <span class="nam">ComponentNodeStyle</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t718" href="#t718">718</a></span><span class="t">    <span class="key">elif</span> <span class="nam">style_tag</span> <span class="key">in</span> <span class="op">[</span><span class="str">'container'</span><span class="op">,</span> <span class="str">'state'</span><span class="op">,</span> <span class="str">'Container'</span><span class="op">,</span> <span class="str">'State'</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t719" href="#t719">719</a></span><span class="t">        <span class="nam">node_style</span> <span class="op">=</span> <span class="nam">ContainerNodeStyle</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t720" href="#t720">720</a></span><span class="t">    <span class="key">elif</span> <span class="nam">style_tag</span> <span class="key">in</span> <span class="op">[</span><span class="str">'condition'</span><span class="op">,</span> <span class="str">'Condition'</span><span class="op">,</span> <span class="str">'method'</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t721" href="#t721">721</a></span><span class="t">        <span class="nam">node_style</span> <span class="op">=</span> <span class="nam">MethodNodeStyle</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t722" href="#t722">722</a></span><span class="t">    <span class="key">elif</span> <span class="nam">style_tag</span> <span class="key">in</span> <span class="op">[</span><span class="str">'dict'</span><span class="op">,</span> <span class="str">'flexible'</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t720" href="#t720">720</a></span><span class="t">    <span class="key">elif</span> <span class="nam">style_tag</span> <span class="key">in</span> <span class="op">[</span><span class="str">'condition'</span><span class="op">,</span> <span class="str">'Condition'</span><span class="op">,</span> <span class="str">'method'</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t721" href="#t721">721</a></span><span class="t">        <span class="nam">node_style</span> <span class="op">=</span> <span class="nam">MethodNodeStyle</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t722" href="#t722">722</a></span><span class="t">    <span class="key">elif</span> <span class="nam">style_tag</span> <span class="key">in</span> <span class="op">[</span><span class="str">'dict'</span><span class="op">,</span> <span class="str">'flexible'</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t723" href="#t723">723</a></span><span class="t">        <span class="nam">node_style</span> <span class="op">=</span> <span class="nam">OtherNodeStyle</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t724" href="#t724">724</a></span><span class="t">    <span class="key">elif</span> <span class="nam">style_tag</span> <span class="key">in</span> <span class="op">[</span><span class="str">'class'</span><span class="op">,</span> <span class="str">'Class'</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t725" href="#t725">725</a></span><span class="t">        <span class="nam">node_style</span> <span class="op">=</span> <span class="nam">OtherNodeStyle</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t724" href="#t724">724</a></span><span class="t">    <span class="key">elif</span> <span class="nam">style_tag</span> <span class="key">in</span> <span class="op">[</span><span class="str">'class'</span><span class="op">,</span> <span class="str">'Class'</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t725" href="#t725">725</a></span><span class="t">        <span class="nam">node_style</span> <span class="op">=</span> <span class="nam">OtherNodeStyle</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t726" href="#t726">726</a></span><span class="t">    <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t727" href="#t727">727</a></span><span class="t">        <span class="key">raise</span> <span class="nam">Exception</span><span class="op">(</span><span class="str">"Invalid node style: "</span><span class="op">+</span><span class="nam">str</span><span class="op">(</span><span class="nam">style_tag</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t728" href="#t728">728</a></span><span class="t">    <span class="nam">instance</span> <span class="op">=</span> <span class="nam">node_style</span><span class="op">(</span><span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -862,7 +862,7 @@
             <a class="nav" href="z_cb0e7a8cec84cab4_history_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 13:22 -0700
+            created at 2025-09-03 11:25 -0700
         </p>
     </div>
 </footer>
