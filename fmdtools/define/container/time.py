@@ -146,7 +146,8 @@ class Time(BaseContainer):
         local_tstep = Decimal(self.local_dt)
         if self.use_local:
             dt = local_tstep
-            if (dt < global_tstep and global_tstep % dt) or dt % global_tstep:
+            if ((dt < global_tstep and global_tstep % dt)
+                or (dt > global_tstep and dt % global_tstep)):
                 raise Exception("Local timestep: " + str(dt) +
                                 " doesn't line up with global timestep: " +
                                 str(global_tstep))

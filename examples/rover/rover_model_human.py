@@ -161,7 +161,7 @@ class Percieve(GenericHumanAction):
     >>> p.comms.s.on = True
     >>> p.comms.s.pos.x = 1.0
     >>> p.comms.s.video.lin_ux = 2.0
-    >>> p.behavior(1)
+    >>> p.dynamic_behavior()
     >>> p.pos_signal.s.x
     1.0
     >>> p.video.s.lin_ux
@@ -174,7 +174,7 @@ class Percieve(GenericHumanAction):
     flow_video = Video
     flow_psfs = PSFs
 
-    def behavior(self, t):
+    def dynamic_behavior(self):
         if not self.comms.s.on:
             self.m.remove_any_faults(opermode='no_action')
         elif self.comms.s.video.quality == 0.0:
@@ -204,7 +204,7 @@ class Comprehend(GenericHumanAction):
     --------
     >>> c = Comprehend()
     >>> c.pos_signal.s.put(ux=1.0, uy=1.0)
-    >>> c.behavior(1)
+    >>> c.dynamic_behavior()
     >>> c.signal.s.u_self
     array([1., 1.])
     """
@@ -215,7 +215,7 @@ class Comprehend(GenericHumanAction):
     flow_video = Video
     flow_psfs = PSFs
 
-    def behavior(self, t):
+    def dynamic_behavior(self):
         if self.psfs.p.fatigue > 8 or self.psfs.p.stress > 80:
             self.m.to_fault('failed_no_action')
         if self.m.in_mode('nominal'):
@@ -257,7 +257,7 @@ class Project(GenericHumanAction):
     --------
     >>> p = Project()
     >>> p.signal.s.put(u_self=(0.0, 1.0), u_lin=(1.0, 1.0))
-    >>> p.behavior(1)
+    >>> p.dynamic_behavior()
     >>> p.signal.s.rdiff
     -0.7854052343902613
     """
@@ -266,7 +266,7 @@ class Project(GenericHumanAction):
     flow_signal = OperatorSignal
     flow_psfs = PSFs
 
-    def behavior(self, t):
+    def dynamic_behavior(self):
         if self.m.in_mode('nominal'):
             self.signal.s.set_turn()
         elif self.m.in_mode('failed_turn_left'):
@@ -315,7 +315,7 @@ class Decide(GenericHumanAction):
     --------
     >>> d = Decide()
     >>> d.signal.s.rdiff = 1.0
-    >>> d.behavior(1)
+    >>> d.dynamic_behavior()
     >>> d.control.s
     ControlState(rpower=2, lpower=0.0)
     """
@@ -324,7 +324,7 @@ class Decide(GenericHumanAction):
     flow_signal = OperatorSignal
     flow_control = Control
 
-    def behavior(self, t):
+    def dynamic_behavior(self):
         # if no action, stops here. If continue, doesn't pass new control info.
         if self.m.in_mode('nominal'):
             self.signal.s.set_control(self.control)
@@ -367,7 +367,7 @@ class Press(GenericHumanAction):
     --------
     >>> p = Press()
     >>> p.control.s.put(lpower=1.0, rpower=0.0)
-    >>> p.behavior(1)
+    >>> p.dynamic_behavior()
     >>> p.comms.s.ctl
     ControlState(rpower=0.0, lpower=1.0)
     """
@@ -376,7 +376,7 @@ class Press(GenericHumanAction):
     flow_control = Control
     flow_comms = Comms
 
-    def behavior(self, t):
+    def dynamic_behavior(self):
         if self.m.in_mode('nominal'):
             self.comms.s.ctl.assign(self.control.s)
         elif self.m.in_mode('failed_left'):
