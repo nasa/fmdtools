@@ -185,7 +185,7 @@ class Simulable(BaseObject):
         Non-default kwargs for mutable containers/roles (to use for reset)
     """
 
-    __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'mut_kwargs')
+    __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'mut_kwargs', '_sims')
     container_t = Time
     default_track = ["all"]
     immutable_roles = BaseObject.immutable_roles + ['sp']
@@ -205,6 +205,7 @@ class Simulable(BaseObject):
         """
         BaseObject.__init__(self, **kwargs)
         self.set_time()
+        self._sims = {}
 
     def is_static(self):
         """Check if Block has static execution step."""
@@ -628,9 +629,11 @@ class Simulable(BaseObject):
 
     def get_sims(self):
         """Return dict of simulable objects within the object."""
-        all_roles = self.get_roles_as_dict(with_immutable=False, no_flows=True)
-        return {rolename: roleobj for rolename, roleobj in all_roles.items()
-                if isinstance(roleobj, Simulable)}
+        if not self._sims:
+            all_roles = self.get_roles_as_dict(with_immutable=False, exclude=['flow'])
+            self._sims = {rolename: roleobj for rolename, roleobj in all_roles.items()
+                          if isinstance(roleobj, Simulable)}
+        return self._sims
 
     def update_arch_behaviors(self, proptype):
         """
@@ -721,9 +724,8 @@ class Simulable(BaseObject):
         if self.t.time > 0.0:
             self.t.t_ind += 1
             self.t.executing = False
-        for objname, obj in self.get_roles_as_dict().items():
-            if hasattr(obj, 'inc_sim_time'):
-                obj.inc_sim_time(**kwargs)
+        for objname, obj in self.get_sims().items():
+            obj.inc_sim_time(**kwargs)
 
     def cut_hist(self):
         """Cut the simulation history to the current time."""

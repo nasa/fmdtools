@@ -325,6 +325,8 @@ class IndivPumpTests(unittest.TestCase):
         self.assertEqual(hist.m.faults.mech_break[6], True)
 
 if __name__ == '__main__':
+    import sys
+    sys.path.append("../..")
     unittest.main()
 
     # suite = unittest.TestSuite()

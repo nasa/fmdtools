@@ -202,7 +202,7 @@ class BaseObject(metaclass=BaseType):
     s.y:                            array(2)
     """
 
-    __slots__ = ('name', 'indicators', 'track', 'root', 'mutables')
+    __slots__ = ('name', 'indicators', 'track', 'root', 'mutables', '_mutobjs')
     roletypes = ['container']
     rolevars = []
     immutable_roles = ['p']
@@ -245,6 +245,7 @@ class BaseObject(metaclass=BaseType):
         self.init_track(track)
         self.init_roletypes(*roletypes, **kwargs)
         self.check_slots()
+        self._mutobjs = []
         self.mutables = ()
 
     def create_repr(self, rolenames=[], with_classname=True, with_name=True,
@@ -515,7 +516,7 @@ class BaseObject(metaclass=BaseType):
         rs = self.get_all_roles(with_immutable=False)
         return rs + ['i'] + self.rolevars
 
-    def get_default_roletypes(self, *roletypes, no_flows=False, with_flex=True):
+    def get_default_roletypes(self, *roletypes, exclude=[], with_flex=True):
         """
         Get the default role types for the object.
 
@@ -524,8 +525,8 @@ class BaseObject(metaclass=BaseType):
         *roletypes : str
             Types of roles (e.g. 'containers' or 'flows'). If not provided, all role
             types are included.
-        no_flows : bool, optional
-            Whether to remove flows. The default is False.
+        exclude : list
+            Roletypes to exclude. Default is [].
         with_flex : bool, optional
             Whether to include flexible roletypes (e.g., functions).
             The default is True.
@@ -545,16 +546,17 @@ class BaseObject(metaclass=BaseType):
             roletypes = []
         else:
             roletypes = list(roletypes)
-        if no_flows and 'flows' in roletypes:
-            roletypes.remove('flows')
+        for rt in exclude:
+            if rt in roletypes:
+                roletypes.remove(rt)
         if not with_flex:
             for flex_role in self.flexible_roles:
                 if flex_role in roletypes:
                     roletypes.remove(flex_role)
         return roletypes
 
-    def get_roles(self, *roletypes, with_immutable=True, no_flows=False, with_flex=True,
-                  with_prefix=False, **kwargs):
+    def get_roles(self, *roletypes, with_immutable=True, with_flex=True,
+                  with_prefix=False, exclude=[], **kwargs):
         """
         Get all roles from the object.
 
@@ -565,10 +567,10 @@ class BaseObject(metaclass=BaseType):
         with_immutable : bool, optional
             Whether to include immutable roles (e.g., parameters at container_p). The
             default is True.
-        no_flows : bool, optional
-            Whether to not inlude flows. The default is False.
         with_flex : bool, optional
             Whether to include flexible roles. The default is True.
+        with_prefix : bool, optional
+            Wheter to provide a prefix for the role.
         **kwargs : kwargs
             (unused) keyword arguments
 
@@ -579,10 +581,22 @@ class BaseObject(metaclass=BaseType):
             parameter, state, and rand roles filled.
         """
         roletypes = self.get_default_roletypes(*roletypes,
-                                               no_flows=no_flows, with_flex=with_flex)
+                                               exclude=exclude, with_flex=with_flex)
         return [roletype+"."+role if with_prefix else role for roletype in roletypes
                 for role in getattr(self, roletype+'s', [])
-                if with_immutable or role not in self.immutable_roles]
+                if (with_immutable or role not in self.immutable_roles) and
+                role not in exclude]
+
+    def get_roles_values(self, *roletypes, with_immutable=True, with_flex=True,
+                         exclude=[], with_method=False, **kwargs):
+        """Get the objects associated with each role."""
+        roletypes = self.get_default_roletypes(*roletypes,
+                                               exclude=exclude, with_flex=with_flex)
+        roleiters = [getattr(self, roletype+"s") for roletype in roletypes]
+        return [roleiter[role] if isinstance(roleiter, dict) else getattr(self, role)
+                for roleiter in roleiters for role in roleiter
+                if (with_immutable or role not in self.immutable_roles) and
+                role not in exclude]
 
     def get_flex_role_objs(self, *flexible_roles, flex_prefixes=False):
         """
@@ -613,7 +627,7 @@ class BaseObject(metaclass=BaseType):
                                                    with_immutable=False).items()}
 
     def get_roles_as_dict(self, *roletypes, with_immutable=True, with_prefix=False,
-                          with_flex=True, no_flows=False, **kwargs):
+                          with_flex=True, exclude=[], **kwargs):
         """
         Return all roles and their objects as a dict.
 
@@ -628,8 +642,8 @@ class BaseObject(metaclass=BaseType):
         with_prefix : bool, optional
             Whether to include the prefixes in the keys of the returned dictionary. The
             default is False.
-        no_flows : bool, optional
-            Whether to not inlude flows. The default is False.
+        exclude : bool, optional
+            Roletypes and roles to exclude. The default is [].
         with_flex : bool, optional
             Whether to include flexible roles. The default is True.
         **kwargs : kwargs
@@ -641,16 +655,16 @@ class BaseObject(metaclass=BaseType):
             List of roles in the object, e.g. ['p', 's' 'r'] for an object with the
             parameter, state, and rand roles filled.
         """
-        roletypes = self.get_default_roletypes(*roletypes, no_flows=no_flows,
+        roletypes = self.get_default_roletypes(*roletypes, exclude=exclude,
                                                with_flex=with_flex)
         role_objs = {}
         for roletype in roletypes:
             roledict = getattr(self, roletype+"s")
             if isinstance(roledict, list) or isinstance(roledict, tuple):
                 roledict = {k: getattr(self, k) for k in roledict}
-            if not with_immutable:
-                roledict = {k: v for k, v in roledict.items()
-                            if k not in self.immutable_roles}
+            roledict = {k: v for k, v in roledict.items()
+                        if (not with_immutable or k not in self.immutable_roles)
+                        and k not in exclude and getattr(v, 'name', '') not in exclude}
             if not with_prefix:
                 role_objs.update(roledict)
             else:
@@ -765,7 +779,7 @@ class BaseObject(metaclass=BaseType):
         """
         mem = sys.getsizeof(self)
         mem_profile = {'base': mem}
-        roles_to_check = self.get_roles_as_dict(no_flows=True)
+        roles_to_check = self.get_roles_as_dict(exclude=['flow'])
         for rolename, roleobj in roles_to_check.items():
             mem_profile[rolename] = get_memory(roleobj)
             mem += mem_profile[rolename]
@@ -816,9 +830,13 @@ class BaseObject(metaclass=BaseType):
 
     def find_mutables(self, exclude=[]):
         """Return list of mutable roles."""
-        return [v for v in
-                self.get_roles_as_dict(with_immutable=False).values()
-                if (not ismethod(v) and getattr(v, 'name', '') not in exclude)]
+        if not self._mutobjs:
+            roleobjs = self.get_roles_values(with_immutable=False, exclude=exclude)
+            roleobjs.reverse()
+            self._mutobjs = [v for v in roleobjs
+                             if not ismethod(v)
+                             and not getattr(v, 'name', '') in exclude]
+        return self._mutobjs
 
     def return_mutables(self, exclude=[]):
         """

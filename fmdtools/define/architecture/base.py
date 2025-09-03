@@ -191,7 +191,9 @@ class Architecture(Simulable):
         # set up history of flows to see if any has changed
         activesims = self.staticsims.copy()
         nextsims = set()
-        self.set_flow_mutables(self.staticflows)
+        # Set the flowstates from the current state of the given flows
+        for flowname in self.staticflows:
+            self.flows[flowname].set_mutables()
         sims = self.get_sims()
         n = 0
         while activesims:
@@ -211,12 +213,10 @@ class Architecture(Simulable):
                         if self.flows[flowname].has_changed(update=True):
                             nextsims.update(self.get_connected_sims(flowname))
                             flows_to_check.remove(flowname)
-            # check remaining flows that have not been checked already
+            # check and update remaining flows that have not been checked already
             for flowname in flows_to_check:
                 if self.flows[flowname].has_changed(update=True):
                     nextsims.update(self.get_connected_sims(flowname))
-            # update flowstates
-            self.set_flow_mutables(self.staticflows)
             activesims = nextsims.copy()
             nextsims.clear()
             n += 1
@@ -228,11 +228,6 @@ class Architecture(Simulable):
     def get_connected_sims(self, flowname):
         """Get the simulables connected to a given flow."""
         return set([n for n in self.graph.neighbors(flowname) if n in self.staticsims])
-
-    def set_flow_mutables(self, flows):
-        """Set the flowstates from the current state of the given flows."""
-        for flowname in flows:
-            self.flows[flowname].set_mutables()
 
     def init_flexible_roles(self, **kwargs):
         """
@@ -555,7 +550,7 @@ class Architecture(Simulable):
     def get_rand_states(self, auto_update_only=False):
         """Get dictionary of random states throughout the model objs."""
         rand_states = {}
-        role_objs = self.get_flex_role_objs()
+        role_objs = self.sims()
         for objname, obj in role_objs.items():
             if hasattr(obj, 'get_rand_states'):
                 rand_state = obj.get_rand_states(auto_update_only=auto_update_only)
