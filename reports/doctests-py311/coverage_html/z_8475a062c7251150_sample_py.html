@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">492 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">428<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">64<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">430<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">62<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">61<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8475a062c7251150_scenario_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 13:58 -0700
+            created at 2025-09-03 01:31 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -918,7 +918,7 @@
     <p class="pln"><span class="n"><a id="t836" href="#t836">836</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t837" href="#t837">837</a></span><span class="t">    <span class="key">def</span> <span class="nam">named_scenarios</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t838" href="#t838">838</a></span><span class="t">        <span class="str">"""Get dict of scenarios by name."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t839" href="#t839">839</a></span><span class="t">        <span class="key">return</span> <span class="op">{</span><span class="nam">scen</span><span class="op">.</span><span class="nam">name</span><span class="op">:</span> <span class="nam">scen</span> <span class="key">for</span> <span class="nam">scen</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">scenarios</span><span class="op">(</span><span class="op">)</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t839" href="#t839">839</a></span><span class="t">        <span class="key">return</span> <span class="op">{</span><span class="nam">scen</span><span class="op">.</span><span class="nam">name</span><span class="op">:</span> <span class="nam">scen</span> <span class="key">for</span> <span class="nam">scen</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">scenarios</span><span class="op">(</span><span class="op">)</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t840" href="#t840">840</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t841" href="#t841">841</a></span><span class="t">    <span class="key">def</span> <span class="nam">scen_names</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t842" href="#t842">842</a></span><span class="t">        <span class="str">"""Get list of scen names."""</span>&nbsp;</span><span class="r"></span></p>
@@ -1194,7 +1194,7 @@
     <p class="run"><span class="n"><a id="t1112" href="#t1112">1112</a></span><span class="t">                <span class="nam">sampletimes</span><span class="op">,</span> <span class="nam">weights</span> <span class="op">=</span> <span class="nam">sample_times_even</span><span class="op">(</span><span class="nam">times</span><span class="op">,</span> <span class="op">*</span><span class="nam">loc_args</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t1113" href="#t1113">1113</a></span><span class="t">                                                         <span class="nam">dt</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">faultdomain</span><span class="op">.</span><span class="nam">mdl</span><span class="op">.</span><span class="nam">sp</span><span class="op">.</span><span class="nam">dt</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1114" href="#t1114">1114</a></span><span class="t">            <span class="key">elif</span> <span class="nam">loc_method</span> <span class="op">==</span> <span class="str">'quad'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t1115" href="#t1115">1115</a></span><span class="t">                <span class="nam">sampletimes</span><span class="op">,</span> <span class="nam">weights</span> <span class="op">=</span> <span class="nam">sample_times_quad</span><span class="op">(</span><span class="nam">times</span><span class="op">,</span> <span class="op">*</span><span class="nam">loc_args</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1115" href="#t1115">1115</a></span><span class="t">                <span class="nam">sampletimes</span><span class="op">,</span> <span class="nam">weights</span> <span class="op">=</span> <span class="nam">sample_times_quad</span><span class="op">(</span><span class="nam">times</span><span class="op">,</span> <span class="op">*</span><span class="nam">loc_args</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1116" href="#t1116">1116</a></span><span class="t">            <span class="key">elif</span> <span class="nam">loc_method</span> <span class="op">==</span> <span class="str">'all'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1117" href="#t1117">1117</a></span><span class="t">                <span class="nam">sampletimes</span> <span class="op">=</span> <span class="nam">times</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1118" href="#t1118">1118</a></span><span class="t">                <span class="nam">weights</span> <span class="op">=</span> <span class="op">[</span><span class="num">1</span><span class="op">/</span><span class="nam">len</span><span class="op">(</span><span class="nam">sampletimes</span><span class="op">)</span> <span class="key">for</span> <span class="nam">i</span> <span class="key">in</span> <span class="nam">sampletimes</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
@@ -2190,7 +2190,7 @@
             <a class="nav" href="z_8475a062c7251150_scenario_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 13:58 -0700
+            created at 2025-09-03 01:31 -0700
         </p>
     </div>
 </footer>
