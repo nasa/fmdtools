@@ -76,7 +76,7 @@ class GeomArchitecture(Architecture):
     polys.ex_poly.s.occupied:     array(101)
     polys.ex_poly.s.buffer_around: array(101)
     >>> ega.return_mutables()
-    ((-0.1, 0, False, False, False), (False, 1.0), (False, 1.0), (False, 1.0))
+    ((False, 1.0), (False, 1.0), (False, 1.0), (-0.1, 0, False, False, False))
 
     GeomArchitectures are also simulable provided dynamic_behavior and static_behavior
     methods as shown below. Note that this behavior must be called externally,
