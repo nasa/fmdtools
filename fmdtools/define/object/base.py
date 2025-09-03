@@ -582,7 +582,7 @@ class BaseObject(metaclass=BaseType):
         """
         roletypes = self.get_default_roletypes(*roletypes,
                                                exclude=exclude, with_flex=with_flex)
-        return [roletype+"."+role if with_prefix else role for roletype in roletypes
+        return [roletype+"s."+role if with_prefix else role for roletype in roletypes
                 for role in getattr(self, roletype+'s', [])
                 if (with_immutable or role not in self.immutable_roles) and
                 role not in exclude]
@@ -663,12 +663,12 @@ class BaseObject(metaclass=BaseType):
             if isinstance(roledict, list) or isinstance(roledict, tuple):
                 roledict = {k: getattr(self, k) for k in roledict}
             roledict = {k: v for k, v in roledict.items()
-                        if (not with_immutable or k not in self.immutable_roles)
+                        if (with_immutable or k not in self.immutable_roles)
                         and k not in exclude and getattr(v, 'name', '') not in exclude}
             if not with_prefix:
                 role_objs.update(roledict)
             else:
-                role_objs.update({roletype+'.'+k: v for k, v in roledict.items()})
+                role_objs.update({roletype+'s.'+k: v for k, v in roledict.items()})
         return role_objs
 
     def get_all_roles(self, with_immutable=True):

@@ -546,6 +546,7 @@ class BaseComparison(BaseTab):
                 if met in ci_metrics:
                     try:
                         mv, lb, ub = sub_res.get_metric_ci(met, method=stat,
+                                                           return_anyway=True,
                                                            **ci_kwargs)
                     except TypeError as e:
                         raise Exception("Invalid method: " + str(stat) + ", " +

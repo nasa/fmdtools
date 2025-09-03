@@ -204,7 +204,7 @@ class PSFDegradationLongStates(State):
         Base/starting experience of the operator. Default is 0.0.
     """
 
-    experience: float = 0.0
+    experience: float = 0.1
 
 
 class PSFDegradationLong(Function):
@@ -235,6 +235,7 @@ if __name__ == "__main__":
     mdlhist.plot_line("s.friction")
 
 
+
     ps = ParameterSample()
     ps.add_variable_replicates([], replicates=100, seed_comb='independent')
     endclasses_deg, mdlhists_deg = prop.parameter_sample(deg_mdl, ps, run_stochastic=True)
@@ -245,6 +246,25 @@ if __name__ == "__main__":
     # individual slice
     mdlhists_deg.plot_metric_dist([1, 10, 20],
                              {'s': ['wear', 'corrosion', 'friction', 'drift']})
+
+    from fmdtools.sim.sample import ParameterDomain, ParameterHistSample
+    from rover_model import RoverParam, Rover
+    mdl = Rover()
+    rpd = ParameterDomain(RoverParam)
+    rpd.add_variables('degradation.friction', 'degradation.drift')
+    rpd(1, 10).degradation
+
+    phs = ParameterHistSample(mdlhists_deg, 's.friction', 's.drift', paramdomain=rpd)
+    phs._get_repname('default', 1)
+    phs.add_hist_groups(reps= 10, ts = [1, 2, 5, 10])
+
+
+    fd = {'drive_faults':  (('faults', ('drive', 'elec_open'), ('drive', 'stuck'), ('drive', 'stuck_left'), ('drive', 'stuck_right')), {})}
+    fs = {'drive_faults': (('fault_phases', 'drive_faults', "start"), {})}
+    ec_nest, hist_nest, app_nest = prop.nested_sample(mdl, phs, faultdomains=fd, faultsamples=fs)
+
+    from fmdtools.analyze.tabulate import NestedComparison
+    nc = NestedComparison(ec_nest, phs, ['inputparams.t'], app_nest, ['fault'], metrics=['tot_deviation', 'end_dist'], default_stat=np.mean, ci_metrics=['end_dist', 'tot_deviation'])
 
     # question -- how do we sample this:
     #   - all replicates?

@@ -36,10 +36,11 @@ def line_dist(ind, show_plot=False, print_time=False):
     disturbances = {'fxns.drive.s.friction': ind[0],
                     'fxns.drive.s.transfer': ind[1],
                     'fxns.drive.s.drift': ind[2]}
-    res, hist = prop.sequence(mdl, disturbances={fault_time: disturbances})
-    dist = res.endclass['line_dist']
-    enddist = res.endclass['end_dist']
-    endpt = res.endclass['endpt']
+    res, hist = prop.sequence(mdl, disturbances={fault_time: disturbances},
+                              include_nominal=False)
+    dist = res.tend.classify['line_dist']
+    enddist = res.tend.classify['end_dist']
+    endpt = res.tend.classify['endpt']
 
     if print_time:
         print("Standard Exec Time: "+str(time.time()-starttime))
@@ -775,10 +776,10 @@ class ModeSearchProblem(DisturbanceProblem):
                      "fxns.drive.s.friction",
                      "fxns.drive.s.transfer",
                      "fxns.drive.s.drift", **kwargs)
-        self.add_result_objective('line_dist', 'endclass.line_dist')
-        self.add_result_objective('end_dist', 'endclass.end_dist')
-        self.add_result_objective('end_x', 'endclass.end_x')
-        self.add_result_objective('end_y', 'endclass.end_y')
+        self.add_result_objective('line_dist', 'classify.line_dist')
+        self.add_result_objective('end_dist', 'classify.end_dist')
+        self.add_result_objective('end_x', 'classify.end_x')
+        self.add_result_objective('end_y', 'classify.end_y')
 
 mode_search_prob = ModeSearchProblem()
 

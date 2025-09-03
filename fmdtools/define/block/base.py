@@ -781,7 +781,7 @@ class Simulable(BaseObject):
                         self.inc_sim_time()
                         t_ind = self.sp.get_hist_ind(self.t.t_ind, self.t.time)
                         self.h.log(self, t_ind, self.t.time)
-                    if self.sp.end_condition:
+                    if self.sp.end_condition and not copy:
                         if get_var(self, self.sp.end_condition)():
                             break
 

@@ -661,6 +661,7 @@ def script_sample_faults(track='all', **kwargs):
 if __name__ == "__main__":
 
     mdl = Pump()
+    res, hist = propagate.nominal(mdl, to_return = {'graph': FunctionArchitectureGraph})
     endfaults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
                                              time=10, to_return='faults')
     # import doctest

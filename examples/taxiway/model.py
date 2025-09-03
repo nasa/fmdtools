@@ -122,7 +122,7 @@ def create_fault_scen_metrics(mdlhist):
             mdlhist.get_faulty_hist(*mdlhist.nominal.fxns.nest().keys())['total']/len(mdlhist.nominal.fxns.nest().keys()),
             "time": mdlhist.faulty.time})
     
-    ind_hist = History({"nominal": nomhist, "faulty": faulthist})
+    ind_hist = History({"nominal": nomhist, "scenario": faulthist})
     return ind_hist
     
 

@@ -218,7 +218,7 @@ class ModelGraph(Graph):
     >>> from fmdtools.define.block.function import ExampleFunction
     >>> mg = ModelGraph(ExampleFunction())
     >>> mg.get_nodes()
-    ['examplefunction', 'examplefunction.m', 'examplefunction.p', 'examplefunction.s', 'examplefunction.sp', 'examplefunction.t', 'examplefunction.exampleflow', 'examplefunction.dynamic_behavior']
+    ['examplefunction', 'examplefunction.t', 'examplefunction.sp', 'examplefunction.p', 'examplefunction.s', 'examplefunction.m', 'examplefunction.exampleflow', 'examplefunction.dynamic_behavior']
     """
 
     def __init__(self, mdl, check_info=True, **kwargs):

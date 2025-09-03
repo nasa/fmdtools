@@ -130,7 +130,8 @@ def check_include_error(result, to_include):
 def clean_to_return(to_return):
     """Clean the to_return dictionary."""
     to_return = copy.deepcopy(to_return)
-    if not isinstance(to_return, dict):
+    if not isinstance(to_return, dict) or any([k for k in to_return
+                                               if not (is_numeric(k) or k == 'end')]):
         to_return = {"end": to_return}
 
     for k, v in to_return.items():

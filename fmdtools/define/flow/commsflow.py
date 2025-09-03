@@ -288,7 +288,7 @@ class CommsFlow(MultiFlow):
             int_ports = int_flow.locals
             out_ports = out_flow.locals
             # add internal ports going out
-            for portname, portobj in int_flow.get_roles_as_dict('locals').items():
+            for portname, portobj in int_flow.get_roles_as_dict('local').items():
                 if portname in out_ports:
                     out_port = out_flow.get_vars(portname)
                 else:

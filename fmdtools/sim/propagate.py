@@ -350,9 +350,9 @@ class SimEvent(BaseContainer):
     >>> se.run(ExampleFunction())
     >>> se.mdl_copy # note that copied models are gotten just before the simulation
     examplefunction ExampleFunction
-    - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
-    - s=ExampleState(x=4.0, y=0.0)
     - t=Time(time=4.0, timers={})
+    - s=ExampleState(x=4.0, y=0.0)
+    - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
     - exf=ExampleFlow(s=(x=1.0, y=1.0))
     >>> se.result
     classify: 
@@ -547,21 +547,21 @@ class Simulation(BaseSimulation):
     >>> res, hist = sim()
     >>> sim.mdl
     examplefunction ExampleFunction
-    - m=ExampleMode(mode='low', faults={'low'}, sub_faults=False)
-    - s=ExampleState(x=20.0, y=294.0)
     - t=Time(time=100.0, timers={})
+    - s=ExampleState(x=20.0, y=294.0)
+    - m=ExampleMode(mode='low', faults={'low'}, sub_faults=False)
     - exf=ExampleFlow(s=(x=1964.0, y=1.0))
     >>> [*res.keys()]
     ['t1p0.s.x', 'tend.classify.xy', 'tend.graph']
     >>> sim.get_models()
     {2.0: examplefunction ExampleFunction
-    - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
-    - s=ExampleState(x=1.0, y=0.0)
     - t=Time(time=1.0, timers={})
+    - s=ExampleState(x=1.0, y=0.0)
+    - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
     - exf=ExampleFlow(s=(x=1.0, y=1.0)), 4.0: examplefunction ExampleFunction
-    - m=ExampleMode(mode='low', faults={'low'}, sub_faults=False)
-    - s=ExampleState(x=20.0, y=3.0)
     - t=Time(time=3.0, timers={})
+    - s=ExampleState(x=20.0, y=3.0)
+    - m=ExampleMode(mode='low', faults={'low'}, sub_faults=False)
     - exf=ExampleFlow(s=(x=1.0, y=1.0))}
     """
 
