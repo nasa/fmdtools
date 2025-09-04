@@ -115,7 +115,7 @@ if __name__ == '__main__':
     from fmdtools.analyze.graph.base import Graph
 
     g = mdl.flows['communications'].create_graph(role_nodes=['local'],
-                                                 roles_to_connect=["locals"],
+                                                 roles_to_connect=["local"],
                                                  recursive=True,
                                                  with_root=False)
 

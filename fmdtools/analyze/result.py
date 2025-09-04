@@ -844,15 +844,15 @@ class Result(UserDict):
         --------
         >>> r = Result({'t1.a': 0.5, 't1.b': 0.01, 't2.a': 0.0, 't2.b': 0.1})
         >>> r.get_metric("a", method=np.average, rates="b")
-        0.0025
+        np.float64(0.0025)
         >>> r.get_metric("a", method="total")
-        1
+        np.int64(1)
         >>> r.get_metric("b", method="rate", rates="a")
-        0.5
+        np.float64(0.5)
         >>> r.get_metric("b", method="expected", rates="a")
-        0.005
+        np.float64(0.005)
         >>> r.get_metric("b", "expected", rates={"t1": 1, "t2": 2})
-        0.21000000000000002
+        np.float64(0.21000000000000002)
         """
         vals, rates, weights = self.get_vals(value, prefix=prefix,
                                              rates=rates, weights=weights)
@@ -883,9 +883,9 @@ class Result(UserDict):
         --------
         >>> r = Result({'a.a': 1, 'b.a': 3, "c.a": 2})
         >>> r.get_metric_ci("a")
-        (2.0, 1.0, 3.0)
+        (np.float64(2.0), np.float64(1.0), np.float64(3.0))
         >>> r.get_metric_ci("a", rates=[0.5, 1.0, 0.5], r_norm=True, method=np.sum)
-        (2.25, 1.0, 4.5)
+        (np.float64(2.25), np.float64(1.0), np.float64(4.5))
         """
         vals, rates, weights = self.get_vals(value, prefix=prefix,
                                              rates=rates, weights=weights)

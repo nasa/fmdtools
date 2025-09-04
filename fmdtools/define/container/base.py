@@ -164,7 +164,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         """
         new_args = []
         new_kwargs = {}
-        for i, typed_field in enumerate(self.__annotations__):
+        for i, typed_field in enumerate(self.__fields__):
             true_type = self.__annotations__.get(typed_field, False)
             try:
                 if i < len(args):
@@ -310,7 +310,12 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         if isinstance(field, BaseContainer):
             field.assign(value, as_copy=as_copy)
         else:
-            setattr(self, fieldname, value)
+            try:
+                true_type = self.__annotations__[fieldname]
+                setattr(self, fieldname, true_type(value))
+            except TypeError as e:
+                raise Exception("Poorly Specified field " + fieldname +
+                                " in class " + self.__class__.__name__) from e
 
     def reset(self):
         # TODO: major issue here is that multiple states initialized to different

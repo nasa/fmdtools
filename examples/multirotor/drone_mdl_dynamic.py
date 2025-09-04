@@ -161,7 +161,7 @@ class PlanPathMode(Mode):
     fault_noloc = (0.2, 10000)
     fault_degloc = (0.8, 10000)
     opermodes = ('taxi', 'hover', 'move', 'descend', 'land')
-    mode: int = 'taxi'
+    mode: str = 'taxi'
 
 
 class PlanPathState(State):

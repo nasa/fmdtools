@@ -259,7 +259,7 @@ class Project(GenericHumanAction):
     >>> p.signal.s.put(u_self=(0.0, 1.0), u_lin=(1.0, 1.0))
     >>> p.dynamic_behavior()
     >>> p.signal.s.rdiff
-    -0.7854052343902613
+    np.float64(-0.7854052343902613)
     """
 
     container_m = ProjectMode
@@ -317,7 +317,7 @@ class Decide(GenericHumanAction):
     >>> d.signal.s.rdiff = 1.0
     >>> d.dynamic_behavior()
     >>> d.control.s
-    ControlState(rpower=2, lpower=0.0)
+    ControlState(rpower=np.float64(2.0), lpower=np.float64(0.0))
     """
 
     container_m = ProjectMode
@@ -369,7 +369,7 @@ class Press(GenericHumanAction):
     >>> p.control.s.put(lpower=1.0, rpower=0.0)
     >>> p.dynamic_behavior()
     >>> p.comms.s.ctl
-    ControlState(rpower=0.0, lpower=1.0)
+    ControlState(rpower=np.float64(0.0), lpower=np.float64(1.0))
     """
 
     container_m = PressMode

@@ -35,17 +35,17 @@ class Component(Block):
     >>> c
     examplecomponent ExampleComponent
     - t=Time(time=-0.1, timers={})
-    - s=ExampleState(x=0.0, y=0.0)
+    - s=ExampleState(x=np.float64(0.0), y=np.float64(0.0))
     >>> c()
     >>> c
     examplecomponent ExampleComponent
     - t=Time(time=1.0, timers={})
-    - s=ExampleState(x=2.0, y=1.0)
+    - s=ExampleState(x=np.float64(2.0), y=np.float64(1.0))
     >>> c()
     >>> c
     examplecomponent ExampleComponent
     - t=Time(time=2.0, timers={})
-    - s=ExampleState(x=2.0, y=2.0)
+    - s=ExampleState(x=np.float64(2.0), y=np.float64(2.0))
 
     Calling a particular propagation step individually only runs the given behavior
     method (in this case, dynamic and not static).
@@ -54,7 +54,7 @@ class Component(Block):
     >>> c
     examplecomponent ExampleComponent
     - t=Time(time=3.0, timers={})
-    - s=ExampleState(x=2.0, y=3.0)
+    - s=ExampleState(x=np.float64(2.0), y=np.float64(3.0))
 
     Note that we can also simulate to a given time, which should give the same results.
     >>> c2 = ExampleComponent()
@@ -62,7 +62,7 @@ class Component(Block):
     >>> c2
     examplecomponent ExampleComponent
     - t=Time(time=2.0, timers={})
-    - s=ExampleState(x=2.0, y=2.0)
+    - s=ExampleState(x=np.float64(2.0), y=np.float64(2.0))
     """
 
     def base_type(self):

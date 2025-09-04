@@ -31,20 +31,19 @@ class Flow(BaseObject):
     Examples
     --------
     >>> class ExampleFlow(Flow):
-    ...     __slots__ = ()
     ...     container_s = ExampleState
 
     >>> exf = ExampleFlow('exf', s={'x': 0.0})
     >>> exf
     exf ExampleFlow
-    - s=ExampleState(x=0.0, y=1.0)
+    - s=ExampleState(x=np.float64(0.0), y=np.float64(1.0))
 
     Note that copying creates independent copies of states:
 
     >>> exf2 = exf.copy()
     >>> exf2
     exf ExampleFlow
-    - s=ExampleState(x=0.0, y=1.0)
+    - s=ExampleState(x=np.float64(0.0), y=np.float64(1.0))
     >>> exf2.s.x = 2.0
     >>> exf2.s == exf.s
     False

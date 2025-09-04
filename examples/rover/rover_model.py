@@ -382,8 +382,8 @@ class ControlState(State):
         left power
     """
 
-    rpower: float = 0.0
-    lpower: float = 0.0
+    rpower: np.float64 = 0.0
+    lpower: np.float64 = 0.0
 
 
 class Control(Flow):

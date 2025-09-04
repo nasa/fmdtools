@@ -499,14 +499,14 @@ class HumanErrorMode(Mode):
     ...     epc_1 : tuple = (2, 0.5)
     >>> exh = ExHMode()
     >>> exh.failrate
-    0.015
+    np.float64(0.015)
     >>> class ExHMode2(HumanErrorMode):
     ...     gtp : float = 0.01
     ...     epc_1 : float = 2.0
     ...     epc_2 : float = 3.0
     >>> exh2 = ExHMode2()
     >>> exh2.failrate
-    0.06
+    np.float64(0.06)
     """
 
     failrate: float = 1.0

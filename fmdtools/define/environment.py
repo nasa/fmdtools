@@ -119,13 +119,13 @@ class Environment(CommsFlow):
         >>> d.ga.points['ex_point'].s.occupied
         True
         >>> d.c.st[0, 0]
-        1.0
+        np.float64(1.0)
 
         It should also be independent, meaning changes don't effect the original:
 
         >>> d.c.st[0, 1] = 1.0
         >>> e.c.st[0, 1]
-        0.0
+        np.float64(0.0)
         >>> d.ga.lines['ex_line'].s.occupied = True
         >>> e.ga.lines['ex_line'].s.occupied
         False

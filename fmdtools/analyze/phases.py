@@ -269,11 +269,11 @@ class PhaseMap(object):
         --------
         >>> pm = PhaseMap({"on1": [0, 1], "on2": [2, 3]}, {"on": {"on1", "on2"}})
         >>> pm.get_phase_times('on1')
-        [0.0, 1.0]
+        [np.float64(0.0), np.float64(1.0)]
         >>> pm.get_phase_times('on2')
-        [2.0, 3.0]
+        [np.float64(2.0), np.float64(3.0)]
         >>> pm.get_phase_times('on')
-        [0.0, 1.0, 2.0, 3.0]
+        [np.float64(0.0), np.float64(1.0), np.float64(2.0), np.float64(3.0)]
         """
         if phase in self.modephases:
             phases = self.modephases[phase]
@@ -305,11 +305,11 @@ class PhaseMap(object):
         --------
         >>> pm = PhaseMap({"on1": [0, 4], "on2": [5, 6]}, {"on": {"on1", "on2"}})
         >>> pm.get_sample_times("on1")
-        {'on1': [0.0, 1.0, 2.0, 3.0, 4.0]}
+        {'on1': [np.float64(0.0), np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(4.0)]}
         >>> pm.get_sample_times("on")
-        {'on': [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0]}
+        {'on': [np.float64(0.0), np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(4.0), np.float64(5.0), np.float64(6.0)]}
         >>> pm.get_sample_times("on1", "on2")
-        {'on1': [0.0, 1.0, 2.0, 3.0, 4.0], 'on2': [5.0, 6.0]}
+        {'on1': [np.float64(0.0), np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(4.0)], 'on2': [np.float64(5.0), np.float64(6.0)]}
         """
         if not phases_to_sample:
             if self.modephases:
@@ -625,7 +625,7 @@ def find_interval_overlap(*intervals, dt=1.0):
     Examples
     --------
     >>> find_interval_overlap([0, 10], [4, 12])
-    [4.0, 10.0]
+    [np.float64(4.0), np.float64(10.0)]
     >>> find_interval_overlap([0, 3], [4, 12])
     []
     """
@@ -672,7 +672,7 @@ def join_phasemaps(*phasemaps):
     >>> a = PhaseMap({"a": [1, 3], "b": [4, 10]})
     >>> b = PhaseMap({"c": [2, 6], "d": [7, 9]})
     >>> join_phasemaps(a, b)
-    PhaseMap({('a', 'c'): [2.0, 3.0], ('b', 'c'): [4.0, 6.0], ('b', 'd'): [7.0, 9.0]}, {})
+    PhaseMap({('a', 'c'): [np.float64(2.0), np.float64(3.0)], ('b', 'c'): [np.float64(4.0), np.float64(6.0)], ('b', 'd'): [np.float64(7.0), np.float64(9.0)]}, {})
     """
     joint_phases = {}
     all_combos = [*itertools.product(*[phasemap.phases for phasemap in phasemaps])]

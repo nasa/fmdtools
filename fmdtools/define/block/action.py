@@ -71,12 +71,12 @@ class Action(Block):
     >>> exa
     exampleaction ExampleAction
     - t=ActionTime(time=-0.1, timers={})
-    - exf=ExampleFlow(s=(x=1.0, y=1.0))
+    - exf=ExampleFlow(s=(x=np.float64(1.0), y=np.float64(1.0)))
     >>> exa(1.0)
     >>> exa
     exampleaction ExampleAction
     - t=ActionTime(time=1.0, timers={})
-    - exf=ExampleFlow(s=(x=2.0, y=1.0))
+    - exf=ExampleFlow(s=(x=np.float64(2.0), y=np.float64(1.0)))
     >>> exa.indicate_done()
     True
     """
@@ -118,7 +118,7 @@ class ExampleAction(Action):
 
     def indicate_done(self):
         """When it reaches the threshold, it enters 'done' status."""
-        return self.exf.s.x > self.p.x
+        return bool(self.exf.s.x > self.p.x)
 
 
 if __name__ == "__main__":

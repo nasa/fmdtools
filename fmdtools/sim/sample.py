@@ -276,7 +276,7 @@ class ParameterDomain(object):
         Examples
         --------
         >>> expd.get_var_iters()
-        {'y': {1.0, 2.0, 3.0, 4.0}, 'x': array([ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10.])}
+        {'y': array([1., 2., 3., 4.]), 'x': array([ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10.])}
         """
         var_iters = dict.fromkeys(self.variables)
         for variable in var_iters:
@@ -288,7 +288,7 @@ class ParameterDomain(object):
                     res = resolution
                 var_iters[variable] = np.arange(ran[0], ran[1]+res, res)
             elif isinstance(self.variables[variable], set):
-                var_iters[variable] = self.variables[variable]
+                var_iters[variable] = np.array([*self.variables[variable]])
             else:
                 raise Exception("Invalid set constraint for variable " + variable)
         return var_iters
@@ -391,7 +391,7 @@ def sample_times_quad(times, nodes, weights):
     Examples
     --------
     >>> sample_times_quad([0,1,2,3,4], [-0.5, 0.5], [0.5, 0.5])
-    ([1, 3], [0.5, 0.5])
+    ([1, 3], [np.float64(0.5), np.float64(0.5)])
     """
     quantiles = np.array(nodes)/2 + 0.5
     if len(quantiles) > len(times):
@@ -505,7 +505,7 @@ class FaultDomain(object):
          -('ex_fxn', 'low', '9')
          -...more
          >>> [f.disturbances[0][1] for f in exfd2.faults.values()]
-         [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+         [np.float64(0.0), np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(4.0), np.float64(5.0), np.float64(6.0), np.float64(7.0), np.float64(8.0), np.float64(9.0), np.float64(10.0)]
         """
         # determine overall state combinations to sample from
         for state, vals in dist_ranges.items():
@@ -513,7 +513,7 @@ class FaultDomain(object):
                 dist_ranges[state] = set(np.linspace(*vals))
             # nans added for nominal states to be included in combinations
             # (to remove at mode creation)
-            dist_ranges[state].add(np.NaN)  # used to represent nominal state
+            dist_ranges[state].add(np.nan)  # used to represent nominal state
         dist_keys = [*dist_ranges.keys()]
         statecombos = [i for i in itertools.product(*dist_ranges.values())]
 
@@ -756,13 +756,13 @@ class BaseSample():
         Examples
         --------
         >>> exfs.get_metric("rate")
-        0.0
+        np.float64(0.0)
         >>> exfs2 = copy.deepcopy(exfs)
         >>> exfs2.scenarios()[0].rate=2
         >>> exfs2.get_metric("rate", method="sum")
-        2.0
+        np.float64(2.0)
         >>> exfs2.get_metric("rate", method="average")
-        0.25
+        np.float64(0.25)
         """
         if ids == "all":
             data = np.array([*self.get_scen_values(value).values()])
@@ -993,7 +993,7 @@ class FaultSample(BaseSample):
         >>> fs.add_single_fault_scenario(("affect_dof.ca.comps.rf", "propwarp"), 5)
         >>> fs.add_single_fault_scenario(("affect_dof.ca.comps.lf", "propwarp"), 5)
         >>> fs.scenarios()[0].rate == fs.scenarios()[1].rate*fs.scenarios()[2].rate
-        True
+        np.True_
         """
         self._times.add(time)
         scen = JointFaultScenario.from_faults(faulttups, time, mdl=self.faultdomain.mdl,
@@ -1589,7 +1589,7 @@ class ParameterSample(BaseSample):
         --------
         >>> ex_ps = ParameterSample(expd, seed=1)
         >>> ex_ps.combine_product()
-        [(1.0, 0), (1.0, 1), (1.0, 2), (1.0, 3), (1.0, 4), (1.0, 5), (1.0, 6), (1.0, 7), (1.0, 8), (1.0, 9), (1.0, 10), (2.0, 0), (2.0, 1), (2.0, 2), (2.0, 3), (2.0, 4), (2.0, 5), (2.0, 6), (2.0, 7), (2.0, 8), (2.0, 9), (2.0, 10), (3.0, 0), (3.0, 1), (3.0, 2), (3.0, 3), (3.0, 4), (3.0, 5), (3.0, 6), (3.0, 7), (3.0, 8), (3.0, 9), (3.0, 10), (4.0, 0), (4.0, 1), (4.0, 2), (4.0, 3), (4.0, 4), (4.0, 5), (4.0, 6), (4.0, 7), (4.0, 8), (4.0, 9), (4.0, 10)]
+        [(np.float64(1.0), np.int64(0)), (np.float64(1.0), np.int64(1)), (np.float64(1.0), np.int64(2)), (np.float64(1.0), np.int64(3)), (np.float64(1.0), np.int64(4)), (np.float64(1.0), np.int64(5)), (np.float64(1.0), np.int64(6)), (np.float64(1.0), np.int64(7)), (np.float64(1.0), np.int64(8)), (np.float64(1.0), np.int64(9)), (np.float64(1.0), np.int64(10)), (np.float64(2.0), np.int64(0)), (np.float64(2.0), np.int64(1)), (np.float64(2.0), np.int64(2)), (np.float64(2.0), np.int64(3)), (np.float64(2.0), np.int64(4)), (np.float64(2.0), np.int64(5)), (np.float64(2.0), np.int64(6)), (np.float64(2.0), np.int64(7)), (np.float64(2.0), np.int64(8)), (np.float64(2.0), np.int64(9)), (np.float64(2.0), np.int64(10)), (np.float64(3.0), np.int64(0)), (np.float64(3.0), np.int64(1)), (np.float64(3.0), np.int64(2)), (np.float64(3.0), np.int64(3)), (np.float64(3.0), np.int64(4)), (np.float64(3.0), np.int64(5)), (np.float64(3.0), np.int64(6)), (np.float64(3.0), np.int64(7)), (np.float64(3.0), np.int64(8)), (np.float64(3.0), np.int64(9)), (np.float64(3.0), np.int64(10)), (np.float64(4.0), np.int64(0)), (np.float64(4.0), np.int64(1)), (np.float64(4.0), np.int64(2)), (np.float64(4.0), np.int64(3)), (np.float64(4.0), np.int64(4)), (np.float64(4.0), np.int64(5)), (np.float64(4.0), np.int64(6)), (np.float64(4.0), np.int64(7)), (np.float64(4.0), np.int64(8)), (np.float64(4.0), np.int64(9)), (np.float64(4.0), np.int64(10))]
         """
         var_iters = self.paramdomain.get_var_iters(resolution, resolutions=resolutions)
         x_combos = [*itertools.product(*var_iters.values())]
@@ -1615,7 +1615,7 @@ class ParameterSample(BaseSample):
         --------
         >>> ex_ps = ParameterSample(expd, seed=1)
         >>> ex_ps.combine_orthogonal()
-        [[1.0, 1.0], [2.0, 1.0], [3.0, 1.0], [4.0, 1.0], [3.0, 0], [3.0, 1], [3.0, 2], [3.0, 3], [3.0, 4], [3.0, 5], [3.0, 6], [3.0, 7], [3.0, 8], [3.0, 9], [3.0, 10]]
+        [[np.float64(1.0), 1.0], [np.float64(2.0), 1.0], [np.float64(3.0), 1.0], [np.float64(4.0), 1.0], [3.0, np.int64(0)], [3.0, np.int64(1)], [3.0, np.int64(2)], [3.0, np.int64(3)], [3.0, np.int64(4)], [3.0, np.int64(5)], [3.0, np.int64(6)], [3.0, np.int64(7)], [3.0, np.int64(8)], [3.0, np.int64(9)], [3.0, np.int64(10)]]
         """
         var_iters = self.paramdomain.get_var_iters(resolution, resolutions=resolutions)
         x_def = self.paramdomain.get_x_defaults()
@@ -1640,7 +1640,7 @@ class ParameterSample(BaseSample):
         --------
         >>> ex_ps = ParameterSample(expd, seed=1)
         >>> ex_ps.combine_random(1)
-        [[2.0, 9.504636963259353]]
+        [[np.float64(2.0), 9.504636963259353]]
         """
         ranges = self.paramdomain.variables.values()
         x_combos = combine_random(ranges, seed=self.seed, num_combos=num_combos)

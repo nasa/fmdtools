@@ -61,29 +61,29 @@ class CommsFlow(MultiFlow):
     >>> t2 = ecf.create_comms("t2")
     >>> ecf
     examplecommsflow ExampleCommsFlow
-    - s=ExampleState(x=1.0, y=1.0)
+    - s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))
     COMMS:
-    - t1=(s=(x=1.0, y=1.0))
-    - t2=(s=(x=1.0, y=1.0))
+    - t1=(s=(x=np.float64(1.0), y=np.float64(1.0)))
+    - t2=(s=(x=np.float64(1.0), y=np.float64(1.0)))
     >>> t1.s.put(x=10.0, y=10.0)
     >>> t1.send("t2", "x")
     >>> t1
     t1 ExampleCommsFlow
-    - s=ExampleState(x=10.0, y=10.0)
-    - out(): t1_out(s=(x=10.0, y=1.0))
+    - s=ExampleState(x=np.float64(10.0), y=np.float64(10.0))
+    - out(): t1_out(s=(x=np.float64(10.0), y=np.float64(1.0)))
     - inbox(): {}
     - received(): {}
     >>> t2
     t2 ExampleCommsFlow
-    - s=ExampleState(x=1.0, y=1.0)
-    - out(): t2_out(s=(x=1.0, y=1.0))
+    - s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))
+    - out(): t2_out(s=(x=np.float64(1.0), y=np.float64(1.0)))
     - inbox(): {'t1': ('x',)}
     - received(): {}
     >>> t2.receive()
     >>> t2
     t2 ExampleCommsFlow
-    - s=ExampleState(x=10.0, y=1.0)
-    - out(): t2_out(s=(x=1.0, y=1.0))
+    - s=ExampleState(x=np.float64(10.0), y=np.float64(1.0))
+    - out(): t2_out(s=(x=np.float64(1.0), y=np.float64(1.0)))
     - inbox(): {}
     - received(): {'t1': ('x',)}
     """

@@ -6,11 +6,11 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2025-09-02T12:59:00.267355</dc:date>
+    <dc:date>2025-09-03T19:56:01.193895</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
-      <dc:title>Matplotlib v3.10.1, https://matplotlib.org/</dc:title>
+      <dc:title>Matplotlib v3.10.6, https://matplotlib.org/</dc:title>
      </cc:Agent>
     </dc:creator>
    </cc:Work>
@@ -32,12 +32,12 @@ z
    <g id="patch_2">
     <path d="M 61.828229 50.038125 
 Q 76.223598 50.038125 89.500933 50.038125 
-" clip-path="url(#pdd16f02afb)" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+" clip-path="url(#p67eaa54a3d)" style="fill: none; stroke: #000000; stroke-linecap: round"/>
     <path d="M 83.500933 47.038125 
 L 89.500933 50.038125 
 L 83.500933 53.038125 
 z
-" clip-path="url(#pdd16f02afb)" style="stroke: #000000; stroke-linecap: round"/>
+" clip-path="url(#p67eaa54a3d)" style="stroke: #000000; stroke-linecap: round"/>
    </g>
    <g id="text_1">
     <!-- ContainmentEdgeStyle -->
@@ -382,7 +382,7 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="pdd16f02afb">
+  <clipPath id="p67eaa54a3d">
    <rect x="48.325312" y="22.318125" width="55.8" height="55.44"/>
   </clipPath>
  </defs>

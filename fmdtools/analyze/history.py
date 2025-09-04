@@ -126,7 +126,7 @@ class History(Result):
     or over all times:
 
     >>> hist.get_metric("a")
-    3.5
+    np.float64(3.5)
     """
 
     def init_att(self, att, val,
@@ -370,7 +370,7 @@ class History(Result):
         >>> History({'m.faults.fault1': [False, False, False]}).get_fault_time()
         nan
         >>> History({'m.faults.fault1': [False, False, True]}).get_fault_time()
-        2
+        np.int64(2)
         """
         flatdict = self.flatten()
         all_faults_hist = np.sum([v for k, v in flatdict.items() if 'faults' in k], 0)
@@ -379,7 +379,7 @@ class History(Result):
         else:
             times = np.where(all_faults_hist >= 1)[0]
             if times.size == 0:
-                return np.NaN
+                return np.nan
             elif metric == 'times':
                 return times
             elif metric == 'earliest':

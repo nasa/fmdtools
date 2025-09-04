@@ -81,26 +81,26 @@ class MultiFlow(Flow):
     >>> sub_flow = exf.create_local("sub_flow")
     >>> sub_flow
     sub_flow ExampleMultiFlow
-    - s=ExampleState(x=1.0, y=1.0)
+    - s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))
     >>> sub_flow.s.put(x=0.0, y=0.0)
     >>> exf
     examplemultiflow ExampleMultiFlow
-    - s=ExampleState(x=1.0, y=1.0)
+    - s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))
     LOCALS:
-    - sub_flow=(s=(x=0.0, y=0.0))
+    - sub_flow=(s=(x=np.float64(0.0), y=np.float64(0.0)))
     >>> exf.update(to_get="sub_flow")
     >>> exf
     examplemultiflow ExampleMultiFlow
-    - s=ExampleState(x=0.0, y=0.0)
+    - s=ExampleState(x=np.float64(0.0), y=np.float64(0.0))
     LOCALS:
-    - sub_flow=(s=(x=0.0, y=0.0))
+    - sub_flow=(s=(x=np.float64(0.0), y=np.float64(0.0)))
     >>> exf.s.put(x=10.0, y=10.0)
     >>> sub_flow.update("x", to_get="global")
     >>> exf
     examplemultiflow ExampleMultiFlow
-    - s=ExampleState(x=10.0, y=10.0)
+    - s=ExampleState(x=np.float64(10.0), y=np.float64(10.0))
     LOCALS:
-    - sub_flow=(s=(x=10.0, y=0.0))
+    - sub_flow=(s=(x=np.float64(10.0), y=np.float64(0.0)))
     """
 
     __slots__ = ['glob', '__dict__']
@@ -219,13 +219,13 @@ class MultiFlow(Flow):
         >>> sub_f2 = exf.create_local("sub_f2")
         >>> sub_f.get_view("global")
         examplemultiflow ExampleMultiFlow
-        - s=ExampleState(x=1.0, y=1.0)
+        - s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))
         LOCALS:
-        - sub_f=(s=(x=1.0, y=1.0))
-        - sub_f2=(s=(x=1.0, y=1.0))
+        - sub_f=(s=(x=np.float64(1.0), y=np.float64(1.0)))
+        - sub_f2=(s=(x=np.float64(1.0), y=np.float64(1.0)))
         >>> sub_f.get_view("sub_f2")
         sub_f2 ExampleMultiFlow
-        - s=ExampleState(x=1.0, y=1.0)
+        - s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))
         """
         if name == "":
             raise Exception("Must provide view")

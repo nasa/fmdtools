@@ -64,7 +64,7 @@ class Rand(BaseContainer):
     Rand is meant to be extended in model definition with random states, e.g.:
 
     >>> class RandState(State):
-    ...     noise: float=1.0
+    ...     noise: np.float64=1.0
     >>> class ExampleRand(Rand):
     ...     s: RandState = RandState()
 
@@ -74,28 +74,28 @@ class Rand(BaseContainer):
     >>> exr = ExampleRand(run_stochastic=True, track_pdf=True)
     >>> exr.set_rand_state('noise', 'normal', 1.0, 1.0)
     >>> exr.s
-    RandState(noise=1.3047170797544314)
+    RandState(noise=np.float64(1.3047170797544314))
     >>> exr.probs
-    [0.3808442490605113]
+    [np.float64(0.3808442490605113)]
 
     Checking copy:
 
     >>> exr2 = exr.copy()
     >>> exr2.s
-    RandState(noise=1.3047170797544314)
+    RandState(noise=np.float64(1.3047170797544314))
     >>> exr2.run_stochastic
     True
-    >>> exr2.rng.__getstate__()['state'] == exr.rng.__getstate__()['state']
+    >>> exr2.rng.bit_generator.state['state']['state'] == exr.rng.bit_generator.state['state']['state']
     True
 
     More state setting:
     >>> exr.set_rand_state('noise', 'normal', 1.0, 1.0)
     >>> exr.probs
-    [0.3808442490605113, 0.23230084450139615]
+    [np.float64(0.3808442490605113), np.float64(0.23230084450139615)]
     >>> exr.return_probdens()
-    0.08847044068025682
+    np.float64(0.08847044068025682)
     >>> exr2.probs
-    [0.3808442490605113]
+    [np.float64(0.3808442490605113)]
     """
 
     rolename = "r"
@@ -144,7 +144,7 @@ class Rand(BaseContainer):
         Examples
         --------
         >>> ExampleRand().get_rand_states()
-        {'noise': 1.0}
+        {'noise': np.float64(1.0)}
         >>> ExampleRand().get_rand_states(auto_update_only=True)
         {}
         """
@@ -178,14 +178,14 @@ class Rand(BaseContainer):
                                 str(self.__class__) + " returned array when it should" +
                                 " be a float/int--check args")
                 newvalue = newvalue[0]
-            setattr(self.s, statename, newvalue)
+            self.s.set_field(statename, newvalue)
             if self.track_pdf:
                 value_pds = get_prob_for_rand(newvalue, methodname, *args)
                 self.probs.append(value_pds)
 
     def return_mutables(self):
         """Get mutable rand states."""
-        rs = tuple([*self.rng.__getstate__()['state'].values()])
+        rs = tuple([*self.rng.bit_generator.state['state'].values()])
         if 's' in self.__fields__:
             return rs + astuple(self.s)
         else:
@@ -224,7 +224,7 @@ class Rand(BaseContainer):
     def set_rng(self, other_rng):
         """Set the state of the rng in the Rand to the same state as other_rng."""
         self.rng = np.random.default_rng(self.seed)
-        self.rng.__setstate__(other_rng.__getstate__())
+        self.rng.bit_generator.__setstate__(other_rng.bit_generator.__getstate__())
 
     def set_field(self, fieldname, value, as_copy=True):
         """Extend BaseContainer.assign to accomodate the rng."""
@@ -249,11 +249,11 @@ def calc_prob_for_integers(x, *args):
     Examples
     --------
     >>> calc_prob_for_integers([0], 2)
-    0.5
+    np.float64(0.5)
     >>> calc_prob_for_integers([0, 1], 0, 2)
-    0.25
+    np.float64(0.25)
     >>> calc_prob_for_integers([0, 1, 2], 0, 2)
-    0.0
+    np.float64(0.0)
     """
     if len(args) == 1:
         xmin, xmax = 0, args[0]
@@ -264,7 +264,7 @@ def calc_prob_for_integers(x, *args):
     if xmin <= np.min(x) and np.max(x) < xmax:
         return np.prod([1/(xmax-xmin) for x in x])
     else:
-        return 0.0
+        return np.float64(0.0)
 
 
 def calc_prob_density_for_random(x):
@@ -274,16 +274,16 @@ def calc_prob_density_for_random(x):
     Examples
     --------
     >>> calc_prob_density_for_random([0.5])
-    1.0
+    np.float64(1.0)
     >>> calc_prob_density_for_random([0.5, 0.1, 0.9, 0.5])
-    0.25
+    np.float64(0.25)
     >>> calc_prob_density_for_random([0.5, 0.1, 0.9, 0.5, 1.1])
-    0.0
+    np.float64(0.0)
     """
     if 0 <= np.min(x) and np.max(x) < 1.0:
-        return 1/len(x)
+        return np.float64(1/len(x))
     else:
-        return 0.0
+        return np.float64(0.0)
 
 
 def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
@@ -293,11 +293,11 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
     Examples
     --------
     >>> calc_prob_for_choice([1], [1,2])
-    0.5
+    np.float64(0.5)
     >>> calc_prob_for_choice([1,2], [1,2], replace=False)
-    0.5
+    np.float64(0.5)
     >>> calc_prob_for_choice([1,2], [1,2,3], p=[0.1, 0.1, 0.9])
-    0.01
+    np.float64(0.01)
     """
     if isinstance(options, int):
         options = [*np.arange(options)]
@@ -325,17 +325,17 @@ def calc_prob_for_shuffle_permutation(x, options, *args, check_valid=True):
     Examples
     --------
     >>> calc_prob_for_shuffle_permutation([1,2], [1,2])
-    0.5
+    np.float64(0.5)
     >>> calc_prob_for_shuffle_permutation([2,1,3], [1,2,3])
-    0.16666666666666666
+    np.float64(0.16666666666666666)
     """
     if is_iter(options):
         options = np.array(options)
     else:
         options = np.arange(options)
     if check_valid and not set(unpack_x(options)).issuperset(set(unpack_x(x))):
-        return 0.0
-    return 1/math.factorial(options.size)
+        return np.float64(0.0)
+    return np.float64(1/math.factorial(options.size))
 
 
 def calc_prob_for_permuted(x, axis=None):
@@ -345,11 +345,11 @@ def calc_prob_for_permuted(x, axis=None):
     Examples
     --------
     >>> calc_prob_for_permuted(np.array([[1,2], [3,4]]))
-    0.041666666666666664
+    np.float64(0.041666666666666664)
     >>> calc_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 0)
-    0.16666666666666666
+    np.float64(0.16666666666666666)
     >>> calc_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 1)
-    0.5
+    np.float64(0.5)
     """
     if axis is not None:
         return calc_prob_for_shuffle_permutation(x, x.shape[axis], check_valid=False)
@@ -393,13 +393,13 @@ def get_exp_ray_pdf(randname, *args):
     Examples
     --------
     >>> get_exp_ray_pdf("rayleigh", 2)(2.0)
-    0.3032653298563167
+    np.float64(0.3032653298563167)
     >>> get_exp_ray_pdf("rayleigh", 2, 2)(2.0)
-    0.0
+    np.float64(0.0)
     >>> get_exp_ray_pdf("exponential", 1)(0.0)
-    1.0
+    np.float64(1.0)
     >>> get_exp_ray_pdf("exponential", 1, -1.0)(0.0)
-    0.36787944117144233
+    np.float64(0.36787944117144233)
     """
     if randname == 'exponential':
         randname = "expon"
@@ -420,7 +420,7 @@ def get_hypergeometric_pmf(*args):
     Examples
     --------
     >>> get_hypergeometric_pmf(50, 450, 100)(10)
-    0.14736784420411747
+    np.float64(0.14736784420411747)
     """
     n_pop = args[0]+args[1]
     n_good = args[0]
@@ -435,7 +435,7 @@ def get_lognormal_pdf(*args):
     Examples
     --------
     >>> get_lognormal_pdf(0, .25)(1.0)
-    1.5957691216057308
+    np.float64(1.5957691216057308)
     """
     s = args[1]
     scale = np.exp(args[0])
@@ -451,7 +451,7 @@ def get_standard_t_pdf(*args):
     Examples
     --------
     >>> get_standard_t_pdf(1)([0.0])
-    0.31830988618379075
+    np.float64(0.31830988618379075)
     """
     return get_scipy_pdf("multivariate_t", df=args[0])
 
@@ -463,13 +463,13 @@ def get_triangular_pdf(*args):
     Examples
     --------
     >>> get_triangular_pdf(0,1,2)(0.0)
-    0.0
+    np.float64(0.0)
     >>> get_triangular_pdf(0,1,2)(1.0)
-    1.0
+    np.float64(1.0)
     >>> get_triangular_pdf(0,1,2)(1.5)
-    0.5
+    np.float64(0.5)
     >>> get_triangular_pdf(0,1,2)(0.5, 0.5)
-    0.25
+    np.float64(0.25)
     """
     left, mode, right = args[:3]
     loc = left
@@ -583,11 +583,11 @@ def get_prob_for_rand(x, randname, *args):
     Examples
     --------
     >>> get_prob_for_rand(0, "normal", 0, 1)
-    0.3989422804014327
+    np.float64(0.3989422804014327)
     >>> get_prob_for_rand([0,0], "normal", 0, 1)
-    0.15915494309189535
+    np.float64(0.15915494309189535)
     >>> get_prob_for_rand(2, "integers", 4)
-    0.25
+    np.float64(0.25)
     """
     pfunc = get_pfunc_for_dist(randname, *args)
     return pfunc(x)
@@ -596,7 +596,7 @@ def get_prob_for_rand(x, randname, *args):
 class RandState(State):
     """Example random state for testing and docs."""
 
-    noise: float = 1.0
+    noise: np.float64 = np.float64(1.0)
 
 
 class ExampleRand(Rand):

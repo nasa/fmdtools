@@ -34,8 +34,8 @@ class State(BaseContainer):
     corresponding field related to a simulation, e.g.,
 
     >>> class ExampleState(State):
-    ...     x : float=1.0
-    ...     y : float=1.0
+    ...     x : np.float64=1.0
+    ...     y : np.float64=1.0
 
     Creates a class point with fields x and y which are tagged as floats with default
     values of 1.0.
@@ -44,16 +44,21 @@ class State(BaseContainer):
 
     >>> p = ExampleState()
     >>> p.x
-    1.0
+    np.float64(1.0)
 
     or:
 
     >>> p = ExampleState(x=10.0)
     >>> p.x
-    10.0
+    np.float64(10.0)
     """
 
     rolename = 's'
+
+    def __init__(self, *args, **kwargs):
+        args = self.get_true_fields(*args, **kwargs)
+        args, kwargs = self.set_arg_type(*args)
+        super().__init__(*args)
 
     def base_type(self):
         """Return fmdtools type of the model class."""
@@ -114,9 +119,9 @@ class State(BaseContainer):
         >>> p_arr
         array([1., 2.])
         >>> p.get("x")
-        1.0
+        np.float64(1.0)
         >>> p.get("x", "y", as_array=False)
-        [1.0, 2.0]
+        [np.float64(1.0), np.float64(2.0)]
         """
         if len(attnames) == 1:
             states = getattr(self, attnames[0])
@@ -146,9 +151,9 @@ class State(BaseContainer):
         Examples
         --------
         >>> ExampleState().gett("x")
-        1.0
+        np.float64(1.0)
         >>> ExampleState().gett("x", "y")
-        (1.0, 1.0)
+        (np.float64(1.0), np.float64(1.0))
         """
         states = self.get(*attnames, as_array=False)
         if not is_iter(states):
@@ -167,9 +172,9 @@ class State(BaseContainer):
         >>> p = ExampleState(x=1.0, y=1.0)
         >>> p.inc(x=1, y=2)
         >>> p.x
-        2.0
+        np.float64(2.0)
         >>> p.y
-        3.0
+        np.float64(3.0)
 
         Can additionally be provided with a second value denoting a limit on the
         increments e.g.,:
@@ -177,10 +182,10 @@ class State(BaseContainer):
         >>> p = ExampleState(x=1.0, y=1.0)
         >>> p.inc(x=(3, 5.0))
         >>> p.x
-        4.0
+        np.float64(4.0)
         >>> p.inc(x=(3, 5.0))
         >>> p.x
-        5.0
+        np.float64(5.0)
         """
         for name, value in kwargs.items():
             if name not in self.__fields__:
@@ -192,7 +197,7 @@ class State(BaseContainer):
                 if sign*newval <= sign*value[1]:
                     setattr(self, name, newval)
                 else:
-                    setattr(self, name, value[1])
+                    setattr(self, name, current.__class__(value[1]))
             else:
                 setattr(self, name, getattr(self, name) + value)
 
@@ -205,7 +210,7 @@ class State(BaseContainer):
         >>> p = ExampleState(x=1.75850)
         >>> p.roundto(x=0.1)
         >>> p.x
-        1.8
+        np.float64(1.8)
         """
         for name, value in kwargs.items():
             current = getattr(self, name)
@@ -221,15 +226,16 @@ class State(BaseContainer):
         >>> p = ExampleState(x=200.0, y=-200.0)
         >>> p.limit(x=(0.0,100.0), y=(0.0, 100.0))
         >>> p.x
-        100.0
+        np.float64(100.0)
         >>>
-        0.0
+        np.float64(0.0)
         """
         for name, value in kwargs.items():
             if name not in self.__fields__:
                 raise Exception(name+" not a property of "+str(self.__class__))
             try:
-                setattr(self, name, min(value[1], max(value[0], getattr(self, name))))
+                lim = np.min([value[1], np.max([value[0], getattr(self, name)])])
+                setattr(self, name, lim)
             except ValueError as e:
                 raise Exception("Invalid state values for "+name +
                                 ": "+str(getattr(self, name))) from e
@@ -242,7 +248,7 @@ class State(BaseContainer):
         --------
         >>> p = ExampleState(x=2.0, y=3.0)
         >>> p.mul("x","y")
-        6.0
+        np.float64(6.0)
         """
         a = self.get(states[0])
         for state in states[1:]:
@@ -257,7 +263,7 @@ class State(BaseContainer):
         --------
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.div('x','y')
-        0.5
+        np.float64(0.5)
         """
         a = self.get(states[0])
         for state in states[1:]:
@@ -272,7 +278,7 @@ class State(BaseContainer):
         --------
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.add('x','y')
-        3.0
+        np.float64(3.0)
         """
         a = self.get(states[0])
         for state in states[1:]:
@@ -287,7 +293,7 @@ class State(BaseContainer):
         --------
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.sub('x','y')
-        -1.0
+        np.float64(-1.0)
         """
         a = self.get(states[0])
         for state in states[1:]:
@@ -326,7 +332,7 @@ class State(BaseContainer):
         if is_iter(test):
             return all(test)
         else:
-            return test
+            return bool(test)
 
     def warn(self, *messages, stacklevel=2):
         """
@@ -356,8 +362,8 @@ class State(BaseContainer):
 class ExampleState(State):
     """Example State class used for docstring tests."""
 
-    x: float = 1.0
-    y: float = 1.0
+    x: np.float64 = 1.0
+    y: np.float64 = 1.0
 
 
 if __name__ == "__main__":

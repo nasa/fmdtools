@@ -594,7 +594,7 @@ class Comparison(BaseComparison):
     >>> comp = Comparison(res, exp_ps, metrics=['a'], factors=['p.x'], default_stat='expected')
     >>> comp.sort_by_factors("p.x")
     >>> comp
-    {'a': {(0,): 0.0, (1,): 1.0, (2,): 4.0, (3,): 9.0, (4,): 16.0, (5,): 25.0, (6,): 36.0, (7,): 49.0, (8,): 64.0, (9,): 81.0, (10,): 100.0}}
+    {'a': {(np.int64(0),): np.float64(0.0), (np.int64(1),): np.float64(1.0), (2,): np.float64(4.0), (np.int64(3),): np.float64(9.0), (np.int64(4),): np.float64(16.0), (np.int64(5),): np.float64(25.0), (np.int64(6),): np.float64(36.0), (np.int64(7),): np.float64(49.0), (np.int64(8),): np.float64(64.0), (np.int64(9),): np.float64(81.0), (np.int64(10),): np.float64(100.0)}}
     >>> comp.as_table()
             a
     10  100.0

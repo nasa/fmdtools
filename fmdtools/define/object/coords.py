@@ -278,7 +278,7 @@ class BaseCoords(BaseObject):
         --------
         >>> ex = ExampleCoords()
         >>> ex.get_properties(0, 0)
-        {'a': False, 'v': 10.0, 'st': 0.0}
+        {'a': np.False_, 'v': np.float64(10.0), 'st': np.float64(0.0)}
         """
         properties = {}
         for prop in self.properties:
@@ -309,11 +309,11 @@ class BaseCoords(BaseObject):
         --------
         >>> ex = ExampleCoords()
         >>> ex.get(10.0, 0.0, "v")
-        10.0
+        np.float64(10.0)
         >>> ex.get(12.0, 4.9, "v")
-        10.0
+        np.float64(10.0)
         >>> ex.get(50.0, 50.0, "v")
-        1.0
+        np.float64(1.0)
         """
         proparray = getattr(self, prop)
         try:
@@ -368,7 +368,7 @@ class BaseCoords(BaseObject):
         >>> ex = ExampleCoords()
         >>> ex.set(15.0, 12.0, "st", 100.0)
         >>> ex.get(15.0, 12.0, "st")
-        100.0
+        np.float64(100.0)
         """
         proparray = getattr(self, prop)
         x_i, y_i = self.to_index(x, y)
@@ -480,17 +480,17 @@ class BaseCoords(BaseObject):
         >>> ex = ExampleCoords()
         >>> ex.set_pts([(50,50), [80,80]], "st", -20.0)
         >>> ex.get(50, 50, "st")
-        -20.0
+        np.float64(-20.0)
         >>> ex.get(80, 80, "st")
-        -20.0
+        np.float64(-20.0)
 
         or:
 
         >>> ex.set_pts([(50,50), [80,80]], "st", [-10.0, -5.0])
         >>> ex.get(50, 50, "st")
-        -10.0
+        np.float64(-10.0)
         >>> ex.get(80, 80, "st")
-        -5.0
+        np.float64(-5.0)
         """
         if is_iter(value):
             if len(value) == len(pts):
@@ -1069,7 +1069,7 @@ class Coords(BaseCoords):
 
     >>> ex.st[0, 0] = 100.0
     >>> ex.st[0, 0]
-    100.0
+    np.float64(100.0)
 
     Collections are lists of points that map to immutable properties. In ExampleCoords,
     all points where v > 5.0 should be a part of high_v, as shown:
@@ -1342,7 +1342,7 @@ class Coords(BaseCoords):
         except Exception:
             return False
         if coll in self.points:
-            return np.all(pt == pts)
+            return bool(np.all(pt == pts))
         elif coll in self.collections:
             return list(pt) in [list(i) for i in [*pts]]
         else:
@@ -1416,9 +1416,9 @@ class Coords(BaseCoords):
         >>> ex.set(0, 0, "st", 25.0)
         >>> cop = ex.copy()
         >>> cop.get(0, 0, "st")
-        25.0
+        np.float64(25.0)
         >>> np.all(ex.st == cop.st)
-        True
+        np.True_
         >>> id(ex.st) == id(cop.st)
         False
         """

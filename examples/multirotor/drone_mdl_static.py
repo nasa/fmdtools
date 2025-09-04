@@ -74,8 +74,8 @@ class ControlState(State):
         Throttle upward. 1.0 maintains hover. 2.0 climbs and 0.0 is no throttle.
     """
 
-    forward: float = 1.0
-    upward: float = 1.0
+    forward: np.float64 = 1.0
+    upward: np.float64 = 1.0
 
 
 class Control(Flow):
@@ -177,7 +177,7 @@ class DesTrajState(State):
         e.g.::
         >>> d = DesTrajState()
         >>> d.dist2d()
-        1.0
+        np.float64(1.0)
         """
         dist = np.sqrt(self.dx**2 + self.dy**2)
         if dist == 0.0:
@@ -551,8 +551,8 @@ class AffectDOF(Function, BaseLine):
         """Calculate immediate power/support from AffectDOF function."""
         pwr = self.s.mul("e_to", "e_ti", "ct", "mt", "pt")
         self.ee_in.s.rate = pwr
-        self.dofs.s.uppwr = self.ctl_in.s.upward * pwr
-        self.dofs.s.planpwr = self.ctl_in.s.forward * pwr
+        self.dofs.s.put(uppwr=self.ctl_in.s.upward * pwr,
+                        planpwr=self.ctl_in.s.forward * pwr)
 
     def calc_vel(self):
         """Calculate velocity given power/support."""
@@ -617,13 +617,13 @@ class CtlDOF(Function):
         >>> c = CtlDOF()
         >>> c.static_behavior()
         >>> c.ctl.s
-        ControlState(forward=1.0, upward=1.0)
+        ControlState(forward=np.float64(1.0), upward=np.float64(1.0))
 
         and in the off-nominal case::
         >>> c.m.add_fault("noctl")
         >>> c.static_behavior()
         >>> c.ctl.s
-        ControlState(forward=0.0, upward=0.0)
+        ControlState(forward=np.float64(0.0), upward=np.float64(0.0))
         """
         self.set_faults()
         self.calc_cs()

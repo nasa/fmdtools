@@ -345,9 +345,9 @@ class BaseProblem(object):
         >>> exp.iter_hist = History({'time': [0,1,2], 'objectives.a': [10, 11, 12], 'objectives.b': [8, 10, 7]})
         >>> h = exp.get_opt_hist()
         >>> h.a
-        [10, 11, 12]
+        [np.int64(10), np.int64(11), np.int64(12)]
         >>> h.b
-        [8, 8, 7]
+        [np.int64(8), np.int64(8), np.int64(7)]
         """
         if objectives:
             hist = self.iter_hist.objectives.get_values(*objectives)
@@ -438,9 +438,9 @@ class SimpleProblem(BaseProblem):
     ...         self.add_constraint("g1", g1, threshold=3.0, comparator="less")
     >>> ex_sp = ExampleSimpleProblem()
     >>> ex_sp.f1(1, 1)
-    2
+    np.float64(2.0)
     >>> ex_sp.g1(1, 1)
-    -3.0
+    np.float64(-3.0)
     """
 
     def __init__(self, **kwargs):
@@ -451,7 +451,7 @@ class SimpleProblem(BaseProblem):
         """Update objectives/constraints by calling callables."""
         self.update_variables(*x)
         for objname, obj in {**self.objectives, **self.constraints}.items():
-            obj.update(self.callables[objname](*x))
+            obj.update(np.float64(self.callables[objname](*x)))
         self.log_hist()
 
     def add_objective(self, name, call, **kwargs):
@@ -533,12 +533,12 @@ class ResultObjective(Objective):
         >>> obj = ResultObjective("a.b", time=1.0)
         >>> res = Result({'t1p0.a.b': 10.0, 't2p0.a.b': 13.0})
         >>> obj.get_result_value(res)
-        10.0
+        np.float64(10.0)
 
         >>> obj = ResultObjective("a.b", time=1.0, method=np.sum)
         >>> res = Result({'scen1.t1p0.a.b': 10.0, 'scen2.t1p0.a.b': 12.0})
         >>> obj.get_result_value(res)
-        22.0
+        np.float64(22.0)
         """
         if not self.time:
             val = res.get_metric(self.name, method=self.method)
@@ -615,7 +615,7 @@ class HistoryObjective(ResultObjective):
     >>> obj = HistoryObjective("a.b", method=np.max)
     >>> hist = History({'t1p0.a.b': [5.0, 10.0], 't2p0.a.b': [1.0, 13.0]})
     >>> obj.get_result_value(hist)
-    13.0
+    np.float64(13.0)
     """
 
 
@@ -805,15 +805,15 @@ class ParameterSimProblem(BaseSimProblem):
     once this is set up, you can use the objectives/constraints as callables, like so:
 
     >>> exprob.f1(1, 0)
-    0.0
+    np.float64(0.0)
     >>> exprob.f1(1, 1)
-    5.0
+    np.float64(5.0)
     >>> exprob.f1(1, 2)
-    10.0
+    np.float64(10.0)
     >>> exprob.f2(1, 2)
-    0.0
+    np.float64(0.0)
     >>> exprob.g1(1, 2)
-    -10.0
+    np.float64(-10.0)
 
     below, we use the classify dict as an objective instead of the variable:
 
@@ -825,9 +825,9 @@ class ParameterSimProblem(BaseSimProblem):
 
     >>> ex_obj_prob = ExampleParameterSimProblemObj()
     >>> ex_obj_prob.f1(1, 1)
-    100.0
+    np.float64(100.0)
     >>> ex_obj_prob.f1(1, 2)
-    200.0
+    np.float64(200.0)
 
     finally, note that this class can work with a variety of methods:
 
@@ -840,9 +840,9 @@ class ParameterSimProblem(BaseSimProblem):
 
     >>> exprobshort = ExampleParameterSimProblemShort()
     >>> exprobshort.f1(1, 1)
-    2.0
+    np.float64(2.0)
     >>> exprobshort.f2(1, 1)
-    3.0
+    np.float64(3.0)
     """
 
     def add_parameterdomain(self, parameterdomain):
@@ -979,9 +979,9 @@ class SingleFaultScenarioProblem(ScenarioProblem):
     objective value should be 1.0 (init value) + 3 * time_with_fault
     >>> ex_scenprob = ExScenProb()
     >>> ex_scenprob.f1(5.0)
-    3.0
+    np.float64(3.0)
     >>> ex_scenprob.f1(4.0)
-    6.0
+    np.float64(6.0)
     """
 
     def name_repr(self):
@@ -1066,9 +1066,9 @@ class DisturbanceProblem(ScenarioProblem):
 
     >>> ex_dp = ExampleDisturbanceProblem()
     >>> ex_dp.f1(5.0)
-    5.0
+    np.float64(5.0)
     >>> ex_dp.f1(4.0)
-    4.0
+    np.float64(4.0)
     """
 
     def add_sim(self, mdl, time, *disturbances, **kwargs):
@@ -1278,18 +1278,18 @@ class ProblemArchitecture(BaseProblem):
     call each objective in each problem in terms of its local variables:
 
     >>> ex_pa.ex_sp_f1(1, 1)
-    2.0
+    np.float64(2.0)
     >>> ex_pa.ex_scenprob_f1()
-    15.0
+    np.float64(15.0)
     >>> ex_pa.ex_dp_f1()
-    1.0
+    np.float64(1.0)
 
     We can also call these in terms of the full set of variables:
 
     >>> ex_pa.ex_scenprob_f1_full(2, 2)
-    12.0
+    np.float64(12.0)
     >>> ex_pa.ex_dp_f1_full(3, 3)
-    3.0
+    np.float64(3.0)
     """
 
     def __init__(self, **kwargs):

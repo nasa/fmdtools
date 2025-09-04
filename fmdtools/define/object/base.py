@@ -123,9 +123,9 @@ from fmdtools.define.container.state import ExampleState
 class ExampleObject(BaseObject):
     container_s = ExampleState
     def indicate_high_x(self):
-        return self.s.x > 1.0
+        return bool(self.s.x > 1.0)
     def indicate_y_over_x(self):
-        return self.s.y > self.s.x
+        return bool(self.s.y > self.s.x)
 """
 
 
@@ -145,9 +145,9 @@ class BaseObject(metaclass=BaseType):
     >>> class ExampleObject(BaseObject):
     ...    container_s = ExampleState
     ...    def indicate_high_x(self):
-    ...        return self.s.x > 1.0
+    ...        return bool(self.s.x > 1.0)
     ...    def indicate_y_over_x(self):
-    ...        return self.s.y > self.s.x
+    ...        return bool(self.s.y > self.s.x)
 
 
     >>> ex = ExampleObject()
@@ -156,14 +156,14 @@ class BaseObject(metaclass=BaseType):
     >>> ex.containers
     ('s',)
     >>> ex.s
-    ExampleState(x=1.0, y=1.0)
+    ExampleState(x=np.float64(1.0), y=np.float64(1.0))
 
     If an already-instanced role is passed, the BaseObject will take this
     copy instead of instancing its own:
 
     >>> ex2 = ExampleObject(s=ExampleState(2.0, 4.0))
     >>> ex2.s
-    ExampleState(x=2.0, y=4.0)
+    ExampleState(x=np.float64(2.0), y=np.float64(4.0))
 
     The method `indicate_high_x` is called an indicator. Indicators show up in the
     indicators property:
@@ -429,15 +429,15 @@ class BaseObject(metaclass=BaseType):
         >>> ex2 = ExampleObject(s={'x': 3.0, 'y': 4.0})
         >>> ex.assign_roles('container', ex2)
         >>> ex.s
-        ExampleState(x=3.0, y=4.0)
+        ExampleState(x=np.float64(3.0), y=np.float64(4.0))
 
         Note that these these roles should be independent after assignment:
 
-        >>> ex.s.x = 4.0
+        >>> ex.s.x = np.float64(4.0)
         >>> ex.s
-        ExampleState(x=4.0, y=4.0)
+        ExampleState(x=np.float64(4.0), y=np.float64(4.0))
         >>> ex2.s
-        ExampleState(x=3.0, y=4.0)
+        ExampleState(x=np.float64(3.0), y=np.float64(4.0))
         """
         roles = getattr(self, roletype+'s')
         for role in roles:
@@ -888,7 +888,7 @@ class BaseObject(metaclass=BaseType):
         >>> exec(example_object_code)
         >>> exo = ExampleObject(s={'y': 2.0})
         >>> exo.get_node_attrs()
-        {'s': ExampleState(x=1.0, y=2.0), 'indicators': ['y_over_x']}
+        {'s': ExampleState(x=np.float64(1.0), y=np.float64(2.0)), 'indicators': ['y_over_x']}
         >>> exo.get_node_attrs(roles=["none"])
         {'indicators': ['y_over_x']}
         """

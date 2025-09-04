@@ -263,15 +263,15 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
     Examples
     --------
     >>> calc_metric([1,2,3]) # simple average
-    2.0
+    np.float64(2.0)
     >>> calc_metric([1,2,3], rates=[0.1, 0.1, 0.0], method=np.sum) # weighted sum
-    0.30000000000000004
+    np.float64(0.30000000000000004)
     >>> calc_metric([0, 20, 30], dtype=bool, rates=[0.1, 0.1, 0.1], method=np.sum) # rate of nonzero event
-    0.2
+    np.float64(0.2)
     >>> calc_metric([0, 1, 2], "total")
-    2
+    np.int64(2)
     >>> calc_metric([0, 1, 2], "expected", rates=[1.0, 2.0, 1.0])
-    4.0
+    np.float64(4.0)
     """
     if isinstance(method, str):
         method = eval("calc_"+method)
@@ -311,7 +311,7 @@ def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
     Examples
     --------
     >>> calc_metric_ci([1, 2, 3], method=np.average)
-    (2.0, 1.0, 3.0)
+    (np.float64(2.0), np.float64(1.0), np.float64(3.0))
     >>> calc_metric_ci([[1,2,3], [2,3,4]], method=np.average)
     (array([1.5, 2.5, 3.5]), array([1., 2., 3.]), array([2., 3., 4.]))
     >>> calc_metric_ci([[1,2,3], [2,3,4]], rates=[0.01, 1.0], method=np.sum)
@@ -345,9 +345,9 @@ def calc_rate(data, rates=None, weights=None, **kwargs):
     Examples
     --------
     >>> calc_rate([0, 10, 0]) # defaults to equal rate
-    0.3333333333333333
+    np.float64(0.3333333333333333)
     >>> calc_rate([0, 10, 100], [0.1, 0.1, 0.1]) # provided rates
-    0.2
+    np.float64(0.2)
     """
     if rates is None:
         rates = 1/np.size(data)
@@ -362,7 +362,7 @@ def calc_percent(data, weights=None, rates=None, **kwargs):
     Examples
     --------
     >>> calc_percent([0, 10, 0])
-    0.3333333333333333
+    np.float64(0.3333333333333333)
     """
     return calc_metric(data, **{**kwargs, 'dtype': bool})
 
@@ -374,9 +374,9 @@ def calc_total(data, weights=None, **kwargs):
     Examples
     --------
     >>> calc_total([0, 10, 0])
-    1
+    np.int64(1)
     >>> calc_total([0, 10, 100])
-    2
+    np.int64(2)
     """
     return calc_metric(data, **{**kwargs, 'method': np.sum, 'dtype': bool})
 
@@ -388,9 +388,9 @@ def calc_expected(data, rates=None, weights=None, **kwargs):
     Examples
     --------
     >>> calc_expected([0, 5, 10]) # defaults to average
-    5.0
+    np.float64(5.0)
     >>> calc_expected([0, 5, 10], [0.1, 0.5, 0.1])
-    3.5
+    np.float64(3.5)
     """
     if rates is None:
         rates = 1/np.size(data)
@@ -404,9 +404,9 @@ def calc_average(data, weights=None, rates=None, **kwargs):
     Examples
     --------
     >>> calc_average([0, 5, 10])
-    5.0
+    np.float64(5.0)
     >>> calc_average([0, 5, 10], [0.0, 0.5, 0.5])
-    7.5
+    np.float64(7.5)
     """
     return calc_metric(data, **{**kwargs, 'method': np.average, 'weights': weights})
 
@@ -418,9 +418,9 @@ def calc_sum(data, weights=None, rates=None, **kwargs):
     Examples
     --------
     >>> calc_sum([0, 5, 10.0])
-    15.0
+    np.float64(15.0)
     >>> calc_sum([0, 5, 10.0], [0.0, 0.5, 0.5])
-    15.0
+    np.float64(15.0)
     """
     return calc_metric(data, **{**kwargs, 'method': np.sum})
 
