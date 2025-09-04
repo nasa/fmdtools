@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_bad1dd11da9cc1be_geom_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 21:59 -0700
+            created at 2025-09-03 23:44 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -294,7 +294,7 @@
     <p class="pln"><span class="n"><a id="t212" href="#t212">212</a></span><span class="t"><span class="str">    >>> efa.g.nodes()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t213" href="#t213">213</a></span><span class="t"><span class="str">    NodeView(('exfxnarch.flows.exf',))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t214" href="#t214">214</a></span><span class="t"><span class="str">    >>> efa.g.nodes['exfxnarch.flows.exf']</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t215" href="#t215">215</a></span><span class="t"><span class="str">    {'nodetype': 'Flow', 'classname': 'ExampleFlow', 'bipartite': 1, 's': ExampleState(x=0.0, y=0.0), 'indicators': []}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t215" href="#t215">215</a></span><span class="t"><span class="str">    {'nodetype': 'Flow', 'classname': 'ExampleFlow', 'bipartite': 1, 's': ExampleState(x=np.float64(0.0), y=np.float64(0.0)), 'indicators': []}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t216" href="#t216">216</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t217" href="#t217">217</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t218" href="#t218">218</a></span><span class="t">    <span class="key">def</span> <span class="nam">nx_from_obj</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">mdl</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -332,7 +332,7 @@
     <p class="pln"><span class="n"><a id="t250" href="#t250">250</a></span><span class="t"><span class="str">    >>> efa.g.edges()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t251" href="#t251">251</a></span><span class="t"><span class="str">    EdgeView([('exfxnarch.fxns.ex_fxn', 'exfxnarch.fxns.ex_fxn2')])</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t252" href="#t252">252</a></span><span class="t"><span class="str">    >>> efa.g.edges[('exfxnarch.fxns.ex_fxn', 'exfxnarch.fxns.ex_fxn2')]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t253" href="#t253">253</a></span><span class="t"><span class="str">    {'flows': "['exfxnarch.flows.exf']", 'edgetype': 'flows', 'exfxnarch.flows.exf': {'s': ExampleState(x=0.0, y=0.0), 'indicators': []}}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t253" href="#t253">253</a></span><span class="t"><span class="str">    {'flows': "['exfxnarch.flows.exf']", 'edgetype': 'flows', 'exfxnarch.flows.exf': {'s': ExampleState(x=np.float64(0.0), y=np.float64(0.0)), 'indicators': []}}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t254" href="#t254">254</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t255" href="#t255">255</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t256" href="#t256">256</a></span><span class="t">    <span class="key">def</span> <span class="nam">nx_from_obj</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">mdl</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -518,10 +518,10 @@
     <p class="pln"><span class="n"><a id="t436" href="#t436">436</a></span><span class="t"><span class="str">    - t=Time(time=-0.1, timers={})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t437" href="#t437">437</a></span><span class="t"><span class="str">    - m=Mode(mode='nominal', faults=set(), sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t438" href="#t438">438</a></span><span class="t"><span class="str">    FLOWS:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t439" href="#t439">439</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=0.0, y=0.0))</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t439" href="#t439">439</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=np.float64(0.0), y=np.float64(0.0)))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t440" href="#t440">440</a></span><span class="t"><span class="str">    FXNS:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t441" href="#t441">441</a></span><span class="t"><span class="str">    - ex_fxn=ExampleFunction(s=(x=0.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t442" href="#t442">442</a></span><span class="t"><span class="str">    - ex_fxn2=ExampleFunction(s=(x=0.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t441" href="#t441">441</a></span><span class="t"><span class="str">    - ex_fxn=ExampleFunction(s=(x=np.float64(0.0), y=np.float64(0.0)), m=(mode='standby', faults=set(), sub_faults=False))</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t442" href="#t442">442</a></span><span class="t"><span class="str">    - ex_fxn2=ExampleFunction(s=(x=np.float64(0.0), y=np.float64(0.0)), m=(mode='standby', faults=set(), sub_faults=False))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t443" href="#t443">443</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t444" href="#t444">444</a></span><span class="t"><span class="str">    This type of functional architecture only has dynamic functions:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t445" href="#t445">445</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -540,10 +540,10 @@
     <p class="pln"><span class="n"><a id="t458" href="#t458">458</a></span><span class="t"><span class="str">    - t=Time(time=1.0, timers={})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t459" href="#t459">459</a></span><span class="t"><span class="str">    - m=Mode(mode='nominal', faults=set(), sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t460" href="#t460">460</a></span><span class="t"><span class="str">    FLOWS:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t461" href="#t461">461</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=2.0, y=0.0))</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t461" href="#t461">461</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=np.float64(2.0), y=np.float64(0.0)))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t462" href="#t462">462</a></span><span class="t"><span class="str">    FXNS:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t463" href="#t463">463</a></span><span class="t"><span class="str">    - ex_fxn=ExampleFunction(s=(x=1.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t464" href="#t464">464</a></span><span class="t"><span class="str">    - ex_fxn2=ExampleFunction(s=(x=1.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t463" href="#t463">463</a></span><span class="t"><span class="str">    - ex_fxn=ExampleFunction(s=(x=np.float64(1.0), y=np.float64(0.0)), m=(mode='standby', faults=set(), sub_faults=False))</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t464" href="#t464">464</a></span><span class="t"><span class="str">    - ex_fxn2=ExampleFunction(s=(x=np.float64(1.0), y=np.float64(0.0)), m=(mode='standby', faults=set(), sub_faults=False))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t465" href="#t465">465</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t466" href="#t466">466</a></span><span class="t"><span class="str">    >>> exfa()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t467" href="#t467">467</a></span><span class="t"><span class="str">    >>> exfa</span>&nbsp;</span><span class="r"></span></p>
@@ -551,10 +551,10 @@
     <p class="pln"><span class="n"><a id="t469" href="#t469">469</a></span><span class="t"><span class="str">    - t=Time(time=2.0, timers={})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t470" href="#t470">470</a></span><span class="t"><span class="str">    - m=Mode(mode='nominal', faults=set(), sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t471" href="#t471">471</a></span><span class="t"><span class="str">    FLOWS:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t472" href="#t472">472</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=6.0, y=0.0))</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t472" href="#t472">472</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=np.float64(6.0), y=np.float64(0.0)))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t473" href="#t473">473</a></span><span class="t"><span class="str">    FXNS:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t474" href="#t474">474</a></span><span class="t"><span class="str">    - ex_fxn=ExampleFunction(s=(x=2.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t475" href="#t475">475</a></span><span class="t"><span class="str">    - ex_fxn2=ExampleFunction(s=(x=2.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t474" href="#t474">474</a></span><span class="t"><span class="str">    - ex_fxn=ExampleFunction(s=(x=np.float64(2.0), y=np.float64(0.0)), m=(mode='standby', faults=set(), sub_faults=False))</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t475" href="#t475">475</a></span><span class="t"><span class="str">    - ex_fxn2=ExampleFunction(s=(x=np.float64(2.0), y=np.float64(0.0)), m=(mode='standby', faults=set(), sub_faults=False))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t476" href="#t476">476</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t477" href="#t477">477</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t478" href="#t478">478</a></span><span class="t">    <span class="nam">__slots__</span> <span class="op">=</span> <span class="op">[</span><span class="str">'fxns'</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
@@ -702,7 +702,7 @@
             <a class="nav" href="z_bad1dd11da9cc1be_geom_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 21:59 -0700
+            created at 2025-09-03 23:44 -0700
         </p>
     </div>
 </footer>

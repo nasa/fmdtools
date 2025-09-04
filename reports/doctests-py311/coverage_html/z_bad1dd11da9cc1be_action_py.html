@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools/define/architecture/action.py: 82%</title>
+    <title>Coverage for fmdtools/define/architecture/action.py: 83%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools/define/architecture/action.py</b>:
-            <span class="pc_cov">82%</span>
+            <span class="pc_cov">83%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">160 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">131<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">29<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">133<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">27<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">13<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_bad1dd11da9cc1be_base_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 20:47 -0700
+            created at 2025-09-03 22:32 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -299,7 +299,7 @@
     <p class="pln"><span class="n"><a id="t217" href="#t217">217</a></span><span class="t"><span class="str">    - t=Time(time=-0.1, timers={})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t218" href="#t218">218</a></span><span class="t"><span class="str">    - m=Mode(mode='nominal', faults=set(), sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t219" href="#t219">219</a></span><span class="t"><span class="str">    FLOWS:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t220" href="#t220">220</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=1.0, y=1.0))</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t220" href="#t220">220</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t221" href="#t221">221</a></span><span class="t"><span class="str">    ACTS:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t222" href="#t222">222</a></span><span class="t"><span class="str">    - act_1=ExampleAction()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t223" href="#t223">223</a></span><span class="t"><span class="str">    - act_2=ExampleAction()</span>&nbsp;</span><span class="r"></span></p>
@@ -314,7 +314,7 @@
     <p class="pln"><span class="n"><a id="t232" href="#t232">232</a></span><span class="t"><span class="str">    - t=Time(time=2.0, timers={})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t233" href="#t233">233</a></span><span class="t"><span class="str">    - m=Mode(mode='nominal', faults=set(), sub_faults=False)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t234" href="#t234">234</a></span><span class="t"><span class="str">    FLOWS:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t235" href="#t235">235</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=4.0, y=1.0))</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t235" href="#t235">235</a></span><span class="t"><span class="str">    - exf=ExampleFlow(s=(x=np.float64(4.0), y=np.float64(1.0)))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t236" href="#t236">236</a></span><span class="t"><span class="str">    ACTS:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t237" href="#t237">237</a></span><span class="t"><span class="str">    - act_1=ExampleAction()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t238" href="#t238">238</a></span><span class="t"><span class="str">    - act_2=ExampleAction()</span>&nbsp;</span><span class="r"></span></p>
@@ -476,7 +476,7 @@
     <p class="pln"><span class="n"><a id="t394" href="#t394">394</a></span><span class="t"><span class="str">        time : float</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t395" href="#t395">395</a></span><span class="t"><span class="str">            Model time.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t396" href="#t396">396</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t397" href="#t397">397</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">prop_graph</span><span class="op">(</span><span class="str">'static'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t397" href="#t397">397</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">prop_graph</span><span class="op">(</span><span class="str">'static'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t398" href="#t398">398</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t399" href="#t399">399</a></span><span class="t">    <span class="key">def</span> <span class="nam">inc_sim_time</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t400" href="#t400">400</a></span><span class="t">        <span class="str">"""Increment action simulation times to current."""</span>&nbsp;</span><span class="r"></span></p>
@@ -517,7 +517,7 @@
     <p class="mis show_mis"><span class="n"><a id="t435" href="#t435">435</a></span><span class="t">                        <span class="key">elif</span> <span class="nam">proptype</span> <span class="key">in</span> <span class="op">[</span><span class="str">'dynamic'</span><span class="op">,</span> <span class="str">'both'</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t436" href="#t436">436</a></span><span class="t">                            <span class="nam">act</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">t_loc</span> <span class="op">+=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">acts</span><span class="op">[</span><span class="nam">action</span><span class="op">]</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">dt</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t437" href="#t437">437</a></span><span class="t">                    <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t438" href="#t438">438</a></span><span class="t">                        <span class="nam">act</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">t_loc</span> <span class="op">=</span> <span class="num">0.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t438" href="#t438">438</a></span><span class="t">                        <span class="nam">act</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">t_loc</span> <span class="op">=</span> <span class="num">0.0</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t439" href="#t439">439</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t440" href="#t440">440</a></span><span class="t">            <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">new_active_actions</span><span class="op">)</span> <span class="op">></span> <span class="num">1</span> <span class="key">and</span> <span class="nam">self</span><span class="op">.</span><span class="nam">state_rep</span> <span class="op">==</span> <span class="str">'finite-state'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t441" href="#t441">441</a></span><span class="t">                <span class="key">raise</span> <span class="nam">Exception</span><span class="op">(</span><span class="str">"Multiple active actions in a finite-state "</span> <span class="op">+</span>&nbsp;</span><span class="r"></span></p>
@@ -560,7 +560,7 @@
             <a class="nav" href="z_bad1dd11da9cc1be_base_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 20:47 -0700
+            created at 2025-09-03 22:32 -0700
         </p>
     </div>
 </footer>

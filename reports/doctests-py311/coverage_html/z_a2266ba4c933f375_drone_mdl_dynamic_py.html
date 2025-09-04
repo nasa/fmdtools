@@ -57,7 +57,7 @@
             <span class="text">200 statements &nbsp;</span>
             <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">189<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">11<span class="text"> missing</span></button>
-            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">74<span class="text"> excluded</span></button>
+            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">75<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="index.html">&#xab; prev</a> &nbsp; &nbsp;
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_a2266ba4c933f375_drone_mdl_hierarchical_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 20:47 -0700
+            created at 2025-09-03 22:32 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -262,7 +262,7 @@
     <p class="pln"><span class="n"><a id="t180" href="#t180">180</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t181" href="#t181">181</a></span><span class="t">    <span class="nam">pt</span><span class="op">:</span> <span class="nam">int</span> <span class="op">=</span> <span class="num">0</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t182" href="#t182">182</a></span><span class="t">    <span class="nam">goal</span><span class="op">:</span> <span class="nam">tuple</span> <span class="op">=</span> <span class="op">(</span><span class="num">0.0</span><span class="op">,</span> <span class="num">0.0</span><span class="op">,</span> <span class="num">50.0</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t183" href="#t183">183</a></span><span class="t">    <span class="nam">dist</span><span class="op">:</span> <span class="nam">float</span> <span class="op">=</span> <span class="num">0.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t183" href="#t183">183</a></span><span class="t">    <span class="nam">dist</span><span class="op">:</span> <span class="nam">np</span><span class="op">.</span><span class="nam">float64</span> <span class="op">=</span> <span class="num">0.0</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t184" href="#t184">184</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t185" href="#t185">185</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t186" href="#t186">186</a></span><span class="t"><span class="key">class</span> <span class="nam">PlanPathParams</span><span class="op">(</span><span class="nam">Parameter</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -307,10 +307,10 @@
     <p class="pln"><span class="n"><a id="t225" href="#t225">225</a></span><span class="t"><span class="str">        e.g.::</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t226" href="#t226">226</a></span><span class="t"><span class="str">        >>> p = PlanPath()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t227" href="#t227">227</a></span><span class="t"><span class="str">        >>> p.s.dist</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t228" href="#t228">228</a></span><span class="t"><span class="str">        0.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t228" href="#t228">228</a></span><span class="t"><span class="str">        np.float64(0.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t229" href="#t229">229</a></span><span class="t"><span class="str">        >>> p.calc_dist_to_goal()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t230" href="#t230">230</a></span><span class="t"><span class="str">        >>> p.s.dist</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t231" href="#t231">231</a></span><span class="t"><span class="str">        50.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t231" href="#t231">231</a></span><span class="t"><span class="str">        np.float64(50.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t232" href="#t232">232</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t233" href="#t233">233</a></span><span class="t">        <span class="nam">loc</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">dofs</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">'x'</span><span class="op">,</span> <span class="str">'y'</span><span class="op">,</span> <span class="str">'z'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t234" href="#t234">234</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">dist</span> <span class="op">=</span> <span class="nam">finddist</span><span class="op">(</span><span class="nam">loc</span><span class="op">,</span> <span class="nam">self</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">goal</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -322,10 +322,10 @@
     <p class="pln"><span class="n"><a id="t240" href="#t240">240</a></span><span class="t"><span class="str">        e.g.::</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t241" href="#t241">241</a></span><span class="t"><span class="str">        >>> p = PlanPath()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t242" href="#t242">242</a></span><span class="t"><span class="str">        >>> p.des_traj.s</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t243" href="#t243">243</a></span><span class="t"><span class="str">        DesTrajState(dx=1.0, dy=0.0, dz=0.0, power=1.0)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t243" href="#t243">243</a></span><span class="t"><span class="str">        DesTrajState(dx=np.float64(1.0), dy=np.float64(0.0), dz=np.float64(0.0), power=np.float64(1.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t244" href="#t244">244</a></span><span class="t"><span class="str">        >>> p.assign_vectdist_to_goal()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t245" href="#t245">245</a></span><span class="t"><span class="str">        >>> p.des_traj.s</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t246" href="#t246">246</a></span><span class="t"><span class="str">        DesTrajState(dx=0.0, dy=0.0, dz=50.0, power=1.0)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t246" href="#t246">246</a></span><span class="t"><span class="str">        DesTrajState(dx=np.float64(0.0), dy=np.float64(0.0), dz=np.float64(50.0), power=np.float64(1.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t247" href="#t247">247</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t248" href="#t248">248</a></span><span class="t">        <span class="nam">loc</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">dofs</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">'x'</span><span class="op">,</span> <span class="str">'y'</span><span class="op">,</span> <span class="str">'z'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t249" href="#t249">249</a></span><span class="t">        <span class="nam">vd</span> <span class="op">=</span> <span class="nam">vectdist</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">goal</span><span class="op">,</span> <span class="nam">loc</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -436,13 +436,13 @@
     <p class="pln"><span class="n"><a id="t354" href="#t354">354</a></span><span class="t"><span class="str">        >>> a.dofs.s.put(x=0.0, y=0.0, z=100.0, planvel=1.0, vertvel=0.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t355" href="#t355">355</a></span><span class="t"><span class="str">        >>> a.inc_pos()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t356" href="#t356">356</a></span><span class="t"><span class="str">        >>> a.dofs.s</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t357" href="#t357">357</a></span><span class="t"><span class="str">        DOFstate(vertvel=0.0, planvel=1.0, planpwr=1.0, uppwr=1.0, x=1.0, y=0.0, z=100.0)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t357" href="#t357">357</a></span><span class="t"><span class="str">        DOFstate(vertvel=np.float64(0.0), planvel=np.float64(1.0), planpwr=np.float64(1.0), uppwr=np.float64(1.0), x=np.float64(1.0), y=np.float64(0.0), z=np.float64(100.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t358" href="#t358">358</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t359" href="#t359">359</a></span><span class="t"><span class="str">        or, for climbing::</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t360" href="#t360">360</a></span><span class="t"><span class="str">        >>> a.dofs.s.put(vertvel=1.0, planvel=0.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t361" href="#t361">361</a></span><span class="t"><span class="str">        >>> a.inc_pos()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t362" href="#t362">362</a></span><span class="t"><span class="str">        >>> a.dofs.s</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t363" href="#t363">363</a></span><span class="t"><span class="str">        DOFstate(vertvel=1.0, planvel=0.0, planpwr=1.0, uppwr=1.0, x=1.0, y=0.0, z=101.0)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t363" href="#t363">363</a></span><span class="t"><span class="str">        DOFstate(vertvel=np.float64(1.0), planvel=np.float64(0.0), planpwr=np.float64(1.0), uppwr=np.float64(1.0), x=np.float64(1.0), y=np.float64(0.0), z=np.float64(101.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t364" href="#t364">364</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t365" href="#t365">365</a></span><span class="t">        <span class="com"># increment x,y,z</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t366" href="#t366">366</a></span><span class="t">        <span class="nam">vec_factor</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">des_traj</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">dist2d</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -625,7 +625,7 @@
     <p class="exc show_exc"><span class="n"><a id="t543" href="#t543">543</a></span><span class="t">    <span class="key">from</span> <span class="nam">fmdtools</span> <span class="key">import</span> <span class="nam">analyze</span> <span class="key">as</span> <span class="nam">an</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t544" href="#t544">544</a></span><span class="t">    <span class="nam">s</span> <span class="op">=</span> <span class="nam">SightGrid</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t545" href="#t545">545</a></span><span class="t">    <span class="key">import</span> <span class="nam">doctest</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t546" href="#t546">546</a></span><span class="t">    <span class="com"># doctest.testmod(verbose=True)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t546" href="#t546">546</a></span><span class="t">    <span class="nam">doctest</span><span class="op">.</span><span class="nam">testmod</span><span class="op">(</span><span class="nam">verbose</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t547" href="#t547">547</a></span><span class="t">    <span class="com"># script_nominal_viewed()</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t548" href="#t548">548</a></span><span class="t">    <span class="nam">script_faulty_trajectories</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t549" href="#t549">549</a></span><span class="t">    <span class="com"># ani = script_env_viewed()</span>&nbsp;</span><span class="r"></span></p>
@@ -638,7 +638,7 @@
             <a class="nav" href="z_a2266ba4c933f375_drone_mdl_hierarchical_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 20:47 -0700
+            created at 2025-09-03 22:32 -0700
         </p>
     </div>
 </footer>
