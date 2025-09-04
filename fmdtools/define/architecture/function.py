@@ -212,7 +212,7 @@ class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
     >>> efa.g.nodes()
     NodeView(('exfxnarch.flows.exf',))
     >>> efa.g.nodes['exfxnarch.flows.exf']
-    {'nodetype': 'Flow', 'classname': 'ExampleFlow', 'bipartite': 1, 's': ExampleState(x=0.0, y=0.0), 'indicators': []}
+    {'nodetype': 'Flow', 'classname': 'ExampleFlow', 'bipartite': 1, 's': ExampleState(x=np.float64(0.0), y=np.float64(0.0)), 'indicators': []}
     """
 
     def nx_from_obj(self, mdl, **kwargs):
@@ -250,7 +250,7 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
     >>> efa.g.edges()
     EdgeView([('exfxnarch.fxns.ex_fxn', 'exfxnarch.fxns.ex_fxn2')])
     >>> efa.g.edges[('exfxnarch.fxns.ex_fxn', 'exfxnarch.fxns.ex_fxn2')]
-    {'flows': "['exfxnarch.flows.exf']", 'edgetype': 'flows', 'exfxnarch.flows.exf': {'s': ExampleState(x=0.0, y=0.0), 'indicators': []}}
+    {'flows': "['exfxnarch.flows.exf']", 'edgetype': 'flows', 'exfxnarch.flows.exf': {'s': ExampleState(x=np.float64(0.0), y=np.float64(0.0)), 'indicators': []}}
     """
 
     def nx_from_obj(self, mdl):
@@ -436,10 +436,10 @@ class FunctionArchitecture(Architecture):
     - t=Time(time=-0.1, timers={})
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     FLOWS:
-    - exf=ExampleFlow(s=(x=0.0, y=0.0))
+    - exf=ExampleFlow(s=(x=np.float64(0.0), y=np.float64(0.0)))
     FXNS:
-    - ex_fxn=ExampleFunction(s=(x=0.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
-    - ex_fxn2=ExampleFunction(s=(x=0.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
+    - ex_fxn=ExampleFunction(s=(x=np.float64(0.0), y=np.float64(0.0)), m=(mode='standby', faults=set(), sub_faults=False))
+    - ex_fxn2=ExampleFunction(s=(x=np.float64(0.0), y=np.float64(0.0)), m=(mode='standby', faults=set(), sub_faults=False))
 
     This type of functional architecture only has dynamic functions:
 
@@ -458,10 +458,10 @@ class FunctionArchitecture(Architecture):
     - t=Time(time=1.0, timers={})
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     FLOWS:
-    - exf=ExampleFlow(s=(x=2.0, y=0.0))
+    - exf=ExampleFlow(s=(x=np.float64(2.0), y=np.float64(0.0)))
     FXNS:
-    - ex_fxn=ExampleFunction(s=(x=1.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
-    - ex_fxn2=ExampleFunction(s=(x=1.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
+    - ex_fxn=ExampleFunction(s=(x=np.float64(1.0), y=np.float64(0.0)), m=(mode='standby', faults=set(), sub_faults=False))
+    - ex_fxn2=ExampleFunction(s=(x=np.float64(1.0), y=np.float64(0.0)), m=(mode='standby', faults=set(), sub_faults=False))
 
     >>> exfa()
     >>> exfa
@@ -469,10 +469,10 @@ class FunctionArchitecture(Architecture):
     - t=Time(time=2.0, timers={})
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     FLOWS:
-    - exf=ExampleFlow(s=(x=6.0, y=0.0))
+    - exf=ExampleFlow(s=(x=np.float64(6.0), y=np.float64(0.0)))
     FXNS:
-    - ex_fxn=ExampleFunction(s=(x=2.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
-    - ex_fxn2=ExampleFunction(s=(x=2.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
+    - ex_fxn=ExampleFunction(s=(x=np.float64(2.0), y=np.float64(0.0)), m=(mode='standby', faults=set(), sub_faults=False))
+    - ex_fxn2=ExampleFunction(s=(x=np.float64(2.0), y=np.float64(0.0)), m=(mode='standby', faults=set(), sub_faults=False))
     """
 
     __slots__ = ['fxns']

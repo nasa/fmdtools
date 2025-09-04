@@ -106,13 +106,13 @@ class DOFstate(State):
         z-position
     """
 
-    vertvel: float = 1.0
-    planvel: float = 1.0
-    planpwr: float = 1.0
-    uppwr: float = 1.0
-    x: float = 0.0
-    y: float = 0.0
-    z: float = 0.0
+    vertvel: np.float64 = 1.0
+    planvel: np.float64 = 1.0
+    planpwr: np.float64 = 1.0
+    uppwr: np.float64 = 1.0
+    x: np.float64 = 0.0
+    y: np.float64 = 0.0
+    z: np.float64 = 0.0
 
 
 class DOFParam(Parameter):
@@ -144,10 +144,10 @@ class DesTrajState(State):
         whether to follow trajectory (0.0 no, 1.0 yes).
     """
 
-    dx: float = 1.0
-    dy: float = 0.0
-    dz: float = 0.0
-    power: float = 1.0
+    dx: np.float64 = 1.0
+    dy: np.float64 = 0.0
+    dz: np.float64 = 0.0
+    power: np.float64 = 1.0
 
     def unit_vect2d(self):
         """
@@ -527,10 +527,10 @@ class AffectDOF(Function, BaseLine):
         nominal case ::
         >>> a = AffectDOF()
         >>> a.dofs.s.z
-        0.0
+        np.float64(0.0)
         >>> a.static_behavior()
         >>> a.dofs.s.z
-        1.0
+        np.float64(1.0)
 
         Mechanical breakages (And other faults) cause a fall::
         >>> a.m.add_fault("mechbreak")
@@ -538,9 +538,9 @@ class AffectDOF(Function, BaseLine):
         >>> a.s.mt
         0.0
         >>> a.dofs.s.uppwr
-        0.0
+        np.float64(0.0)
         >>> a.dofs.s.z
-        0.0
+        np.float64(0.0)
         """
         self.calc_faults()
         self.calc_pwr()
@@ -563,9 +563,9 @@ class AffectDOF(Function, BaseLine):
         """Increment Drone Position."""
         if self.dofs.s.vertvel > 1.5 or self.dofs.s.vertvel < -1:
             self.m.add_fault("mechbreak")
-            self.dofs.s.z = 0.0
+            self.dofs.s.z = np.float64(0.0)
         else:
-            self.dofs.s.z = 1.0
+            self.dofs.s.z = np.float64(1.0)
 
 
 class CtlDOFstate(State):
@@ -691,13 +691,13 @@ class PlanPath(Function):
         >>> p = PlanPath()
         >>> p.static_behavior()
         >>> p.des_traj.s
-        DesTrajState(dx=1.0, dy=0.0, dz=0.0, power=1.0)
+        DesTrajState(dx=np.float64(1.0), dy=np.float64(0.0), dz=np.float64(0.0), power=np.float64(1.0))
 
         If it loses location, navigation not provided:
         >>> p.m.add_fault("noloc")
         >>> p.static_behavior()
         >>> p.des_traj.s
-        DesTrajState(dx=0.0, dy=0.0, dz=0.0, power=1.0)
+        DesTrajState(dx=np.float64(0.0), dy=np.float64(0.0), dz=np.float64(0.0), power=np.float64(1.0))
         """
         self.set_faults()
         self.des_traj.s.assign([1.0, 0.0, 0.0], "dx", "dy", "dz")

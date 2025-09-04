@@ -217,7 +217,7 @@ class ActionArchitecture(Architecture):
     - t=Time(time=-0.1, timers={})
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     FLOWS:
-    - exf=ExampleFlow(s=(x=1.0, y=1.0))
+    - exf=ExampleFlow(s=(x=np.float64(1.0), y=np.float64(1.0)))
     ACTS:
     - act_1=ExampleAction()
     - act_2=ExampleAction()
@@ -232,7 +232,7 @@ class ActionArchitecture(Architecture):
     - t=Time(time=2.0, timers={})
     - m=Mode(mode='nominal', faults=set(), sub_faults=False)
     FLOWS:
-    - exf=ExampleFlow(s=(x=4.0, y=1.0))
+    - exf=ExampleFlow(s=(x=np.float64(4.0), y=np.float64(1.0)))
     ACTS:
     - act_1=ExampleAction()
     - act_2=ExampleAction()

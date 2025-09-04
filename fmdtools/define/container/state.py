@@ -100,9 +100,9 @@ class State(BaseContainer):
         >>> p = ExampleState()
         >>> p.put(x=2.0, y=2.0)
         >>> p.x
-        2.0
+        np.float64(2.0)
         >>> p.y
-        2.0
+        np.float64(2.0)
         """
         for name, value in kwargs.items():
             self.set_field(name, value, as_copy=as_copy)

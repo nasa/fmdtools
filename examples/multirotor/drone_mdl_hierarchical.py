@@ -194,11 +194,11 @@ class AffectDOF(AffectDOFDynamic):
         >>> a.ctl_in.s.put(forward=0.0, upward=1.0)
         >>> a.calc_pwr()
         >>> a.dofs.s
-        DOFstate(vertvel=1.0, planvel=1.0, planpwr=-0.0, uppwr=1.0, x=0.0, y=0.0, z=100.0)
+        DOFstate(vertvel=np.float64(1.0), planvel=np.float64(1.0), planpwr=np.float64(-0.0), uppwr=np.float64(1.0), x=np.float64(0.0), y=np.float64(0.0), z=np.float64(100.0))
         >>> a.ctl_in.s.put(forward=1.0, upward=1.0)
         >>> a.calc_pwr()
         >>> a.dofs.s
-        DOFstate(vertvel=1.0, planvel=1.0, planpwr=1.0, uppwr=1.0, x=0.0, y=0.0, z=100.0)
+        DOFstate(vertvel=np.float64(1.0), planvel=np.float64(1.0), planpwr=np.float64(1.0), uppwr=np.float64(1.0), x=np.float64(0.0), y=np.float64(0.0), z=np.float64(100.0))
         """
         air, ee_in = {}, {}
         # injects faults into lines

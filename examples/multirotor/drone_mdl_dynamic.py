@@ -180,7 +180,7 @@ class PlanPathState(State):
 
     pt: int = 0
     goal: tuple = (0.0, 0.0, 50.0)
-    dist: float = 0.0
+    dist: np.float64 = 0.0
 
 
 class PlanPathParams(Parameter):
@@ -225,10 +225,10 @@ class PlanPath(Function):
         e.g.::
         >>> p = PlanPath()
         >>> p.s.dist
-        0.0
+        np.float64(0.0)
         >>> p.calc_dist_to_goal()
         >>> p.s.dist
-        50.0
+        np.float64(50.0)
         """
         loc = self.dofs.s.get('x', 'y', 'z')
         self.s.dist = finddist(loc, self.s.goal)
@@ -240,10 +240,10 @@ class PlanPath(Function):
         e.g.::
         >>> p = PlanPath()
         >>> p.des_traj.s
-        DesTrajState(dx=1.0, dy=0.0, dz=0.0, power=1.0)
+        DesTrajState(dx=np.float64(1.0), dy=np.float64(0.0), dz=np.float64(0.0), power=np.float64(1.0))
         >>> p.assign_vectdist_to_goal()
         >>> p.des_traj.s
-        DesTrajState(dx=0.0, dy=0.0, dz=50.0, power=1.0)
+        DesTrajState(dx=np.float64(0.0), dy=np.float64(0.0), dz=np.float64(50.0), power=np.float64(1.0))
         """
         loc = self.dofs.s.get('x', 'y', 'z')
         vd = vectdist(self.s.goal, loc)
@@ -354,13 +354,13 @@ class AffectDOF(AffectDOFStatic):
         >>> a.dofs.s.put(x=0.0, y=0.0, z=100.0, planvel=1.0, vertvel=0.0)
         >>> a.inc_pos()
         >>> a.dofs.s
-        DOFstate(vertvel=0.0, planvel=1.0, planpwr=1.0, uppwr=1.0, x=1.0, y=0.0, z=100.0)
+        DOFstate(vertvel=np.float64(0.0), planvel=np.float64(1.0), planpwr=np.float64(1.0), uppwr=np.float64(1.0), x=np.float64(1.0), y=np.float64(0.0), z=np.float64(100.0))
 
         or, for climbing::
         >>> a.dofs.s.put(vertvel=1.0, planvel=0.0)
         >>> a.inc_pos()
         >>> a.dofs.s
-        DOFstate(vertvel=1.0, planvel=0.0, planpwr=1.0, uppwr=1.0, x=1.0, y=0.0, z=101.0)
+        DOFstate(vertvel=np.float64(1.0), planvel=np.float64(0.0), planpwr=np.float64(1.0), uppwr=np.float64(1.0), x=np.float64(1.0), y=np.float64(0.0), z=np.float64(101.0))
         """
         # increment x,y,z
         vec_factor = self.des_traj.s.dist2d()
@@ -543,7 +543,7 @@ if __name__ == "__main__":
     from fmdtools import analyze as an
     s = SightGrid()
     import doctest
-    # doctest.testmod(verbose=True)
+    doctest.testmod(verbose=True)
     # script_nominal_viewed()
     script_faulty_trajectories()
     # ani = script_env_viewed()
