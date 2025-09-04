@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hold-up Tank Model &mdash; fmdtools 2.1.3 documentation</title>
+  <title>Hold-up Tank Model &mdash; fmdtools 2.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
 
   
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=179ab080"></script>
+      <script src="../../_static/documentation_options.js?v=b21de401"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-0">Version: 2.2.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -219,21 +219,12 @@
 </ul>
 </li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Hold-up Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#history">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#what-about-human-induced-faults">What about human-induced faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#evaluating-joint-component-human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#testing-different-reaction-times">Testing different reaction times</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tank-architecture-s">Tank Architecture(s)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tank-analysis">Tank Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Tank_Optimization.html#simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Tank_Optimization.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Tank_Optimization.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Tank_Optimization.html#full-set-of-modes">Full set of modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Tank_Optimization.html#defining-optimization-problem">Defining Optimization Problem</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Tank_Optimization.html#optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tank_Optimization.html">Cooling Tank Model Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Tank_Optimization.html#simulation">Simulation</a></li>
 </ul>
 </li>
 </ul>
@@ -400,12 +391,15 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_dict_repr"><code class="docutils literal notranslate"><span class="pre">get_dict_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_repr"><code class="docutils literal notranslate"><span class="pre">get_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
@@ -430,41 +424,25 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.NestedSimulation"><code class="docutils literal notranslate"><span class="pre">NestedSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.SimEvent"><code class="docutils literal notranslate"><span class="pre">SimEvent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_fault_sim"><code class="docutils literal notranslate"><span class="pre">exec_fault_sim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_sim"><code class="docutils literal notranslate"><span class="pre">exec_sim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample"><code class="docutils literal notranslate"><span class="pre">fault_sample()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample_from"><code class="docutils literal notranslate"><span class="pre">fault_sample_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.gen_sampleapproach"><code class="docutils literal notranslate"><span class="pre">gen_sampleapproach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_mdl_kwargs"><code class="docutils literal notranslate"><span class="pre">get_mdl_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_sim_call_kwargs"><code class="docutils literal notranslate"><span class="pre">get_sim_call_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nested_sample"><code class="docutils literal notranslate"><span class="pre">nested_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.parameter_sample"><code class="docutils literal notranslate"><span class="pre">parameter_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.process_nominal"><code class="docutils literal notranslate"><span class="pre">process_nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
@@ -555,7 +533,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
@@ -579,6 +556,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_to_return"><code class="docutils literal notranslate"><span class="pre">clean_to_return()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
@@ -763,8 +741,46 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 </div>
+<section id="tank-architecture-s">
+<h2>Tank Architecture(s)<a class="headerlink" href="#tank-architecture-s" title="Link to this heading"></a></h2>
+<p>The tank has two architectures: the high-level functional architecture and the action architecture of the Human function.</p>
+<p>Below is the functional architecture:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">()</span>
+<span class="n">gr</span> <span class="o">=</span> <span class="n">mdl</span><span class="o">.</span><span class="n">as_modelgraph</span><span class="p">()</span>
+<span class="n">gr</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">5.5</span><span class="p">,</span><span class="mf">5.5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 550x550 with 1 Axes&gt;, &lt;Axes: &gt;)
+</pre></div>
+</div>
+<img alt="../../_images/70f576abc54fc1ad128d9e4a41752602f2d7f3cc8f2f5f2922c8d87ba46ab13f.png" src="../../_images/70f576abc54fc1ad128d9e4a41752602f2d7f3cc8f2f5f2922c8d87ba46ab13f.png" />
+</div>
+</div>
+<p>And here is the human Action Architecture:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aa</span> <span class="o">=</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;human&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">aa</span>
+<span class="n">gr</span> <span class="o">=</span> <span class="n">aa</span><span class="o">.</span><span class="n">as_modelgraph</span><span class="p">()</span>
+<span class="n">gr</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
+</pre></div>
+</div>
+<img alt="../../_images/af2de98dae9fd7db697daf45320270c1c54e9d84dcd2bfa28c73b531065ab0b7.png" src="../../_images/af2de98dae9fd7db697daf45320270c1c54e9d84dcd2bfa28c73b531065ab0b7.png" />
+</div>
+</div>
+</section>
+<section id="tank-analysis">
+<h2>Tank Analysis<a class="headerlink" href="#tank-analysis" title="Link to this heading"></a></h2>
 <section id="verifying-the-nominal-state">
-<h2>Verifying the nominal state:<a class="headerlink" href="#verifying-the-nominal-state" title="Link to this heading"></a></h2>
+<h3>Verifying the nominal state:<a class="headerlink" href="#verifying-the-nominal-state" title="Link to this heading"></a></h3>
 <p>In the nominal state, no change in system state should occur and the tank level should remain at 10. For this, <code class="docutils literal notranslate"><span class="pre">track</span> <span class="pre">=</span> <span class="pre">'all'</span></code> is included to record all states of the model. If <code class="docutils literal notranslate"><span class="pre">track</span> <span class="pre">=</span> <span class="pre">'all'</span></code> is ommitted, only values defined in <code class="docutils literal notranslate"><span class="pre">mdl.default_track</span></code> would be included (see <code class="docutils literal notranslate"><span class="pre">tank_model.py</span></code>).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -782,7 +798,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x000001EEE2C4EE10&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tend.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x00000174E67A9010&gt;
 </pre></div>
 </div>
 </div>
@@ -790,12 +806,12 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <p>With these results, we can now plot the graph of results resgraph using:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">tend</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d25bf366206f33bfba7198198c563571569c59127ff1ab3508139c5279cec2a4.png" src="../../_images/d25bf366206f33bfba7198198c563571569c59127ff1ab3508139c5279cec2a4.png" />
+<img alt="../../_images/9b7bb4a015c7b110c2d8462a6c2eb47ed6ee092a09b523d71b41c3851dd2d270.png" src="../../_images/9b7bb4a015c7b110c2d8462a6c2eb47ed6ee092a09b523d71b41c3851dd2d270.png" />
 </div>
 </div>
 <p>As can be seen, this gives a graphical representation of the functional model with the various flows. Since all of the functions are <em>grey</em>, no faults were accidentally introduced in this run.</p>
@@ -808,6 +824,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>m.sub_faults:                  array(21)
+time:                          array(21)
 flows.wat_in_1.s.effort:       array(21)
 flows.wat_in_1.s.rate:         array(21)
 flows.wat_in_2.s.effort:       array(21)
@@ -861,7 +878,6 @@ fxns.human.aa.acts.t           array(21)
 fxns.human.aa.acts.t           array(21)
 fxns.human.aa.acts.turn.m.sub_faults: array(21)
 fxns.human.m.sub_faults:       array(21)
-time:                          array(21)
 </pre></div>
 </div>
 </div>
@@ -904,12 +920,12 @@ sub_faults:                    array(21)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/0ad88d07c43e807f8af9105ab52fd579b00114519edcbe7b4806d1fdd86eb79d.png" src="../../_images/0ad88d07c43e807f8af9105ab52fd579b00114519edcbe7b4806d1fdd86eb79d.png" />
+<img alt="../../_images/aa256bbd4c54b2ff2432a24e1b1b93506e7a506235056d001c7b7298c2524afd.png" src="../../_images/aa256bbd4c54b2ff2432a24e1b1b93506e7a506235056d001c7b7298c2524afd.png" />
 </div>
 </div>
 </section>
 <section id="history">
-<h2>History<a class="headerlink" href="#history" title="Link to this heading"></a></h2>
+<h3>History<a class="headerlink" href="#history" title="Link to this heading"></a></h3>
 <p>If we want to see this data in tabular form, we can use <code class="docutils literal notranslate"><span class="pre">mdlhist.as_table()</span></code>. This also includes indexing on the table to only see parts of it.</p>
 <p>This table is a pandas dataframe. We can save this dataframe to a .csv using <code class="docutils literal notranslate"><span class="pre">nominal_histtable.to_csv(&quot;filename.csv&quot;)</span></code></p>
 <div class="cell docutils container">
@@ -939,6 +955,7 @@ sub_faults:                    array(21)
     <tr style="text-align: right;">
       <th></th>
       <th>m.sub_faults</th>
+      <th>time</th>
       <th>flows.wat_in_1.s.effort</th>
       <th>flows.wat_in_1.s.rate</th>
       <th>flows.wat_in_2.s.effort</th>
@@ -947,8 +964,8 @@ sub_faults:                    array(21)
       <th>flows.wat_out_1.s.rate</th>
       <th>flows.wat_out_2.s.effort</th>
       <th>flows.wat_out_2.s.rate</th>
-      <th>flows.valve1_sig.s.indicator</th>
       <th>...</th>
+      <th>fxns.human.aa.acts.detect.m.faults.not_detected</th>
       <th>fxns.human.aa.acts.detect.m.sub_faults</th>
       <th>fxns.human.aa.acts.reach.m.faults.unable</th>
       <th>fxns.human.aa.acts.reach.m.sub_faults</th>
@@ -958,13 +975,13 @@ sub_faults:                    array(21)
       <th>fxns.human.aa.acts.turn.m.faults.wrong_valve</th>
       <th>fxns.human.aa.acts.turn.m.sub_faults</th>
       <th>fxns.human.m.sub_faults</th>
-      <th>time</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
       <td>False</td>
+      <td>0.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -973,7 +990,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -984,7 +1000,7 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>0.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>1</th>
@@ -997,7 +1013,7 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
+      <td>1.0</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1008,11 +1024,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>1.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>2</th>
       <td>False</td>
+      <td>2.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1021,7 +1038,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1032,11 +1048,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>2.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>3</th>
       <td>False</td>
+      <td>3.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1045,7 +1062,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1056,11 +1072,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>3.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>4</th>
       <td>False</td>
+      <td>4.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1069,7 +1086,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1080,11 +1096,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>4.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>5</th>
       <td>False</td>
+      <td>5.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1093,7 +1110,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1104,11 +1120,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>5.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>6</th>
       <td>False</td>
+      <td>6.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1117,7 +1134,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1128,11 +1144,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>6.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>7</th>
       <td>False</td>
+      <td>7.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1141,7 +1158,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1152,11 +1168,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>7.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>8</th>
       <td>False</td>
+      <td>8.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1165,7 +1182,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1176,11 +1192,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>8.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>9</th>
       <td>False</td>
+      <td>9.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1189,7 +1206,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1200,7 +1216,7 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>9.0</td>
+      <td>False</td>
     </tr>
   </tbody>
 </table>
@@ -1209,7 +1225,7 @@ sub_faults:                    array(21)
 </div>
 </section>
 <section id="what-happens-under-component-faults">
-<h2>What happens under component faults?<a class="headerlink" href="#what-happens-under-component-faults" title="Link to this heading"></a></h2>
+<h3>What happens under component faults?<a class="headerlink" href="#what-happens-under-component-faults" title="Link to this heading"></a></h3>
 <p>Here we model a leak of the tank. To compensate for this leak, the operator opens the first valve to a higher setting, maintaining the level of the tank. This is done with <code class="docutils literal notranslate"><span class="pre">propagate.one_fault</span></code>, which tells the model that a fault has occured and when it did occure. Note that this fault was part of the history earlier as <code class="docutils literal notranslate"><span class="pre">fxns.store_water.m.faults.leak</span></code>.</p>
 <p>Here, the store_water level drops until the indicator turns on and allows for the system to compensate to keep the tank from fully emptying. Blue represents nominal state and red is the fault scenario.</p>
 <div class="cell docutils container">
@@ -1223,7 +1239,7 @@ sub_faults:                    array(21)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/bb8852a35088b4a3f737d52eb4599151aa6728f537650ed6dd41da8555d774df.png" src="../../_images/bb8852a35088b4a3f737d52eb4599151aa6728f537650ed6dd41da8555d774df.png" />
+<img alt="../../_images/d20115dd0db500ded4d6e07b14dc2291cd320ea9c6502562bba79cab7e8b8de5.png" src="../../_images/d20115dd0db500ded4d6e07b14dc2291cd320ea9c6502562bba79cab7e8b8de5.png" />
 </div>
 </div>
 <p>We can also view the model again with highlighed areas to show the faults visually. The <code class="docutils literal notranslate"><span class="pre">draw_from</span></code> function requires both the time step you’re call (here, it’s at <code class="docutils literal notranslate"><span class="pre">10</span></code> since that is after the fault occured). For more uses of this function, including animations, see <code class="docutils literal notranslate"><span class="pre">Pump_Example_Notebook.ipynb</span></code> in the pump example folder.</p>
@@ -1235,7 +1251,7 @@ sub_faults:                    array(21)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/111b39628091ba35363e1236c96744333183b0701f41196887773f814bdd0d03.png" src="../../_images/111b39628091ba35363e1236c96744333183b0701f41196887773f814bdd0d03.png" />
+<img alt="../../_images/605c1c58427197a93420845e6e1590f1bdecfb6f746b90dd32eb129f015b60d5.png" src="../../_images/605c1c58427197a93420845e6e1590f1bdecfb6f746b90dd32eb129f015b60d5.png" />
 </div>
 </div>
 <p>Now mdlhist has double the number of entries–those corresponding to the nominal and faulty scenarios.</p>
@@ -1266,6 +1282,7 @@ sub_faults:                    array(21)
     <tr style="text-align: right;">
       <th></th>
       <th>nominal.m.sub_faults</th>
+      <th>nominal.time</th>
       <th>nominal.flows.wat_in_1.s.effort</th>
       <th>nominal.flows.wat_in_1.s.rate</th>
       <th>nominal.flows.wat_in_2.s.effort</th>
@@ -1274,24 +1291,24 @@ sub_faults:                    array(21)
       <th>nominal.flows.wat_out_1.s.rate</th>
       <th>nominal.flows.wat_out_2.s.effort</th>
       <th>nominal.flows.wat_out_2.s.rate</th>
-      <th>nominal.flows.valve1_sig.s.indicator</th>
       <th>...</th>
-      <th>faulty.fxns.human.aa.acts.detect.m.sub_faults</th>
-      <th>faulty.fxns.human.aa.acts.reach.m.faults.unable</th>
-      <th>faulty.fxns.human.aa.acts.reach.m.sub_faults</th>
-      <th>faulty.fxns.human.aa.acts.grasp.m.faults.cannot</th>
-      <th>faulty.fxns.human.aa.acts.grasp.m.sub_faults</th>
-      <th>faulty.fxns.human.aa.acts.turn.m.faults.cannot</th>
-      <th>faulty.fxns.human.aa.acts.turn.m.faults.wrong_valve</th>
-      <th>faulty.fxns.human.aa.acts.turn.m.sub_faults</th>
-      <th>faulty.fxns.human.m.sub_faults</th>
-      <th>faulty.time</th>
+      <th>store_water_leak_t3.fxns.human.aa.acts.detect.m.faults.not_detected</th>
+      <th>store_water_leak_t3.fxns.human.aa.acts.detect.m.sub_faults</th>
+      <th>store_water_leak_t3.fxns.human.aa.acts.reach.m.faults.unable</th>
+      <th>store_water_leak_t3.fxns.human.aa.acts.reach.m.sub_faults</th>
+      <th>store_water_leak_t3.fxns.human.aa.acts.grasp.m.faults.cannot</th>
+      <th>store_water_leak_t3.fxns.human.aa.acts.grasp.m.sub_faults</th>
+      <th>store_water_leak_t3.fxns.human.aa.acts.turn.m.faults.cannot</th>
+      <th>store_water_leak_t3.fxns.human.aa.acts.turn.m.faults.wrong_valve</th>
+      <th>store_water_leak_t3.fxns.human.aa.acts.turn.m.sub_faults</th>
+      <th>store_water_leak_t3.fxns.human.m.sub_faults</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
       <td>False</td>
+      <td>0.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1300,7 +1317,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1311,7 +1327,7 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>0.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1324,7 +1340,7 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
+      <td>1.0</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1335,11 +1351,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>1.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>2</th>
       <td>False</td>
+      <td>2.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1348,7 +1365,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1359,11 +1375,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>2.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>3</th>
       <td>False</td>
+      <td>3.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1372,7 +1389,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1383,11 +1399,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>3.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>4</th>
       <td>False</td>
+      <td>4.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1396,7 +1413,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1407,11 +1423,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>4.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>5</th>
       <td>False</td>
+      <td>5.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1420,7 +1437,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1431,11 +1447,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>5.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>6</th>
       <td>False</td>
+      <td>6.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1444,7 +1461,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1455,11 +1471,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>6.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>7</th>
       <td>False</td>
+      <td>7.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1468,7 +1485,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1479,11 +1495,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>7.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>8</th>
       <td>False</td>
+      <td>8.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1492,7 +1509,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1503,11 +1519,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>8.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>9</th>
       <td>False</td>
+      <td>9.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1516,7 +1533,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1527,11 +1543,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>9.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>10</th>
       <td>False</td>
+      <td>10.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1540,7 +1557,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1551,11 +1567,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>10.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>11</th>
       <td>False</td>
+      <td>11.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1564,7 +1581,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1575,11 +1591,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>11.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>12</th>
       <td>False</td>
+      <td>12.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1588,7 +1605,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1599,11 +1615,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>12.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>13</th>
       <td>False</td>
+      <td>13.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1612,7 +1629,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1623,11 +1639,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>13.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>14</th>
       <td>False</td>
+      <td>14.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1636,7 +1653,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1647,11 +1663,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>14.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>15</th>
       <td>False</td>
+      <td>15.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1660,7 +1677,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1671,11 +1687,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>15.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>16</th>
       <td>False</td>
+      <td>16.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1684,7 +1701,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1695,11 +1711,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>16.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>17</th>
       <td>False</td>
+      <td>17.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1708,7 +1725,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1719,11 +1735,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>17.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>18</th>
       <td>False</td>
+      <td>18.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1732,7 +1749,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1743,11 +1759,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>18.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>19</th>
       <td>False</td>
+      <td>19.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1756,7 +1773,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1767,11 +1783,12 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>19.0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>20</th>
       <td>False</td>
+      <td>20.0</td>
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1780,7 +1797,6 @@ sub_faults:                    array(21)
       <td>1.0</td>
       <td>1.0</td>
       <td>1.0</td>
-      <td>1</td>
       <td>...</td>
       <td>False</td>
       <td>False</td>
@@ -1791,7 +1807,7 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>False</td>
-      <td>20.0</td>
+      <td>False</td>
     </tr>
   </tbody>
 </table>
@@ -1972,38 +1988,38 @@ sub_faults:                    array(21)
     </tr>
     <tr>
       <th>7</th>
-      <td>True</td>
-      <td>False</td>
-      <td>True</td>
       <td>False</td>
       <td>False</td>
-      <td>True</td>
-      <td>True</td>
       <td>True</td>
       <td>False</td>
       <td>False</td>
       <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
       <td>True</td>
       <td>False</td>
-      <td>7</td>
+      <td>3</td>
       <td>7.0</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>True</td>
-      <td>False</td>
-      <td>True</td>
       <td>False</td>
       <td>False</td>
-      <td>True</td>
-      <td>True</td>
       <td>True</td>
       <td>False</td>
       <td>False</td>
       <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
       <td>True</td>
       <td>False</td>
-      <td>7</td>
+      <td>3</td>
       <td>8.0</td>
     </tr>
     <tr>
@@ -2228,7 +2244,7 @@ sub_faults:                    array(21)
 </div>
 </section>
 <section id="what-about-human-induced-faults">
-<h2>What about human-induced faults?<a class="headerlink" href="#what-about-human-induced-faults" title="Link to this heading"></a></h2>
+<h3>What about human-induced faults?<a class="headerlink" href="#what-about-human-induced-faults" title="Link to this heading"></a></h3>
 <p>Here we evaluate what happens if the operator thinks they see a low or high indicator and takes those given actions.</p>
 <p>Note that in these cases, because of the indicator/procedures, the operators are able to correct for the fault.</p>
 <div class="cell docutils container">
@@ -2246,8 +2262,8 @@ sub_faults:                    array(21)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/04bd7bf50fdbf4e818b3aefc6b9469eeebe6ca3d0856bcaa4440fb4f15bb8021.png" src="../../_images/04bd7bf50fdbf4e818b3aefc6b9469eeebe6ca3d0856bcaa4440fb4f15bb8021.png" />
-<img alt="../../_images/bc77842d6a2e4312c9a7500ebb3f679b0e79cedbc296e3d88c616cca155135dd.png" src="../../_images/bc77842d6a2e4312c9a7500ebb3f679b0e79cedbc296e3d88c616cca155135dd.png" />
+<img alt="../../_images/64b4d66215067299974e85e02e3230e1d2c9ad2f06441d219f8a7de0f5623cb4.png" src="../../_images/64b4d66215067299974e85e02e3230e1d2c9ad2f06441d219f8a7de0f5623cb4.png" />
+<img alt="../../_images/39e78c3419ba9cce05e3ddd828659103d6858c800d790a9485fc0aff22e236d4.png" src="../../_images/39e78c3419ba9cce05e3ddd828659103d6858c800d790a9485fc0aff22e236d4.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2350,38 +2366,38 @@ sub_faults:                    array(21)
     </tr>
     <tr>
       <th>3</th>
-      <td>True</td>
-      <td>False</td>
-      <td>True</td>
       <td>False</td>
       <td>False</td>
-      <td>True</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
       <td>False</td>
       <td>False</td>
       <td>True</td>
       <td>False</td>
       <td>False</td>
-      <td>6</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>1</td>
       <td>3.0</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>True</td>
-      <td>False</td>
-      <td>True</td>
       <td>False</td>
       <td>False</td>
-      <td>True</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
       <td>False</td>
       <td>False</td>
       <td>True</td>
       <td>False</td>
       <td>False</td>
-      <td>6</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>1</td>
       <td>4.0</td>
     </tr>
     <tr>
@@ -2415,9 +2431,9 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>True</td>
-      <td>True</td>
       <td>False</td>
-      <td>7</td>
+      <td>False</td>
+      <td>6</td>
       <td>6.0</td>
     </tr>
     <tr>
@@ -2433,9 +2449,9 @@ sub_faults:                    array(21)
       <td>False</td>
       <td>False</td>
       <td>True</td>
-      <td>True</td>
       <td>False</td>
-      <td>7</td>
+      <td>False</td>
+      <td>6</td>
       <td>7.0</td>
     </tr>
     <tr>
@@ -2538,12 +2554,12 @@ sub_faults:                    array(21)
       <td>True</td>
       <td>True</td>
       <td>True</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>9</td>
+      <td>7</td>
       <td>13.0</td>
     </tr>
     <tr>
@@ -2556,12 +2572,12 @@ sub_faults:                    array(21)
       <td>True</td>
       <td>True</td>
       <td>True</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>True</td>
       <td>True</td>
       <td>False</td>
-      <td>9</td>
+      <td>7</td>
       <td>14.0</td>
     </tr>
     <tr>
@@ -2595,9 +2611,9 @@ sub_faults:                    array(21)
       <td>True</td>
       <td>True</td>
       <td>True</td>
+      <td>True</td>
       <td>False</td>
-      <td>False</td>
-      <td>8</td>
+      <td>9</td>
       <td>16.0</td>
     </tr>
     <tr>
@@ -2613,9 +2629,9 @@ sub_faults:                    array(21)
       <td>True</td>
       <td>True</td>
       <td>True</td>
+      <td>True</td>
       <td>False</td>
-      <td>False</td>
-      <td>8</td>
+      <td>9</td>
       <td>17.0</td>
     </tr>
     <tr>
@@ -2649,9 +2665,9 @@ sub_faults:                    array(21)
       <td>True</td>
       <td>True</td>
       <td>True</td>
-      <td>True</td>
       <td>False</td>
-      <td>9</td>
+      <td>False</td>
+      <td>8</td>
       <td>19.0</td>
     </tr>
     <tr>
@@ -2667,9 +2683,9 @@ sub_faults:                    array(21)
       <td>True</td>
       <td>True</td>
       <td>True</td>
-      <td>True</td>
       <td>False</td>
-      <td>9</td>
+      <td>False</td>
+      <td>8</td>
       <td>20.0</td>
     </tr>
   </tbody>
@@ -2692,13 +2708,13 @@ sub_faults:                    array(21)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a1f3c4c3954345d582b0fc7946dc5295168b4b5ffc1015ef12b308761cc4bb2e.png" src="../../_images/a1f3c4c3954345d582b0fc7946dc5295168b4b5ffc1015ef12b308761cc4bb2e.png" />
-<img alt="../../_images/bc77842d6a2e4312c9a7500ebb3f679b0e79cedbc296e3d88c616cca155135dd.png" src="../../_images/bc77842d6a2e4312c9a7500ebb3f679b0e79cedbc296e3d88c616cca155135dd.png" />
+<img alt="../../_images/070ed926ca273cce7dcbbfafa54896dcb3adcab042167d09f5b3d15135e0103f.png" src="../../_images/070ed926ca273cce7dcbbfafa54896dcb3adcab042167d09f5b3d15135e0103f.png" />
+<img alt="../../_images/39e78c3419ba9cce05e3ddd828659103d6858c800d790a9485fc0aff22e236d4.png" src="../../_images/39e78c3419ba9cce05e3ddd828659103d6858c800d790a9485fc0aff22e236d4.png" />
 </div>
 </div>
 </section>
 <section id="evaluating-joint-component-human-fault-modes">
-<h2>Evaluating Joint Component-Human fault modes<a class="headerlink" href="#evaluating-joint-component-human-fault-modes" title="Link to this heading"></a></h2>
+<h3>Evaluating Joint Component-Human fault modes<a class="headerlink" href="#evaluating-joint-component-human-fault-modes" title="Link to this heading"></a></h3>
 <p>To understand where the risks of failure are, we need to find the scenarios, that, with the modelled human controls, still lead to failures. To assess this, we develop a fault sampling strategy using <code class="docutils literal notranslate"><span class="pre">FaultDomain</span></code> and <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -2734,43 +2750,7 @@ sub_faults:                    array(21)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   0%|          | 0/30 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  10%|█         | 3/30 [00:00&lt;00:01, 20.69it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  20%|██        | 6/30 [00:00&lt;00:01, 20.20it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  30%|███       | 9/30 [00:00&lt;00:01, 19.92it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  37%|███▋      | 11/30 [00:00&lt;00:00, 19.71it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  47%|████▋     | 14/30 [00:00&lt;00:00, 19.77it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  53%|█████▎    | 16/30 [00:00&lt;00:00, 19.65it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  63%|██████▎   | 19/30 [00:00&lt;00:00, 19.97it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  73%|███████▎  | 22/30 [00:01&lt;00:00, 20.17it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  83%|████████▎ | 25/30 [00:01&lt;00:00, 20.16it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  93%|█████████▎| 28/30 [00:01&lt;00:00, 20.28it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 30/30 [00:01&lt;00:00, 20.14it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 30/30 [00:01&lt;00:00, 19.24it/s]
 </pre></div>
 </div>
 </div>
@@ -2784,334 +2764,7 @@ sub_faults:                    array(21)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   0%|          | 0/240 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   1%|▏         | 3/240 [00:00&lt;00:11, 20.27it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   2%|▎         | 6/240 [00:00&lt;00:11, 19.88it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   4%|▍         | 9/240 [00:00&lt;00:11, 19.93it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   5%|▍         | 11/240 [00:00&lt;00:11, 19.77it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   6%|▌         | 14/240 [00:00&lt;00:11, 19.86it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   7%|▋         | 17/240 [00:00&lt;00:11, 20.10it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   8%|▊         | 20/240 [00:00&lt;00:10, 20.30it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  10%|▉         | 23/240 [00:01&lt;00:10, 20.43it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  11%|█         | 26/240 [00:01&lt;00:10, 20.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  12%|█▏        | 29/240 [00:01&lt;00:10, 20.24it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  13%|█▎        | 32/240 [00:01&lt;00:10, 20.17it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  15%|█▍        | 35/240 [00:01&lt;00:10, 20.07it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  16%|█▌        | 38/240 [00:01&lt;00:10, 19.97it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  17%|█▋        | 40/240 [00:02&lt;00:10, 19.62it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  18%|█▊        | 42/240 [00:02&lt;00:10, 19.61it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  18%|█▊        | 44/240 [00:02&lt;00:10, 19.42it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  19%|█▉        | 46/240 [00:02&lt;00:10, 19.37it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  20%|██        | 48/240 [00:02&lt;00:09, 19.38it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  21%|██        | 50/240 [00:02&lt;00:09, 19.39it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  22%|██▏       | 52/240 [00:02&lt;00:09, 19.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  22%|██▎       | 54/240 [00:02&lt;00:09, 19.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  23%|██▎       | 56/240 [00:02&lt;00:09, 19.10it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  24%|██▍       | 58/240 [00:02&lt;00:09, 19.08it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  25%|██▌       | 60/240 [00:03&lt;00:09, 19.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  26%|██▌       | 62/240 [00:03&lt;00:09, 19.29it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  27%|██▋       | 64/240 [00:03&lt;00:09, 19.05it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  28%|██▊       | 66/240 [00:03&lt;00:09, 19.05it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  28%|██▊       | 68/240 [00:03&lt;00:09, 19.05it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  29%|██▉       | 70/240 [00:03&lt;00:08, 19.10it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  30%|███       | 72/240 [00:03&lt;00:08, 19.19it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  31%|███       | 74/240 [00:03&lt;00:08, 19.05it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  32%|███▏      | 76/240 [00:03&lt;00:08, 18.99it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  32%|███▎      | 78/240 [00:03&lt;00:08, 19.14it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  33%|███▎      | 80/240 [00:04&lt;00:08, 19.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  34%|███▍      | 82/240 [00:04&lt;00:08, 19.26it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  35%|███▌      | 84/240 [00:04&lt;00:08, 19.03it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  36%|███▌      | 86/240 [00:04&lt;00:08, 19.04it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  37%|███▋      | 88/240 [00:04&lt;00:07, 19.04it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  38%|███▊      | 90/240 [00:04&lt;00:07, 19.04it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  38%|███▊      | 92/240 [00:04&lt;00:07, 19.04it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  39%|███▉      | 94/240 [00:04&lt;00:07, 18.78it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  40%|████      | 96/240 [00:04&lt;00:07, 18.81it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  41%|████      | 98/240 [00:05&lt;00:07, 18.78it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  42%|████▏     | 100/240 [00:05&lt;00:07, 18.70it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  42%|████▎     | 102/240 [00:05&lt;00:07, 18.26it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  43%|████▎     | 104/240 [00:05&lt;00:07, 18.54it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  44%|████▍     | 106/240 [00:05&lt;00:07, 18.79it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  45%|████▌     | 108/240 [00:05&lt;00:06, 18.87it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  46%|████▌     | 110/240 [00:05&lt;00:06, 18.82it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  47%|████▋     | 112/240 [00:05&lt;00:06, 18.74it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  48%|████▊     | 114/240 [00:05&lt;00:06, 18.49it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  48%|████▊     | 116/240 [00:06&lt;00:06, 18.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  49%|████▉     | 118/240 [00:06&lt;00:06, 18.30it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  50%|█████     | 120/240 [00:06&lt;00:06, 18.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  51%|█████     | 122/240 [00:06&lt;00:06, 18.31it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  52%|█████▏    | 124/240 [00:06&lt;00:06, 18.47it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  52%|█████▎    | 126/240 [00:06&lt;00:06, 18.49it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  53%|█████▎    | 128/240 [00:06&lt;00:06, 18.55it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  54%|█████▍    | 130/240 [00:06&lt;00:05, 18.58it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  55%|█████▌    | 132/240 [00:06&lt;00:05, 18.61it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  56%|█████▌    | 134/240 [00:06&lt;00:05, 18.64it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  57%|█████▋    | 136/240 [00:07&lt;00:05, 18.86it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  57%|█████▊    | 138/240 [00:07&lt;00:05, 19.14it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  58%|█████▊    | 140/240 [00:07&lt;00:05, 19.33it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  60%|█████▉    | 143/240 [00:07&lt;00:04, 19.64it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  60%|██████    | 145/240 [00:07&lt;00:04, 19.63it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  61%|██████▏   | 147/240 [00:07&lt;00:04, 19.73it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  62%|██████▎   | 150/240 [00:07&lt;00:04, 20.03it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  64%|██████▍   | 153/240 [00:07&lt;00:04, 20.16it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  65%|██████▌   | 156/240 [00:08&lt;00:04, 20.00it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  66%|██████▌   | 158/240 [00:08&lt;00:04, 19.86it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  67%|██████▋   | 160/240 [00:08&lt;00:04, 19.85it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  68%|██████▊   | 162/240 [00:08&lt;00:03, 19.73it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  69%|██████▉   | 165/240 [00:08&lt;00:03, 19.92it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  70%|███████   | 168/240 [00:08&lt;00:03, 19.89it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  71%|███████▏  | 171/240 [00:08&lt;00:03, 19.92it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  72%|███████▏  | 173/240 [00:08&lt;00:03, 19.79it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  73%|███████▎  | 175/240 [00:09&lt;00:03, 19.69it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  74%|███████▍  | 178/240 [00:09&lt;00:03, 19.80it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  75%|███████▌  | 180/240 [00:09&lt;00:03, 19.70it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  76%|███████▌  | 182/240 [00:09&lt;00:02, 19.73it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  77%|███████▋  | 185/240 [00:09&lt;00:02, 19.78it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  78%|███████▊  | 188/240 [00:09&lt;00:02, 19.94it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  79%|███████▉  | 190/240 [00:09&lt;00:02, 19.91it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  80%|████████  | 193/240 [00:09&lt;00:02, 19.99it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  82%|████████▏ | 196/240 [00:10&lt;00:02, 19.99it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  82%|████████▎ | 198/240 [00:10&lt;00:02, 19.86it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  83%|████████▎ | 200/240 [00:10&lt;00:02, 19.55it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  84%|████████▍ | 202/240 [00:10&lt;00:01, 19.53it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  85%|████████▌ | 204/240 [00:10&lt;00:01, 18.94it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  86%|████████▌ | 206/240 [00:10&lt;00:01, 18.72it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  87%|████████▋ | 208/240 [00:10&lt;00:01, 19.07it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  88%|████████▊ | 211/240 [00:10&lt;00:01, 19.44it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  89%|████████▉ | 213/240 [00:10&lt;00:01, 19.43it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  90%|████████▉ | 215/240 [00:11&lt;00:01, 19.33it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  91%|█████████ | 218/240 [00:11&lt;00:01, 19.62it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  92%|█████████▏| 220/240 [00:11&lt;00:01, 19.51it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  92%|█████████▎| 222/240 [00:11&lt;00:00, 19.54it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  93%|█████████▎| 224/240 [00:11&lt;00:00, 19.66it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  94%|█████████▍| 226/240 [00:11&lt;00:00, 19.70it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  95%|█████████▌| 228/240 [00:11&lt;00:00, 19.78it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  96%|█████████▌| 230/240 [00:11&lt;00:00, 19.79it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  97%|█████████▋| 232/240 [00:11&lt;00:00, 19.79it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  98%|█████████▊| 234/240 [00:12&lt;00:00, 19.74it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  98%|█████████▊| 236/240 [00:12&lt;00:00, 19.46it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  99%|█████████▉| 238/240 [00:12&lt;00:00, 19.50it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 240/240 [00:12&lt;00:00, 19.48it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 240/240 [00:12&lt;00:00, 19.40it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 240/240 [00:12&lt;00:00, 19.53it/s]
 </pre></div>
 </div>
 </div>
@@ -3159,7 +2812,7 @@ sub_faults:                    array(21)
       <td>0.0</td>
     </tr>
     <tr>
-      <th>faulty</th>
+      <th>human_aa_acts_detect_false_high_t3</th>
       <td>[]</td>
       <td>[]</td>
       <td>NaN</td>
@@ -3295,14 +2948,6 @@ sub_faults:                    array(21)
       <td>23150399999.999996</td>
     </tr>
     <tr>
-      <th>tank_fxns_human_aa_acts_detect_false_high__tank_fxns_human_aa_acts_detect_false_low_t10p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.053594</td>
-      <td>1000000.0</td>
-      <td>5359410201.599999</td>
-    </tr>
-    <tr>
       <th>tank_fxns_human_aa_acts_detect_false_high__tank_fxns_human_aa_acts_detect_false_low_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
@@ -3311,12 +2956,20 @@ sub_faults:                    array(21)
       <td>5359410201.599999</td>
     </tr>
     <tr>
-      <th>tank_fxns_human_aa_acts_detect_false_high__tank_fxns_human_aa_acts_turn_wrong_valve_t10p0</th>
+      <th>tank_fxns_human_aa_acts_detect_false_high__tank_fxns_human_aa_acts_turn_wrong_valve_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.032086</td>
       <td>1000000.0</td>
       <td>3208645440.0</td>
+    </tr>
+    <tr>
+      <th>tank_fxns_guide_water_in_clogged_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.00001</td>
+      <td>1000000.0</td>
+      <td>1000000.0</td>
     </tr>
     <tr>
       <th>...</th>
@@ -3327,7 +2980,7 @@ sub_faults:                    array(21)
       <td>...</td>
     </tr>
     <tr>
-      <th>tank_fxns_import_water_stuck__tank_fxns_guide_water_in_clogged_t10p0</th>
+      <th>tank_fxns_guide_water_out_leak__tank_fxns_export_water_stuck_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>-0.0</td>
@@ -3335,12 +2988,20 @@ sub_faults:                    array(21)
       <td>-3.166667</td>
     </tr>
     <tr>
-      <th>tank_fxns_export_water_stuck__tank_fxns_human_aa_acts_detect_false_low_t0p0</th>
+      <th>tank_fxns_import_water_stuck__tank_fxns_guide_water_out_clogged_t10p0</th>
       <td>NaN</td>
       <td>NaN</td>
-      <td>-0.000001</td>
+      <td>-0.0</td>
       <td>1000000.0</td>
-      <td>-73309.6</td>
+      <td>-3.166667</td>
+    </tr>
+    <tr>
+      <th>tank_fxns_import_water_stuck__tank_fxns_guide_water_out_leak_t10p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-0.0</td>
+      <td>1000000.0</td>
+      <td>-3.166667</td>
     </tr>
     <tr>
       <th>tank_fxns_export_water_stuck__tank_fxns_human_aa_acts_detect_false_high_t0p0</th>
@@ -3351,15 +3012,7 @@ sub_faults:                    array(21)
       <td>-73309.6</td>
     </tr>
     <tr>
-      <th>tank_fxns_export_water_stuck__tank_fxns_human_aa_acts_detect_false_high_t10p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-0.000001</td>
-      <td>1000000.0</td>
-      <td>-73309.6</td>
-    </tr>
-    <tr>
-      <th>tank_fxns_export_water_stuck__tank_fxns_human_aa_acts_detect_false_low_t10p0</th>
+      <th>tank_fxns_export_water_stuck__tank_fxns_human_aa_acts_detect_false_low_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>-0.000001</td>
@@ -3368,7 +3021,7 @@ sub_faults:                    array(21)
     </tr>
   </tbody>
 </table>
-<p>111 rows × 5 columns</p>
+<p>103 rows × 5 columns</p>
 </div></div></div>
 </div>
 <p>One of the top modes is a joint human-component failure mode. Let’s see what happens in this case:</p>
@@ -3379,7 +3032,63 @@ sub_faults:                    array(21)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;tank_fxns_import_water_stuck_t0p0.m.sub_faults&#39;,
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;nominal.m.sub_faults&#39;,
+ &#39;nominal.time&#39;,
+ &#39;nominal.flows.wat_in_1.s.effort&#39;,
+ &#39;nominal.flows.wat_in_1.s.rate&#39;,
+ &#39;nominal.flows.wat_in_2.s.effort&#39;,
+ &#39;nominal.flows.wat_in_2.s.rate&#39;,
+ &#39;nominal.flows.wat_out_1.s.effort&#39;,
+ &#39;nominal.flows.wat_out_1.s.rate&#39;,
+ &#39;nominal.flows.wat_out_2.s.effort&#39;,
+ &#39;nominal.flows.wat_out_2.s.rate&#39;,
+ &#39;nominal.flows.valve1_sig.s.indicator&#39;,
+ &#39;nominal.flows.valve1_sig.s.action&#39;,
+ &#39;nominal.flows.tank_sig.s.indicator&#39;,
+ &#39;nominal.flows.tank_sig.s.action&#39;,
+ &#39;nominal.flows.valve2_sig.s.indicator&#39;,
+ &#39;nominal.flows.valve2_sig.s.action&#39;,
+ &#39;nominal.fxns.import_water.s.amt_open&#39;,
+ &#39;nominal.fxns.import_water.m.faults.stuck&#39;,
+ &#39;nominal.fxns.import_water.m.sub_faults&#39;,
+ &#39;nominal.fxns.guide_water_in.m.faults.clogged&#39;,
+ &#39;nominal.fxns.guide_water_in.m.faults.leak&#39;,
+ &#39;nominal.fxns.guide_water_in.m.sub_faults&#39;,
+ &#39;nominal.fxns.store_water.s.level&#39;,
+ &#39;nominal.fxns.store_water.s.net_flow&#39;,
+ &#39;nominal.fxns.store_water.m.faults.leak&#39;,
+ &#39;nominal.fxns.store_water.m.sub_faults&#39;,
+ &#39;nominal.fxns.guide_water_out.m.faults.clogged&#39;,
+ &#39;nominal.fxns.guide_water_out.m.faults.leak&#39;,
+ &#39;nominal.fxns.guide_water_out.m.sub_faults&#39;,
+ &#39;nominal.fxns.export_water.s.amt_open&#39;,
+ &#39;nominal.fxns.export_water.m.faults.stuck&#39;,
+ &#39;nominal.fxns.export_water.m.sub_faults&#39;,
+ &#39;nominal.fxns.human.aa.active_actions&#39;,
+ &#39;nominal.fxns.human.aa.flows.tank_sig.s.indicator&#39;,
+ &#39;nominal.fxns.human.aa.flows.tank_sig.s.action&#39;,
+ &#39;nominal.fxns.human.aa.flows.valve1_sig.s.indicator&#39;,
+ &#39;nominal.fxns.human.aa.flows.valve1_sig.s.action&#39;,
+ &#39;nominal.fxns.human.aa.flows.valve2_sig.s.indicator&#39;,
+ &#39;nominal.fxns.human.aa.flows.valve2_sig.s.action&#39;,
+ &#39;nominal.fxns.human.aa.flows.detect_sig.s.indicator&#39;,
+ &#39;nominal.fxns.human.aa.flows.detect_sig.s.action&#39;,
+ &#39;nominal.fxns.human.aa.acts.look.m.faults.not_visible&#39;,
+ &#39;nominal.fxns.human.aa.acts.look.m.sub_faults&#39;,
+ &#39;nominal.fxns.human.aa.acts.detect.m.faults.false_high&#39;,
+ &#39;nominal.fxns.human.aa.acts.detect.m.faults.false_low&#39;,
+ &#39;nominal.fxns.human.aa.acts.detect.m.faults.not_detected&#39;,
+ &#39;nominal.fxns.human.aa.acts.detect.m.sub_faults&#39;,
+ &#39;nominal.fxns.human.aa.acts.reach.m.faults.unable&#39;,
+ &#39;nominal.fxns.human.aa.acts.reach.m.sub_faults&#39;,
+ &#39;nominal.fxns.human.aa.acts.grasp.m.faults.cannot&#39;,
+ &#39;nominal.fxns.human.aa.acts.grasp.m.sub_faults&#39;,
+ &#39;nominal.fxns.human.aa.acts.turn.m.faults.cannot&#39;,
+ &#39;nominal.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
+ &#39;nominal.fxns.human.aa.acts.turn.m.sub_faults&#39;,
+ &#39;nominal.fxns.human.m.sub_faults&#39;,
+ &#39;tank_fxns_import_water_stuck_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_import_water_stuck_t0p0.time&#39;,
  &#39;tank_fxns_import_water_stuck_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_import_water_stuck_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_import_water_stuck_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -3433,8 +3142,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_import_water_stuck_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_import_water_stuck_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_import_water_stuck_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_import_water_stuck_t0p0.time&#39;,
  &#39;tank_fxns_guide_water_in_clogged_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_guide_water_in_clogged_t0p0.time&#39;,
  &#39;tank_fxns_guide_water_in_clogged_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_guide_water_in_clogged_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_guide_water_in_clogged_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -3488,8 +3197,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_guide_water_in_clogged_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_guide_water_in_clogged_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_guide_water_in_clogged_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_clogged_t0p0.time&#39;,
  &#39;tank_fxns_guide_water_in_leak_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_guide_water_in_leak_t0p0.time&#39;,
  &#39;tank_fxns_guide_water_in_leak_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_guide_water_in_leak_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_guide_water_in_leak_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -3543,8 +3252,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_guide_water_in_leak_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_guide_water_in_leak_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_guide_water_in_leak_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_leak_t0p0.time&#39;,
  &#39;tank_fxns_store_water_leak_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_store_water_leak_t0p0.time&#39;,
  &#39;tank_fxns_store_water_leak_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_store_water_leak_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_store_water_leak_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -3598,8 +3307,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_store_water_leak_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_store_water_leak_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_store_water_leak_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_store_water_leak_t0p0.time&#39;,
  &#39;tank_fxns_guide_water_out_clogged_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_guide_water_out_clogged_t0p0.time&#39;,
  &#39;tank_fxns_guide_water_out_clogged_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_guide_water_out_clogged_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_guide_water_out_clogged_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -3653,8 +3362,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_guide_water_out_clogged_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_guide_water_out_clogged_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_guide_water_out_clogged_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_out_clogged_t0p0.time&#39;,
  &#39;tank_fxns_guide_water_out_leak_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_guide_water_out_leak_t0p0.time&#39;,
  &#39;tank_fxns_guide_water_out_leak_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_guide_water_out_leak_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_guide_water_out_leak_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -3708,8 +3417,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_guide_water_out_leak_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_guide_water_out_leak_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_guide_water_out_leak_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_out_leak_t0p0.time&#39;,
  &#39;tank_fxns_export_water_stuck_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_export_water_stuck_t0p0.time&#39;,
  &#39;tank_fxns_export_water_stuck_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_export_water_stuck_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_export_water_stuck_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -3763,8 +3472,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_export_water_stuck_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_export_water_stuck_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_export_water_stuck_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_export_water_stuck_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_look_not_visible_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_human_aa_acts_look_not_visible_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_look_not_visible_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_human_aa_acts_look_not_visible_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_human_aa_acts_look_not_visible_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -3818,8 +3527,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_human_aa_acts_look_not_visible_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_human_aa_acts_look_not_visible_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_human_aa_acts_look_not_visible_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_human_aa_acts_look_not_visible_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_detect_false_high_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_human_aa_acts_detect_false_high_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_detect_false_high_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_human_aa_acts_detect_false_high_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_human_aa_acts_detect_false_high_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -3873,8 +3582,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_human_aa_acts_detect_false_high_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_human_aa_acts_detect_false_high_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_human_aa_acts_detect_false_high_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_human_aa_acts_detect_false_high_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_detect_false_low_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_human_aa_acts_detect_false_low_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_detect_false_low_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_human_aa_acts_detect_false_low_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_human_aa_acts_detect_false_low_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -3928,8 +3637,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_human_aa_acts_detect_false_low_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_human_aa_acts_detect_false_low_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_human_aa_acts_detect_false_low_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_human_aa_acts_detect_false_low_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_detect_not_detected_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_human_aa_acts_detect_not_detected_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_detect_not_detected_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_human_aa_acts_detect_not_detected_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_human_aa_acts_detect_not_detected_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -3983,8 +3692,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_human_aa_acts_detect_not_detected_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_human_aa_acts_detect_not_detected_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_human_aa_acts_detect_not_detected_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_human_aa_acts_detect_not_detected_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_reach_unable_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_human_aa_acts_reach_unable_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_reach_unable_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_human_aa_acts_reach_unable_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_human_aa_acts_reach_unable_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -4038,8 +3747,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_human_aa_acts_reach_unable_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_human_aa_acts_reach_unable_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_human_aa_acts_reach_unable_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_human_aa_acts_reach_unable_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_grasp_cannot_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_human_aa_acts_grasp_cannot_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_grasp_cannot_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_human_aa_acts_grasp_cannot_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_human_aa_acts_grasp_cannot_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -4093,8 +3802,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_human_aa_acts_grasp_cannot_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_human_aa_acts_grasp_cannot_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_human_aa_acts_grasp_cannot_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_human_aa_acts_grasp_cannot_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_turn_cannot_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_human_aa_acts_turn_cannot_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_turn_cannot_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_human_aa_acts_turn_cannot_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_human_aa_acts_turn_cannot_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -4148,8 +3857,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_human_aa_acts_turn_cannot_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_human_aa_acts_turn_cannot_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_human_aa_acts_turn_cannot_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_human_aa_acts_turn_cannot_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_turn_wrong_valve_t0p0.m.sub_faults&#39;,
+ &#39;tank_fxns_human_aa_acts_turn_wrong_valve_t0p0.time&#39;,
  &#39;tank_fxns_human_aa_acts_turn_wrong_valve_t0p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_human_aa_acts_turn_wrong_valve_t0p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_human_aa_acts_turn_wrong_valve_t0p0.flows.wat_in_2.s.effort&#39;,
@@ -4203,8 +3912,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_human_aa_acts_turn_wrong_valve_t0p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_human_aa_acts_turn_wrong_valve_t0p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_human_aa_acts_turn_wrong_valve_t0p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_human_aa_acts_turn_wrong_valve_t0p0.time&#39;,
  &#39;tank_fxns_import_water_stuck_t10p0.m.sub_faults&#39;,
+ &#39;tank_fxns_import_water_stuck_t10p0.time&#39;,
  &#39;tank_fxns_import_water_stuck_t10p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_import_water_stuck_t10p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_import_water_stuck_t10p0.flows.wat_in_2.s.effort&#39;,
@@ -4258,8 +3967,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_import_water_stuck_t10p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_import_water_stuck_t10p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_import_water_stuck_t10p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_import_water_stuck_t10p0.time&#39;,
  &#39;tank_fxns_guide_water_in_clogged_t10p0.m.sub_faults&#39;,
+ &#39;tank_fxns_guide_water_in_clogged_t10p0.time&#39;,
  &#39;tank_fxns_guide_water_in_clogged_t10p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_guide_water_in_clogged_t10p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_guide_water_in_clogged_t10p0.flows.wat_in_2.s.effort&#39;,
@@ -4313,8 +4022,8 @@ sub_faults:                    array(21)
  &#39;tank_fxns_guide_water_in_clogged_t10p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
  &#39;tank_fxns_guide_water_in_clogged_t10p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
  &#39;tank_fxns_guide_water_in_clogged_t10p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_clogged_t10p0.time&#39;,
  &#39;tank_fxns_guide_water_in_leak_t10p0.m.sub_faults&#39;,
+ &#39;tank_fxns_guide_water_in_leak_t10p0.time&#39;,
  &#39;tank_fxns_guide_water_in_leak_t10p0.flows.wat_in_1.s.effort&#39;,
  &#39;tank_fxns_guide_water_in_leak_t10p0.flows.wat_in_1.s.rate&#39;,
  &#39;tank_fxns_guide_water_in_leak_t10p0.flows.wat_in_2.s.effort&#39;,
@@ -4323,62 +4032,6 @@ sub_faults:                    array(21)
  &#39;tank_fxns_guide_water_in_leak_t10p0.flows.wat_out_1.s.rate&#39;,
  &#39;tank_fxns_guide_water_in_leak_t10p0.flows.wat_out_2.s.effort&#39;,
  &#39;tank_fxns_guide_water_in_leak_t10p0.flows.wat_out_2.s.rate&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.flows.valve1_sig.s.indicator&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.flows.valve1_sig.s.action&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.flows.tank_sig.s.indicator&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.flows.tank_sig.s.action&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.flows.valve2_sig.s.indicator&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.flows.valve2_sig.s.action&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.import_water.s.amt_open&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.import_water.m.faults.stuck&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.import_water.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.guide_water_in.m.faults.clogged&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.guide_water_in.m.faults.leak&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.guide_water_in.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.store_water.s.level&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.store_water.s.net_flow&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.store_water.m.faults.leak&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.store_water.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.guide_water_out.m.faults.clogged&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.guide_water_out.m.faults.leak&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.guide_water_out.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.export_water.s.amt_open&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.export_water.m.faults.stuck&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.export_water.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.active_actions&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.flows.tank_sig.s.indicator&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.flows.tank_sig.s.action&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.flows.valve1_sig.s.indicator&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.flows.valve1_sig.s.action&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.flows.valve2_sig.s.indicator&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.flows.valve2_sig.s.action&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.flows.detect_sig.s.indicator&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.flows.detect_sig.s.action&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.look.m.faults.not_visible&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.look.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.detect.m.faults.false_high&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.detect.m.faults.false_low&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.detect.m.faults.not_detected&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.detect.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.reach.m.faults.unable&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.reach.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.grasp.m.faults.cannot&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.grasp.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.turn.m.faults.cannot&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.turn.m.faults.wrong_valve&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.aa.acts.turn.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.fxns.human.m.sub_faults&#39;,
- &#39;tank_fxns_guide_water_in_leak_t10p0.time&#39;,
- &#39;tank_fxns_store_water_leak_t10p0.m.sub_faults&#39;,
- &#39;tank_fxns_store_water_leak_t10p0.flows.wat_in_1.s.effort&#39;,
- &#39;tank_fxns_store_water_leak_t10p0.flows.wat_in_1.s.rate&#39;,
- &#39;tank_fxns_store_water_leak_t10p0.flows.wat_in_2.s.effort&#39;,
- &#39;tank_fxns_store_water_leak_t10p0.flows.wat_in_2.s.rate&#39;,
- &#39;tank_fxns_store_water_leak_t10p0.flows.wat_out_1.s.effort&#39;,
- &#39;tank_fxns_store_water_leak_t10p0.flows.wat_out_1.s.rate&#39;,
- &#39;tank_fxns_store_water_leak_t10p0.flows.wat_out_2.s.effort&#39;,
- &#39;tank_fxns_store_water_leak_t10p0.flows.wat_out_2.s.rate&#39;,
- &#39;tank_fxns_store_water_leak_t10p0.flows.valve1_sig.s.indicator&#39;,
  ...]
 </pre></div>
 </div>
@@ -4398,7 +4051,7 @@ sub_faults:                    array(21)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/dfc3af431534bf1ce272ecad54818cc5b3848e8bb2bb3c6db21eb544962e5990.png" src="../../_images/dfc3af431534bf1ce272ecad54818cc5b3848e8bb2bb3c6db21eb544962e5990.png" />
+<img alt="../../_images/3f3a330bc7f50aad2c97d211280a1f0a65d2be9d8e52da4c963dcd6d59d111a6.png" src="../../_images/3f3a330bc7f50aad2c97d211280a1f0a65d2be9d8e52da4c963dcd6d59d111a6.png" />
 </div>
 </div>
 <p>In this case, there is a leak, but the operator cannot turn the valve, resulting in the tank filling too high, which is a failure.</p>
@@ -4416,13 +4069,13 @@ sub_faults:                    array(21)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d1e2e73193c73066d0b22b670e8cd5c2d32bdeabc1678f3b1f47d8fefbe66367.png" src="../../_images/d1e2e73193c73066d0b22b670e8cd5c2d32bdeabc1678f3b1f47d8fefbe66367.png" />
+<img alt="../../_images/6fad501c5a7c3a4c85d5d4e7bb310f9e862ba2d65f6748316ae58ed8b283a4c1.png" src="../../_images/6fad501c5a7c3a4c85d5d4e7bb310f9e862ba2d65f6748316ae58ed8b283a4c1.png" />
 </div>
 </div>
 <p>In this case, there is a leak, but it is not caugh, resulting in a failure again.</p>
 </section>
 <section id="testing-different-reaction-times">
-<h2>Testing different reaction times<a class="headerlink" href="#testing-different-reaction-times" title="Link to this heading"></a></h2>
+<h3>Testing different reaction times<a class="headerlink" href="#testing-different-reaction-times" title="Link to this heading"></a></h3>
 <p>The model set up in <code class="docutils literal notranslate"><span class="pre">tank_model</span></code> is parameterized by the reaction time of the operator. As a result, we can assess how long or short reaction times affect the given scenarios.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -4441,7 +4094,7 @@ sub_faults:                    array(21)
                        <span class="s1">&#39;fxns.store_water.s.level&#39;</span><span class="p">,</span> 
                        <span class="s1">&#39;fxns.store_water.s.net_flow&#39;</span><span class="p">)</span>
 
-<span class="n">result</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+<span class="n">result</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">tend</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -4449,11 +4102,12 @@ sub_faults:                    array(21)
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
 </pre></div>
 </div>
-<img alt="../../_images/a35e005ebd6ac8cb96f08377f14b133102303c8042aa4bef334181db9d00ebe2.png" src="../../_images/a35e005ebd6ac8cb96f08377f14b133102303c8042aa4bef334181db9d00ebe2.png" />
-<img alt="../../_images/8454ace332ff24987a2b72ec9ad32c544dd4809f4b582491ae3b08fb81074a62.png" src="../../_images/8454ace332ff24987a2b72ec9ad32c544dd4809f4b582491ae3b08fb81074a62.png" />
+<img alt="../../_images/fd162c15934b0b6cdee9fc5618b45b7238cf09e2cc39eb0ae351090d5e5ec9ad.png" src="../../_images/fd162c15934b0b6cdee9fc5618b45b7238cf09e2cc39eb0ae351090d5e5ec9ad.png" />
+<img alt="../../_images/02e7ef0866531998bd6af43256552d28d61b45c352d5280251e3afc9cfc8ca4a.png" src="../../_images/02e7ef0866531998bd6af43256552d28d61b45c352d5280251e3afc9cfc8ca4a.png" />
 </div>
 </div>
 <p>As shown, the operator does not respond in time, resulting in the tank draining all the way, a failure state. We can further use the <code class="docutils literal notranslate"><span class="pre">propagate.approach</span></code> function to compare the number of scenarios caught in this system compared with the other.</p>
+</section>
 </section>
 </section>
 

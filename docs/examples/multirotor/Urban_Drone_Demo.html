@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Urban Drone Demo &mdash; fmdtools 2.1.3 documentation</title>
+  <title>Urban Drone Demo &mdash; fmdtools 2.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
 
   
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=179ab080"></script>
+      <script src="../../_static/documentation_options.js?v=b21de401"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-0">Version: 2.2.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -219,21 +219,12 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#history">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#what-about-human-induced-faults">What about human-induced faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#evaluating-joint-component-human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#testing-different-reaction-times">Testing different reaction times</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#tank-architecture-s">Tank Architecture(s)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#tank-analysis">Tank Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#full-set-of-modes">Full set of modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#defining-optimization-problem">Defining Optimization Problem</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#simulation">Simulation</a></li>
 </ul>
 </li>
 </ul>
@@ -400,12 +391,15 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_dict_repr"><code class="docutils literal notranslate"><span class="pre">get_dict_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_repr"><code class="docutils literal notranslate"><span class="pre">get_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
@@ -430,41 +424,25 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.NestedSimulation"><code class="docutils literal notranslate"><span class="pre">NestedSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.SimEvent"><code class="docutils literal notranslate"><span class="pre">SimEvent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_fault_sim"><code class="docutils literal notranslate"><span class="pre">exec_fault_sim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_sim"><code class="docutils literal notranslate"><span class="pre">exec_sim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample"><code class="docutils literal notranslate"><span class="pre">fault_sample()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample_from"><code class="docutils literal notranslate"><span class="pre">fault_sample_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.gen_sampleapproach"><code class="docutils literal notranslate"><span class="pre">gen_sampleapproach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_mdl_kwargs"><code class="docutils literal notranslate"><span class="pre">get_mdl_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_sim_call_kwargs"><code class="docutils literal notranslate"><span class="pre">get_sim_call_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nested_sample"><code class="docutils literal notranslate"><span class="pre">nested_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.parameter_sample"><code class="docutils literal notranslate"><span class="pre">parameter_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.process_nominal"><code class="docutils literal notranslate"><span class="pre">process_nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
@@ -555,7 +533,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
@@ -579,6 +556,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_to_return"><code class="docutils literal notranslate"><span class="pre">clean_to_return()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
@@ -784,7 +762,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c15bcd17727d2ef63874d73f2ff3bdb45da37911eb855d543c787b590092ddd5.png" src="../../_images/c15bcd17727d2ef63874d73f2ff3bdb45da37911eb855d543c787b590092ddd5.png" />
+<img alt="../../_images/9826bd30150f6327104d80207a3ce335f31e72731f4f9892f6f10e2f254cd45f.png" src="../../_images/9826bd30150f6327104d80207a3ce335f31e72731f4f9892f6f10e2f254cd45f.png" />
 </div>
 </div>
 <p>We can also view the grid environment using its <code class="docutils literal notranslate"><span class="pre">show</span></code> methods:</p>
@@ -796,7 +774,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/118bde309fc0fca1ba6e1be5ad90c41bb3724e402272b1f37d67a6984981b236.png" src="../../_images/118bde309fc0fca1ba6e1be5ad90c41bb3724e402272b1f37d67a6984981b236.png" />
+<img alt="../../_images/8a7f32450735771a9b0bfa3b6a46abd59acfedb82806ab2fe8614efc192f8ee6.png" src="../../_images/8a7f32450735771a9b0bfa3b6a46abd59acfedb82806ab2fe8614efc192f8ee6.png" />
 </div>
 </div>
 <p>Which shows the Start, End, and allowed/unsafe locations in the 1000x1000-m grid. In this display, line thickness corresponds to building height, and hatching corresponds to whether or not the space is occupied. We can also display this using <code class="docutils literal notranslate"><span class="pre">show.coord3d</span></code>:</p>
@@ -807,7 +785,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/93a2e62929c5e7a118422e537f77b4e3fbb52b7f596a076854d9e29e84255743.png" src="../../_images/93a2e62929c5e7a118422e537f77b4e3fbb52b7f596a076854d9e29e84255743.png" />
+<img alt="../../_images/e352e6306e04c773fc470964559a63935d6707fc45e9e7f5765fbe94bf614504.png" src="../../_images/e352e6306e04c773fc470964559a63935d6707fc45e9e7f5765fbe94bf614504.png" />
 </div>
 </div>
 </section>
@@ -827,19 +805,19 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/e142e8d7525bfb1f2097be515c372eb33ff788107a90f400dfd6f5a2b93d81fd.png" src="../../_images/e142e8d7525bfb1f2097be515c372eb33ff788107a90f400dfd6f5a2b93d81fd.png" />
+<img alt="../../_images/c34d90bd2d5449d6fabc446955a68f9c4b4b72cf18e9191cf2ea2c99e41dbbe1.png" src="../../_images/c34d90bd2d5449d6fabc446955a68f9c4b4b72cf18e9191cf2ea2c99e41dbbe1.png" />
 </div>
 </div>
 <p>As shown, the flight ends fairly quickly (in 10 minutes), with the drone successively proceeding through points in the flight plan.</p>
 <p>We can also view this flightpath in 3-d space using <code class="docutils literal notranslate"><span class="pre">History.plot_trajectories</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">hist_nom</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s1">&#39;dofs.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;dofs.s.y&#39;</span><span class="p">,</span> <span class="s1">&#39;dofs.s.z&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">hist_nom</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s1">&#39;dofs.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;dofs.s.y&#39;</span><span class="p">,</span> <span class="s1">&#39;dofs.s.z&#39;</span><span class="p">,</span> <span class="n">time_groups</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nominal&#39;</span><span class="p">],</span> <span class="n">time_ticks</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/802babdc2b96b1aff610fc06d3fcdad6a1eb676954df7cc76bc7f9533a75285f.png" src="../../_images/802babdc2b96b1aff610fc06d3fcdad6a1eb676954df7cc76bc7f9533a75285f.png" />
+<img alt="../../_images/425fa9c1396cf0a93c9d315c7683fa5a736b3a13f57b9c54822958ef91de6fcf.png" src="../../_images/425fa9c1396cf0a93c9d315c7683fa5a736b3a13f57b9c54822958ef91de6fcf.png" />
 </div>
 </div>
 <p>Trajectory plots can be overlaid on top of environment plots. In this case, we defined the method <code class="docutils literal notranslate"><span class="pre">plot_env_with_traj</span></code> and <code class="docutils literal notranslate"><span class="pre">plot_env_with_traj_z</span></code> for this case.</p>
@@ -861,7 +839,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
  &lt;Axes3D: title={&#39;center&#39;: &#39;trajectory&#39;}, xlabel=&#39;x&#39;, ylabel=&#39;y&#39;, zlabel=&#39;z&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/ca4e9a987e9474739754164c532a7362a3c982b37b529ac023c94006c09af1ee.png" src="../../_images/ca4e9a987e9474739754164c532a7362a3c982b37b529ac023c94006c09af1ee.png" />
+<img alt="../../_images/5e6464547111f7d7637df7115b326335157e1816e6ed708bed1f7bc8f1108811.png" src="../../_images/5e6464547111f7d7637df7115b326335157e1816e6ed708bed1f7bc8f1108811.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -875,7 +853,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
  &lt;Axes: title={&#39;center&#39;: &#39;trajectory&#39;}, xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/a3d6088886845f436c8e14e6510f968452122eadd3cd583899293997b66c7ab0.png" src="../../_images/a3d6088886845f436c8e14e6510f968452122eadd3cd583899293997b66c7ab0.png" />
+<img alt="../../_images/36800c823764c82c3485a9662ac941dff5964997e5e4e701ea43ce4766993727.png" src="../../_images/36800c823764c82c3485a9662ac941dff5964997e5e4e701ea43ce4766993727.png" />
 </div>
 </div>
 <p>As shown, this is a rather simple straight-line path. If we wanted a more complex scenario, we could make the path more complex by adding multiple destinations or planning the path based on allowed flight/landing locations.</p>
@@ -965,7 +943,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_fault</span><span class="p">,</span> <span class="n">hist_fault</span> <span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s2">&quot;affect_dof.ca.comps.lr&quot;</span><span class="p">,</span> <span class="s2">&quot;mechbreak&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_fault</span><span class="p">,</span> <span class="n">hist_fault</span> <span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s2">&quot;affect_dof.ca.comps.lr&quot;</span><span class="p">,</span> <span class="s2">&quot;mechbreak&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -982,7 +960,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/4ce838f12ecdd64d16d6d16516047e42c28fe51e5dde4e79acc0c64ecc7614e3.png" src="../../_images/4ce838f12ecdd64d16d6d16516047e42c28fe51e5dde4e79acc0c64ecc7614e3.png" />
+<img alt="../../_images/c2c65a90eb5f572fe3f13b45901a2f5f6d40aab726d161d1d016c14a89f5cd07.png" src="../../_images/c2c65a90eb5f572fe3f13b45901a2f5f6d40aab726d161d1d016c14a89f5cd07.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -996,7 +974,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
  &lt;Axes3D: title={&#39;center&#39;: &#39;trajectory&#39;}, xlabel=&#39;x&#39;, ylabel=&#39;y&#39;, zlabel=&#39;z&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/41a4cee0cd552780772483dba233662cc3a2b9d51fabcd4636ba9cc73232146f.png" src="../../_images/41a4cee0cd552780772483dba233662cc3a2b9d51fabcd4636ba9cc73232146f.png" />
+<img alt="../../_images/99e8cf0c5464afa81a5bc5f49ea39e24c8cc5288f2bbc756ac8d91a2fd0b7796.png" src="../../_images/99e8cf0c5464afa81a5bc5f49ea39e24c8cc5288f2bbc756ac8d91a2fd0b7796.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1010,7 +988,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
  &lt;Axes: title={&#39;center&#39;: &#39;trajectory&#39;}, xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/09764a02300381c0cbaf78a88dedcb013f8d7c0f52923a404ceeee664a67fb05.png" src="../../_images/09764a02300381c0cbaf78a88dedcb013f8d7c0f52923a404ceeee664a67fb05.png" />
+<img alt="../../_images/2a81d4e7b4102e10a7787c9da32f75f5610ef401543d8fe746c484edb691a5be.png" src="../../_images/2a81d4e7b4102e10a7787c9da32f75f5610ef401543d8fe746c484edb691a5be.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1021,17 +999,17 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>endclass.rate:    1.0000000000000002e-06
-endclass.cost:                   28600.0
-endclass.expected_cost: 2860.0000000000005
-endclass.repcost:                    500
-endclass.unsafe_flight_time:         281
-endclass.body_strikes:               0.0
-endclass.head_strikes:               0.0
-endclass.property_restrictions:        0
-endclass.safecost:               28100.0
-endclass.landcost:                     0
-endclass.p_safety:                   0.0
-endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000002e-06}
+endclass.cost:                   41400.0
+endclass.expected_cost: 4140.000000000001
+endclass.repcost:                   1500
+endclass.unsafe_flight_time:         251
+endclass.body_strikes:            0.0003
+endclass.head_strikes:            0.0002
+endclass.property_restrictions:        1
+endclass.safecost:               29900.0
+endclass.landcost:                 10000
+endclass.p_safety: 0.00011951429376733103
+endclass.severities: {&#39;hazardous&#39;: 1.1951429376733104e-10, &#39;minor&#39;: 9.998804857062328e-07}
 </pre></div>
 </div>
 </div>
@@ -1040,14 +1018,14 @@ endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.analyze.phases</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhaseMap</span><span class="p">,</span> <span class="n">from_hist</span>
-<span class="n">phasemaps</span> <span class="o">=</span> <span class="n">from_hist</span><span class="p">(</span><span class="n">hist_nom</span><span class="p">,</span> <span class="n">fxn_modephases</span><span class="o">=</span><span class="p">[])</span>
+<span class="n">phasemaps</span> <span class="o">=</span> <span class="n">from_hist</span><span class="p">(</span><span class="n">hist_nom</span><span class="p">,</span> <span class="n">fxn_modephases</span><span class="o">=</span><span class="p">[],</span> <span class="n">dt</span><span class="o">=</span><span class="n">mdl</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
 <span class="n">phasemaps</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;ctl_dof&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 30.0]}, {}),
- &#39;plan_path&#39;: PhaseMap({&#39;taxi&#39;: [0.0, 1.0], &#39;move&#39;: [1.1, 1.6], &#39;land&#39;: [1.7, 2.4], &#39;taxi1&#39;: [2.5, 30.0]}, {})}
+ &#39;plan_path&#39;: PhaseMap({&#39;taxi&#39;: [0.0, 1.0], &#39;move&#39;: [1.1, 8.2], &#39;land&#39;: [8.3, 18.6], &#39;taxi1&#39;: [18.7, 30.0]}, {})}
 </pre></div>
 </div>
 </div>
@@ -1062,7 +1040,10 @@ endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;samp&#39;: &#39;quadrature&#39;,
- &#39;quad&#39;: {&#39;nodes&#39;: [-0.20000000000000018, 1.0], &#39;weights&#39;: [1.0, 0.92]}}
+ &#39;quad&#39;: {&#39;nodes&#39;: [0.8309859154929577,
+   -0.2676056338028169,
+   0.267605633802817],
+  &#39;weights&#39;: [0.006, 1.0, 0.92]}}
 </pre></div>
 </div>
 </div>
@@ -1085,17 +1066,205 @@ endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>FaultSample of scenarios: 
- - drone_fxns_manage_health_lostfunction_t2
- - drone_fxns_manage_health_lostfunction_t2
- - drone_fxns_store_ee_lowcharge_t2
- - drone_fxns_store_ee_lowcharge_t2
- - drone_fxns_store_ee_nocharge_t2
- - drone_fxns_store_ee_nocharge_t2
- - drone_fxns_store_ee_ca_comps_s1p1_break_t2
- - drone_fxns_store_ee_ca_comps_s1p1_break_t2
- - drone_fxns_store_ee_ca_comps_s1p1_degr_t2
- - drone_fxns_store_ee_ca_comps_s1p1_degr_t2
- - ... (118 total)
+ - drone_fxns_manage_health_lostfunction_t7p6
+ - drone_fxns_manage_health_lostfunction_t3p7
+ - drone_fxns_manage_health_lostfunction_t5p6
+ - drone_fxns_store_ee_lowcharge_t7p6
+ - drone_fxns_store_ee_lowcharge_t3p7
+ - drone_fxns_store_ee_lowcharge_t5p6
+ - drone_fxns_store_ee_nocharge_t7p6
+ - drone_fxns_store_ee_nocharge_t3p7
+ - drone_fxns_store_ee_nocharge_t5p6
+ - drone_fxns_store_ee_ca_comps_s1p1_break_t7p6
+ - ... (177 total)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.manage_health&#39;: [&#39;lostfunction&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.manage_health&#39;, fault=&#39;lostfunction&#39;, rate=4.672897196261682e-11, name=&#39;drone_fxns_manage_health_lostfunction_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.manage_health&#39;: [&#39;lostfunction&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.manage_health&#39;, fault=&#39;lostfunction&#39;, rate=7.78816199376947e-09, name=&#39;drone_fxns_manage_health_lostfunction_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.manage_health&#39;: [&#39;lostfunction&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.manage_health&#39;, fault=&#39;lostfunction&#39;, rate=7.1651090342679115e-09, name=&#39;drone_fxns_manage_health_lostfunction_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.store_ee&#39;: [&#39;lowcharge&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.store_ee&#39;, fault=&#39;lowcharge&#39;, rate=4.3613707165109034e-08, name=&#39;drone_fxns_store_ee_lowcharge_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.store_ee&#39;: [&#39;lowcharge&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.store_ee&#39;, fault=&#39;lowcharge&#39;, rate=7.268951194184839e-06, name=&#39;drone_fxns_store_ee_lowcharge_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.store_ee&#39;: [&#39;lowcharge&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.store_ee&#39;, fault=&#39;lowcharge&#39;, rate=6.687435098650051e-06, name=&#39;drone_fxns_store_ee_lowcharge_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.store_ee&#39;: [&#39;nocharge&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.store_ee&#39;, fault=&#39;nocharge&#39;, rate=1.2461059190031154e-08, name=&#39;drone_fxns_store_ee_nocharge_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.store_ee&#39;: [&#39;nocharge&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.store_ee&#39;, fault=&#39;nocharge&#39;, rate=2.0768431983385256e-06, name=&#39;drone_fxns_store_ee_nocharge_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.store_ee&#39;: [&#39;nocharge&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.store_ee&#39;, fault=&#39;nocharge&#39;, rate=1.9106957424714435e-06, name=&#39;drone_fxns_store_ee_nocharge_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;break&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;break&#39;, rate=2.2429906542056072e-09, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_break_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;break&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;break&#39;, rate=3.7383177570093457e-07, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_break_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;break&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;break&#39;, rate=3.439252336448598e-07, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_break_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;degr&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;degr&#39;, rate=2.2429906542056072e-09, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_degr_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;degr&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;degr&#39;, rate=3.7383177570093457e-07, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_degr_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;degr&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;degr&#39;, rate=3.439252336448598e-07, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_degr_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;lowcharge&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;lowcharge&#39;, rate=2.9906542056074763e-09, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_lowcharge_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;lowcharge&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;lowcharge&#39;, rate=4.98442367601246e-07, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_lowcharge_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;lowcharge&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;lowcharge&#39;, rate=4.5856697819314633e-07, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_lowcharge_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;nocharge&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;nocharge&#39;, rate=4.4859813084112144e-09, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_nocharge_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;nocharge&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;nocharge&#39;, rate=7.476635514018691e-07, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_nocharge_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;nocharge&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;nocharge&#39;, rate=6.878504672897196e-07, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_nocharge_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;short&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;short&#39;, rate=2.2429906542056072e-09, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_short_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;short&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;short&#39;, rate=3.7383177570093457e-07, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_short_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;: [&#39;short&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.store_ee.ca.comps.s1p1&#39;, fault=&#39;short&#39;, rate=3.439252336448598e-07, name=&#39;drone_fxns_store_ee_ca_comps_s1p1_short_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.dist_ee&#39;: [&#39;break&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.dist_ee&#39;, fault=&#39;break&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_dist_ee_break_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.dist_ee&#39;: [&#39;break&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.dist_ee&#39;, fault=&#39;break&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_dist_ee_break_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.dist_ee&#39;: [&#39;break&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.dist_ee&#39;, fault=&#39;break&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_dist_ee_break_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.dist_ee&#39;: [&#39;degr&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.dist_ee&#39;, fault=&#39;degr&#39;, rate=1.5576323987538942e-08, name=&#39;drone_fxns_dist_ee_degr_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.dist_ee&#39;: [&#39;degr&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.dist_ee&#39;, fault=&#39;degr&#39;, rate=2.596053997923157e-06, name=&#39;drone_fxns_dist_ee_degr_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.dist_ee&#39;: [&#39;degr&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.dist_ee&#39;, fault=&#39;degr&#39;, rate=2.388369678089304e-06, name=&#39;drone_fxns_dist_ee_degr_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.dist_ee&#39;: [&#39;short&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.dist_ee&#39;, fault=&#39;short&#39;, rate=9.345794392523365e-09, name=&#39;drone_fxns_dist_ee_short_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.dist_ee&#39;: [&#39;short&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.dist_ee&#39;, fault=&#39;short&#39;, rate=1.557632398753894e-06, name=&#39;drone_fxns_dist_ee_short_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.dist_ee&#39;: [&#39;short&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.dist_ee&#39;, fault=&#39;short&#39;, rate=1.4330218068535824e-06, name=&#39;drone_fxns_dist_ee_short_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;ctlbreak&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;ctlbreak&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lf_ctlbreak_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;ctlbreak&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;ctlbreak&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_affect_dof_ca_comps_lf_ctlbreak_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;ctlbreak&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;ctlbreak&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_ctlbreak_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;ctldn&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;ctldn&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lf_ctldn_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;ctldn&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;ctldn&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_affect_dof_ca_comps_lf_ctldn_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;ctldn&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;ctldn&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_ctldn_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;ctlup&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;ctlup&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lf_ctlup_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;ctlup&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;ctlup&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_affect_dof_ca_comps_lf_ctlup_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;ctlup&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;ctlup&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_ctlup_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;mechbreak&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;mechbreak&#39;, rate=3.1152647975077885e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lf_mechbreak_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;mechbreak&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;mechbreak&#39;, rate=5.192107995846314e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_mechbreak_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;mechbreak&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;mechbreak&#39;, rate=4.776739356178609e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_mechbreak_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;mechfriction&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;mechfriction&#39;, rate=1.5576323987538942e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lf_mechfriction_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;mechfriction&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;mechfriction&#39;, rate=2.596053997923157e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_mechfriction_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;mechfriction&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;mechfriction&#39;, rate=2.3883696780893044e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_mechfriction_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;openc&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;openc&#39;, rate=3.1152647975077885e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lf_openc_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;openc&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;openc&#39;, rate=5.192107995846314e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_openc_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;openc&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;openc&#39;, rate=4.776739356178609e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_openc_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;propbreak&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;propbreak&#39;, rate=9.345794392523365e-10, name=&#39;drone_fxns_affect_dof_ca_comps_lf_propbreak_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;propbreak&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;propbreak&#39;, rate=1.5576323987538942e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_propbreak_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;propbreak&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;propbreak&#39;, rate=1.4330218068535827e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_propbreak_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;propstuck&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;propstuck&#39;, rate=6.230529595015577e-10, name=&#39;drone_fxns_affect_dof_ca_comps_lf_propstuck_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;propstuck&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;propstuck&#39;, rate=1.0384215991692627e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_propstuck_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;propstuck&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;propstuck&#39;, rate=9.553478712357218e-08, name=&#39;drone_fxns_affect_dof_ca_comps_lf_propstuck_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;propwarp&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;propwarp&#39;, rate=3.1152647975077885e-10, name=&#39;drone_fxns_affect_dof_ca_comps_lf_propwarp_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;propwarp&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;propwarp&#39;, rate=5.1921079958463137e-08, name=&#39;drone_fxns_affect_dof_ca_comps_lf_propwarp_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;propwarp&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;propwarp&#39;, rate=4.776739356178609e-08, name=&#39;drone_fxns_affect_dof_ca_comps_lf_propwarp_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;short&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;short&#39;, rate=3.1152647975077885e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lf_short_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;short&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;short&#39;, rate=5.192107995846314e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_short_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lf&#39;: [&#39;short&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lf&#39;, fault=&#39;short&#39;, rate=4.776739356178609e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lf_short_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;ctlbreak&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;ctlbreak&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lr_ctlbreak_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;ctlbreak&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;ctlbreak&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_affect_dof_ca_comps_lr_ctlbreak_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;ctlbreak&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;ctlbreak&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_ctlbreak_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;ctldn&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;ctldn&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lr_ctldn_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;ctldn&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;ctldn&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_affect_dof_ca_comps_lr_ctldn_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;ctldn&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;ctldn&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_ctldn_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;ctlup&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;ctlup&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lr_ctlup_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;ctlup&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;ctlup&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_affect_dof_ca_comps_lr_ctlup_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;ctlup&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;ctlup&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_ctlup_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;mechbreak&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;mechbreak&#39;, rate=3.1152647975077885e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lr_mechbreak_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;mechbreak&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;mechbreak&#39;, rate=5.192107995846314e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_mechbreak_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;mechbreak&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;mechbreak&#39;, rate=4.776739356178609e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_mechbreak_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;mechfriction&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;mechfriction&#39;, rate=1.5576323987538942e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lr_mechfriction_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;mechfriction&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;mechfriction&#39;, rate=2.596053997923157e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_mechfriction_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;mechfriction&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;mechfriction&#39;, rate=2.3883696780893044e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_mechfriction_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;openc&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;openc&#39;, rate=3.1152647975077885e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lr_openc_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;openc&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;openc&#39;, rate=5.192107995846314e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_openc_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;openc&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;openc&#39;, rate=4.776739356178609e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_openc_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;propbreak&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;propbreak&#39;, rate=9.345794392523365e-10, name=&#39;drone_fxns_affect_dof_ca_comps_lr_propbreak_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;propbreak&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;propbreak&#39;, rate=1.5576323987538942e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_propbreak_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;propbreak&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;propbreak&#39;, rate=1.4330218068535827e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_propbreak_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;propstuck&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;propstuck&#39;, rate=6.230529595015577e-10, name=&#39;drone_fxns_affect_dof_ca_comps_lr_propstuck_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;propstuck&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;propstuck&#39;, rate=1.0384215991692627e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_propstuck_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;propstuck&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;propstuck&#39;, rate=9.553478712357218e-08, name=&#39;drone_fxns_affect_dof_ca_comps_lr_propstuck_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;propwarp&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;propwarp&#39;, rate=3.1152647975077885e-10, name=&#39;drone_fxns_affect_dof_ca_comps_lr_propwarp_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;propwarp&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;propwarp&#39;, rate=5.1921079958463137e-08, name=&#39;drone_fxns_affect_dof_ca_comps_lr_propwarp_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;propwarp&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;propwarp&#39;, rate=4.776739356178609e-08, name=&#39;drone_fxns_affect_dof_ca_comps_lr_propwarp_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;short&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;short&#39;, rate=3.1152647975077885e-09, name=&#39;drone_fxns_affect_dof_ca_comps_lr_short_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;short&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;short&#39;, rate=5.192107995846314e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_short_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.lr&#39;: [&#39;short&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.lr&#39;, fault=&#39;short&#39;, rate=4.776739356178609e-07, name=&#39;drone_fxns_affect_dof_ca_comps_lr_short_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;ctlbreak&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;ctlbreak&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rf_ctlbreak_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;ctlbreak&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;ctlbreak&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_affect_dof_ca_comps_rf_ctlbreak_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;ctlbreak&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;ctlbreak&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_ctlbreak_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;ctldn&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;ctldn&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rf_ctldn_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;ctldn&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;ctldn&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_affect_dof_ca_comps_rf_ctldn_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;ctldn&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;ctldn&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_ctldn_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;ctlup&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;ctlup&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rf_ctlup_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;ctlup&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;ctlup&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_affect_dof_ca_comps_rf_ctlup_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;ctlup&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;ctlup&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_ctlup_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;mechbreak&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;mechbreak&#39;, rate=3.1152647975077885e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rf_mechbreak_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;mechbreak&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;mechbreak&#39;, rate=5.192107995846314e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_mechbreak_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;mechbreak&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;mechbreak&#39;, rate=4.776739356178609e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_mechbreak_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;mechfriction&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;mechfriction&#39;, rate=1.5576323987538942e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rf_mechfriction_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;mechfriction&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;mechfriction&#39;, rate=2.596053997923157e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_mechfriction_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;mechfriction&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;mechfriction&#39;, rate=2.3883696780893044e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_mechfriction_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;openc&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;openc&#39;, rate=3.1152647975077885e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rf_openc_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;openc&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;openc&#39;, rate=5.192107995846314e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_openc_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;openc&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;openc&#39;, rate=4.776739356178609e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_openc_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;propbreak&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;propbreak&#39;, rate=9.345794392523365e-10, name=&#39;drone_fxns_affect_dof_ca_comps_rf_propbreak_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;propbreak&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;propbreak&#39;, rate=1.5576323987538942e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_propbreak_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;propbreak&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;propbreak&#39;, rate=1.4330218068535827e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_propbreak_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;propstuck&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;propstuck&#39;, rate=6.230529595015577e-10, name=&#39;drone_fxns_affect_dof_ca_comps_rf_propstuck_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;propstuck&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;propstuck&#39;, rate=1.0384215991692627e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_propstuck_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;propstuck&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;propstuck&#39;, rate=9.553478712357218e-08, name=&#39;drone_fxns_affect_dof_ca_comps_rf_propstuck_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;propwarp&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;propwarp&#39;, rate=3.1152647975077885e-10, name=&#39;drone_fxns_affect_dof_ca_comps_rf_propwarp_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;propwarp&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;propwarp&#39;, rate=5.1921079958463137e-08, name=&#39;drone_fxns_affect_dof_ca_comps_rf_propwarp_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;propwarp&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;propwarp&#39;, rate=4.776739356178609e-08, name=&#39;drone_fxns_affect_dof_ca_comps_rf_propwarp_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;short&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;short&#39;, rate=3.1152647975077885e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rf_short_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;short&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;short&#39;, rate=5.192107995846314e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_short_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rf&#39;: [&#39;short&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rf&#39;, fault=&#39;short&#39;, rate=4.776739356178609e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rf_short_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;ctlbreak&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;ctlbreak&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rr_ctlbreak_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;ctlbreak&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;ctlbreak&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_affect_dof_ca_comps_rr_ctlbreak_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;ctlbreak&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;ctlbreak&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_ctlbreak_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;ctldn&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;ctldn&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rr_ctldn_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;ctldn&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;ctldn&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_affect_dof_ca_comps_rr_ctldn_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;ctldn&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;ctldn&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_ctldn_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;ctlup&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;ctlup&#39;, rate=6.230529595015577e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rr_ctlup_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;ctlup&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;ctlup&#39;, rate=1.0384215991692628e-06, name=&#39;drone_fxns_affect_dof_ca_comps_rr_ctlup_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;ctlup&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;ctlup&#39;, rate=9.553478712357217e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_ctlup_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;mechbreak&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;mechbreak&#39;, rate=3.1152647975077885e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rr_mechbreak_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;mechbreak&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;mechbreak&#39;, rate=5.192107995846314e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_mechbreak_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;mechbreak&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;mechbreak&#39;, rate=4.776739356178609e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_mechbreak_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;mechfriction&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;mechfriction&#39;, rate=1.5576323987538942e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rr_mechfriction_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;mechfriction&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;mechfriction&#39;, rate=2.596053997923157e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_mechfriction_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;mechfriction&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;mechfriction&#39;, rate=2.3883696780893044e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_mechfriction_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;openc&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;openc&#39;, rate=3.1152647975077885e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rr_openc_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;openc&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;openc&#39;, rate=5.192107995846314e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_openc_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;openc&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;openc&#39;, rate=4.776739356178609e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_openc_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;propbreak&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;propbreak&#39;, rate=9.345794392523365e-10, name=&#39;drone_fxns_affect_dof_ca_comps_rr_propbreak_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;propbreak&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;propbreak&#39;, rate=1.5576323987538942e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_propbreak_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;propbreak&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;propbreak&#39;, rate=1.4330218068535827e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_propbreak_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;propstuck&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;propstuck&#39;, rate=6.230529595015577e-10, name=&#39;drone_fxns_affect_dof_ca_comps_rr_propstuck_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;propstuck&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;propstuck&#39;, rate=1.0384215991692627e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_propstuck_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;propstuck&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;propstuck&#39;, rate=9.553478712357218e-08, name=&#39;drone_fxns_affect_dof_ca_comps_rr_propstuck_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;propwarp&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;propwarp&#39;, rate=3.1152647975077885e-10, name=&#39;drone_fxns_affect_dof_ca_comps_rr_propwarp_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;propwarp&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;propwarp&#39;, rate=5.1921079958463137e-08, name=&#39;drone_fxns_affect_dof_ca_comps_rr_propwarp_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;propwarp&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;propwarp&#39;, rate=4.776739356178609e-08, name=&#39;drone_fxns_affect_dof_ca_comps_rr_propwarp_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;short&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;short&#39;, rate=3.1152647975077885e-09, name=&#39;drone_fxns_affect_dof_ca_comps_rr_short_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;short&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;short&#39;, rate=5.192107995846314e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_short_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.affect_dof.ca.comps.rr&#39;: [&#39;short&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.affect_dof.ca.comps.rr&#39;, fault=&#39;short&#39;, rate=4.776739356178609e-07, name=&#39;drone_fxns_affect_dof_ca_comps_rr_short_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.ctl_dof&#39;: [&#39;degctl&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.ctl_dof&#39;, fault=&#39;degctl&#39;, rate=7.476635514018692e-09, name=&#39;drone_fxns_ctl_dof_degctl_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.ctl_dof&#39;: [&#39;degctl&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.ctl_dof&#39;, fault=&#39;degctl&#39;, rate=1.2461059190031154e-06, name=&#39;drone_fxns_ctl_dof_degctl_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.ctl_dof&#39;: [&#39;degctl&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.ctl_dof&#39;, fault=&#39;degctl&#39;, rate=1.1464174454828662e-06, name=&#39;drone_fxns_ctl_dof_degctl_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.ctl_dof&#39;: [&#39;noctl&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.ctl_dof&#39;, fault=&#39;noctl&#39;, rate=1.869158878504673e-09, name=&#39;drone_fxns_ctl_dof_noctl_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.ctl_dof&#39;: [&#39;noctl&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.ctl_dof&#39;, fault=&#39;noctl&#39;, rate=3.1152647975077885e-07, name=&#39;drone_fxns_ctl_dof_noctl_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.ctl_dof&#39;: [&#39;noctl&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.ctl_dof&#39;, fault=&#39;noctl&#39;, rate=2.8660436137071655e-07, name=&#39;drone_fxns_ctl_dof_noctl_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.plan_path&#39;: [&#39;degloc&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.plan_path&#39;, fault=&#39;degloc&#39;, rate=7.476635514018692e-09, name=&#39;drone_fxns_plan_path_degloc_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.plan_path&#39;: [&#39;degloc&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.plan_path&#39;, fault=&#39;degloc&#39;, rate=1.2461059190031154e-06, name=&#39;drone_fxns_plan_path_degloc_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.plan_path&#39;: [&#39;degloc&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.plan_path&#39;, fault=&#39;degloc&#39;, rate=1.1464174454828662e-06, name=&#39;drone_fxns_plan_path_degloc_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.plan_path&#39;: [&#39;noloc&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.plan_path&#39;, fault=&#39;noloc&#39;, rate=1.869158878504673e-09, name=&#39;drone_fxns_plan_path_noloc_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.plan_path&#39;: [&#39;noloc&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.plan_path&#39;, fault=&#39;noloc&#39;, rate=3.1152647975077885e-07, name=&#39;drone_fxns_plan_path_noloc_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.plan_path&#39;: [&#39;noloc&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.plan_path&#39;, fault=&#39;noloc&#39;, rate=2.8660436137071655e-07, name=&#39;drone_fxns_plan_path_noloc_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.plan_path.ca.comps.vision&#39;: [&#39;lack_of_detection&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.plan_path.ca.comps.vision&#39;, fault=&#39;lack_of_detection&#39;, rate=0.00018691588785046725, name=&#39;drone_fxns_plan_path_ca_comps_vision_lack_of_detection_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.plan_path.ca.comps.vision&#39;: [&#39;lack_of_detection&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.plan_path.ca.comps.vision&#39;, fault=&#39;lack_of_detection&#39;, rate=0.031152647975077875, name=&#39;drone_fxns_plan_path_ca_comps_vision_lack_of_detection_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.plan_path.ca.comps.vision&#39;: [&#39;lack_of_detection&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.plan_path.ca.comps.vision&#39;, fault=&#39;lack_of_detection&#39;, rate=0.028660436137071643, name=&#39;drone_fxns_plan_path_ca_comps_vision_lack_of_detection_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.plan_path.ca.comps.vision&#39;: [&#39;undesired_detection&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.plan_path.ca.comps.vision&#39;, fault=&#39;undesired_detection&#39;, rate=0.00018691588785046725, name=&#39;drone_fxns_plan_path_ca_comps_vision_undesired_detection_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.plan_path.ca.comps.vision&#39;: [&#39;undesired_detection&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.plan_path.ca.comps.vision&#39;, fault=&#39;undesired_detection&#39;, rate=0.031152647975077875, name=&#39;drone_fxns_plan_path_ca_comps_vision_undesired_detection_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.plan_path.ca.comps.vision&#39;: [&#39;undesired_detection&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.plan_path.ca.comps.vision&#39;, fault=&#39;undesired_detection&#39;, rate=0.028660436137071643, name=&#39;drone_fxns_plan_path_ca_comps_vision_undesired_detection_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.hold_payload&#39;: [&#39;break&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.hold_payload&#39;, fault=&#39;break&#39;, rate=2.2429906542056067e-11, name=&#39;drone_fxns_hold_payload_break_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.hold_payload&#39;: [&#39;break&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.hold_payload&#39;, fault=&#39;break&#39;, rate=3.7383177570093445e-09, name=&#39;drone_fxns_hold_payload_break_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.hold_payload&#39;: [&#39;break&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.hold_payload&#39;, fault=&#39;break&#39;, rate=3.439252336448597e-09, name=&#39;drone_fxns_hold_payload_break_t5p6&#39;, time=5.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={7.6: Injection(faults={&#39;drone.fxns.hold_payload&#39;: [&#39;deform&#39;]}, disturbances={})}, times=(7.6,), function=&#39;drone.fxns.hold_payload&#39;, fault=&#39;deform&#39;, rate=8.971962616822427e-11, name=&#39;drone_fxns_hold_payload_deform_t7p6&#39;, time=7.6, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={3.7: Injection(faults={&#39;drone.fxns.hold_payload&#39;: [&#39;deform&#39;]}, disturbances={})}, times=(3.7,), function=&#39;drone.fxns.hold_payload&#39;, fault=&#39;deform&#39;, rate=1.4953271028037378e-08, name=&#39;drone_fxns_hold_payload_deform_t3p7&#39;, time=3.7, phase=&#39;move&#39;),
+ SingleFaultScenario(sequence={5.6: Injection(faults={&#39;drone.fxns.hold_payload&#39;: [&#39;deform&#39;]}, disturbances={})}, times=(5.6,), function=&#39;drone.fxns.hold_payload&#39;, fault=&#39;deform&#39;, rate=1.3757009345794388e-08, name=&#39;drone_fxns_hold_payload_deform_t5p6&#39;, time=5.6, phase=&#39;move&#39;)]
 </pre></div>
 </div>
 </div>
@@ -1107,7 +1276,7 @@ endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 118/118 [01:32&lt;00:00,  1.27it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 177/177 [02:49&lt;00:00,  1.04it/s]
 </pre></div>
 </div>
 </div>
@@ -1123,7 +1292,7 @@ endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000
  &lt;Axes3D: title={&#39;center&#39;: &#39;trajectory&#39;}, xlabel=&#39;x&#39;, ylabel=&#39;y&#39;, zlabel=&#39;z&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/a0eab3f60050c819c2ca52d8d1f5ac8822878f5f6bbfdb58986fdfc769506324.png" src="../../_images/a0eab3f60050c819c2ca52d8d1f5ac8822878f5f6bbfdb58986fdfc769506324.png" />
+<img alt="../../_images/cf488a970f94234f5b90c2796bfcaa57a7f6335ac7892044252cdb426b06162f.png" src="../../_images/cf488a970f94234f5b90c2796bfcaa57a7f6335ac7892044252cdb426b06162f.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1171,709 +1340,716 @@ endclass.severities: {&#39;hazardous&#39;: 0.0, &#39;minor&#39;: 1.0000000000000
   <tbody>
     <tr>
       <th rowspan="2" valign="top">drone.fxns.plan_path.ca.comps.vision</th>
-      <th>undesired_detection</th>
-      <td>5.989583e-03</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <th>lack_of_detection</th>
+      <td>2.000000e-02</td>
+      <td>244.666667</td>
+      <td>24466.666667</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
     </tr>
     <tr>
-      <th>lack_of_detection</th>
-      <td>5.989583e-03</td>
-      <td>281.0</td>
-      <td>28100.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <th>undesired_detection</th>
+      <td>2.000000e-02</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
     </tr>
     <tr>
       <th>drone.fxns.store_ee</th>
       <th>lowcharge</th>
-      <td>6.708333e-06</td>
-      <td>281.0</td>
-      <td>28200.0</td>
-      <td>100.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>4.666667e-06</td>
+      <td>244.666667</td>
+      <td>25966.666667</td>
+      <td>1500.000000</td>
+      <td>0.000000</td>
+      <td>0.0000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
     </tr>
     <tr>
       <th>drone.fxns.dist_ee</th>
       <th>degr</th>
-      <td>2.395833e-06</td>
-      <td>281.0</td>
-      <td>29100.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>1.666667e-06</td>
+      <td>244.666667</td>
+      <td>30733.333333</td>
+      <td>1333.333333</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
       <th>drone.fxns.store_ee</th>
       <th>nocharge</th>
-      <td>1.916667e-06</td>
-      <td>281.0</td>
-      <td>28200.0</td>
-      <td>100.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>1.333333e-06</td>
+      <td>244.666667</td>
+      <td>29966.666667</td>
+      <td>566.666667</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
       <th>drone.fxns.dist_ee</th>
       <th>short</th>
-      <td>1.437500e-06</td>
-      <td>281.0</td>
-      <td>29600.0</td>
-      <td>1500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>1.000000e-06</td>
+      <td>244.666667</td>
+      <td>30900.000000</td>
+      <td>1500.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
       <th>drone.fxns.plan_path</th>
       <th>degloc</th>
-      <td>1.150000e-06</td>
-      <td>281.0</td>
-      <td>29100.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>8.000000e-07</td>
+      <td>244.666667</td>
+      <td>25466.666667</td>
+      <td>1000.000000</td>
+      <td>0.000000</td>
+      <td>0.0000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
     </tr>
     <tr>
       <th>drone.fxns.ctl_dof</th>
       <th>degctl</th>
-      <td>1.150000e-06</td>
-      <td>281.0</td>
-      <td>29100.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>8.000000e-07</td>
+      <td>244.666667</td>
+      <td>25633.333333</td>
+      <td>1166.666667</td>
+      <td>0.000000</td>
+      <td>0.0000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>ctldn</th>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>ctlbreak</th>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30633.333333</td>
+      <td>1233.333333</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
       <th>drone.fxns.affect_dof.ca.comps.rr</th>
       <th>ctlup</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rf</th>
-      <th>ctldn</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lr</th>
-      <th>ctlbreak</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>29100.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rr</th>
-      <th>ctlbreak</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>29100.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rf</th>
-      <th>ctlbreak</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>29100.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rr</th>
-      <th>ctldn</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lr</th>
-      <th>ctldn</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lf</th>
-      <th>ctlup</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rf</th>
-      <th>ctlup</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lf</th>
-      <th>ctlbreak</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>29100.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
       <th>drone.fxns.dist_ee</th>
       <th>break</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>29600.0</td>
-      <td>1500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30900.000000</td>
+      <td>1500.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>ctldn</th>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>ctlbreak</th>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30633.333333</td>
+      <td>1233.333333</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>ctlbreak</th>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30633.333333</td>
+      <td>1233.333333</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>ctlup</th>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>ctlup</th>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>ctlbreak</th>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30633.333333</td>
+      <td>1233.333333</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>ctldn</th>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>ctldn</th>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
       <th>drone.fxns.affect_dof.ca.comps.lr</th>
       <th>ctlup</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lf</th>
-      <th>ctldn</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rf</th>
-      <th>mechbreak</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rr</th>
-      <th>openc</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rf</th>
-      <th>short</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rr</th>
-      <th>mechbreak</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lr</th>
-      <th>mechbreak</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th rowspan="3" valign="top">drone.fxns.affect_dof.ca.comps.lf</th>
-      <th>mechbreak</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>openc</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>short</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lr</th>
-      <th>openc</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rr</th>
-      <th>short</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rf</th>
-      <th>openc</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lr</th>
-      <th>short</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.ctl_dof</th>
-      <th>noctl</th>
-      <td>2.875000e-07</td>
-      <td>281.0</td>
-      <td>29100.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.plan_path</th>
-      <th>noloc</th>
-      <td>2.875000e-07</td>
-      <td>281.0</td>
-      <td>29100.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rf</th>
-      <th>mechfriction</th>
-      <td>2.395833e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lr</th>
-      <th>mechfriction</th>
-      <td>2.395833e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rr</th>
-      <th>mechfriction</th>
-      <td>2.395833e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lf</th>
-      <th>mechfriction</th>
-      <td>2.395833e-07</td>
-      <td>281.0</td>
-      <td>28600.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>6.666667e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
       <th>drone.fxns.store_ee.ca.comps.s1p1</th>
       <th>nocharge</th>
-      <td>1.437500e-07</td>
-      <td>281.0</td>
-      <td>28200.0</td>
-      <td>100.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>4.800000e-07</td>
+      <td>244.666667</td>
+      <td>24566.666667</td>
+      <td>100.000000</td>
+      <td>0.000000</td>
+      <td>0.0000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
     </tr>
     <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rf</th>
-      <th>propbreak</th>
-      <td>1.437500e-07</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <th rowspan="2" valign="top">drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>mechbreak</th>
+      <td>3.333333e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lr</th>
-      <th>propbreak</th>
-      <td>1.437500e-07</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <th>openc</th>
+      <td>3.333333e-07</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rr</th>
-      <th>propbreak</th>
-      <td>1.437500e-07</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <th rowspan="2" valign="top">drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>openc</th>
+      <td>3.333333e-07</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lf</th>
-      <th>propbreak</th>
-      <td>1.437500e-07</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <th>mechbreak</th>
+      <td>3.333333e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
-      <th>drone.fxns.store_ee.ca.comps.s1p1</th>
-      <th>lowcharge</th>
-      <td>9.583333e-08</td>
-      <td>281.0</td>
-      <td>28200.0</td>
-      <td>100.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <th rowspan="3" valign="top">drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>mechbreak</th>
+      <td>3.333333e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rr</th>
-      <th>propstuck</th>
-      <td>9.583333e-08</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <th>openc</th>
+      <td>3.333333e-07</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
-      <th>drone.fxns.affect_dof.ca.comps.rf</th>
-      <th>propstuck</th>
-      <td>9.583333e-08</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lf</th>
-      <th>propstuck</th>
-      <td>9.583333e-08</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lr</th>
-      <th>propstuck</th>
-      <td>9.583333e-08</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th rowspan="3" valign="top">drone.fxns.store_ee.ca.comps.s1p1</th>
       <th>short</th>
-      <td>7.187500e-08</td>
-      <td>281.0</td>
-      <td>28200.0</td>
-      <td>100.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>3.333333e-07</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
-      <th>break</th>
-      <td>7.187500e-08</td>
-      <td>281.0</td>
-      <td>28200.0</td>
-      <td>100.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <th>drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>mechbreak</th>
+      <td>3.333333e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>short</th>
+      <td>3.333333e-07</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>openc</th>
+      <td>3.333333e-07</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>short</th>
+      <td>3.333333e-07</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>short</th>
+      <td>3.333333e-07</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">drone.fxns.store_ee.ca.comps.s1p1</th>
+      <th>lowcharge</th>
+      <td>3.200000e-07</td>
+      <td>244.666667</td>
+      <td>24566.666667</td>
+      <td>100.000000</td>
+      <td>0.000000</td>
+      <td>0.0000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
     </tr>
     <tr>
       <th>degr</th>
-      <td>7.187500e-08</td>
-      <td>281.0</td>
-      <td>28200.0</td>
-      <td>100.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>2.400000e-07</td>
+      <td>244.666667</td>
+      <td>30433.333333</td>
+      <td>1033.333333</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>break</th>
+      <td>2.400000e-07</td>
+      <td>244.666667</td>
+      <td>29966.666667</td>
+      <td>566.666667</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>short</th>
+      <td>2.400000e-07</td>
+      <td>244.666667</td>
+      <td>29966.666667</td>
+      <td>566.666667</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.plan_path</th>
+      <th>noloc</th>
+      <td>2.000000e-07</td>
+      <td>244.666667</td>
+      <td>25466.666667</td>
+      <td>1000.000000</td>
+      <td>0.000000</td>
+      <td>0.0000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.ctl_dof</th>
+      <th>noctl</th>
+      <td>2.000000e-07</td>
+      <td>244.666667</td>
+      <td>30566.666667</td>
+      <td>1166.666667</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>mechfriction</th>
+      <td>1.666667e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>mechfriction</th>
+      <td>1.666667e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>mechfriction</th>
+      <td>1.666667e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
       <th>drone.fxns.affect_dof.ca.comps.rr</th>
-      <th>propwarp</th>
-      <td>4.791667e-08</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <th>mechfriction</th>
+      <td>1.666667e-07</td>
+      <td>244.666667</td>
+      <td>30300.000000</td>
+      <td>900.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>propbreak</th>
+      <td>1.000000e-07</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>propbreak</th>
+      <td>1.000000e-07</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>propbreak</th>
+      <td>1.000000e-07</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>propbreak</th>
+      <td>1.000000e-07</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rf</th>
+      <th>propstuck</th>
+      <td>6.666667e-08</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>propstuck</th>
+      <td>6.666667e-08</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
+      <th>propstuck</th>
+      <td>6.666667e-08</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lf</th>
+      <th>propstuck</th>
+      <td>6.666667e-08</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
       <th>drone.fxns.affect_dof.ca.comps.rf</th>
       <th>propwarp</th>
-      <td>4.791667e-08</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>3.333333e-08</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
-      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>drone.fxns.affect_dof.ca.comps.rr</th>
       <th>propwarp</th>
-      <td>4.791667e-08</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>3.333333e-08</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
       <th>drone.fxns.affect_dof.ca.comps.lf</th>
       <th>propwarp</th>
-      <td>4.791667e-08</td>
-      <td>281.0</td>
-      <td>28300.0</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>3.333333e-08</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.affect_dof.ca.comps.lr</th>
+      <th>propwarp</th>
+      <td>3.333333e-08</td>
+      <td>244.666667</td>
+      <td>30100.000000</td>
+      <td>700.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <th>drone.fxns.hold_payload</th>
+      <th>deform</th>
+      <td>9.600000e-09</td>
+      <td>244.666667</td>
+      <td>30900.000000</td>
+      <td>1500.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
     <tr>
       <th>drone.fxns.manage_health</th>
       <th>lostfunction</th>
-      <td>7.187500e-09</td>
-      <td>281.0</td>
-      <td>29100.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>5.000000e-09</td>
+      <td>244.666667</td>
+      <td>25466.666667</td>
+      <td>1000.000000</td>
+      <td>0.000000</td>
+      <td>0.0000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
     </tr>
     <tr>
-      <th rowspan="2" valign="top">drone.fxns.hold_payload</th>
-      <th>deform</th>
-      <td>2.875000e-09</td>
-      <td>281.0</td>
-      <td>29600.0</td>
-      <td>1500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
+      <th>drone.fxns.hold_payload</th>
       <th>break</th>
-      <td>7.187500e-10</td>
-      <td>281.0</td>
-      <td>29600.0</td>
-      <td>1500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>2.400000e-09</td>
+      <td>244.666667</td>
+      <td>30900.000000</td>
+      <td>1500.000000</td>
+      <td>3333.333333</td>
+      <td>0.0001</td>
+      <td>0.000067</td>
+      <td>0.333333</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;environment&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">in_area</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="s2">&quot;all_safe&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>False
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 </section>

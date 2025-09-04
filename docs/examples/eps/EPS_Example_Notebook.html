@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EPS Example Notebook &mdash; fmdtools 2.1.3 documentation</title>
+  <title>EPS Example Notebook &mdash; fmdtools 2.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
 
   
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=179ab080"></script>
+      <script src="../../_static/documentation_options.js?v=b21de401"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-0">Version: 2.2.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -219,21 +219,12 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#history">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#what-about-human-induced-faults">What about human-induced faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#evaluating-joint-component-human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#testing-different-reaction-times">Testing different reaction times</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#tank-architecture-s">Tank Architecture(s)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#tank-analysis">Tank Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#full-set-of-modes">Full set of modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#defining-optimization-problem">Defining Optimization Problem</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#simulation">Simulation</a></li>
 </ul>
 </li>
 </ul>
@@ -400,12 +391,15 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_dict_repr"><code class="docutils literal notranslate"><span class="pre">get_dict_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_repr"><code class="docutils literal notranslate"><span class="pre">get_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
@@ -430,41 +424,25 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.NestedSimulation"><code class="docutils literal notranslate"><span class="pre">NestedSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.SimEvent"><code class="docutils literal notranslate"><span class="pre">SimEvent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_fault_sim"><code class="docutils literal notranslate"><span class="pre">exec_fault_sim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_sim"><code class="docutils literal notranslate"><span class="pre">exec_sim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample"><code class="docutils literal notranslate"><span class="pre">fault_sample()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample_from"><code class="docutils literal notranslate"><span class="pre">fault_sample_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.gen_sampleapproach"><code class="docutils literal notranslate"><span class="pre">gen_sampleapproach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_mdl_kwargs"><code class="docutils literal notranslate"><span class="pre">get_mdl_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_sim_call_kwargs"><code class="docutils literal notranslate"><span class="pre">get_sim_call_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nested_sample"><code class="docutils literal notranslate"><span class="pre">nested_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.parameter_sample"><code class="docutils literal notranslate"><span class="pre">parameter_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.process_nominal"><code class="docutils literal notranslate"><span class="pre">process_nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
@@ -555,7 +533,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
@@ -579,6 +556,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_to_return"><code class="docutils literal notranslate"><span class="pre">clean_to_return()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
@@ -765,13 +743,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/bc5adb0944bccd0278146466869bf129389c1994cff9d288f4419ea1794e1f12.png" src="../../_images/bc5adb0944bccd0278146466869bf129389c1994cff9d288f4419ea1794e1f12.png" />
+<img alt="../../_images/c4d3f2b7b460bd0c6da62236b08cdae0f640d645de8f2a93a64f119dbc71026c.png" src="../../_images/c4d3f2b7b460bd0c6da62236b08cdae0f640d645de8f2a93a64f119dbc71026c.png" />
 </div>
 </div>
 <p>As with dynamic models, in static models we use <code class="docutils literal notranslate"><span class="pre">fp.run_one_fault</span></code> to see the effects of single faults. All setup is performed in the Model class definition</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;ee_to_me&#39;</span><span class="p">,</span> <span class="s1">&#39;toohigh_torque&#39;</span><span class="p">,</span> <span class="n">to_return</span><span class="o">=</span><span class="s2">&quot;graph&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;ee_to_me&#39;</span><span class="p">,</span> <span class="s1">&#39;toohigh_torque&#39;</span><span class="p">,</span> <span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;graph&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -784,23 +762,24 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\common.py:549: UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\common.py:546: UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
   ax.set_xlim(*xlim)
 </pre></div>
 </div>
-<img alt="../../_images/17f25e2ddd599ee4c4342c83b5b2b50f49ba36420cb5cb87e22ff58e9c2c0cdf.png" src="../../_images/17f25e2ddd599ee4c4342c83b5b2b50f49ba36420cb5cb87e22ff58e9c2c0cdf.png" />
+<img alt="../../_images/3dba534fc6b4535a8e551b328dedbfb7f6cd3ae8fdbb34b7dde7f5e5f43d6082.png" src="../../_images/3dba534fc6b4535a8e551b328dedbfb7f6cd3ae8fdbb34b7dde7f5e5f43d6082.png" />
 </div>
 </div>
 <p>As a result, it’s better to look at the results graph for a visualization of what went wrong. In this case <code class="docutils literal notranslate"><span class="pre">resgraph</span></code> better represents the fault propagation of the system than in a dynamic model, since there is only one time-step to represent (rather than a set)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">set_edge_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">graph</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get_faulty</span><span class="p">()</span><span class="o">.</span><span class="n">tend</span><span class="o">.</span><span class="n">graph</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">set_edge_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/6bb23b8e1c42338bc281243e374e8d6a529500cb863ba0b2264f8d3b8494b7dc.png" src="../../_images/6bb23b8e1c42338bc281243e374e8d6a529500cb863ba0b2264f8d3b8494b7dc.png" />
+<img alt="../../_images/4154c98755f877326e91c6d0bcd506e6ba87b5f4dc6a8f10c65ad2f657aa61a5.png" src="../../_images/4154c98755f877326e91c6d0bcd506e6ba87b5f4dc6a8f10c65ad2f657aa61a5.png" />
 </div>
 </div>
 <p>We can run the set of single-fault scenarios on this model using <code class="docutils literal notranslate"><span class="pre">fmdtools.sim.propagate.single_faults</span></code>. For single-fault scenarios, one does not need to use a <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code>, since all faults are injected at a single time-step.</p>
@@ -812,34 +791,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   0%|          | 0/35 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  14%|█▍        | 5/35 [00:00&lt;00:00, 43.10it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  29%|██▊       | 10/35 [00:00&lt;00:00, 43.77it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  43%|████▎     | 15/35 [00:00&lt;00:00, 44.34it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  57%|█████▋    | 20/35 [00:00&lt;00:00, 44.10it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  71%|███████▏  | 25/35 [00:00&lt;00:00, 44.15it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  86%|████████▌ | 30/35 [00:00&lt;00:00, 44.87it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 45.38it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 44.65it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 39.75it/s]
 </pre></div>
 </div>
 </div>
@@ -895,7 +847,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>0.0</td>
     </tr>
     <tr>
-      <th>ee_to_he_open_circuit_t0p0</th>
+      <th>eps_fxns_ee_to_he_open_circuit_t0p0</th>
       <td>['ee_to_he', 'ee_h', 'he']</td>
       <td>['ee_to_he']</td>
       <td>0.0</td>
@@ -903,7 +855,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>2.409</td>
     </tr>
     <tr>
-      <th>supply_ee_open_circuit_t0p0</th>
+      <th>eps_fxns_supply_ee_open_circuit_t0p0</th>
       <td>['supply_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_o', ...</td>
       <td>['supply_ee']</td>
       <td>0.0</td>
@@ -911,7 +863,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>3.1755</td>
     </tr>
     <tr>
-      <th>ee_to_he_high_heat_t0p0</th>
+      <th>eps_fxns_ee_to_he_high_heat_t0p0</th>
       <td>['supply_ee', 'store_ee', 'ee_to_he', 'ee_2', ...</td>
       <td>['supply_ee', 'store_ee', 'ee_to_he']</td>
       <td>0.0</td>
@@ -919,7 +871,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>10.95</td>
     </tr>
     <tr>
-      <th>ee_to_oe_optical_resist_t0p0</th>
+      <th>eps_fxns_ee_to_oe_optical_resist_t0p0</th>
       <td>['ee_to_oe', 'ee_o', 'oe', 'he', 'waste_he_o']</td>
       <td>['ee_to_oe']</td>
       <td>0.0</td>
@@ -927,7 +879,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>11.388</td>
     </tr>
     <tr>
-      <th>supply_ee_short_t0p0</th>
+      <th>eps_fxns_supply_ee_short_t0p0</th>
       <td>['supply_ee', 'store_ee', 'distribute_ee', 'ee...</td>
       <td>['supply_ee', 'store_ee', 'distribute_ee']</td>
       <td>0.0</td>
@@ -935,7 +887,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>22.557</td>
     </tr>
     <tr>
-      <th>ee_to_he_low_heat_t0p0</th>
+      <th>eps_fxns_ee_to_he_low_heat_t0p0</th>
       <td>['ee_to_he', 'he']</td>
       <td>['ee_to_he']</td>
       <td>0.000002</td>
@@ -943,7 +895,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>48.18</td>
     </tr>
     <tr>
-      <th>ee_to_oe_burnt_out_t0p0</th>
+      <th>eps_fxns_ee_to_oe_burnt_out_t0p0</th>
       <td>['ee_to_oe', 'ee_o', 'oe', 'he', 'waste_he_o']</td>
       <td>['ee_to_oe']</td>
       <td>0.000002</td>
@@ -951,7 +903,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>48.18</td>
     </tr>
     <tr>
-      <th>import_signal_no_signal_t0p0</th>
+      <th>eps_fxns_import_signal_no_signal_t0p0</th>
       <td>['import_signal', 'ee_2', 'ee_3', 'ee_m', 'ee_...</td>
       <td>['import_signal']</td>
       <td>0.000001</td>
@@ -959,7 +911,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>87.6</td>
     </tr>
     <tr>
-      <th>ee_to_he_toohigh_heat_t0p0</th>
+      <th>eps_fxns_ee_to_he_toohigh_heat_t0p0</th>
       <td>['store_ee', 'distribute_ee', 'ee_to_he', 'ee_...</td>
       <td>['store_ee', 'distribute_ee', 'ee_to_he']</td>
       <td>0.0</td>
@@ -967,7 +919,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>111.69</td>
     </tr>
     <tr>
-      <th>supply_ee_adverse_resist_t0p0</th>
+      <th>eps_fxns_supply_ee_adverse_resist_t0p0</th>
       <td>['supply_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_o', ...</td>
       <td>['supply_ee']</td>
       <td>0.000002</td>
@@ -975,47 +927,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>144.54</td>
     </tr>
     <tr>
-      <th>export_waste_ho_hot_sink_t0p0</th>
-      <td>['export_waste_ho', 'he', 'waste_he_o']</td>
-      <td>['export_waste_ho']</td>
-      <td>0.00001</td>
-      <td>500.0</td>
-      <td>219.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_h1_ineffective_sink_t0p0</th>
-      <td>['export_waste_h1', 'he', 'waste_he_1']</td>
-      <td>['export_waste_h1']</td>
-      <td>0.000005</td>
-      <td>1000.0</td>
-      <td>219.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_h1_hot_sink_t0p0</th>
-      <td>['export_waste_h1', 'he', 'waste_he_1']</td>
-      <td>['export_waste_h1']</td>
-      <td>0.00001</td>
-      <td>500.0</td>
-      <td>219.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_hm_ineffective_sink_t0p0</th>
-      <td>['export_waste_hm', 'he', 'waste_he_m']</td>
-      <td>['export_waste_hm']</td>
-      <td>0.000005</td>
-      <td>1000.0</td>
-      <td>219.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_hm_hot_sink_t0p0</th>
-      <td>['export_waste_hm', 'he', 'waste_he_m']</td>
-      <td>['export_waste_hm']</td>
-      <td>0.00001</td>
-      <td>500.0</td>
-      <td>219.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_ho_ineffective_sink_t0p0</th>
+      <th>eps_fxns_export_waste_ho_ineffective_sink_t0p0</th>
       <td>['export_waste_ho', 'he', 'waste_he_o']</td>
       <td>['export_waste_ho']</td>
       <td>0.000005</td>
@@ -1023,7 +935,47 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>219.0</td>
     </tr>
     <tr>
-      <th>export_he_hot_sink_t0p0</th>
+      <th>eps_fxns_export_waste_ho_hot_sink_t0p0</th>
+      <td>['export_waste_ho', 'he', 'waste_he_o']</td>
+      <td>['export_waste_ho']</td>
+      <td>0.00001</td>
+      <td>500.0</td>
+      <td>219.0</td>
+    </tr>
+    <tr>
+      <th>eps_fxns_export_waste_h1_ineffective_sink_t0p0</th>
+      <td>['export_waste_h1', 'he', 'waste_he_1']</td>
+      <td>['export_waste_h1']</td>
+      <td>0.000005</td>
+      <td>1000.0</td>
+      <td>219.0</td>
+    </tr>
+    <tr>
+      <th>eps_fxns_export_waste_h1_hot_sink_t0p0</th>
+      <td>['export_waste_h1', 'he', 'waste_he_1']</td>
+      <td>['export_waste_h1']</td>
+      <td>0.00001</td>
+      <td>500.0</td>
+      <td>219.0</td>
+    </tr>
+    <tr>
+      <th>eps_fxns_export_waste_hm_hot_sink_t0p0</th>
+      <td>['export_waste_hm', 'he', 'waste_he_m']</td>
+      <td>['export_waste_hm']</td>
+      <td>0.00001</td>
+      <td>500.0</td>
+      <td>219.0</td>
+    </tr>
+    <tr>
+      <th>eps_fxns_export_waste_hm_ineffective_sink_t0p0</th>
+      <td>['export_waste_hm', 'he', 'waste_he_m']</td>
+      <td>['export_waste_hm']</td>
+      <td>0.000005</td>
+      <td>1000.0</td>
+      <td>219.0</td>
+    </tr>
+    <tr>
+      <th>eps_fxns_export_he_hot_sink_t0p0</th>
       <td>['export_he', 'he']</td>
       <td>['export_he']</td>
       <td>0.00001</td>
@@ -1031,7 +983,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>262.8</td>
     </tr>
     <tr>
-      <th>import_ee_low_v_t0p0</th>
+      <th>eps_fxns_import_ee_low_v_t0p0</th>
       <td>['import_ee', 'ee_1', 'ee_2', 'ee_3', 'ee_m', ...</td>
       <td>['import_ee']</td>
       <td>0.00001</td>
@@ -1039,15 +991,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>306.6</td>
     </tr>
     <tr>
-      <th>supply_ee_major_overload_t0p0</th>
-      <td>['supply_ee', 'store_ee', 'ee_2', 'he', 'waste...</td>
-      <td>['supply_ee', 'store_ee']</td>
-      <td>0.000003</td>
-      <td>2400.0</td>
-      <td>315.36</td>
-    </tr>
-    <tr>
-      <th>export_he_ineffective_sink_t0p0</th>
+      <th>eps_fxns_export_he_ineffective_sink_t0p0</th>
       <td>['export_he', 'he']</td>
       <td>['export_he']</td>
       <td>0.000005</td>
@@ -1055,7 +999,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>328.5</td>
     </tr>
     <tr>
-      <th>store_ee_low_storage_t0p0</th>
+      <th>eps_fxns_store_ee_low_storage_t0p0</th>
       <td>['store_ee']</td>
       <td>['store_ee']</td>
       <td>0.000005</td>
@@ -1063,15 +1007,15 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>438.0</td>
     </tr>
     <tr>
-      <th>import_ee_high_v_t0p0</th>
-      <td>['import_ee', 'store_ee', 'ee_1', 'ee_2']</td>
-      <td>['import_ee', 'store_ee']</td>
-      <td>0.000005</td>
-      <td>2100.0</td>
-      <td>459.9</td>
+      <th>eps_fxns_supply_ee_major_overload_t0p0</th>
+      <td>['supply_ee', 'store_ee', 'ee_2', 'ee_3', 'ee_...</td>
+      <td>['supply_ee', 'store_ee']</td>
+      <td>0.000003</td>
+      <td>3650.0</td>
+      <td>479.61</td>
     </tr>
     <tr>
-      <th>import_ee_no_v_t0p0</th>
+      <th>eps_fxns_import_ee_no_v_t0p0</th>
       <td>['import_ee', 'ee_1', 'ee_2', 'ee_3', 'ee_m', ...</td>
       <td>['import_ee']</td>
       <td>0.00001</td>
@@ -1079,7 +1023,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>678.9</td>
     </tr>
     <tr>
-      <th>store_ee_no_storage_t0p0</th>
+      <th>eps_fxns_store_ee_no_storage_t0p0</th>
       <td>['store_ee', 'ee_3', 'ee_m', 'ee_o', 'ee_h', '...</td>
       <td>['store_ee']</td>
       <td>0.000005</td>
@@ -1087,7 +1031,15 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>711.75</td>
     </tr>
     <tr>
-      <th>import_signal_partial_signal_t0p0</th>
+      <th>eps_fxns_import_ee_high_v_t0p0</th>
+      <td>['import_ee', 'store_ee', 'ee_1', 'ee_2', 'ee_...</td>
+      <td>['import_ee', 'store_ee']</td>
+      <td>0.000005</td>
+      <td>3350.0</td>
+      <td>733.65</td>
+    </tr>
+    <tr>
+      <th>eps_fxns_import_signal_partial_signal_t0p0</th>
       <td>['import_signal', 'ee_2', 'ee_3', 'ee_m', 'ee_...</td>
       <td>['import_signal']</td>
       <td>0.00001</td>
@@ -1095,7 +1047,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>876.0</td>
     </tr>
     <tr>
-      <th>distribute_ee_adverse_resist_t0p0</th>
+      <th>eps_fxns_distribute_ee_adverse_resist_t0p0</th>
       <td>['distribute_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_...</td>
       <td>['distribute_ee']</td>
       <td>0.00001</td>
@@ -1103,7 +1055,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>1204.5</td>
     </tr>
     <tr>
-      <th>ee_to_me_open_circuit_t0p0</th>
+      <th>eps_fxns_ee_to_me_open_circuit_t0p0</th>
       <td>['ee_to_me', 'ee_m', 'me', 'he', 'waste_he_m']</td>
       <td>['ee_to_me']</td>
       <td>0.00005</td>
@@ -1111,7 +1063,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>1423.5</td>
     </tr>
     <tr>
-      <th>distribute_ee_poor_alloc_t0p0</th>
+      <th>eps_fxns_distribute_ee_poor_alloc_t0p0</th>
       <td>['distribute_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_...</td>
       <td>['distribute_ee']</td>
       <td>0.00002</td>
@@ -1119,7 +1071,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>1533.0</td>
     </tr>
     <tr>
-      <th>ee_to_me_high_torque_t0p0</th>
+      <th>eps_fxns_ee_to_me_high_torque_t0p0</th>
       <td>['ee_to_me', 'ee_m', 'me', 'he', 'waste_he_m']</td>
       <td>['ee_to_me']</td>
       <td>0.0001</td>
@@ -1127,7 +1079,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>1971.0</td>
     </tr>
     <tr>
-      <th>supply_ee_minor_overload_t0p0</th>
+      <th>eps_fxns_supply_ee_minor_overload_t0p0</th>
       <td>['supply_ee', 'store_ee', 'distribute_ee', 'ee...</td>
       <td>['supply_ee', 'store_ee', 'distribute_ee']</td>
       <td>0.00001</td>
@@ -1135,7 +1087,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>2255.7</td>
     </tr>
     <tr>
-      <th>distribute_ee_open_circuit_t0p0</th>
+      <th>eps_fxns_distribute_ee_open_circuit_t0p0</th>
       <td>['distribute_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_...</td>
       <td>['distribute_ee']</td>
       <td>0.00003</td>
@@ -1143,7 +1095,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>3613.5</td>
     </tr>
     <tr>
-      <th>distribute_ee_short_t0p0</th>
+      <th>eps_fxns_distribute_ee_short_t0p0</th>
       <td>['store_ee', 'distribute_ee', 'ee_3', 'ee_m', ...</td>
       <td>['store_ee', 'distribute_ee']</td>
       <td>0.00002</td>
@@ -1151,7 +1103,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>4161.0</td>
     </tr>
     <tr>
-      <th>ee_to_me_short_t0p0</th>
+      <th>eps_fxns_ee_to_me_short_t0p0</th>
       <td>['store_ee', 'distribute_ee', 'ee_to_me', 'ee_...</td>
       <td>['store_ee', 'distribute_ee', 'ee_to_me']</td>
       <td>0.00005</td>
@@ -1159,7 +1111,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>10840.5</td>
     </tr>
     <tr>
-      <th>ee_to_me_toohigh_torque_t0p0</th>
+      <th>eps_fxns_ee_to_me_toohigh_torque_t0p0</th>
       <td>['store_ee', 'distribute_ee', 'ee_to_me', 'ee_...</td>
       <td>['store_ee', 'distribute_ee', 'ee_to_me']</td>
       <td>0.00005</td>
@@ -1167,7 +1119,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <td>11059.5</td>
     </tr>
     <tr>
-      <th>ee_to_me_low_torque_t0p0</th>
+      <th>eps_fxns_ee_to_me_low_torque_t0p0</th>
       <td>['store_ee', 'distribute_ee', 'ee_to_me', 'ee_...</td>
       <td>['store_ee', 'distribute_ee', 'ee_to_me']</td>
       <td>0.0001</td>

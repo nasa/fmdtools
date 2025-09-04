@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.flow &mdash; fmdtools 2.1.3 documentation</title>
+  <title>fmdtools.define.flow &mdash; fmdtools 2.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
 
   
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=179ab080"></script>
+      <script src="../_static/documentation_options.js?v=b21de401"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-0">Version: 2.2.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -219,21 +219,12 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#history">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#what-about-human-induced-faults">What about human-induced faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#evaluating-joint-component-human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#testing-different-reaction-times">Testing different reaction times</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#tank-architecture-s">Tank Architecture(s)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#tank-analysis">Tank Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#full-set-of-modes">Full set of modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#defining-optimization-problem">Defining Optimization Problem</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html">Cooling Tank Model Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#simulation">Simulation</a></li>
 </ul>
 </li>
 </ul>
@@ -400,12 +391,15 @@
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_dict_repr"><code class="docutils literal notranslate"><span class="pre">get_dict_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_repr"><code class="docutils literal notranslate"><span class="pre">get_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
@@ -430,41 +424,25 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.NestedSimulation"><code class="docutils literal notranslate"><span class="pre">NestedSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.SimEvent"><code class="docutils literal notranslate"><span class="pre">SimEvent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_fault_sim"><code class="docutils literal notranslate"><span class="pre">exec_fault_sim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_sim"><code class="docutils literal notranslate"><span class="pre">exec_sim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.fault_sample"><code class="docutils literal notranslate"><span class="pre">fault_sample()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.fault_sample_from"><code class="docutils literal notranslate"><span class="pre">fault_sample_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.gen_sampleapproach"><code class="docutils literal notranslate"><span class="pre">gen_sampleapproach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.get_mdl_kwargs"><code class="docutils literal notranslate"><span class="pre">get_mdl_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.get_sim_call_kwargs"><code class="docutils literal notranslate"><span class="pre">get_sim_call_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nested_sample"><code class="docutils literal notranslate"><span class="pre">nested_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.pack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.parameter_sample"><code class="docutils literal notranslate"><span class="pre">parameter_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.process_nominal"><code class="docutils literal notranslate"><span class="pre">process_nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
@@ -555,7 +533,6 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
@@ -579,6 +556,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.clean_to_return"><code class="docutils literal notranslate"><span class="pre">clean_to_return()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
@@ -796,19 +774,20 @@
 and respresent shared variables or states.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">ExampleFlow</span><span class="p">(</span><span class="n">Flow</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 <span class="gp">... </span>    <span class="n">container_s</span> <span class="o">=</span> <span class="n">ExampleState</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span> <span class="o">=</span> <span class="n">ExampleFlow</span><span class="p">(</span><span class="s1">&#39;exf&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span>
-<span class="go">exf ExampleFlow flow: ExampleState(x=0.0, y=1.0)</span>
+<span class="go">exf ExampleFlow</span>
+<span class="go">- s=ExampleState(x=np.float64(0.0), y=np.float64(1.0))</span>
 </pre></div>
 </div>
 <p>Note that copying creates independent copies of states:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exf2</span> <span class="o">=</span> <span class="n">exf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf2</span>
-<span class="go">exf ExampleFlow flow: ExampleState(x=0.0, y=1.0)</span>
+<span class="go">exf ExampleFlow</span>
+<span class="go">- s=ExampleState(x=np.float64(0.0), y=np.float64(1.0))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf2</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">2.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf2</span><span class="o">.</span><span class="n">s</span> <span class="o">==</span> <span class="n">exf</span><span class="o">.</span><span class="n">s</span>
 <span class="go">False</span>
@@ -877,8 +856,69 @@ and respresent shared variables or states.</p>
 <dl class="py class" id="module-fmdtools.define.flow.multiflow">
 <dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.flow.multiflow.</span></span><span class="sig-name descname"><span class="pre">ExampleMultiFlow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['s']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ExampleFlow</span></code>, <a class="reference internal" href="#fmdtools.define.flow.multiflow.MultiFlow" title="fmdtools.define.flow.multiflow.MultiFlow"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFlow</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.flow.multiflow.MultiFlow" title="fmdtools.define.flow.multiflow.MultiFlow"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFlow</span></code></a></p>
 <p>Extension of ExampleFlow to MultiFlow case.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow.container_s">
+<span class="sig-name descname"><span class="pre">container_s</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow.container_s" title="Link to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">ExampleState</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow.containers">
+<span class="sig-name descname"><span class="pre">containers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('s',)</span></em><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow.containers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow.glob">
+<span class="sig-name descname"><span class="pre">glob</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow.glob" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow.h">
+<span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow.h" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow.indicators">
+<span class="sig-name descname"><span class="pre">indicators</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow.indicators" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow.locals">
+<span class="sig-name descname"><span class="pre">locals</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow.locals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow.mutables">
+<span class="sig-name descname"><span class="pre">mutables</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow.mutables" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow.p">
+<span class="sig-name descname"><span class="pre">p</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow.p" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow.root">
+<span class="sig-name descname"><span class="pre">root</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow.root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow.s">
+<span class="sig-name descname"><span class="pre">s</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow.s" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.ExampleMultiFlow.track">
+<span class="sig-name descname"><span class="pre">track</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.ExampleMultiFlow.track" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -903,20 +943,27 @@ as well as a single global view (which may represent the actual value)</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span> <span class="o">=</span> <span class="n">ExampleMultiFlow</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_flow</span> <span class="o">=</span> <span class="n">exf</span><span class="o">.</span><span class="n">create_local</span><span class="p">(</span><span class="s2">&quot;sub_flow&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_flow</span>
-<span class="go">sub_flow ExampleMultiFlow flow: ExampleState(x=1.0, y=1.0)</span>
+<span class="go">sub_flow ExampleMultiFlow</span>
+<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_flow</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span>
-<span class="go">examplemultiflow ExampleMultiFlow flow: ExampleState(x=1.0, y=1.0)</span>
-<span class="go">   sub_flow ExampleMultiFlow flow: ExampleState(x=0.0, y=0.0)</span>
+<span class="go">examplemultiflow ExampleMultiFlow</span>
+<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>
+<span class="go">LOCALS:</span>
+<span class="go">- sub_flow=(s=(x=np.float64(0.0), y=np.float64(0.0)))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">to_get</span><span class="o">=</span><span class="s2">&quot;sub_flow&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span>
-<span class="go">examplemultiflow ExampleMultiFlow flow: ExampleState(x=0.0, y=0.0)</span>
-<span class="go">   sub_flow ExampleMultiFlow flow: ExampleState(x=0.0, y=0.0)</span>
+<span class="go">examplemultiflow ExampleMultiFlow</span>
+<span class="go">- s=ExampleState(x=np.float64(0.0), y=np.float64(0.0))</span>
+<span class="go">LOCALS:</span>
+<span class="go">- sub_flow=(s=(x=np.float64(0.0), y=np.float64(0.0)))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_flow</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">to_get</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span>
-<span class="go">examplemultiflow ExampleMultiFlow flow: ExampleState(x=10.0, y=10.0)</span>
-<span class="go">   sub_flow ExampleMultiFlow flow: ExampleState(x=10.0, y=0.0)</span>
+<span class="go">examplemultiflow ExampleMultiFlow</span>
+<span class="go">- s=ExampleState(x=np.float64(10.0), y=np.float64(10.0))</span>
+<span class="go">LOCALS:</span>
+<span class="go">- sub_flow=(s=(x=np.float64(10.0), y=np.float64(0.0)))</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -934,6 +981,11 @@ as well as a single global view (which may represent the actual value)</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.check_dict_creation">
 <span class="sig-name descname"><span class="pre">check_dict_creation</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.check_dict_creation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.containers">
+<span class="sig-name descname"><span class="pre">containers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.containers" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1004,14 +1056,20 @@ same initial states as the multiflow</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.create_local_repr">
+<span class="sig-name descname"><span class="pre">create_local_repr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.create_local_repr" title="Link to this definition"></a></dt>
+<dd><p>Create repr string for local flows.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.find_mutables">
-<span class="sig-name descname"><span class="pre">find_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.find_mutables" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find_mutables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.find_mutables" title="Link to this definition"></a></dt>
 <dd><p>Find mutables (includes locals).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.flexible_roles">
-<span class="sig-name descname"><span class="pre">flexible_roles</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['locals']</span></em><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.flexible_roles" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">flexible_roles</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['local']</span></em><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.flexible_roles" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1036,18 +1094,46 @@ same initial states as the multiflow</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_f</span> <span class="o">=</span> <span class="n">exf</span><span class="o">.</span><span class="n">create_local</span><span class="p">(</span><span class="s2">&quot;sub_f&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_f2</span> <span class="o">=</span> <span class="n">exf</span><span class="o">.</span><span class="n">create_local</span><span class="p">(</span><span class="s2">&quot;sub_f2&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_f</span><span class="o">.</span><span class="n">get_view</span><span class="p">(</span><span class="s2">&quot;global&quot;</span><span class="p">)</span>
-<span class="go">examplemultiflow ExampleMultiFlow flow: ExampleState(x=1.0, y=1.0)</span>
-<span class="go">   sub_f ExampleMultiFlow flow: ExampleState(x=1.0, y=1.0)</span>
-<span class="go">   sub_f2 ExampleMultiFlow flow: ExampleState(x=1.0, y=1.0)</span>
+<span class="go">examplemultiflow ExampleMultiFlow</span>
+<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>
+<span class="go">LOCALS:</span>
+<span class="go">- sub_f=(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
+<span class="go">- sub_f2=(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_f</span><span class="o">.</span><span class="n">get_view</span><span class="p">(</span><span class="s2">&quot;sub_f2&quot;</span><span class="p">)</span>
-<span class="go">sub_f2 ExampleMultiFlow flow: ExampleState(x=1.0, y=1.0)</span>
+<span class="go">sub_f2 ExampleMultiFlow</span>
+<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.glob">
+<span class="sig-name descname"><span class="pre">glob</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.glob" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.h">
 <span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.h" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.indicators">
+<span class="sig-name descname"><span class="pre">indicators</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.indicators" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.locals">
+<span class="sig-name descname"><span class="pre">locals</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.locals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.mutables">
+<span class="sig-name descname"><span class="pre">mutables</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.mutables" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1067,13 +1153,18 @@ same initial states as the multiflow</p></li>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.root">
+<span class="sig-name descname"><span class="pre">root</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.s">
 <span class="sig-name descname"><span class="pre">s</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.s" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.slots">
-<span class="sig-name descname"><span class="pre">slots</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['locals',</span> <span class="pre">'__dict__']</span></em><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.slots" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.track">
+<span class="sig-name descname"><span class="pre">track</span></span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.track" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1195,33 +1286,32 @@ and “received” (a set of messages received).</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span> <span class="o">=</span> <span class="n">ecf</span><span class="o">.</span><span class="n">create_comms</span><span class="p">(</span><span class="s2">&quot;t1&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="o">=</span> <span class="n">ecf</span><span class="o">.</span><span class="n">create_comms</span><span class="p">(</span><span class="s2">&quot;t2&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ecf</span>
-<span class="go">examplecommsflow ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)</span>
-<span class="go">   t1: t1 ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)</span>
-<span class="go">       out: t1_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)</span>
-<span class="go">       in: {}</span>
-<span class="go">       received: {}</span>
-<span class="go">   t2: t2 ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)</span>
-<span class="go">       out: t2_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)</span>
-<span class="go">       in: {}</span>
-<span class="go">       received: {}</span>
+<span class="go">examplecommsflow ExampleCommsFlow</span>
+<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>
+<span class="go">COMMS:</span>
+<span class="go">- t1=(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
+<span class="go">- t2=(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;t2&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span>
-<span class="go">t1 ExampleCommsFlow flow: ExampleState(x=10.0, y=10.0)</span>
-<span class="go">       out: t1_out ExampleCommsFlow flow: ExampleState(x=10.0, y=1.0)</span>
-<span class="go">       in: {}</span>
-<span class="go">       received: {}</span>
+<span class="go">t1 ExampleCommsFlow</span>
+<span class="go">- s=ExampleState(x=np.float64(10.0), y=np.float64(10.0))</span>
+<span class="go">- out(): t1_out(s=(x=np.float64(10.0), y=np.float64(1.0)))</span>
+<span class="go">- inbox(): {}</span>
+<span class="go">- received(): {}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span>
-<span class="go">t2 ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)</span>
-<span class="go">       out: t2_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)</span>
-<span class="go">       in: {&#39;t1&#39;: (&#39;x&#39;,)}</span>
-<span class="go">       received: {}</span>
+<span class="go">t2 ExampleCommsFlow</span>
+<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>
+<span class="go">- out(): t2_out(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
+<span class="go">- inbox(): {&#39;t1&#39;: (&#39;x&#39;,)}</span>
+<span class="go">- received(): {}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span><span class="o">.</span><span class="n">receive</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span>
-<span class="go">t2 ExampleCommsFlow flow: ExampleState(x=10.0, y=1.0)</span>
-<span class="go">       out: t2_out ExampleCommsFlow flow: ExampleState(x=1.0, y=1.0)</span>
-<span class="go">       in: {}</span>
-<span class="go">       received: {&#39;t1&#39;: (&#39;x&#39;,)}</span>
+<span class="go">t2 ExampleCommsFlow</span>
+<span class="go">- s=ExampleState(x=np.float64(10.0), y=np.float64(1.0))</span>
+<span class="go">- out(): t2_out(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
+<span class="go">- inbox(): {}</span>
+<span class="go">- received(): {&#39;t1&#39;: (&#39;x&#39;,)}</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -1259,6 +1349,11 @@ and “received” (a set of messages received).</p>
 <dd><p>Clear the inbox of the function so it can recieve more messages.</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.containers">
+<span class="sig-name descname"><span class="pre">containers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.containers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['s']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.copy" title="Link to this definition"></a></dt>
@@ -1288,9 +1383,14 @@ and “received” (a set of messages received).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.find_mutables">
-<span class="sig-name descname"><span class="pre">find_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.find_mutables" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find_mutables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.find_mutables" title="Link to this definition"></a></dt>
 <dd><p>Add in/received dicts to mutables.</p>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.fxns">
+<span class="sig-name descname"><span class="pre">fxns</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.fxns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.get_port">
@@ -1302,6 +1402,11 @@ respectively.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.glob">
+<span class="sig-name descname"><span class="pre">glob</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.glob" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.h">
 <span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.h" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -1311,6 +1416,26 @@ respectively.</p>
 <span class="sig-name descname"><span class="pre">inbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fxnname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'local'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.inbox" title="Link to this definition"></a></dt>
 <dd><p>Provide list of messages which have not been received by the function yet.</p>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.indicators">
+<span class="sig-name descname"><span class="pre">indicators</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.indicators" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.locals">
+<span class="sig-name descname"><span class="pre">locals</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.locals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.mutables">
+<span class="sig-name descname"><span class="pre">mutables</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.mutables" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.out">
@@ -1351,6 +1476,11 @@ respectively.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.root">
+<span class="sig-name descname"><span class="pre">root</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.s">
 <span class="sig-name descname"><span class="pre">s</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.s" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -1374,8 +1504,8 @@ received (update its internal view).</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.slots">
-<span class="sig-name descname"><span class="pre">slots</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['fxns',</span> <span class="pre">'__dict__']</span></em><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.slots" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.track">
+<span class="sig-name descname"><span class="pre">track</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.track" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1385,21 +1515,79 @@ received (update its internal view).</p>
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.flow.commsflow.</span></span><span class="sig-name descname"><span class="pre">CommsFlowGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['local']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlowGraph" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.flow.multiflow.MultiFlowGraph" title="fmdtools.define.flow.multiflow.MultiFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFlowGraph</span></code></a></p>
 <p>Create graph representation of the CommsFlow.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>g</strong> – Graph of the commsflow connections.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>networkx.DiGraph</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.flow.commsflow.</span></span><span class="sig-name descname"><span class="pre">ExampleCommsFlow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['s']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ExampleFlow</span></code>, <a class="reference internal" href="#fmdtools.define.flow.commsflow.CommsFlow" title="fmdtools.define.flow.commsflow.CommsFlow"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.flow.commsflow.CommsFlow" title="fmdtools.define.flow.commsflow.CommsFlow"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></p>
 <p>Extension of ExampleFlow to CommsFlow case.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.container_s">
+<span class="sig-name descname"><span class="pre">container_s</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.container_s" title="Link to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">ExampleState</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.containers">
+<span class="sig-name descname"><span class="pre">containers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('s',)</span></em><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.containers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.fxns">
+<span class="sig-name descname"><span class="pre">fxns</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.fxns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.glob">
+<span class="sig-name descname"><span class="pre">glob</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.glob" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.h">
+<span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.h" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.indicators">
+<span class="sig-name descname"><span class="pre">indicators</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.indicators" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.locals">
+<span class="sig-name descname"><span class="pre">locals</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.locals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.mutables">
+<span class="sig-name descname"><span class="pre">mutables</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.mutables" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.p">
+<span class="sig-name descname"><span class="pre">p</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.p" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.root">
+<span class="sig-name descname"><span class="pre">root</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.s">
+<span class="sig-name descname"><span class="pre">s</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.s" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.ExampleCommsFlow.track">
+<span class="sig-name descname"><span class="pre">track</span></span><a class="headerlink" href="#fmdtools.define.flow.commsflow.ExampleCommsFlow.track" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </section>

@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Paper Demonstration &mdash; fmdtools 2.1.3 documentation</title>
+  <title>fmdtools Paper Demonstration &mdash; fmdtools 2.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
 
   
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=179ab080"></script>
+      <script src="../../_static/documentation_options.js?v=b21de401"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-0">Version: 2.2.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -219,21 +219,12 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#history">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#what-about-human-induced-faults">What about human-induced faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#evaluating-joint-component-human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#testing-different-reaction-times">Testing different reaction times</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#tank-architecture-s">Tank Architecture(s)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#tank-analysis">Tank Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#full-set-of-modes">Full set of modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#defining-optimization-problem">Defining Optimization Problem</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#simulation">Simulation</a></li>
 </ul>
 </li>
 </ul>
@@ -400,12 +391,15 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_dict_repr"><code class="docutils literal notranslate"><span class="pre">get_dict_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_repr"><code class="docutils literal notranslate"><span class="pre">get_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
@@ -430,41 +424,25 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.NestedSimulation"><code class="docutils literal notranslate"><span class="pre">NestedSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.SimEvent"><code class="docutils literal notranslate"><span class="pre">SimEvent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_fault_sim"><code class="docutils literal notranslate"><span class="pre">exec_fault_sim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_sim"><code class="docutils literal notranslate"><span class="pre">exec_sim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample"><code class="docutils literal notranslate"><span class="pre">fault_sample()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample_from"><code class="docutils literal notranslate"><span class="pre">fault_sample_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.gen_sampleapproach"><code class="docutils literal notranslate"><span class="pre">gen_sampleapproach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_mdl_kwargs"><code class="docutils literal notranslate"><span class="pre">get_mdl_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_sim_call_kwargs"><code class="docutils literal notranslate"><span class="pre">get_sim_call_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nested_sample"><code class="docutils literal notranslate"><span class="pre">nested_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.parameter_sample"><code class="docutils literal notranslate"><span class="pre">parameter_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.process_nominal"><code class="docutils literal notranslate"><span class="pre">process_nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
@@ -555,7 +533,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
@@ -579,6 +556,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_to_return"><code class="docutils literal notranslate"><span class="pre">clean_to_return()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
@@ -764,7 +742,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.define.architecture.function</span><span class="w"> </span><span class="kn">import</span> <span class="n">FunctionArchitecture</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.define.block.function</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenericFxn</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Drone</span><span class="p">(</span><span class="n">FunctionArchitecture</span><span class="p">):</span>
-    <span class="vm">__slots__</span><span class="o">=</span><span class="p">()</span>
+
     <span class="n">default_sp</span><span class="o">=</span><span class="p">{}</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">init_architecture</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1">#add flows to the model</span>
@@ -814,13 +792,43 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;store_ee&#39;: store_ee GenericFxn,
- &#39;dist_ee&#39;: dist_ee GenericFxn,
- &#39;affect_dof&#39;: affect_dof GenericFxn,
- &#39;ctl_dof&#39;: ctl_dof GenericFxn,
- &#39;plan_path&#39;: plan_path GenericFxn,
- &#39;hold_payload&#39;: hold_payload GenericFxn,
- &#39;view_env&#39;: view_env GenericFxn}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;store_ee&#39;: store_ee GenericFxn
+ - t=Time(time=-0.1, timers={})
+ - ee_1=Flow()
+ - force_st=Flow(),
+ &#39;dist_ee&#39;: dist_ee GenericFxn
+ - t=Time(time=-0.1, timers={})
+ - ee_1=Flow()
+ - ee_mot=Flow()
+ - ee_ctl=Flow()
+ - force_st=Flow(),
+ &#39;affect_dof&#39;: affect_dof GenericFxn
+ - t=Time(time=-0.1, timers={})
+ - ee_mot=Flow()
+ - ctl=Flow()
+ - dofs=Flow()
+ - force_lin=Flow(),
+ &#39;ctl_dof&#39;: ctl_dof GenericFxn
+ - t=Time(time=-0.1, timers={})
+ - ee_ctl=Flow()
+ - des_traj=Flow()
+ - ctl=Flow()
+ - dofs=Flow()
+ - force_st=Flow(),
+ &#39;plan_path&#39;: plan_path GenericFxn
+ - t=Time(time=-0.1, timers={})
+ - ee_ctl=Flow()
+ - des_traj=Flow()
+ - force_st=Flow()
+ - dofs=Flow(),
+ &#39;hold_payload&#39;: hold_payload GenericFxn
+ - t=Time(time=-0.1, timers={})
+ - dofs=Flow()
+ - force_lin=Flow()
+ - force_st=Flow(),
+ &#39;view_env&#39;: view_env GenericFxn
+ - t=Time(time=-0.1, timers={})
+ - dofs=Flow()}
 </pre></div>
 </div>
 </div>
@@ -881,7 +889,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2efdeb67b9497264479825afdeb51a14fdbcbdfbb41520564845b28dc3dc6c7e.png" src="../../_images/2efdeb67b9497264479825afdeb51a14fdbcbdfbb41520564845b28dc3dc6c7e.png" />
+<img alt="../../_images/51c3fce649049091560d11da273a1c682dbf649baed93b8c5c4532ec7d2c4671.png" src="../../_images/51c3fce649049091560d11da273a1c682dbf649baed93b8c5c4532ec7d2c4671.png" />
 </div>
 </div>
 <p>Note that a variety of views of the model graph can be used for analysis/visualization. Below we use the ModelFxnGraph</p>
@@ -902,7 +910,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/85e31103ed39815a9caf79fb5e088f3a81583ba175e2bd0dc07021a91dc1c4bb.png" src="../../_images/85e31103ed39815a9caf79fb5e088f3a81583ba175e2bd0dc07021a91dc1c4bb.png" />
+<img alt="../../_images/83bb1e70e5cc21ae8d0034c256c9a71a54589e6d6b0c0ddfdf224a905511021e.png" src="../../_images/83bb1e70e5cc21ae8d0034c256c9a71a54589e6d6b0c0ddfdf224a905511021e.png" />
 </div>
 </div>
 <section id="network-analysis">
@@ -924,7 +932,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ASPL: 1.14
 Modularity: 0.00
-Robustness Coefficient: 99.18
+Robustness Coefficient: 99.14
 </pre></div>
 </div>
 </div>
@@ -938,7 +946,7 @@ Robustness Coefficient: 99.18
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/e31cd02169906281a76706b1f98eafbd48798a0eef4d9db3c377b861c9bc5e17.png" src="../../_images/e31cd02169906281a76706b1f98eafbd48798a0eef4d9db3c377b861c9bc5e17.png" />
+<img alt="../../_images/9f2b0a38e27893ad89fb1f1a516115cde7d52a9bd1407f51487802c0bcf15acc.png" src="../../_images/9f2b0a38e27893ad89fb1f1a516115cde7d52a9bd1407f51487802c0bcf15acc.png" />
 </div>
 </div>
 <p>As shown, no bridging notes are found. This is somewhat expected, since functiongraph functions are for the most part all connected to the same flows.</p>
@@ -950,7 +958,7 @@ Robustness Coefficient: 99.18
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/ec7b34d506b2ebeb86ddb5138ca977277e5c11ca00bb594196bc34fcd7a5b9a6.png" src="../../_images/ec7b34d506b2ebeb86ddb5138ca977277e5c11ca00bb594196bc34fcd7a5b9a6.png" />
+<img alt="../../_images/60dfeb2d217bcc8c729dbb967f3f802b258b636ede5fda6d573bdd66fa13874d.png" src="../../_images/60dfeb2d217bcc8c729dbb967f3f802b258b636ede5fda6d573bdd66fa13874d.png" />
 </div>
 </div>
 <p>However, some functions do have more connected to them than others. In this case-, path planning and control, along with the structure.</p>
@@ -978,7 +986,7 @@ High Degree Nodes: [(&#39;drone.fxns.ctl_dof&#39;, 6), (&#39;drone.fxns.plan_pat
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d685ba42146c58c35520fb4c5e65e741f4165a816cc169cabbedf92fb30e780b.png" src="../../_images/d685ba42146c58c35520fb4c5e65e741f4165a816cc169cabbedf92fb30e780b.png" />
+<img alt="../../_images/7cfa7285fdbf076fc970abc360d07816845df69a2255d30cab36c2da9dcd6e93.png" src="../../_images/7cfa7285fdbf076fc970abc360d07816845df69a2255d30cab36c2da9dcd6e93.png" />
 </div>
 </div>
 <p>The above analysis includes only function nodes. It is also possible to treat the entire model graph (containing both functions and flows) as a unipartite-like graph and perform similar analysis on both function and flow nodes.</p>
@@ -997,7 +1005,7 @@ High Degree Nodes: [(&#39;drone.fxns.ctl_dof&#39;, 6), (&#39;drone.fxns.plan_pat
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ASPL, functions and flows: 2.30
 Modularity, functions and flows: 0.32
-Robustness Coefficient, functions and flows: 85.26
+Robustness Coefficient, functions and flows: 85.56
 </pre></div>
 </div>
 </div>
@@ -1010,8 +1018,8 @@ Robustness Coefficient, functions and flows: 85.26
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/5756689c4b8b78cb40812604b4b689e3e4a889a193f8a3221d18b7e077bf686e.png" src="../../_images/5756689c4b8b78cb40812604b4b689e3e4a889a193f8a3221d18b7e077bf686e.png" />
-<img alt="../../_images/5f5c56b28155ebb5a2dd8cd8be0541999a9ef40b8c0c80c32eae3a2c291b2e79.png" src="../../_images/5f5c56b28155ebb5a2dd8cd8be0541999a9ef40b8c0c80c32eae3a2c291b2e79.png" />
+<img alt="../../_images/7eb6909deffc4fc6dbc1236fedc9cb4c1325e7743910ed00b1076fdc7ba35079.png" src="../../_images/7eb6909deffc4fc6dbc1236fedc9cb4c1325e7743910ed00b1076fdc7ba35079.png" />
+<img alt="../../_images/f41b82ab35e6651cc8fe2ada9c8870eb876cd66b5a753cf512fa624d2d6591e6.png" src="../../_images/f41b82ab35e6651cc8fe2ada9c8870eb876cd66b5a753cf512fa624d2d6591e6.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1035,7 +1043,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/f2c85178063b881ffcaf14c0bfb40837703dd2953d0ef7316bce5c8b4cef323c.png" src="../../_images/f2c85178063b881ffcaf14c0bfb40837703dd2953d0ef7316bce5c8b4cef323c.png" />
+<img alt="../../_images/303e2a147917a22b4429bdb69813274bc52555bc811b6379b02c07a825591d85.png" src="../../_images/303e2a147917a22b4429bdb69813274bc52555bc811b6379b02c07a825591d85.png" />
 </div>
 </div>
 <p>The SFF model can be simulated with options for simulation time, infection (failure) rate, and recovery (fix) rate. The start node can be selected or chosen randomly. Plotting includes an option for error bars. This models the system’s response to a failure using an analogy of an epidemic spreading through a network.</p>
@@ -1047,7 +1055,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/4625e04d6711eb4eaab0e478c963957b645e04625423d0b3117eba2d9860325c.png" src="../../_images/4625e04d6711eb4eaab0e478c963957b645e04625423d0b3117eba2d9860325c.png" />
+<img alt="../../_images/730be692930e1b4c373d5c7500e2828f31b837d7a284659161c53de001ad77e5.png" src="../../_images/730be692930e1b4c373d5c7500e2828f31b837d7a284659161c53de001ad77e5.png" />
 </div>
 </div>
 </section>
@@ -1073,7 +1081,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 20/20 [00:00&lt;00:00, 149.24it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 20/20 [00:00&lt;00:00, 61.02it/s]
 </pre></div>
 </div>
 </div>
@@ -1115,7 +1123,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
   </thead>
   <tbody>
     <tr>
-      <th>store_ee_nocharge_t0p0</th>
+      <th>drone_fxns_store_ee_nocharge_t0p0</th>
       <td>['store_ee', 'dist_ee', 'affect_dof', 'ctl_dof...</td>
       <td>['store_ee', 'dist_ee', 'affect_dof', 'ctl_dof...</td>
       <td>0.00001</td>
@@ -1123,7 +1131,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>32800.0</td>
     </tr>
     <tr>
-      <th>plan_path_degloc_t0p0</th>
+      <th>drone_fxns_plan_path_degloc_t0p0</th>
       <td>['plan_path', 'ctl', 'dofs', 'des_traj']</td>
       <td>['plan_path']</td>
       <td>0.000008</td>
@@ -1131,7 +1139,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>16000.0</td>
     </tr>
     <tr>
-      <th>dist_ee_short_t0p0</th>
+      <th>drone_fxns_dist_ee_short_t0p0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000003</td>
@@ -1139,7 +1147,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>10650.0</td>
     </tr>
     <tr>
-      <th>ctl_dof_degctl_t0p0</th>
+      <th>drone_fxns_ctl_dof_degctl_t0p0</th>
       <td>['ctl_dof', 'ctl', 'dofs']</td>
       <td>['ctl_dof']</td>
       <td>0.000008</td>
@@ -1147,7 +1155,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>8000.0</td>
     </tr>
     <tr>
-      <th>affect_dof_ctlbreak_t0p0</th>
+      <th>drone_fxns_affect_dof_ctlbreak_t0p0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000002</td>
@@ -1155,7 +1163,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>6700.0</td>
     </tr>
     <tr>
-      <th>affect_dof_ctlup_t0p0</th>
+      <th>drone_fxns_affect_dof_ctlup_t0p0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000002</td>
@@ -1163,7 +1171,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>6600.0</td>
     </tr>
     <tr>
-      <th>ctl_dof_noctl_t0p0</th>
+      <th>drone_fxns_dist_ee_break_t0p0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000002</td>
@@ -1171,7 +1179,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>6500.0</td>
     </tr>
     <tr>
-      <th>dist_ee_break_t0p0</th>
+      <th>drone_fxns_ctl_dof_noctl_t0p0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000002</td>
@@ -1179,7 +1187,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>6500.0</td>
     </tr>
     <tr>
-      <th>affect_dof_short_t0p0</th>
+      <th>drone_fxns_affect_dof_openc_t0p0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000001</td>
@@ -1187,7 +1195,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>3270.0</td>
     </tr>
     <tr>
-      <th>affect_dof_openc_t0p0</th>
+      <th>drone_fxns_affect_dof_short_t0p0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000001</td>
@@ -1195,7 +1203,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>3270.0</td>
     </tr>
     <tr>
-      <th>affect_dof_mechbreak_t0p0</th>
+      <th>drone_fxns_affect_dof_mechbreak_t0p0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000001</td>
@@ -1203,7 +1211,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>3250.0</td>
     </tr>
     <tr>
-      <th>plan_path_noloc_t0p0</th>
+      <th>drone_fxns_plan_path_noloc_t0p0</th>
       <td>['plan_path', 'ctl', 'dofs', 'des_traj']</td>
       <td>['plan_path']</td>
       <td>0.000002</td>
@@ -1211,7 +1219,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>2000.0</td>
     </tr>
     <tr>
-      <th>affect_dof_propbreak_t0p0</th>
+      <th>drone_fxns_affect_dof_propbreak_t0p0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.0</td>
@@ -1219,7 +1227,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>981.0</td>
     </tr>
     <tr>
-      <th>hold_payload_deform_t0p0</th>
+      <th>drone_fxns_hold_payload_deform_t0p0</th>
       <td>['hold_payload', 'force_st', 'force_lin']</td>
       <td>['hold_payload']</td>
       <td>0.000001</td>
@@ -1227,7 +1235,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>800.0</td>
     </tr>
     <tr>
-      <th>affect_dof_propstuck_t0p0</th>
+      <th>drone_fxns_affect_dof_propstuck_t0p0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.0</td>
@@ -1235,7 +1243,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>654.0</td>
     </tr>
     <tr>
-      <th>hold_payload_break_t0p0</th>
+      <th>drone_fxns_hold_payload_break_t0p0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.0</td>
@@ -1243,7 +1251,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>650.0</td>
     </tr>
     <tr>
-      <th>dist_ee_degr_t0p0</th>
+      <th>drone_fxns_dist_ee_degr_t0p0</th>
       <td>['dist_ee', 'ctl_dof', 'ee_mot', 'ee_ctl', 'ct...</td>
       <td>['dist_ee']</td>
       <td>0.000005</td>
@@ -1251,7 +1259,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>500.0</td>
     </tr>
     <tr>
-      <th>affect_dof_ctldn_t0p0</th>
+      <th>drone_fxns_affect_dof_ctldn_t0p0</th>
       <td>['affect_dof', 'ee_1', 'ee_mot', 'ctl', 'dofs']</td>
       <td>['affect_dof']</td>
       <td>0.000002</td>
@@ -1259,7 +1267,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>100.0</td>
     </tr>
     <tr>
-      <th>affect_dof_mechfriction_t0p0</th>
+      <th>drone_fxns_affect_dof_mechfriction_t0p0</th>
       <td>['affect_dof']</td>
       <td>['affect_dof']</td>
       <td>0.000001</td>
@@ -1267,7 +1275,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
       <td>25.0</td>
     </tr>
     <tr>
-      <th>affect_dof_propwarp_t0p0</th>
+      <th>drone_fxns_affect_dof_propwarp_t0p0</th>
       <td>['affect_dof', 'ee_1', 'ee_mot', 'dofs']</td>
       <td>['affect_dof']</td>
       <td>0.0</td>
@@ -1297,26 +1305,26 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 \toprule
  &amp; degraded &amp; faulty &amp; rate &amp; cost &amp; expected_cost \\
 \midrule
-store_ee_nocharge_t0p0 &amp; [&#39;store_ee&#39;, &#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;store_ee&#39;, &#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000010 &amp; 32800.000000 &amp; 32800.000000 \\
-plan_path_degloc_t0p0 &amp; [&#39;plan_path&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;plan_path&#39;] &amp; 0.000008 &amp; 20000.000000 &amp; 16000.000000 \\
-dist_ee_short_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000003 &amp; 35500.000000 &amp; 10650.000000 \\
-ctl_dof_degctl_t0p0 &amp; [&#39;ctl_dof&#39;, &#39;ctl&#39;, &#39;dofs&#39;] &amp; [&#39;ctl_dof&#39;] &amp; 0.000008 &amp; 10000.000000 &amp; 8000.000000 \\
-affect_dof_ctlbreak_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000002 &amp; 33500.000000 &amp; 6700.000000 \\
-affect_dof_ctlup_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000002 &amp; 33000.000000 &amp; 6600.000000 \\
-ctl_dof_noctl_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000002 &amp; 32500.000000 &amp; 6500.000000 \\
-dist_ee_break_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000002 &amp; 32500.000000 &amp; 6500.000000 \\
-affect_dof_short_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000001 &amp; 32700.000000 &amp; 3270.000000 \\
-affect_dof_openc_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000001 &amp; 32700.000000 &amp; 3270.000000 \\
-affect_dof_mechbreak_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000001 &amp; 32500.000000 &amp; 3250.000000 \\
-plan_path_noloc_t0p0 &amp; [&#39;plan_path&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;plan_path&#39;] &amp; 0.000002 &amp; 10000.000000 &amp; 2000.000000 \\
-affect_dof_propbreak_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000000 &amp; 32700.000000 &amp; 981.000000 \\
-hold_payload_deform_t0p0 &amp; [&#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;] &amp; [&#39;hold_payload&#39;] &amp; 0.000001 &amp; 10000.000000 &amp; 800.000000 \\
-affect_dof_propstuck_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000000 &amp; 32700.000000 &amp; 654.000000 \\
-hold_payload_break_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000000 &amp; 32500.000000 &amp; 650.000000 \\
-dist_ee_degr_t0p0 &amp; [&#39;dist_ee&#39;, &#39;ctl_dof&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;] &amp; [&#39;dist_ee&#39;] &amp; 0.000005 &amp; 1000.000000 &amp; 500.000000 \\
-affect_dof_ctldn_t0p0 &amp; [&#39;affect_dof&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ctl&#39;, &#39;dofs&#39;] &amp; [&#39;affect_dof&#39;] &amp; 0.000002 &amp; 500.000000 &amp; 100.000000 \\
-affect_dof_mechfriction_t0p0 &amp; [&#39;affect_dof&#39;] &amp; [&#39;affect_dof&#39;] &amp; 0.000001 &amp; 500.000000 &amp; 25.000000 \\
-affect_dof_propwarp_t0p0 &amp; [&#39;affect_dof&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;dofs&#39;] &amp; [&#39;affect_dof&#39;] &amp; 0.000000 &amp; 200.000000 &amp; 2.000000 \\
+drone_fxns_store_ee_nocharge_t0p0 &amp; [&#39;store_ee&#39;, &#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;store_ee&#39;, &#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000010 &amp; 32800.000000 &amp; 32800.000000 \\
+drone_fxns_plan_path_degloc_t0p0 &amp; [&#39;plan_path&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;plan_path&#39;] &amp; 0.000008 &amp; 20000.000000 &amp; 16000.000000 \\
+drone_fxns_dist_ee_short_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000003 &amp; 35500.000000 &amp; 10650.000000 \\
+drone_fxns_ctl_dof_degctl_t0p0 &amp; [&#39;ctl_dof&#39;, &#39;ctl&#39;, &#39;dofs&#39;] &amp; [&#39;ctl_dof&#39;] &amp; 0.000008 &amp; 10000.000000 &amp; 8000.000000 \\
+drone_fxns_affect_dof_ctlbreak_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000002 &amp; 33500.000000 &amp; 6700.000000 \\
+drone_fxns_affect_dof_ctlup_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000002 &amp; 33000.000000 &amp; 6600.000000 \\
+drone_fxns_dist_ee_break_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000002 &amp; 32500.000000 &amp; 6500.000000 \\
+drone_fxns_ctl_dof_noctl_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000002 &amp; 32500.000000 &amp; 6500.000000 \\
+drone_fxns_affect_dof_openc_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000001 &amp; 32700.000000 &amp; 3270.000000 \\
+drone_fxns_affect_dof_short_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000001 &amp; 32700.000000 &amp; 3270.000000 \\
+drone_fxns_affect_dof_mechbreak_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000001 &amp; 32500.000000 &amp; 3250.000000 \\
+drone_fxns_plan_path_noloc_t0p0 &amp; [&#39;plan_path&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;plan_path&#39;] &amp; 0.000002 &amp; 10000.000000 &amp; 2000.000000 \\
+drone_fxns_affect_dof_propbreak_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000000 &amp; 32700.000000 &amp; 981.000000 \\
+drone_fxns_hold_payload_deform_t0p0 &amp; [&#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;] &amp; [&#39;hold_payload&#39;] &amp; 0.000001 &amp; 10000.000000 &amp; 800.000000 \\
+drone_fxns_affect_dof_propstuck_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000000 &amp; 32700.000000 &amp; 654.000000 \\
+drone_fxns_hold_payload_break_t0p0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000000 &amp; 32500.000000 &amp; 650.000000 \\
+drone_fxns_dist_ee_degr_t0p0 &amp; [&#39;dist_ee&#39;, &#39;ctl_dof&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;] &amp; [&#39;dist_ee&#39;] &amp; 0.000005 &amp; 1000.000000 &amp; 500.000000 \\
+drone_fxns_affect_dof_ctldn_t0p0 &amp; [&#39;affect_dof&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ctl&#39;, &#39;dofs&#39;] &amp; [&#39;affect_dof&#39;] &amp; 0.000002 &amp; 500.000000 &amp; 100.000000 \\
+drone_fxns_affect_dof_mechfriction_t0p0 &amp; [&#39;affect_dof&#39;] &amp; [&#39;affect_dof&#39;] &amp; 0.000001 &amp; 500.000000 &amp; 25.000000 \\
+drone_fxns_affect_dof_propwarp_t0p0 &amp; [&#39;affect_dof&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;dofs&#39;] &amp; [&#39;affect_dof&#39;] &amp; 0.000000 &amp; 200.000000 &amp; 2.000000 \\
 nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 \bottomrule
 \end{tabular}
@@ -1330,14 +1338,16 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">static_mdl</span> <span class="o">=</span> <span class="n">Drone_Static</span><span class="p">()</span>
 <span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">static_mdl</span><span class="p">,</span><span class="s1">&#39;affect_dof&#39;</span><span class="p">,</span> <span class="s1">&#39;mechbreak&#39;</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">to_return</span><span class="o">=</span><span class="s1">&#39;graph&#39;</span><span class="p">)</span>
 
-<span class="n">result</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">set_edge_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;AffectDOF: Mechbreak at final sim time&#39;</span><span class="p">)</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get_faulty</span><span class="p">()</span><span class="o">.</span><span class="n">tend</span><span class="o">.</span><span class="n">graph</span>
+
+<span class="n">graph</span><span class="o">.</span><span class="n">set_edge_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;AffectDOF: Mechbreak at final sim time&#39;</span><span class="p">)</span>
 <span class="c1">#fig.savefig(&#39;static_propagation.pdf&#39;, format=&quot;pdf&quot;, bbox_inches = &#39;tight&#39;, pad_inches = 0)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c1a27c51a92e37fe739879083e1a9dfb118ac2877764d894aa8580f83efa7cfc.png" src="../../_images/c1a27c51a92e37fe739879083e1a9dfb118ac2877764d894aa8580f83efa7cfc.png" />
+<img alt="../../_images/9d01192ba9e32068420289de67242cf0c19df1edd2379d39c9a8fbb80d07feb8.png" src="../../_images/9d01192ba9e32068420289de67242cf0c19df1edd2379d39c9a8fbb80d07feb8.png" />
 </div>
 </div>
 </section>
@@ -1376,7 +1386,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/b5375aea8d77bbd86a0460d1a8e631618a08853e2b8b2cde5af2cf7889ca561b.png" src="../../_images/b5375aea8d77bbd86a0460d1a8e631618a08853e2b8b2cde5af2cf7889ca561b.png" />
+<img alt="../../_images/946f3d15c144253be4b6162d871a2a95be6a694651b5686ddbbce9cade6e98ae.png" src="../../_images/946f3d15c144253be4b6162d871a2a95be6a694651b5686ddbbce9cade6e98ae.png" />
 </div>
 </div>
 <p>As shown below, in the case of the break in the AffectDOF function, the system crashes:</p>
@@ -1400,7 +1410,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/8d257cd91c25ba9436d04bf5aee9edc82c829a148e1a4a9bfb3bbada521ce1a0.png" src="../../_images/8d257cd91c25ba9436d04bf5aee9edc82c829a148e1a4a9bfb3bbada521ce1a0.png" />
+<img alt="../../_images/9e3ee80c1015c7d3b1593ba1eeb50b2b1dc7db352c84c1dbfe371a84c5395f1b.png" src="../../_images/9e3ee80c1015c7d3b1593ba1eeb50b2b1dc7db352c84c1dbfe371a84c5395f1b.png" />
 </div>
 </div>
 <p>Finally, we can see how the cost function of this scenario changes over time. As shown, when the fault is injected early, it has a lower cost because it crashes at the landing pad and not in a dangerous area. When it is injected at the end, the cost is minimal because the drone has already landed.</p>
@@ -1424,7 +1434,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 36.49it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:01&lt;00:00, 12.39it/s]
 </pre></div>
 </div>
 </div>
@@ -1450,7 +1460,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d366f3ce46465634e79c88fedbc175b575d44923975065a41d960fe5c884d16f.png" src="../../_images/d366f3ce46465634e79c88fedbc175b575d44923975065a41d960fe5c884d16f.png" />
+<img alt="../../_images/a34c899d7ac7b054a548e6f3a3be4b1c905b43e1202f2d247af0e157cce8aa62.png" src="../../_images/a34c899d7ac7b054a548e6f3a3be4b1c905b43e1202f2d247af0e157cce8aa62.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1460,7 +1470,10 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>affect_dof_mechbreak5.000000000000001e-07
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nominal.tend.classify.rate:          1.0
+nominal.tend.classify.cost:            0
+nominal.tend.classify.expected_cost: 0.0
+affect_dof_mechbreak5.000000000000001e-07
 affect_dof_mechbreak                 500
 affect_dof_mechbreak  25.000000000000007
 affect_dof_mechbreak5.000000000000001e-07
@@ -1499,9 +1512,6 @@ affect_dof_mechbreak  25.000000000000007
 affect_dof_mechbreak5.000000000000001e-07
 affect_dof_mechbreak                 500
 affect_dof_mechbreak  25.000000000000007
-nominal.endclass.rate:               1.0
-nominal.endclass.cost:                 0
-nominal.endclass.expected_cost:      0.0
 </pre></div>
 </div>
 </div>
@@ -1535,7 +1545,7 @@ nominal.endclass.expected_cost:      0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/0f491e3230231f443eb5b9d6714954fdec5bcf3886d09128d51b66cce6101e3c.png" src="../../_images/0f491e3230231f443eb5b9d6714954fdec5bcf3886d09128d51b66cce6101e3c.png" />
+<img alt="../../_images/5ee9fd3e8192c8a6b06795e8e845559c88c9c8ff5eed38a8c0f3f26360f93de2.png" src="../../_images/5ee9fd3e8192c8a6b06795e8e845559c88c9c8ff5eed38a8c0f3f26360f93de2.png" />
 </div>
 </div>
 <p>Then we can see how the octorotor architecture performs in the same case:</p>
@@ -1559,7 +1569,7 @@ nominal.endclass.expected_cost:      0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/fa6a34d4fa27de3257ce0c9c43c5d102a7e06dc4457cfc3408bfba64630bd49a.png" src="../../_images/fa6a34d4fa27de3257ce0c9c43c5d102a7e06dc4457cfc3408bfba64630bd49a.png" />
+<img alt="../../_images/0212a77150fbc6008e2f077c86ff28601d693bd23307c03cb52da624190b322d.png" src="../../_images/0212a77150fbc6008e2f077c86ff28601d693bd23307c03cb52da624190b322d.png" />
 </div>
 </div>
 <p>As shown, the octorotor architecture enables the quadrotor to recover from the fault and land.</p>
@@ -1688,68 +1698,7 @@ nominal.endclass.expected_cost:      0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  70%|███████   | 35/50 [00:01&lt;00:00, 19.24it/s]
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">quad_endclasses</span><span class="p">,</span> <span class="n">quad_mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_quad</span><span class="p">,</span> <span class="n">fs_quad</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="nn">File c:\Users\dhulse\AppData\Local\anaconda3\envs\fmdtools\Lib\site-packages\fmdtools\sim\propagate.py:638,</span> in <span class="ni">fault_sample</span><span class="nt">(mdl, fs, include_nominal, get_phasemap, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">635</span> <span class="n">nomresult</span><span class="p">,</span> <span class="n">nomhist</span><span class="p">,</span> <span class="n">nomscen</span><span class="p">,</span> <span class="n">c_mdl</span><span class="p">,</span> <span class="n">t_end_nom</span> <span class="o">=</span> <span class="n">n_outs</span>
-<span class="g g-Whitespace">    </span><span class="mi">636</span> <span class="n">scenlist</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
-<span class="ne">--&gt; </span><span class="mi">638</span> <span class="n">results</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">scenlist_helper</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">639</span>                                     <span class="n">scenlist</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">640</span>                                     <span class="n">c_mdl</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">641</span>                                     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">642</span>                                     <span class="n">nomhist</span><span class="o">=</span><span class="n">nomhist</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">643</span>                                     <span class="n">nomresult</span><span class="o">=</span><span class="n">nomresult</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">645</span> <span class="k">if</span> <span class="n">include_nominal</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">646</span>     <span class="n">process_nominal</span><span class="p">(</span><span class="n">mdlhists</span><span class="p">,</span> <span class="n">nomhist</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">nomresult</span><span class="p">,</span> <span class="n">t_end_nom</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File c:\Users\dhulse\AppData\Local\anaconda3\envs\fmdtools\Lib\site-packages\fmdtools\sim\propagate.py:807,</span> in <span class="ni">scenlist_helper</span><span class="nt">(mdl, scenlist, c_mdl, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">805</span> <span class="n">name</span> <span class="o">=</span> <span class="n">scen</span><span class="o">.</span><span class="n">name</span>
-<span class="g g-Whitespace">    </span><span class="mi">806</span> <span class="k">if</span> <span class="n">staged</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">807</span>     <span class="n">mdl_i</span> <span class="o">=</span> <span class="n">c_mdl</span><span class="p">[</span><span class="n">scen</span><span class="o">.</span><span class="n">time</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">808</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">809</span>     <span class="n">mdl_i</span> <span class="o">=</span> <span class="n">c_mdl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
-
-<span class="nn">File c:\Users\dhulse\AppData\Local\anaconda3\envs\fmdtools\Lib\site-packages\fmdtools\define\architecture\base.py:348,</span> in <span class="ni">Architecture.copy</span><span class="nt">(self, flows, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">331</span> <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flows</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">332</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">333</span><span class="sd">     Copy the architecture at the current state.</span>
-<span class="g g-Whitespace">    </span><span class="mi">334</span><span class="sd"> </span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">343</span><span class="sd">         Copy of the curent architecture.</span>
-<span class="g g-Whitespace">    </span><span class="mi">344</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">345</span>     <span class="n">cargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="p">{}),</span>
-<span class="g g-Whitespace">    </span><span class="mi">346</span>                  <span class="n">sp</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;sp&#39;</span><span class="p">,</span> <span class="p">{}),</span>
-<span class="g g-Whitespace">    </span><span class="mi">347</span>                  <span class="n">track</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;track&#39;</span><span class="p">,</span> <span class="p">{}),</span>
-<span class="ne">--&gt; </span><span class="mi">348</span>                  <span class="n">h</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-<span class="g g-Whitespace">    </span><span class="mi">349</span>                  <span class="n">t</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">copy</span><span class="p">()),</span>
-<span class="g g-Whitespace">    </span><span class="mi">350</span>                  <span class="n">as_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">351</span>     <span class="c1"># send role dicts in to be copied via as_copy param.</span>
-<span class="g g-Whitespace">    </span><span class="mi">352</span>     <span class="k">for</span> <span class="n">flex_role</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">flexible_roles</span><span class="p">:</span>
-
-<span class="nn">File c:\Users\dhulse\AppData\Local\anaconda3\envs\fmdtools\Lib\site-packages\fmdtools\analyze\history.py:202,</span> in <span class="ni">History.copy</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">200</span>         <span class="n">newhist</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">201</span>     <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">202</span>         <span class="n">newhist</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">203</span> <span class="k">return</span> <span class="n">newhist</span>
-
-<span class="nn">File c:\Users\dhulse\AppData\Local\anaconda3\envs\fmdtools\Lib\site-packages\numpy\lib\function_base.py:962,</span> in <span class="ni">copy</span><span class="nt">(a, order, subok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">873</span> <span class="nd">@array_function_dispatch</span><span class="p">(</span><span class="n">_copy_dispatcher</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">874</span> <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="n">subok</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">875</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">876</span><span class="sd">     Return an array copy of the given object.</span>
-<span class="g g-Whitespace">    </span><span class="mi">877</span><span class="sd"> </span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">960</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">961</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">962</span>     <span class="k">return</span> <span class="n">array</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">subok</span><span class="o">=</span><span class="n">subok</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:12&lt;00:00,  3.91it/s]
 </pre></div>
 </div>
 </div>
@@ -1793,6 +1742,12 @@ nominal.endclass.expected_cost:      0.0
       <td>37160.0</td>
     </tr>
     <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rr_ctlbreak_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>185800.0</td>
+      <td>37160.0</td>
+    </tr>
+    <tr>
       <th>drone_fxns_affect_dof_ca_comps_rf_ctlbreak_t8p0</th>
       <td>2.000000e-06</td>
       <td>185800.0</td>
@@ -1805,25 +1760,7 @@ nominal.endclass.expected_cost:      0.0
       <td>37160.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185800.0</td>
-      <td>37160.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf_ctlup_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf_ctldn_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr_ctldn_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_lf_ctlup_t8p0</th>
       <td>2.000000e-06</td>
       <td>185300.0</td>
       <td>37060.0</td>
@@ -1835,7 +1772,25 @@ nominal.endclass.expected_cost:      0.0
       <td>37060.0</td>
     </tr>
     <tr>
+      <th>drone_fxns_affect_dof_ca_comps_lr_ctldn_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>185300.0</td>
+      <td>37060.0</td>
+    </tr>
+    <tr>
       <th>drone_fxns_affect_dof_ca_comps_rr_ctlup_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>185300.0</td>
+      <td>37060.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rr_ctldn_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>185300.0</td>
+      <td>37060.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rf_ctldn_t8p0</th>
       <td>2.000000e-06</td>
       <td>185300.0</td>
       <td>37060.0</td>
@@ -1847,49 +1802,19 @@ nominal.endclass.expected_cost:      0.0
       <td>37060.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lf_ctlup_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_rf_ctlup_t8p0</th>
       <td>2.000000e-06</td>
       <td>185300.0</td>
       <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_ctldn_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lf_short_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf_openc_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_short_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_openc_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf_short_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
     </tr>
     <tr>
       <th>drone_fxns_affect_dof_ca_comps_lf_openc_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>185000.0</td>
+      <td>18500.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_lf_short_t8p0</th>
       <td>1.000000e-06</td>
       <td>185000.0</td>
       <td>18500.0</td>
@@ -1901,10 +1826,40 @@ nominal.endclass.expected_cost:      0.0
       <td>18500.0</td>
     </tr>
     <tr>
+      <th>drone_fxns_affect_dof_ca_comps_lr_openc_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>185000.0</td>
+      <td>18500.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rf_openc_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>185000.0</td>
+      <td>18500.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rf_short_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>185000.0</td>
+      <td>18500.0</td>
+    </tr>
+    <tr>
       <th>drone_fxns_affect_dof_ca_comps_rr_openc_t8p0</th>
       <td>1.000000e-06</td>
       <td>185000.0</td>
       <td>18500.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_lr_short_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>185000.0</td>
+      <td>18500.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rf_mechbreak_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>184800.0</td>
+      <td>18480.0</td>
     </tr>
     <tr>
       <th>drone_fxns_affect_dof_ca_comps_lf_mechbreak_t8p0</th>
@@ -1925,19 +1880,7 @@ nominal.endclass.expected_cost:      0.0
       <td>18480.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf_mechbreak_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>184800.0</td>
-      <td>18480.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lf_mechfriction_t8p0</th>
-      <td>5.000000e-07</td>
-      <td>185300.0</td>
-      <td>9265.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_mechfriction_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_rf_mechfriction_t8p0</th>
       <td>5.000000e-07</td>
       <td>185300.0</td>
       <td>9265.0</td>
@@ -1949,13 +1892,19 @@ nominal.endclass.expected_cost:      0.0
       <td>9265.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf_mechfriction_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_lr_mechfriction_t8p0</th>
       <td>5.000000e-07</td>
       <td>185300.0</td>
       <td>9265.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr_propbreak_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_lf_mechfriction_t8p0</th>
+      <td>5.000000e-07</td>
+      <td>185300.0</td>
+      <td>9265.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_lr_propbreak_t8p0</th>
       <td>3.000000e-07</td>
       <td>184800.0</td>
       <td>5544.0</td>
@@ -1967,13 +1916,13 @@ nominal.endclass.expected_cost:      0.0
       <td>5544.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lf_propbreak_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_rr_propbreak_t8p0</th>
       <td>3.000000e-07</td>
       <td>184800.0</td>
       <td>5544.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_propbreak_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_lf_propbreak_t8p0</th>
       <td>3.000000e-07</td>
       <td>184800.0</td>
       <td>5544.0</td>
@@ -2009,13 +1958,13 @@ nominal.endclass.expected_cost:      0.0
       <td>1850.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lf_propwarp_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_rf_propwarp_t8p0</th>
       <td>1.000000e-07</td>
       <td>185000.0</td>
       <td>1850.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf_propwarp_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_lf_propwarp_t8p0</th>
       <td>1.000000e-07</td>
       <td>185000.0</td>
       <td>1850.0</td>
@@ -2033,13 +1982,13 @@ nominal.endclass.expected_cost:      0.0
       <td>200.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ctldn_t8p0</th>
+      <th>drone_fxns_affect_dof_ctlup_t8p0</th>
       <td>2.000000e-06</td>
       <td>500.0</td>
       <td>100.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ctlup_t8p0</th>
+      <th>drone_fxns_affect_dof_ctldn_t8p0</th>
       <td>2.000000e-06</td>
       <td>500.0</td>
       <td>100.0</td>
@@ -2317,7 +2266,7 @@ nominal.endclass.expected_cost:      0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:05&lt;00:00, 15.65it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:24&lt;00:00,  3.64it/s]
 </pre></div>
 </div>
 </div>
@@ -2355,25 +2304,7 @@ nominal.endclass.expected_cost:      0.0
   </thead>
   <tbody>
     <tr>
-      <th>drone_fxns_affect_dof_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr2_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf2_ctlbreak_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_lf2_ctlbreak_t8p0</th>
       <td>2.000000e-06</td>
       <td>1000.0</td>
       <td>200.0</td>
@@ -2385,13 +2316,31 @@ nominal.endclass.expected_cost:      0.0
       <td>200.0</td>
     </tr>
     <tr>
+      <th>drone_fxns_affect_dof_ctlbreak_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>1000.0</td>
+      <td>200.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rr2_ctlbreak_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>1000.0</td>
+      <td>200.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rr_ctlbreak_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>1000.0</td>
+      <td>200.0</td>
+    </tr>
+    <tr>
       <th>...</th>
       <td>...</td>
       <td>...</td>
       <td>...</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf2_propwarp_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_lr2_propwarp_t8p0</th>
       <td>1.000000e-07</td>
       <td>200.0</td>
       <td>2.0</td>

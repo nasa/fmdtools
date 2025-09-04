@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Action Sequence Graph Tutorial &mdash; fmdtools 2.1.3 documentation</title>
+  <title>Action Sequence Graph Tutorial &mdash; fmdtools 2.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
 
   
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=179ab080"></script>
+      <script src="../../_static/documentation_options.js?v=b21de401"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-0">Version: 2.2.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -219,21 +219,12 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#history">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#what-about-human-induced-faults">What about human-induced faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#evaluating-joint-component-human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#testing-different-reaction-times">Testing different reaction times</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#tank-architecture-s">Tank Architecture(s)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#tank-analysis">Tank Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#full-set-of-modes">Full set of modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#defining-optimization-problem">Defining Optimization Problem</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#simulation">Simulation</a></li>
 </ul>
 </li>
 </ul>
@@ -400,12 +391,15 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_dict_repr"><code class="docutils literal notranslate"><span class="pre">get_dict_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_repr"><code class="docutils literal notranslate"><span class="pre">get_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
@@ -430,41 +424,25 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.NestedSimulation"><code class="docutils literal notranslate"><span class="pre">NestedSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.SimEvent"><code class="docutils literal notranslate"><span class="pre">SimEvent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_fault_sim"><code class="docutils literal notranslate"><span class="pre">exec_fault_sim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_sim"><code class="docutils literal notranslate"><span class="pre">exec_sim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample"><code class="docutils literal notranslate"><span class="pre">fault_sample()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample_from"><code class="docutils literal notranslate"><span class="pre">fault_sample_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.gen_sampleapproach"><code class="docutils literal notranslate"><span class="pre">gen_sampleapproach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_mdl_kwargs"><code class="docutils literal notranslate"><span class="pre">get_mdl_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_sim_call_kwargs"><code class="docutils literal notranslate"><span class="pre">get_sim_call_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nested_sample"><code class="docutils literal notranslate"><span class="pre">nested_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.parameter_sample"><code class="docutils literal notranslate"><span class="pre">parameter_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.process_nominal"><code class="docutils literal notranslate"><span class="pre">process_nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
@@ -555,7 +533,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
@@ -579,6 +556,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_to_return"><code class="docutils literal notranslate"><span class="pre">clean_to_return()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
@@ -786,7 +764,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 class Outcome(Flow):
 
-    __slots__ = ()
     container_s = OutcomeStates
 
 class HazardState(State):
@@ -798,7 +775,6 @@ class HazardState(State):
 
 class Hazard(Flow):
 
-    __slots__ = ()
     container_s = HazardState
 </pre></div>
 </div>
@@ -823,12 +799,11 @@ class Hazard(Flow):
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>class Perceive(Action):
     &quot;&quot;&quot;A user&#39;s perception abilities/behaviors for percieving the hazard.&quot;&quot;&quot;
 
-    __slots__ = (&#39;hazard&#39;, &#39;outcome&#39;)
     container_m = ActionMode
     flow_hazard = Hazard
     flow_outcome = Outcome
 
-    def behavior(self, time):
+    def dynamic_behavior(self):
         if not self.m.in_mode(&#39;failed&#39;, &#39;unable&#39;):
             self.hazard.s.percieved = self.hazard.s.present
             self.outcome.s.num_perceptions += self.hazard.s.percieved
@@ -842,12 +817,11 @@ class Hazard(Flow):
 class Act(Action):
     &quot;&quot;&quot;User actions to mitigate the hazard.&quot;&quot;&quot;
 
-    __slots__ = (&#39;hazard&#39;, &#39;outcome&#39;)
     container_m = ActionMode
     flow_hazard = Hazard
     flow_outcome = Outcome
 
-    def behavior(self, time):
+    def dynamic_behavior(self):
         if not self.m.in_mode(&#39;failed&#39;, &#39;unable&#39;):
             self.outcome.s.num_actions += 1
             self.hazard.s.mitigated = True
@@ -863,10 +837,9 @@ class Act(Action):
 class Done(Action):
     &quot;&quot;&quot;User state after performing the action.&quot;&quot;&quot;
 
-    __slots__ = (&#39;hazard&#39;)
     flow_hazard = Hazard
 
-    def behavior(self, time):
+    def dynamic_behavior(self):
         if not self.hazard.s.present:
             self.hazard.s.mitigated = False
 
@@ -1019,15 +992,8 @@ add_cond(self, start_action, end_action, name=&#39;auto&#39;, condition=&#39;pas
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on function build in module fmdtools.define.architecture.action:
 
-build(self, **kwargs)
-    Construct the overall model structure.
-    
-    Use in subclasses to build the model after init_architecture is called.
-    
-    Parameters
-    ----------
-    update_seed : bool
-        Whether to update the seed
+build(self, construct_graph=False, **kwargs)
+    Build the action graph.
 </pre></div>
 </div>
 </div>
@@ -1041,7 +1007,20 @@ build(self, **kwargs)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;demo_model.Human at 0x292dc2b6350&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>human Human
+- t=Time(time=-0.1, timers={})
+- m=Mode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)
+FLOWS:
+- hazard=Hazard(s=(present=False, percieved=False, mitigated=False))
+- outcome=Outcome(s=(num_perceptions=0, num_actions=0))
+ACTS:
+- perceive=Perceive(m=(mode=&#39;nominal&#39;, faults=set(), sub_faults=False))
+- act=Act(m=(mode=&#39;nominal&#39;, faults=set(), sub_faults=False))
+- done=Done()
+CONDS:
+- percieved=&lt;method perceive.percieved()&gt;
+- acted=&lt;method act.acted()&gt;
+- ready=&lt;method done.ready()&gt;
 </pre></div>
 </div>
 </div>
@@ -1069,7 +1048,7 @@ build(self, **kwargs)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/28709499e2f2e59fdb81be049c66dd04d982fa1c6f8d2b9f92bfa8c568aca970.png" src="../../_images/28709499e2f2e59fdb81be049c66dd04d982fa1c6f8d2b9f92bfa8c568aca970.png" />
+<img alt="../../_images/bf10948890bdbe530ea6b703b008a5e9f5665308231eb33c3493609696e10799.png" src="../../_images/bf10948890bdbe530ea6b703b008a5e9f5665308231eb33c3493609696e10799.png" />
 </div>
 </div>
 <p>As shown, the “Percieve” action is active (green), while the inactive actions are shown in blue. This action is active because it was defined as initial_action in the ASG definition.</p>
@@ -1100,7 +1079,6 @@ build(self, **kwargs)
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>class DetectHazard(Function):
     &quot;&quot;&quot;Function containing the human.&quot;&quot;&quot;
 
-    __slots__ = (&#39;hazard&#39;)
     container_m = Mode
     arch_aa = Human
     flow_hazard = Hazard
@@ -1119,7 +1097,8 @@ build(self, **kwargs)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=False)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hazard Hazard
+- s=HazardState(present=False, percieved=False, mitigated=False)
 </pre></div>
 </div>
 </div>
@@ -1127,7 +1106,7 @@ build(self, **kwargs)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span><span class="o">=</span><span class="kc">True</span>
-<span class="n">ex_fxn</span><span class="p">(</span><span class="s1">&#39;dynamic&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">ex_fxn</span><span class="p">(</span><span class="n">time</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">proptype</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1143,7 +1122,7 @@ build(self, **kwargs)
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
 </pre></div>
 </div>
-<img alt="../../_images/d0a93bad70fbe8785fa76bcbc0cda6ae53145a798c140002fb53768887c1c1ac.png" src="../../_images/d0a93bad70fbe8785fa76bcbc0cda6ae53145a798c140002fb53768887c1c1ac.png" />
+<img alt="../../_images/28e690eb9676cca44b13936a480d5bfb8b4ebddae9ba43c28e36b769f5928630.png" src="../../_images/28e690eb9676cca44b13936a480d5bfb8b4ebddae9ba43c28e36b769f5928630.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1153,7 +1132,8 @@ build(self, **kwargs)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hazard Hazard flow: HazardState(present=True, percieved=True, mitigated=True)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hazard Hazard
+- s=HazardState(present=True, percieved=True, mitigated=True)
 </pre></div>
 </div>
 </div>
@@ -1172,7 +1152,8 @@ build(self, **kwargs)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>outcome Outcome flow: OutcomeStates(num_perceptions=1, num_actions=1)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>outcome Outcome
+- s=OutcomeStates(num_perceptions=1, num_actions=1)
 </pre></div>
 </div>
 </div>
@@ -1189,7 +1170,7 @@ build(self, **kwargs)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span><span class="o">=</span><span class="kc">False</span>
-<span class="n">ex_fxn</span><span class="p">(</span><span class="s1">&#39;dynamic&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ex_fxn</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">proptype</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1202,7 +1183,7 @@ build(self, **kwargs)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/28709499e2f2e59fdb81be049c66dd04d982fa1c6f8d2b9f92bfa8c568aca970.png" src="../../_images/28709499e2f2e59fdb81be049c66dd04d982fa1c6f8d2b9f92bfa8c568aca970.png" />
+<img alt="../../_images/bf10948890bdbe530ea6b703b008a5e9f5665308231eb33c3493609696e10799.png" src="../../_images/bf10948890bdbe530ea6b703b008a5e9f5665308231eb33c3493609696e10799.png" />
 </div>
 </div>
 <p>As shown, now that the hazard is no longer present, the “Ready” Condition is triggered and the ASG goes back to the percieve state.</p>
@@ -1213,7 +1194,8 @@ build(self, **kwargs)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>outcome Outcome flow: OutcomeStates(num_perceptions=1, num_actions=1)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>outcome Outcome
+- s=OutcomeStates(num_perceptions=1, num_actions=1)
 </pre></div>
 </div>
 </div>
@@ -1225,7 +1207,8 @@ build(self, **kwargs)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=False)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hazard Hazard
+- s=HazardState(present=False, percieved=False, mitigated=False)
 </pre></div>
 </div>
 </div>
@@ -1237,7 +1220,8 @@ build(self, **kwargs)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=False)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hazard Hazard
+- s=HazardState(present=False, percieved=False, mitigated=False)
 </pre></div>
 </div>
 </div>
@@ -1254,7 +1238,7 @@ build(self, **kwargs)
 <p>This is essentially what a step-though of a simulation looks like. In practice, we simulate these behaviors using <code class="docutils literal notranslate"><span class="pre">propagate</span></code> as long as the <code class="docutils literal notranslate"><span class="pre">ActionArchitecture</span></code> is contained in a <code class="docutils literal notranslate"><span class="pre">Function</span></code>. Here we use the <code class="docutils literal notranslate"><span class="pre">disturbances</span></code> argument to simulate an external hazard occuring at <code class="docutils literal notranslate"><span class="pre">t=5</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_indiv</span><span class="p">,</span> <span class="n">hist_indiv</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">ex_fxn</span><span class="p">,</span> <span class="n">disturbances</span><span class="o">=</span><span class="p">{</span><span class="mi">5</span><span class="p">:{</span><span class="s1">&#39;aa.flows.hazard.s.present&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">}})</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_indiv</span><span class="p">,</span> <span class="n">hist_indiv</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">sequence</span><span class="p">(</span><span class="n">ex_fxn</span><span class="p">,</span> <span class="n">disturbances</span><span class="o">=</span><span class="p">{</span><span class="mi">5</span><span class="p">:{</span><span class="s1">&#39;aa.flows.hazard.s.present&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">}},</span> <span class="n">include_nominal</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1268,7 +1252,7 @@ build(self, **kwargs)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/4ac6470d935a43c5117db4840c92fdb2f4f0362e66cbd399894e7b72453cfd1a.png" src="../../_images/4ac6470d935a43c5117db4840c92fdb2f4f0362e66cbd399894e7b72453cfd1a.png" />
+<img alt="../../_images/bb21945c6d0674c432da3e105baced12f49fe06a5043e85bc256ba5c50c3671c.png" src="../../_images/bb21945c6d0674c432da3e105baced12f49fe06a5043e85bc256ba5c50c3671c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1326,11 +1310,10 @@ build(self, **kwargs)
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>class ProduceHazard(Function):
     &quot;&quot;&quot;Function producing Hazards.&quot;&quot;&quot;
 
-    __slots__ = (&#39;hazard&#39;,)
     flow_hazard = Hazard
 
-    def dynamic_behavior(self, time):
-        if not time % 4:
+    def dynamic_behavior(self):
+        if not self.t.time % 4:
             self.hazard.s.present = True
         else:
             self.hazard.s.present = False
@@ -1344,11 +1327,10 @@ class PassStates(State):
 class PassHazard(Function):
     &quot;&quot;&quot;Accumulates total hazards/mitigations.&quot;&quot;&quot;
 
-    __slots__ = (&#39;hazard&#39;,)
     container_s = PassStates
     flow_hazard = Hazard
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         if self.hazard.s.present and self.hazard.s.mitigated:
             self.s.hazards_mitigated += 1
         elif self.hazard.s.present and not self.hazard.s.mitigated:
@@ -1357,7 +1339,6 @@ class PassHazard(Function):
 class HazardModel(FunctionArchitecture):
     &quot;&quot;&quot;Overall model of the human in context.&quot;&quot;&quot;
 
-    __slots__ = ()
     default_sp = dict(end_time=60, dt=1.0)
 
     def init_architecture(self, **kwargs):
@@ -1387,7 +1368,8 @@ class HazardModel(FunctionArchitecture):
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>flows.hazard.s.present:        array(61)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>time:                          array(61)
+flows.hazard.s.present:        array(61)
 flows.hazard.s.percieved:      array(61)
 flows.hazard.s.mitigated:      array(61)
 fxns.detect_hazard.aa.active_actions: array(61)
@@ -1407,7 +1389,6 @@ fxns.detect_hazard.a           array(61)
 fxns.detect_hazard.m.sub_faults: array(61)
 fxns.pass_hazard.s.hazards_mitigated: array(61)
 fxns.pass_hazard.s.hazards_propagated: array(61)
-time:                          array(61)
 </pre></div>
 </div>
 </div>
@@ -1453,10 +1434,10 @@ time:                          array(61)
   <tbody>
     <tr>
       <th>0</th>
-      <td>{done}</td>
-      <td>True</td>
-      <td>True</td>
-      <td>True</td>
+      <td>{perceive}</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1546,7 +1527,7 @@ time:                          array(61)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/47656e458e4a85e78690025afe297a0433f78d7f3dcf52b8250b1a982037f59f.png" src="../../_images/47656e458e4a85e78690025afe297a0433f78d7f3dcf52b8250b1a982037f59f.png" />
+<img alt="../../_images/d23b27f478940d0c307446017e0e06888f5559f73107b69d586a4723ae4380b6.png" src="../../_images/d23b27f478940d0c307446017e0e06888f5559f73107b69d586a4723ae4380b6.png" />
 </div>
 </div>
 <p>As shown, perceptions and actions track the hazards mitigated.</p>
@@ -1592,21 +1573,18 @@ time:                          array(61)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c0ac004f7265a9ae58b4c61b1da35cc3d2352204b8ac3d0d6aa74eb03334b30d.png" src="../../_images/c0ac004f7265a9ae58b4c61b1da35cc3d2352204b8ac3d0d6aa74eb03334b30d.png" />
+<img alt="../../_images/58e089cac893c93c780f4baaf6635f376ae1dad0c3945cf2ae664299d06b1fac.png" src="../../_images/58e089cac893c93c780f4baaf6635f376ae1dad0c3945cf2ae664299d06b1fac.png" />
 </div>
 </div>
 <p>As shown, this only shows up in the PassHazard function (since the fault is removed in one timestep).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_fault</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">result_fault</span><span class="o">.</span><span class="n">get_faulty</span><span class="p">()</span><span class="o">.</span><span class="n">tend</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
-</pre></div>
-</div>
-<img alt="../../_images/0b59df5470c19f25f732b3e4b223452d415654a0fd01fd2566b0c3cae6e00c27.png" src="../../_images/0b59df5470c19f25f732b3e4b223452d415654a0fd01fd2566b0c3cae6e00c27.png" />
+<img alt="../../_images/8032ae06b43a5da2a38a5736458eb5b3c6f09c3273ed292c494cdbda34dcaf09.png" src="../../_images/8032ae06b43a5da2a38a5736458eb5b3c6f09c3273ed292c494cdbda34dcaf09.png" />
 </div>
 </div>
 <p>To see this in more detail, we will process the results history and then use <code class="docutils literal notranslate"><span class="pre">graph.results_from</span></code> at the time of the fault. Note how the model histories can be processed below:</p>
@@ -1895,7 +1873,7 @@ m.sub_faults:                  array(61)
 <p>We can further use <code class="docutils literal notranslate"><span class="pre">draw_from</span></code> to view the state of the ASG. See below:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_fault</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_fault</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_fault</span><span class="o">.</span><span class="n">get_faulty</span><span class="p">()</span><span class="o">.</span><span class="n">tend</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_fault</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1903,7 +1881,7 @@ m.sub_faults:                  array(61)
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: title={&#39;center&#39;: &#39; t=4&#39;}&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/68072196779a1860e6dc300a3b92fc6af5328fd7b592f69a31d85e65008bdccf.png" src="../../_images/68072196779a1860e6dc300a3b92fc6af5328fd7b592f69a31d85e65008bdccf.png" />
+<img alt="../../_images/9c10095611800fd194ecf19c1e3877eba46bdff3879764d93a661a2c7e6d08e1.png" src="../../_images/9c10095611800fd194ecf19c1e3877eba46bdff3879764d93a661a2c7e6d08e1.png" />
 </div>
 </div>
 <p>Note the lack of a fault at this time-step, despite it being instantiated here. This is because the fault was removed at the end of the same time-step it was added in.</p>
@@ -1925,7 +1903,7 @@ m.sub_faults:                  array(61)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/f8123bfbee2378dcd0b9d666e6cca674e6ac25e439f3307f9a81518decb7018d.png" src="../../_images/f8123bfbee2378dcd0b9d666e6cca674e6ac25e439f3307f9a81518decb7018d.png" />
+<img alt="../../_images/a1ef21ceabf4541ddb7e32f6acfbb46337b2c5a9e6837a3930b1e93f78576978.png" src="../../_images/a1ef21ceabf4541ddb7e32f6acfbb46337b2c5a9e6837a3930b1e93f78576978.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1935,7 +1913,7 @@ m.sub_faults:                  array(61)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([{&#39;done&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;done&#39;},
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([{&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;done&#39;},
        {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;done&#39;}, {&#39;perceive&#39;},
        {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;done&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;},
        {&#39;perceive&#39;}, {&#39;done&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;},
@@ -1992,10 +1970,20 @@ m.sub_faults:                  array(61)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>acts.perceive:                  array(1)
-acts.act:                       array(1)
-acts.done:                      array(1)
-active_actions:                 array(1)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>active_actions:                 array(1)
+flows.hazard.s.present:         array(1)
+flows.hazard.s.percieved:       array(1)
+flows.hazard.s.mitigated:       array(1)
+flows.outcome.s.num_perceptions: array(1)
+flows.outcome.s.num_actions:    array(1)
+acts.perceive.m.mode:           array(1)
+acts.perceive.m.faults.failed:  array(1)
+acts.perceive.m.faults.unable:  array(1)
+acts.perceive.m.sub_faults:     array(1)
+acts.act.m.mode:                array(1)
+acts.act.m.faults.failed:       array(1)
+acts.act.m.faults.unable:       array(1)
+acts.act.m.sub_faults:          array(1)
 </pre></div>
 </div>
 </div>
@@ -2019,13 +2007,7 @@ active_actions:                 array(1)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([False, False, False, False, False, False, False, False, False,
-       False, False, False, False, False, False, False, False, False,
-       False, False, False, False, False, False, False, False, False,
-       False, False, False, False, False, False, False, False, False,
-       False, False, False, False, False, False, False, False, False,
-       False, False, False, False, False, False, False, False, False,
-       False, False, False, False, False, False, False])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([False])
 </pre></div>
 </div>
 </div>
@@ -2051,7 +2033,7 @@ act.m.sub_faults:              array(61)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endstate_unable</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endstate_unable</span><span class="o">.</span><span class="n">get_faulty</span><span class="p">()</span><span class="o">.</span><span class="n">tend</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2059,27 +2041,27 @@ act.m.sub_faults:              array(61)
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: title={&#39;center&#39;: &#39; t=4&#39;}&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/e37b7a266f90fd68b9faa4ebba6e5887b8fc6a57458dcf016c6bbe29ff1118ff.png" src="../../_images/e37b7a266f90fd68b9faa4ebba6e5887b8fc6a57458dcf016c6bbe29ff1118ff.png" />
+<img alt="../../_images/94b252030827823fe56dd994080612156ac56ceeb7736a83c91eb6452e73943b.png" src="../../_images/94b252030827823fe56dd994080612156ac56ceeb7736a83c91eb6452e73943b.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.aa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="o">.</span><span class="n">get_faulty</span><span class="p">()</span><span class="o">.</span><span class="n">tend</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.aa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/516159a4f93ff4c84ad62160a2c9943f8fd9fd227f9bcdddf4cdfc05c78454a8.png" src="../../_images/516159a4f93ff4c84ad62160a2c9943f8fd9fd227f9bcdddf4cdfc05c78454a8.png" />
+<img alt="../../_images/da95f94480b03c446dedbefdbed03f6847210e555ffa3d2c815cc6373b0244b1.png" src="../../_images/da95f94480b03c446dedbefdbed03f6847210e555ffa3d2c815cc6373b0244b1.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.aa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">,</span> <span class="n">rem_ind</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="o">.</span><span class="n">get_faulty</span><span class="p">()</span><span class="o">.</span><span class="n">tend</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.aa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">,</span> <span class="n">rem_ind</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d409d93353c86c4a7ac54bef5bfde03224f04b0d1ce61e3391899758b29f6aed.png" src="../../_images/d409d93353c86c4a7ac54bef5bfde03224f04b0d1ce61e3391899758b29f6aed.png" />
+<img alt="../../_images/f8fd4d941d8b9fb3588dbb82772cc769a473aa9a3f6881fe2678c5a589133478.png" src="../../_images/f8fd4d941d8b9fb3588dbb82772cc769a473aa9a3f6881fe2678c5a589133478.png" />
 </div>
 </div>
 </section>

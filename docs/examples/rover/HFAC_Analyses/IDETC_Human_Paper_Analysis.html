@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Human Failure Representation &mdash; fmdtools 2.1.3 documentation</title>
+  <title>Human Failure Representation &mdash; fmdtools 2.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
 
   
     <link rel="shortcut icon" href="../../../_static/fmdtools_ico.ico"/>
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=179ab080"></script>
+      <script src="../../../_static/documentation_options.js?v=b21de401"></script>
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#version-2-2-0">Version: 2.2.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -219,21 +219,12 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Analysis.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Analysis.html#history">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Analysis.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Analysis.html#what-about-human-induced-faults">What about human-induced faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Analysis.html#evaluating-joint-component-human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Analysis.html#testing-different-reaction-times">Testing different reaction times</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Analysis.html#tank-architecture-s">Tank Architecture(s)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Analysis.html#tank-analysis">Tank Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../tank/Tank_Optimization.html#simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Optimization.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Optimization.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Optimization.html#full-set-of-modes">Full set of modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Optimization.html#defining-optimization-problem">Defining Optimization Problem</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Optimization.html#optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../tank/Tank_Optimization.html#simulation">Simulation</a></li>
 </ul>
 </li>
 </ul>
@@ -400,12 +391,15 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.get_dict_repr"><code class="docutils literal notranslate"><span class="pre">get_dict_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.get_repr"><code class="docutils literal notranslate"><span class="pre">get_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
@@ -430,41 +424,25 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.NestedSimulation"><code class="docutils literal notranslate"><span class="pre">NestedSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.SimEvent"><code class="docutils literal notranslate"><span class="pre">SimEvent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_fault_sim"><code class="docutils literal notranslate"><span class="pre">exec_fault_sim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_sim"><code class="docutils literal notranslate"><span class="pre">exec_sim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample"><code class="docutils literal notranslate"><span class="pre">fault_sample()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample_from"><code class="docutils literal notranslate"><span class="pre">fault_sample_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.gen_sampleapproach"><code class="docutils literal notranslate"><span class="pre">gen_sampleapproach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_mdl_kwargs"><code class="docutils literal notranslate"><span class="pre">get_mdl_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_sim_call_kwargs"><code class="docutils literal notranslate"><span class="pre">get_sim_call_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nested_sample"><code class="docutils literal notranslate"><span class="pre">nested_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.parameter_sample"><code class="docutils literal notranslate"><span class="pre">parameter_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.process_nominal"><code class="docutils literal notranslate"><span class="pre">process_nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
@@ -555,7 +533,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
@@ -579,6 +556,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_to_return"><code class="docutils literal notranslate"><span class="pre">clean_to_return()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
@@ -764,21 +742,63 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;power&#39;: power Power
- - PowerState(charge=100.0, power=0.0)
- - PowerMode(mode=off, faults=set()),
+ - t=Time(time=-0.1, timers={})
+ - s=PowerState(charge=100.0, power=0.0)
+ - m=PowerMode(mode=&#39;off&#39;, faults=set(), sub_faults=False)
+ - ee_15=EE(s=(v=0.0, a=0.0))
+ - ee_5=EE(s=(v=0.0, a=0.0))
+ - ee_12=EE(s=(v=0.0, a=0.0))
+ - switch=Switch(s=(power=False)),
  &#39;perception&#39;: perception Perception
- - PerceptionMode(mode=off, faults=set()),
- &#39;communications&#39;: communications Communications,
+ - t=Time(time=-0.1, timers={})
+ - m=PerceptionMode(mode=&#39;off&#39;, faults=set(), sub_faults=False)
+ - pos=Pos(s=(x=0.0, y=0.0, vel=0.0, ux=1.0, uy=0.0))
+ - pos_signal=Pos(s=(x=0.0, y=0.0, vel=0.0, ux=1.0, uy=0.0))
+ - ground=Ground(s=(in_bound=True), c=(), ga=())
+ - ee=EE(s=(v=0.0, a=0.0))
+ - video=Video(s=(lin_ux=1.0, lin_uy=0.0, lin_dx=0.0, lin_dy=0.0, quality=1.0)),
+ &#39;communications&#39;: communications Communications
+ - t=Time(time=-0.1, timers={})
+ - ee_12=EE(s=(v=0.0, a=0.0))
+ - comms=Comms(s=(pos=PosState(x=0.0, y=0.0, vel=0.0, ux=1.0, uy=0.0), ctl=ControlState(rpower=0.0, lpower=0.0), video...
+ - pos_signal=Pos(s=(x=0.0, y=0.0, vel=0.0, ux=1.0, uy=0.0))
+ - video=Video(s=(lin_ux=1.0, lin_uy=0.0, lin_dx=0.0, lin_dy=0.0, quality=1.0)),
  &#39;operator&#39;: operator Operator
- - Mode(mode=nominal, faults=set()),
+ - t=Time(time=-0.1, timers={})
+ - m=Mode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)
+ - switch=Switch(s=(power=False))
+ - control=Control(s=(rpower=0.0, lpower=0.0))
+ - pos_signal=Pos(s=(x=0.0, y=0.0, vel=0.0, ux=1.0, uy=0.0))
+ - comms=Comms(s=(pos=PosState(x=0.0, y=0.0, vel=0.0, ux=1.0, uy=0.0), ctl=ControlState(rpower=0.0, lpower=0.0), video...
+ - video=Video(s=(lin_ux=1.0, lin_uy=0.0, lin_dx=0.0, lin_dy=0.0, quality=1.0))
+ - psfs=PSFs(s=(attention=10.0))
+ - ground=Ground(s=(in_bound=True), c=(), ga=())
+ - aa=HumanActions(m=(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)),
  &#39;plan_path&#39;: plan_path PlanPath
- - PlanPathState(u_self=array([0., 0.]), u_lin=array([0., 0.]), u_lin_dev=array([0., 0.]), rdiff=0.0, vel_adj=1.0)
- - PlanPathMode(mode=standby, faults=set()),
+ - t=Time(time=-0.1, timers={})
+ - m=PlanPathMode(mode=&#39;standby&#39;, faults=set(), sub_faults=False)
+ - s=PlanPathState(u_self=array([0., 0.]), u_lin=array([0., 0.]), u_lin_dev=array([0., 0.]), rdiff=0.0, vel_adj=1.0)
+ - video=Video(s=(lin_ux=1.0, lin_uy=0.0, lin_dx=0.0, lin_dy=0.0, quality=1.0))
+ - pos_signal=Pos(s=(x=0.0, y=0.0, vel=0.0, ux=1.0, uy=0.0))
+ - ground=Ground(s=(in_bound=True), c=(), ga=())
+ - control=Control(s=(rpower=0.0, lpower=0.0))
+ - fault_sig=FaultSig(s=(transfer=1.0, friction=0.0, drift=0.0)),
  &#39;override&#39;: override Override
- - OverrideMode(mode=off, faults=set()),
+ - t=Time(time=-0.1, timers={})
+ - m=OverrideMode(mode=&#39;off&#39;, faults=set(), sub_faults=False)
+ - comms=Comms(s=(pos=PosState(x=0.0, y=0.0, vel=0.0, ux=1.0, uy=0.0), ctl=ControlState(rpower=0.0, lpower=0.0), video...
+ - ee=EE(s=(v=0.0, a=0.0))
+ - motor_control=Control(s=(rpower=0.0, lpower=0.0))
+ - auto_control=Control(s=(rpower=0.0, lpower=0.0)),
  &#39;drive&#39;: drive Drive
- - FaultStates(transfer=1.0, friction=0.0, drift=0.0)
- - DriveMode(mode=nominal, faults=set())}
+ - t=Time(time=-0.1, timers={})
+ - m=DriveMode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)
+ - s=FaultStates(transfer=1.0, friction=0.0, drift=0.0)
+ - fault_sig=FaultSig(s=(transfer=1.0, friction=0.0, drift=0.0))
+ - ground=Ground(s=(in_bound=True), c=(), ga=())
+ - pos=Pos(s=(x=0.0, y=0.0, vel=0.0, ux=1.0, uy=0.0))
+ - motor_control=Control(s=(rpower=0.0, lpower=0.0))
+ - ee_in=EE(s=(v=0.0, a=0.0))}
 </pre></div>
 </div>
 </div>
@@ -806,7 +826,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/f4c8ea79b725d753b6790a8cef4244752584853b771b65c3512b79e2c7cdb79e.png" src="../../../_images/f4c8ea79b725d753b6790a8cef4244752584853b771b65c3512b79e2c7cdb79e.png" />
+<img alt="../../../_images/c9ef399fe5d3b754706f948e7d1707321d91406ad56dbd02490310bcd49e8340.png" src="../../../_images/c9ef399fe5d3b754706f948e7d1707321d91406ad56dbd02490310bcd49e8340.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -827,7 +847,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/9b7845ed2cfa77d5bf432a577eb47fb1f02b5798c1c8f91ff130d59bc736872c.png" src="../../../_images/9b7845ed2cfa77d5bf432a577eb47fb1f02b5798c1c8f91ff130d59bc736872c.png" />
+<img alt="../../../_images/4a58774b49ce7a1d6c67ec0f3c40251e7892351c24eee36283f4f973399ccf47.png" src="../../../_images/4a58774b49ce7a1d6c67ec0f3c40251e7892351c24eee36283f4f973399ccf47.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -848,7 +868,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/595c6b26803f425454f4e737ce0af318818fb7f17c3f624b669d97f3f3314fd8.png" src="../../../_images/595c6b26803f425454f4e737ce0af318818fb7f17c3f624b669d97f3f3314fd8.png" />
+<img alt="../../../_images/3fe9b10520df55f2e474451bda005203462b1671447a3d70df8f2b6fb931d61d.png" src="../../../_images/3fe9b10520df55f2e474451bda005203462b1671447a3d70df8f2b6fb931d61d.png" />
 </div>
 </div>
 <p>Performance on turn</p>
@@ -864,7 +884,7 @@
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../../_images/317994c7073c584de4067335b4e17211fa9074993ba59b0fdf12241183ee1de7.png" src="../../../_images/317994c7073c584de4067335b4e17211fa9074993ba59b0fdf12241183ee1de7.png" />
+<img alt="../../../_images/f32d4665471ee7933feff2bb6e91489b13f56efe32be1429eae084e1eddb00cf.png" src="../../../_images/f32d4665471ee7933feff2bb6e91489b13f56efe32be1429eae084e1eddb00cf.png" />
 </div>
 </div>
 <p>Performance on sine map</p>
@@ -880,7 +900,7 @@
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../../_images/3d74cfbf4dfd814180deaff3048448ff12d9876f781e347a453cb9d17c73d959.png" src="../../../_images/3d74cfbf4dfd814180deaff3048448ff12d9876f781e347a453cb9d17c73d959.png" />
+<img alt="../../../_images/cb03e795be4eca1b24db638376c18c20665183f156835a0d50aad5bf47b820db.png" src="../../../_images/cb03e795be4eca1b24db638376c18c20665183f156835a0d50aad5bf47b820db.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -901,7 +921,7 @@
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;power&#39;: PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 109.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}}),
  &#39;perception&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;feed&#39;: [2.0, 109.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;feed&#39;: {&#39;feed&#39;}}),
  &#39;look&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 109.0]}, {&#39;nominal&#39;: {&#39;nominal&#39;}}),
- &#39;percieve&#39;: PhaseMap({&#39;no_action&#39;: [0.0, 1.0], &#39;nominal&#39;: [2.0, 109.0]}, {&#39;no_action&#39;: {&#39;no_action&#39;}, &#39;nominal&#39;: {&#39;nominal&#39;}}),
+ &#39;percieve&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 0.0], &#39;no_action&#39;: [1.0, 1.0], &#39;nominal1&#39;: [2.0, 109.0]}, {&#39;nominal&#39;: {&#39;nominal1&#39;, &#39;nominal&#39;}, &#39;no_action&#39;: {&#39;no_action&#39;}}),
  &#39;comprehend&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 109.0]}, {&#39;nominal&#39;: {&#39;nominal&#39;}}),
  &#39;project&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 109.0]}, {&#39;nominal&#39;: {&#39;nominal&#39;}}),
  &#39;decide&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 109.0]}, {&#39;nominal&#39;: {&#39;nominal&#39;}}),
@@ -919,7 +939,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/222caa693746b4bad1be3ac1a6ce3268233887f704c52242b1443768d65ad977.png" src="../../../_images/222caa693746b4bad1be3ac1a6ce3268233887f704c52242b1443768d65ad977.png" />
+<img alt="../../../_images/41171fafa5d7b40f07f79c2e7e38d3388fb2aa73a6744a1ef85c86afccf29c99.png" src="../../../_images/41171fafa5d7b40f07f79c2e7e38d3388fb2aa73a6744a1ef85c86afccf29c99.png" />
 </div>
 </div>
 </section>
@@ -1014,70 +1034,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   0%|          | 0/19 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   5%|▌         | 1/19 [00:00&lt;00:03,  4.88it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  11%|█         | 2/19 [00:00&lt;00:04,  3.44it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  16%|█▌        | 3/19 [00:00&lt;00:05,  3.15it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  21%|██        | 4/19 [00:01&lt;00:04,  3.01it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  26%|██▋       | 5/19 [00:01&lt;00:04,  3.48it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  32%|███▏      | 6/19 [00:01&lt;00:03,  3.87it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  37%|███▋      | 7/19 [00:01&lt;00:02,  4.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  42%|████▏     | 8/19 [00:02&lt;00:03,  3.02it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  47%|████▋     | 9/19 [00:02&lt;00:02,  3.43it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  53%|█████▎    | 10/19 [00:02&lt;00:02,  3.81it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  58%|█████▊    | 11/19 [00:03&lt;00:01,  4.04it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  63%|██████▎   | 12/19 [00:03&lt;00:01,  4.18it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  68%|██████▊   | 13/19 [00:03&lt;00:01,  4.34it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  74%|███████▎  | 14/19 [00:03&lt;00:01,  4.47it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  79%|███████▉  | 15/19 [00:03&lt;00:00,  4.55it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  84%|████████▍ | 16/19 [00:04&lt;00:00,  4.62it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  89%|████████▉ | 17/19 [00:04&lt;00:00,  3.86it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  95%|█████████▍| 18/19 [00:04&lt;00:00,  3.43it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:05&lt;00:00,  3.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:05&lt;00:00,  3.68it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:08&lt;00:00,  2.21it/s]
 </pre></div>
 </div>
 </div>
@@ -1089,7 +1046,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/8d9e048b0bbb7aacf2a60f28b53a3a1718c2563e8444f3ab8898dc40d8d0eb2b.png" src="../../../_images/8d9e048b0bbb7aacf2a60f28b53a3a1718c2563e8444f3ab8898dc40d8d0eb2b.png" />
+<img alt="../../../_images/375d9645a2df388713442e0a0aa5a998b039f61bf884da58645f231177a14389.png" src="../../../_images/375d9645a2df388713442e0a0aa5a998b039f61bf884da58645f231177a14389.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1104,7 +1061,10 @@
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-5.0, 5.0)
 </pre></div>
 </div>
-<img alt="../../../_images/2777d5ac1af9901fa3c2291eb79a0588c7781b0fc47812b896bf57426cf40a6c.png" src="../../../_images/2777d5ac1af9901fa3c2291eb79a0588c7781b0fc47812b896bf57426cf40a6c.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ignoring fixed x limits to fulfill fixed data aspect with adjustable data limits.
+</pre></div>
+</div>
+<img alt="../../../_images/260d5a80cca7580ec9710cf4ce47a328c0458e393b7d3807278e36c54953af99.png" src="../../../_images/260d5a80cca7580ec9710cf4ce47a328c0458e393b7d3807278e36c54953af99.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1156,6 +1116,18 @@
   </thead>
   <tbody>
     <tr>
+      <th>nominal</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0.0</td>
+      <td>[]</td>
+      <td>nominal mission</td>
+      <td>29.254775</td>
+      <td>-0.782764</td>
+    </tr>
+    <tr>
       <th>roverhuman_fxns_operator_aa_acts_look_failed_no_action_t56p0</th>
       <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
@@ -1169,7 +1141,7 @@
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t56p0</th>
-      <td>['ground']</td>
+      <td>[]</td>
       <td>[]</td>
       <td>True</td>
       <td>True</td>
@@ -1181,7 +1153,7 @@
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_percieve_not_visible_t56p0</th>
-      <td>['ground']</td>
+      <td>[]</td>
       <td>[]</td>
       <td>True</td>
       <td>True</td>
@@ -1193,7 +1165,7 @@
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_percieve_wrong_position_t56p0</th>
-      <td>['ground']</td>
+      <td>[]</td>
       <td>[]</td>
       <td>True</td>
       <td>True</td>
@@ -1241,7 +1213,7 @@
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_project_failed_slow_t56p0</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'ee_12...</td>
+      <td>['psfs', 'pos_signal', 'pos', 'ee_15', 'video'...</td>
       <td>['operator']</td>
       <td>True</td>
       <td>False</td>
@@ -1277,15 +1249,15 @@
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_decide_failed_fast_t56p0</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
+      <td>['psfs', 'pos_signal', 'pos', 'ee_15', 'video'...</td>
       <td>['operator']</td>
+      <td>True</td>
       <td>False</td>
-      <td>False</td>
-      <td>13.663813</td>
-      <td>[percieve.not_visible, decide.failed_fast]</td>
+      <td>14.2601</td>
+      <td>[decide.failed_fast]</td>
       <td>incomplete mission faulty</td>
-      <td>15.24424</td>
-      <td>-0.529458</td>
+      <td>14.759409</td>
+      <td>0.904491</td>
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_decide_failed_no_action_t56p0</th>
@@ -1301,39 +1273,39 @@
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_decide_failed_slow_t56p0</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
+      <td>['psfs', 'pos_signal', 'pos', 'ee_15', 'video'...</td>
       <td>['operator']</td>
+      <td>True</td>
       <td>False</td>
-      <td>False</td>
-      <td>13.663813</td>
-      <td>[percieve.not_visible, decide.failed_slow]</td>
+      <td>14.2601</td>
+      <td>[decide.failed_slow]</td>
       <td>incomplete mission faulty</td>
-      <td>15.24424</td>
-      <td>-0.529458</td>
+      <td>14.759409</td>
+      <td>0.904491</td>
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_decide_failed_turn_left_t56p0</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
+      <td>['psfs', 'pos_signal', 'pos', 'ee_15', 'video'...</td>
       <td>['operator']</td>
+      <td>True</td>
       <td>False</td>
-      <td>False</td>
-      <td>13.663813</td>
-      <td>[percieve.not_visible, decide.failed_turn_left]</td>
+      <td>14.2601</td>
+      <td>[decide.failed_turn_left]</td>
       <td>incomplete mission faulty</td>
-      <td>15.24424</td>
-      <td>-0.529458</td>
+      <td>14.759409</td>
+      <td>0.904491</td>
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_decide_failed_turn_right_t56p0</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
+      <td>['psfs', 'pos_signal', 'pos', 'ee_15', 'video'...</td>
       <td>['operator']</td>
+      <td>True</td>
       <td>False</td>
-      <td>False</td>
-      <td>13.663813</td>
-      <td>[percieve.not_visible, decide.failed_turn_right]</td>
+      <td>14.2601</td>
+      <td>[decide.failed_turn_right]</td>
       <td>incomplete mission faulty</td>
-      <td>15.24424</td>
-      <td>-0.529458</td>
+      <td>14.759409</td>
+      <td>0.904491</td>
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_reach_failed_no_action_t56p0</th>
@@ -1349,7 +1321,7 @@
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_press_failed_left_t56p0</th>
-      <td>['ground', 'operator']</td>
+      <td>['operator']</td>
       <td>['operator']</td>
       <td>True</td>
       <td>True</td>
@@ -1361,7 +1333,7 @@
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_press_failed_right_t56p0</th>
-      <td>['ground', 'operator']</td>
+      <td>['operator']</td>
       <td>['operator']</td>
       <td>True</td>
       <td>True</td>
@@ -1373,25 +1345,13 @@
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_press_no_press_t56p0</th>
-      <td>['ground', 'operator']</td>
+      <td>['operator']</td>
       <td>['operator']</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
       <td>[press.no_press]</td>
       <td>faulty</td>
-      <td>29.254775</td>
-      <td>-0.782764</td>
-    </tr>
-    <tr>
-      <th>nominal</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>True</td>
-      <td>True</td>
-      <td>0.0</td>
-      <td>[]</td>
-      <td>nominal mission</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
@@ -1437,6 +1397,54 @@
   </thead>
   <tbody>
     <tr>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_turn_right_t56p0</th>
+      <td>['psfs', 'pos_signal', 'pos', 'ee_15', 'video'...</td>
+      <td>['operator']</td>
+      <td>True</td>
+      <td>False</td>
+      <td>14.2601</td>
+      <td>[decide.failed_turn_right]</td>
+      <td>incomplete mission faulty</td>
+      <td>14.759409</td>
+      <td>0.904491</td>
+    </tr>
+    <tr>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_fast_t56p0</th>
+      <td>['psfs', 'pos_signal', 'pos', 'ee_15', 'video'...</td>
+      <td>['operator']</td>
+      <td>True</td>
+      <td>False</td>
+      <td>14.2601</td>
+      <td>[decide.failed_fast]</td>
+      <td>incomplete mission faulty</td>
+      <td>14.759409</td>
+      <td>0.904491</td>
+    </tr>
+    <tr>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_slow_t56p0</th>
+      <td>['psfs', 'pos_signal', 'pos', 'ee_15', 'video'...</td>
+      <td>['operator']</td>
+      <td>True</td>
+      <td>False</td>
+      <td>14.2601</td>
+      <td>[decide.failed_slow]</td>
+      <td>incomplete mission faulty</td>
+      <td>14.759409</td>
+      <td>0.904491</td>
+    </tr>
+    <tr>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_turn_left_t56p0</th>
+      <td>['psfs', 'pos_signal', 'pos', 'ee_15', 'video'...</td>
+      <td>['operator']</td>
+      <td>True</td>
+      <td>False</td>
+      <td>14.2601</td>
+      <td>[decide.failed_turn_left]</td>
+      <td>incomplete mission faulty</td>
+      <td>14.759409</td>
+      <td>0.904491</td>
+    </tr>
+    <tr>
       <th>roverhuman_fxns_operator_aa_acts_project_failed_turn_left_t56p0</th>
       <td>['ground', 'pos_signal', 'pos', 'video', 'auto...</td>
       <td>['operator']</td>
@@ -1461,18 +1469,6 @@
       <td>1.140047</td>
     </tr>
     <tr>
-      <th>roverhuman_fxns_operator_aa_acts_look_failed_no_action_t56p0</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
-      <td>['operator']</td>
-      <td>False</td>
-      <td>False</td>
-      <td>13.663813</td>
-      <td>[look.failed_no_action]</td>
-      <td>incomplete mission faulty</td>
-      <td>15.24424</td>
-      <td>-0.529458</td>
-    </tr>
-    <tr>
       <th>roverhuman_fxns_operator_aa_acts_reach_failed_no_action_t56p0</th>
       <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
@@ -1485,61 +1481,13 @@
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>roverhuman_fxns_operator_aa_acts_decide_failed_turn_right_t56p0</th>
+      <th>roverhuman_fxns_operator_aa_acts_comprehend_failed_no_action_t56p0</th>
       <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>[percieve.not_visible, decide.failed_turn_right]</td>
-      <td>incomplete mission faulty</td>
-      <td>15.24424</td>
-      <td>-0.529458</td>
-    </tr>
-    <tr>
-      <th>roverhuman_fxns_operator_aa_acts_decide_failed_turn_left_t56p0</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
-      <td>['operator']</td>
-      <td>False</td>
-      <td>False</td>
-      <td>13.663813</td>
-      <td>[percieve.not_visible, decide.failed_turn_left]</td>
-      <td>incomplete mission faulty</td>
-      <td>15.24424</td>
-      <td>-0.529458</td>
-    </tr>
-    <tr>
-      <th>roverhuman_fxns_operator_aa_acts_decide_failed_slow_t56p0</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
-      <td>['operator']</td>
-      <td>False</td>
-      <td>False</td>
-      <td>13.663813</td>
-      <td>[percieve.not_visible, decide.failed_slow]</td>
-      <td>incomplete mission faulty</td>
-      <td>15.24424</td>
-      <td>-0.529458</td>
-    </tr>
-    <tr>
-      <th>roverhuman_fxns_operator_aa_acts_decide_failed_no_action_t56p0</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
-      <td>['operator']</td>
-      <td>False</td>
-      <td>False</td>
-      <td>13.663813</td>
-      <td>[percieve.not_visible, decide.failed_no_action]</td>
-      <td>incomplete mission faulty</td>
-      <td>15.24424</td>
-      <td>-0.529458</td>
-    </tr>
-    <tr>
-      <th>roverhuman_fxns_operator_aa_acts_decide_failed_fast_t56p0</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
-      <td>['operator']</td>
-      <td>False</td>
-      <td>False</td>
-      <td>13.663813</td>
-      <td>[percieve.not_visible, decide.failed_fast]</td>
+      <td>[percieve.not_visible, comprehend.failed_no_ac...</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
@@ -1557,13 +1505,25 @@
       <td>-0.529458</td>
     </tr>
     <tr>
-      <th>roverhuman_fxns_operator_aa_acts_comprehend_failed_no_action_t56p0</th>
+      <th>roverhuman_fxns_operator_aa_acts_look_failed_no_action_t56p0</th>
       <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
       <td>['operator']</td>
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>[percieve.not_visible, comprehend.failed_no_ac...</td>
+      <td>[look.failed_no_action]</td>
+      <td>incomplete mission faulty</td>
+      <td>15.24424</td>
+      <td>-0.529458</td>
+    </tr>
+    <tr>
+      <th>roverhuman_fxns_operator_aa_acts_decide_failed_no_action_t56p0</th>
+      <td>['ground', 'psfs', 'pos_signal', 'pos', 'video...</td>
+      <td>['operator']</td>
+      <td>False</td>
+      <td>False</td>
+      <td>13.663813</td>
+      <td>[percieve.not_visible, decide.failed_no_action]</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
@@ -1582,7 +1542,7 @@
     </tr>
     <tr>
       <th>roverhuman_fxns_operator_aa_acts_project_failed_slow_t56p0</th>
-      <td>['ground', 'psfs', 'pos_signal', 'pos', 'ee_12...</td>
+      <td>['psfs', 'pos_signal', 'pos', 'ee_15', 'video'...</td>
       <td>['operator']</td>
       <td>True</td>
       <td>False</td>
@@ -1593,56 +1553,8 @@
       <td>0.81243</td>
     </tr>
     <tr>
-      <th>roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t56p0</th>
-      <td>['ground']</td>
-      <td>[]</td>
-      <td>True</td>
-      <td>True</td>
-      <td>0.0</td>
-      <td>[]</td>
-      <td>nominal mission</td>
-      <td>29.254775</td>
-      <td>-0.782764</td>
-    </tr>
-    <tr>
-      <th>roverhuman_fxns_operator_aa_acts_percieve_wrong_position_t56p0</th>
-      <td>['ground']</td>
-      <td>[]</td>
-      <td>True</td>
-      <td>True</td>
-      <td>0.0</td>
-      <td>[]</td>
-      <td>nominal mission</td>
-      <td>29.254775</td>
-      <td>-0.782764</td>
-    </tr>
-    <tr>
-      <th>roverhuman_fxns_operator_aa_acts_percieve_not_visible_t56p0</th>
-      <td>['ground']</td>
-      <td>[]</td>
-      <td>True</td>
-      <td>True</td>
-      <td>0.0</td>
-      <td>[]</td>
-      <td>nominal mission</td>
-      <td>29.254775</td>
-      <td>-0.782764</td>
-    </tr>
-    <tr>
-      <th>roverhuman_fxns_operator_aa_acts_press_failed_left_t56p0</th>
-      <td>['ground', 'operator']</td>
-      <td>['operator']</td>
-      <td>True</td>
-      <td>True</td>
-      <td>0.0</td>
-      <td>[press.failed_left]</td>
-      <td>faulty</td>
-      <td>29.254775</td>
-      <td>-0.782764</td>
-    </tr>
-    <tr>
       <th>roverhuman_fxns_operator_aa_acts_press_failed_right_t56p0</th>
-      <td>['ground', 'operator']</td>
+      <td>['operator']</td>
       <td>['operator']</td>
       <td>True</td>
       <td>True</td>
@@ -1653,13 +1565,13 @@
       <td>-0.782764</td>
     </tr>
     <tr>
-      <th>roverhuman_fxns_operator_aa_acts_press_no_press_t56p0</th>
-      <td>['ground', 'operator']</td>
+      <th>roverhuman_fxns_operator_aa_acts_press_failed_left_t56p0</th>
+      <td>['operator']</td>
       <td>['operator']</td>
       <td>True</td>
       <td>True</td>
       <td>0.0</td>
-      <td>[press.no_press]</td>
+      <td>[press.failed_left]</td>
       <td>faulty</td>
       <td>29.254775</td>
       <td>-0.782764</td>
@@ -1673,6 +1585,54 @@
       <td>0.0</td>
       <td>[]</td>
       <td>nominal mission</td>
+      <td>29.254775</td>
+      <td>-0.782764</td>
+    </tr>
+    <tr>
+      <th>roverhuman_fxns_operator_aa_acts_percieve_wrong_position_t56p0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0.0</td>
+      <td>[]</td>
+      <td>nominal mission</td>
+      <td>29.254775</td>
+      <td>-0.782764</td>
+    </tr>
+    <tr>
+      <th>roverhuman_fxns_operator_aa_acts_percieve_not_visible_t56p0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0.0</td>
+      <td>[]</td>
+      <td>nominal mission</td>
+      <td>29.254775</td>
+      <td>-0.782764</td>
+    </tr>
+    <tr>
+      <th>roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t56p0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0.0</td>
+      <td>[]</td>
+      <td>nominal mission</td>
+      <td>29.254775</td>
+      <td>-0.782764</td>
+    </tr>
+    <tr>
+      <th>roverhuman_fxns_operator_aa_acts_press_no_press_t56p0</th>
+      <td>['operator']</td>
+      <td>['operator']</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0.0</td>
+      <td>[press.no_press]</td>
+      <td>faulty</td>
       <td>29.254775</td>
       <td>-0.782764</td>
     </tr>
@@ -1691,26 +1651,26 @@
 \toprule
  &amp; degraded &amp; faulty &amp; in_bound &amp; at_finish &amp; end_dist &amp; faults &amp; classification &amp; end_x &amp; end_y \\
 \midrule
+nominal &amp; [] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
 roverhuman_fxns_operator_aa_acts_look_failed_no_action_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;look.failed_no_action&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t56p0 &amp; [&#39;ground&#39;] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
-roverhuman_fxns_operator_aa_acts_percieve_not_visible_t56p0 &amp; [&#39;ground&#39;] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
-roverhuman_fxns_operator_aa_acts_percieve_wrong_position_t56p0 &amp; [&#39;ground&#39;] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
+roverhuman_fxns_operator_aa_acts_percieve_failed_no_action_t56p0 &amp; [] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
+roverhuman_fxns_operator_aa_acts_percieve_not_visible_t56p0 &amp; [] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
+roverhuman_fxns_operator_aa_acts_percieve_wrong_position_t56p0 &amp; [] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
 roverhuman_fxns_operator_aa_acts_comprehend_failed_no_action_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;comprehend.failed_no_action&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
 roverhuman_fxns_operator_aa_acts_project_failed_fast_t56p0 &amp; [&#39;ground&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 12.955107 &amp; [&#39;percieve.not_visible&#39;, &#39;project.failed_fast&#39;] &amp; incomplete mission faulty &amp; 16.023518 &amp; 0.480458 \\
 roverhuman_fxns_operator_aa_acts_project_failed_no_action_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;project.failed_no_action&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-roverhuman_fxns_operator_aa_acts_project_failed_slow_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;operator&#39;, &#39;plan_path&#39;, &#39;override&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; False &amp; 9.319490 &amp; [&#39;project.failed_slow&#39;] &amp; incomplete mission faulty &amp; 19.740872 &amp; 0.812430 \\
+roverhuman_fxns_operator_aa_acts_project_failed_slow_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; False &amp; 9.319490 &amp; [&#39;project.failed_slow&#39;] &amp; incomplete mission faulty &amp; 19.740872 &amp; 0.812430 \\
 roverhuman_fxns_operator_aa_acts_project_failed_turn_left_t56p0 &amp; [&#39;ground&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 14.057688 &amp; [&#39;percieve.not_visible&#39;, &#39;project.failed_turn_left&#39;] &amp; incomplete mission faulty &amp; 14.862043 &amp; -0.251773 \\
 roverhuman_fxns_operator_aa_acts_project_failed_turn_right_t56p0 &amp; [&#39;ground&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.693675 &amp; [&#39;percieve.not_visible&#39;, &#39;project.failed_turn_right&#39;] &amp; incomplete mission faulty &amp; 15.363988 &amp; 1.140047 \\
-roverhuman_fxns_operator_aa_acts_decide_failed_fast_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;decide.failed_fast&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+roverhuman_fxns_operator_aa_acts_decide_failed_fast_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; False &amp; 14.260100 &amp; [&#39;decide.failed_fast&#39;] &amp; incomplete mission faulty &amp; 14.759409 &amp; 0.904491 \\
 roverhuman_fxns_operator_aa_acts_decide_failed_no_action_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;decide.failed_no_action&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-roverhuman_fxns_operator_aa_acts_decide_failed_slow_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;decide.failed_slow&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-roverhuman_fxns_operator_aa_acts_decide_failed_turn_left_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;decide.failed_turn_left&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-roverhuman_fxns_operator_aa_acts_decide_failed_turn_right_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;decide.failed_turn_right&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+roverhuman_fxns_operator_aa_acts_decide_failed_slow_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; False &amp; 14.260100 &amp; [&#39;decide.failed_slow&#39;] &amp; incomplete mission faulty &amp; 14.759409 &amp; 0.904491 \\
+roverhuman_fxns_operator_aa_acts_decide_failed_turn_left_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; False &amp; 14.260100 &amp; [&#39;decide.failed_turn_left&#39;] &amp; incomplete mission faulty &amp; 14.759409 &amp; 0.904491 \\
+roverhuman_fxns_operator_aa_acts_decide_failed_turn_right_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; False &amp; 14.260100 &amp; [&#39;decide.failed_turn_right&#39;] &amp; incomplete mission faulty &amp; 14.759409 &amp; 0.904491 \\
 roverhuman_fxns_operator_aa_acts_reach_failed_no_action_t56p0 &amp; [&#39;ground&#39;, &#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;comms&#39;, &#39;power&#39;, &#39;operator&#39;, &#39;plan_path&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; [&#39;percieve.not_visible&#39;, &#39;reach.failed_no_action&#39;] &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-roverhuman_fxns_operator_aa_acts_press_failed_left_t56p0 &amp; [&#39;ground&#39;, &#39;operator&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; [&#39;press.failed_left&#39;] &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
-roverhuman_fxns_operator_aa_acts_press_failed_right_t56p0 &amp; [&#39;ground&#39;, &#39;operator&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; [&#39;press.failed_right&#39;] &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
-roverhuman_fxns_operator_aa_acts_press_no_press_t56p0 &amp; [&#39;ground&#39;, &#39;operator&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; [&#39;press.no_press&#39;] &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
-nominal &amp; [] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
+roverhuman_fxns_operator_aa_acts_press_failed_left_t56p0 &amp; [&#39;operator&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; [&#39;press.failed_left&#39;] &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
+roverhuman_fxns_operator_aa_acts_press_failed_right_t56p0 &amp; [&#39;operator&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; [&#39;press.failed_right&#39;] &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
+roverhuman_fxns_operator_aa_acts_press_no_press_t56p0 &amp; [&#39;operator&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; [&#39;press.no_press&#39;] &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
 \bottomrule
 \end{tabular}
 </pre></div>
@@ -1932,442 +1892,7 @@ nominal &amp; [] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; no
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   0%|          | 0/144 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   1%|          | 1/144 [00:00&lt;01:02,  2.28it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   1%|▏         | 2/144 [00:00&lt;01:02,  2.27it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   2%|▏         | 3/144 [00:01&lt;01:02,  2.27it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   3%|▎         | 4/144 [00:01&lt;01:01,  2.27it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   3%|▎         | 5/144 [00:02&lt;01:01,  2.27it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   4%|▍         | 6/144 [00:02&lt;01:00,  2.27it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   5%|▍         | 7/144 [00:03&lt;01:00,  2.26it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   6%|▌         | 8/144 [00:03&lt;01:00,  2.27it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   6%|▋         | 9/144 [00:03&lt;00:59,  2.26it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   7%|▋         | 10/144 [00:04&lt;00:59,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   8%|▊         | 11/144 [00:04&lt;00:59,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   8%|▊         | 12/144 [00:05&lt;00:58,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   9%|▉         | 13/144 [00:05&lt;00:58,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  10%|▉         | 14/144 [00:06&lt;00:57,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  10%|█         | 15/144 [00:06&lt;00:57,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  11%|█         | 16/144 [00:07&lt;00:56,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  12%|█▏        | 17/144 [00:07&lt;00:56,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  12%|█▎        | 18/144 [00:07&lt;00:56,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  13%|█▎        | 19/144 [00:08&lt;00:55,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  14%|█▍        | 20/144 [00:08&lt;00:55,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  15%|█▍        | 21/144 [00:09&lt;00:54,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  15%|█▌        | 22/144 [00:09&lt;00:55,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  16%|█▌        | 23/144 [00:10&lt;00:54,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  17%|█▋        | 24/144 [00:10&lt;00:53,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  17%|█▋        | 25/144 [00:11&lt;00:53,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  18%|█▊        | 26/144 [00:11&lt;00:52,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  19%|█▉        | 27/144 [00:12&lt;00:52,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  19%|█▉        | 28/144 [00:12&lt;00:51,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  20%|██        | 29/144 [00:12&lt;00:51,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  21%|██        | 30/144 [00:13&lt;00:51,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  22%|██▏       | 31/144 [00:13&lt;00:50,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  22%|██▏       | 32/144 [00:14&lt;00:50,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  23%|██▎       | 33/144 [00:14&lt;00:50,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  24%|██▎       | 34/144 [00:15&lt;00:50,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  24%|██▍       | 35/144 [00:15&lt;00:49,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  25%|██▌       | 36/144 [00:16&lt;00:48,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  26%|██▌       | 37/144 [00:16&lt;00:48,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  26%|██▋       | 38/144 [00:16&lt;00:47,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  27%|██▋       | 39/144 [00:17&lt;00:47,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  28%|██▊       | 40/144 [00:17&lt;00:46,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  28%|██▊       | 41/144 [00:18&lt;00:46,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  29%|██▉       | 42/144 [00:18&lt;00:46,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  30%|██▉       | 43/144 [00:19&lt;00:45,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  31%|███       | 44/144 [00:19&lt;00:45,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  31%|███▏      | 45/144 [00:20&lt;00:44,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  32%|███▏      | 46/144 [00:20&lt;00:44,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  33%|███▎      | 47/144 [00:21&lt;00:43,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  33%|███▎      | 48/144 [00:21&lt;00:43,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  34%|███▍      | 49/144 [00:21&lt;00:42,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  35%|███▍      | 50/144 [00:22&lt;00:42,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  35%|███▌      | 51/144 [00:22&lt;00:41,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  36%|███▌      | 52/144 [00:23&lt;00:41,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  37%|███▋      | 53/144 [00:23&lt;00:41,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  38%|███▊      | 54/144 [00:24&lt;00:40,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  38%|███▊      | 55/144 [00:24&lt;00:40,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  39%|███▉      | 56/144 [00:25&lt;00:39,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  40%|███▉      | 57/144 [00:25&lt;00:39,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  40%|████      | 58/144 [00:26&lt;00:38,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  41%|████      | 59/144 [00:26&lt;00:38,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  42%|████▏     | 60/144 [00:26&lt;00:38,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  42%|████▏     | 61/144 [00:27&lt;00:38,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  43%|████▎     | 62/144 [00:27&lt;00:37,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  44%|████▍     | 63/144 [00:28&lt;00:37,  2.17it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  44%|████▍     | 64/144 [00:28&lt;00:36,  2.17it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  45%|████▌     | 65/144 [00:29&lt;00:36,  2.18it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  46%|████▌     | 66/144 [00:29&lt;00:35,  2.19it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  47%|████▋     | 67/144 [00:30&lt;00:35,  2.19it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  47%|████▋     | 68/144 [00:30&lt;00:34,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  48%|████▊     | 69/144 [00:31&lt;00:33,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  49%|████▊     | 70/144 [00:31&lt;00:33,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  49%|████▉     | 71/144 [00:31&lt;00:32,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  50%|█████     | 72/144 [00:32&lt;00:32,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  51%|█████     | 73/144 [00:32&lt;00:32,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  51%|█████▏    | 74/144 [00:33&lt;00:32,  2.18it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  52%|█████▏    | 75/144 [00:33&lt;00:31,  2.18it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  53%|█████▎    | 76/144 [00:34&lt;00:31,  2.18it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  53%|█████▎    | 77/144 [00:34&lt;00:30,  2.18it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  54%|█████▍    | 78/144 [00:35&lt;00:30,  2.19it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  55%|█████▍    | 79/144 [00:35&lt;00:29,  2.19it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  56%|█████▌    | 80/144 [00:36&lt;00:29,  2.18it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  56%|█████▋    | 81/144 [00:36&lt;00:29,  2.17it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  57%|█████▋    | 82/144 [00:37&lt;00:28,  2.17it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  58%|█████▊    | 83/144 [00:37&lt;00:28,  2.17it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  58%|█████▊    | 84/144 [00:37&lt;00:27,  2.19it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  59%|█████▉    | 85/144 [00:38&lt;00:26,  2.19it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  60%|█████▉    | 86/144 [00:38&lt;00:26,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  60%|██████    | 87/144 [00:39&lt;00:25,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  61%|██████    | 88/144 [00:39&lt;00:25,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  62%|██████▏   | 89/144 [00:40&lt;00:24,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  62%|██████▎   | 90/144 [00:40&lt;00:24,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  63%|██████▎   | 91/144 [00:41&lt;00:24,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  64%|██████▍   | 92/144 [00:41&lt;00:23,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  65%|██████▍   | 93/144 [00:41&lt;00:23,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  65%|██████▌   | 94/144 [00:42&lt;00:22,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  66%|██████▌   | 95/144 [00:42&lt;00:22,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  67%|██████▋   | 96/144 [00:43&lt;00:21,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  67%|██████▋   | 97/144 [00:43&lt;00:21,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  68%|██████▊   | 98/144 [00:44&lt;00:20,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  69%|██████▉   | 99/144 [00:44&lt;00:20,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  69%|██████▉   | 100/144 [00:45&lt;00:19,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  70%|███████   | 101/144 [00:45&lt;00:19,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  71%|███████   | 102/144 [00:46&lt;00:18,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  72%|███████▏  | 103/144 [00:46&lt;00:18,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  72%|███████▏  | 104/144 [00:46&lt;00:17,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  73%|███████▎  | 105/144 [00:47&lt;00:17,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  74%|███████▎  | 106/144 [00:47&lt;00:17,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  74%|███████▍  | 107/144 [00:48&lt;00:17,  2.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  75%|███████▌  | 108/144 [00:48&lt;00:16,  2.15it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  76%|███████▌  | 109/144 [00:49&lt;00:16,  2.13it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  76%|███████▋  | 110/144 [00:49&lt;00:15,  2.13it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  77%|███████▋  | 111/144 [00:50&lt;00:15,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  78%|███████▊  | 112/144 [00:50&lt;00:15,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  78%|███████▊  | 113/144 [00:51&lt;00:14,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  79%|███████▉  | 114/144 [00:51&lt;00:14,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  80%|███████▉  | 115/144 [00:52&lt;00:13,  2.13it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  81%|████████  | 116/144 [00:52&lt;00:13,  2.13it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  81%|████████▏ | 117/144 [00:53&lt;00:12,  2.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  82%|████████▏ | 118/144 [00:53&lt;00:12,  2.10it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  83%|████████▎ | 119/144 [00:54&lt;00:11,  2.10it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  83%|████████▎ | 120/144 [00:54&lt;00:11,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  84%|████████▍ | 121/144 [00:54&lt;00:10,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  85%|████████▍ | 122/144 [00:55&lt;00:10,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  85%|████████▌ | 123/144 [00:55&lt;00:09,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  86%|████████▌ | 124/144 [00:56&lt;00:09,  2.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  87%|████████▋ | 125/144 [00:56&lt;00:09,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  88%|████████▊ | 126/144 [00:57&lt;00:08,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  88%|████████▊ | 127/144 [00:57&lt;00:08,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  89%|████████▉ | 128/144 [00:58&lt;00:07,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  90%|████████▉ | 129/144 [00:58&lt;00:07,  2.10it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  90%|█████████ | 130/144 [00:59&lt;00:06,  2.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  91%|█████████ | 131/144 [00:59&lt;00:06,  2.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  92%|█████████▏| 132/144 [01:00&lt;00:05,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  92%|█████████▏| 133/144 [01:00&lt;00:05,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  93%|█████████▎| 134/144 [01:01&lt;00:04,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  94%|█████████▍| 135/144 [01:01&lt;00:04,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  94%|█████████▍| 136/144 [01:02&lt;00:03,  2.13it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  95%|█████████▌| 137/144 [01:02&lt;00:03,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  96%|█████████▌| 138/144 [01:03&lt;00:02,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  97%|█████████▋| 139/144 [01:03&lt;00:02,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  97%|█████████▋| 140/144 [01:03&lt;00:01,  2.13it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  98%|█████████▊| 141/144 [01:04&lt;00:01,  2.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  99%|█████████▊| 142/144 [01:04&lt;00:00,  2.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  99%|█████████▉| 143/144 [01:05&lt;00:00,  2.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 144/144 [01:05&lt;00:00,  2.10it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 144/144 [01:05&lt;00:00,  2.19it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 144/144 [02:22&lt;00:00,  1.01it/s]
 </pre></div>
 </div>
 </div>
@@ -2382,7 +1907,7 @@ nominal &amp; [] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; no
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../../_images/db31ff346d97b670e5259b9d35dee31c4f8e77fbb09f95fb9e0938369d494a3b.png" src="../../../_images/db31ff346d97b670e5259b9d35dee31c4f8e77fbb09f95fb9e0938369d494a3b.png" />
+<img alt="../../../_images/98d1b96d0832421cb459dc2160a9adffed5e8357cc1052aaf7a96b321c4f1801.png" src="../../../_images/98d1b96d0832421cb459dc2160a9adffed5e8357cc1052aaf7a96b321c4f1801.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2392,150 +1917,150 @@ nominal &amp; [] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; [] &amp; no
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>rep0_range_0.endclass.end_x: 29.254775331608617
-rep0_range_1.endclass.end_x: 29.254775331608617
-rep0_range_2.endclass.end_x: 29.254775331608617
-rep0_range_3.endclass.end_x: 29.254775331608617
-rep0_range_4.endclass.end_x: 29.254775331608617
-rep0_range_5.endclass.end_x: 29.254775331608617
-rep0_range_6.endclass.end_x: 29.254775331608617
-rep0_range_7.endclass.end_x: 29.254775331608617
-rep0_range_8.endclass.end_x: 29.254775331608617
-rep0_range_9.endclass.end_x: 29.254775331608617
-rep0_range_10.endclass.end_x: 29.254775331608617
-rep0_range_11.endclass.end_x: 29.254775331608617
-rep0_range_12.endclass.end_x: 29.254775331608617
-rep0_range_13.endclass.end_x: 29.254775331608617
-rep0_range_14.endclass.end_x: 29.254775331608617
-rep0_range_15.endclass.end_x: 29.254775331608617
-rep0_range_16.endclass.end_x: 29.254775331608617
-rep0_range_17.endclass.end_x: 29.254775331608617
-rep0_range_18.endclass.end_x: 29.254775331608617
-rep0_range_19.endclass.end_x: 29.254775331608617
-rep0_range_20.endclass.end_x: 29.254775331608617
-rep0_range_21.endclass.end_x: 29.254775331608617
-rep0_range_22.endclass.end_x: 29.254775331608617
-rep0_range_23.endclass.end_x: 29.254775331608617
-rep0_range_24.endclass.end_x: 29.254775331608617
-rep0_range_25.endclass.end_x: 29.254775331608617
-rep0_range_26.endclass.end_x: 29.254775331608617
-rep0_range_27.endclass.end_x: 29.254775331608617
-rep0_range_28.endclass.end_x: 29.254775331608617
-rep0_range_29.endclass.end_x: 29.254775331608617
-rep0_range_30.endclass.end_x: 29.254775331608617
-rep0_range_31.endclass.end_x: 29.254775331608617
-rep0_range_32.endclass.end_x: 29.254775331608617
-rep0_range_33.endclass.end_x: 29.254775331608617
-rep0_range_34.endclass.end_x: 29.254775331608617
-rep0_range_35.endclass.end_x: 29.254775331608617
-rep0_range_36.endclass.end_x: 29.254775331608617
-rep0_range_37.endclass.end_x: 29.254775331608617
-rep0_range_38.endclass.end_x: 29.254775331608617
-rep0_range_39.endclass.end_x: 29.254775331608617
-rep0_range_40.endclass.end_x: 29.254775331608617
-rep0_range_41.endclass.end_x: 29.254775331608617
-rep0_range_42.endclass.end_x: 29.254775331608617
-rep0_range_43.endclass.end_x: 29.254775331608617
-rep0_range_44.endclass.end_x: 29.254775331608617
-rep0_range_45.endclass.end_x: 29.254775331608617
-rep0_range_46.endclass.end_x: 29.254775331608617
-rep0_range_47.endclass.end_x: 29.254775331608617
-rep0_range_48.endclass.end_x: 29.254775331608617
-rep0_range_49.endclass.end_x: 29.254775331608617
-rep0_range_50.endclass.end_x: 29.254775331608617
-rep0_range_51.endclass.end_x: 29.254775331608617
-rep0_range_52.endclass.end_x: 29.254775331608617
-rep0_range_53.endclass.end_x: 29.254775331608617
-rep0_range_54.endclass.end_x: 29.254775331608617
-rep0_range_55.endclass.end_x: 29.254775331608617
-rep0_range_56.endclass.end_x: 29.254775331608617
-rep0_range_57.endclass.end_x: 29.254775331608617
-rep0_range_58.endclass.end_x: 29.254775331608617
-rep0_range_59.endclass.end_x: 29.254775331608617
-rep0_range_60.endclass.end_x: 29.254775331608617
-rep0_range_61.endclass.end_x: 29.254775331608617
-rep0_range_62.endclass.end_x: 29.254775331608617
-rep0_range_63.endclass.end_x: 29.254775331608617
-rep0_range_64.endclass.end_x: 29.254775331608617
-rep0_range_65.endclass.end_x: 29.254775331608617
-rep0_range_66.endclass.end_x: 29.254775331608617
-rep0_range_67.endclass.end_x: 29.254775331608617
-rep0_range_68.endclass.end_x: 29.254775331608617
-rep0_range_69.endclass.end_x: 29.254775331608617
-rep0_range_70.endclass.end_x: 29.254775331608617
-rep0_range_71.endclass.end_x: 29.254775331608617
-rep0_range_72.endclass.end_x: 29.254775331608617
-rep0_range_73.endclass.end_x: 29.254775331608617
-rep0_range_74.endclass.end_x: 29.254775331608617
-rep0_range_75.endclass.end_x: 29.254775331608617
-rep0_range_76.endclass.end_x: 29.254775331608617
-rep0_range_77.endclass.end_x: 29.254775331608617
-rep0_range_78.endclass.end_x: 29.254775331608617
-rep0_range_79.endclass.end_x: 29.254775331608617
-rep0_range_80.endclass.end_x: 29.254775331608617
-rep0_range_81.endclass.end_x: 29.254775331608617
-rep0_range_82.endclass.end_x: 29.254775331608617
-rep0_range_83.endclass.end_x: 29.254775331608617
-rep0_range_84.endclass.end_x: 29.254775331608617
-rep0_range_85.endclass.end_x: 29.254775331608617
-rep0_range_86.endclass.end_x: 29.254775331608617
-rep0_range_87.endclass.end_x: 29.254775331608617
-rep0_range_88.endclass.end_x: 29.254775331608617
-rep0_range_89.endclass.end_x: 29.254775331608617
-rep0_range_90.endclass.end_x: 29.254775331608617
-rep0_range_91.endclass.end_x: 29.254775331608617
-rep0_range_92.endclass.end_x: 29.254775331608617
-rep0_range_93.endclass.end_x: 29.254775331608617
-rep0_range_94.endclass.end_x: 29.254775331608617
-rep0_range_95.endclass.end_x: 29.254775331608617
-rep0_range_96.endclass.end_x: 29.254775331608617
-rep0_range_97.endclass.end_x: 29.254775331608617
-rep0_range_98.endclass.end_x: 29.254775331608617
-rep0_range_99.endclass.end_x: 29.254775331608617
-rep0_range_100.endclass.end_x: 29.254775331608617
-rep0_range_101.endclass.end_x: 29.254775331608617
-rep0_range_102.endclass.end_x: 29.254775331608617
-rep0_range_103.endclass.end_x: 29.254775331608617
-rep0_range_104.endclass.end_x: 29.254775331608617
-rep0_range_105.endclass.end_x: 29.254775331608617
-rep0_range_106.endclass.end_x: 29.254775331608617
-rep0_range_107.endclass.end_x: 29.254775331608617
-rep0_range_108.endclass.end_x:       0.0
-rep0_range_109.endclass.end_x:       0.0
-rep0_range_110.endclass.end_x:       0.0
-rep0_range_111.endclass.end_x:       0.0
-rep0_range_112.endclass.end_x:       0.0
-rep0_range_113.endclass.end_x:       0.0
-rep0_range_114.endclass.end_x:       0.0
-rep0_range_115.endclass.end_x:       0.0
-rep0_range_116.endclass.end_x:       0.0
-rep0_range_117.endclass.end_x:       0.0
-rep0_range_118.endclass.end_x:       0.0
-rep0_range_119.endclass.end_x:       0.0
-rep0_range_120.endclass.end_x:       0.0
-rep0_range_121.endclass.end_x:       0.0
-rep0_range_122.endclass.end_x:       0.0
-rep0_range_123.endclass.end_x:       0.0
-rep0_range_124.endclass.end_x:       0.0
-rep0_range_125.endclass.end_x:       0.0
-rep0_range_126.endclass.end_x:       0.0
-rep0_range_127.endclass.end_x:       0.0
-rep0_range_128.endclass.end_x:       0.0
-rep0_range_129.endclass.end_x:       0.0
-rep0_range_130.endclass.end_x:       0.0
-rep0_range_131.endclass.end_x:       0.0
-rep0_range_132.endclass.end_x:       0.0
-rep0_range_133.endclass.end_x:       0.0
-rep0_range_134.endclass.end_x:       0.0
-rep0_range_135.endclass.end_x:       0.0
-rep0_range_136.endclass.end_x:       0.0
-rep0_range_137.endclass.end_x:       0.0
-rep0_range_138.endclass.end_x:       0.0
-rep0_range_139.endclass.end_x:       0.0
-rep0_range_140.endclass.end_x:       0.0
-rep0_range_141.endclass.end_x:       0.0
-rep0_range_142.endclass.end_x:       0.0
-rep0_range_143.endclass.end_x:       0.0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>rep0_range_0.tend.classify.end_x: 29.254775331608617
+rep0_range_1.tend.classify.end_x: 29.254775331608617
+rep0_range_2.tend.classify.end_x: 29.254775331608617
+rep0_range_3.tend.classify.end_x: 29.254775331608617
+rep0_range_4.tend.classify.end_x: 29.254775331608617
+rep0_range_5.tend.classify.end_x: 29.254775331608617
+rep0_range_6.tend.classify.end_x: 29.254775331608617
+rep0_range_7.tend.classify.end_x: 29.254775331608617
+rep0_range_8.tend.classify.end_x: 29.254775331608617
+rep0_range_9.tend.classify.end_x: 29.254775331608617
+rep0_range_10.tend.classify.end_x: 29.254775331608617
+rep0_range_11.tend.classify.end_x: 29.254775331608617
+rep0_range_12.tend.classify.end_x: 29.254775331608617
+rep0_range_13.tend.classify.end_x: 29.254775331608617
+rep0_range_14.tend.classify.end_x: 29.254775331608617
+rep0_range_15.tend.classify.end_x: 29.254775331608617
+rep0_range_16.tend.classify.end_x: 29.254775331608617
+rep0_range_17.tend.classify.end_x: 29.254775331608617
+rep0_range_18.tend.classify.end_x: 29.254775331608617
+rep0_range_19.tend.classify.end_x: 29.254775331608617
+rep0_range_20.tend.classify.end_x: 29.254775331608617
+rep0_range_21.tend.classify.end_x: 29.254775331608617
+rep0_range_22.tend.classify.end_x: 29.254775331608617
+rep0_range_23.tend.classify.end_x: 29.254775331608617
+rep0_range_24.tend.classify.end_x: 29.254775331608617
+rep0_range_25.tend.classify.end_x: 29.254775331608617
+rep0_range_26.tend.classify.end_x: 29.254775331608617
+rep0_range_27.tend.classify.end_x: 29.254775331608617
+rep0_range_28.tend.classify.end_x: 29.254775331608617
+rep0_range_29.tend.classify.end_x: 29.254775331608617
+rep0_range_30.tend.classify.end_x: 29.254775331608617
+rep0_range_31.tend.classify.end_x: 29.254775331608617
+rep0_range_32.tend.classify.end_x: 29.254775331608617
+rep0_range_33.tend.classify.end_x: 29.254775331608617
+rep0_range_34.tend.classify.end_x: 29.254775331608617
+rep0_range_35.tend.classify.end_x: 29.254775331608617
+rep0_range_36.tend.classify.end_x: 29.254775331608617
+rep0_range_37.tend.classify.end_x: 29.254775331608617
+rep0_range_38.tend.classify.end_x: 29.254775331608617
+rep0_range_39.tend.classify.end_x: 29.254775331608617
+rep0_range_40.tend.classify.end_x: 29.254775331608617
+rep0_range_41.tend.classify.end_x: 29.254775331608617
+rep0_range_42.tend.classify.end_x: 29.254775331608617
+rep0_range_43.tend.classify.end_x: 29.254775331608617
+rep0_range_44.tend.classify.end_x: 29.254775331608617
+rep0_range_45.tend.classify.end_x: 29.254775331608617
+rep0_range_46.tend.classify.end_x: 29.254775331608617
+rep0_range_47.tend.classify.end_x: 29.254775331608617
+rep0_range_48.tend.classify.end_x: 29.254775331608617
+rep0_range_49.tend.classify.end_x: 29.254775331608617
+rep0_range_50.tend.classify.end_x: 29.254775331608617
+rep0_range_51.tend.classify.end_x: 29.254775331608617
+rep0_range_52.tend.classify.end_x: 29.254775331608617
+rep0_range_53.tend.classify.end_x: 29.254775331608617
+rep0_range_54.tend.classify.end_x: 29.254775331608617
+rep0_range_55.tend.classify.end_x: 29.254775331608617
+rep0_range_56.tend.classify.end_x: 29.254775331608617
+rep0_range_57.tend.classify.end_x: 29.254775331608617
+rep0_range_58.tend.classify.end_x: 29.254775331608617
+rep0_range_59.tend.classify.end_x: 29.254775331608617
+rep0_range_60.tend.classify.end_x: 29.254775331608617
+rep0_range_61.tend.classify.end_x: 29.254775331608617
+rep0_range_62.tend.classify.end_x: 29.254775331608617
+rep0_range_63.tend.classify.end_x: 29.254775331608617
+rep0_range_64.tend.classify.end_x: 29.254775331608617
+rep0_range_65.tend.classify.end_x: 29.254775331608617
+rep0_range_66.tend.classify.end_x: 29.254775331608617
+rep0_range_67.tend.classify.end_x: 29.254775331608617
+rep0_range_68.tend.classify.end_x: 29.254775331608617
+rep0_range_69.tend.classify.end_x: 29.254775331608617
+rep0_range_70.tend.classify.end_x: 29.254775331608617
+rep0_range_71.tend.classify.end_x: 29.254775331608617
+rep0_range_72.tend.classify.end_x: 29.254775331608617
+rep0_range_73.tend.classify.end_x: 29.254775331608617
+rep0_range_74.tend.classify.end_x: 29.254775331608617
+rep0_range_75.tend.classify.end_x: 29.254775331608617
+rep0_range_76.tend.classify.end_x: 29.254775331608617
+rep0_range_77.tend.classify.end_x: 29.254775331608617
+rep0_range_78.tend.classify.end_x: 29.254775331608617
+rep0_range_79.tend.classify.end_x: 29.254775331608617
+rep0_range_80.tend.classify.end_x: 29.254775331608617
+rep0_range_81.tend.classify.end_x: 29.254775331608617
+rep0_range_82.tend.classify.end_x: 29.254775331608617
+rep0_range_83.tend.classify.end_x: 29.254775331608617
+rep0_range_84.tend.classify.end_x: 29.254775331608617
+rep0_range_85.tend.classify.end_x: 29.254775331608617
+rep0_range_86.tend.classify.end_x: 29.254775331608617
+rep0_range_87.tend.classify.end_x: 29.254775331608617
+rep0_range_88.tend.classify.end_x: 29.254775331608617
+rep0_range_89.tend.classify.end_x: 29.254775331608617
+rep0_range_90.tend.classify.end_x: 29.254775331608617
+rep0_range_91.tend.classify.end_x: 29.254775331608617
+rep0_range_92.tend.classify.end_x: 29.254775331608617
+rep0_range_93.tend.classify.end_x: 29.254775331608617
+rep0_range_94.tend.classify.end_x: 29.254775331608617
+rep0_range_95.tend.classify.end_x: 29.254775331608617
+rep0_range_96.tend.classify.end_x: 29.254775331608617
+rep0_range_97.tend.classify.end_x: 29.254775331608617
+rep0_range_98.tend.classify.end_x: 29.254775331608617
+rep0_range_99.tend.classify.end_x: 29.254775331608617
+rep0_range_100.tend.classify.end_x: 29.254775331608617
+rep0_range_101.tend.classify.end_x: 29.254775331608617
+rep0_range_102.tend.classify.end_x: 29.254775331608617
+rep0_range_103.tend.classify.end_x: 29.254775331608617
+rep0_range_104.tend.classify.end_x: 29.254775331608617
+rep0_range_105.tend.classify.end_x: 29.254775331608617
+rep0_range_106.tend.classify.end_x: 29.254775331608617
+rep0_range_107.tend.classify.end_x: 29.254775331608617
+rep0_range_108.tend.classify.end_x:  0.0
+rep0_range_109.tend.classify.end_x:  0.0
+rep0_range_110.tend.classify.end_x:  0.0
+rep0_range_111.tend.classify.end_x:  0.0
+rep0_range_112.tend.classify.end_x:  0.0
+rep0_range_113.tend.classify.end_x:  0.0
+rep0_range_114.tend.classify.end_x:  0.0
+rep0_range_115.tend.classify.end_x:  0.0
+rep0_range_116.tend.classify.end_x:  0.0
+rep0_range_117.tend.classify.end_x:  0.0
+rep0_range_118.tend.classify.end_x:  0.0
+rep0_range_119.tend.classify.end_x:  0.0
+rep0_range_120.tend.classify.end_x:  0.0
+rep0_range_121.tend.classify.end_x:  0.0
+rep0_range_122.tend.classify.end_x:  0.0
+rep0_range_123.tend.classify.end_x:  0.0
+rep0_range_124.tend.classify.end_x:  0.0
+rep0_range_125.tend.classify.end_x:  0.0
+rep0_range_126.tend.classify.end_x:  0.0
+rep0_range_127.tend.classify.end_x:  0.0
+rep0_range_128.tend.classify.end_x:  0.0
+rep0_range_129.tend.classify.end_x:  0.0
+rep0_range_130.tend.classify.end_x:  0.0
+rep0_range_131.tend.classify.end_x:  0.0
+rep0_range_132.tend.classify.end_x:  0.0
+rep0_range_133.tend.classify.end_x:  0.0
+rep0_range_134.tend.classify.end_x:  0.0
+rep0_range_135.tend.classify.end_x:  0.0
+rep0_range_136.tend.classify.end_x:  0.0
+rep0_range_137.tend.classify.end_x:  0.0
+rep0_range_138.tend.classify.end_x:  0.0
+rep0_range_139.tend.classify.end_x:  0.0
+rep0_range_140.tend.classify.end_x:  0.0
+rep0_range_141.tend.classify.end_x:  0.0
+rep0_range_142.tend.classify.end_x:  0.0
+rep0_range_143.tend.classify.end_x:  0.0
 </pre></div>
 </div>
 </div>
@@ -2549,7 +2074,7 @@ rep0_range_143.endclass.end_x:       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/94b52eafb5149de2e891d0049d664e4ba6f669e3fcfaa5d44b0478214b0190fe.png" src="../../../_images/94b52eafb5149de2e891d0049d664e4ba6f669e3fcfaa5d44b0478214b0190fe.png" />
+<img alt="../../../_images/5a7d9532b8711c16e6cd120a8eeb548f1329419d924a7012a30a435b559ed891.png" src="../../../_images/5a7d9532b8711c16e6cd120a8eeb548f1329419d924a7012a30a435b559ed891.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2574,21 +2099,36 @@ rep0_range_143.endclass.end_x:       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>endclass.rate:                       1.0
-endclass.cost:                         0
-endclass.prob:                       1.0
-endclass.expected_cost:                0
-endclass.in_bound:                 False
-endclass.at_finish:                False
-endclass.line_dist:                    1
-endclass.num_modes:                    1
-endclass.end_dist:    23.466067426611588
-endclass.tot_deviation: 0.2759017544282031
-endclass.faults:                array(1)
-endclass.classification: incomplete mission faulty
-endclass.end_x:        13.33333333333334
-endclass.end_y:                      0.0
-endclass.endpt:                 array(2)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nominal.tend.classify.rate:          1.0
+nominal.tend.classify.cost:            0
+nominal.tend.classify.prob:          1.0
+nominal.tend.classify.expected_cost:   0
+nominal.tend.classify.in_bound:     True
+nominal.tend.classify.at_finish:    True
+nominal.tend.classify.line_dist:       1
+nominal.tend.classify.num_modes:       0
+nominal.tend.classify.end_dist:      0.0
+nominal.tend.classify.tot_deviation: 0.005246344989065292
+nominal.tend.classify.faults:   array(0)
+nominal.tend.classify.classification: nominal mission
+nominal.tend.classify.end_x: 29.813614084369863
+nominal.tend.classify.end_y: 17.26588133276667
+nominal.tend.classify.endpt:    array(2)
+operator_aa_acts_loo                 1.0
+operator_aa_acts_loo                   0
+operator_aa_acts_loo                 1.0
+operator_aa_acts_loo                   0
+operator_aa_acts_loo               False
+operator_aa_acts_loo               False
+operator_aa_acts_loo                   1
+operator_aa_acts_loo                   1
+operator_aa_acts_loo  23.466067426611588
+operator_aa_acts_loo  0.2759017544282031
+operator_aa_acts_loo            array(1)
+operator_aa_acts_looincomplete mission faulty
+operator_aa_acts_loo   13.33333333333334
+operator_aa_acts_loo                 0.0
+operator_aa_acts_loo            array(2)
 </pre></div>
 </div>
 </div>
@@ -2600,7 +2140,7 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/325005e96f2ce039a0700ae2dd507a5b15a110f462b88435bbbf268f027695e3.png" src="../../../_images/325005e96f2ce039a0700ae2dd507a5b15a110f462b88435bbbf268f027695e3.png" />
+<img alt="../../../_images/527170bab1edb4eda4275c457de94d80328af1c7f43a2b8d7371910bd8985133.png" src="../../../_images/527170bab1edb4eda4275c457de94d80328af1c7f43a2b8d7371910bd8985133.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2613,7 +2153,7 @@ endclass.endpt:                 array(2)
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../../_images/bb575d454d30967ad8b251ab5be55fd71c54669d3b14114a76cd79e43de9a85d.png" src="../../../_images/bb575d454d30967ad8b251ab5be55fd71c54669d3b14114a76cd79e43de9a85d.png" />
+<img alt="../../../_images/a1009b4bc7853f3e9a9bc67b9fdf78906bb90587456104fa43728f7a1280512a.png" src="../../../_images/a1009b4bc7853f3e9a9bc67b9fdf78906bb90587456104fa43728f7a1280512a.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2630,7 +2170,7 @@ endclass.endpt:                 array(2)
         &lt;Axes: &gt;], dtype=object))
 </pre></div>
 </div>
-<img alt="../../../_images/6f5155687f0124638a7771308ba59581b1158e986482d12fbf8223523d76ccdf.png" src="../../../_images/6f5155687f0124638a7771308ba59581b1158e986482d12fbf8223523d76ccdf.png" />
+<img alt="../../../_images/8e0c48b797d7ceb78ab3c90b97fbd2f77a363eb89794a01785161f74d0bb180d.png" src="../../../_images/8e0c48b797d7ceb78ab3c90b97fbd2f77a363eb89794a01785161f74d0bb180d.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2665,334 +2205,7 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   0%|          | 0/114 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   1%|          | 1/114 [00:00&lt;00:51,  2.17it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   2%|▏         | 2/114 [00:00&lt;00:31,  3.60it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   3%|▎         | 3/114 [00:00&lt;00:24,  4.56it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   4%|▎         | 4/114 [00:00&lt;00:21,  5.18it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   4%|▍         | 5/114 [00:01&lt;00:19,  5.61it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   5%|▌         | 6/114 [00:01&lt;00:18,  5.86it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   6%|▌         | 7/114 [00:01&lt;00:26,  4.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   7%|▋         | 8/114 [00:01&lt;00:30,  3.47it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   8%|▊         | 9/114 [00:02&lt;00:33,  3.14it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   9%|▉         | 10/114 [00:02&lt;00:35,  2.94it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  10%|▉         | 11/114 [00:03&lt;00:36,  2.84it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  11%|█         | 12/114 [00:03&lt;00:37,  2.76it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  11%|█▏        | 13/114 [00:03&lt;00:37,  2.71it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  12%|█▏        | 14/114 [00:04&lt;00:37,  2.68it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  13%|█▎        | 15/114 [00:04&lt;00:37,  2.65it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  14%|█▍        | 16/114 [00:05&lt;00:37,  2.64it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  15%|█▍        | 17/114 [00:05&lt;00:36,  2.63it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  16%|█▌        | 18/114 [00:05&lt;00:36,  2.63it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  17%|█▋        | 19/114 [00:06&lt;00:36,  2.60it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  18%|█▊        | 20/114 [00:06&lt;00:36,  2.59it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  18%|█▊        | 21/114 [00:07&lt;00:35,  2.60it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  19%|█▉        | 22/114 [00:07&lt;00:35,  2.59it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  20%|██        | 23/114 [00:07&lt;00:34,  2.61it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  21%|██        | 24/114 [00:08&lt;00:34,  2.62it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  22%|██▏       | 25/114 [00:08&lt;00:36,  2.46it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  23%|██▎       | 26/114 [00:08&lt;00:29,  3.03it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  24%|██▎       | 27/114 [00:08&lt;00:24,  3.62it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  25%|██▍       | 28/114 [00:09&lt;00:20,  4.16it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  25%|██▌       | 29/114 [00:09&lt;00:18,  4.64it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  26%|██▋       | 30/114 [00:09&lt;00:16,  5.08it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  27%|██▋       | 31/114 [00:09&lt;00:13,  5.94it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  28%|██▊       | 32/114 [00:09&lt;00:12,  6.71it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  29%|██▉       | 33/114 [00:09&lt;00:11,  7.27it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  30%|██▉       | 34/114 [00:09&lt;00:10,  7.54it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  31%|███       | 35/114 [00:09&lt;00:10,  7.67it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  32%|███▏      | 36/114 [00:10&lt;00:10,  7.57it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  32%|███▏      | 37/114 [00:10&lt;00:18,  4.13it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  33%|███▎      | 38/114 [00:10&lt;00:16,  4.64it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  34%|███▍      | 39/114 [00:10&lt;00:14,  5.07it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  35%|███▌      | 40/114 [00:11&lt;00:13,  5.41it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  36%|███▌      | 41/114 [00:11&lt;00:12,  5.66it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  37%|███▋      | 42/114 [00:11&lt;00:12,  5.82it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  38%|███▊      | 43/114 [00:11&lt;00:19,  3.59it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  39%|███▊      | 44/114 [00:12&lt;00:24,  2.81it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  39%|███▉      | 45/114 [00:12&lt;00:27,  2.50it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  40%|████      | 46/114 [00:13&lt;00:27,  2.44it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  41%|████      | 47/114 [00:13&lt;00:26,  2.54it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  42%|████▏     | 48/114 [00:14&lt;00:23,  2.77it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  44%|████▍     | 50/114 [00:14&lt;00:13,  4.59it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  46%|████▌     | 52/114 [00:14&lt;00:10,  6.16it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  47%|████▋     | 54/114 [00:14&lt;00:08,  7.06it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  49%|████▉     | 56/114 [00:14&lt;00:06,  9.01it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  51%|█████     | 58/114 [00:14&lt;00:05, 10.00it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  53%|█████▎    | 60/114 [00:14&lt;00:05,  9.81it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  54%|█████▍    | 62/114 [00:15&lt;00:09,  5.62it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  55%|█████▌    | 63/114 [00:15&lt;00:08,  5.69it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  56%|█████▌    | 64/114 [00:15&lt;00:08,  5.77it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  57%|█████▋    | 65/114 [00:16&lt;00:08,  5.87it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  58%|█████▊    | 66/114 [00:16&lt;00:08,  5.92it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  59%|█████▉    | 67/114 [00:16&lt;00:12,  3.80it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  60%|█████▉    | 68/114 [00:16&lt;00:10,  4.19it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  61%|██████    | 69/114 [00:17&lt;00:09,  4.58it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  61%|██████▏   | 70/114 [00:17&lt;00:09,  4.75it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  62%|██████▏   | 71/114 [00:17&lt;00:08,  5.05it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  63%|██████▎   | 72/114 [00:17&lt;00:07,  5.29it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  64%|██████▍   | 73/114 [00:18&lt;00:11,  3.44it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  65%|██████▍   | 74/114 [00:18&lt;00:10,  3.88it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  66%|██████▌   | 75/114 [00:18&lt;00:08,  4.35it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  67%|██████▋   | 76/114 [00:18&lt;00:08,  4.66it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  68%|██████▊   | 77/114 [00:18&lt;00:07,  5.01it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  68%|██████▊   | 78/114 [00:19&lt;00:06,  5.31it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  69%|██████▉   | 79/114 [00:19&lt;00:10,  3.41it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  70%|███████   | 80/114 [00:19&lt;00:08,  3.90it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  71%|███████   | 81/114 [00:19&lt;00:07,  4.39it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  72%|███████▏  | 82/114 [00:20&lt;00:06,  4.80it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  73%|███████▎  | 83/114 [00:20&lt;00:06,  5.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  74%|███████▎  | 84/114 [00:20&lt;00:05,  5.39it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  75%|███████▍  | 85/114 [00:20&lt;00:08,  3.46it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  75%|███████▌  | 86/114 [00:21&lt;00:07,  3.97it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  76%|███████▋  | 87/114 [00:21&lt;00:06,  4.45it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  77%|███████▋  | 88/114 [00:21&lt;00:05,  4.85it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  78%|███████▊  | 89/114 [00:21&lt;00:04,  5.19it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  79%|███████▉  | 90/114 [00:21&lt;00:04,  5.47it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  80%|███████▉  | 91/114 [00:22&lt;00:06,  3.51it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  81%|████████  | 92/114 [00:22&lt;00:05,  4.01it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  82%|████████▏ | 93/114 [00:22&lt;00:04,  4.51it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  82%|████████▏ | 94/114 [00:22&lt;00:04,  4.92it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  83%|████████▎ | 95/114 [00:22&lt;00:03,  5.25it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  84%|████████▍ | 96/114 [00:23&lt;00:03,  5.52it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  85%|████████▌ | 97/114 [00:23&lt;00:04,  4.04it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  86%|████████▌ | 98/114 [00:23&lt;00:04,  3.35it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  87%|████████▋ | 99/114 [00:24&lt;00:05,  3.00it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  88%|████████▊ | 100/114 [00:24&lt;00:05,  2.79it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  89%|████████▊ | 101/114 [00:25&lt;00:04,  2.66it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  89%|████████▉ | 102/114 [00:25&lt;00:04,  2.59it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  90%|█████████ | 103/114 [00:25&lt;00:04,  2.53it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  91%|█████████ | 104/114 [00:26&lt;00:03,  2.51it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  92%|█████████▏| 105/114 [00:26&lt;00:03,  2.49it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  93%|█████████▎| 106/114 [00:27&lt;00:03,  2.48it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  94%|█████████▍| 107/114 [00:27&lt;00:02,  2.46it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  95%|█████████▍| 108/114 [00:28&lt;00:02,  2.46it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  96%|█████████▌| 109/114 [00:28&lt;00:02,  2.46it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  96%|█████████▋| 110/114 [00:28&lt;00:01,  2.46it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  97%|█████████▋| 111/114 [00:29&lt;00:01,  2.46it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  98%|█████████▊| 112/114 [00:29&lt;00:00,  2.45it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  99%|█████████▉| 113/114 [00:30&lt;00:00,  2.45it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:30&lt;00:00,  2.44it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:30&lt;00:00,  3.74it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 114/114 [01:24&lt;00:00,  1.35it/s]
 </pre></div>
 </div>
 </div>
@@ -3004,7 +2217,7 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/5361609db6e8f827e3b0e5d10b856d5634b68740cf6d40aee0b8fa11cd76b092.png" src="../../../_images/5361609db6e8f827e3b0e5d10b856d5634b68740cf6d40aee0b8fa11cd76b092.png" />
+<img alt="../../../_images/6f6589a1ab7502efb3e5aa9ee32d26583478f57575ba1d6d44f9d8c88a0d5be5.png" src="../../../_images/6f6589a1ab7502efb3e5aa9ee32d26583478f57575ba1d6d44f9d8c88a0d5be5.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -3021,7 +2234,7 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/5cc979496cfce8a5f0dab6b125f12e675ed7d3a8af217bc651319f43712ec166.png" src="../../../_images/5cc979496cfce8a5f0dab6b125f12e675ed7d3a8af217bc651319f43712ec166.png" />
+<img alt="../../../_images/5f29b116ff4c984e529b16ad24870382727221549b7913f2d6ccfcb5cced2946.png" src="../../../_images/5f29b116ff4c984e529b16ad24870382727221549b7913f2d6ccfcb5cced2946.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -3045,298 +2258,7 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   0%|          | 0/114 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   1%|          | 1/114 [00:00&lt;00:52,  2.15it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   3%|▎         | 3/114 [00:00&lt;00:20,  5.41it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   4%|▎         | 4/114 [00:00&lt;00:17,  6.31it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   4%|▍         | 5/114 [00:00&lt;00:15,  6.90it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   5%|▌         | 6/114 [00:01&lt;00:15,  6.97it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   6%|▌         | 7/114 [00:01&lt;00:21,  4.91it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   7%|▋         | 8/114 [00:01&lt;00:26,  4.06it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   8%|▊         | 9/114 [00:02&lt;00:28,  3.63it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   9%|▉         | 10/114 [00:02&lt;00:30,  3.41it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  10%|▉         | 11/114 [00:02&lt;00:31,  3.27it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  11%|█         | 12/114 [00:03&lt;00:32,  3.19it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  11%|█▏        | 13/114 [00:03&lt;00:32,  3.07it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  12%|█▏        | 14/114 [00:03&lt;00:33,  3.02it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  13%|█▎        | 15/114 [00:04&lt;00:32,  3.03it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  14%|█▍        | 16/114 [00:04&lt;00:32,  3.03it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  15%|█▍        | 17/114 [00:04&lt;00:32,  3.02it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  16%|█▌        | 18/114 [00:05&lt;00:32,  2.99it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  17%|█▋        | 19/114 [00:05&lt;00:31,  2.99it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  18%|█▊        | 20/114 [00:05&lt;00:32,  2.93it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  18%|█▊        | 21/114 [00:06&lt;00:32,  2.87it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  19%|█▉        | 22/114 [00:06&lt;00:31,  2.90it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  20%|██        | 23/114 [00:06&lt;00:31,  2.89it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  21%|██        | 24/114 [00:07&lt;00:30,  2.95it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  22%|██▏       | 25/114 [00:07&lt;00:36,  2.43it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  24%|██▎       | 27/114 [00:07&lt;00:23,  3.76it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  25%|██▍       | 28/114 [00:08&lt;00:19,  4.36it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  25%|██▌       | 29/114 [00:08&lt;00:17,  4.81it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  26%|██▋       | 30/114 [00:08&lt;00:16,  5.06it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  28%|██▊       | 32/114 [00:08&lt;00:11,  7.30it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  30%|██▉       | 34/114 [00:08&lt;00:09,  8.51it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  32%|███▏      | 36/114 [00:08&lt;00:09,  8.59it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  32%|███▏      | 37/114 [00:09&lt;00:15,  4.94it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  34%|███▍      | 39/114 [00:09&lt;00:11,  6.27it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  35%|███▌      | 40/114 [00:09&lt;00:11,  6.65it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  36%|███▌      | 41/114 [00:09&lt;00:10,  6.92it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  37%|███▋      | 42/114 [00:09&lt;00:10,  7.03it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  38%|███▊      | 43/114 [00:10&lt;00:17,  4.09it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  39%|███▊      | 44/114 [00:11&lt;00:22,  3.05it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  39%|███▉      | 45/114 [00:11&lt;00:26,  2.60it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  40%|████      | 46/114 [00:12&lt;00:29,  2.34it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  41%|████      | 47/114 [00:12&lt;00:30,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  42%|████▏     | 48/114 [00:13&lt;00:31,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  44%|████▍     | 50/114 [00:13&lt;00:17,  3.57it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  46%|████▌     | 52/114 [00:13&lt;00:12,  4.99it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  47%|████▋     | 54/114 [00:13&lt;00:10,  5.99it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  49%|████▉     | 56/114 [00:13&lt;00:07,  7.82it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  51%|█████     | 58/114 [00:13&lt;00:06,  8.99it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  53%|█████▎    | 60/114 [00:14&lt;00:05,  9.16it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  54%|█████▍    | 62/114 [00:14&lt;00:08,  5.97it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  56%|█████▌    | 64/114 [00:14&lt;00:07,  6.81it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  57%|█████▋    | 65/114 [00:14&lt;00:06,  7.02it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  58%|█████▊    | 66/114 [00:15&lt;00:06,  7.02it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  59%|█████▉    | 67/114 [00:15&lt;00:10,  4.40it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  61%|██████    | 69/114 [00:15&lt;00:07,  5.83it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  61%|██████▏   | 70/114 [00:15&lt;00:06,  6.36it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  62%|██████▏   | 71/114 [00:16&lt;00:06,  6.70it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  63%|██████▎   | 72/114 [00:16&lt;00:06,  6.85it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  64%|██████▍   | 73/114 [00:16&lt;00:09,  4.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  66%|██████▌   | 75/114 [00:16&lt;00:06,  5.72it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  67%|██████▋   | 76/114 [00:16&lt;00:06,  6.23it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  68%|██████▊   | 77/114 [00:17&lt;00:05,  6.64it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  68%|██████▊   | 78/114 [00:17&lt;00:05,  6.83it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  69%|██████▉   | 79/114 [00:17&lt;00:08,  4.14it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  71%|███████   | 81/114 [00:17&lt;00:05,  5.79it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  72%|███████▏  | 82/114 [00:17&lt;00:05,  6.37it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  73%|███████▎  | 83/114 [00:18&lt;00:04,  6.78it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  74%|███████▎  | 84/114 [00:18&lt;00:04,  6.94it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  75%|███████▍  | 85/114 [00:18&lt;00:06,  4.14it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  76%|███████▋  | 87/114 [00:18&lt;00:04,  5.78it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  77%|███████▋  | 88/114 [00:19&lt;00:04,  6.35it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  78%|███████▊  | 89/114 [00:19&lt;00:03,  6.78it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  79%|███████▉  | 90/114 [00:19&lt;00:03,  6.94it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  80%|███████▉  | 91/114 [00:19&lt;00:05,  4.16it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  82%|████████▏ | 93/114 [00:19&lt;00:03,  5.83it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  82%|████████▏ | 94/114 [00:20&lt;00:03,  6.42it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  83%|████████▎ | 95/114 [00:20&lt;00:02,  6.82it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  84%|████████▍ | 96/114 [00:20&lt;00:02,  6.97it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  85%|████████▌ | 97/114 [00:20&lt;00:03,  5.04it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  86%|████████▌ | 98/114 [00:21&lt;00:03,  4.11it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  87%|████████▋ | 99/114 [00:21&lt;00:04,  3.66it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  88%|████████▊ | 100/114 [00:21&lt;00:04,  3.40it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  89%|████████▊ | 101/114 [00:22&lt;00:04,  3.19it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  89%|████████▉ | 102/114 [00:22&lt;00:03,  3.12it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  90%|█████████ | 103/114 [00:22&lt;00:03,  3.06it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  91%|█████████ | 104/114 [00:23&lt;00:03,  3.02it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  92%|█████████▏| 105/114 [00:23&lt;00:03,  2.95it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  93%|█████████▎| 106/114 [00:23&lt;00:02,  2.92it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  94%|█████████▍| 107/114 [00:24&lt;00:02,  2.90it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  95%|█████████▍| 108/114 [00:24&lt;00:02,  2.86it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  96%|█████████▌| 109/114 [00:24&lt;00:01,  2.83it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  96%|█████████▋| 110/114 [00:25&lt;00:01,  2.81it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  97%|█████████▋| 111/114 [00:25&lt;00:01,  2.83it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  98%|█████████▊| 112/114 [00:25&lt;00:00,  2.85it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:  99%|█████████▉| 113/114 [00:26&lt;00:00,  2.87it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:26&lt;00:00,  2.85it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:26&lt;00:00,  4.28it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 114/114 [01:10&lt;00:00,  1.63it/s]
 </pre></div>
 </div>
 </div>
@@ -3348,7 +2270,7 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/549740279a57dfc898a6a2447a81a2639a44bf2e036ffac2f24c84f71c658869.png" src="../../../_images/549740279a57dfc898a6a2447a81a2639a44bf2e036ffac2f24c84f71c658869.png" />
+<img alt="../../../_images/db936646c049f44e7e39859fbedc836b253ab9a96325f63b7eed1f523f0e9ebe.png" src="../../../_images/db936646c049f44e7e39859fbedc836b253ab9a96325f63b7eed1f523f0e9ebe.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -3365,7 +2287,7 @@ endclass.endpt:                 array(2)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/7da0f1a273d30fc6fb9a5914953ac7d721633557909a13c1ad8871786fbe170f.png" src="../../../_images/7da0f1a273d30fc6fb9a5914953ac7d721633557909a13c1ad8871786fbe170f.png" />
+<img alt="../../../_images/4406ea5fa68a0d9ac61fc3226303e0c2b110352c5708f2d73eee47ce23c4b3e9.png" src="../../../_images/4406ea5fa68a0d9ac61fc3226303e0c2b110352c5708f2d73eee47ce23c4b3e9.png" />
 </div>
 </div>
 <div class="cell docutils container">

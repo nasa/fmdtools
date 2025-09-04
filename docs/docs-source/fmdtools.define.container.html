@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.container &mdash; fmdtools 2.1.3 documentation</title>
+  <title>fmdtools.define.container &mdash; fmdtools 2.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
 
   
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=179ab080"></script>
+      <script src="../_static/documentation_options.js?v=b21de401"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-0">Version: 2.2.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -219,21 +219,12 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#history">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#what-about-human-induced-faults">What about human-induced faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#evaluating-joint-component-human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#testing-different-reaction-times">Testing different reaction times</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#tank-architecture-s">Tank Architecture(s)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#tank-analysis">Tank Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#full-set-of-modes">Full set of modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#defining-optimization-problem">Defining Optimization Problem</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html">Cooling Tank Model Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#simulation">Simulation</a></li>
 </ul>
 </li>
 </ul>
@@ -400,12 +391,15 @@
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_dict_repr"><code class="docutils literal notranslate"><span class="pre">get_dict_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_repr"><code class="docutils literal notranslate"><span class="pre">get_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
@@ -430,41 +424,25 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.NestedSimulation"><code class="docutils literal notranslate"><span class="pre">NestedSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.SimEvent"><code class="docutils literal notranslate"><span class="pre">SimEvent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_fault_sim"><code class="docutils literal notranslate"><span class="pre">exec_fault_sim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_sim"><code class="docutils literal notranslate"><span class="pre">exec_sim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.fault_sample"><code class="docutils literal notranslate"><span class="pre">fault_sample()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.fault_sample_from"><code class="docutils literal notranslate"><span class="pre">fault_sample_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.gen_sampleapproach"><code class="docutils literal notranslate"><span class="pre">gen_sampleapproach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.get_mdl_kwargs"><code class="docutils literal notranslate"><span class="pre">get_mdl_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.get_sim_call_kwargs"><code class="docutils literal notranslate"><span class="pre">get_sim_call_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nested_sample"><code class="docutils literal notranslate"><span class="pre">nested_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.pack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.parameter_sample"><code class="docutils literal notranslate"><span class="pre">parameter_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.process_nominal"><code class="docutils literal notranslate"><span class="pre">process_nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
@@ -555,7 +533,6 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
@@ -579,6 +556,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.clean_to_return"><code class="docutils literal notranslate"><span class="pre">clean_to_return()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
@@ -741,11 +719,11 @@
 <span id="fmdtools-define-container"></span><h1>fmdtools.define.container<a class="headerlink" href="#module-fmdtools.define.container" title="Link to this heading"></a></h1>
 <p>Package defining system variables other base constructs.</p>
 <p>The containers subpackage provides the elemental building puzzle pieces needed (i.e., containers for holding states, modes, etc.) to develop simulations, shown below.</p>
-<figure class="align-default" id="id36">
+<figure class="align-default" id="id39">
 <a class="reference internal image-reference" href="../_images/Containers.svg"><img alt="fmdtools container classes" src="../_images/Containers.svg" style="width: 800px;" />
 </a>
 <figcaption>
-<p><span class="caption-text">Container classes in fmdtools and their inheritance.</span><a class="headerlink" href="#id36" title="Link to this image"></a></p>
+<p><span class="caption-text">Container classes in fmdtools and their inheritance.</span><a class="headerlink" href="#id39" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>These classes are provided in the following modules:</p>
@@ -902,6 +880,12 @@ The default is None.</p></li>
 </div>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.create_repr">
+<span class="sig-name descname"><span class="pre">create_repr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">with_classname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">one_line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.create_repr" title="Link to this definition"></a></dt>
+<dd><p>Create repr-friendly string for container.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.default_track">
 <span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'all'</span></em><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.default_track" title="Link to this definition"></a></dt>
@@ -962,7 +946,7 @@ The default is None.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.get_pref_attrs">
 <span class="sig-name descname"><span class="pre">get_pref_attrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.get_pref_attrs" title="Link to this definition"></a></dt>
-<dd><p>Return dict of Container attributes with ‘<a href="#id42"><span class="problematic" id="id43">prefix_</span></a>’ as the var name.</p>
+<dd><p>Return dict of Container attributes with ‘<a href="#id45"><span class="problematic" id="id46">prefix_</span></a>’ as the var name.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1152,11 +1136,11 @@ float in initialization.</p>
 <section id="fmdtools-define-container-mode">
 <h2>fmdtools.define.container.mode<a class="headerlink" href="#fmdtools-define-container-mode" title="Link to this heading"></a></h2>
 <p>The following template shows the basic syntax to use to define modes:</p>
-<figure class="align-default" id="id37">
+<figure class="align-default" id="id40">
 <a class="reference internal image-reference" href="../_images/mode_structure.svg"><img alt="Structure of a Mode Class" src="../_images/mode_structure.svg" style="width: 600px;" />
 </a>
 <figcaption>
-<p><span class="caption-text">Mode class template/example.</span><a class="headerlink" href="#id37" title="Link to this image"></a></p>
+<p><span class="caption-text">Mode class template/example.</span><a class="headerlink" href="#id40" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p id="module-fmdtools.define.container.mode">Defines <a class="reference internal" href="#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a> class for defining (faulty and otherwise) <a class="reference internal" href="Development%20Guide.html#term-Mode"><span class="xref std std-term">mode</span></a> s.</p>
@@ -1332,14 +1316,14 @@ factors or tuple (factor, effect proportion).</p>
 <span class="gp">... </span>    <span class="n">epc_1</span> <span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exh</span> <span class="o">=</span> <span class="n">ExHMode</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exh</span><span class="o">.</span><span class="n">failrate</span>
-<span class="go">0.015</span>
+<span class="go">np.float64(0.015)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">ExHMode2</span><span class="p">(</span><span class="n">HumanErrorMode</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">gtp</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span>
 <span class="gp">... </span>    <span class="n">epc_1</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span>
 <span class="gp">... </span>    <span class="n">epc_2</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exh2</span> <span class="o">=</span> <span class="n">ExHMode2</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exh2</span><span class="o">.</span><span class="n">failrate</span>
-<span class="go">0.06</span>
+<span class="go">np.float64(0.06)</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -1441,12 +1425,12 @@ their properties</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span> <span class="o">=</span> <span class="n">ExampleMode</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span><span class="o">.</span><span class="n">get_fault</span><span class="p">(</span><span class="s1">&#39;low&#39;</span><span class="p">)</span>
-<span class="go">Fault(prob=1.0, cost=0.0, phases=(), disturbances={&#39;s.charge&#39;: 20.0}, units=&#39;sim&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;disturbances&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;s.charge&#39;</span><span class="p">:</span> <span class="mf">40.0</span><span class="p">}}))</span>
+<span class="go">Fault(prob=1.0, cost=0.0, phases=(), disturbances={&#39;s.x&#39;: 20.0}, units=&#39;sim&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span><span class="o">.</span><span class="n">add_fault</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;disturbances&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;s.x&#39;</span><span class="p">:</span> <span class="mf">40.0</span><span class="p">}}))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span>
-<span class="go">ExampleMode(mode=low, faults={&#39;low&#39;})</span>
+<span class="go">ExampleMode(faults={&#39;low&#39;}, sub_faults=False, fault_low={&#39;disturbances&#39;: {&#39;s.x&#39;: 40.0}}, mode=&#39;low&#39;)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exm</span><span class="o">.</span><span class="n">get_fault</span><span class="p">(</span><span class="s1">&#39;low&#39;</span><span class="p">)</span>
-<span class="go">Fault(prob=1.0, cost=0.0, phases=(), disturbances={&#39;s.charge&#39;: 40.0}, units=&#39;sim&#39;)</span>
+<span class="go">Fault(prob=1.0, cost=0.0, phases=(), disturbances={&#39;s.x&#39;: 40.0}, units=&#39;sim&#39;)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1461,6 +1445,12 @@ their properties</p>
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.base_type">
 <span class="sig-name descname"><span class="pre">base_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.base_type" title="Link to this definition"></a></dt>
 <dd><p>Return fmdtools type of the model class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.create_repr">
+<span class="sig-name descname"><span class="pre">create_repr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['mode',</span> <span class="pre">'faults',</span> <span class="pre">'sub_faults']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.create_repr" title="Link to this definition"></a></dt>
+<dd><p>Limit default repr to relevant fields.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1666,32 +1656,32 @@ Can also be parameters of the fault.</p>
 <p>Defines <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a> class for representing variables that change over time.</p>
 <p>State classes are used to represent mutables properties of the system that change over time.</p>
 <p>State classes are extended and deployed by the user, as shown below:</p>
-<figure class="align-default" id="id38">
+<figure class="align-default" id="id41">
 <a class="reference internal image-reference" href="../_images/StateExample.svg"><img alt="example state class" src="../_images/StateExample.svg" style="width: 600px;" />
 </a>
 <figcaption>
-<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a> class to hold x/y fields.</span><a class="headerlink" href="#id38" title="Link to this image"></a></p>
+<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a> class to hold x/y fields.</span><a class="headerlink" href="#id41" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>The following template shows the basic syntax used to define states:</p>
-<figure class="align-default" id="id39">
+<figure class="align-default" id="id42">
 <a class="reference internal image-reference" href="../_images/state_structure.svg"><img alt="Structure of a State Class" src="../_images/state_structure.svg" style="width: 600px;" />
 </a>
 <figcaption>
-<p><span class="caption-text">State class template/example.</span><a class="headerlink" href="#id39" title="Link to this image"></a></p>
+<p><span class="caption-text">State class template/example.</span><a class="headerlink" href="#id42" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.state.State">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.state.</span></span><span class="sig-name descname"><span class="pre">State</span></span><a class="headerlink" href="#fmdtools.define.container.state.State" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.state.</span></span><span class="sig-name descname"><span class="pre">State</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
 <p>Class for working with model states.</p>
 <p>States which are variables in the model which change over time.</p>
 <p>State is meant to be extended in the model definition object to add the
 corresponding field related to a simulation, e.g.,</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">ExampleState</span><span class="p">(</span><span class="n">State</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">x</span> <span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.0</span>
-<span class="gp">... </span>    <span class="n">y</span> <span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="gp">... </span>    <span class="n">x</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="gp">... </span>    <span class="n">y</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="o">=</span><span class="mf">1.0</span>
 </pre></div>
 </div>
 <p>Creates a class point with fields x and y which are tagged as floats with default
@@ -1699,13 +1689,13 @@ values of 1.0.</p>
 <p>Instancing State gives normal read/write access, e.g., one can do:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">1.0</span>
+<span class="go">np.float64(1.0)</span>
 </pre></div>
 </div>
 <p>or:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">10.0</span>
+<span class="go">np.float64(10.0)</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -1715,7 +1705,7 @@ values of 1.0.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
-<span class="go">3.0</span>
+<span class="go">np.float64(3.0)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1733,7 +1723,7 @@ values of 1.0.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
-<span class="go">0.5</span>
+<span class="go">np.float64(0.5)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1749,9 +1739,9 @@ statements. e.g.,:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p_arr</span>
 <span class="go">array([1., 2.])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
-<span class="go">1.0</span>
+<span class="go">np.float64(1.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">as_array</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="go">[1.0, 2.0]</span>
+<span class="go">[np.float64(1.0), np.float64(2.0)]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1765,9 +1755,9 @@ types poorly (e.g., np.array([1,’b’] would make 1 a string–using a tuple
 instead preserves the data type)).</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExampleState</span><span class="p">()</span><span class="o">.</span><span class="n">gett</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
-<span class="go">1.0</span>
+<span class="go">np.float64(1.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ExampleState</span><span class="p">()</span><span class="o">.</span><span class="n">gett</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">)</span>
-<span class="go">(1.0, 1.0)</span>
+<span class="go">(np.float64(1.0), np.float64(1.0))</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1780,9 +1770,9 @@ instead preserves the data type)).</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">2.0</span>
+<span class="go">np.float64(2.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">y</span>
-<span class="go">3.0</span>
+<span class="go">np.float64(3.0)</span>
 </pre></div>
 </div>
 <p>Can additionally be provided with a second value denoting a limit on the
@@ -1790,10 +1780,10 @@ increments e.g.,:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">4.0</span>
+<span class="go">np.float64(4.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">5.0</span>
+<span class="go">np.float64(5.0)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1812,9 +1802,9 @@ increments e.g.,:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">200.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">200.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">100.0</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">100.0</span>
+<span class="go">np.float64(100.0)</span>
 <span class="gp">&gt;&gt;&gt;</span>
-<span class="go">0.0</span>
+<span class="go">np.float64(0.0)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1826,7 +1816,7 @@ increments e.g.,:</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
-<span class="go">6.0</span>
+<span class="go">np.float64(6.0)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1848,9 +1838,9 @@ increments e.g.,:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">2.0</span>
+<span class="go">np.float64(2.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">y</span>
-<span class="go">2.0</span>
+<span class="go">np.float64(2.0)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1863,7 +1853,7 @@ increments e.g.,:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.75850</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">roundto</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">1.8</span>
+<span class="go">np.float64(1.8)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1912,7 +1902,7 @@ function/flow <em>states</em>) e.g.,</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
-<span class="go">-1.0</span>
+<span class="go">np.float64(-1.0)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1945,19 +1935,19 @@ The default is 2 (points to the place in the model)</p></li>
 <span id="fmdtools-define-container-parameter"></span><h2>fmdtools.define.container.parameter<a class="headerlink" href="#module-fmdtools.define.container.parameter" title="Link to this heading"></a></h2>
 <p>Defines <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to represent attributes that do not change.</p>
 <p><a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> classes are used to represent immutable properties of the system. <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> classes are extended and deployed by the user, as shown below:</p>
-<figure class="align-default" id="id40">
+<figure class="align-default" id="id43">
 <a class="reference internal image-reference" href="../_images/ParameterExample.svg"><img alt="example parameter class" src="../_images/ParameterExample.svg" style="width: 600px;" />
 </a>
 <figcaption>
-<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to hold x/y/z fields.</span><a class="headerlink" href="#id40" title="Link to this image"></a></p>
+<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to hold x/y/z fields.</span><a class="headerlink" href="#id43" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>The following template shows the basic syntax to use to define parameters:</p>
-<figure class="align-default" id="id41">
+<figure class="align-default" id="id44">
 <a class="reference internal image-reference" href="../_images/parameter_structure.svg"><img alt="Structure of a Parameter Class" src="../_images/parameter_structure.svg" style="width: 600px;" />
 </a>
 <figcaption>
-<p><span class="caption-text">Parameter class template/example.</span><a class="headerlink" href="#id41" title="Link to this image"></a></p>
+<p><span class="caption-text">Parameter class template/example.</span><a class="headerlink" href="#id44" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <dl class="py class">
@@ -2145,6 +2135,11 @@ and random.permutation.</p></li>
 <span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.seed" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.ExampleRand.track_pdf">
+<span class="sig-name descname"><span class="pre">track_pdf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.track_pdf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -2185,46 +2180,74 @@ and random.permutation.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.run_stochastic">
+<span class="sig-name descname"><span class="pre">run_stochastic</span></span><a class="headerlink" href="#fmdtools.define.container.rand.Rand.run_stochastic" title="Link to this definition"></a></dt>
+<dd><p>Whether the rand is to be updated/called</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.track_pdf">
+<span class="sig-name descname"><span class="pre">track_pdf</span></span><a class="headerlink" href="#fmdtools.define.container.rand.Rand.track_pdf" title="Link to this definition"></a></dt>
+<dd><p>Whether a pdf is to be tracked and returned from the Rand.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
 <p class="rubric">Examples</p>
 <p>Rand is meant to be extended in model definition with random states, e.g.:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">RandState</span><span class="p">(</span><span class="n">State</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">noise</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="gp">... </span>    <span class="n">noise</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="o">=</span><span class="mf">1.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">ExampleRand</span><span class="p">(</span><span class="n">Rand</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">s</span><span class="p">:</span> <span class="n">RandState</span> <span class="o">=</span> <span class="n">RandState</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Which enables the use of set_rand_state, update_stochastic_states, etc for updating
 these states with methods called from the rng when run_stochastic=True.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exr</span> <span class="o">=</span> <span class="n">ExampleRand</span><span class="p">(</span><span class="n">run_stochastic</span><span class="o">=</span><span class="s1">&#39;track_pdf&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exr</span> <span class="o">=</span> <span class="n">ExampleRand</span><span class="p">(</span><span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track_pdf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exr</span><span class="o">.</span><span class="n">set_rand_state</span><span class="p">(</span><span class="s1">&#39;noise&#39;</span><span class="p">,</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exr</span><span class="o">.</span><span class="n">s</span>
-<span class="go">RandState(noise=1.3047170797544314)</span>
+<span class="go">RandState(noise=np.float64(1.3047170797544314))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exr</span><span class="o">.</span><span class="n">probs</span>
-<span class="go">[0.3808442490605113]</span>
+<span class="go">[np.float64(0.3808442490605113)]</span>
 </pre></div>
 </div>
 <p>Checking copy:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exr2</span> <span class="o">=</span> <span class="n">exr</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exr2</span><span class="o">.</span><span class="n">s</span>
-<span class="go">RandState(noise=1.3047170797544314)</span>
+<span class="go">RandState(noise=np.float64(1.3047170797544314))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exr2</span><span class="o">.</span><span class="n">run_stochastic</span>
-<span class="go">&#39;track_pdf&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exr2</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">exr</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exr2</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">bit_generator</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">][</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">exr</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">bit_generator</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">][</span><span class="s1">&#39;state&#39;</span><span class="p">]</span>
 <span class="go">True</span>
 </pre></div>
 </div>
 <p>More state setting:
 &gt;&gt;&gt; exr.set_rand_state(‘noise’, ‘normal’, 1.0, 1.0)
 &gt;&gt;&gt; exr.probs
-[0.3808442490605113, 0.23230084450139615]
+[np.float64(0.3808442490605113), np.float64(0.23230084450139615)]
 &gt;&gt;&gt; exr.return_probdens()
-0.08847044068025682
+np.float64(0.08847044068025682)
 &gt;&gt;&gt; exr2.probs
-[0.3808442490605113]</p>
+[np.float64(0.3808442490605113)]</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.base_type">
 <span class="sig-name descname"><span class="pre">base_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.Rand.base_type" title="Link to this definition"></a></dt>
 <dd><p>Return fmdtools type of the model class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.create_repr">
+<span class="sig-name descname"><span class="pre">create_repr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['seed',</span> <span class="pre">'s']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.Rand.create_repr" title="Link to this definition"></a></dt>
+<dd><p>Limit default repr to relevant fields.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2249,7 +2272,7 @@ these states with methods called from the rng when run_stochastic=True.</p>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExampleRand</span><span class="p">()</span><span class="o">.</span><span class="n">get_rand_states</span><span class="p">()</span>
-<span class="go">{&#39;noise&#39;: 1.0}</span>
+<span class="go">{&#39;noise&#39;: np.float64(1.0)}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ExampleRand</span><span class="p">()</span><span class="o">.</span><span class="n">get_rand_states</span><span class="p">(</span><span class="n">auto_update_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="go">{}</span>
 </pre></div>
@@ -2301,13 +2324,13 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.run_stochastic">
-<span class="sig-name descname"><span class="pre">run_stochastic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.rand.Rand.run_stochastic" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id27">
+<span class="sig-name descname"><span class="pre">run_stochastic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id27">
-<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id28">
+<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2338,6 +2361,11 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dd><p>Set the state of the rng in the Rand to the same state as other_rng.</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id29">
+<span class="sig-name descname"><span class="pre">track_pdf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.update_seed">
 <span class="sig-name descname"><span class="pre">update_seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.Rand.update_seed" title="Link to this definition"></a></dt>
@@ -2354,12 +2382,12 @@ these states with methods called from the rng when run_stochastic=True.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.RandState">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">RandState</span></span><a class="headerlink" href="#fmdtools.define.container.rand.RandState" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">RandState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.RandState" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
 <p>Example random state for testing and docs.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.RandState.noise">
-<span class="sig-name descname"><span class="pre">noise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.container.rand.RandState.noise" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">noise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.container.rand.RandState.noise" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2376,11 +2404,11 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dd><p>Get probability density for np.default_rng.random.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_density_for_random</span><span class="p">([</span><span class="mf">0.5</span><span class="p">])</span>
-<span class="go">1.0</span>
+<span class="go">np.float64(1.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_density_for_random</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
-<span class="go">0.25</span>
+<span class="go">np.float64(0.25)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_density_for_random</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
-<span class="go">0.0</span>
+<span class="go">np.float64(0.0)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2391,11 +2419,11 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dd><p>Get probability corresponding to a call to np.choice.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_choice</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
-<span class="go">0.5</span>
+<span class="go">np.float64(0.5)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="go">0.5</span>
+<span class="go">np.float64(0.5)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
-<span class="go">0.01</span>
+<span class="go">np.float64(0.01)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2406,11 +2434,11 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dd><p>Get probability for np.default_rng.integers.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_integers</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
-<span class="go">0.5</span>
+<span class="go">np.float64(0.5)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_integers</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="go">0.25</span>
+<span class="go">np.float64(0.25)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_integers</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="go">0.0</span>
+<span class="go">np.float64(0.0)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2421,11 +2449,11 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dd><p>Get probability corresponding to rng.permuted.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_permuted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]]))</span>
-<span class="go">0.041666666666666664</span>
+<span class="go">np.float64(0.041666666666666664)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_permuted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]]),</span> <span class="mi">0</span><span class="p">)</span>
-<span class="go">0.16666666666666666</span>
+<span class="go">np.float64(0.16666666666666666)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_permuted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]]),</span> <span class="mi">1</span><span class="p">)</span>
-<span class="go">0.5</span>
+<span class="go">np.float64(0.5)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2436,9 +2464,9 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dd><p>Get probability corresponding to rng.shuffle and rng.permutation.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_shuffle_permutation</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
-<span class="go">0.5</span>
+<span class="go">np.float64(0.5)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_shuffle_permutation</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
-<span class="go">0.16666666666666666</span>
+<span class="go">np.float64(0.16666666666666666)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2455,13 +2483,13 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dd><p>Get callable for scipy exponential and rayleigh pdf with numpy.random arguments.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;rayleigh&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="go">0.3032653298563167</span>
+<span class="go">np.float64(0.3032653298563167)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;rayleigh&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="go">0.0</span>
+<span class="go">np.float64(0.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;exponential&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">)</span>
-<span class="go">1.0</span>
+<span class="go">np.float64(1.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;exponential&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">)</span>
-<span class="go">0.36787944117144233</span>
+<span class="go">np.float64(0.36787944117144233)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2472,7 +2500,7 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dd><p>Get callable for scipy hypergeomeric pmf with numpy.random arguments.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_hypergeometric_pmf</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">450</span><span class="p">,</span> <span class="mi">100</span><span class="p">)(</span><span class="mi">10</span><span class="p">)</span>
-<span class="go">0.14736784420411747</span>
+<span class="go">np.float64(0.14736784420411747)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2483,7 +2511,7 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dd><p>Get callable for scipy lognormal pdf with numpy.random arguments.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_lognormal_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.25</span><span class="p">)(</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="go">1.5957691216057308</span>
+<span class="go">np.float64(1.5957691216057308)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2534,11 +2562,11 @@ to calculate the probabilities/probability densities.</p>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_prob_for_rand</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="go">0.3989422804014327</span>
+<span class="go">np.float64(0.3989422804014327)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">get_prob_for_rand</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="go">0.15915494309189535</span>
+<span class="go">np.float64(0.15915494309189535)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">get_prob_for_rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;integers&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-<span class="go">0.25</span>
+<span class="go">np.float64(0.25)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2562,7 +2590,7 @@ to calculate the probabilities/probability densities.</p>
 <p>Note: doesn’t support len(x)&gt;1.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_standard_t_pdf</span><span class="p">(</span><span class="mi">1</span><span class="p">)([</span><span class="mf">0.0</span><span class="p">])</span>
-<span class="go">0.31830988618379075</span>
+<span class="go">np.float64(0.31830988618379075)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2573,13 +2601,13 @@ to calculate the probabilities/probability densities.</p>
 <dd><p>Get callable for scipy.triang corresponding to a numpy.random.triangular call.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_triangular_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">)</span>
-<span class="go">0.0</span>
+<span class="go">np.float64(0.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">get_triangular_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="go">1.0</span>
+<span class="go">np.float64(1.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">get_triangular_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mf">1.5</span><span class="p">)</span>
-<span class="go">0.5</span>
+<span class="go">np.float64(0.5)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">get_triangular_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
-<span class="go">0.25</span>
+<span class="go">np.float64(0.25)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2605,18 +2633,23 @@ to calculate the probabilities/probability densities.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.run_times">
-<span class="sig-name descname"><span class="pre">run_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.run_times" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.executed_dynamic">
+<span class="sig-name descname"><span class="pre">executed_dynamic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executed_dynamic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.executed_static">
+<span class="sig-name descname"><span class="pre">executed_static</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executed_static" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.executing">
+<span class="sig-name descname"><span class="pre">executing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executing" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.t_ind">
 <span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.t_ind" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.t_loc">
-<span class="sig-name descname"><span class="pre">t_loc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.t_loc" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2671,7 +2704,7 @@ to calculate the probabilities/probability densities.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.Time.t_ind">
 <span class="sig-name descname"><span class="pre">t_ind</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.t_ind" title="Link to this definition"></a></dt>
-<dd><p>index of the given time</p>
+<dd><p>index of the given time in the history.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -2680,24 +2713,35 @@ to calculate the probabilities/probability densities.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.t_loc">
-<span class="sig-name descname"><span class="pre">t_loc</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.t_loc" title="Link to this definition"></a></dt>
-<dd><p>local time (e.g., for actions with durations)</p>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.executed_static">
+<span class="sig-name descname"><span class="pre">executed_static</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.executed_static" title="Link to this definition"></a></dt>
+<dd><p>Whether a sim’s static behavior has executed yet this timestep (or not).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.run_times">
-<span class="sig-name descname"><span class="pre">run_times</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.run_times" title="Link to this definition"></a></dt>
-<dd><p>number of times to run the behavior if running at a different timestep than
-global</p>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.executed_dynamic">
+<span class="sig-name descname"><span class="pre">executed_dynamic</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.executed_dynamic" title="Link to this definition"></a></dt>
+<dd><p>Whether a sim’s dynamic behavior has executed yet this timestep (or not).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.executing">
+<span class="sig-name descname"><span class="pre">executing</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.executing" title="Link to this definition"></a></dt>
+<dd><p>Whether the timestep of the sim is executing or has finished executing.
+Gets set as true when time is updated and false when the timestep is incremented</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2769,15 +2813,59 @@ global</p>
 <dd><p>Return fmdtools type of the model class.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.create_repr">
+<span class="sig-name descname"><span class="pre">create_repr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['time',</span> <span class="pre">'timers']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.create_repr" title="Link to this definition"></a></dt>
+<dd><p>Limit model repr to relevant time/timers fields.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.Time.default_track">
 <span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'timers'</span></em><a class="headerlink" href="#fmdtools.define.container.time.Time.default_track" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id28">
-<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">executed_dynamic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id32">
+<span class="sig-name descname"><span class="pre">executed_static</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id33">
+<span class="sig-name descname"><span class="pre">executing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.get_sim_times">
+<span class="sig-name descname"><span class="pre">get_sim_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.get_sim_times" title="Link to this definition"></a></dt>
+<dd><p>Get the start and end time for the end of the timestep (if not provided).</p>
+<p>If the current time is -0.1, sets start_time at 0.0 for static propagation.
+Otherwise gets the time at the next timestep.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>start_time</strong> (<em>float</em>) – Starting time for the timestep</p></li>
+<li><p><strong>end_time</strong> (<em>float</em>) – Ending time for the timestep.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.has_executed">
+<span class="sig-name descname"><span class="pre">has_executed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.has_executed" title="Link to this definition"></a></dt>
+<dd><p>Return whether the Simulabe has been called.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.Time.init_hist_att">
@@ -2807,47 +2895,43 @@ global</p>
 <span class="sig-name descname"><span class="pre">rolename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'t'</span></em><a class="headerlink" href="#fmdtools.define.container.time.Time.rolename" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id29">
-<span class="sig-name descname"><span class="pre">run_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.Time.set_timestep">
-<span class="sig-name descname"><span class="pre">set_timestep</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.set_timestep" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_timestep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.set_timestep" title="Link to this definition"></a></dt>
 <dd><p>Set the timestep of the function given.</p>
 <p>If using the option use_local, local_timestep is used instead of
 global_timestep.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id30">
-<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id31">
-<span class="sig-name descname"><span class="pre">t_loc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id32">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id33">
-<span class="sig-name descname"><span class="pre">timernames</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="id34">
-<span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id35">
-<span class="sig-name descname"><span class="pre">use_local</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id36">
+<span class="sig-name descname"><span class="pre">timernames</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#id36" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id37">
+<span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#id37" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.update_time">
+<span class="sig-name descname"><span class="pre">update_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.update_time" title="Link to this definition"></a></dt>
+<dd><p>Update the current time from the overall simulation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id38">
+<span class="sig-name descname"><span class="pre">use_local</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id38" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

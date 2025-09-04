@@ -2,6 +2,8 @@
 
 The list below is a chronological accounting of relevant publications from the fmdtools team:
 
+- Hulse, D., Mbaye, S., & Irshad, L. (2025). [The Functional Reasoning Design Language (FRDL): Supporting Hazard Analysis with Graphical Models of Behavioral Interaction.](https://www.researchgate.net/publication/393537342_The_Functional_Reasoning_Design_Language_FRDL_Supporting_Hazard_Analysis_with_Graphical_Models_of_Behavioral_Interaction) Journal of Mechanical Design, 1-16. https://doi.org/10.1115/1.4069127
+
 - Irshad, L., & Hulse, D. (2025). [Towards Early Design Modeling and Simulation of Distributed Situation Awareness.](https://www.researchgate.net/profile/Daniel-Hulse-4/publication/388338743_Towards_Early_Design_Modeling_and_Simulation_of_Distributed_Situation_Awareness/links/6797b278645ef274a449ce16/Toward-Early-Design-Modeling-and-Simulation-of-Distributed-Situation-Awareness.pdf) Journal of Computing and Information Science in Engineering, 1-13. https://doi.org/10.1115/1.4067705
 
 - Mbaye, S., Hulse, D. E., Irshad, L., Walsh, H. S., & Andrade, S. R. (2025). [Towards Computational Functional Hazard Assessment (CFHA): A Gap Analysis and Concept for Emerging Aviation Systems.](https://ntrs.nasa.gov/citations/20240013093) In AIAA SCITECH 2025 Forum (p. 1411). https://doi.org/10.2514/6.2025-1411

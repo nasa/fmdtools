@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Tutorial &mdash; fmdtools 2.1.3 documentation</title>
+  <title>fmdtools Tutorial &mdash; fmdtools 2.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
 
   
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=179ab080"></script>
+      <script src="../../_static/documentation_options.js?v=b21de401"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-1-3">Version: 2.1.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-0">Version: 2.2.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -219,21 +219,12 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#history">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#what-about-human-induced-faults">What about human-induced faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#evaluating-joint-component-human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#testing-different-reaction-times">Testing different reaction times</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#tank-architecture-s">Tank Architecture(s)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#tank-analysis">Tank Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#verifying-the-nominal-state">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#what-happens-under-component-faults">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#full-set-of-modes">Full set of modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#defining-optimization-problem">Defining Optimization Problem</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#simulation">Simulation</a></li>
 </ul>
 </li>
 </ul>
@@ -400,12 +391,15 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_dict_repr"><code class="docutils literal notranslate"><span class="pre">get_dict_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_methods"><code class="docutils literal notranslate"><span class="pre">get_methods()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_obj_name"><code class="docutils literal notranslate"><span class="pre">get_obj_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_repr"><code class="docutils literal notranslate"><span class="pre">get_repr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
@@ -430,41 +424,25 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.NestedSimulation"><code class="docutils literal notranslate"><span class="pre">NestedSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.SimEvent"><code class="docutils literal notranslate"><span class="pre">SimEvent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_fault_sim"><code class="docutils literal notranslate"><span class="pre">exec_fault_sim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.exec_sim"><code class="docutils literal notranslate"><span class="pre">exec_sim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample"><code class="docutils literal notranslate"><span class="pre">fault_sample()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.fault_sample_from"><code class="docutils literal notranslate"><span class="pre">fault_sample_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.gen_sampleapproach"><code class="docutils literal notranslate"><span class="pre">gen_sampleapproach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_mdl_kwargs"><code class="docutils literal notranslate"><span class="pre">get_mdl_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_sim_call_kwargs"><code class="docutils literal notranslate"><span class="pre">get_sim_call_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nested_sample"><code class="docutils literal notranslate"><span class="pre">nested_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.parameter_sample"><code class="docutils literal notranslate"><span class="pre">parameter_sample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.process_nominal"><code class="docutils literal notranslate"><span class="pre">process_nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
@@ -555,7 +533,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_func_kwargs"><code class="docutils literal notranslate"><span class="pre">get_func_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
@@ -579,6 +556,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.clean_to_return"><code class="docutils literal notranslate"><span class="pre">clean_to_return()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
@@ -802,17 +780,30 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;import_ee&#39;: import_ee ImportEE
- - ImportEEState(effstate=1.0)
- - ImportEEMode(mode=nominal, faults=set()),
+ - t=Time(time=-0.1, timers={})
+ - m=ImportEEMode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)
+ - s=ImportEEState(effstate=1.0)
+ - ee_out=Electricity(s=(current=1.0, voltage=1.0)),
  &#39;import_water&#39;: import_water ImportWater
- - ImportWaterMode(mode=nominal, faults=set()),
+ - t=Time(time=-0.1, timers={})
+ - m=ImportWaterMode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)
+ - wat_out=Water(s=(flowrate=1.0, pressure=1.0, area=1.0, level=1.0)),
  &#39;import_signal&#39;: import_signal ImportSig
- - ImportSigMode(mode=nominal, faults=set()),
+ - t=Time(time=-0.1, timers={})
+ - m=ImportSigMode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)
+ - sig_out=Signal(s=(power=1.0)),
  &#39;move_water&#39;: move_water MoveWat
- - MoveWatStates(eff=1.0)
- - MoveWatMode(mode=nominal, faults=set()),
+ - t=MoveWatTime(time=-0.1, timers={&#39;pressure_limit&#39;: Timer pressure_limit: mode= standby, time= 0.0})
+ - s=MoveWatStates(eff=1.0)
+ - m=MoveWatMode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)
+ - ee_in=Electricity(s=(current=1.0, voltage=1.0))
+ - sig_in=Signal(s=(power=1.0))
+ - wat_in=Water(s=(flowrate=1.0, pressure=1.0, area=1.0, level=1.0))
+ - wat_out=Water(s=(flowrate=1.0, pressure=1.0, area=1.0, level=1.0)),
  &#39;export_water&#39;: export_water ExportWater
- - ExportWaterMode(mode=nominal, faults=set())}
+ - t=Time(time=-0.1, timers={})
+ - m=ExportWaterMode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)
+ - wat_in=Water(s=(flowrate=1.0, pressure=1.0, area=1.0, level=1.0))}
 </pre></div>
 </div>
 </div>
@@ -842,13 +833,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
 </pre></div>
 </div>
-<img alt="../../_images/fdaa8a9e6198ec59c22ae11b56028cb2f80fa607bc5d47f2304aeb1bd01cb645.png" src="../../_images/fdaa8a9e6198ec59c22ae11b56028cb2f80fa607bc5d47f2304aeb1bd01cb645.png" />
+<img alt="../../_images/4d78928815800a00deff82edcc7d610ee0d650bf90cd0d1c20164f4e1c175e8d.png" src="../../_images/4d78928815800a00deff82edcc7d610ee0d650bf90cd0d1c20164f4e1c175e8d.png" />
 </div>
 </div>
 <p>As shown, because all of the methods were defined as generic behaviors, they are each run in the static propagation step. No order is shown in the static step because the static propagation step iterates between model functions until the values have converged. Nevertheless, one can view the initial static order using:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">staticfxns</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">staticsims</span>
 </pre></div>
 </div>
 </div>
@@ -861,7 +852,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <p>and the dynamic step order (if there was one):</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">dynamicfxns</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">dynamicsims</span>
 </pre></div>
 </div>
 </div>
@@ -896,24 +887,19 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pump Pump
-FUNCTIONS:
-import_ee ImportEE
-- ImportEEState(effstate=1.0)
-- ImportEEMode(mode=nominal, faults=set())
-import_water ImportWater
-- ImportWaterMode(mode=nominal, faults=set())
-import_signal ImportSig
-- ImportSigMode(mode=nominal, faults=set())
-move_water MoveWat
-- MoveWatStates(eff=1.0)
-- MoveWatMode(mode=nominal, faults=set())
-export_water ExportWater
-- ExportWaterMode(mode=nominal, faults=set())
+- t=Time(time=-0.1, timers={})
+- m=Mode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)
 FLOWS:
-ee_1 Electricity flow: EEStates(current=1.0, voltage=1.0)
-sig_1 Signal flow: SignalStates(power=1.0)
-wat_1 Water flow: WaterStates(flowrate=1.0, pressure=1.0, area=1.0, level=1.0)
-wat_2 Water flow: WaterStates(flowrate=1.0, pressure=1.0, area=1.0, level=1.0)
+- ee_1=Electricity(s=(current=1.0, voltage=1.0))
+- sig_1=Signal(s=(power=1.0))
+- wat_1=Water(s=(flowrate=1.0, pressure=1.0, area=1.0, level=1.0))
+- wat_2=Water(s=(flowrate=1.0, pressure=1.0, area=1.0, level=1.0))
+FXNS:
+- import_ee=ImportEE(s=(effstate=1.0), m=(mode=&#39;nominal&#39;, faults=set(), sub_faults=False))
+- import_water=ImportWater(m=(mode=&#39;nominal&#39;, faults=set(), sub_faults=False))
+- import_signal=ImportSig(m=(mode=&#39;nominal&#39;, faults=set(), sub_faults=False))
+- move_water=MoveWat(s=(eff=1.0), m=(mode=&#39;nominal&#39;, faults=set(), sub_faults=False))
+- export_water=ExportWater(m=(mode=&#39;nominal&#39;, faults=set(), sub_faults=False))
 </pre></div>
 </div>
 </div>
@@ -963,10 +949,7 @@ endresults, which is a result (or a dict of multiple results) specified by the <
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>endclass: 
---rate:                              1.0
---cost:                              0.0
---expected_cost:                     0.0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -987,6 +970,7 @@ endresults, which is a result (or a dict of multiple results) specified by the <
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>i.finished:                    array(56)
 i.on:                          array(56)
 m.sub_faults:                  array(56)
+time:                          array(56)
 flows.ee_1.s.current:          array(56)
 flows.ee_1.s.voltage:          array(56)
 flows.sig_1.s.power:           array(56)
@@ -1016,7 +1000,6 @@ fxns.move_water.t.pressure_limit.time: array(56)
 fxns.move_water.t.pressure_limit.mode: array(56)
 fxns.export_water.m.faults.block: array(56)
 fxns.export_water.m.sub_faults: array(56)
-time:                          array(56)
 </pre></div>
 </div>
 </div>
@@ -1041,7 +1024,7 @@ time:                          array(56)
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
 </pre></div>
 </div>
-<img alt="../../_images/9a5720d1a455190e8702159e238084d8bfd0af30faa344757cf046ef782cb63f.png" src="../../_images/9a5720d1a455190e8702159e238084d8bfd0af30faa344757cf046ef782cb63f.png" />
+<img alt="../../_images/e527460899a8cd09b8112e1104afb294441c3dc7d9e21f891bfe180b9ad835da.png" src="../../_images/e527460899a8cd09b8112e1104afb294441c3dc7d9e21f891bfe180b9ad835da.png" />
 </div>
 </div>
 <p>We can also view the flow values of the model using <code class="docutils literal notranslate"><span class="pre">History.plot_line</span></code></p>
@@ -1054,7 +1037,7 @@ time:                          array(56)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/b10fb4a4c1918afcae95e2d682c4b9e71044a46aac507f0180ec19c87cc4bdca.png" src="../../_images/b10fb4a4c1918afcae95e2d682c4b9e71044a46aac507f0180ec19c87cc4bdca.png" />
+<img alt="../../_images/71e9b408e151d83ef53343319afe426ed883e58e2ec471fc6c010f9fe460f8b3.png" src="../../_images/71e9b408e151d83ef53343319afe426ed883e58e2ec471fc6c010f9fe460f8b3.png" />
 </div>
 </div>
 <p>Note: for quick access to the syntax and options for these methods, type the <code class="docutils literal notranslate"><span class="pre">?method</span></code> or <code class="docutils literal notranslate"><span class="pre">help(method)</span></code> in the terminal. For example <code class="docutils literal notranslate"><span class="pre">?History.plot_line</span></code></p>
@@ -1079,10 +1062,8 @@ time:                          array(56)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>endclass.rate:                     1e-05
-endclass.cost:        29000.000000000007
-endclass.expected_cost: 29000.000000000007
-graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x000001BD662EF990&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nominal.tend.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x0000020AB6C7C390&gt;
+move_water_short_t10.tend.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x0000020AB6B88D90&gt;
 </pre></div>
 </div>
 </div>
@@ -1097,6 +1078,7 @@ graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph objec
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nominal.i.finished:            array(56)
 nominal.i.on:                  array(56)
 nominal.m.sub_faults:          array(56)
+nominal.time:                  array(56)
 nominal.flows.ee_1.s.current:  array(56)
 nominal.flows.ee_1.s.voltage:  array(56)
 nominal.flows.sig_1.s.power:   array(56)
@@ -1126,40 +1108,39 @@ nominal.fxns.move_wa           array(56)
 nominal.fxns.move_wa           array(56)
 nominal.fxns.export_           array(56)
 nominal.fxns.export_water.m.sub_faults: array(56)
-nominal.time:                  array(56)
-faulty.i.finished:             array(56)
-faulty.i.on:                   array(56)
-faulty.m.sub_faults:           array(56)
-faulty.flows.ee_1.s.current:   array(56)
-faulty.flows.ee_1.s.voltage:   array(56)
-faulty.flows.sig_1.s.power:    array(56)
-faulty.flows.wat_1.s.flowrate: array(56)
-faulty.flows.wat_1.s.pressure: array(56)
-faulty.flows.wat_1.s.area:     array(56)
-faulty.flows.wat_1.s.level:    array(56)
-faulty.flows.wat_2.s.flowrate: array(56)
-faulty.flows.wat_2.s.pressure: array(56)
-faulty.flows.wat_2.s.area:     array(56)
-faulty.flows.wat_2.s.level:    array(56)
-faulty.fxns.import_ee.s.effstate: array(56)
-faulty.fxns.import_ee.m.faults.inf_v: array(56)
-faulty.fxns.import_ee.m.faults.no_v: array(56)
-faulty.fxns.import_ee.m.sub_faults: array(56)
-faulty.fxns.import_w           array(56)
-faulty.fxns.import_w           array(56)
-faulty.fxns.import_water.m.sub_faults: array(56)
-faulty.fxns.import_s           array(56)
-faulty.fxns.import_signal.m.sub_faults: array(56)
-faulty.fxns.move_water.i.over_pressure: array(56)
-faulty.fxns.move_water.s.eff:  array(56)
-faulty.fxns.move_wat           array(56)
-faulty.fxns.move_water.m.faults.short: array(56)
-faulty.fxns.move_water.m.sub_faults: array(56)
-faulty.fxns.move_wat           array(56)
-faulty.fxns.move_wat           array(56)
-faulty.fxns.export_w           array(56)
-faulty.fxns.export_water.m.sub_faults: array(56)
-faulty.time:                   array(56)
+move_water_short_t10.i.finished: array(56)
+move_water_short_t10.i.on:     array(56)
+move_water_short_t10.m.sub_faults: array(56)
+move_water_short_t10.time:     array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
+move_water_short_t10           array(56)
 </pre></div>
 </div>
 </div>
@@ -1178,13 +1159,13 @@ faulty.time:                   array(56)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/8bf8b4ff08a683e1bca0196627827b63dff573c7afe952b94ceadc408429540d.png" src="../../_images/8bf8b4ff08a683e1bca0196627827b63dff573c7afe952b94ceadc408429540d.png" />
+<img alt="../../_images/60d62ca9f147f05fd04d940da3b922772980b6a63179cf592a1cbef7aec6a2d5.png" src="../../_images/60d62ca9f147f05fd04d940da3b922772980b6a63179cf592a1cbef7aec6a2d5.png" />
 </div>
 </div>
 <p>We can also view this result graph using <code class="docutils literal notranslate"><span class="pre">Graph.draw</span></code>. In this case, it shows the state of the model at the final time-step of the model run. Thus, while the <code class="docutils literal notranslate"><span class="pre">EE_1</span></code> flow is shown in orange (because it is off-nominal), the Water flows are not, because they have the same state at the final time-step.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_fault</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_fault</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">tend</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1192,7 +1173,7 @@ faulty.time:                   array(56)
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
 </pre></div>
 </div>
-<img alt="../../_images/e3bdf062839bedc47f1cf05a7bce018cf6db3eedd69e4c70198b7e4d8062a190.png" src="../../_images/e3bdf062839bedc47f1cf05a7bce018cf6db3eedd69e4c70198b7e4d8062a190.png" />
+<img alt="../../_images/6f28da9aad4b9ba090cdb459d2d005fcb4a803f9ae892e4f5b86ff225006d16f.png" src="../../_images/6f28da9aad4b9ba090cdb459d2d005fcb4a803f9ae892e4f5b86ff225006d16f.png" />
 </div>
 </div>
 <p>If we want to view the graph at another time-step, we can use <code class="docutils literal notranslate"><span class="pre">Graph.draw_from</span></code>, which will call <code class="docutils literal notranslate"><span class="pre">History.get_degraded_hist</span></code> to first process the model states into results which can be visualized and then map that onto a graph view at a given time.</p>
@@ -1203,7 +1184,7 @@ faulty.time:                   array(56)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/cfb3615d3fdca7e021dae4bae7f4d8ad7adfb575f374bc56f98ec699834553ba.png" src="../../_images/cfb3615d3fdca7e021dae4bae7f4d8ad7adfb575f374bc56f98ec699834553ba.png" />
+<img alt="../../_images/cd5af9ebb3410343e05d06706745bc168008ddf3b38bb4ac4c80e93b18f68423.png" src="../../_images/cd5af9ebb3410343e05d06706745bc168008ddf3b38bb4ac4c80e93b18f68423.png" />
 </div>
 </div>
 <p>Note that multiple graph representations are available for the graph if desired…</p>
@@ -1216,7 +1197,7 @@ faulty.time:                   array(56)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/41bcde49017b79c312bd8df28b66488c695fed37f83d480854223b8e1edaab1f.png" src="../../_images/41bcde49017b79c312bd8df28b66488c695fed37f83d480854223b8e1edaab1f.png" />
+<img alt="../../_images/10e4a413631c16207bc31e8728181f2679bab8a88f3dafcad65babf8a7947ec0.png" src="../../_images/10e4a413631c16207bc31e8728181f2679bab8a88f3dafcad65babf8a7947ec0.png" />
 </div>
 </div>
 </section>
@@ -1277,7 +1258,7 @@ faulty.time:                   array(56)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 38.54it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:01&lt;00:00, 21.15it/s]
 </pre></div>
 </div>
 </div>
@@ -1290,7 +1271,10 @@ faulty.time:                   array(56)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pump_fxns_import_ee_                 0.0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nominal.tend.classify.rate:          1.0
+nominal.tend.classify.cost:          0.0
+nominal.tend.classify.expected_cost: 0.0
+pump_fxns_import_ee_                 0.0
 pump_fxns_import_ee_  25125.000000000007
 pump_fxns_import_ee_                 0.0
 pump_fxns_import_ee_                 0.0
@@ -1362,9 +1346,6 @@ pump_fxns_move_water             10000.0
 pump_fxns_export_wat               1e-05
 pump_fxns_export_wat              5000.0
 pump_fxns_export_wat              5000.0
-nominal.endclass.rate:               1.0
-nominal.endclass.cost:               0.0
-nominal.endclass.expected_cost:      0.0
 </pre></div>
 </div>
 </div>
@@ -1378,131 +1359,156 @@ nominal.endclass.expected_cost:      0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pump_fxns_import_ee_inf_v_t2p0: 
---endclass: 
-----rate:                            0.0
-----cost:             25125.000000000007
-----expected_cost:                   0.0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nominal: 
+--tend: 
+----classify: 
+------rate:                          1.0
+------cost:                          0.0
+------expected_cost:                 0.0
+pump_fxns_import_ee_inf_v_t2p0: 
+--tend: 
+----classify: 
+------rate:                          0.0
+------cost:           25125.000000000007
+------expected_cost:                 0.0
 pump_fxns_import_ee_no_v_t2p0: 
---endclass: 
-----rate:                            0.0
-----cost:             20125.000000000007
-----expected_cost:                   0.0
+--tend: 
+----classify: 
+------rate:                          0.0
+------cost:           20125.000000000007
+------expected_cost:                 0.0
 pump_fxns_import_water_less_wat_t2p0: 
---endclass: 
-----rate:                          1e-05
-----cost:              5062.500000000004
-----expected_cost:     5062.500000000004
+--tend: 
+----classify: 
+------rate:                        1e-05
+------cost:            5062.500000000004
+------expected_cost:   5062.500000000004
 pump_fxns_import_water_no_wat_t2p0: 
---endclass: 
-----rate:                          1e-05
-----cost:             11125.000000000007
-----expected_cost:    11125.000000000007
+--tend: 
+----classify: 
+------rate:                        1e-05
+------cost:           11125.000000000007
+------expected_cost:  11125.000000000007
 pump_fxns_import_signal_no_sig_t2p0: 
---endclass: 
-----rate:                        1.5e-06
-----cost:             20125.000000000007
-----expected_cost:     3018.750000000001
+--tend: 
+----classify: 
+------rate:                      1.5e-06
+------cost:           20125.000000000007
+------expected_cost:   3018.750000000001
 pump_fxns_move_water_mech_break_t2p0: 
---endclass: 
-----rate:          6.000000000000001e-07
-----cost:             15125.000000000007
-----expected_cost:     907.5000000000005
+--tend: 
+----classify: 
+------rate:        6.000000000000001e-07
+------cost:           15125.000000000007
+------expected_cost:   907.5000000000005
 pump_fxns_move_water_short_t2p0: 
---endclass: 
-----rate:         1.5000000000000002e-05
-----cost:             30125.000000000007
-----expected_cost:    45187.500000000015
+--tend: 
+----classify: 
+------rate:       1.5000000000000002e-05
+------cost:           30125.000000000007
+------expected_cost:  45187.500000000015
 pump_fxns_export_water_block_t2p0: 
---endclass: 
-----rate:         1.5000000000000002e-05
-----cost:             20102.500000000007
-----expected_cost:    30153.750000000015
+--tend: 
+----classify: 
+------rate:       1.5000000000000002e-05
+------cost:           20102.500000000007
+------expected_cost:  30153.750000000015
 pump_fxns_import_ee_inf_v_t27p0: 
---endclass: 
-----rate:         2.0000000000000003e-06
-----cost:                        20175.0
-----expected_cost:     4035.000000000001
+--tend: 
+----classify: 
+------rate:       2.0000000000000003e-06
+------cost:                      20175.0
+------expected_cost:   4035.000000000001
 pump_fxns_import_ee_no_v_t27p0: 
---endclass: 
-----rate:          8.000000000000001e-06
-----cost:             15174.999999999998
-----expected_cost:               12140.0
+--tend: 
+----classify: 
+------rate:        8.000000000000001e-06
+------cost:           15174.999999999998
+------expected_cost:             12140.0
 pump_fxns_import_water_less_wat_t27p0: 
---endclass: 
-----rate:                          1e-05
-----cost:              2587.499999999999
-----expected_cost:     2587.499999999999
+--tend: 
+----classify: 
+------rate:                        1e-05
+------cost:            2587.499999999999
+------expected_cost:   2587.499999999999
 pump_fxns_import_water_no_wat_t27p0: 
---endclass: 
-----rate:                          1e-05
-----cost:              6174.999999999998
-----expected_cost:     6174.999999999998
+--tend: 
+----classify: 
+------rate:                        1e-05
+------cost:            6174.999999999998
+------expected_cost:   6174.999999999998
 pump_fxns_import_signal_no_sig_t27p0: 
---endclass: 
-----rate:                          1e-06
-----cost:             15174.999999999998
-----expected_cost:    1517.4999999999998
+--tend: 
+----classify: 
+------rate:                        1e-06
+------cost:           15174.999999999998
+------expected_cost:  1517.4999999999998
 pump_fxns_move_water_mech_break_t27p0: 
---endclass: 
-----rate:                        7.2e-06
-----cost:             10174.999999999998
-----expected_cost:     7325.999999999998
+--tend: 
+----classify: 
+------rate:                      7.2e-06
+------cost:           10174.999999999998
+------expected_cost:   7325.999999999998
 pump_fxns_move_water_short_t27p0: 
---endclass: 
-----rate:                          1e-05
-----cost:                        25175.0
-----expected_cost:               25175.0
+--tend: 
+----classify: 
+------rate:                        1e-05
+------cost:                      25175.0
+------expected_cost:             25175.0
 pump_fxns_export_water_block_t27p0: 
---endclass: 
-----rate:                          1e-05
-----cost:                        15152.5
-----expected_cost:               15152.5
+--tend: 
+----classify: 
+------rate:                        1e-05
+------cost:                      15152.5
+------expected_cost:             15152.5
 pump_fxns_import_ee_inf_v_t52p0: 
---endclass: 
-----rate:                            0.0
-----cost:                         5000.0
-----expected_cost:                   0.0
+--tend: 
+----classify: 
+------rate:                          0.0
+------cost:                       5000.0
+------expected_cost:                 0.0
 pump_fxns_import_ee_no_v_t52p0: 
---endclass: 
-----rate:                            0.0
-----cost:                        10000.0
-----expected_cost:                   0.0
+--tend: 
+----classify: 
+------rate:                          0.0
+------cost:                      10000.0
+------expected_cost:                 0.0
 pump_fxns_import_water_less_wat_t52p0: 
---endclass: 
-----rate:                          1e-05
-----cost:                            0.0
-----expected_cost:                   0.0
+--tend: 
+----classify: 
+------rate:                        1e-05
+------cost:                          0.0
+------expected_cost:                 0.0
 pump_fxns_import_water_no_wat_t52p0: 
---endclass: 
-----rate:                          1e-05
-----cost:                         1000.0
-----expected_cost:                1000.0
+--tend: 
+----classify: 
+------rate:                        1e-05
+------cost:                       1000.0
+------expected_cost:              1000.0
 pump_fxns_import_signal_no_sig_t52p0: 
---endclass: 
-----rate:                          1e-06
-----cost:                        10000.0
-----expected_cost:     999.9999999999999
+--tend: 
+----classify: 
+------rate:                        1e-06
+------cost:                      10000.0
+------expected_cost:   999.9999999999999
 pump_fxns_move_water_mech_break_t52p0: 
---endclass: 
-----rate:          6.000000000000001e-07
-----cost:                         5000.0
-----expected_cost:                 300.0
+--tend: 
+----classify: 
+------rate:        6.000000000000001e-07
+------cost:                       5000.0
+------expected_cost:               300.0
 pump_fxns_move_water_short_t52p0: 
---endclass: 
-----rate:                          1e-05
-----cost:                        10000.0
-----expected_cost:               10000.0
+--tend: 
+----classify: 
+------rate:                        1e-05
+------cost:                      10000.0
+------expected_cost:             10000.0
 pump_fxns_export_water_block_t52p0: 
---endclass: 
-----rate:                          1e-05
-----cost:                         5000.0
-----expected_cost:                5000.0
-nominal: 
---endclass: 
-----rate:                            1.0
-----cost:                            0.0
-----expected_cost:                   0.0
+--tend: 
+----classify: 
+------rate:                        1e-05
+------cost:                       5000.0
+------expected_cost:              5000.0
 </pre></div>
 </div>
 </div>
@@ -1551,23 +1557,12 @@ nominal:
 <p>There are a number of different ways to sample the scenarios in the approach:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs2</span><span class="o">.</span><span class="n">times</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs2</span><span class="o">.</span><span class="n">get_times</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;bound method FaultSample.times of FaultSample of scenarios: 
- - move_water_short_t0p0
- - move_water_short_t1p0
- - move_water_short_t2p0
- - move_water_short_t3p0
- - move_water_short_t4p0
- - move_water_short_t14p0
- - move_water_short_t23p0
- - move_water_short_t31p0
- - move_water_short_t40p0
- - move_water_short_t51p0
- - ... (13 total)&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.0, 1.0, 2.0, 3.0, 4.0, 40.0, 14.0, 51.0, 52.0, 53.0, 54.0, 23.0, 31.0]
 </pre></div>
 </div>
 </div>
@@ -1704,6 +1699,14 @@ nominal:
   </thead>
   <tbody>
     <tr>
+      <th>nominal</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
       <th>pump_fxns_import_ee_inf_v_t2p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
@@ -1895,14 +1898,6 @@ nominal:
       <td>5000.0</td>
       <td>5000.0</td>
     </tr>
-    <tr>
-      <th>nominal</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
   </tbody>
 </table>
 </div></div></div>
@@ -1917,7 +1912,7 @@ nominal:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 36.87it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:01&lt;00:00, 23.43it/s]
 </pre></div>
 </div>
 <div class="output text_html"><div>
@@ -1947,6 +1942,14 @@ nominal:
   </thead>
   <tbody>
     <tr>
+      <th>nominal</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
       <th>pump_fxns_import_ee_inf_v_t2p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
@@ -2138,14 +2141,6 @@ nominal:
       <td>5000.0</td>
       <td>5000.0</td>
     </tr>
-    <tr>
-      <th>nominal</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
   </tbody>
 </table>
 </div></div></div>
@@ -2171,7 +2166,10 @@ nominal:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pump_fxns_import_ee_                 0.0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nominal.tend.classify.rate:          1.0
+nominal.tend.classify.cost:          0.0
+nominal.tend.classify.expected_cost: 0.0
+pump_fxns_import_ee_                 0.0
 pump_fxns_import_ee_  25125.000000000007
 pump_fxns_import_ee_                 0.0
 pump_fxns_import_ee_                 0.0
@@ -2243,9 +2241,6 @@ pump_fxns_move_water             10000.0
 pump_fxns_export_wat               1e-05
 pump_fxns_export_wat              5000.0
 pump_fxns_export_wat              5000.0
-nominal.endclass.rate:               1.0
-nominal.endclass.cost:               0.0
-nominal.endclass.expected_cost:      0.0
 </pre></div>
 </div>
 </div>
@@ -2276,7 +2271,10 @@ nominal.endclass.expected_cost:      0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pump_fxns_import_ee_                 0.0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nominal.tend.classify.rate:          1.0
+nominal.tend.classify.cost:          0.0
+nominal.tend.classify.expected_cost: 0.0
+pump_fxns_import_ee_                 0.0
 pump_fxns_import_ee_  25125.000000000007
 pump_fxns_import_ee_                 0.0
 pump_fxns_import_ee_                 0.0
@@ -2348,9 +2346,6 @@ pump_fxns_move_water             10000.0
 pump_fxns_export_wat               1e-05
 pump_fxns_export_wat              5000.0
 pump_fxns_export_wat              5000.0
-nominal.endclass.rate:               1.0
-nominal.endclass.cost:               0.0
-nominal.endclass.expected_cost:      0.0
 </pre></div>
 </div>
 </div>

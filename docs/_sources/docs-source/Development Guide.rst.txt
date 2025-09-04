@@ -93,13 +93,13 @@ You can use the glossary as a reference to understand basic simulation and analy
 		The expected occurrence (frequency) of a given :term:`mode`, which may be specified in a number of ways in the :class:`fmdtools.define.container.mode.Mode` class.
 		
 	Cost
-		A metric used to define severity of a scenario. While cost is defined in a monetary sense, it should often be defined holistically to account for indirect costs and externalities (e.g., safety, disruption, etc). One of the default outputs from :meth:`fmdtools.define.block.base.Simulable.find_classification()` for models or blocks.
+		A metric used to define severity of a scenario. While cost is defined in a monetary sense, it should often be defined holistically to account for indirect costs and externalities (e.g., safety, disruption, etc). One of the default outputs from :meth:`fmdtools.define.block.base.Simulable.classify()` for models or blocks.
 		
 	Expected Cost
 		A metric used to define risk of a scenario, calculated my multiplying the :term:`rate` and :term:`cost`.
 		
 	Endclass
-		The end-state classification given from :meth:`fmdtools.define.block.base.Simulable.find_classification()`.
+		The end-state classification given from :meth:`fmdtools.define.block.base.Simulable.classify()`.
 	
 	Scenario
 		A specific set of inputs to a simulation, including :term:`parameters`, :term:`Fault Mode` s, and :term:`Disturbances`. Defined in :class:`~fmdtools.sim.scenario.Scenario`.
@@ -230,7 +230,7 @@ A very basic model development process should thus proceed:
 #. Create Architecture file and create place-holder major function/flow classes
 #. Connect classes in a Architecture file and visualize structure
 #. Create low-fidelity model behaviors and verify in nominal scenario
-#. Add hazard metrics in `find_classification` 
+#. Add hazard metrics in `classify` 
 #. Add more detailed behaviors (e.g., modes, actions, components, etc) as needed
 #. Perform more complex analyses...
 
