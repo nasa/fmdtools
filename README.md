@@ -9,8 +9,8 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/nasa/fmdtools?label=GitHub%20Release)](https://github.com/nasa/fmdtools/releases)
 [![GitHub Tag](https://img.shields.io/github/v/tag/nasa/fmdtools)](https://github.com/nasa/fmdtools/tags)
 [![CodeFactor](https://www.codefactor.io/repository/github/nasa/fmdtools/badge)](https://www.codefactor.io/repository/github/nasa/fmdtools)
-[![Tests Status](./reports/full-py311/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/full-py311/junit/report.html)
-[![Tests Coverage](./reports/full-py311/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/full-py311/coverage_html/index.html)
+[![Tests Status](./reports/full-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/full-py313/junit/report.html)
+[![Tests Coverage](./reports/full-py313/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/full-py313/coverage_html/index.html)
 [![GitHub License](https://img.shields.io/badge/License-Apache%202.0-green)](https://github.com/nasa/fmdtools/blob/main/LICENSE)
 [![NASA Software Classification](https://img.shields.io/badge/Software_Class-E-blue)](https://nodis3.gsfc.nasa.gov/displayDir.cfm?Internal_ID=N_PR_7150_002D_&page_name=AppendixD)
 
@@ -49,9 +49,9 @@ The fmdtools library is developed in Python 3.13 but is tested to maintain compa
 
 | Python Version    | Doctests |
 | -------- | ------- |
-| 3.12  | [![Python 3.12 Tests](./reports/doctests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-py312/junit/report.html)   |
-| 3.13 | [![Python 3.13 Tests](./reports/doctests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-py313/junit/report.html)    |
-| 3.14    | [![Python 3.14 Tests](./reports/doctests-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-py314/junit/report.html)   |
+| 3.11  | [![Python 3.11 Tests](./reports/doctests-py311/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-py311/junit/report.html)   |
+| 3.12 | [![Python 3.12 Tests](./reports/doctests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-py312/junit/report.html)    |
+| 3.13    | [![Python 3.13 Tests](./reports/doctests-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-py313/junit/report.html)   |
 
 Further (functional and integration) tests are performed in the Python 3.13 to ensure that examples run as desired. Thus, it is generally reccommended to use Python 3.13 with this version to keep pace with development, especially when running examples.
 
