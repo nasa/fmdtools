@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_cb0e7a8cec84cab4_phases_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:05 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -208,7 +208,7 @@
     <p class="pln"><span class="n"><a id="t126" href="#t126">126</a></span><span class="t"><span class="str">    or over all times:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t127" href="#t127">127</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t128" href="#t128">128</a></span><span class="t"><span class="str">    >>> hist.get_metric("a")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t129" href="#t129">129</a></span><span class="t"><span class="str">    3.5</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t129" href="#t129">129</a></span><span class="t"><span class="str">    np.float64(3.5)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t130" href="#t130">130</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t131" href="#t131">131</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t132" href="#t132">132</a></span><span class="t">    <span class="key">def</span> <span class="nam">init_att</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">att</span><span class="op">,</span> <span class="nam">val</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -452,7 +452,7 @@
     <p class="pln"><span class="n"><a id="t370" href="#t370">370</a></span><span class="t"><span class="str">        >>> History({'m.faults.fault1': [False, False, False]}).get_fault_time()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t371" href="#t371">371</a></span><span class="t"><span class="str">        nan</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t372" href="#t372">372</a></span><span class="t"><span class="str">        >>> History({'m.faults.fault1': [False, False, True]}).get_fault_time()</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t373" href="#t373">373</a></span><span class="t"><span class="str">        2</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t373" href="#t373">373</a></span><span class="t"><span class="str">        np.int64(2)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t374" href="#t374">374</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t375" href="#t375">375</a></span><span class="t">        <span class="nam">flatdict</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">flatten</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t376" href="#t376">376</a></span><span class="t">        <span class="nam">all_faults_hist</span> <span class="op">=</span> <span class="nam">np</span><span class="op">.</span><span class="nam">sum</span><span class="op">(</span><span class="op">[</span><span class="nam">v</span> <span class="key">for</span> <span class="nam">k</span><span class="op">,</span> <span class="nam">v</span> <span class="key">in</span> <span class="nam">flatdict</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span> <span class="key">if</span> <span class="str">'faults'</span> <span class="key">in</span> <span class="nam">k</span><span class="op">]</span><span class="op">,</span> <span class="num">0</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -461,7 +461,7 @@
     <p class="pln"><span class="n"><a id="t379" href="#t379">379</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t380" href="#t380">380</a></span><span class="t">            <span class="nam">times</span> <span class="op">=</span> <span class="nam">np</span><span class="op">.</span><span class="nam">where</span><span class="op">(</span><span class="nam">all_faults_hist</span> <span class="op">>=</span> <span class="num">1</span><span class="op">)</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t381" href="#t381">381</a></span><span class="t">            <span class="key">if</span> <span class="nam">times</span><span class="op">.</span><span class="nam">size</span> <span class="op">==</span> <span class="num">0</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t382" href="#t382">382</a></span><span class="t">                <span class="key">return</span> <span class="nam">np</span><span class="op">.</span><span class="nam">NaN</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t382" href="#t382">382</a></span><span class="t">                <span class="key">return</span> <span class="nam">np</span><span class="op">.</span><span class="nam">nan</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t383" href="#t383">383</a></span><span class="t">            <span class="key">elif</span> <span class="nam">metric</span> <span class="op">==</span> <span class="str">'times'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t384" href="#t384">384</a></span><span class="t">                <span class="key">return</span> <span class="nam">times</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t385" href="#t385">385</a></span><span class="t">            <span class="key">elif</span> <span class="nam">metric</span> <span class="op">==</span> <span class="str">'earliest'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1289,7 +1289,7 @@
             <a class="nav" href="z_cb0e7a8cec84cab4_phases_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:05 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
     </div>
 </footer>

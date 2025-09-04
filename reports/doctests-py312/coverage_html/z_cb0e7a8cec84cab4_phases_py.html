@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_cb0e7a8cec84cab4_result_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:05 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -351,11 +351,11 @@
     <p class="pln"><span class="n"><a id="t269" href="#t269">269</a></span><span class="t"><span class="str">        --------</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t270" href="#t270">270</a></span><span class="t"><span class="str">        >>> pm = PhaseMap({"on1": [0, 1], "on2": [2, 3]}, {"on": {"on1", "on2"}})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t271" href="#t271">271</a></span><span class="t"><span class="str">        >>> pm.get_phase_times('on1')</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t272" href="#t272">272</a></span><span class="t"><span class="str">        [0.0, 1.0]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t272" href="#t272">272</a></span><span class="t"><span class="str">        [np.float64(0.0), np.float64(1.0)]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t273" href="#t273">273</a></span><span class="t"><span class="str">        >>> pm.get_phase_times('on2')</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t274" href="#t274">274</a></span><span class="t"><span class="str">        [2.0, 3.0]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t274" href="#t274">274</a></span><span class="t"><span class="str">        [np.float64(2.0), np.float64(3.0)]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t275" href="#t275">275</a></span><span class="t"><span class="str">        >>> pm.get_phase_times('on')</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t276" href="#t276">276</a></span><span class="t"><span class="str">        [0.0, 1.0, 2.0, 3.0]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t276" href="#t276">276</a></span><span class="t"><span class="str">        [np.float64(0.0), np.float64(1.0), np.float64(2.0), np.float64(3.0)]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">        <span class="key">if</span> <span class="nam">phase</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">modephases</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">            <span class="nam">phases</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">modephases</span><span class="op">[</span><span class="nam">phase</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
@@ -387,11 +387,11 @@
     <p class="pln"><span class="n"><a id="t305" href="#t305">305</a></span><span class="t"><span class="str">        --------</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t306" href="#t306">306</a></span><span class="t"><span class="str">        >>> pm = PhaseMap({"on1": [0, 4], "on2": [5, 6]}, {"on": {"on1", "on2"}})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t307" href="#t307">307</a></span><span class="t"><span class="str">        >>> pm.get_sample_times("on1")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t308" href="#t308">308</a></span><span class="t"><span class="str">        {'on1': [0.0, 1.0, 2.0, 3.0, 4.0]}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t308" href="#t308">308</a></span><span class="t"><span class="str">        {'on1': [np.float64(0.0), np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(4.0)]}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t309" href="#t309">309</a></span><span class="t"><span class="str">        >>> pm.get_sample_times("on")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t310" href="#t310">310</a></span><span class="t"><span class="str">        {'on': [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0]}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t310" href="#t310">310</a></span><span class="t"><span class="str">        {'on': [np.float64(0.0), np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(4.0), np.float64(5.0), np.float64(6.0)]}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t311" href="#t311">311</a></span><span class="t"><span class="str">        >>> pm.get_sample_times("on1", "on2")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t312" href="#t312">312</a></span><span class="t"><span class="str">        {'on1': [0.0, 1.0, 2.0, 3.0, 4.0], 'on2': [5.0, 6.0]}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t312" href="#t312">312</a></span><span class="t"><span class="str">        {'on1': [np.float64(0.0), np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(4.0)], 'on2': [np.float64(5.0), np.float64(6.0)]}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t313" href="#t313">313</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t314" href="#t314">314</a></span><span class="t">        <span class="key">if</span> <span class="key">not</span> <span class="nam">phases_to_sample</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t315" href="#t315">315</a></span><span class="t">            <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">modephases</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -707,7 +707,7 @@
     <p class="pln"><span class="n"><a id="t625" href="#t625">625</a></span><span class="t"><span class="str">    Examples</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t626" href="#t626">626</a></span><span class="t"><span class="str">    --------</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t627" href="#t627">627</a></span><span class="t"><span class="str">    >>> find_interval_overlap([0, 10], [4, 12])</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t628" href="#t628">628</a></span><span class="t"><span class="str">    [4.0, 10.0]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t628" href="#t628">628</a></span><span class="t"><span class="str">    [np.float64(4.0), np.float64(10.0)]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t629" href="#t629">629</a></span><span class="t"><span class="str">    >>> find_interval_overlap([0, 3], [4, 12])</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t630" href="#t630">630</a></span><span class="t"><span class="str">    []</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t631" href="#t631">631</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
@@ -754,7 +754,7 @@
     <p class="pln"><span class="n"><a id="t672" href="#t672">672</a></span><span class="t"><span class="str">    >>> a = PhaseMap({"a": [1, 3], "b": [4, 10]})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t673" href="#t673">673</a></span><span class="t"><span class="str">    >>> b = PhaseMap({"c": [2, 6], "d": [7, 9]})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t674" href="#t674">674</a></span><span class="t"><span class="str">    >>> join_phasemaps(a, b)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t675" href="#t675">675</a></span><span class="t"><span class="str">    PhaseMap({('a', 'c'): [2.0, 3.0], ('b', 'c'): [4.0, 6.0], ('b', 'd'): [7.0, 9.0]}, {})</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t675" href="#t675">675</a></span><span class="t"><span class="str">    PhaseMap({('a', 'c'): [np.float64(2.0), np.float64(3.0)], ('b', 'c'): [np.float64(4.0), np.float64(6.0)], ('b', 'd'): [np.float64(7.0), np.float64(9.0)]}, {})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t676" href="#t676">676</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t677" href="#t677">677</a></span><span class="t">    <span class="nam">joint_phases</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t678" href="#t678">678</a></span><span class="t">    <span class="nam">all_combos</span> <span class="op">=</span> <span class="op">[</span><span class="op">*</span><span class="nam">itertools</span><span class="op">.</span><span class="nam">product</span><span class="op">(</span><span class="op">*</span><span class="op">[</span><span class="nam">phasemap</span><span class="op">.</span><span class="nam">phases</span> <span class="key">for</span> <span class="nam">phasemap</span> <span class="key">in</span> <span class="nam">phasemaps</span><span class="op">]</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
@@ -779,7 +779,7 @@
             <a class="nav" href="z_cb0e7a8cec84cab4_result_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:05 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
     </div>
 </footer>

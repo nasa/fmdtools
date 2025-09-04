@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools/analyze/graph/base.py: 48%</title>
+    <title>Coverage for fmdtools/analyze/graph/base.py: 47%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools/analyze/graph/base.py</b>:
-            <span class="pc_cov">48%</span>
+            <span class="pc_cov">47%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">524 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">250<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">274<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">247<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">277<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">8<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_6d0a7c83aaa197fb_label_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 13:58 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -214,10 +214,10 @@
     <p class="pln"><span class="n"><a id="t132" href="#t132">132</a></span><span class="t">                <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t133" href="#t133">133</a></span><span class="t">                    <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t134" href="#t134">134</a></span><span class="t">                        <span class="nam">self</span><span class="op">.</span><span class="nam">pos</span> <span class="op">=</span> <span class="nam">nx</span><span class="op">.</span><span class="nam">planar_layout</span><span class="op">(</span><span class="nam">nx</span><span class="op">.</span><span class="nam">MultiGraph</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">g</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t135" href="#t135">135</a></span><span class="t">                    <span class="key">except</span> <span class="nam">nx</span><span class="op">.</span><span class="nam">NetworkXException</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t136" href="#t136">136</a></span><span class="t">                        <span class="nam">self</span><span class="op">.</span><span class="nam">pos</span> <span class="op">=</span> <span class="nam">nx</span><span class="op">.</span><span class="nam">spring_layout</span><span class="op">(</span><span class="nam">nx</span><span class="op">.</span><span class="nam">MultiGraph</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">g</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t135" href="#t135">135</a></span><span class="t">                    <span class="key">except</span> <span class="nam">nx</span><span class="op">.</span><span class="nam">NetworkXException</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t136" href="#t136">136</a></span><span class="t">                        <span class="nam">self</span><span class="op">.</span><span class="nam">pos</span> <span class="op">=</span> <span class="nam">nx</span><span class="op">.</span><span class="nam">spring_layout</span><span class="op">(</span><span class="nam">nx</span><span class="op">.</span><span class="nam">MultiGraph</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">g</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t137" href="#t137">137</a></span><span class="t">            <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t138" href="#t138">138</a></span><span class="t">                <span class="nam">self</span><span class="op">.</span><span class="nam">pos</span> <span class="op">=</span> <span class="op">{</span><span class="nam">n</span><span class="op">:</span> <span class="nam">self</span><span class="op">.</span><span class="nam">pos</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="nam">n</span><span class="op">,</span> <span class="op">(</span><span class="num">0.5</span><span class="op">,</span> <span class="num">0.5</span><span class="op">)</span><span class="op">)</span> <span class="key">for</span> <span class="nam">n</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">g</span><span class="op">.</span><span class="nam">nodes</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t138" href="#t138">138</a></span><span class="t">                <span class="nam">self</span><span class="op">.</span><span class="nam">pos</span> <span class="op">=</span> <span class="op">{</span><span class="nam">n</span><span class="op">:</span> <span class="nam">self</span><span class="op">.</span><span class="nam">pos</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="nam">n</span><span class="op">,</span> <span class="op">(</span><span class="num">0.5</span><span class="op">,</span> <span class="num">0.5</span><span class="op">)</span><span class="op">)</span> <span class="key">for</span> <span class="nam">n</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">g</span><span class="op">.</span><span class="nam">nodes</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t139" href="#t139">139</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">pos</span><span class="op">.</span><span class="nam">update</span><span class="op">(</span><span class="nam">pos</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t140" href="#t140">140</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t141" href="#t141">141</a></span><span class="t">    <span class="key">def</span> <span class="nam">set_edge_styles</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">edgetype</span><span class="op">=</span><span class="op">{</span><span class="op">}</span><span class="op">,</span> <span class="op">**</span><span class="nam">edge_styles</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1344,7 +1344,7 @@
             <a class="nav" href="z_6d0a7c83aaa197fb_label_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 13:58 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
     </div>
 </footer>

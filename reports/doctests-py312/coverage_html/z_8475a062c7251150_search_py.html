@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="index.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 00:26 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -427,9 +427,9 @@
     <p class="pln"><span class="n"><a id="t345" href="#t345">345</a></span><span class="t"><span class="str">        >>> exp.iter_hist = History({'time': [0,1,2], 'objectives.a': [10, 11, 12], 'objectives.b': [8, 10, 7]})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t346" href="#t346">346</a></span><span class="t"><span class="str">        >>> h = exp.get_opt_hist()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t347" href="#t347">347</a></span><span class="t"><span class="str">        >>> h.a</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t348" href="#t348">348</a></span><span class="t"><span class="str">        [10, 11, 12]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t348" href="#t348">348</a></span><span class="t"><span class="str">        [np.int64(10), np.int64(11), np.int64(12)]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t349" href="#t349">349</a></span><span class="t"><span class="str">        >>> h.b</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t350" href="#t350">350</a></span><span class="t"><span class="str">        [8, 8, 7]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t350" href="#t350">350</a></span><span class="t"><span class="str">        [np.int64(8), np.int64(8), np.int64(7)]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t351" href="#t351">351</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t352" href="#t352">352</a></span><span class="t">        <span class="key">if</span> <span class="nam">objectives</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t353" href="#t353">353</a></span><span class="t">            <span class="nam">hist</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">iter_hist</span><span class="op">.</span><span class="nam">objectives</span><span class="op">.</span><span class="nam">get_values</span><span class="op">(</span><span class="op">*</span><span class="nam">objectives</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -520,9 +520,9 @@
     <p class="pln"><span class="n"><a id="t438" href="#t438">438</a></span><span class="t"><span class="str">    ...         self.add_constraint("g1", g1, threshold=3.0, comparator="less")</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t439" href="#t439">439</a></span><span class="t"><span class="str">    >>> ex_sp = ExampleSimpleProblem()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t440" href="#t440">440</a></span><span class="t"><span class="str">    >>> ex_sp.f1(1, 1)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t441" href="#t441">441</a></span><span class="t"><span class="str">    2</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t441" href="#t441">441</a></span><span class="t"><span class="str">    np.float64(2.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t442" href="#t442">442</a></span><span class="t"><span class="str">    >>> ex_sp.g1(1, 1)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t443" href="#t443">443</a></span><span class="t"><span class="str">    -3.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t443" href="#t443">443</a></span><span class="t"><span class="str">    np.float64(-3.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t444" href="#t444">444</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t445" href="#t445">445</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t446" href="#t446">446</a></span><span class="t">    <span class="key">def</span> <span class="nam">__init__</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -533,7 +533,7 @@
     <p class="pln"><span class="n"><a id="t451" href="#t451">451</a></span><span class="t">        <span class="str">"""Update objectives/constraints by calling callables."""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t452" href="#t452">452</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">update_variables</span><span class="op">(</span><span class="op">*</span><span class="nam">x</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t453" href="#t453">453</a></span><span class="t">        <span class="key">for</span> <span class="nam">objname</span><span class="op">,</span> <span class="nam">obj</span> <span class="key">in</span> <span class="op">{</span><span class="op">**</span><span class="nam">self</span><span class="op">.</span><span class="nam">objectives</span><span class="op">,</span> <span class="op">**</span><span class="nam">self</span><span class="op">.</span><span class="nam">constraints</span><span class="op">}</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t454" href="#t454">454</a></span><span class="t">            <span class="nam">obj</span><span class="op">.</span><span class="nam">update</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">callables</span><span class="op">[</span><span class="nam">objname</span><span class="op">]</span><span class="op">(</span><span class="op">*</span><span class="nam">x</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t454" href="#t454">454</a></span><span class="t">            <span class="nam">obj</span><span class="op">.</span><span class="nam">update</span><span class="op">(</span><span class="nam">np</span><span class="op">.</span><span class="nam">float64</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">callables</span><span class="op">[</span><span class="nam">objname</span><span class="op">]</span><span class="op">(</span><span class="op">*</span><span class="nam">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t455" href="#t455">455</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">log_hist</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t456" href="#t456">456</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t457" href="#t457">457</a></span><span class="t">    <span class="key">def</span> <span class="nam">add_objective</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">name</span><span class="op">,</span> <span class="nam">call</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -615,12 +615,12 @@
     <p class="pln"><span class="n"><a id="t533" href="#t533">533</a></span><span class="t"><span class="str">        >>> obj = ResultObjective("a.b", time=1.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t534" href="#t534">534</a></span><span class="t"><span class="str">        >>> res = Result({'t1p0.a.b': 10.0, 't2p0.a.b': 13.0})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t535" href="#t535">535</a></span><span class="t"><span class="str">        >>> obj.get_result_value(res)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t536" href="#t536">536</a></span><span class="t"><span class="str">        10.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t536" href="#t536">536</a></span><span class="t"><span class="str">        np.float64(10.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t537" href="#t537">537</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t538" href="#t538">538</a></span><span class="t"><span class="str">        >>> obj = ResultObjective("a.b", time=1.0, method=np.sum)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t539" href="#t539">539</a></span><span class="t"><span class="str">        >>> res = Result({'scen1.t1p0.a.b': 10.0, 'scen2.t1p0.a.b': 12.0})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t540" href="#t540">540</a></span><span class="t"><span class="str">        >>> obj.get_result_value(res)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t541" href="#t541">541</a></span><span class="t"><span class="str">        22.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t541" href="#t541">541</a></span><span class="t"><span class="str">        np.float64(22.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t542" href="#t542">542</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t543" href="#t543">543</a></span><span class="t">        <span class="key">if</span> <span class="key">not</span> <span class="nam">self</span><span class="op">.</span><span class="nam">time</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t544" href="#t544">544</a></span><span class="t">            <span class="nam">val</span> <span class="op">=</span> <span class="nam">res</span><span class="op">.</span><span class="nam">get_metric</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">name</span><span class="op">,</span> <span class="nam">method</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">method</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -697,7 +697,7 @@
     <p class="pln"><span class="n"><a id="t615" href="#t615">615</a></span><span class="t"><span class="str">    >>> obj = HistoryObjective("a.b", method=np.max)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t616" href="#t616">616</a></span><span class="t"><span class="str">    >>> hist = History({'t1p0.a.b': [5.0, 10.0], 't2p0.a.b': [1.0, 13.0]})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t617" href="#t617">617</a></span><span class="t"><span class="str">    >>> obj.get_result_value(hist)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t618" href="#t618">618</a></span><span class="t"><span class="str">    13.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t618" href="#t618">618</a></span><span class="t"><span class="str">    np.float64(13.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t619" href="#t619">619</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t620" href="#t620">620</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t621" href="#t621">621</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -887,15 +887,15 @@
     <p class="pln"><span class="n"><a id="t805" href="#t805">805</a></span><span class="t"><span class="str">    once this is set up, you can use the objectives/constraints as callables, like so:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t806" href="#t806">806</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t807" href="#t807">807</a></span><span class="t"><span class="str">    >>> exprob.f1(1, 0)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t808" href="#t808">808</a></span><span class="t"><span class="str">    0.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t808" href="#t808">808</a></span><span class="t"><span class="str">    np.float64(0.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t809" href="#t809">809</a></span><span class="t"><span class="str">    >>> exprob.f1(1, 1)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t810" href="#t810">810</a></span><span class="t"><span class="str">    5.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t810" href="#t810">810</a></span><span class="t"><span class="str">    np.float64(5.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t811" href="#t811">811</a></span><span class="t"><span class="str">    >>> exprob.f1(1, 2)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t812" href="#t812">812</a></span><span class="t"><span class="str">    10.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t812" href="#t812">812</a></span><span class="t"><span class="str">    np.float64(10.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t813" href="#t813">813</a></span><span class="t"><span class="str">    >>> exprob.f2(1, 2)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t814" href="#t814">814</a></span><span class="t"><span class="str">    0.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t814" href="#t814">814</a></span><span class="t"><span class="str">    np.float64(0.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t815" href="#t815">815</a></span><span class="t"><span class="str">    >>> exprob.g1(1, 2)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t816" href="#t816">816</a></span><span class="t"><span class="str">    -10.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t816" href="#t816">816</a></span><span class="t"><span class="str">    np.float64(-10.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t817" href="#t817">817</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t818" href="#t818">818</a></span><span class="t"><span class="str">    below, we use the classify dict as an objective instead of the variable:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t819" href="#t819">819</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -907,9 +907,9 @@
     <p class="pln"><span class="n"><a id="t825" href="#t825">825</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t826" href="#t826">826</a></span><span class="t"><span class="str">    >>> ex_obj_prob = ExampleParameterSimProblemObj()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t827" href="#t827">827</a></span><span class="t"><span class="str">    >>> ex_obj_prob.f1(1, 1)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t828" href="#t828">828</a></span><span class="t"><span class="str">    100.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t828" href="#t828">828</a></span><span class="t"><span class="str">    np.float64(100.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t829" href="#t829">829</a></span><span class="t"><span class="str">    >>> ex_obj_prob.f1(1, 2)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t830" href="#t830">830</a></span><span class="t"><span class="str">    200.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t830" href="#t830">830</a></span><span class="t"><span class="str">    np.float64(200.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t831" href="#t831">831</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t832" href="#t832">832</a></span><span class="t"><span class="str">    finally, note that this class can work with a variety of methods:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t833" href="#t833">833</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -922,9 +922,9 @@
     <p class="pln"><span class="n"><a id="t840" href="#t840">840</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t841" href="#t841">841</a></span><span class="t"><span class="str">    >>> exprobshort = ExampleParameterSimProblemShort()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t842" href="#t842">842</a></span><span class="t"><span class="str">    >>> exprobshort.f1(1, 1)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t843" href="#t843">843</a></span><span class="t"><span class="str">    2.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t843" href="#t843">843</a></span><span class="t"><span class="str">    np.float64(2.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t844" href="#t844">844</a></span><span class="t"><span class="str">    >>> exprobshort.f2(1, 1)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t845" href="#t845">845</a></span><span class="t"><span class="str">    3.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t845" href="#t845">845</a></span><span class="t"><span class="str">    np.float64(3.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t846" href="#t846">846</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t847" href="#t847">847</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t848" href="#t848">848</a></span><span class="t">    <span class="key">def</span> <span class="nam">add_parameterdomain</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">parameterdomain</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1061,9 +1061,9 @@
     <p class="pln"><span class="n"><a id="t979" href="#t979">979</a></span><span class="t"><span class="str">    objective value should be 1.0 (init value) + 3 * time_with_fault</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t980" href="#t980">980</a></span><span class="t"><span class="str">    >>> ex_scenprob = ExScenProb()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t981" href="#t981">981</a></span><span class="t"><span class="str">    >>> ex_scenprob.f1(5.0)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t982" href="#t982">982</a></span><span class="t"><span class="str">    3.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t982" href="#t982">982</a></span><span class="t"><span class="str">    np.float64(3.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t983" href="#t983">983</a></span><span class="t"><span class="str">    >>> ex_scenprob.f1(4.0)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t984" href="#t984">984</a></span><span class="t"><span class="str">    6.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t984" href="#t984">984</a></span><span class="t"><span class="str">    np.float64(6.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t985" href="#t985">985</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t986" href="#t986">986</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t987" href="#t987">987</a></span><span class="t">    <span class="key">def</span> <span class="nam">name_repr</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1148,9 +1148,9 @@
     <p class="pln"><span class="n"><a id="t1066" href="#t1066">1066</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1067" href="#t1067">1067</a></span><span class="t"><span class="str">    >>> ex_dp = ExampleDisturbanceProblem()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1068" href="#t1068">1068</a></span><span class="t"><span class="str">    >>> ex_dp.f1(5.0)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t1069" href="#t1069">1069</a></span><span class="t"><span class="str">    5.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1069" href="#t1069">1069</a></span><span class="t"><span class="str">    np.float64(5.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1070" href="#t1070">1070</a></span><span class="t"><span class="str">    >>> ex_dp.f1(4.0)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t1071" href="#t1071">1071</a></span><span class="t"><span class="str">    4.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1071" href="#t1071">1071</a></span><span class="t"><span class="str">    np.float64(4.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1072" href="#t1072">1072</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1073" href="#t1073">1073</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1074" href="#t1074">1074</a></span><span class="t">    <span class="key">def</span> <span class="nam">add_sim</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">mdl</span><span class="op">,</span> <span class="nam">time</span><span class="op">,</span> <span class="op">*</span><span class="nam">disturbances</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1360,18 +1360,18 @@
     <p class="pln"><span class="n"><a id="t1278" href="#t1278">1278</a></span><span class="t"><span class="str">    call each objective in each problem in terms of its local variables:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1279" href="#t1279">1279</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1280" href="#t1280">1280</a></span><span class="t"><span class="str">    >>> ex_pa.ex_sp_f1(1, 1)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t1281" href="#t1281">1281</a></span><span class="t"><span class="str">    2.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1281" href="#t1281">1281</a></span><span class="t"><span class="str">    np.float64(2.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1282" href="#t1282">1282</a></span><span class="t"><span class="str">    >>> ex_pa.ex_scenprob_f1()</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t1283" href="#t1283">1283</a></span><span class="t"><span class="str">    15.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1283" href="#t1283">1283</a></span><span class="t"><span class="str">    np.float64(15.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1284" href="#t1284">1284</a></span><span class="t"><span class="str">    >>> ex_pa.ex_dp_f1()</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t1285" href="#t1285">1285</a></span><span class="t"><span class="str">    1.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1285" href="#t1285">1285</a></span><span class="t"><span class="str">    np.float64(1.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1286" href="#t1286">1286</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1287" href="#t1287">1287</a></span><span class="t"><span class="str">    We can also call these in terms of the full set of variables:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1288" href="#t1288">1288</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1289" href="#t1289">1289</a></span><span class="t"><span class="str">    >>> ex_pa.ex_scenprob_f1_full(2, 2)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t1290" href="#t1290">1290</a></span><span class="t"><span class="str">    12.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1290" href="#t1290">1290</a></span><span class="t"><span class="str">    np.float64(12.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1291" href="#t1291">1291</a></span><span class="t"><span class="str">    >>> ex_pa.ex_dp_f1_full(3, 3)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t1292" href="#t1292">1292</a></span><span class="t"><span class="str">    3.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1292" href="#t1292">1292</a></span><span class="t"><span class="str">    np.float64(3.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1293" href="#t1293">1293</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1294" href="#t1294">1294</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1295" href="#t1295">1295</a></span><span class="t">    <span class="key">def</span> <span class="nam">__init__</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -2070,7 +2070,7 @@
             <a class="nav" href="index.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 00:26 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
     </div>
 </footer>

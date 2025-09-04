@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_e362d41fc1c2a748_geom_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:05 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -360,7 +360,7 @@
     <p class="pln"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t"><span class="str">        --------</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t"><span class="str">        >>> ex = ExampleCoords()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t"><span class="str">        >>> ex.get_properties(0, 0)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t"><span class="str">        {'a': False, 'v': 10.0, 'st': 0.0}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t"><span class="str">        {'a': np.False_, 'v': np.float64(10.0), 'st': np.float64(0.0)}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t283" href="#t283">283</a></span><span class="t">        <span class="nam">properties</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t284" href="#t284">284</a></span><span class="t">        <span class="key">for</span> <span class="nam">prop</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">properties</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -391,11 +391,11 @@
     <p class="pln"><span class="n"><a id="t309" href="#t309">309</a></span><span class="t"><span class="str">        --------</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t310" href="#t310">310</a></span><span class="t"><span class="str">        >>> ex = ExampleCoords()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t311" href="#t311">311</a></span><span class="t"><span class="str">        >>> ex.get(10.0, 0.0, "v")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t312" href="#t312">312</a></span><span class="t"><span class="str">        10.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t312" href="#t312">312</a></span><span class="t"><span class="str">        np.float64(10.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t313" href="#t313">313</a></span><span class="t"><span class="str">        >>> ex.get(12.0, 4.9, "v")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t314" href="#t314">314</a></span><span class="t"><span class="str">        10.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t314" href="#t314">314</a></span><span class="t"><span class="str">        np.float64(10.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t315" href="#t315">315</a></span><span class="t"><span class="str">        >>> ex.get(50.0, 50.0, "v")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t316" href="#t316">316</a></span><span class="t"><span class="str">        1.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t316" href="#t316">316</a></span><span class="t"><span class="str">        np.float64(1.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t317" href="#t317">317</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t318" href="#t318">318</a></span><span class="t">        <span class="nam">proparray</span> <span class="op">=</span> <span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">prop</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t319" href="#t319">319</a></span><span class="t">        <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -450,7 +450,7 @@
     <p class="pln"><span class="n"><a id="t368" href="#t368">368</a></span><span class="t"><span class="str">        >>> ex = ExampleCoords()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t369" href="#t369">369</a></span><span class="t"><span class="str">        >>> ex.set(15.0, 12.0, "st", 100.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t370" href="#t370">370</a></span><span class="t"><span class="str">        >>> ex.get(15.0, 12.0, "st")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t371" href="#t371">371</a></span><span class="t"><span class="str">        100.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t371" href="#t371">371</a></span><span class="t"><span class="str">        np.float64(100.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t372" href="#t372">372</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t373" href="#t373">373</a></span><span class="t">        <span class="nam">proparray</span> <span class="op">=</span> <span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">prop</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t374" href="#t374">374</a></span><span class="t">        <span class="nam">x_i</span><span class="op">,</span> <span class="nam">y_i</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">to_index</span><span class="op">(</span><span class="nam">x</span><span class="op">,</span> <span class="nam">y</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -562,17 +562,17 @@
     <p class="pln"><span class="n"><a id="t480" href="#t480">480</a></span><span class="t"><span class="str">        >>> ex = ExampleCoords()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t481" href="#t481">481</a></span><span class="t"><span class="str">        >>> ex.set_pts([(50,50), [80,80]], "st", -20.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t482" href="#t482">482</a></span><span class="t"><span class="str">        >>> ex.get(50, 50, "st")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t483" href="#t483">483</a></span><span class="t"><span class="str">        -20.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t483" href="#t483">483</a></span><span class="t"><span class="str">        np.float64(-20.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t484" href="#t484">484</a></span><span class="t"><span class="str">        >>> ex.get(80, 80, "st")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t485" href="#t485">485</a></span><span class="t"><span class="str">        -20.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t485" href="#t485">485</a></span><span class="t"><span class="str">        np.float64(-20.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t486" href="#t486">486</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t487" href="#t487">487</a></span><span class="t"><span class="str">        or:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t488" href="#t488">488</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t489" href="#t489">489</a></span><span class="t"><span class="str">        >>> ex.set_pts([(50,50), [80,80]], "st", [-10.0, -5.0])</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t490" href="#t490">490</a></span><span class="t"><span class="str">        >>> ex.get(50, 50, "st")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t491" href="#t491">491</a></span><span class="t"><span class="str">        -10.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t491" href="#t491">491</a></span><span class="t"><span class="str">        np.float64(-10.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t492" href="#t492">492</a></span><span class="t"><span class="str">        >>> ex.get(80, 80, "st")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t493" href="#t493">493</a></span><span class="t"><span class="str">        -5.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t493" href="#t493">493</a></span><span class="t"><span class="str">        np.float64(-5.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t494" href="#t494">494</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t495" href="#t495">495</a></span><span class="t">        <span class="key">if</span> <span class="nam">is_iter</span><span class="op">(</span><span class="nam">value</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t496" href="#t496">496</a></span><span class="t">            <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">value</span><span class="op">)</span> <span class="op">==</span> <span class="nam">len</span><span class="op">(</span><span class="nam">pts</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1151,7 +1151,7 @@
     <p class="exc exc2 show_exc"><span class="n"><a id="t1069" href="#t1069">1069</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc exc2 show_exc"><span class="n"><a id="t1070" href="#t1070">1070</a></span><span class="t"><span class="str">    >>> ex.st[0, 0] = 100.0</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc exc2 show_exc"><span class="n"><a id="t1071" href="#t1071">1071</a></span><span class="t"><span class="str">    >>> ex.st[0, 0]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc exc2 show_exc"><span class="n"><a id="t1072" href="#t1072">1072</a></span><span class="t"><span class="str">    100.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc exc2 show_exc"><span class="n"><a id="t1072" href="#t1072">1072</a></span><span class="t"><span class="str">    np.float64(100.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc exc2 show_exc"><span class="n"><a id="t1073" href="#t1073">1073</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc exc2 show_exc"><span class="n"><a id="t1074" href="#t1074">1074</a></span><span class="t"><span class="str">    Collections are lists of points that map to immutable properties. In ExampleCoords,</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc exc2 show_exc"><span class="n"><a id="t1075" href="#t1075">1075</a></span><span class="t"><span class="str">    all points where v > 5.0 should be a part of high_v, as shown:</span>&nbsp;</span><span class="r"></span></p>
@@ -1424,7 +1424,7 @@
     <p class="run"><span class="n"><a id="t1342" href="#t1342">1342</a></span><span class="t">        <span class="key">except</span> <span class="nam">Exception</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1343" href="#t1343">1343</a></span><span class="t">            <span class="key">return</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1344" href="#t1344">1344</a></span><span class="t">        <span class="key">if</span> <span class="nam">coll</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">points</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t1345" href="#t1345">1345</a></span><span class="t">            <span class="key">return</span> <span class="nam">np</span><span class="op">.</span><span class="nam">all</span><span class="op">(</span><span class="nam">pt</span> <span class="op">==</span> <span class="nam">pts</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1345" href="#t1345">1345</a></span><span class="t">            <span class="key">return</span> <span class="nam">bool</span><span class="op">(</span><span class="nam">np</span><span class="op">.</span><span class="nam">all</span><span class="op">(</span><span class="nam">pt</span> <span class="op">==</span> <span class="nam">pts</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1346" href="#t1346">1346</a></span><span class="t">        <span class="key">elif</span> <span class="nam">coll</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">collections</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1347" href="#t1347">1347</a></span><span class="t">            <span class="key">return</span> <span class="nam">list</span><span class="op">(</span><span class="nam">pt</span><span class="op">)</span> <span class="key">in</span> <span class="op">[</span><span class="nam">list</span><span class="op">(</span><span class="nam">i</span><span class="op">)</span> <span class="key">for</span> <span class="nam">i</span> <span class="key">in</span> <span class="op">[</span><span class="op">*</span><span class="nam">pts</span><span class="op">]</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1348" href="#t1348">1348</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1498,9 +1498,9 @@
     <p class="pln"><span class="n"><a id="t1416" href="#t1416">1416</a></span><span class="t"><span class="str">        >>> ex.set(0, 0, "st", 25.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1417" href="#t1417">1417</a></span><span class="t"><span class="str">        >>> cop = ex.copy()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1418" href="#t1418">1418</a></span><span class="t"><span class="str">        >>> cop.get(0, 0, "st")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t1419" href="#t1419">1419</a></span><span class="t"><span class="str">        25.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1419" href="#t1419">1419</a></span><span class="t"><span class="str">        np.float64(25.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1420" href="#t1420">1420</a></span><span class="t"><span class="str">        >>> np.all(ex.st == cop.st)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t1421" href="#t1421">1421</a></span><span class="t"><span class="str">        True</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1421" href="#t1421">1421</a></span><span class="t"><span class="str">        np.True_</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1422" href="#t1422">1422</a></span><span class="t"><span class="str">        >>> id(ex.st) == id(cop.st)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1423" href="#t1423">1423</a></span><span class="t"><span class="str">        False</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1424" href="#t1424">1424</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
@@ -1818,7 +1818,7 @@
             <a class="nav" href="z_e362d41fc1c2a748_geom_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-02 11:05 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
     </div>
 </footer>

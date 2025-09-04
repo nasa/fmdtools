@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_cb0e7a8cec84cab4_tabulate_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 11:25 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -926,15 +926,15 @@
     <p class="pln"><span class="n"><a id="t844" href="#t844">844</a></span><span class="t"><span class="str">        --------</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t845" href="#t845">845</a></span><span class="t"><span class="str">        >>> r = Result({'t1.a': 0.5, 't1.b': 0.01, 't2.a': 0.0, 't2.b': 0.1})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t846" href="#t846">846</a></span><span class="t"><span class="str">        >>> r.get_metric("a", method=np.average, rates="b")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t847" href="#t847">847</a></span><span class="t"><span class="str">        0.0025</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t847" href="#t847">847</a></span><span class="t"><span class="str">        np.float64(0.0025)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t848" href="#t848">848</a></span><span class="t"><span class="str">        >>> r.get_metric("a", method="total")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t849" href="#t849">849</a></span><span class="t"><span class="str">        1</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t849" href="#t849">849</a></span><span class="t"><span class="str">        np.int64(1)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t850" href="#t850">850</a></span><span class="t"><span class="str">        >>> r.get_metric("b", method="rate", rates="a")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t851" href="#t851">851</a></span><span class="t"><span class="str">        0.5</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t851" href="#t851">851</a></span><span class="t"><span class="str">        np.float64(0.5)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t852" href="#t852">852</a></span><span class="t"><span class="str">        >>> r.get_metric("b", method="expected", rates="a")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t853" href="#t853">853</a></span><span class="t"><span class="str">        0.005</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t853" href="#t853">853</a></span><span class="t"><span class="str">        np.float64(0.005)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t854" href="#t854">854</a></span><span class="t"><span class="str">        >>> r.get_metric("b", "expected", rates={"t1": 1, "t2": 2})</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t855" href="#t855">855</a></span><span class="t"><span class="str">        0.21000000000000002</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t855" href="#t855">855</a></span><span class="t"><span class="str">        np.float64(0.21000000000000002)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t856" href="#t856">856</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t857" href="#t857">857</a></span><span class="t">        <span class="nam">vals</span><span class="op">,</span> <span class="nam">rates</span><span class="op">,</span> <span class="nam">weights</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">get_vals</span><span class="op">(</span><span class="nam">value</span><span class="op">,</span> <span class="nam">prefix</span><span class="op">=</span><span class="nam">prefix</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t858" href="#t858">858</a></span><span class="t">                                             <span class="nam">rates</span><span class="op">=</span><span class="nam">rates</span><span class="op">,</span> <span class="nam">weights</span><span class="op">=</span><span class="nam">weights</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -965,9 +965,9 @@
     <p class="pln"><span class="n"><a id="t883" href="#t883">883</a></span><span class="t"><span class="str">        --------</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t884" href="#t884">884</a></span><span class="t"><span class="str">        >>> r = Result({'a.a': 1, 'b.a': 3, "c.a": 2})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t885" href="#t885">885</a></span><span class="t"><span class="str">        >>> r.get_metric_ci("a")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t886" href="#t886">886</a></span><span class="t"><span class="str">        (2.0, 1.0, 3.0)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t886" href="#t886">886</a></span><span class="t"><span class="str">        (np.float64(2.0), np.float64(1.0), np.float64(3.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t887" href="#t887">887</a></span><span class="t"><span class="str">        >>> r.get_metric_ci("a", rates=[0.5, 1.0, 0.5], r_norm=True, method=np.sum)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t888" href="#t888">888</a></span><span class="t"><span class="str">        (2.25, 1.0, 4.5)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t888" href="#t888">888</a></span><span class="t"><span class="str">        (np.float64(2.25), np.float64(1.0), np.float64(4.5))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t889" href="#t889">889</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t890" href="#t890">890</a></span><span class="t">        <span class="nam">vals</span><span class="op">,</span> <span class="nam">rates</span><span class="op">,</span> <span class="nam">weights</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">get_vals</span><span class="op">(</span><span class="nam">value</span><span class="op">,</span> <span class="nam">prefix</span><span class="op">=</span><span class="nam">prefix</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t891" href="#t891">891</a></span><span class="t">                                             <span class="nam">rates</span><span class="op">=</span><span class="nam">rates</span><span class="op">,</span> <span class="nam">weights</span><span class="op">=</span><span class="nam">weights</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -1250,7 +1250,7 @@
             <a class="nav" href="z_cb0e7a8cec84cab4_tabulate_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 11:25 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
     </div>
 </footer>

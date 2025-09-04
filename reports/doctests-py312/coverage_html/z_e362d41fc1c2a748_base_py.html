@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_e362d41fc1c2a748_coords_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 11:25 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -205,9 +205,9 @@
     <p class="run run2"><span class="n"><a id="t123" href="#t123">123</a></span><span class="t"><span class="str">class ExampleObject(BaseObject):</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t124" href="#t124">124</a></span><span class="t"><span class="str">    container_s = ExampleState</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t125" href="#t125">125</a></span><span class="t"><span class="str">    def indicate_high_x(self):</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t126" href="#t126">126</a></span><span class="t"><span class="str">        return self.s.x > 1.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t126" href="#t126">126</a></span><span class="t"><span class="str">        return bool(self.s.x > 1.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t127" href="#t127">127</a></span><span class="t"><span class="str">    def indicate_y_over_x(self):</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t128" href="#t128">128</a></span><span class="t"><span class="str">        return self.s.y > self.s.x</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t128" href="#t128">128</a></span><span class="t"><span class="str">        return bool(self.s.y > self.s.x)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t129" href="#t129">129</a></span><span class="t"><span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t130" href="#t130">130</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t131" href="#t131">131</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -227,9 +227,9 @@
     <p class="pln"><span class="n"><a id="t145" href="#t145">145</a></span><span class="t"><span class="str">    >>> class ExampleObject(BaseObject):</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t146" href="#t146">146</a></span><span class="t"><span class="str">    ...    container_s = ExampleState</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t147" href="#t147">147</a></span><span class="t"><span class="str">    ...    def indicate_high_x(self):</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t148" href="#t148">148</a></span><span class="t"><span class="str">    ...        return self.s.x > 1.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t148" href="#t148">148</a></span><span class="t"><span class="str">    ...        return bool(self.s.x > 1.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t149" href="#t149">149</a></span><span class="t"><span class="str">    ...    def indicate_y_over_x(self):</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t150" href="#t150">150</a></span><span class="t"><span class="str">    ...        return self.s.y > self.s.x</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t150" href="#t150">150</a></span><span class="t"><span class="str">    ...        return bool(self.s.y > self.s.x)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t151" href="#t151">151</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t152" href="#t152">152</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t153" href="#t153">153</a></span><span class="t"><span class="str">    >>> ex = ExampleObject()</span>&nbsp;</span><span class="r"></span></p>
@@ -238,14 +238,14 @@
     <p class="pln"><span class="n"><a id="t156" href="#t156">156</a></span><span class="t"><span class="str">    >>> ex.containers</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t157" href="#t157">157</a></span><span class="t"><span class="str">    ('s',)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t158" href="#t158">158</a></span><span class="t"><span class="str">    >>> ex.s</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t159" href="#t159">159</a></span><span class="t"><span class="str">    ExampleState(x=1.0, y=1.0)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t159" href="#t159">159</a></span><span class="t"><span class="str">    ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t160" href="#t160">160</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t161" href="#t161">161</a></span><span class="t"><span class="str">    If an already-instanced role is passed, the BaseObject will take this</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t162" href="#t162">162</a></span><span class="t"><span class="str">    copy instead of instancing its own:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t163" href="#t163">163</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t164" href="#t164">164</a></span><span class="t"><span class="str">    >>> ex2 = ExampleObject(s=ExampleState(2.0, 4.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t165" href="#t165">165</a></span><span class="t"><span class="str">    >>> ex2.s</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t166" href="#t166">166</a></span><span class="t"><span class="str">    ExampleState(x=2.0, y=4.0)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t166" href="#t166">166</a></span><span class="t"><span class="str">    ExampleState(x=np.float64(2.0), y=np.float64(4.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t167" href="#t167">167</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t168" href="#t168">168</a></span><span class="t"><span class="str">    The method `indicate_high_x` is called an indicator. Indicators show up in the</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t169" href="#t169">169</a></span><span class="t"><span class="str">    indicators property:</span>&nbsp;</span><span class="r"></span></p>
@@ -511,15 +511,15 @@
     <p class="pln"><span class="n"><a id="t429" href="#t429">429</a></span><span class="t"><span class="str">        >>> ex2 = ExampleObject(s={'x': 3.0, 'y': 4.0})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t430" href="#t430">430</a></span><span class="t"><span class="str">        >>> ex.assign_roles('container', ex2)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t431" href="#t431">431</a></span><span class="t"><span class="str">        >>> ex.s</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t432" href="#t432">432</a></span><span class="t"><span class="str">        ExampleState(x=3.0, y=4.0)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t432" href="#t432">432</a></span><span class="t"><span class="str">        ExampleState(x=np.float64(3.0), y=np.float64(4.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t433" href="#t433">433</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t434" href="#t434">434</a></span><span class="t"><span class="str">        Note that these these roles should be independent after assignment:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t435" href="#t435">435</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t436" href="#t436">436</a></span><span class="t"><span class="str">        >>> ex.s.x = 4.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t436" href="#t436">436</a></span><span class="t"><span class="str">        >>> ex.s.x = np.float64(4.0)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t437" href="#t437">437</a></span><span class="t"><span class="str">        >>> ex.s</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t438" href="#t438">438</a></span><span class="t"><span class="str">        ExampleState(x=4.0, y=4.0)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t438" href="#t438">438</a></span><span class="t"><span class="str">        ExampleState(x=np.float64(4.0), y=np.float64(4.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t439" href="#t439">439</a></span><span class="t"><span class="str">        >>> ex2.s</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t440" href="#t440">440</a></span><span class="t"><span class="str">        ExampleState(x=3.0, y=4.0)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t440" href="#t440">440</a></span><span class="t"><span class="str">        ExampleState(x=np.float64(3.0), y=np.float64(4.0))</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t441" href="#t441">441</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t442" href="#t442">442</a></span><span class="t">        <span class="nam">roles</span> <span class="op">=</span> <span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">roletype</span><span class="op">+</span><span class="str">'s'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t443" href="#t443">443</a></span><span class="t">        <span class="key">for</span> <span class="nam">role</span> <span class="key">in</span> <span class="nam">roles</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -970,7 +970,7 @@
     <p class="pln"><span class="n"><a id="t888" href="#t888">888</a></span><span class="t"><span class="str">        >>> exec(example_object_code)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t889" href="#t889">889</a></span><span class="t"><span class="str">        >>> exo = ExampleObject(s={'y': 2.0})</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t890" href="#t890">890</a></span><span class="t"><span class="str">        >>> exo.get_node_attrs()</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t891" href="#t891">891</a></span><span class="t"><span class="str">        {'s': ExampleState(x=1.0, y=2.0), 'indicators': ['y_over_x']}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t891" href="#t891">891</a></span><span class="t"><span class="str">        {'s': ExampleState(x=np.float64(1.0), y=np.float64(2.0)), 'indicators': ['y_over_x']}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t892" href="#t892">892</a></span><span class="t"><span class="str">        >>> exo.get_node_attrs(roles=["none"])</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t893" href="#t893">893</a></span><span class="t"><span class="str">        {'indicators': ['y_over_x']}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t894" href="#t894">894</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
@@ -1302,7 +1302,7 @@
             <a class="nav" href="z_e362d41fc1c2a748_coords_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-09-03 11:25 -0700
+            created at 2025-09-03 20:47 -0700
         </p>
     </div>
 </footer>
