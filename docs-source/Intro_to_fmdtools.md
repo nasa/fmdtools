@@ -183,9 +183,78 @@ In a single timestep, functions with `static_behavior()` methods simulate until 
 ![Dynamic Propagation width:600px](./figures/drawio/propagationovertime.svg)
 
 -----------------
+# Python Concept: Classes and Object-Oriented Programming
+
+Classes are the core of object-oriented programming. A class in python might look like:
+```
+class Hello(object):
+    a = 3 # <- Class variables define data used by all objects
+    def __init__(self, x=1, y=2): #<- This is a "dunder" method to instantiate the class
+        self.x = x
+        self.y = y
+
+    def sum(self):
+        return self.x + self.y + self.a
+```
+Classes are instantiated to form objects, which we can then use to manipulate data, e.g.:
+```
+>>> hi = Hello(x=2, y=2)
+>>> hi.sum()
+7
+```
+
+-----------------
+# Why classes and objects?
+
+- Classes give you the ability to **group data and methods** together to satisfy an overall use-case
+- Classes define the "template"--what should an object include, be able to do, how should it be instantiated, etc.
+- **Inheritance**--you can create subclasses that creating new variants for a given system with specific properties (e.g., *Ferrari* might be a subclass of a *Car* class)
+- **Principle of encapsulation:** Object-oriented programming give you control of what the user (or environment sees) versus what should be "internal"
+- **Organization:** You always know what methods are supposed to act on what data
+- **Independence:** New objects are independent of old objects, so, e.g., if you want a new sim while keeping the old one you can do that
+
+-----------------
+# Python dataclasses (and similar)
+
+fmdtools uses the recordclass package to define dataclasses: https://github.com/intellimath/recordclass
+
+```
+from recordclass import dataobject
+class Point(dataobject):
+    x: int = 1 # <- Field for variable x
+    y: int = 2 # <- Field for variable y
+```
+Dataclasses let you define the data as **fields** and then lets you directly instantiate the class based on the data, e.g.:
+```
+>>> p = Point(2, 3)
+>>> p.x
+2
+```
+Dataclasses are used in fmdtools for **Containers**
+
+-----------------
 # Containers - The building blocks of simulations
 ![container example](./figures/powerpoint/container_structures.svg)
 - Containers are used to define various attributes of Functions and Flows
+
+-----------------
+# Class aggregation in fmdtools
+
+In fmdtools, **BaseObject** classes (Functions, Flows, etc.) aggregate Containers classes, allowing you to instantiate multiple at the same time, e.g., in the class:
+```
+class ExampleObject(BaseObject):
+    container_s = StateName
+```
+- `container_s` attaches the `StateName` class to the ExampleObject class as a container
+- Our object class instantiates it to the variable `s`, e.g.:
+```
+>>> ex = ExampleObject()
+>>> ex.s.varname1
+1.0
+```
+-----------------
+# Class aggregation in fmdtools - Functions and Flows
+
 
 -----------------
 # Flow Code Template
