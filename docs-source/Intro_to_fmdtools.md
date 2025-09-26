@@ -238,7 +238,7 @@ Dataclasses are used in fmdtools for **Containers**
 - Containers are used to define various attributes of Functions and Flows
 
 -----------------
-# Class aggregation in fmdtools
+# Class aggregation in fmdtools BaseObject
 
 In fmdtools, **BaseObject** classes (Functions, Flows, etc.) aggregate Containers classes, allowing you to instantiate multiple at the same time, e.g., in the class:
 ```
@@ -253,7 +253,17 @@ class ExampleObject(BaseObject):
 1.0
 ```
 -----------------
-# Class aggregation in fmdtools - Functions and Flows
+# Main classes in fmdtools
+
+![flow example](./figures/drawio/class_diagram.svg)
+
+**Containers** are used to represent properties of **Objects** (all classes below)
+
+**Blocks** are the main behaviors of the system (e.g., Functions or Components)
+
+**Flows** connect functions (and are thus a part of their definition)
+
+**Architectures** are used to instantiate and connect Blocks with Flows
 
 
 -----------------
@@ -287,6 +297,14 @@ Notice the definitions and structure:
 - **Parameter**: `PumpParam` defines values we can change in the simulation
 
 -----------------
+# Why do we structure models this way?
+
+- **Enabling undirected propagation:** Behavior from any Block in an Architecture can propagate to anything else, which is important for capturing the full set of hazardous behavior
+- **Composability and Parameterization:** OOP gives us the ability to create a number of co-existing model variants by varying parameters as well as creating sub-classes with different containers
+- **Avoiding one big monolithic class:** We can document and unit test individual simulation pieces a lot easier than one giant class, increasing code quality
+
+
+-----------------
 
 # More Resources for Model Definition
 
@@ -306,6 +324,7 @@ Open `/examples/pump/Tutorial_unfilled.ipynb`:
     - Change things!
     What does the model directory look like? 
     - `dir(mdl)`
+- simulate to given time with `mdl(time)`
 
 -----------------
 
@@ -381,6 +400,24 @@ Explore:
 - How can you show only the parameters you want? Or change the formatting?
 - What does the behavior under other faults look like?
 - What other analyses can you perform with these results?
+
+-----------------
+
+# Starting your own repo/project
+
+1.) Use `uv init` to create a template project, with its own virtual environment at `.venv`, `README.md`, and `pyproject.toml` files.
+- Fill in these files (e.g., fmdtools version, contributors, project description)
+- see: https://docs.astral.sh/uv/guides/projects/
+
+2.) Install fmdtools into the venv:
+- `uv pip install fmdtools` or `uv pip install fmdtools @ "./path/to/fmdtools"`
+
+3.) Set up the rest of the python tooling: https://github.com/nasa/fmdtools?tab=readme-ov-file#set-up-python-tooling-environment
+
+5.) See if it all works! Get a script to run fmdtools  from the `venv` kernel in your IDE.
+
+6.) Commit and sync to remote
+
 
 -----------------
 
