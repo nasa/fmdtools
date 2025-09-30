@@ -96,11 +96,17 @@
 <li class="toctree-l3"><a class="reference internal" href="#id1">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#concept-static-propagation">Concept: Static Propagation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#concept-propagation-over-time">Concept: Propagation over Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-concept-classes-and-object-oriented-programming">Python Concept: Classes and Object-Oriented Programming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-classes-and-objects">Why classes and objects?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-dataclasses-and-similar">Python dataclasses (and similar)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#containers-the-building-blocks-of-simulations">Containers - The building blocks of simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#class-aggregation-in-fmdtools-baseobject">Class aggregation in fmdtools BaseObject</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#main-classes-in-fmdtools">Main classes in fmdtools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#flow-code-template">Flow Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#function-code-template">Function Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#function-architecture-code-template">Function Architecture Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-do-we-structure-models-this-way">Why do we structure models this way?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#more-resources-for-model-definition">More Resources for Model Definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#notebook-activity">Notebook Activity:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#simulation-concepts-types-of-simulations">Simulation Concepts: Types of Simulations</a></li>
@@ -109,6 +115,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#activity-simulate-the-model">Activity: Simulate the Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-modules-see-docs-for-fmdtools-analyze">Analysis Modules - see docs for <code class="docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-activity">Analysis Activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-your-own-repo-project">Starting your own repo/project</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#conclusions-summary">Conclusions/Summary</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#further-reading-links">Further Reading/Links</a></li>
 </ul>
@@ -964,12 +971,90 @@
 <p><img alt="Dynamic Propagation width:600px" src="../_images/propagationovertime.svg" /></p>
 </section>
 <hr class="docutils" />
+<section id="python-concept-classes-and-object-oriented-programming">
+<h1>Python Concept: Classes and Object-Oriented Programming<a class="headerlink" href="#python-concept-classes-and-object-oriented-programming" title="Link to this heading"></a></h1>
+<p>Classes are the core of object-oriented programming. A class in python might look like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Hello</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># &lt;- Class variables define data used by all objects</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span> <span class="c1">#&lt;- This is a &quot;dunder&quot; method to instantiate the class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
+</pre></div>
+</div>
+<p>Classes are instantiated to form objects, which we can then use to manipulate data, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hi</span> <span class="o">=</span> <span class="n">Hello</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hi</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="go">7</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="why-classes-and-objects">
+<h1>Why classes and objects?<a class="headerlink" href="#why-classes-and-objects" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>Classes give you the ability to <strong>group data and methods</strong> together to satisfy an overall use-case</p></li>
+<li><p>Classes define the “template”–what should an object include, be able to do, how should it be instantiated, etc.</p></li>
+<li><p><strong>Inheritance</strong>–you can create subclasses that creating new variants for a given system with specific properties (e.g., <em>Ferrari</em> might be a subclass of a <em>Car</em> class)</p></li>
+<li><p><strong>Principle of encapsulation:</strong> Object-oriented programming give you control of what the user (or environment sees) versus what should be “internal”</p></li>
+<li><p><strong>Organization:</strong> You always know what methods are supposed to act on what data</p></li>
+<li><p><strong>Independence:</strong> New objects are independent of old objects, so, e.g., if you want a new sim while keeping the old one you can do that</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="python-dataclasses-and-similar">
+<h1>Python dataclasses (and similar)<a class="headerlink" href="#python-dataclasses-and-similar" title="Link to this heading"></a></h1>
+<p>fmdtools uses the recordclass package to define dataclasses: https://github.com/intellimath/recordclass</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">recordclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataobject</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">(</span><span class="n">dataobject</span><span class="p">):</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># &lt;- Field for variable x</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># &lt;- Field for variable y</span>
+</pre></div>
+</div>
+<p>Dataclasses let you define the data as <strong>fields</strong> and then lets you directly instantiate the class based on the data, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>Dataclasses are used in fmdtools for <strong>Containers</strong></p>
+</section>
+<hr class="docutils" />
 <section id="containers-the-building-blocks-of-simulations">
 <h1>Containers - The building blocks of simulations<a class="headerlink" href="#containers-the-building-blocks-of-simulations" title="Link to this heading"></a></h1>
 <p><img alt="container example" src="../_images/container_structures.svg" /></p>
 <ul class="simple">
 <li><p>Containers are used to define various attributes of Functions and Flows</p></li>
 </ul>
+</section>
+<hr class="docutils" />
+<section id="class-aggregation-in-fmdtools-baseobject">
+<h1>Class aggregation in fmdtools BaseObject<a class="headerlink" href="#class-aggregation-in-fmdtools-baseobject" title="Link to this heading"></a></h1>
+<p>In fmdtools, <strong>BaseObject</strong> classes (Functions, Flows, etc.) aggregate Containers classes, allowing you to instantiate multiple at the same time, e.g., in the class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ExampleObject</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+    <span class="n">container_s</span> <span class="o">=</span> <span class="n">StateName</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">container_s</span></code> attaches the <code class="docutils literal notranslate"><span class="pre">StateName</span></code> class to the ExampleObject class as a container</p></li>
+<li><p>Our object class instantiates it to the variable <code class="docutils literal notranslate"><span class="pre">s</span></code>, e.g.:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleObject</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">varname1</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="main-classes-in-fmdtools">
+<h1>Main classes in fmdtools<a class="headerlink" href="#main-classes-in-fmdtools" title="Link to this heading"></a></h1>
+<p><img alt="flow example" src="../_images/class_diagram.svg" /></p>
+<p><strong>Containers</strong> are used to represent properties of <strong>Objects</strong> (all classes below)</p>
+<p><strong>Blocks</strong> are the main behaviors of the system (e.g., Functions or Components)</p>
+<p><strong>Flows</strong> connect functions (and are thus a part of their definition)</p>
+<p><strong>Architectures</strong> are used to instantiate and connect Blocks with Flows</p>
 </section>
 <hr class="docutils" />
 <section id="flow-code-template">
@@ -1013,6 +1098,15 @@
 </ul>
 </section>
 <hr class="docutils" />
+<section id="why-do-we-structure-models-this-way">
+<h1>Why do we structure models this way?<a class="headerlink" href="#why-do-we-structure-models-this-way" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><strong>Enabling undirected propagation:</strong> Behavior from any Block in an Architecture can propagate to anything else, which is important for capturing the full set of hazardous behavior</p></li>
+<li><p><strong>Composability and Parameterization:</strong> OOP gives us the ability to create a number of co-existing model variants by varying parameters as well as creating sub-classes with different containers</p></li>
+<li><p><strong>Avoiding one big monolithic class:</strong> We can document and unit test individual simulation pieces a lot easier than one giant class, increasing code quality</p></li>
+</ul>
+</section>
+<hr class="docutils" />
 <section id="more-resources-for-model-definition">
 <h1>More Resources for Model Definition<a class="headerlink" href="#more-resources-for-model-definition" title="Link to this heading"></a></h1>
 <ul class="simple">
@@ -1038,6 +1132,7 @@ What does the model directory look like?</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dir(mdl)</span></code></p></li>
 </ul>
 </li>
+<li><p>simulate to given time with <code class="docutils literal notranslate"><span class="pre">mdl(time)</span></code></p></li>
 </ul>
 </section>
 <hr class="docutils" />
@@ -1119,6 +1214,22 @@ What does the model directory look like?</p></li>
 <li><p>What does the behavior under other faults look like?</p></li>
 <li><p>What other analyses can you perform with these results?</p></li>
 </ul>
+</section>
+<hr class="docutils" />
+<section id="starting-your-own-repo-project">
+<h1>Starting your own repo/project<a class="headerlink" href="#starting-your-own-repo-project" title="Link to this heading"></a></h1>
+<p>1.) Use <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">init</span></code> to create a template project, with its own virtual environment at <code class="docutils literal notranslate"><span class="pre">.venv</span></code>, <code class="docutils literal notranslate"><span class="pre">README.md</span></code>, and <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> files.</p>
+<ul class="simple">
+<li><p>Fill in these files (e.g., fmdtools version, contributors, project description)</p></li>
+<li><p>see: https://docs.astral.sh/uv/guides/projects/</p></li>
+</ul>
+<p>2.) Install fmdtools into the venv:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">fmdtools</span></code> or <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">fmdtools</span> <span class="pre">&#64;</span> <span class="pre">&quot;./path/to/fmdtools&quot;</span></code></p></li>
+</ul>
+<p>3.) Set up the rest of the python tooling: https://github.com/nasa/fmdtools?tab=readme-ov-file#set-up-python-tooling-environment</p>
+<p>5.) See if it all works! Get a script to run fmdtools  from the <code class="docutils literal notranslate"><span class="pre">venv</span></code> kernel in your IDE.</p>
+<p>6.) Commit and sync to remote</p>
 </section>
 <hr class="docutils" />
 <section id="conclusions-summary">
