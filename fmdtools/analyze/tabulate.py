@@ -68,18 +68,16 @@ def result_summary_fmea(result, mdlhist, *attrs, metrics=()):
     >>> mdl = ExFxnArch()
     >>> res, hist = fault_sample(mdl, exfs)
     >>> result_summary_fmea(res, hist, *mdl.fxns, *mdl.flows)
-                                                             degraded  ...  flowval
-    nominal                                                        []  ...  10100.0
-    exfxnarch_fxns_ex_fxn_no_charge_t1              ['ex_fxn', 'exf']  ...   5050.0
-    exfxnarch_fxns_ex_fxn_no_charge_t2              ['ex_fxn', 'exf']  ...   5150.0
-    exfxnarch_fxns_ex_fxn2_no_charge_t1  ['ex_fxn', 'ex_fxn2', 'exf']  ...   5050.0
-    exfxnarch_fxns_ex_fxn2_no_charge_t2  ['ex_fxn', 'ex_fxn2', 'exf']  ...   5150.0
-    exfxnarch_fxns_ex_fxn_short_t1                  ['ex_fxn', 'exf']  ...   5050.0
-    exfxnarch_fxns_ex_fxn_short_t2                  ['ex_fxn', 'exf']  ...   5150.0
-    exfxnarch_fxns_ex_fxn2_short_t1      ['ex_fxn', 'ex_fxn2', 'exf']  ...   5050.0
-    exfxnarch_fxns_ex_fxn2_short_t2      ['ex_fxn', 'ex_fxn2', 'exf']  ...   5150.0
-    <BLANKLINE>
-    [9 rows x 3 columns]
+                                                             degraded       faulty  flowval
+    nominal                                                        []           []  10100.0
+    exfxnarch_fxns_ex_fxn_no_charge_t1              ['ex_fxn', 'exf']   ['ex_fxn']   5050.0
+    exfxnarch_fxns_ex_fxn_no_charge_t2              ['ex_fxn', 'exf']   ['ex_fxn']   5150.0
+    exfxnarch_fxns_ex_fxn2_no_charge_t1  ['ex_fxn', 'ex_fxn2', 'exf']  ['ex_fxn2']   5050.0
+    exfxnarch_fxns_ex_fxn2_no_charge_t2  ['ex_fxn', 'ex_fxn2', 'exf']  ['ex_fxn2']   5150.0
+    exfxnarch_fxns_ex_fxn_short_t1                  ['ex_fxn', 'exf']   ['ex_fxn']   5050.0
+    exfxnarch_fxns_ex_fxn_short_t2                  ['ex_fxn', 'exf']   ['ex_fxn']   5150.0
+    exfxnarch_fxns_ex_fxn2_short_t1      ['ex_fxn', 'ex_fxn2', 'exf']  ['ex_fxn2']   5050.0
+    exfxnarch_fxns_ex_fxn2_short_t2      ['ex_fxn', 'ex_fxn2', 'exf']  ['ex_fxn2']   5150.0
     """
     from fmdtools.analyze.history import History
     deg_summaries = {}
@@ -146,7 +144,14 @@ class BaseTab(UserDict):
     factors : list
         List of factors in the table
     """
-
+    def __repr__(self):
+        name = self.__class__.__name__
+        metrics = list(self.keys())
+        num_metrics = len(metrics)
+        num_entries = len(next(iter(self.values()))) if metrics else 0
+        return (f"<{name}: {num_metrics} metric(s), "
+                f"{num_entries} entries, metrics={metrics}>")
+    
     def sort_by_factors(self, *factors):
         """
         Sort the table by its factors.
@@ -446,14 +451,15 @@ class FMEA(BaseTab):
     --------
     >>> from fmdtools.sim.sample import exfs
     >>> res = Result({scen.name+'.tend.classify': {'rate': scen.time, 'cost': i} for i, scen in enumerate(exfs.scenarios())}).flatten()
+    >>> FMEA(res, exfs)
+    <FMEA: 3 metric(s), 4 entries, metrics=['average_scenario_rate', 'sum_cost', 'expected_cost']>
     >>> FMEA(res, exfs).as_table(sort_by="sum_cost")
-                                      average_scenario_rate  ...  expected_cost
-    exfxnarch.fxns.ex_fxn2 short                        0.0  ...            0.0
-    exfxnarch.fxns.ex_fxn  short                        0.0  ...            0.0
-    exfxnarch.fxns.ex_fxn2 no_charge                    0.0  ...            0.0
-    exfxnarch.fxns.ex_fxn  no_charge                    0.0  ...            0.0
-    <BLANKLINE>
-    [4 rows x 3 columns]
+                                      average_scenario_rate  sum_cost  expected_cost
+    exfxnarch.fxns.ex_fxn2 short                        0.0        13            0.0
+    exfxnarch.fxns.ex_fxn  short                        0.0         9            0.0
+    exfxnarch.fxns.ex_fxn2 no_charge                    0.0         5            0.0
+    exfxnarch.fxns.ex_fxn  no_charge                    0.0         1            0.0
+
     >>> FMEA(res, exfs, average_metric=["rate"], sum_metric=["cost"], expected_metric=["cost"], rates="rate").as_table()
                                       average_rate  sum_cost  expected_cost
     exfxnarch.fxns.ex_fxn2 short               1.5        13             20
@@ -502,7 +508,9 @@ class FMEA(BaseTab):
                                                         prefix=prefix, **met_kwar)
                     fmeadict[met][group] = sum_met
         self.data = fmeadict
-
+    
+    def __repr__(self):
+        return super().__repr__()
 
 class BaseComparison(BaseTab):
     """
@@ -559,6 +567,8 @@ class BaseComparison(BaseTab):
                     met_dict[met][fact_tup] = sub_res.get_metric(met, method=stat)
         self.data = met_dict
 
+    def __repr__(self):
+        return super().__repr__()
 
 class Comparison(BaseComparison):
     """
@@ -594,7 +604,7 @@ class Comparison(BaseComparison):
     >>> comp = Comparison(res, exp_ps, metrics=['a'], factors=['p.x'], default_stat='expected')
     >>> comp.sort_by_factors("p.x")
     >>> comp
-    {'a': {(np.int64(0),): np.float64(0.0), (np.int64(1),): np.float64(1.0), (2,): np.float64(4.0), (np.int64(3),): np.float64(9.0), (np.int64(4),): np.float64(16.0), (np.int64(5),): np.float64(25.0), (np.int64(6),): np.float64(36.0), (np.int64(7),): np.float64(49.0), (np.int64(8),): np.float64(64.0), (np.int64(9),): np.float64(81.0), (np.int64(10),): np.float64(100.0)}}
+    <Comparison: 1 metric(s), 11 entries, metrics=['a']>
     >>> comp.as_table()
             a
     10  100.0
@@ -668,6 +678,8 @@ class Comparison(BaseComparison):
         scen_groups = samp.get_scen_groups(*factors)
         super().__init__(res, scen_groups, **kwargs)
 
+    def __repr__(self):
+        return super().__repr__()      
 
 class NestedComparison(BaseComparison):
     """
@@ -704,6 +716,9 @@ class NestedComparison(BaseComparison):
 
         self.factors = samp_factors + samps_factors
         super().__init__(res, overall_scen_groups, **kwargs)
+    
+    def __repr__(self):
+        return super().__repr__()
 
 
 class NominalEnvelope(object):
@@ -765,6 +780,13 @@ class NominalEnvelope(object):
               [func(v) for v in res.get_scens(*scens).get_values("."+metric).values()]
               for group, scens in self.variable_groups.items()}
         self.group_values = gv
+
+    def __repr__(self):
+        name = self.__class__.__name__
+        num_params = len(self.params)
+        num_groups = len(self.variable_groups)
+        return (f"<{name}: {num_params} param(s), "
+                f"{num_groups} groups, params={list(self.params)}>")
 
     def as_plot(self, **kwargs):
         """
