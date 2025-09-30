@@ -39,3 +39,5 @@ LICENSE.bak
 *.pkl
 fmdtools.code-workspace
 /jupyter_execute
+fmdtools-dev/
+.venv/
