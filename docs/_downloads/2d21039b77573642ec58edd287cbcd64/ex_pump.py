@@ -432,9 +432,6 @@ class MoveWat(Function):
         self.wat_out.s.pressure = 10/500 * velocity/self.wat_out.s.area
         self.wat_out.s.flowrate = 0.3/500 * velocity*self.wat_out.s.area
 
-        self.wat_in.s.assign(self.wat_out.s, 'pressure', 'flowrate')
-
-
 # DEFINE MODEL OBJECT
 class Pump(FunctionArchitecture):
     """
@@ -660,8 +657,15 @@ def script_sample_faults(track='all', **kwargs):
 
 if __name__ == "__main__":
 
-    mdl = Pump()
-    res, hist = propagate.nominal(mdl, to_return = {'graph': FunctionArchitectureGraph})
+    mdl = Pump(sp={'end_time': 100000}, track=[])
+    import time
+    t = time.time()
+    mdl(100000)
+    dt = time.time() - t
+    # mdl = Pump()
+    # res, hist = propagate.nominal(mdl, to_return = {'graph': FunctionArchitectureGraph})
+
+    """
     endfaults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',
                                              time=10, to_return='faults')
     # import doctest
@@ -686,3 +690,4 @@ if __name__ == "__main__":
     og = ObjectGraph(Pump(), get_source=True)
     og.set_node_labels(title='shortname', title2='classname', subtext='docs')
     og.draw_graphviz()
+    """
