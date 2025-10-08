@@ -28,13 +28,13 @@ class Aviate(Function):
     >>> t.s.put(z=100.0, goal_z=100.0, dz=0.0, dx=10.0)
     >>> des_traj = t.create_local("des_traj")
     >>> av = Aviate(trajectories=t)
-    >>> av.static_behavior(1)
-    >>> av.dynamic_behavior(1)
+    >>> av.static_behavior()
+    >>> av.dynamic_behavior()
     >>> av.trajectories.s.x
     10.0
     >>> av.trajectories.des_traj.s.put(dx=0.0, dy=10.0)
-    >>> av.static_behavior(2)
-    >>> av.dynamic_behavior(2)
+    >>> av.static_behavior()
+    >>> av.dynamic_behavior()
     >>> av.trajectories.s.y
     10.0
     """
@@ -47,7 +47,7 @@ class Aviate(Function):
     flow_environment = AircraftEnvironment
     container_m = AviateMode
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """Overall static behavior of drone (determines modes based on states)."""
         if self.force.s.contact_support >= 10.0:
             self.m.add_fault('crash')
@@ -76,7 +76,7 @@ class Aviate(Function):
         elif self.m.in_mode("idle"):
             self.idle_behavior()
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """Overall dynamic behavior of the drone (flight, falling, and idle)."""
         self.trajectories.s.increment_position()
         self.trajectories.s.limit(z=(0.0, np.inf))

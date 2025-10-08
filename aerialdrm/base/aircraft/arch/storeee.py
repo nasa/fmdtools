@@ -25,7 +25,7 @@ class StoreAndSupplyElectricity(Function):
     flow_electricity = Electricity
     container_m = StoreEEMode
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Execute power supply static behavior.
 
@@ -44,7 +44,7 @@ class StoreAndSupplyElectricity(Function):
             self.electricity.s.voltage_low = float(self.electricity.s.power_low)
             self.electricity.s.voltage_high = False
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """
         Execute power supply dynamic behavior.
 

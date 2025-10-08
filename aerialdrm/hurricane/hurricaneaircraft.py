@@ -39,7 +39,7 @@ class HurricaneControlState(ControlState):
         Whether or not flightgrid is up to date
     """
     closest_dist: float = 100.0
-    flightgrid: object = None
+    flightgrid: DroneFlightGrid = DroneFlightGrid(HurricaneEnvironment())
     planned: bool = False
 
     
@@ -57,6 +57,7 @@ class HurricaneControlFlight(ControlFlight):
     flow_environment = HurricaneEnvironment
     container_s = HurricaneControlState
     container_p = HurricaneControlParameter
+    default_track = {'s': ["closest_dist", 'planned']}
     
     def set_faultmode(self):
         super().set_faultmode()
@@ -80,7 +81,7 @@ class HurricaneControlFlight(ControlFlight):
             elif self.m.in_mode('pause'):
                 self.m.set_mode('flight')
                 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if not self.s.planned:
             self.replan_mission()
             self.s.planned = True
@@ -155,8 +156,8 @@ class HurricaneControlFlight(ControlFlight):
 class HurricaneAviate(Aviate):
     __slots__ = ()
 
-    def dynamic_behavior(self, time):
-        super().dynamic_behavior(time)
+    def dynamic_behavior(self):
+        super().dynamic_behavior()
         self.environment.ga.points['self'].s.assign(self.trajectories.s, 'x', 'y', 'z')
 
 
@@ -232,10 +233,10 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
         else:
             return coords not in [[*i] for i in [*self.flows['environment'].c.suitable]]
 
-    def indicate_landed(self, time):
-        return self.flows['trajectories'].s.z == 0.0 and time > 5.0
+    def indicate_landed(self):
+        return self.flows['trajectories'].s.z == 0.0 and self.t.time > 5.0
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, scen, **kwargs):
         """Classify the simulation results."""
         endloc = self.flows['trajectories'].s.get('x', 'y')
         coords = self.flows['environment'].c
@@ -284,12 +285,14 @@ if __name__ == "__main__":
     from fmdtools.sim import propagate
     from fmdtools.sim.sample import FaultDomain, FaultSample
 
+    h = HurricaneAviate()
+    hc = HurricaneConditions()
+    hcf = HurricaneControlFlight()
+
     ha = HurricaneAircraftArchitecture()
-    
-    
-    
+
     cf = ha.fxns['control_flight']
-    cf.static_behavior(time=0.0)
+    cf.static_behavior()
     fg = FunctionArchitectureGraph(ha)
     fg.draw()
     res, hist = propagate.nominal(ha)

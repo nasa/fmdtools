@@ -21,7 +21,7 @@ class HoldPayload(Function):
     flow_trajectories = Trajectories
     container_m = HoldPayloadMode
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         next_z = self.trajectories.s.z + self.trajectories.s.dz
         if next_z <= 0.0 and self.trajectories.s.dz < -15.0:
             self.force.s.put(contact_support=10.0)

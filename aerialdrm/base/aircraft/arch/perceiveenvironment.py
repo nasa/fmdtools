@@ -31,11 +31,11 @@ class PerceiveEnvironment(Function):
         """Initialize the block with des_traj sub-flow."""
         self.perc_traj = self.trajectories.create_local("perc_traj")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         if self.force.s.contact_support >= 7.0:
             self.m.add_fault('break')
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """
         Environmental perception behavior - mirrors trajectory.
 
@@ -43,7 +43,7 @@ class PerceiveEnvironment(Function):
         --------
         >>> pe = PerceiveEnvironment()
         >>> pe.trajectories.s.x=0.5
-        >>> pe.dynamic_behavior(1)
+        >>> pe.dynamic_behavior()
         >>> pe.perc_traj.s.x
         0.5
         """

@@ -28,13 +28,13 @@ fmdtools v2.1
 
 a.) To set up with Spyder, first install Spyder 6 or later.
 
-b.) run `uv pip install spyder-kernels==3.0.*`.
+b.) run `uv pip install spyder-kernels==3.1.*`.
 
 c.) Then the console can be made as the ipython console in Spyder (by setting the console path to `aerialdrm-dev\Scripts\python.exe` in preferneces).
 
 3.) Install aerialdrm
 
-a.) If using a set version of fmdtools, use `uv pip install .`
+a.) If using a set version of fmdtools, use `uv pip install -e .`
 
 b.) If co-developing with fmdtools, install fmdtools as a development dependency also, e.g., using `uv pip install -e fmdtools @ ../fmdtools`
 
@@ -48,6 +48,7 @@ b.) If co-developing with fmdtools, install fmdtools as a development dependency
 
 Daniel Hulse
 Seydou Mbaye
+Cody Wang
 
 ## Funding
 

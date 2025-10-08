@@ -72,22 +72,22 @@ class ControlFlight(Function):
     >>> cf = ControlFlight(trajectories=t)
     >>> cf.m.mode
     'idle'
-    >>> cf.propagate(0)
-    >>> cf.propagate(1)
+    >>> cf(0)
+    >>> cf(1)
     >>> cf.m.mode
     'ascend'
     >>> cf.trajectories.perc_traj.s.z = cf.s.height
-    >>> cf.propagate(2)
+    >>> cf(2)
     >>> cf.m.mode
     'flight'
     >>> cf.des_traj.s.get('dx', 'dy')
     array([7.07106781, 7.07106781])
     >>> cf.trajectories.perc_traj.s.put(x=25.0, y=25.0)
-    >>> cf.propagate(3)
+    >>> cf(3)
     >>> cf.m.mode
     'descend'
     >>> cf.trajectories.perc_traj.s.put(z=0.0)
-    >>> cf.propagate(4)
+    >>> cf(4)
     >>> cf.m.mode
     'idle'
     """
@@ -106,7 +106,7 @@ class ControlFlight(Function):
         self.perc_traj = self.trajectories.create_local("perc_traj")
         self.des_traj = self.trajectories.create_local("des_traj")
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         """
         Propagate static behaviors for flight control.
 
@@ -136,7 +136,7 @@ class ControlFlight(Function):
         else:
             self.des_traj.s.put(dz=-self.trajectories.s.z)
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         """
         Propagate overall modal logic for flight control.
         """
@@ -144,7 +144,7 @@ class ControlFlight(Function):
             self.trajectories.perc_traj.update('goal_x', 'goal_y', 'goal_z',
                                                to_get='des_traj')
             if self.s.is_start():
-                if time > 0.0:
+                if self.t.time > 0.0:
                     self.takeoff_planning()
             elif self.s.is_end():
                 self.landing_planning()
@@ -190,10 +190,10 @@ if __name__ == "__main__":
     doctest.testmod(verbose=True)
 
     cf = ControlFlight()
-    cf.dynamic_behavior(1)
+    cf.dynamic_behavior()
     cf.trajectories.perc_traj.s.z = cf.s.height
-    cf.dynamic_behavior(2)
+    cf.dynamic_behavior()
     cf.trajectories.perc_traj.s.put(x=25.0, y=25.0)
-    cf.dynamic_behavior(3)
+    cf.dynamic_behavior()
     cf.trajectories.perc_traj.s.put(z=0.0)
-    cf.dynamic_behavior(4)
+    cf.dynamic_behavior()

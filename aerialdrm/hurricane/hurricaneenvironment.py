@@ -19,18 +19,18 @@ class HurricaneCoordsParam(CoordsParam):
     x_size: int = 12
     y_size: int = 12
     blocksize: float = 10.0
-    feature_occupied: tuple = (bool, False)
-    feature_disallowed: tuple = (bool, False)
-    feature_restricted: tuple = (bool, False)
-    collect_suitable: tuple = (("occupied", False, np.equal),
-                               "and", ("disallowed", False, np.equal),
-                               "and", ("restricted", False, np.equal))
-
-    point_start: tuple = (10.0, 10.0)
-    point_end: tuple = (100.0, 100.0)
 
 class HurricaneCoords(Coords):
     container_p = HurricaneCoordsParam
+    feature_occupied = (bool, False)
+    feature_disallowed = (bool, False)
+    feature_restricted = (bool, False)
+    collection_suitable = (("occupied", False, np.equal),
+                           "and", ("disallowed", False, np.equal),
+                           "and", ("restricted", False, np.equal))
+
+    point_start = (10.0, 10.0)
+    point_end = (100.0, 100.0)
 
     def init_properties(self, **kwargs):
 
@@ -43,6 +43,7 @@ class HurricaneCoords(Coords):
         self.set_range('restricted', True, ymin=110)
         self.set_pts([self.start, self.end], 'occupied', False)
         self.set_pts([self.start, self.end], 'disallowed', False)
+
 properties = {'disallowed': {'color': 'blue', 'proplab': 'disallowed', 'alpha': 0.5},
               'occupied': {'color': 'red', 'proplab': 'occupied', 'alpha': 0.5},
               'restricted': {'color': 'grey', 'proplab': 'restricted', 'alpha': 0.75}}
@@ -108,7 +109,7 @@ class HurricaneConditions(Function):
     __slots__ = ('environment', )
     flow_environment = HurricaneEnvironment
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.environment.ga.update_positions()
 
 
@@ -117,10 +118,10 @@ if __name__ == "__main__":
     # hc.show(properties=properties, collections=collections)
     # hc.show(collections={'suitable': {}})
     # hc.show_collection("suitable", **collections['suitable'])
+    props = {'restricted': {'color': 'red', 'proplab': 'restricted'}}
+    colls = {'start': {'color': 'lightblue'}, 'end': {'color': 'lightgreen'}}
 
-    hc.show(properties={'restricted': {'color': 'red', 'proplab': 'restricted'}},
-            collections={'start': {'color': 'lightblue'},
-                         'end': {'color': 'lightgreen'}})
+    hc.show(properties=props, collections=colls)
 
     from fmdtools.analyze.common import setup_plot, add_title_xylabs
     from matplotlib.colors import to_rgba, ListedColormap, TABLEAU_COLORS

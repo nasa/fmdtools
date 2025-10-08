@@ -29,7 +29,6 @@ class FireAircraftState(AircraftState):
 class FireAircraft(BaseAircraft):
     """Aircraft that mitigates fire propagation and resupplies from bases."""
 
-    __slots__ = ('fireenvironment')
     container_m = AircraftModes
     container_t = AircraftTime
     container_s = FireAircraftState
@@ -47,7 +46,7 @@ class FireAircraft(BaseAircraft):
             if len(closest) > 0:
                 self.s.assign(closest, "goal_x", "goal_y")
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         if self.m.in_mode("resupply"):
             if self.t.timers['resupply'].indicate_complete() or self.t.timers['resupply'].indicate_standby():
                 self.s.retardant_status = 100

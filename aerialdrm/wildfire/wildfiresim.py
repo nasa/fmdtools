@@ -50,11 +50,11 @@ class WildfireSim(FunctionArchitecture):
                          p={'base': base})
         self.add_fxn("firepropagation", FirePropagation, "fireenvironment")
 
-    def find_classification(self, scen, hist):
+    def classify(self, **kwargs):
         return {'perc_burned': self.flows['fireenvironment'].c.calc_perc_burned(),
                 'burn_pts': self.flows['fireenvironment'].c.get_all_burned()}
 
-    def indicate_complete(self, *t):
+    def indicate_complete(self):
         """Returns true when fire is contained."""
         return self.flows['fireenvironment'].c.indicate_contained()
 

@@ -13,7 +13,7 @@ version="0.2"
 readme = "README.md"
 requires-python = ">=3.10"
 
-dependencies = ["fmdtools >= 2.1.0"]
+dependencies = ["fmdtools >= 2.2.0"]
 
 
 [build-system]

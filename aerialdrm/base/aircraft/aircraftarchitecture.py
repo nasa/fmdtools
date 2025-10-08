@@ -60,7 +60,7 @@ class AircraftArchitecture(FunctionArchitecture):
                      'environment', 'force', 'electricity', 'trajectories')
         self.add_fxn('hold_payload', HoldPayload, 'trajectories', 'force')
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, **kwargs):
         """Classify the simulation results."""
         return {'faultmodes': {*self.return_faultmodes()}}
 
@@ -74,14 +74,14 @@ if __name__ == "__main__":
     cf = ControlFlight(trajectories=t)
     av = Aviate(trajectories=t)
 
-    cf.dynamic_behavior(1)
+    cf.dynamic_behavior()
     cf.des_traj.s
-    av.dynamic_behavior(1)
+    av.dynamic_behavior()
     av.trajectories.s
 
-    cf.dynamic_behavior(2)
+    cf.dynamic_behavior()
     cf.des_traj.s
-    av.dynamic_behavior(2)
+    av.dynamic_behavior()
     av.trajectories.s
 
     da = AircraftArchitecture(p={'flightplan':((0.0, 0.0), (25.0, 0.0), (0.0, 25.0), (25.0, 25.0))})
@@ -90,8 +90,8 @@ if __name__ == "__main__":
 
     res, hist = prop.nominal(da)
 
-    res, hist = prop.one_fault(da, 'store_and_supply_ee', 'depletion', 7, desired_result=['endclass', 'graph'])
-    res.graph.draw()
+    res, hist = prop.one_fault(da, 'store_and_supply_ee', 'depletion', 7, to_return=['classify', 'graph'])
+    res.store_and_supply_ee_depletion_t7.tend.graph.draw()
 
     hist.plot_trajectories('trajectories.s.x', 'trajectories.s.y')
     hist.plot_trajectories('trajectories.s.x',

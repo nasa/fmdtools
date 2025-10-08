@@ -45,12 +45,7 @@ class DroneFlightGridParam(CoordsParam):
     x_size: int = 120
     y_size: int = 120
     blocksize: float = 1.0
-    
     max_cost = 1000000.0
-    
-    state_grid_costs: tuple = (float, 0.0)
-    state_fuel_costs: tuple = (dict, None)
-    state_edge_weights: tuple = (dict, None)
     
 class DroneFlightGrid(Coords):
     """
@@ -83,7 +78,11 @@ class DroneFlightGrid(Coords):
     True
 
     """
+    __slots__ = ('env', 'env_coords')
     container_p = DroneFlightGridParam
+    state_grid_costs: tuple = (float, 0.0)
+    state_fuel_costs: tuple = (dict, None)
+    state_edge_weights: tuple = (dict, None)
 
     def init_properties(self, env, **kwargs):
         self.env_coords = env.c

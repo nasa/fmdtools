@@ -16,16 +16,6 @@ class FireMapParam(CoordsParam):
     x_size: int = 10
     y_size: int = 10
     blocksize: float = 5.0  # 5 kilometers
-    state_to_burn: tuple = (float, np.nan)
-    state_burning: tuple = (bool, False)
-    state_to_extinguish: tuple = (float, np.nan)
-    state_extinguished: tuple = (bool, False)
-    feature_strike: tuple = (bool, False)
-    feature_grass: tuple = (bool, False)
-    feature_scrub: tuple = (bool, False)
-    feature_forest: tuple = (bool, False)
-    feature_water: tuple = (bool, False)
-    feature_base: tuple = (bool, False)
     base_locations: tuple = ((0.0, 0.0),)
     num_strikes: int = 1
     map_type: str = "uniform-grass"
@@ -39,6 +29,16 @@ class FireMapParam(CoordsParam):
 
 class FireMap(Coords):
     container_p = FireMapParam
+    state_to_burn: tuple = (float, np.nan)
+    state_burning: tuple = (bool, False)
+    state_to_extinguish: tuple = (float, np.nan)
+    state_extinguished: tuple = (bool, False)
+    feature_strike: tuple = (bool, False)
+    feature_grass: tuple = (bool, False)
+    feature_scrub: tuple = (bool, False)
+    feature_forest: tuple = (bool, False)
+    feature_water: tuple = (bool, False)
+    feature_base: tuple = (bool, False)
 
     def init_properties(self, *args, **kwargs):
         self.set_pts(self.p.base_locations, "base", True)
@@ -177,7 +177,6 @@ class FireMap(Coords):
 class FireEnvironment(Environment):
     """Map of fire propagation properties and air bases."""
 
-    __slots__ = ()
     coords_c = FireMap
 
     def prop_time(self, tstep=1.0):
@@ -192,14 +191,13 @@ class FirePropagationState(State):
 class FirePropagation(Function):
     """Propagates fire behavior over map."""
 
-    __slots__ = ('fireenvironment')
     container_s = FirePropagationState
     flow_fireenvironment = FireEnvironment
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         self.s.perc_burned = self.fireenvironment.c.calc_perc_burned()
         self.s.leading_edge_length = len(self.fireenvironment.c.get_leading_edge())
-        if time > 0:
+        if self.t.time > 0:
             self.fireenvironment.prop_time(self.t.dt)
 
 
@@ -227,7 +225,9 @@ sim_properties={'grass': {'color': 'lightgreen'},
 if __name__ == "__main__":
 
     fm = FireMap(p={'map_type': "forest-grass-scrub"})
+# %%
     fm.show(properties=show_properties)
+
     # fm.show_property('tree')
     fm = FireMap(p=double_size_p)
     # fm.show_property('tree')
