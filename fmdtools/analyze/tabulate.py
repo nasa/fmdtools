@@ -34,6 +34,8 @@ from fmdtools.analyze.common import set_empty_multiplots
 from fmdtools.analyze.common import multiplot_legend_title, setup_plot
 
 import pandas as pd
+pd.set_option('display.width', 1000) # provides full doctest output to doctest
+pd.set_option('display.max_columns', 10) # must be consistent with local console!
 import numpy as np
 from collections import UserDict
 from matplotlib import colors as mcolors
@@ -67,7 +69,7 @@ def result_summary_fmea(result, mdlhist, *attrs, metrics=()):
     >>> from fmdtools.sim.sample import exfs
     >>> mdl = ExFxnArch()
     >>> res, hist = fault_sample(mdl, exfs)
-    >>> result_summary_fmea(res, hist, *mdl.fxns, *mdl.flows)
+    >>> result_summary_fmea(res, hist, *mdl.fxns, *mdl.flows) # doctest: +NORMALIZE_WHITESPACE
                                                              degraded       faulty  flowval
     nominal                                                        []           []  10100.0
     exfxnarch_fxns_ex_fxn_no_charge_t1              ['ex_fxn', 'exf']   ['ex_fxn']   5050.0
@@ -92,7 +94,8 @@ def result_summary_fmea(result, mdlhist, *attrs, metrics=()):
     faulttable = pd.DataFrame(fault_summaries, index=['faulty'])
     simplefmea = result.create_simple_fmea(*metrics)
     fulltable = pd.concat([degradedtable, faulttable, simplefmea.transpose()])
-    return fulltable.transpose()
+    ftt = fulltable.transpose()
+    return ftt
 
 
 def result_summary(result, mdlhist, *attrs, t="end"):
@@ -182,7 +185,6 @@ class BaseTab(UserDict):
         """
         metric = [*self.keys()][0]
         keys = [k for k in self[metric].keys()]
-        ex_key = keys[0]
 
         if hasattr(self, 'factors') and isinstance(factor, str):
             value = self.factors.index(factor)
@@ -508,9 +510,7 @@ class FMEA(BaseTab):
                                                         prefix=prefix, **met_kwar)
                     fmeadict[met][group] = sum_met
         self.data = fmeadict
-    
-    def __repr__(self):
-        return super().__repr__()
+
 
 class BaseComparison(BaseTab):
     """
@@ -567,8 +567,6 @@ class BaseComparison(BaseTab):
                     met_dict[met][fact_tup] = sub_res.get_metric(met, method=stat)
         self.data = met_dict
 
-    def __repr__(self):
-        return super().__repr__()
 
 class Comparison(BaseComparison):
     """
@@ -678,8 +676,6 @@ class Comparison(BaseComparison):
         scen_groups = samp.get_scen_groups(*factors)
         super().__init__(res, scen_groups, **kwargs)
 
-    def __repr__(self):
-        return super().__repr__()      
 
 class NestedComparison(BaseComparison):
     """
@@ -716,9 +712,6 @@ class NestedComparison(BaseComparison):
 
         self.factors = samp_factors + samps_factors
         super().__init__(res, overall_scen_groups, **kwargs)
-    
-    def __repr__(self):
-        return super().__repr__()
 
 
 class NominalEnvelope(object):
@@ -782,6 +775,7 @@ class NominalEnvelope(object):
         self.group_values = gv
 
     def __repr__(self):
+        """Display Name, parameters, and groups of NominalEnvelope in console."""
         name = self.__class__.__name__
         num_params = len(self.params)
         num_groups = len(self.variable_groups)
