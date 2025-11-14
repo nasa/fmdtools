@@ -251,12 +251,12 @@ if __name__ == "__main__":
     vals = ['fxns.store_coolant.s.level',
             'fxns.store_coolant.s.net_flow',
             'fxns.store_coolant.s.coolingbuffer']
-    endresults, mdlhist = propagate.nominal(mdl, to_Return=['endclass', 'graph'])
+    endresults, mdlhist = propagate.nominal(mdl, to_Return=['classify', 'graph'])
     mdlhist.plot_line(*vals)
 
     # check faulty run
     result, mdlhist = propagate.one_fault(mdl, 'export_coolant', 'blockage', time=2,
-                                          to_return=['endclass', 'graph'])
+                                          to_return=['classify', 'graph'])
 
     mdlhist.plot_line(*vals, time_slice=2, title='NotVisible')
     result.get_faulty().tend.graph.draw(title='NotVisible, time=2')

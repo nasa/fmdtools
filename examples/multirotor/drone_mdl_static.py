@@ -795,4 +795,4 @@ if __name__ == "__main__":
     doctest.testmod(verbose=True)
 
     static_mdl = Drone()
-    endclasses, mdlhists = propagate.single_faults(static_mdl)
+    results, mdlhists = propagate.single_faults(static_mdl)

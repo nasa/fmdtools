@@ -139,4 +139,4 @@ if __name__ == "__main__":
     # mdl_nom = EPS()
     # endresults_nom, resgraph_nom, mdlhist_nom = propagate.nominal(mdl_nom)
 
-    # endclasses, reshists = propagate.single_faults(mdl)
+    # results, hists = propagate.single_faults(mdl)

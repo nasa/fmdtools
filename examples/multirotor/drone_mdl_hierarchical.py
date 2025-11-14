@@ -303,7 +303,7 @@ if __name__ == "__main__":
 
     # check rf_mechbreack fault propagation in quad architecture:
     hierarchical_model = Drone(p=DroneParam(arch='quad'))
-    # endclass, mdlhist = fs.propagate.one_fault(hierarchical_model,
+    # result, mdlhist = fs.propagate.one_fault(hierarchical_model,
     #                                            'affect_dof.ca.comps.rf',
     #                                            'mechbreak',
     #                                            time=5)

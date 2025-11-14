@@ -62,7 +62,7 @@ A very basic model development process should thus proceed:
 #. Create model file and create place-holder major function/flow classes
 #. Connect classes in a model file and visualize structure
 #. Create low-fidelity model behaviors and verify in nominal scenario
-#. Add hazard metrics in `find_classification` 
+#. Add hazard metrics in `classify` 
 #. Add more detailed behaviors (e.g., modes, actions, components, etc) as needed
 #. Perform more complex analyses...
 

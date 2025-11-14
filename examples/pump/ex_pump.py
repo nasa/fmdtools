@@ -568,26 +568,26 @@ def script_show_graphs(**kwargs):
 def script_try_faults(**kwargs):
     """Try some fault scenarios."""
     mdl = Pump(**kwargs)
-    endclass, mdlhist = propagate.one_fault(mdl, 'export_water', 'block', time=29,
+    result, mdlhist = propagate.one_fault(mdl, 'export_water', 'block', time=29,
                                             staged=True)
 
-    endclass, mdlhist = propagate.one_fault(
+    result, mdlhist = propagate.one_fault(
         mdl, 'import_water', 'no_wat', time=29, staged=True)
-    endclass, mdlhist = propagate.nominal(mdl, mdl_kwargs=dict(track='all'))
+    result, mdlhist = propagate.nominal(mdl, mdl_kwargs=dict(track='all'))
     fig, ax = mdlhist.plot_line('flows.wat_2.s.flowrate', 'i.on')
     mdl = Pump(**kwargs)
 
-    endclass, mdlhist = propagate.one_fault(
+    result, mdlhist = propagate.one_fault(
         mdl, 'import_water', 'no_wat', time=29, staged=True)
 
-    endclass, mdlhist = propagate.one_fault(
+    result, mdlhist = propagate.one_fault(
         mdl, 'move_water', 'mech_break', time=0, staged=False)
 
 
 def script_fault_degradation_tables(**kwargs):
     """Show fault/degradation tables/plots for a given fault scenario."""
     mdl = Pump(**kwargs, track="all")
-    endclass, mdlhist = propagate.one_fault(
+    result, mdlhist = propagate.one_fault(
         mdl, 'import_ee', 'no_v', time=29, staged=True)
 
     ks = mdl.get_roles_as_dict("fxn", "flow", flex_prefixes=True)
@@ -613,19 +613,19 @@ def script_sample_faults(track='all', **kwargs):
     faultapp.add_faultsample("testsample", "fault_phases", "testdomain",
                              phasemap=mdl.sp.phases)
 
-    endclasses, mdlhists = propagate.fault_sample(mdl, faultapp)
+    results, mdlhists = propagate.fault_sample(mdl, faultapp)
     flat = mdlhists.flatten()
 
     gh = mdlhists.get_comp_groups('flows.ee_1.s.current')
 
-    endclasses, mdlhists_staged = propagate.fault_sample(mdl, faultapp,
-                                                         staged=True, track='all')
+    results, mdlhists_staged = propagate.fault_sample(mdl, faultapp,
+                                                      staged=True, track='all')
 
     tab = an.tabulate.result_summary_fmea(
-        endclasses, mdlhists, *mdl.fxns, *mdl.flows)
+            results, mdlhists, *mdl.fxns, *mdl.flows)
 
     h = mdlhists.get_expected(app=faultapp, with_nominal=True)
-    ec = endclasses.get_expected()
+    ec = results.get_expected()
 
     # degsumm = h.get_summary(*mdl.fxns, *mdl.flows)
 
@@ -633,7 +633,7 @@ def script_sample_faults(track='all', **kwargs):
 
 
 
-    c = an.tabulate.Comparison(endclasses, faultapp, default_stat=np.average,
+    c = an.tabulate.Comparison(results, faultapp, default_stat=np.average,
                                metrics=['cost', 'rate', 'expected_cost'],
                                ci_metrics=['cost'])
     c.as_table()
@@ -641,7 +641,7 @@ def script_sample_faults(track='all', **kwargs):
     c.as_plot("cost")
     c.as_plots("cost", "rate", "expected_cost", cols=2)
 
-    fmea = an.tabulate.FMEA(endclasses, faultapp)
+    fmea = an.tabulate.FMEA(results, faultapp)
     fmea.as_table()
     fmea.sort_by_metric("expected_cost")
     fmea.as_plot("expected_cost", color_factor="function")
@@ -652,7 +652,7 @@ def script_sample_faults(track='all', **kwargs):
     mdlhists.plot_line("flows.ee_1.s.current", "flows.sig_1.s.power",
                        "fxns.move_water.s.eff", "flows.wat_1.s.flowrate", cols=3)
 
-    endclasses.plot_metric_dist("rate", "cost", "expected_cost")
+    results.plot_metric_dist("rate", "cost", "expected_cost")
 
 
 if __name__ == "__main__":

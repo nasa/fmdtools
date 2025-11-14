@@ -42,8 +42,8 @@ def delay_test(delays=[i for i in range(0, 100, 10)]):
 def one_delay_helper(delay):
     """Generate output over the given input delays."""
     mdl = Pump(p=PumpParam(delay=delay))
-    endclasses, mdlhists = propagate.one_fault(mdl, 'export_water', 'block')
-    return endclasses
+    results, mdlhists = propagate.one_fault(mdl, 'export_water', 'block')
+    return results
 
 
 def compare_pools(mdl, app, pools, staged=False, track=False, verbose=True,
@@ -81,7 +81,7 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose=True,
     """
     exectimes = {}
     starttime = time.time()
-    endclasses, mdlhists = propagate.fault_sample(mdl, app, pool=False, staged=staged,
+    results, mdlhists = propagate.fault_sample(mdl, app, pool=False, staged=staged,
                                                   showprogress=False,
                                                   track_times=track_times,
                                                   to_return={})
@@ -98,7 +98,7 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose=True,
                           track_times=track_times,
                           to_return={},
                           auto_close_pool=False)
-        endclasses, mdlhists = propagate.fault_sample(mdl, app, **loc_kwargs)
+        results, mdlhists = propagate.fault_sample(mdl, app, **loc_kwargs)
         exectime_par = time.time() - starttime
         if verbose:
             print(pool+" exec time: "+str(exectime_par))
@@ -108,8 +108,8 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose=True,
 
 def run_model():
     mdl = Pump()
-    endclasses, mdlhist=propagate.nominal(mdl)
-    return endclasses
+    results, mdlhist=propagate.nominal(mdl)
+    return results
 
 def parallel_mc(iters=10):
     """run for performance evaluation of model with asyncronous execution"""
@@ -132,8 +132,8 @@ def parallel_mc2(iters=10):
 def one_fault_helper(args):
     """Helper function for parallel_mc3 to run in pool.map."""
     mdl = Pump()
-    endclasses, mdlhists = propagate.one_fault(mdl, args[0], args[1])
-    return endclasses, mdlhists
+    results, mdlhists = propagate.one_fault(mdl, args[0], args[1])
+    return results, mdlhists
 
 
 def parallel_mc3():
@@ -150,7 +150,7 @@ def parallel_mc3():
 def instantiate_pools(cores, with_pathos=False):
     """Instantiate multiprocessing pools for comparison."""
     if with_pathos:
-        from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
+        from pathos.pools import ParallelPool, ProcessPool, ThreadPool
         return {'multiprocessing': mp.Pool(cores),
                 'ProcessPool': ProcessPool(nodes=cores),
                 'ParallelPool': ParallelPool(nodes=cores),

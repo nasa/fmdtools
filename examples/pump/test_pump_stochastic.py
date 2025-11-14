@@ -160,7 +160,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         ps.add_variable_replicates([], replicates=10)
         res, hist = prop.parameter_sample(mdl, ps,
                                           showprogress=False, warn_faults=False)
-        res['rep0_var_0.endclass.cost'] = 10.0
+        res['rep0_var_0.classify.cost'] = 10.0
         # an.plot.nominal_vals_1d(app, endres, 'r.seed', metric="nonsense")
         title = "should show at least one red line over range of seeds"
 
@@ -183,7 +183,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
         res, hist = prop.parameter_sample(mdl, ps2,
                                           showprogress=False, warn_faults=False)
-        res['delay_10_20.endclass.cost'] = 10.0
+        res['delay_10_20.classify.cost'] = 10.0
         title = ("should show at least one red x over range of seeds," +
                  " probs, and delay={1, 10}")
         f_kwargs = {'alpha': 1.0}

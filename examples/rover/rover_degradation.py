@@ -238,7 +238,7 @@ if __name__ == "__main__":
 
     ps = ParameterSample()
     ps.add_variable_replicates([], replicates=100, seed_comb='independent')
-    endclasses_deg, mdlhists_deg = prop.parameter_sample(deg_mdl, ps, run_stochastic=True)
+    results_deg, mdlhists_deg = prop.parameter_sample(deg_mdl, ps, run_stochastic=True)
     fig, ax = mdlhists_deg.plot_line('s.wear', 's.corrosion', 's.friction', 's.drift',
                                  'r.s.corrode_rate', 'r.s.wear_rate', 'r.s.yaw_load',
                                  title="", xlabel='lifecycle time (months)')
@@ -284,20 +284,20 @@ if __name__ == "__main__":
     # )
 
     # mdl = Rover()
-    # behave_endclasses, behave_mdlhists = prop.nominal_approach(mdl, behave_nomapp)
+    # behave_results, behave_mdlhists = prop.nominal_approach(mdl, behave_nomapp)
     # f = plt.figure()
     # f = plot_trajectories(behave_mdlhists)
-    # an.plot.nominal_vals_2d(behave_nomapp, behave_endclasses, "inputparams.t", "inputparams.scen",
+    # an.plot.nominal_vals_2d(behave_nomapp, behave_results, "inputparams.t", "inputparams.scen",
     #                         nom_func=lambda x: x == 'nominal',
     #                         metric='classification')
 
     # comp_groups = {
-    #     "group_1": [*behave_endclasses.nest().keys()][:100],
-    #     "group_2": [*behave_endclasses.nest().keys()][100:],
+    #     "group_1": [*behave_results.nest().keys()][:100],
+    #     "group_2": [*behave_results.nest().keys()][100:],
     # }
 
 
-    # an.plot.metric_dist(behave_endclasses, 'line_dist', 'end_dist',
+    # an.plot.metric_dist(behave_results, 'line_dist', 'end_dist',
     #                     comp_groups=comp_groups, alpha=0.5, bins=10,
     #                     metric_bins={'x':20})
 
@@ -327,7 +327,7 @@ if __name__ == "__main__":
     #     gen_long_degPSF_param, "nomapp_hum_long", experience_param, scen=(0, 25, 1)
     # )
 
-    # endclasses, mdlhists_hum_long = prop.nominal_approach(
+    # results, mdlhists_hum_long = prop.nominal_approach(
     #     fxn_deg_long, nomapp_hum_long, run_stochastic=True
     # )
     # histname_long = "nomapp_hum_long"
@@ -347,7 +347,7 @@ if __name__ == "__main__":
     # )
     # nomapp_short_long.update_factor_seeds(histname_short, "scen")
 
-    # endclasses, mdlhists_hum_short_long = prop.nominal_approach(
+    # results, mdlhists_hum_short_long = prop.nominal_approach(
     #     fxn_deg_short, nomapp_short_long, run_stochastic=True
     # )
 

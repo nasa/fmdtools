@@ -436,7 +436,7 @@ if __name__ == '__main__':
 
     mdl = Tank(track='all')
 
-    endclass, mdlhist = propagate.one_fault(mdl, 'human.aa.acts.look', 'not_visible', time=2,
+    res, mdlhist = propagate.one_fault(mdl, 'human.aa.acts.look', 'not_visible', time=2,
                                             staged=True)
 
     from fmdtools.define.architecture.function import FunctionArchitectureGraph
@@ -477,14 +477,14 @@ if __name__ == '__main__':
     resgraph.get_faulty().tend.graph.draw(title='turn_wrong_valve, t=end')
 
     # run all faults - note: all faults get caught!
-    endclasses, hist = propagate.single_faults(mdl)
+    res, hist = propagate.single_faults(mdl)
 
     mdl = Tank(p=TankParam(reacttime=2), sp=dict(dt=1.0))
     fd = FaultDomain(mdl)
     fd.add_all()
     fs = FaultSample(fd)
     fs.add_fault_times((0, 5, 10, 15, 20))
-    endclasses, hist = propagate.fault_sample(mdl, fs)
+    res, hist = propagate.fault_sample(mdl, fs)
 
     mdl.fxns['human'].t.dt = 2.0
     mg = mdl.as_modelgraph()

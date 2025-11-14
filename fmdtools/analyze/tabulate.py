@@ -5,7 +5,7 @@ Translates simulation outputs to pandas tables for display, export, etc.
 
 Uses methods:
 
-- :func:`result_summary_fmea`: Make a table of endclass metrics, along with degraded functions/flows.
+- :func:`result_summary_fmea`: Make a table of metrics from classify(), along with degraded functions/flows.
 - :func:`result_summary`: Make a a table of a summary dictionary from a given model run.
 
 and classes:
@@ -111,7 +111,7 @@ def result_summary(result, mdlhist, *attrs, t="end"):
     *attrs : str
         Names of attributes to check in the history for degradation/faulty.
     t : float
-        Time to get the endclass from. Default is "end".
+        Time to get the classify dict from. Default is "end".
 
     Returns
     -------
@@ -421,7 +421,7 @@ class BaseTab(UserDict):
 
 class FMEA(BaseTab):
     """
-    Make a user-definable fmea of the endclasses of a set of fault scenarios.
+    Make a user-definable fmea of the classify metrics for a set of fault scenarios.
 
     Parameters
     ----------
@@ -436,8 +436,8 @@ class FMEA(BaseTab):
         Way of grouping fmea rows by scenario fields.
         The default is ('function', 'fault').
     prefix : str
-        Prefix for the metrics to use for get_metric. Default is 'endclass.', which
-        gets the metrics from endclass (output of classify() method) only.
+        Prefix for the metrics to use for get_metric. Default is 'tend.classify', which
+        gets the metrics from the classify() at the final timestep only.
     rates/weights : str(s)
         Weighting or rate factor to use for weighted averages and expectations.
         Can be any value from the result (e,g. rates='rate') or the FaultSample
@@ -734,7 +734,7 @@ class NominalEnvelope(object):
     res : Result
         Result dict for the set of simulations produced by running the model over ps
     metric : str
-        Value to get from endclasses for the scenario(s). The default is 'cost'.
+        Value to get from classify metrics for the scenario(s). The default is 'cost'.
     x_param : str
         Parameter range desired to visualize in the operational envelope. Can be any
         property that changes over the nomapp
@@ -755,7 +755,7 @@ class NominalEnvelope(object):
         res : Result
             Result dict for the set of simulations produced by running the model over ps
         metric : str
-            Value to get from endclasses for the scenario(s). The default is 'cost'.
+            Value to get from classify() metrics for the scenario(s). The default is 'cost'.
         x_param : str
             Parameter range desired to visualize in the operational envelope. Can be any
             property that changes over the nomapp

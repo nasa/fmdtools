@@ -929,7 +929,7 @@ if __name__ == "__main__":
     app.add_faultdomain("drone_faults", "all")
     app.add_faultsample("move_scens", "fault_phases", "drone_faults", "move",
                         phasemap='plan_path', args=(3,))
-    endclasses, mdlhists = prop.fault_sample(mdl, app, staged=True)
+    results, mdlhists = prop.fault_sample(mdl, app, staged=True)
 
     # plot trajectories over fault scenarios
     fault_kwargs = {'alpha': 0.2, 'color': 'red'}

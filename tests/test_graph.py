@@ -102,7 +102,7 @@ if __name__ == '__main__':
     runner.run(suite_for_plots(ModelGraphTests, plottests=True))
 
     mdl = Pump()
-    des_res = ['graph', 'endclass', 'endfaults']
+    des_res = ['graph', 'classify', 'endfaults']
     endresults, mdlhist = propagate.one_fault(mdl, 'move_water', 'short', time=10,
                                               to_return=des_res, track='all')
 
