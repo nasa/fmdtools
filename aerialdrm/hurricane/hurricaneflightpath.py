@@ -84,7 +84,7 @@ class DroneFlightGrid(Coords):
     state_fuel_costs: tuple = (dict, None)
     state_edge_weights: tuple = (dict, None)
 
-    def init_properties(self, env, **kwargs):
+    def init_properties(self, env={}, **kwargs):
         self.env_coords = env.c
         self.env = env
         for i in range(self.p.y_size):
@@ -136,7 +136,7 @@ class DroneFlightGrid(Coords):
             except (AttributeError, KeyError):
                 print("No such UAV geometry architecture exists")
             uav_geom = self.env.ga.geoms()['uav']
-            coarse_block = self.env.p.blocksize
+            coarse_block = self.env.c.p.blocksize
             fine_block = self.p.blocksize
             coarse_unsafe_pts = [pt for pt in self.env_coords.pts if uav_geom.at(pt, 'safety')]
             for (cx, cy) in coarse_unsafe_pts:
@@ -248,7 +248,7 @@ class DroneFlightGrid(Coords):
                                    weight = "weight"))
         cost = sum(G[u][v]["weight"] for u, v in zip(path[:-1], path[1:]))
         if cost > self.p.max_cost:
-            G_test = self.nx_graph_gen(max_distance, disallowed_cost, occupied_cost, restricted_cost, 0)
+            G_test = self.nx_graph_gen(max_distance, disallowed_cost, occupied_cost, restricted_cost, 0, obstacle)
             cost_test = nx.astar_path_length(G_test, start, goal, heuristic = heuristic, weight = "weight")
             if cost_test < self.p.max_cost:
                 """detect fuel infeasibility as opposed to environmental"""

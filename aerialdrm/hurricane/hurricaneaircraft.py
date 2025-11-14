@@ -57,7 +57,7 @@ class HurricaneControlFlight(ControlFlight):
     flow_environment = HurricaneEnvironment
     container_s = HurricaneControlState
     container_p = HurricaneControlParameter
-    default_track = {'s': ["closest_dist", 'planned']}
+    default_track = {'s': ["closest_dist", 'planned', 'pt'], 'm': ['mode']}
     
     def set_faultmode(self):
         super().set_faultmode()
@@ -85,6 +85,7 @@ class HurricaneControlFlight(ControlFlight):
         if not self.s.planned:
             self.replan_mission()
             self.s.planned = True
+        super().static_behavior()
             
     def gen_flight_grid(self):
         dfgp = DroneFlightGridParam(
@@ -92,7 +93,7 @@ class HurricaneControlFlight(ControlFlight):
             disallowed_cost = self.p.disallowed_cost,
             occupied_cost = self.p.occupied_cost,
             restricted_cost = self.p.restricted_cost)
-        grid = DroneFlightGrid(self.environment, p = dfgp)
+        grid = DroneFlightGrid(env = self.environment, p = dfgp)
         return grid
         
     def replan_mission(self):
@@ -145,9 +146,8 @@ class HurricaneControlFlight(ControlFlight):
             obstacle = obstacle
             )
 
-        if new_path == None:
-        # CHATGPT HELP WITH THIS later. for now, assume new_path always exists.
-            return
+        # if new_path == None:
+        #     return
         if new_path and new_path[0] == (curr_x, curr_y):
             new_path = new_path[1:]
         self.s.flightplan = new_path
