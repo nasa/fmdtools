@@ -107,7 +107,7 @@ class GeomArchitecture(Architecture):
 
     def init_architecture(self, **kwargs):
         """Use this placeholder method to define custom architectures."""
-        a = 1
+        pass
 
     def geoms(self):
         """Return a dict of all points, lines, and polygons."""

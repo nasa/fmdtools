@@ -637,7 +637,7 @@ class Location(MultiFlow):
 
 class RequestState(State):
     """
-    State  defining communications to/from ATCs and assets
+    State  defining communications to/from ATCs and assets.
 
     Fields
     ------
@@ -678,7 +678,7 @@ class Requests(CommsFlow):
         else:
             condition = False
         if condition:
-            a=1
+            pass
         return condition
 
     def indicate_duplicate_land(self):
