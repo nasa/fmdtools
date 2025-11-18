@@ -785,7 +785,7 @@ class BaseObject(metaclass=BaseType):
             mem += mem_profile[rolename]
         return mem, mem_profile
 
-    def create_hist(self, timerange):
+    def create_hist(self, timerange, track=None):
         """
         Create state history of the object over the timerange.
 
@@ -798,6 +798,9 @@ class BaseObject(metaclass=BaseType):
         -------
         hist : History
             A history of each recorded block property over the given timerange.
+        track : Track
+            Argument to set track. Only used if history has not already been created.
+            Default is None.
         """
         if hasattr(self, 'h') and self.h:
             len_timerange = len(timerange)
@@ -805,6 +808,8 @@ class BaseObject(metaclass=BaseType):
                 self.h = self.h.cut(reshape_to=len_timerange)
             return self.h
         else:
+            if track is not None:
+                self.init_track(track)
             track = self.track
             hist = History()
             if track:

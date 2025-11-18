@@ -81,8 +81,8 @@ class Flow(BaseObject):
         """Return fmdtools type of the model class."""
         return Flow
 
-    def create_hist(self, timerange):
-        self.h = BaseObject.create_hist(self, timerange)
+    def create_hist(self, timerange, track=None):
+        self.h = BaseObject.create_hist(self, timerange, track=track)
         return self.h
 
 

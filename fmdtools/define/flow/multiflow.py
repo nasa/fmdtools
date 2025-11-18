@@ -290,7 +290,7 @@ class MultiFlow(Flow):
             cop.create_local(local.name, **local.copy_mut_containers(), as_copy=True)
         return cop
 
-    def create_hist(self, timerange):
+    def create_hist(self, timerange, track=None):
         """
         Create history for entire flow structure (with sub-flows).
 
@@ -318,7 +318,7 @@ class MultiFlow(Flow):
         s.x:                            array(3)
         s.y:                            array(3)
         """
-        super().create_hist(timerange)
+        super().create_hist(timerange, track=track)
         for localname in self.locals:
             local_flow = getattr(self, localname)
             self.h[localname] = local_flow.create_hist(timerange)
