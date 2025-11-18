@@ -4604,7 +4604,7 @@
 <val>1</val>
 </isAbstract>
 <name>
-<val>find_classification</val>
+<val>classify</val>
 </name>
 </Operation>
 <Operation id="b2bb5fff-1096-11ee-9c2a-10f60af7e3a0">
@@ -8775,7 +8775,7 @@
 <val>1</val>
 </isStatic>
 <name>
-<val>find_classification</val>
+<val>classify</val>
 </name>
 </Operation>
 <Diagram id="8617c291-0d67-11ef-acbd-300505445c7c">

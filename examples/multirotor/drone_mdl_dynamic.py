@@ -428,7 +428,7 @@ class Drone(FunctionArchitecture):
 
         Returns
         -------
-        endclass : dict
+        result : dict
             Rate, cost, and expected cost for scenario.
         """
         if -5 > self.h.flows.dofs.s.x[-1] or 5 < self.h.flows.dofs.s.x[-1]:
@@ -439,7 +439,7 @@ class Drone(FunctionArchitecture):
             lostcost = 50000
         else:
             lostcost = 0
-        a = 1
+
         if any(self.h.fxns.hold_payload.m.faults['break']):
             crashcost = 100000
         else:

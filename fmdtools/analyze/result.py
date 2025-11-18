@@ -696,7 +696,7 @@ class Result(UserDict):
 
     def save(self, filename, filetype="", overwrite=False, result_id=''):
         """
-        Save a given result variable (endclasses or mdlhists) to a file filename.
+        Save a given result variable (result or history) to a file filename.
 
         Files can be saved as npz, csv, or json.
 
@@ -768,7 +768,7 @@ class Result(UserDict):
         return pd.DataFrame.from_dict(newdict)
 
     def create_simple_fmea(self, *metrics):
-        """Make a simple FMEA-stype table of the metrics in the endclasses
+        """Make a simple FMEA-stype table of the metrics in the end-state classification
         of a list of fault scenarios run. If metrics not provided, returns all"""
         nested = {k: {**v.tend.classify} for k, v in self.nest(levels=1).items()}
         tab = pd.DataFrame.from_dict(nested).transpose()
@@ -1051,9 +1051,9 @@ class Result(UserDict):
             bins = np.histogram(fulldata, metric_bins.get(plot_value, num_bins))[1]
             if not i % cols:
                 ax.set_ylabel(ylabel)
-            for group, endclasses in groupmetrics.items():
+            for group, results in groupmetrics.items():
                 local_kwargs = {**kwargs, **indiv_kwargs.get(group, {})}
-                x = [*endclasses.get_values(plot_value).values()]
+                x = [*results.get_values(plot_value).values()]
                 ax.hist(x, bins, label=group, **local_kwargs)
 
         set_empty_multiplots(axs, len(plot_values), cols, xlab_ang=0, set_above=False)
@@ -1064,7 +1064,7 @@ class Result(UserDict):
 
 def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=Result):
     """
-    Load a given (endclasses or mdlhists) results dictionary from a (npz/csv/json) file.
+    Load a given (result or history) results dictionary from a (npz/csv/json) file.
 
     e.g. a file saved using process.save_result or save_args in propagate functions.
 

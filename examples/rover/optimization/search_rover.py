@@ -707,7 +707,7 @@ def visualizations(soln, method="EA", figsize=(4, 4), ax=False, legend=True,
 
     fault_time = fs.get_times()[0]
     end_time = phasemaps['plan_path'].phases['drive'][1]+25
-    endclasses_range, mdlhists_range = prop.fault_sample(mdl_range, fs, staged=True,
+    results_range, mdlhists_range = prop.fault_sample(mdl_range, fs, staged=True,
                                                          showprogress=False,
                                                          mdl_kwargs={'sp': {'end_time': end_time}})
     fig = mdlhists_range.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',

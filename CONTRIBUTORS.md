@@ -26,6 +26,7 @@ Alumni and Interns
 * Inga Girshfeld
 * [Cole Jetton](https://github.com/ColeJetton)
 * [Zain Khatri](https://github.com/zainkhatri)
+* [Cody Wang](https://github.com/ydoccr)
 
 fmdtools at OSU
 -------------------------

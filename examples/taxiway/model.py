@@ -146,7 +146,7 @@ if __name__ == "__main__":
                                                     11:{"graph.flows.requests":(CommsFlowGraph, req_args),
                                                         "graph.flows.ground":(MultiFlowGraph, ground_args)},
                                                     19:{"graph.flows.requests":{'include_glob':False, "ports_only":True}},
-                                                    20:["graph"], 120:"endclass"})
+                                                    20:["graph"], 120: "classify"})
     ind_hist = create_fault_scen_metrics(mdlhist)
     fig, ax = ind_hist.plot_line("degraded_fields",
                                  "cycled_assets",
@@ -163,7 +163,7 @@ if __name__ == "__main__":
             93: {"graph.flows.location": {"include_glob": False}},
             110: {"graph.flows.location": {"include_glob": False}},
             20: ["graph"],
-            120: ["graph", "endclass"],
+            120: ["graph", "classify"],
         },
     )
 
@@ -207,7 +207,7 @@ if __name__ == "__main__":
         to_return={
             11: {"graph.flows.requests": {}},
             20: ["graph"],
-            120: "endclass",
+            120: "classify",
         },
     )
     plot_tstep(mdl, mdlhist.faulty, 110, title="Aircraft crashed")

@@ -110,7 +110,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 # What is fmdtools? Repo Structure
 
 
-[Repository] (https://github.com/nasa/fmdtools/)
+[Repository](https://github.com/nasa/fmdtools/)
 - `/fmdtools`: installable package directory
 - `/examples`: example models with demonstrative notebooks and tests
 - `/docs`: [HTML Documentation](https://nasa.github.io/fmdtools/) (source files at `/docs-source`)
@@ -122,7 +122,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 <style scoped>section{font-size:27px;}</style>
 # Activity: Download and Install fmdtools
 
-- repo link: https://github.com/nasa/fmdtools/
+- repo link: [https://github.com/nasa/fmdtools/](https://github.com/nasa/fmdtools/)
 - set up repo:
     - create `path/to/fmdtools` folder for repo 
         - (usually in `/documents/GitHub`)

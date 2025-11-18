@@ -202,7 +202,7 @@ def load_folder(folder, filetype):
     Returns
     -------
     files_to_read : list
-        files to load for endclasses/mdlhists.
+        files to load for results/mdlhists.
     """
     files = os.listdir(folder)
     files_toread = []

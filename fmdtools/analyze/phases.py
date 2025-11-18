@@ -509,7 +509,7 @@ def phaseplot(phasemaps, modephases=[], mdl=[], dt=1.0, singleplot=True,
         return figs
 
 
-def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.01,
+def samplemetric(faultsamp, res, metric='cost', rad='rate', rad_scale=0.01,
                  label_rad="{:.2e}", line='stem', title="", ylims=None, time="end",
                  **scen_kwargs):
     """
@@ -521,7 +521,7 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
     ----------
     faultsamp : FaultSamp
         Fault sample defining the underlying samples to take with phasemap
-    endclasses : Result
+    res : Result
         A Result with the end classification of each fault (metrics, etc)
     metric : str, optional
         Metric to plot. The default is 'cost'
@@ -554,7 +554,7 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
     ax = faultsamp.phasemap.plot(ax=axes[1], fig=fig)
 
     # cost/metric plots
-    costs = np.array([endclasses.get(scen+'.'+t_key(time)).classify[metric]
+    costs = np.array([res.get(scen+'.'+t_key(time)).classify[metric]
                       for scen in scens])
     times = np.array([v.time for v in scens.values()])
     timesort = np.argsort(times)
@@ -568,7 +568,7 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
 
     # rate/metric plot
     if rad:
-        sizes = np.array([endclasses.get(scen+'.'+t_key(time)).classify[rad] for scen in scens])
+        sizes = np.array([res.get(scen+'.'+t_key(time)).classify[rad] for scen in scens])
         sizes = sizes[timesort]
         rad_scale *= np.max(abs(costs))/np.max(abs(sizes))
         axes[0].scatter(times, costs, s=rad_scale*sizes, label=rad, alpha=0.5)
@@ -591,7 +591,7 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
     return fig
 
 
-def samplemetrics(app, endclasses, **kwargs):
+def samplemetrics(app, res, **kwargs):
     """
     Plot costs and rates of a set of faults injected over time according to the sample.
 
@@ -599,7 +599,7 @@ def samplemetrics(app, endclasses, **kwargs):
     ----------
     app : sampleapproach
         The sample approach used to run the list of faults
-    endclasses : Result
+    res : Result
         Results over the scenarios defined in app.
     **kwargs : kwargs
         kwargs to samplemetric
@@ -611,7 +611,7 @@ def samplemetrics(app, endclasses, **kwargs):
     """
     figs = {}
     for faultsampname, faultsamp in app.faultsamples.items():
-        figs[faultsampname] = samplemetric(faultsamp, endclasses,
+        figs[faultsampname] = samplemetric(faultsamp, res,
                                            title=faultsampname, **kwargs)
     return figs
 

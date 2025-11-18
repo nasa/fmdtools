@@ -224,7 +224,7 @@ class CommonTests():
                 same = 0
         self.assertEqual(same, 0)
 
-    def check_onerun_save(self, mdl, runtype, mfile, ecfile, faultscen={}):
+    def check_onerun_save(self, mdl, runtype, histfile, resfile, faultscen={}):
         """
         Check if the results from the mdl are the same when saved.
 
@@ -233,19 +233,19 @@ class CommonTests():
         Parameters
         ----------
         mdl : Model
-        mfile : name of file to save mdlhists in
-        ecfile : name of file to save endclasses in
+        histfile : name of file to save mdlhists in
+        resfile : name of file to save endclasses in
         runtype : propagate method to test ('nominal', 'one_fault', 'sequence')
         faultscen : dict/tuple, optional
             - for one_fault, the (functionname, faultname, faulttime)
             - for sequence, the faultseq dict input
         """
-        if os.path.exists(mfile):
-            os.remove(mfile)
-        if os.path.exists(ecfile):
-            os.remove(ecfile)
+        if os.path.exists(histfile):
+            os.remove(histfile)
+        if os.path.exists(resfile):
+            os.remove(resfile)
         check_link = False
-        kw = {'history_filename': mfile, 'result_filename': ecfile, 'tosave': True,
+        kw = {'history_filename': histfile, 'result_filename': resfile, 'tosave': True,
               'showprogress': False}
         if runtype == 'nominal':
             res, hist = prop.nominal(mdl, **kw)
@@ -258,11 +258,11 @@ class CommonTests():
         else:
             raise Exception("Invalid Run Type" + runtype)
 
-        self.check_same_file(hist, mfile, check_link=check_link)
-        self.check_same_file(res, ecfile)
+        self.check_same_file(hist, histfile, check_link=check_link)
+        self.check_same_file(res, resfile)
 
-        os.remove(mfile),
-        os.remove(ecfile)
+        os.remove(histfile),
+        os.remove(resfile)
 
     def check_same_fmea(self, fs, res, mdl, val='expected_cost'):
         """Test to ensure results from the fmea are the same over all options."""
@@ -295,7 +295,7 @@ class CommonTests():
                                 res_saved_flattened['time'][0])
 
     def compare_results(self, res_true, res_check):
-        """Check if two flattened endclass/mdlhist results dictionaries are the same."""
+        """Check if two flattened result/history dictionaries are the same."""
         # test to see that all values of the arrays in the hist are the same
         for key in res_true:
             val = res_true[key]

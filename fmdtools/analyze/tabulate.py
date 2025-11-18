@@ -5,7 +5,7 @@ Translates simulation outputs to pandas tables for display, export, etc.
 
 Uses methods:
 
-- :func:`result_summary_fmea`: Make a table of endclass metrics, along with degraded functions/flows.
+- :func:`result_summary_fmea`: Make a table of metrics from classify(), along with degraded functions/flows.
 - :func:`result_summary`: Make a a table of a summary dictionary from a given model run.
 
 and classes:
@@ -34,6 +34,8 @@ from fmdtools.analyze.common import set_empty_multiplots
 from fmdtools.analyze.common import multiplot_legend_title, setup_plot
 
 import pandas as pd
+pd.set_option('display.width', 1000) # provides full doctest output to doctest
+pd.set_option('display.max_columns', 10) # must be consistent with local console!
 import numpy as np
 from collections import UserDict
 from matplotlib import colors as mcolors
@@ -67,19 +69,17 @@ def result_summary_fmea(result, mdlhist, *attrs, metrics=()):
     >>> from fmdtools.sim.sample import exfs
     >>> mdl = ExFxnArch()
     >>> res, hist = fault_sample(mdl, exfs)
-    >>> result_summary_fmea(res, hist, *mdl.fxns, *mdl.flows)
-                                                             degraded  ...  flowval
-    nominal                                                        []  ...  10100.0
-    exfxnarch_fxns_ex_fxn_no_charge_t1              ['ex_fxn', 'exf']  ...   5050.0
-    exfxnarch_fxns_ex_fxn_no_charge_t2              ['ex_fxn', 'exf']  ...   5150.0
-    exfxnarch_fxns_ex_fxn2_no_charge_t1  ['ex_fxn', 'ex_fxn2', 'exf']  ...   5050.0
-    exfxnarch_fxns_ex_fxn2_no_charge_t2  ['ex_fxn', 'ex_fxn2', 'exf']  ...   5150.0
-    exfxnarch_fxns_ex_fxn_short_t1                  ['ex_fxn', 'exf']  ...   5050.0
-    exfxnarch_fxns_ex_fxn_short_t2                  ['ex_fxn', 'exf']  ...   5150.0
-    exfxnarch_fxns_ex_fxn2_short_t1      ['ex_fxn', 'ex_fxn2', 'exf']  ...   5050.0
-    exfxnarch_fxns_ex_fxn2_short_t2      ['ex_fxn', 'ex_fxn2', 'exf']  ...   5150.0
-    <BLANKLINE>
-    [9 rows x 3 columns]
+    >>> result_summary_fmea(res, hist, *mdl.fxns, *mdl.flows) # doctest: +NORMALIZE_WHITESPACE
+                                                             degraded       faulty  flowval
+    nominal                                                        []           []  10100.0
+    exfxnarch_fxns_ex_fxn_no_charge_t1              ['ex_fxn', 'exf']   ['ex_fxn']   5050.0
+    exfxnarch_fxns_ex_fxn_no_charge_t2              ['ex_fxn', 'exf']   ['ex_fxn']   5150.0
+    exfxnarch_fxns_ex_fxn2_no_charge_t1  ['ex_fxn', 'ex_fxn2', 'exf']  ['ex_fxn2']   5050.0
+    exfxnarch_fxns_ex_fxn2_no_charge_t2  ['ex_fxn', 'ex_fxn2', 'exf']  ['ex_fxn2']   5150.0
+    exfxnarch_fxns_ex_fxn_short_t1                  ['ex_fxn', 'exf']   ['ex_fxn']   5050.0
+    exfxnarch_fxns_ex_fxn_short_t2                  ['ex_fxn', 'exf']   ['ex_fxn']   5150.0
+    exfxnarch_fxns_ex_fxn2_short_t1      ['ex_fxn', 'ex_fxn2', 'exf']  ['ex_fxn2']   5050.0
+    exfxnarch_fxns_ex_fxn2_short_t2      ['ex_fxn', 'ex_fxn2', 'exf']  ['ex_fxn2']   5150.0
     """
     from fmdtools.analyze.history import History
     deg_summaries = {}
@@ -94,7 +94,8 @@ def result_summary_fmea(result, mdlhist, *attrs, metrics=()):
     faulttable = pd.DataFrame(fault_summaries, index=['faulty'])
     simplefmea = result.create_simple_fmea(*metrics)
     fulltable = pd.concat([degradedtable, faulttable, simplefmea.transpose()])
-    return fulltable.transpose()
+    ftt = fulltable.transpose()
+    return ftt
 
 
 def result_summary(result, mdlhist, *attrs, t="end"):
@@ -110,7 +111,7 @@ def result_summary(result, mdlhist, *attrs, t="end"):
     *attrs : str
         Names of attributes to check in the history for degradation/faulty.
     t : float
-        Time to get the endclass from. Default is "end".
+        Time to get the classify dict from. Default is "end".
 
     Returns
     -------
@@ -146,7 +147,14 @@ class BaseTab(UserDict):
     factors : list
         List of factors in the table
     """
-
+    def __repr__(self):
+        name = self.__class__.__name__
+        metrics = list(self.keys())
+        num_metrics = len(metrics)
+        num_entries = len(next(iter(self.values()))) if metrics else 0
+        return (f"<{name}: {num_metrics} metric(s), "
+                f"{num_entries} entries, metrics={metrics}>")
+    
     def sort_by_factors(self, *factors):
         """
         Sort the table by its factors.
@@ -177,7 +185,6 @@ class BaseTab(UserDict):
         """
         metric = [*self.keys()][0]
         keys = [k for k in self[metric].keys()]
-        ex_key = keys[0]
 
         if hasattr(self, 'factors') and isinstance(factor, str):
             value = self.factors.index(factor)
@@ -414,7 +421,7 @@ class BaseTab(UserDict):
 
 class FMEA(BaseTab):
     """
-    Make a user-definable fmea of the endclasses of a set of fault scenarios.
+    Make a user-definable fmea of the classify metrics for a set of fault scenarios.
 
     Parameters
     ----------
@@ -429,8 +436,8 @@ class FMEA(BaseTab):
         Way of grouping fmea rows by scenario fields.
         The default is ('function', 'fault').
     prefix : str
-        Prefix for the metrics to use for get_metric. Default is 'endclass.', which
-        gets the metrics from endclass (output of classify() method) only.
+        Prefix for the metrics to use for get_metric. Default is 'tend.classify', which
+        gets the metrics from the classify() at the final timestep only.
     rates/weights : str(s)
         Weighting or rate factor to use for weighted averages and expectations.
         Can be any value from the result (e,g. rates='rate') or the FaultSample
@@ -446,14 +453,15 @@ class FMEA(BaseTab):
     --------
     >>> from fmdtools.sim.sample import exfs
     >>> res = Result({scen.name+'.tend.classify': {'rate': scen.time, 'cost': i} for i, scen in enumerate(exfs.scenarios())}).flatten()
+    >>> FMEA(res, exfs)
+    <FMEA: 3 metric(s), 4 entries, metrics=['average_scenario_rate', 'sum_cost', 'expected_cost']>
     >>> FMEA(res, exfs).as_table(sort_by="sum_cost")
-                                      average_scenario_rate  ...  expected_cost
-    exfxnarch.fxns.ex_fxn2 short                        0.0  ...            0.0
-    exfxnarch.fxns.ex_fxn  short                        0.0  ...            0.0
-    exfxnarch.fxns.ex_fxn2 no_charge                    0.0  ...            0.0
-    exfxnarch.fxns.ex_fxn  no_charge                    0.0  ...            0.0
-    <BLANKLINE>
-    [4 rows x 3 columns]
+                                      average_scenario_rate  sum_cost  expected_cost
+    exfxnarch.fxns.ex_fxn2 short                        0.0        13            0.0
+    exfxnarch.fxns.ex_fxn  short                        0.0         9            0.0
+    exfxnarch.fxns.ex_fxn2 no_charge                    0.0         5            0.0
+    exfxnarch.fxns.ex_fxn  no_charge                    0.0         1            0.0
+
     >>> FMEA(res, exfs, average_metric=["rate"], sum_metric=["cost"], expected_metric=["cost"], rates="rate").as_table()
                                       average_rate  sum_cost  expected_cost
     exfxnarch.fxns.ex_fxn2 short               1.5        13             20
@@ -594,7 +602,7 @@ class Comparison(BaseComparison):
     >>> comp = Comparison(res, exp_ps, metrics=['a'], factors=['p.x'], default_stat='expected')
     >>> comp.sort_by_factors("p.x")
     >>> comp
-    {'a': {(np.int64(0),): np.float64(0.0), (np.int64(1),): np.float64(1.0), (2,): np.float64(4.0), (np.int64(3),): np.float64(9.0), (np.int64(4),): np.float64(16.0), (np.int64(5),): np.float64(25.0), (np.int64(6),): np.float64(36.0), (np.int64(7),): np.float64(49.0), (np.int64(8),): np.float64(64.0), (np.int64(9),): np.float64(81.0), (np.int64(10),): np.float64(100.0)}}
+    <Comparison: 1 metric(s), 11 entries, metrics=['a']>
     >>> comp.as_table()
             a
     10  100.0
@@ -726,7 +734,7 @@ class NominalEnvelope(object):
     res : Result
         Result dict for the set of simulations produced by running the model over ps
     metric : str
-        Value to get from endclasses for the scenario(s). The default is 'cost'.
+        Value to get from classify metrics for the scenario(s). The default is 'cost'.
     x_param : str
         Parameter range desired to visualize in the operational envelope. Can be any
         property that changes over the nomapp
@@ -747,7 +755,7 @@ class NominalEnvelope(object):
         res : Result
             Result dict for the set of simulations produced by running the model over ps
         metric : str
-            Value to get from endclasses for the scenario(s). The default is 'cost'.
+            Value to get from classify() metrics for the scenario(s). The default is 'cost'.
         x_param : str
             Parameter range desired to visualize in the operational envelope. Can be any
             property that changes over the nomapp
@@ -765,6 +773,14 @@ class NominalEnvelope(object):
               [func(v) for v in res.get_scens(*scens).get_values("."+metric).values()]
               for group, scens in self.variable_groups.items()}
         self.group_values = gv
+
+    def __repr__(self):
+        """Display Name, parameters, and groups of NominalEnvelope in console."""
+        name = self.__class__.__name__
+        num_params = len(self.params)
+        num_groups = len(self.variable_groups)
+        return (f"<{name}: {num_params} param(s), "
+                f"{num_groups} groups, params={list(self.params)}>")
 
     def as_plot(self, **kwargs):
         """

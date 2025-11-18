@@ -482,14 +482,14 @@ if __name__ == "__main__":
                                            to_return="graph")
 
     result.get_faulty().tend.graph.draw()
-    # endclasses, mdlhists = propagate.single_faults(mdl)
+    # results, hists = propagate.single_faults(mdl)
 
     # resgraph, mdlhists = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', to_return="fxnflowgraph")
     # result.graph.draw()
     ks = [*mdl.get_roles_as_dict("fxn", "flow", flex_prefixes=True)]
 
     summary = mdlhists.get_fault_degradation_summary(*ks)
-    # endclasses, mdlhists = propagate.single_faults(mdl)
+    # results, hists = propagate.single_faults(mdl)
     degradation = mdlhists.get_degraded_hist(*ks)
 
     degtimemap = degradation.get_summary(operator=np.sum)

@@ -1054,7 +1054,7 @@ class Rover(FunctionArchitecture):
         Calculate metric that need to be tracked for the simulation.
 
         Returns
-        ----------
+        -------
         endclass : dict
             Dictionary with keys/values:
             "rate": float
