@@ -281,6 +281,10 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         for field, value in fielddict.items():
             self.set_field(field, value, as_copy=as_copy)
 
+    def __setattr__(self, name, value):
+        """Set type for containers on assignment."""
+        self.set_field(name, value)
+
     def set_field(self, fieldname, value, as_copy=True):
         """
         Set the field of the container to the given value.
@@ -305,14 +309,14 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         if fieldname not in self.__fields__:
             raise Exception(fieldname+" not a property of "+self.name)
         if as_copy:
-            value = copy.deepcopy(value)
+            super().__setattr__(fieldname, value)
         field = getattr(self, fieldname)
         if isinstance(field, BaseContainer):
             field.assign(value, as_copy=as_copy)
         else:
             try:
                 true_type = self.__annotations__[fieldname]
-                setattr(self, fieldname, true_type(value))
+                super().__setattr__(fieldname, true_type(value))
             except TypeError as e:
                 raise Exception("Poorly Specified field " + fieldname +
                                 " in class " + self.__class__.__name__) from e

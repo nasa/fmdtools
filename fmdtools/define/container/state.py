@@ -75,12 +75,12 @@ class State(BaseContainer):
         >>> p = ExampleState()
         >>> p.set_atts(x=2.0, y=2.0)
         >>> p.x
-        2.0
+        np.float64(2.0)
         >>> p.y
-        2.0
+        np.float64(2.0)
         """
         for name, value in kwargs.items():
-            setattr(self, name, value)
+            self.set_field(name, value)
 
     def put(self, as_copy=True, **kwargs):
         """
