@@ -22,6 +22,7 @@ from fmdtools.define.container.base import BaseContainer
 from fmdtools.define.object.timer import Timer
 
 from decimal import Decimal
+import numpy as np
 
 
 class Time(BaseContainer):
@@ -80,15 +81,15 @@ class Time(BaseContainer):
     """
 
     rolename = "t"
-    time: float = -0.1
-    t_ind: int = 0
+    time: np.float64 = np.float64(-0.1)
+    t_ind: np.int32 = np.int32(0)
     timers: dict = {}
-    use_local: bool = True
-    dt: float = 1.0
-    executed_static: bool = False
-    executed_dynamic: bool = False
-    executing: bool = False
-    local_dt = 1.0
+    use_local: np.bool_ = True
+    dt: np.float64 = np.float64(1.0)
+    executed_static: np.bool = False
+    executed_dynamic: np.bool = False
+    executing: np.bool = False
+    local_dt = np.float64(1.0)
     timernames = ()
     default_track = ('timers')
 

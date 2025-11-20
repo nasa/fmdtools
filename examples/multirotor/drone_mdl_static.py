@@ -40,8 +40,8 @@ class EEState(State):
         Dimensionless voltage. 1.0 is nominal while 0.0 is off.
     """
 
-    rate: float = 1.0
-    effort: float = 1.0
+    rate: np.float64 = 1.0
+    effort: np.float64 = 1.0
 
 
 class EE(Flow):
@@ -53,7 +53,7 @@ class EE(Flow):
 class ForceState(State):
     """State of force. Holds support field."""
 
-    support: float = 1.0
+    support: np.float64 = 1.0
 
 
 class Force(Flow):
@@ -118,7 +118,7 @@ class DOFstate(State):
 class DOFParam(Parameter):
     """Parameter defining max velocity (5m/s or 300 m/min)."""
 
-    max_vel: float = 300.0
+    max_vel: np.float64 = 300.0
 
 
 class DOFs(Flow):
@@ -204,7 +204,7 @@ class StoreEEMode(Mode):
 class StoreEEState(State):
     """Battery state of charge percentage."""
 
-    soc: float = 100.0
+    soc: np.float64 = 100.0
 
 
 class StoreEE(Function):
@@ -256,8 +256,8 @@ class DistEEState(State):
         Ability to transfer EE effort (voltage, with a nominal value of 1.0)
     """
 
-    ee_tr: float = 1.0
-    ee_te: float = 1.0
+    ee_tr: np.float64 = 1.0
+    ee_te: np.float64 = 1.0
 
 
 class DistEE(Function):
@@ -347,7 +347,7 @@ class HoldPayloadState(State):
         Force from the ground
     """
 
-    force_gr: float = 1.0
+    force_gr: np.float64 = 1.0
 
 
 class HoldPayload(Function):
@@ -427,11 +427,11 @@ class AffectDOFState(State):
         Physical tranferrence (ability of rotor to spin)
     """
 
-    e_to: float = 1.0
-    e_ti: float = 1.0
-    ct: float = 1.0
-    mt: float = 1.0
-    pt: float = 1.0
+    e_to: np.float64 = 1.0
+    e_ti: np.float64 = 1.0
+    ct: np.float64 = 1.0
+    mt: np.float64 = 1.0
+    pt: np.float64 = 1.0
 
 
 class AffectDOFMode(Mode):
@@ -536,7 +536,7 @@ class AffectDOF(Function, BaseLine):
         >>> a.m.add_fault("mechbreak")
         >>> a.static_behavior()
         >>> a.s.mt
-        0.0
+        np.float64(0.0)
         >>> a.dofs.s.uppwr
         np.float64(0.0)
         >>> a.dofs.s.z
@@ -580,8 +580,8 @@ class CtlDOFstate(State):
         Power sent transference (nominally 1.0)
     """
 
-    cs: float = 1.0
-    power: float = 1.0
+    cs: np.float64 = 1.0
+    power: np.float64 = 1.0
 
 
 class CtlDOFMode(Mode):
@@ -617,13 +617,13 @@ class CtlDOF(Function):
         >>> c = CtlDOF()
         >>> c.static_behavior()
         >>> c.ctl.s
-        ControlState(forward=np.float64(1.0), upward=np.float64(1.0))
+        ControlState(forward=1.0, upward=1.0)
 
         and in the off-nominal case::
         >>> c.m.add_fault("noctl")
         >>> c.static_behavior()
         >>> c.ctl.s
-        ControlState(forward=np.float64(0.0), upward=np.float64(0.0))
+        ControlState(forward=0.0, upward=0.0)
         """
         self.set_faults()
         self.calc_cs()
@@ -691,13 +691,13 @@ class PlanPath(Function):
         >>> p = PlanPath()
         >>> p.static_behavior()
         >>> p.des_traj.s
-        DesTrajState(dx=np.float64(1.0), dy=np.float64(0.0), dz=np.float64(0.0), power=np.float64(1.0))
+        DesTrajState(dx=1.0, dy=0.0, dz=0.0, power=1.0)
 
         If it loses location, navigation not provided:
         >>> p.m.add_fault("noloc")
         >>> p.static_behavior()
         >>> p.des_traj.s
-        DesTrajState(dx=np.float64(0.0), dy=np.float64(0.0), dz=np.float64(0.0), power=np.float64(1.0))
+        DesTrajState(dx=0.0, dy=0.0, dz=0.0, power=1.0)
         """
         self.set_faults()
         self.des_traj.s.assign([1.0, 0.0, 0.0], "dx", "dy", "dz")

@@ -46,6 +46,8 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.flow.base import Flow
 
+import numpy as np
+
 
 class PSFParam(Parameter):
     """
@@ -59,8 +61,8 @@ class PSFParam(Parameter):
         Operator stress level over the course of a day.
     """
 
-    fatigue: float = 0.0
-    stress: float = 0.0
+    fatigue: np.float64 = 0.0
+    stress: np.float64 = 0.0
 
 
 class PSFState(State):
@@ -77,7 +79,7 @@ class PSFState(State):
         Operator attention over the course of a day.
     """
 
-    attention: float = 10.0
+    attention: np.float64 = 10.0
 
 
 class PSFs(Flow):
@@ -163,9 +165,9 @@ class Percieve(GenericHumanAction):
     >>> p.comms.s.video.lin_ux = 2.0
     >>> p.dynamic_behavior()
     >>> p.pos_signal.s.x
-    1.0
+    np.float64(1.0)
     >>> p.video.s.lin_ux
-    2.0
+    np.float64(2.0)
     """
 
     container_m = PerceptionMode
@@ -317,7 +319,7 @@ class Decide(GenericHumanAction):
     >>> d.signal.s.rdiff = 1.0
     >>> d.dynamic_behavior()
     >>> d.control.s
-    ControlState(rpower=np.float64(2.0), lpower=np.float64(0.0))
+    ControlState(rpower=2.0, lpower=0.0)
     """
 
     container_m = ProjectMode
@@ -369,7 +371,7 @@ class Press(GenericHumanAction):
     >>> p.control.s.put(lpower=1.0, rpower=0.0)
     >>> p.dynamic_behavior()
     >>> p.comms.s.ctl
-    ControlState(rpower=np.float64(0.0), lpower=np.float64(1.0))
+    ControlState(rpower=0.0, lpower=1.0)
     """
 
     container_m = PressMode

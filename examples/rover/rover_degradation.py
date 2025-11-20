@@ -43,10 +43,10 @@ class DriveDegradationStates(State):
         Drift in the system, causing unintentional turning. Default is 0.0.
     """
 
-    wear: float = 0.0
-    corrosion: float = 0.0
-    friction: float = 0.0
-    drift: float = 0.0
+    wear: np.float64 = 0.0
+    corrosion: np.float64 = 0.0
+    friction: np.float64 = 0.0
+    drift: np.float64 = 0.0
 
 
 class DriveRandStates(State):
@@ -66,11 +66,11 @@ class DriveRandStates(State):
         uniform distribution between -0.1 (left yaw) and 0.1 (right yaw).
     """
 
-    corrode_rate: float = 0.01
+    corrode_rate: np.float64 = 0.01
     corrode_rate_update = ("pareto", (50,))
-    wear_rate: float = 0.02
+    wear_rate: np.float64 = 0.02
     wear_rate_update = ("pareto", (25,))
-    yaw_load: float = 0.01
+    yaw_load: np.float64 = 0.01
     yaw_load_update = ("uniform", (-0.1, 0.1))
 
 
@@ -107,9 +107,9 @@ class PSFDegradationShortStates(State):
         Operator stress over the course of a day. Default is 0.0.
     """
 
-    fatigue: float = 0.0
-    stress: float = 0.0
-    experience: float = 0.0
+    fatigue: np.float64 = 0.0
+    stress: np.float64 = 0.0
+    experience: np.float64 = 0.0
 
 
 class PSFDegShortRandStates(State):
@@ -123,7 +123,7 @@ class PSFDegShortRandStates(State):
         distribution with parameters 1 and 1.9.
     """
 
-    fatigue_param: float = 1.0
+    fatigue_param: np.float64 = 1.0
     fatigue_param_update = ("gamma", (1, 1.9))
 
 
@@ -147,9 +147,9 @@ class PSFShortParams(Parameter, readonly=True):
         Operator base fatigue increment. Default is 0.0
     """
 
-    experience: float = 1.0
-    stress_param: float = 0.0
-    fatigue_param: float = 1.0
+    experience: np.float64 = 1.0
+    stress_param: np.float64 = 0.0
+    fatigue_param: np.float64 = 1.0
 
 
 class PSFDegradationShort(Function):
@@ -189,9 +189,9 @@ class LongParams(Parameter, readonly=True):
         Maximum operator experience. Default is 10.0.
     """
 
-    experience_param: float = 9.0
-    training_frequency: float = 8.0
-    experience_scale_max: float = 10.0
+    experience_param: np.float64 = 9.0
+    training_frequency: np.float64 = 8.0
+    experience_scale_max: np.float64 = 10.0
 
 
 class PSFDegradationLongStates(State):
@@ -204,7 +204,7 @@ class PSFDegradationLongStates(State):
         Base/starting experience of the operator. Default is 0.0.
     """
 
-    experience: float = 0.1
+    experience: np.float64 = 0.1
 
 
 class PSFDegradationLong(Function):

@@ -76,10 +76,10 @@ class SimParam(Parameter, readonly=True):
 
     rolename = "sp"
     phases: tuple = (('na', 0, 100),)
-    start_time: float = 0.0
-    end_time: float = 100.0
+    start_time: np.float64 = np.float64(0.0)
+    end_time: np.float64 = np.float64(100.0)
     track_times: tuple = ('all',)
-    dt: float = 1.0
+    dt: np.float64 = np.float64(1.0)
     units: str = "hr"
     units_set = ('sec', 'min', 'hr', 'day', 'wk', 'month', 'year')
     end_condition: str = ''

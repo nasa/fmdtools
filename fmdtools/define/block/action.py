@@ -21,6 +21,7 @@ from fmdtools.define.block.base import Block
 from fmdtools.define.container.parameter import ExampleParameter
 from fmdtools.define.container.time import Time
 from fmdtools.define.flow.base import ExampleFlow
+import numpy as np
 
 
 class ActionTime(Time):
@@ -37,9 +38,9 @@ class ActionTime(Time):
         local time (e.g., for actions with durations)
     """
 
-    out_delay: float = 0.0
-    duration: float = 0.0
-    t_loc: float = 0.0
+    out_delay: np.float64 = np.float64(0.0)
+    duration: np.float64 = np.float64(0.0)
+    t_loc: np.float64 = np.float64(0.0)
 
     def return_mutables(self):
         """Return mutable attributes."""
@@ -71,12 +72,12 @@ class Action(Block):
     >>> exa
     exampleaction ExampleAction
     - t=ActionTime(time=-0.1, timers={})
-    - exf=ExampleFlow(s=(x=np.float64(1.0), y=np.float64(1.0)))
+    - exf=ExampleFlow(s=(x=1.0, y=1.0))
     >>> exa(1.0)
     >>> exa
     exampleaction ExampleAction
     - t=ActionTime(time=1.0, timers={})
-    - exf=ExampleFlow(s=(x=np.float64(2.0), y=np.float64(1.0)))
+    - exf=ExampleFlow(s=(x=2.0, y=1.0))
     >>> exa.indicate_done()
     True
     """

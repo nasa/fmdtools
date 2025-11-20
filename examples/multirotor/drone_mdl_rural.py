@@ -86,9 +86,9 @@ class DronePhysicalParameters(Parameter, readonly=True):
     bat_set = ('monolithic', 'series-split', 'parallel-split', 'split-both')
     linearch: str = 'quad'
     linearch_set = ('quad', 'hex', 'oct')
-    batweight: float = 0.4
-    archweight: float = 1.2
-    archdrag: float = 0.95
+    batweight: np.float64 = 0.4
+    archweight: np.float64 = 1.2
+    archdrag: np.float64 = 0.95
     def __init__(self, *args, **kwargs):
         args = self.get_true_fields(*args, **kwargs)
         args[2] = {'monolithic': 0.4, 'series-split': 0.5,
@@ -162,9 +162,9 @@ class BatState(State):
         Power transference with nominal value 1.0
     """
 
-    soc: float = 100.0
-    ee_e: float = 1.0
-    e_t: float = 1.0
+    soc: np.float64 = 100.0
+    ee_e: np.float64 = 1.0
+    e_t: np.float64 = 1.0
 
 
 class BatMode(Mode):
@@ -221,14 +221,14 @@ class BatParam(Parameter):
         Energy stored (in flight time).
     """
 
-    avail_eff: float = 0.0
-    maxa: float = 0.0
-    amt: float = 0.0
-    weight: float = 0.1
-    drag: float = 0.95
-    series: int = 1
-    parallel: int = 1
-    voltage: float = 12.0
+    avail_eff: np.float64 = 0.0
+    maxa: np.float64 = 0.0
+    amt: np.float64 = 0.0
+    weight: np.float64 = 0.1
+    drag: np.float64 = 0.95
+    series: np.int32 = 1
+    parallel: np.int32 = 1
+    voltage: np.float64 = 12.0
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -296,11 +296,11 @@ class BatArchParam(Parameter):
 
     archtype: str = 'monolithic'
     components: tuple = ()
-    weight: float = 0.0
-    drag: float = 0.0
-    series: int = 1
-    parallel: int = 1
-    voltage: float = 12.0
+    weight: np.float64 = 0.0
+    drag: np.float64 = 0.0
+    series: np.int32 = 1
+    parallel: np.int32 = 1
+    voltage: np.float64 = 12.0
 
     def __init__(self, *args, **kwargs):
         archtype = self.get_true_field('archtype', *args, **kwargs)
@@ -566,7 +566,7 @@ class PlanPathState(PlanPathStateDyn):
         Sequence of goals defining the flightplan.
     """
 
-    ground_height: float = 0.0
+    ground_height: np.float64 = 0.0
     goals: dict = {}
 
 

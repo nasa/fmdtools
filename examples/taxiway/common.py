@@ -173,21 +173,21 @@ class AssetParams(Parameter, readonly=True):
     uas: tuple = ()  # names for uaVs (filled on initialization)
     mas: tuple = ()  # names for piloted aircraft
     hs: tuple = ()  # names for helicopters
-    gatetime: float = 45.0  # time spent at gate parking
+    gatetime: np.float64 = 45.0  # time spent at gate parking
     gatetime_lim = (0.0, 120.0)
-    landtime: float = 3.0
-    takeofftime: float = 5.0
-    num_ua: int = 3  # number of uaS
+    landtime: np.float64 = 3.0
+    takeofftime: np.float64 = 5.0
+    num_ua: np.int32 = 3  # number of uaS
     num_ua_lim = (0, 8)
-    num_ma: int = 3  # number of mas
+    num_ma: np.int32 = 3  # number of mas
     num_ma_lim = (0, 8)
-    num_h: int = 2  # number of helicopters
+    num_h: np.int32 = 2  # number of helicopters
     num_h_lim = (0, 4)
-    ground_ua: int = 1  # number of uas initialized on the ground
+    ground_ua: np.int32 = 1  # number of uas initialized on the ground
     ground_ua_lim = (0, 4)
-    ground_ma: int = 1  # number of mas initialized on the ground
+    ground_ma: np.int32 = 1  # number of mas initialized on the ground
     ground_ma_lim = (0, 4)
-    ground_h: int = 1  # number of Hs initialized on the ground
+    ground_h: np.int32 = 1  # number of Hs initialized on the ground
     ground_h_lim = (0, 1)
 
     def __init__(self, *args, **kwargs):
@@ -227,7 +227,7 @@ class TaxiwayParams(Parameter, readonly=True):
     """Aircoords, numbers of assets, and gatetime/recoverytime."""
 
     assetparams: AssetParams = AssetParams()
-    seed: int = 42  # random seed for map generation
+    seed: np.int32 = 42  # random seed for map generation
     aircoords = default_aircoords
     speeds = default_speeds
     routes = default_routes
@@ -533,11 +533,11 @@ class Environment(MultiFlow):
 class LocationState(State):
     """State defining the default values of the location flow for assets."""
 
-    x: float = default_air_loc[0]
-    y: float = default_air_loc[1]
-    xd: float = 0.0
-    yd: float = 0.0
-    speed: float = 0.0
+    x: np.float64 = default_air_loc[0]
+    y: np.float64 = default_air_loc[1]
+    xd: np.float64 = 0.0
+    yd: np.float64 = 0.0
+    speed: np.float64 = 0.0
     stage: str = "flight"  # phase of operation (flight, land, taxi, park, takeoff)
     mode: str = "standby"  # completion of the phase (standby, continue, hold, done)
 

@@ -43,6 +43,8 @@ class State(BaseContainer):
     Instancing State gives normal read/write access, e.g., one can do:
 
     >>> p = ExampleState()
+    >>> p
+    ExampleState(x=1.0, y=1.0)
     >>> p.x
     np.float64(1.0)
 

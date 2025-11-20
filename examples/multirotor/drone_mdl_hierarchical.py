@@ -48,9 +48,9 @@ class OverallAffectDOFState(State):
         Amplification factor (for fault recovery)
     """
 
-    lrstab: float = 0.0
-    frstab: float = 0.0
-    amp_factor: float = 1.0
+    lrstab: np.float64 = 0.0
+    frstab: np.float64 = 0.0
+    amp_factor: np.float64 = 1.0
 
 
 class LineArchParam(Parameter):
@@ -165,8 +165,11 @@ class AffectDOF(AffectDOFDynamic):
         self.calc_pwr()
 
     def reconfig_faults(self):
-        """Corrects for individual line faultmodes by turning off the opposite rotor
-        and upping the throttle (amp_factor)"""
+        """
+        Correct for individual line faultmodes.
+
+        Turns off the opposite rotor and upping the throttle (amp_factor).
+        """
         if self.get_faults(with_base_faults=False, only_present=True):
             for cname, comp in self.ca.comps.items():
                 if comp.m.faults:
@@ -186,7 +189,7 @@ class AffectDOF(AffectDOFDynamic):
 
     def calc_pwr(self):
         """
-        Calculates overall power and stability based on individual rotor output.
+        Calculate overall power and stability based on individual rotor output.
 
         e.g., ::
         >>> a = AffectDOF()
@@ -194,11 +197,11 @@ class AffectDOF(AffectDOFDynamic):
         >>> a.ctl_in.s.put(forward=0.0, upward=1.0)
         >>> a.calc_pwr()
         >>> a.dofs.s
-        DOFstate(vertvel=np.float64(1.0), planvel=np.float64(1.0), planpwr=np.float64(-0.0), uppwr=np.float64(1.0), x=np.float64(0.0), y=np.float64(0.0), z=np.float64(100.0))
+        DOFstate(vertvel=1.0, planvel=1.0, planpwr=-0.0, uppwr=1.0, x=0.0, y=0.0, z=100.0)
         >>> a.ctl_in.s.put(forward=1.0, upward=1.0)
         >>> a.calc_pwr()
         >>> a.dofs.s
-        DOFstate(vertvel=np.float64(1.0), planvel=np.float64(1.0), planpwr=np.float64(1.0), uppwr=np.float64(1.0), x=np.float64(0.0), y=np.float64(0.0), z=np.float64(100.0))
+        DOFstate(vertvel=1.0, planvel=1.0, planpwr=1.0, uppwr=1.0, x=0.0, y=0.0, z=100.0)
         """
         air, ee_in = {}, {}
         # injects faults into lines

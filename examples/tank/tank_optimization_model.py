@@ -139,9 +139,9 @@ class ExportLiquid(Function):
 
 
 class StoreLiquidState(State):
-    level: float = 10.0
-    net_flow: float = 0.0
-    coolingbuffer: float = 10.0
+    level: np.float64  = 10.0
+    net_flow: np.float64  = 0.0
+    coolingbuffer: np.float64  = 10.0
 
 
 class StoreLiquid(Function):

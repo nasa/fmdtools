@@ -61,7 +61,7 @@ class BaseObjCon(dataobject):
     """
 
     name: str = ''
-    value: float = np.nan
+    value: np.float64 = np.nan
 
 
 class Objective(BaseObjCon):
@@ -107,7 +107,7 @@ class Constraint(Objective):
         Whether the constraint is satisfied.
     """
 
-    threshold: float = 0.0
+    threshold: np.float64 = np.float64(0.0)
     comparator: str = 'greater'
     or_equal: bool = True
     satisfied: bool = True
@@ -510,7 +510,7 @@ class ResultObjective(Objective):
 
     """
 
-    time: float = None
+    time: np.float64 = None
     method: callable = np.sum
 
     def get_result_value(self, res):
@@ -569,7 +569,7 @@ class ResultConstraint(ResultObjective):
         Whether the constraint is satisfied.
     """
 
-    threshold: float = 0.0
+    threshold: np.float64 = np.float64(0.0)
     comparator: str = 'greater'
     or_equal: bool = True
     satisfied: bool = True
