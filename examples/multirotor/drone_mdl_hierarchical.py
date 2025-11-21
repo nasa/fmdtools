@@ -137,7 +137,7 @@ class LineArchState(State):
 
 class AffectDOFArch(ComponentArchitecture):
     """
-    Drone line architectrue (quad/hex/octorotor).
+    Drone line architecture (quad/hex/octorotor).
 
     Architecture reconfigures rotors when a fault is present, see:
 
