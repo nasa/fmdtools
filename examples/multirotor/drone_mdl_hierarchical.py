@@ -119,7 +119,7 @@ class LineArchParam(Parameter):
 
 class LineArchState(State):
     """
-    States of the line architecture.
+    State of the line architecture.
 
     Fields
     ------
@@ -128,11 +128,32 @@ class LineArchState(State):
     upward: dict
         Correction factors for moving upward (1.0 unless in a recovery mode).
     """
+
     forward: dict = dict()
     upward: dict = dict()
+    tot_comps: np.int32 = 0
+    empty_comps: np.int32 = 0
 
 
 class AffectDOFArch(ComponentArchitecture):
+    """
+    Drone line architectrue (quad/hex/octorotor).
+
+    Architecture reconfigures rotors when a fault is present, see:
+
+    Examples
+    --------
+    >>> adf = AffectDOFArch()
+    >>> adf.comps['lf'].m.add_fault("mechbreak")
+    >>> adf.static_behavior()
+    >>> adf.s.forward
+    {'rf': 0.5, 'lf': 0.0, 'lr': -0.5, 'rr': 0.0}
+    >>> adf.s.upward
+    {'lf': 0.0, 'lr': 1.0, 'rf': 1.0, 'rr': 0.0}
+    >>> adf.s.empty_comps
+    np.int32(2)
+    """
+
     container_p = LineArchParam
     container_s = LineArchState
 
@@ -150,6 +171,34 @@ class AffectDOFArch(ComponentArchitecture):
             self.s.forward.update({'rf': 0.5, 'lf': 0.5, 'lr': -0.5, 'rr': -0.5,
                                    'rf2': 0.5, 'lf2': 0.5, 'lr2': -0.5, 'rr2': -0.5})
         self.s.upward = {c: 1.0 for c in self.p.components}
+        self.set_num_comps()
+
+    def set_num_comps(self):
+        """Set number of components in use."""
+        self.s.tot_comps = len(self.comps)
+        self.s.empty_comps = len([c for c in self.s.forward if self.s.forward[c] == 0.0])
+
+    def static_behavior(self):
+        """Trigger reconfiguration during static behavior step."""
+        if self.p.opposite and self.get_faults(with_base_faults=False):
+            self.reconfig_faults()
+
+    def reconfig_faults(self):
+        """
+        Correct for individual line faultmodes.
+
+        Turns off the opposite rotor and upping the throttle (amp_factor).
+        """
+        for cname, comp in self.comps.items():
+            if comp.m.faults:
+                oname = self.p.opposite[cname]
+                if self.s.forward[cname] != 0.0:
+                    self.s.forward[cname] = 0.0
+                    self.s.upward[cname] = 0.0
+                if self.s.forward[oname] != 0.0:
+                    self.s.forward[oname] = 0.0
+                    self.s.upward[oname] = 0.0
+        self.set_num_comps()
 
 
 class AffectDOF(AffectDOFDynamic):
@@ -160,32 +209,12 @@ class AffectDOF(AffectDOFDynamic):
 
     def static_behavior(self):
         """Rotor dynamic behavior with architecture-base recovery."""
-        if self.ca.p.opposite:
-            self.reconfig_faults()
-        self.calc_pwr()
-
-    def reconfig_faults(self):
-        """
-        Correct for individual line faultmodes.
-
-        Turns off the opposite rotor and upping the throttle (amp_factor).
-        """
-        if self.get_faults(with_base_faults=False, only_present=True):
-            for cname, comp in self.ca.comps.items():
-                if comp.m.faults:
-                    oname = self.ca.p.opposite[cname]
-                    if self.ca.s.forward[cname] != 0.0:
-                        self.ca.s.forward[cname] = 0.0
-                        self.ca.s.upward[cname] = 0.0
-                    if self.ca.s.forward[oname] != 0.0:
-                        self.ca.s.forward[oname] = 0.0
-                        self.ca.s.upward[oname] = 0.0
-        tot_comps = len(self.ca.comps)
-        empty_comps = len([c for c in self.ca.s.forward if self.ca.s.forward[c] == 0.0])
         try:
+            tot_comps, empty_comps = self.ca.s.get('tot_comps', 'empty_comps')
             self.s.amp_factor = tot_comps / (tot_comps - empty_comps)
         except ZeroDivisionError:
             self.s.amp_factor = 1.0
+        self.calc_pwr()
 
     def calc_pwr(self):
         """
