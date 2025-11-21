@@ -307,7 +307,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         ExNestContainer(e1=ExContainer(x=3.0, y=4.0), z=20.0)
         """
         if fieldname not in self.__fields__:
-            raise Exception(fieldname+" not a property of "+self.name)
+            raise Exception(fieldname+" not a property of "+self.__class__.__name__)
         if as_copy:
             value = copy.deepcopy(value)
         field = getattr(self, fieldname)

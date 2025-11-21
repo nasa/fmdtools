@@ -218,7 +218,7 @@ class BatParam(Parameter):
     maxa : float
         Maximum current.
     amt : float
-        Energy stored (in flight time).
+        Overall energy stored (in flight time).
     """
 
     avail_eff: np.float64 = 0.0
@@ -236,6 +236,10 @@ class BatParam(Parameter):
         self.maxa = 2/self.series
         self.amt = 4200/60 * (self.drag/self.weight)
 
+    def num(self):
+        """Get number of batteries."""
+        return self.series*self.parallel
+
 
 class Battery(Component):
     """Battery component used to hold energy in distributed architecture."""
@@ -243,11 +247,13 @@ class Battery(Component):
     container_s = BatState
     container_m = BatMode
     container_p = BatParam
+    flow_force = Force
+    flow_ee = EE
 
-    def behavior(self, fs, ee_outr, exec_dynamic):
+    def static_behavior(self):
         """Battery behavior returning electrical transference, soc, and fault state."""
         # If current is too high, battery breaks.
-        if fs < 1.0 or ee_outr > self.p.maxa:
+        if self.force.s.support < 1.0 or self.ee.s.rate > self.p.maxa:
             self.m.add_fault('break')
 
         # Determine transference state based on faults
@@ -260,21 +266,17 @@ class Battery(Component):
         else:
             self.s.e_t = self.p.avail_eff
 
-        # Increment power use/soc (once per timestep)
-        if exec_dynamic:
-            self.s.inc(soc=-100*ee_outr*self.p.parallel *
-                       self.p.series*self.t.dt/self.p.amt)
-
         # Calculate charge modes/values
         if self.s.soc < 20:
             self.m.add_fault('lowcharge')
         if self.s.soc < 1:
             self.m.replace_fault('lowcharge', 'nocharge')
             self.s.put(soc=0.0, e_t=0.0)
-            er_res = ee_outr
-        else:
-            er_res = 0.0
-        return self.s.e_t, self.s.soc, er_res
+            self.ee.s.effort = 0.0
+
+    def dynamic_behavior(self):
+        """Increment power use/soc (once per timestep)."""
+        self.s.inc(soc=-100*self.ee.s.rate*self.t.dt*self.p.num()/self.p.amt)
 
 
 class BatArchParam(Parameter):
@@ -333,10 +335,35 @@ class BatArch(ComponentArchitecture):
     container_p = BatArchParam
 
     def init_architecture(self, **kwargs):
+        self.add_flow('ee_1')
         for comp in self.p.components:
             batparams = self.p.get_field_dict(self.p, 'series', 'parallel', 'voltage',
                                               'weight', 'drag')
             self.add_comp(comp, Battery, p=batparams)
+
+    def static_behavior(self):
+        """Pull current from batteries if there is charge."""
+        usable_bats = len([c for c in self.comps.values()
+                           if not c.m.has_fault('no_charge')])
+        for cname, comp in self.comps.items():
+            if not comp.m.has_fault('no_charge'):
+                comp.ee.s.rate = self.flows['ee_1'].s.rate/usable_bats
+            else:
+                comp.ee.s.rate = 0.0
+
+        # calculate overall ee provided
+        ees = {cname: c.ee.s.effort for cname, c in self.comps.items()}
+        if self.p.archtype == 'monolithic':
+            ee_provided = ees['s1p1']
+        elif self.p.archtype == 'series-split':
+            ee_provided = np.max(list(ees.values()))
+        elif self.p.archtype == 'parallel-split':
+            ee_provided = np.sum(list(ees.values()))
+        elif self.p.archtype == 'split-both':
+            e = list(ees.values())
+            e.sort()
+            ee_provided = e[-1]+e[-2]
+        self.flows['ee_1'].s.effort = ee_provided
 
 
 class StoreEEMode(Mode):
@@ -380,25 +407,8 @@ class StoreEE(Function):
     def static_behavior(self):
         """Calculate overall behavior for StoreEE architecture."""
         self.set_faults()
-        ee, soc = {}, {}
-        rate_res = 0
-        for batname, bat in self.ca.comps.items():
-            ee[bat.name], soc[bat.name], rate_res = \
-                bat.behavior(self.force_st.s.support, self.ee_1.s.rate /
-                             (self.ca.p.series*self.ca.p.parallel)+rate_res,
-                             not self.t.executed_static)
-        # need to incorporate max current draw somehow + draw when reconfigured
-        if self.ca.p.archtype == 'monolithic':
-            self.ee_1.s.effort = ee['s1p1']
-        elif self.ca.p.archtype == 'series-split':
-            self.ee_1.s.effort = np.max(list(ee.values()))
-        elif self.ca.p.archtype == 'parallel-split':
-            self.ee_1.s.effort = np.sum(list(ee.values()))
-        elif self.ca.p.archtype == 'split-both':
-            e = list(ee.values())
-            e.sort()
-            self.ee_1.effort = e[-1]+e[-2]
-        self.s.soc = np.mean(list(soc.values()))
+        socs = {cname: c.s.soc for cname, c in self.ca.comps.items()}
+        self.s.soc = np.mean(list(socs.values()))
         if self.m.any_faults() and not self.m.has_fault("dummy"):
             self.hsig_bat.s.hstate = 'faulty'
         else:
