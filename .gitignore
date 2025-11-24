@@ -41,3 +41,4 @@ fmdtools.code-workspace
 /jupyter_execute
 fmdtools-dev/
 .venv/
+.coverage
