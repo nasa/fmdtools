@@ -74,7 +74,7 @@ class Rand(BaseContainer):
     >>> exr = ExampleRand(run_stochastic=True, track_pdf=True)
     >>> exr.set_rand_state('noise', 'normal', 1.0, 1.0)
     >>> exr.s
-    RandState(noise=np.float64(1.3047170797544314))
+    RandState(noise=1.3047170797544314)
     >>> exr.probs
     [np.float64(0.3808442490605113)]
 
@@ -82,9 +82,9 @@ class Rand(BaseContainer):
 
     >>> exr2 = exr.copy()
     >>> exr2.s
-    RandState(noise=np.float64(1.3047170797544314))
+    RandState(noise=1.3047170797544314)
     >>> exr2.run_stochastic
-    True
+    np.True_
     >>> exr2.rng.bit_generator.state['state']['state'] == exr.rng.bit_generator.state['state']['state']
     True
 

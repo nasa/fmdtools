@@ -64,7 +64,7 @@ class ParameterDomain(object):
 
     >>> class ExampleParameter(Parameter):
     ...    x: float = 1.0
-    ...    y: float = 10.0
+    ...    y: float = 2.0
     ...    z: float = 0.0
     ...    x_lim = (0, 10)
     ...    y_set = (1.0, 2.0, 3.0, 4.0)
@@ -946,7 +946,7 @@ class FaultSample(BaseSample):
         >>> fs2 = FaultSample(exfd2)
         >>> fs2.add_single_fault_scenario(('ex_fxn', 'low', '15'), 5)
         >>> fs2.scenarios()
-        [SingleFaultScenario(sequence={5.0: Injection(faults={'ex_fxn': {'low': {'prob': 1.0, 'cost': 0.0, 'phases': (), 'disturbances': {'s.x': 15.0}, 'units': 'sim'}}}, disturbances={})}, times=(5,), function='ex_fxn', fault='low', rate=1.0, name='ex_fxn_low_15_t5', time=5, phase='na')]
+        [SingleFaultScenario(sequence={5.0: Injection(faults={'ex_fxn': {'low': {'prob': np.float64(1.0), 'cost': np.float64(0.0), 'phases': (), 'disturbances': {'s.x': 15.0}, 'units': 'sim'}}}, disturbances={})}, times=(5,), function='ex_fxn', fault='low', rate=np.float64(1.0), name='ex_fxn_low_15_t5', time=5, phase='na')]
         """
         self._times.add(time)
         if len(faulttup) > 2:
