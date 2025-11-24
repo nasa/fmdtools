@@ -103,8 +103,8 @@ class Rand(BaseContainer):
     probs: list = list()
     probdens: np.float64 = np.float64(1.0)
     seed: np.int64 = np.int64(42)
-    run_stochastic: np.bool = np.bool(False)
-    track_pdf: np.bool = np.bool(False)
+    run_stochastic: np.bool_ = np.bool_(False)
+    track_pdf: np.bool_ = np.bool_(False)
     default_track = ('s', 'probdens')
 
     def __init__(self, *args, seed=42, s_kwargs={}, **kwargs):

@@ -86,9 +86,9 @@ class Time(BaseContainer):
     timers: dict = {}
     use_local: np.bool_ = True
     dt: np.float64 = np.float64(1.0)
-    executed_static: np.bool = False
-    executed_dynamic: np.bool = False
-    executing: np.bool = False
+    executed_static: np.bool_ = False
+    executed_dynamic: np.bool_ = False
+    executing: np.bool_ = False
     local_dt = np.float64(1.0)
     timernames = ()
     default_track = ('timers')
