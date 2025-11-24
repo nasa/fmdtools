@@ -57,12 +57,23 @@ Flows contain State objects which hold variables, but may be given other attribu
 
 
 class WaterStates(State):
-    """States for Water Flows."""
+    """
+    States for Water Flows.
 
-    flowrate: float = 1.0
-    pressure: float = 1.0
-    area: float = 1.0
-    level: float = 1.0
+    Note the syntax for fields is:
+        fieldname: value type = value
+    Where fieldname is the name of the field, value type is its type (which cannot change)
+    and value is the default value.
+
+    Generally, numpy types are reccomended, though both numpy and Python base types
+    can be used throughout. In fact, if a type annotation is given, it will convert
+    the default value to said type, as shown below...
+    """
+
+    flowrate: np.float64 = np.float64(1.0)  # verbose way to define a field with defaults
+    pressure: np.float64 = 1.0  # "lazy" default set to Python float - will be converted on instantiation
+    area: float = 1.0  # field using normal Python type -- still works fine
+    level: float = np.float64(1.0)  # no reason to do this but it will force the base Python type on the numpy default value
 
 
 class Water(Flow):
@@ -74,8 +85,8 @@ class Water(Flow):
 class EEStates(State):
     """States for electrical energy flows."""
 
-    current: float = 1.0
-    voltage: float = 1.0
+    current: np.float64 = 1.0
+    voltage: np.float64 = 1.0
 
 
 class Electricity(Flow):
@@ -87,7 +98,7 @@ class Electricity(Flow):
 class SignalStates(State):
     """States of Signal Flows."""
 
-    power: float = 1.0
+    power: np.float64 = 1.0
 
 
 class Signal(Flow):
@@ -146,7 +157,7 @@ class PumpParam(Parameter, readonly=True):
     # costs to tabulate in cost model (see classify())
     cost: tuple = ("repair", "water")
     # delay to use in MoveWater function
-    delay: int = 10
+    delay: np.int32 = 10
     # valid limits for delay
     delay_lim = (0, 100)
 
@@ -188,7 +199,7 @@ class ImportEEMode(Mode):
 class ImportEEState(State):
     """Effectiveness of importing electrical energy."""
 
-    effstate: float = 1.0
+    effstate: np.float64 = 1.0
 
 
 class ImportEE(Function):
@@ -337,13 +348,13 @@ class MoveWatTime(Time):
 class MoveWatStates(State):
     """State of the pump effectiveness."""
 
-    eff: float = 1.0
+    eff: np.float64 = 1.0
 
 
 class MoveWatParams(Parameter, readonly=True):
     """Delay parameter affecting how long it takes for the pump to break."""
 
-    delay: int = 1
+    delay: np.int32 = 1
 
 
 class MoveWatMode(Mode):
@@ -657,13 +668,13 @@ def script_sample_faults(track='all', **kwargs):
 
 if __name__ == "__main__":
 
-    mdl = Pump(sp={'end_time': 100000}, track=[])
-    import time
-    t = time.time()
-    mdl(100000)
-    dt = time.time() - t
-    # mdl = Pump()
-    # res, hist = propagate.nominal(mdl, to_return = {'graph': FunctionArchitectureGraph})
+    # mdl = Pump(sp={'end_time': 100000}, track=[])
+    # import time
+    # t = time.time()
+    # mdl(100000)
+    # dt = time.time() - t
+    mdl = Pump()
+    res, hist = propagate.nominal(mdl, to_return = {'graph': FunctionArchitectureGraph})
 
     """
     endfaults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',

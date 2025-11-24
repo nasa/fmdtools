@@ -45,10 +45,12 @@ from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.block.action import Action
 from fmdtools.define.architecture.action import ActionArchitecture
 
+import numpy as np
+
 
 class WatState(State):
-    effort: float = 1.0
-    rate: float = 1.0
+    effort: np.float64 = 1.0
+    rate: np.float64 = 1.0
 
 
 class Liquid(Flow):
@@ -57,8 +59,8 @@ class Liquid(Flow):
 
 
 class SigState(State):
-    indicator: int = 1
-    action: int = 0
+    indicator: np.int32 = 1
+    action: np.int32 = 0
 
 
 class Signal(Flow):
@@ -67,7 +69,7 @@ class Signal(Flow):
 
 
 class TransportLiquidState(State):
-    amt_open: int = 1
+    amt_open: np.int32 = 1
 
 
 class TransportLiquidMode(Mode):
@@ -149,8 +151,8 @@ class GuideLiquidOut(GuideLiquid):
 
 
 class StoreLiquidState(State):
-    level: float = 10.0
-    net_flow: float = 0.0
+    level: np.float64 = 10.0
+    net_flow: np.float64 = 0.0
 
 
 class StoreLiquidMode(Mode):
@@ -195,7 +197,7 @@ class StoreLiquid(Function):
 
 
 class HumanParam(Parameter):
-    reacttime: int = 2
+    reacttime: np.int32 = 2
 
 
 class HumanASG(ActionArchitecture):
@@ -261,7 +263,7 @@ class HumanActions(Function):
 
 
 class LookMode(HumanErrorMode):
-    gtp: float = 0.02
+    gtp: np.float64 = 0.02
     fault_not_visible = (1, )
     default_phases = (('na', 1.0),)
     epc_x = 4, 0.1
@@ -278,7 +280,7 @@ class Look(Action):
 
 
 class DetectMode(HumanErrorMode):
-    gtp: float = 0.03
+    gtp: np.float64 = 0.03
     fault_not_detected = ()
     fault_false_high = ()
     fault_false_low = ()
@@ -318,7 +320,7 @@ class Detect(Action):
 
 
 class ReachMode(HumanErrorMode):
-    gtp: float = 0.09
+    gtp: np.float64 = 0.09
     fault_unable = (0.5, )
     default_phases = (('na', 1.0),)
     epc_2 = 11, 0.1
@@ -353,7 +355,7 @@ class Grasp(Action):
 
 
 class TurnMode(HumanErrorMode):
-    gtp: float = 0.009
+    gtp: np.float64 = 0.009
     fault_cannot = (1,)
     fault_wrong_valve = (0.5,)
     default_phases = (('na', 1.0),)
@@ -387,8 +389,8 @@ class Turn(Action):
 
 
 class TankParam(Parameter, readonly=True):
-    reacttime: int = 2
-    store_tstep: float = 1.0
+    reacttime: np.int32 = 2
+    store_tstep: np.float64 = 1.0
 
 
 class Tank(FunctionArchitecture):

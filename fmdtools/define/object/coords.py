@@ -91,10 +91,10 @@ class CoordsParam(Parameter):
 class DefaultCoordsParam(CoordsParam):
     """Default Parameter for Coords (with no states/features)."""
 
-    x_size: int = 10
-    y_size: int = 10
-    blocksize: float = 1.0
-    gapwidth: float = 0.0
+    x_size: np.int32 = 10
+    y_size: np.int32 = 10
+    blocksize: np.float64 = 1.0
+    gapwidth: np.float64 = 0.0
 
 
 class BaseCoords(BaseObject):

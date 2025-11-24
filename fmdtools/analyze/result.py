@@ -224,6 +224,10 @@ class Result(UserDict):
                 str_rep = str_rep+val_rep+vv+'\n'
         if str_rep.endswith('\n') and ind == 0:
             str_rep = str_rep[:-1]
+        lines = str_rep.splitlines()
+        if len(lines)>99:
+            capped_lines = lines[:99]
+            str_rep = "\n".join(capped_lines)+"\n ..."+str(len(lines))+" lines"
         return str_rep
 
     def all(self):

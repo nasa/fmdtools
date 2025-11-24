@@ -164,7 +164,7 @@ class Asset(Function):
             self.location.s.assign([*self.ground.places[landplace]], "x", "y")
             self.ground.area_to_standby(self.name, landplace)
         else:
-            a = 1
+            pass
             #print(self.name+" correction worked at t="+str(self.t.time))
 
     def park_cycle(self):
@@ -190,7 +190,7 @@ class Asset(Function):
         self.perc_requests.send('atc', 'asset_req')
     def determine_visioncov(self, xd, yd):
         """
-        Creates the polygon corresponding to the asset's vision cone.
+        Create the polygon corresponding to the asset's vision cone.
 
         Parameters
         ----------

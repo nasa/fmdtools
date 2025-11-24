@@ -57,12 +57,13 @@ class Parameter(BaseContainer, readonly=True):
     >>> p.copy()
     ExampleParameter(x=1.0, y=2.0, z=0.0)
     """
+
     rolename = "p"
 
     def __init__(self, *args, strict_immutability=True, check_type=True,
                  check_pickle=True, set_type=True, check_lim=True, **kwargs):
         """
-        Initializes the parameter with given kwargs.
+        Initialize the parameter with given kwargs.
 
         Parameters
         ----------
@@ -75,16 +76,14 @@ class Parameter(BaseContainer, readonly=True):
         if not self.__doc__:
             raise Exception("Please provide docstring")
             # self.__doc__=Parameter.__doc__
+        args = self.get_true_fields(*args, **kwargs)
+        if set_type:
+            args, kwargs = self.set_arg_type(*args, **kwargs)
         if args and isinstance(args[0], self.__class__):
             args = astuple(args[0])
         if check_lim:
             for i, k in enumerate(self.__fields__):
-                if i < len(args):
-                    self.check_lim(k, args[i])
-                elif k in kwargs:
-                    self.check_lim(k, kwargs[k])
-        if set_type:
-            args, kwargs = self.set_arg_type(*args, **kwargs)
+                self.check_lim(k, args[i])
         try:
             super().__init__(*args, **kwargs)
         except TypeError as e:
@@ -107,8 +106,9 @@ class Parameter(BaseContainer, readonly=True):
 
     def check_lim(self, k, v):
         """
-        Checks to ensure the value v for field k is within the defined limits
-        self.k_lim or set constraints self.k_set
+        Check to ensure the value v for field k is within the defined limits.
+
+        Limits defined for field k defined in self.k_lim or set constraints self.k_set.
 
         Parameters
         ----------

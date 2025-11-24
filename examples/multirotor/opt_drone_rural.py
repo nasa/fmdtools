@@ -200,4 +200,4 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes='all'
 
 
 if __name__ == "__main__":
-    a = 1
+    pass

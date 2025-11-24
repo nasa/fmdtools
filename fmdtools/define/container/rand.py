@@ -101,13 +101,14 @@ class Rand(BaseContainer):
     rolename = "r"
     rng: np.random._generator.Generator = np.random.default_rng()
     probs: list = list()
-    probdens: float = 1.0
-    seed: int = 42
-    run_stochastic: bool = False
-    track_pdf: bool = False
+    probdens: np.float64 = np.float64(1.0)
+    seed: np.int64 = np.int64(42)
+    run_stochastic: np.bool = np.bool(False)
+    track_pdf: np.bool = np.bool(False)
     default_track = ('s', 'probdens')
 
     def __init__(self, *args, seed=42, s_kwargs={}, **kwargs):
+
         args = self.get_true_fields(*args,
                                     seed=seed,
                                     rng=np.random.default_rng(seed),
@@ -223,13 +224,13 @@ class Rand(BaseContainer):
 
     def set_rng(self, other_rng):
         """Set the state of the rng in the Rand to the same state as other_rng."""
-        self.rng = np.random.default_rng(self.seed)
-        self.rng.bit_generator.__setstate__(other_rng.bit_generator.__getstate__())
+        self.rng = create_matching_rng(other_rng, init_seed=self.seed)
 
     def set_field(self, fieldname, value, as_copy=True):
         """Extend BaseContainer.assign to accomodate the rng."""
         if fieldname == 'rng':
-            self.set_rng(value)
+            value = create_matching_rng(value, init_seed=self.seed)
+            super(BaseContainer, self).__setattr__(fieldname, value)
         else:
             BaseContainer.set_field(self, fieldname, value, as_copy=as_copy)
 
@@ -240,6 +241,13 @@ class Rand(BaseContainer):
                           timerange=timerange, track='all')
         else:
             BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
+
+
+def create_matching_rng(other_rng, init_seed=42):
+    """Create an rng matching the state of other_rng."""
+    rng = np.random.default_rng(init_seed)
+    rng.bit_generator.__setstate__(other_rng.bit_generator.__getstate__())
+    return rng
 
 
 def calc_prob_for_integers(x, *args):

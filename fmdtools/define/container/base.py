@@ -281,6 +281,10 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         for field, value in fielddict.items():
             self.set_field(field, value, as_copy=as_copy)
 
+    def __setattr__(self, name, value):
+        """Set type for containers on assignment."""
+        self.set_field(name, value)
+
     def set_field(self, fieldname, value, as_copy=True):
         """
         Set the field of the container to the given value.
@@ -303,7 +307,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         ExNestContainer(e1=ExContainer(x=3.0, y=4.0), z=20.0)
         """
         if fieldname not in self.__fields__:
-            raise Exception(fieldname+" not a property of "+self.name)
+            raise Exception(fieldname+" not a property of "+self.__class__.__name__)
         if as_copy:
             value = copy.deepcopy(value)
         field = getattr(self, fieldname)
@@ -312,7 +316,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         else:
             try:
                 true_type = self.__annotations__[fieldname]
-                setattr(self, fieldname, true_type(value))
+                super().__setattr__(fieldname, true_type(value))
             except TypeError as e:
                 raise Exception("Poorly Specified field " + fieldname +
                                 " in class " + self.__class__.__name__) from e
@@ -484,7 +488,7 @@ class ExContainer(BaseContainer):
 
 class ExNestContainer(BaseContainer):
     e1: ExContainer = ExContainer()
-    z: float = 20.0
+    z: np.float64 = 20.0
 
 
 if __name__ == "__main__":

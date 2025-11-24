@@ -84,14 +84,14 @@ class UrbanGridParam(CoordsParam):
         all points that are safe to land at
     """
 
-    x_size: int = 10
-    y_size: int = 10
-    blocksize: float = 100.0
-    num_allowed: int = 10
-    num_unsafe: int = 60
-    num_occupied: int = 10
-    max_height: float = 100.0
-    roadwidth: int = 15
+    x_size: np.int32 = 10
+    y_size: np.int32 = 10
+    blocksize: np.float64 = 100.0
+    num_allowed: np.int32 = 10
+    num_unsafe: np.int32 = 60
+    num_occupied: np.int32 = 10
+    max_height: np.float64 = 100.0
+    roadwidth: np.int32 = 15
     loc: str = 'urban'
 
 
@@ -221,7 +221,7 @@ class VisionArch(ComponentArchitecture):
 class PlanPathParam(Parameter):
     """Path planning parameter (height)."""
 
-    height: float = 200.0
+    height: np.float64 = 200.0
 
 
 class PlanPath(PlanPathRural):

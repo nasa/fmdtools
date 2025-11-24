@@ -59,8 +59,8 @@ from shapely import Point
 class DegParam(Parameter, readonly=True):
     """Parameters for rover degradation."""
 
-    friction: float = 0.0
-    drift: float = 0.0
+    friction: np.float64 = 0.0
+    drift: np.float64 = 0.0
 
 
 class GroundParam(Parameter):
@@ -91,19 +91,19 @@ class GroundParam(Parameter):
 
     linetype: str = 'sine'
     linetype_set = ("sine", "turn")
-    amp: float = 1.0
-    period: float = 2 * np.pi
-    radius: float = 20.0
-    x_start: float = 10.0
-    y_end: float = 10.0
-    x_min: float = 0.0
-    x_max: float = 30.0
-    x_res: float = 0.1
-    path_buffer_on: float = 0.2
-    path_buffer_poor: float = 0.3
-    path_buffer_near: float = 0.4
-    dest_buffer_on: float = 1.0
-    dest_buffer_near: float = 2.0
+    amp: np.float64 = 1.0
+    period: np.float64 = 2 * np.pi
+    radius: np.float64 = 20.0
+    x_start: np.float64 = 10.0
+    y_end: np.float64 = 10.0
+    x_min: np.float64 = 0.0
+    x_max: np.float64 = 30.0
+    x_res: np.float64 = 0.1
+    path_buffer_on: np.float64 = 0.2
+    path_buffer_poor: np.float64 = 0.3
+    path_buffer_near: np.float64 = 0.4
+    dest_buffer_on: np.float64 = 1.0
+    dest_buffer_near: np.float64 = 2.0
 
     def gen_ls_sine(self):
         """Generate coordinates in sine environment."""
@@ -155,15 +155,15 @@ class ResCorrection(Parameter):
         correction for friction (if out of bounds)
     """
 
-    ub_f: float = 10.0
-    lb_f: float = -1.0
-    ub_t: float = 10.0
-    lb_t: float = 0.0
-    ub_d: float = 2.0
-    lb_d: float = -2.0
-    cor_d: float = 0.0
-    cor_t: float = 0.0
-    cor_f: float = 0.0
+    ub_f: np.float64 = 10.0
+    lb_f: np.float64 = -1.0
+    ub_t: np.float64 = 10.0
+    lb_t: np.float64 = 0.0
+    ub_d: np.float64 = 2.0
+    lb_d: np.float64 = -2.0
+    cor_d: np.float64 = 0.0
+    cor_t: np.float64 = 0.0
+    cor_f: np.float64 = 0.0
 
 class DestParam(PointParam):
     """
@@ -173,10 +173,10 @@ class DestParam(PointParam):
     the location.
     """
 
-    x: float = 0.0
-    y: float = 0.0
-    buffer_on: float = 1.0
-    buffer_near: float = 2.0
+    x: np.float64 = 0.0
+    y: np.float64 = 0.0
+    buffer_on: np.float64 = 1.0
+    buffer_near: np.float64 = 2.0
 
 
 def sin_func(x, amp, period):
@@ -188,9 +188,9 @@ class PathParam(LineParam):
     """Parameter defining the path."""
 
     xys: tuple = tuple([[x, sin_func(x, 1, 1)] for x in np.arange(0, 100, 1)])
-    buffer_on: float = 0.2
-    buffer_poor: float = 0.3
-    buffer_near: float = 0.4
+    buffer_on: np.float64 = 0.2
+    buffer_poor: np.float64 = 0.3
+    buffer_near: np.float64 = 0.4
 
 
 class RoverParam(Parameter):
@@ -313,11 +313,11 @@ class PosState(State):
         rover y-direction (positive if forward, negative if backward)
     """
 
-    x: float = 0.0
-    y: float = 0.0
-    vel: float = 0.0
-    ux: float = 1.0
-    uy: float = 0.0
+    x: np.float64 = 0.0
+    y: np.float64 = 0.0
+    vel: np.float64 = 0.0
+    ux: np.float64 = 1.0
+    uy: np.float64 = 0.0
 
 
 class Pos(Flow):
@@ -329,8 +329,8 @@ class Pos(Flow):
 class EEState(State):
     """Electricity state (voltage v and amperage a)."""
 
-    v: float = 0.0
-    a: float = 0.0
+    v: np.float64 = 0.0
+    a: np.float64 = 0.0
 
 
 class EE(Flow):
@@ -357,11 +357,11 @@ class VideoState(State):
         quality of feed
     """
 
-    lin_ux: float = 1.0
-    lin_uy: float = 0.0
-    lin_dx: float = 0.0
-    lin_dy: float = 0.0
-    quality: float = 1.0
+    lin_ux: np.float64 = 1.0
+    lin_uy: np.float64 = 0.0
+    lin_dx: np.float64 = 0.0
+    lin_dy: np.float64 = 0.0
+    quality: np.float64 = 1.0
 
 
 class Video(Flow):
@@ -428,9 +428,9 @@ class Comms(Flow):
 class FaultStates(State):
     """Rover fault states (friction, transfer, and drift)."""
 
-    transfer: float = 1.0
-    friction: float = 0.0
-    drift: float = 0.0
+    transfer: np.float64 = 1.0
+    friction: np.float64 = 0.0
+    drift: np.float64 = 0.0
 
 
 class FaultSig(Flow):
@@ -487,8 +487,8 @@ class PlanPathState(State):
     u_self: np.array = np.array([0.0, 0.0])
     u_lin: np.array = np.array([0.0, 0.0])
     u_lin_dev: np.array = np.array([0.0, 0.0])
-    rdiff: float = 0.0
-    vel_adj: float = 1.0
+    rdiff: np.float64 = 0.0
+    vel_adj: np.float64 = 1.0
 
     def set_positions(self, pos_signal, video):
         """Get and group the ownship position, line position, and deviation."""
@@ -681,7 +681,7 @@ class Drive(Function):
             >>> d.pos.s.uy = 1
             >>> d.pos.s.ux = 0
             >>> d.pos.s
-            PosState(x=0.0, y=0.0, vel=0.0, ux=0, uy=1)
+            PosState(x=0.0, y=0.0, vel=0.0, ux=0.0, uy=1.0)
             >>> d.drive_nominal(6, 6)
             >>> d.pos.s
             PosState(x=0.0, y=2.0, vel=2.0, ux=0.0, uy=1.0)
@@ -690,7 +690,7 @@ class Drive(Function):
             >>> d.pos.s.uy = -1
             >>> d.pos.s.ux = 0
             >>> d.pos.s
-            PosState(x=0.0, y=0.0, vel=0.0, ux=0, uy=-1)
+            PosState(x=0.0, y=0.0, vel=0.0, ux=0.0, uy=-1.0)
             >>> d.drive_nominal(6, 6)
             >>> d.pos.s
             PosState(x=0.0, y=-2.0, vel=2.0, ux=0.0, uy=-1.0)
@@ -788,8 +788,8 @@ class PowerState(State):
         Power output (percentage of soc).
     """
 
-    charge: float = 100.0
-    power: float = 0.0
+    charge: np.float64 = 100.0
+    power: np.float64 = 0.0
 
 
 class PowerMode(Mode):

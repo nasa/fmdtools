@@ -60,7 +60,7 @@ class TankParam(Parameter, readonly=True):
 
 
 def x_to_fp(*x):
-    a = 1
+    pass
     fp = tuple((v[0], v[1], v[2], v[3], int(x[i]))
                for i, v in enumerate(TankParam.__defaults__['faultpolicy']))
     return fp
@@ -139,9 +139,9 @@ class ExportLiquid(Function):
 
 
 class StoreLiquidState(State):
-    level: float = 10.0
-    net_flow: float = 0.0
-    coolingbuffer: float = 10.0
+    level: np.float64  = 10.0
+    net_flow: np.float64  = 0.0
+    coolingbuffer: np.float64  = 10.0
 
 
 class StoreLiquid(Function):

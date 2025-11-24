@@ -35,11 +35,12 @@ from fmdtools.define.container.mode import Mode
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.container.state import State
 from fmdtools.define.flow.base import Flow
+import numpy as np
 
 
 class GenericState(State):
-    rate: float = 1.0
-    effort: float = 1.0
+    rate: np.float64 = 1.0
+    effort: np.float64 = 1.0
 
 
 class GenericFlow(Flow):
@@ -48,7 +49,7 @@ class GenericFlow(Flow):
 
 
 class SigState(State):
-    value: float = 1.0
+    value: np.float64 = 1.0
 
 
 class Signal(Flow):

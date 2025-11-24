@@ -33,8 +33,8 @@ import numpy as np
 
 
 class ImportEERandState(State):
-    effstate: float = 1.0
-    grid_noise: float = 1.0
+    effstate: np.float64 = 1.0
+    grid_noise: np.float64 = 1.0
 
 
 class ImportEERand(Rand, copy_default=True):
@@ -65,7 +65,7 @@ class ImportEE(DetImportEE):
 
 
 class ImportSigRandState(State):
-    sig_noise: float = 1.0
+    sig_noise: np.float64 = 1.0
 
 
 class ImportSigRand(Rand):
@@ -93,12 +93,12 @@ class ImportSig(DetImportSig):
 
 
 class MoveWatStates(State):
-    total_flow: float = 0.0
-    eff: float = 1.0  # effectiveness state
+    total_flow: np.float64 = 0.0
+    eff: np.float64 = 1.0  # effectiveness state
 
 
 class MoveWatRandState(State):
-    eff: float = 1.0
+    eff: np.float64 = 1.0
     eff_update = ('normal', (1.0, 0.2))
 
 

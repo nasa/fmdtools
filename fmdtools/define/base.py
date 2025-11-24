@@ -410,8 +410,10 @@ def get_repr(obj, name, with_classname=True, with_name=False, one_line=True):
         if hasattr(obj.__self__, 'name'):
             objrepr = obj.__self__.name+"."+objrepr
         objrepr = "<method "+objrepr
+    elif isinstance(obj, str):
+        objrepr = repr(obj)
     else:
-        objrepr = obj.__repr__()
+        objrepr = str(obj)
     return name+"="+objrepr
 
 

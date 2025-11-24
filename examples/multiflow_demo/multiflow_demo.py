@@ -24,10 +24,12 @@ from fmdtools.define.flow.multiflow import MultiFlow
 from fmdtools.define.flow.commsflow import CommsFlow
 from fmdtools.define.container.state import State
 
+import numpy as np
+
 
 class LocationState(State):
-    x: float = 0.0
-    y: float = 0.0
+    x: np.float64 = 0.0
+    y: np.float64 = 0.0
 
 
 class Communications(CommsFlow):
@@ -39,8 +41,8 @@ class Location(MultiFlow):
 
 
 class MoveParam(Parameter):
-    x_up: float = 0.0
-    y_up: float = 0.0
+    x_up: np.float64 = 0.0
+    y_up: np.float64 = 0.0
 
 
 class Mover(Function):

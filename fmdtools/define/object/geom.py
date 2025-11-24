@@ -171,7 +171,7 @@ class Geom(BaseObject):
 
     def vect_to_shape(self, pt, shapename='shape'):
         """
-        Gets the vector (x, y) to a given shape.
+        Get the vector (x, y) to a given shape.
 
         Parameters
         ----------

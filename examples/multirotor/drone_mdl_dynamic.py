@@ -60,9 +60,9 @@ class DroneEnvironmentGridParam(CoordsParam):
         Type of environment risk profile (urban or rural).
     """
 
-    x_size: int = 16
-    y_size: int = 16
-    blocksize: float = 10.0
+    x_size: np.int32 = 16
+    y_size: np.int32 = 16
+    blocksize: np.float64 = 10.0
     loc: str = 'rural'
 
 

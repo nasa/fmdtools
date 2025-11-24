@@ -54,11 +54,11 @@ class Fault(BaseContainer, readonly=True):
         discrete ('sim') time. Default is 'sim'.
     """
 
-    prob: float = 1.0
-    cost: float = 0.0
+    prob: np.float64 = np.float64(1.0)
+    cost: np.float64 = np.float64(0.0)
     phases: tuple = ()
     disturbances: tuple = ()
-    units: str = 'sim'
+    units: np.str_ = 'sim'
 
     def __init__(self, *args, failrate=1.0, **kwargs):
         args = self.get_true_fields(*args, force_kwargs=True, **kwargs)
@@ -509,8 +509,8 @@ class HumanErrorMode(Mode):
     np.float64(0.06)
     """
 
-    failrate: float = 1.0
-    gtp: ClassVar[float] = 1.0
+    failrate: np.float64 = 1.0
+    gtp: ClassVar[np.float64] = 1.0
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
