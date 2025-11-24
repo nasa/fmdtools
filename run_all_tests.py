@@ -200,11 +200,11 @@ if __name__ == "__main__":
     parser.add_argument("--pyver", default="py311", required=False)
     parsed_args = parser.parse_args()
     kwargs = {k: v for k, v in vars(parsed_args).items() if v is not None}
-    # main(**kwargs)
+    main(**kwargs)
 
     # main(notebooks=False, testtype="doctests", cov=False, report=False)
     # main(testtype="custom", testlist=["examples/tank/Tank_Analysis.ipynb", "examples/tank/test_tank.py"])
-    main(testtype="custom", testlist=["examples/pump/test_pump_example.py"], cov=False, report=False, notebooks=False)
+    # main(testtype="custom", testlist=["examples/pump/test_pump_example.py"], cov=False, report=False, notebooks=False)
     # main(testtype="custom", testlist=["examples/rover/test_rover.py"])
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"
