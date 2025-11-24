@@ -125,7 +125,7 @@ numpy < 2.0
 # license: (BSD) https://numpy.org/doc/stable/license.html
 matplotlib
 # license: (mixed) https://matplotlib.org/stable/users/license.html
-pandas
+pandas[all]
 # license: (BSD 3-clause) https://pandas.pydata.org/pandas-docs/stable/getting_started/overview.html#license
 ordered-set
 # license: (MIT) https://github.com/rspeer/ordered-set/blob/master/MIT-LICENSE

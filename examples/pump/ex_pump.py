@@ -392,6 +392,8 @@ class MoveWat(Function):
 
     def set_faults(self):
         """
+        Set faults in the pump function.
+
         Here we use the timer to define a conditional fault that only occurs after a
         state is present after X seconds.
 
@@ -421,7 +423,7 @@ class MoveWat(Function):
         Indicators return booleans which are then recorded in the .i structure in the
         model history.
         """
-        return self.wat_out.s.pressure > 15.0
+        return bool(self.wat_out.s.pressure > 15.0)
 
     def static_behavior(self):
         """Define how the function will behave with different faults."""
@@ -435,13 +437,14 @@ class MoveWat(Function):
         else:
             self.ee_in.s.current = 10/5000*self.sig_in.s.power * \
                 self.ee_in.s.voltage*min(13.0, self.wat_out.s.pressure)
-            # if we wanted to enforce nominall eff state, we would include:
+            # if we wanted to enforce nominal eff state, we would include:
             # self.s.eff = 1.0
 
         velocity = self.sig_in.s.power*self.s.eff * \
             min(1000, self.ee_in.s.voltage)*self.wat_in.s.level
         self.wat_out.s.pressure = 10/500 * velocity/self.wat_out.s.area
         self.wat_out.s.flowrate = 0.3/500 * velocity*self.wat_out.s.area
+        self.wat_in.s.assign(self.wat_out.s, 'pressure', 'flowrate')
 
 # DEFINE MODEL OBJECT
 class Pump(FunctionArchitecture):

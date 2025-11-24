@@ -4,7 +4,7 @@ multiprocessing
 networkx
 numpy >= 2.0
 matplotlib >= 3.7.0
-pandas
+pandas[all]
 ordered-set
 dill
 recordclass == 0.23.1
