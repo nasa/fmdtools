@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.sim &mdash; fmdtools 2.2.1 documentation</title>
+  <title>fmdtools.sim &mdash; fmdtools 2.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=16656018"></script>
+      <script src="../_static/documentation_options.js?v=219dea72"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-1">Version: 2.2.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -431,6 +431,7 @@
 </li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.propagate.BaseSimContainer"><code class="docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
@@ -781,9 +782,16 @@ given SampleApproach over a range of parameters defined by a ParameterSample.</p
 <li><p><a class="reference internal" href="#fmdtools.sim.propagate.exec_fault_sim" title="fmdtools.sim.propagate.exec_fault_sim"><code class="xref py py-func docutils literal notranslate"><span class="pre">exec_fault_sim()</span></code></a>: Execute a MultiEventSimulation (for mapping)</p></li>
 </ul>
 <dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.sim.propagate.BaseSimContainer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">BaseSimContainer</span></span><a class="headerlink" href="#fmdtools.sim.propagate.BaseSimContainer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
+<p>Base Container class for SimEvent and BaseSimulation.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.BaseSimulation">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">BaseSimulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.BaseSimulation" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.propagate.BaseSimContainer" title="fmdtools.sim.propagate.BaseSimContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></p>
 <p>Base Simulation class that other simulations inherit from.</p>
 <p>Does not in and of itself simulate, but provides the overall patterns that other
 simulations inherit.</p>
@@ -1521,7 +1529,7 @@ rep0_var_3.examplefu               220.0</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.SimEvent">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">SimEvent</span></span><a class="headerlink" href="#fmdtools.sim.propagate.SimEvent" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.propagate.BaseSimContainer" title="fmdtools.sim.propagate.BaseSimContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></p>
 <p>Event in a Simulation.</p>
 <p>SimEvent is a class that simulations use to run scenarios that describes the
 time to simulate the model to as well as the operations to perform at that time,
@@ -1547,9 +1555,9 @@ such as copying, injecting faults, and returning results.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">se</span><span class="o">.</span><span class="n">mdl_copy</span> <span class="c1"># note that copied models are gotten just before the simulation</span>
 <span class="go">examplefunction ExampleFunction</span>
 <span class="go">- t=Time(time=4.0, timers={})</span>
-<span class="go">- s=ExampleState(x=np.float64(4.0), y=np.float64(0.0))</span>
+<span class="go">- s=ExampleState(x=4.0, y=0.0)</span>
 <span class="go">- m=ExampleMode(mode=&#39;standby&#39;, faults=set(), sub_faults=False)</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
+<span class="go">- exf=ExampleFlow(s=(x=1.0, y=1.0))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">se</span><span class="o">.</span><span class="n">result</span>
 <span class="go">classify:</span>
 <span class="go">--xy:                                4.0</span>
@@ -1667,21 +1675,21 @@ for nominal simulations.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">mdl</span>
 <span class="go">examplefunction ExampleFunction</span>
 <span class="go">- t=Time(time=100.0, timers={})</span>
-<span class="go">- s=ExampleState(x=20.0, y=np.float64(294.0))</span>
+<span class="go">- s=ExampleState(x=20.0, y=294.0)</span>
 <span class="go">- m=ExampleMode(mode=&#39;low&#39;, faults={&#39;low&#39;}, sub_faults=False)</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(1964.0), y=np.float64(1.0)))</span>
+<span class="go">- exf=ExampleFlow(s=(x=1964.0, y=1.0))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="o">*</span><span class="n">res</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
 <span class="go">[&#39;t1p0.s.x&#39;, &#39;tend.classify.xy&#39;, &#39;tend.graph&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">get_models</span><span class="p">()</span>
 <span class="go">{2.0: examplefunction ExampleFunction</span>
 <span class="go">- t=Time(time=1.0, timers={})</span>
-<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(0.0))</span>
+<span class="go">- s=ExampleState(x=1.0, y=0.0)</span>
 <span class="go">- m=ExampleMode(mode=&#39;standby&#39;, faults=set(), sub_faults=False)</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(1.0), y=np.float64(1.0))), 4.0: examplefunction ExampleFunction</span>
+<span class="go">- exf=ExampleFlow(s=(x=1.0, y=1.0)), 4.0: examplefunction ExampleFunction</span>
 <span class="go">- t=Time(time=3.0, timers={})</span>
-<span class="go">- s=ExampleState(x=np.float64(20.0), y=np.float64(3.0))</span>
+<span class="go">- s=ExampleState(x=20.0, y=3.0)</span>
 <span class="go">- m=ExampleMode(mode=&#39;low&#39;, faults={&#39;low&#39;}, sub_faults=False)</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(1.0), y=np.float64(1.0)))}</span>
+<span class="go">- exf=ExampleFlow(s=(x=1.0, y=1.0))}</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -3149,7 +3157,7 @@ independent base rate assumptions to calculate. Default is 1.0.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs2</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">exfd2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs2</span><span class="o">.</span><span class="n">add_single_fault_scenario</span><span class="p">((</span><span class="s1">&#39;ex_fxn&#39;</span><span class="p">,</span> <span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fs2</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
-<span class="go">[SingleFaultScenario(sequence={5.0: Injection(faults={&#39;ex_fxn&#39;: {&#39;low&#39;: {&#39;prob&#39;: 1.0, &#39;cost&#39;: 0.0, &#39;phases&#39;: (), &#39;disturbances&#39;: {&#39;s.x&#39;: 15.0}, &#39;units&#39;: &#39;sim&#39;}}}, disturbances={})}, times=(5,), function=&#39;ex_fxn&#39;, fault=&#39;low&#39;, rate=1.0, name=&#39;ex_fxn_low_15_t5&#39;, time=5, phase=&#39;na&#39;)]</span>
+<span class="go">[SingleFaultScenario(sequence={5.0: Injection(faults={&#39;ex_fxn&#39;: {&#39;low&#39;: {&#39;prob&#39;: np.float64(1.0), &#39;cost&#39;: np.float64(0.0), &#39;phases&#39;: (), &#39;disturbances&#39;: {&#39;s.x&#39;: 15.0}, &#39;units&#39;: &#39;sim&#39;}}}, disturbances={})}, times=(5,), function=&#39;ex_fxn&#39;, fault=&#39;low&#39;, rate=np.float64(1.0), name=&#39;ex_fxn_low_15_t5&#39;, time=5, phase=&#39;na&#39;)]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -3233,7 +3241,7 @@ may only take kwargs as input (which will map to ParameterDomain variables).</p>
 <p>Given the parameter:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">ExampleParameter</span><span class="p">(</span><span class="n">Parameter</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="gp">... </span>   <span class="n">y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span>
+<span class="gp">... </span>   <span class="n">y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span>
 <span class="gp">... </span>   <span class="n">z</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
 <span class="gp">... </span>   <span class="n">x_lim</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="gp">... </span>   <span class="n">y_set</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
@@ -4221,7 +4229,7 @@ as the inputs to another.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseObjCon.value">
-<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.BaseObjCon.value" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.BaseObjCon.value" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -4674,7 +4682,7 @@ g(x) = value - threshold &gt; 0.0 for ‘less’ constraints.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.Constraint.threshold">
-<span class="sig-name descname"><span class="pre">threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.Constraint.threshold" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.Constraint.threshold" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -4685,7 +4693,7 @@ g(x) = value - threshold &gt; 0.0 for ‘less’ constraints.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.Constraint.value">
-<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.Constraint.value" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.Constraint.value" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -4975,17 +4983,17 @@ The default is {}.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.HistoryConstraint.threshold">
-<span class="sig-name descname"><span class="pre">threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryConstraint.threshold" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryConstraint.threshold" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.HistoryConstraint.time">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryConstraint.time" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryConstraint.time" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.HistoryConstraint.value">
-<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryConstraint.value" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryConstraint.value" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -5019,12 +5027,12 @@ The default is {}.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.HistoryObjective.time">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryObjective.time" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryObjective.time" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.HistoryObjective.value">
-<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryObjective.value" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryObjective.value" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -5064,7 +5072,7 @@ The default is {}.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.Objective.value">
-<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.Objective.value" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.Objective.value" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -5825,12 +5833,12 @@ The default is ‘’.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ResultConstraint.threshold">
-<span class="sig-name descname"><span class="pre">threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultConstraint.threshold" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultConstraint.threshold" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ResultConstraint.time">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultConstraint.time" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultConstraint.time" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -5841,7 +5849,7 @@ The default is ‘’.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ResultConstraint.value">
-<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultConstraint.value" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultConstraint.value" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -5908,7 +5916,7 @@ The default is ‘’.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ResultObjective.time">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultObjective.time" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultObjective.time" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -5919,7 +5927,7 @@ The default is ‘’.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ResultObjective.value">
-<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultObjective.value" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultObjective.value" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>

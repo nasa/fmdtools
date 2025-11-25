@@ -57,12 +57,23 @@ Flows contain State objects which hold variables, but may be given other attribu
 
 
 class WaterStates(State):
-    """States for Water Flows."""
+    """
+    States for Water Flows.
 
-    flowrate: float = 1.0
-    pressure: float = 1.0
-    area: float = 1.0
-    level: float = 1.0
+    Note the syntax for fields is:
+        fieldname: value type = value
+    Where fieldname is the name of the field, value type is its type (which cannot change)
+    and value is the default value.
+
+    Generally, numpy types are reccomended, though both numpy and Python base types
+    can be used throughout. In fact, if a type annotation is given, it will convert
+    the default value to said type, as shown below...
+    """
+
+    flowrate: np.float64 = np.float64(1.0)  # verbose way to define a field with defaults
+    pressure: np.float64 = 1.0  # "lazy" default set to Python float - will be converted on instantiation
+    area: float = 1.0  # field using normal Python type -- still works fine
+    level: float = np.float64(1.0)  # no reason to do this but it will force the base Python type on the numpy default value
 
 
 class Water(Flow):
@@ -74,8 +85,8 @@ class Water(Flow):
 class EEStates(State):
     """States for electrical energy flows."""
 
-    current: float = 1.0
-    voltage: float = 1.0
+    current: np.float64 = 1.0
+    voltage: np.float64 = 1.0
 
 
 class Electricity(Flow):
@@ -87,7 +98,7 @@ class Electricity(Flow):
 class SignalStates(State):
     """States of Signal Flows."""
 
-    power: float = 1.0
+    power: np.float64 = 1.0
 
 
 class Signal(Flow):
@@ -146,7 +157,7 @@ class PumpParam(Parameter, readonly=True):
     # costs to tabulate in cost model (see classify())
     cost: tuple = ("repair", "water")
     # delay to use in MoveWater function
-    delay: int = 10
+    delay: np.int32 = 10
     # valid limits for delay
     delay_lim = (0, 100)
 
@@ -188,7 +199,7 @@ class ImportEEMode(Mode):
 class ImportEEState(State):
     """Effectiveness of importing electrical energy."""
 
-    effstate: float = 1.0
+    effstate: np.float64 = 1.0
 
 
 class ImportEE(Function):
@@ -337,13 +348,13 @@ class MoveWatTime(Time):
 class MoveWatStates(State):
     """State of the pump effectiveness."""
 
-    eff: float = 1.0
+    eff: np.float64 = 1.0
 
 
 class MoveWatParams(Parameter, readonly=True):
     """Delay parameter affecting how long it takes for the pump to break."""
 
-    delay: int = 1
+    delay: np.int32 = 1
 
 
 class MoveWatMode(Mode):
@@ -381,6 +392,8 @@ class MoveWat(Function):
 
     def set_faults(self):
         """
+        Set faults in the pump function.
+
         Here we use the timer to define a conditional fault that only occurs after a
         state is present after X seconds.
 
@@ -410,7 +423,7 @@ class MoveWat(Function):
         Indicators return booleans which are then recorded in the .i structure in the
         model history.
         """
-        return self.wat_out.s.pressure > 15.0
+        return bool(self.wat_out.s.pressure > 15.0)
 
     def static_behavior(self):
         """Define how the function will behave with different faults."""
@@ -424,13 +437,14 @@ class MoveWat(Function):
         else:
             self.ee_in.s.current = 10/5000*self.sig_in.s.power * \
                 self.ee_in.s.voltage*min(13.0, self.wat_out.s.pressure)
-            # if we wanted to enforce nominall eff state, we would include:
+            # if we wanted to enforce nominal eff state, we would include:
             # self.s.eff = 1.0
 
         velocity = self.sig_in.s.power*self.s.eff * \
             min(1000, self.ee_in.s.voltage)*self.wat_in.s.level
         self.wat_out.s.pressure = 10/500 * velocity/self.wat_out.s.area
         self.wat_out.s.flowrate = 0.3/500 * velocity*self.wat_out.s.area
+        self.wat_in.s.assign(self.wat_out.s, 'pressure', 'flowrate')
 
 # DEFINE MODEL OBJECT
 class Pump(FunctionArchitecture):
@@ -568,26 +582,26 @@ def script_show_graphs(**kwargs):
 def script_try_faults(**kwargs):
     """Try some fault scenarios."""
     mdl = Pump(**kwargs)
-    endclass, mdlhist = propagate.one_fault(mdl, 'export_water', 'block', time=29,
+    result, mdlhist = propagate.one_fault(mdl, 'export_water', 'block', time=29,
                                             staged=True)
 
-    endclass, mdlhist = propagate.one_fault(
+    result, mdlhist = propagate.one_fault(
         mdl, 'import_water', 'no_wat', time=29, staged=True)
-    endclass, mdlhist = propagate.nominal(mdl, mdl_kwargs=dict(track='all'))
+    result, mdlhist = propagate.nominal(mdl, mdl_kwargs=dict(track='all'))
     fig, ax = mdlhist.plot_line('flows.wat_2.s.flowrate', 'i.on')
     mdl = Pump(**kwargs)
 
-    endclass, mdlhist = propagate.one_fault(
+    result, mdlhist = propagate.one_fault(
         mdl, 'import_water', 'no_wat', time=29, staged=True)
 
-    endclass, mdlhist = propagate.one_fault(
+    result, mdlhist = propagate.one_fault(
         mdl, 'move_water', 'mech_break', time=0, staged=False)
 
 
 def script_fault_degradation_tables(**kwargs):
     """Show fault/degradation tables/plots for a given fault scenario."""
     mdl = Pump(**kwargs, track="all")
-    endclass, mdlhist = propagate.one_fault(
+    result, mdlhist = propagate.one_fault(
         mdl, 'import_ee', 'no_v', time=29, staged=True)
 
     ks = mdl.get_roles_as_dict("fxn", "flow", flex_prefixes=True)
@@ -613,19 +627,19 @@ def script_sample_faults(track='all', **kwargs):
     faultapp.add_faultsample("testsample", "fault_phases", "testdomain",
                              phasemap=mdl.sp.phases)
 
-    endclasses, mdlhists = propagate.fault_sample(mdl, faultapp)
+    results, mdlhists = propagate.fault_sample(mdl, faultapp)
     flat = mdlhists.flatten()
 
     gh = mdlhists.get_comp_groups('flows.ee_1.s.current')
 
-    endclasses, mdlhists_staged = propagate.fault_sample(mdl, faultapp,
-                                                         staged=True, track='all')
+    results, mdlhists_staged = propagate.fault_sample(mdl, faultapp,
+                                                      staged=True, track='all')
 
     tab = an.tabulate.result_summary_fmea(
-        endclasses, mdlhists, *mdl.fxns, *mdl.flows)
+            results, mdlhists, *mdl.fxns, *mdl.flows)
 
     h = mdlhists.get_expected(app=faultapp, with_nominal=True)
-    ec = endclasses.get_expected()
+    ec = results.get_expected()
 
     # degsumm = h.get_summary(*mdl.fxns, *mdl.flows)
 
@@ -633,7 +647,7 @@ def script_sample_faults(track='all', **kwargs):
 
 
 
-    c = an.tabulate.Comparison(endclasses, faultapp, default_stat=np.average,
+    c = an.tabulate.Comparison(results, faultapp, default_stat=np.average,
                                metrics=['cost', 'rate', 'expected_cost'],
                                ci_metrics=['cost'])
     c.as_table()
@@ -641,7 +655,7 @@ def script_sample_faults(track='all', **kwargs):
     c.as_plot("cost")
     c.as_plots("cost", "rate", "expected_cost", cols=2)
 
-    fmea = an.tabulate.FMEA(endclasses, faultapp)
+    fmea = an.tabulate.FMEA(results, faultapp)
     fmea.as_table()
     fmea.sort_by_metric("expected_cost")
     fmea.as_plot("expected_cost", color_factor="function")
@@ -652,18 +666,18 @@ def script_sample_faults(track='all', **kwargs):
     mdlhists.plot_line("flows.ee_1.s.current", "flows.sig_1.s.power",
                        "fxns.move_water.s.eff", "flows.wat_1.s.flowrate", cols=3)
 
-    endclasses.plot_metric_dist("rate", "cost", "expected_cost")
+    results.plot_metric_dist("rate", "cost", "expected_cost")
 
 
 if __name__ == "__main__":
 
-    mdl = Pump(sp={'end_time': 100000}, track=[])
-    import time
-    t = time.time()
-    mdl(100000)
-    dt = time.time() - t
-    # mdl = Pump()
-    # res, hist = propagate.nominal(mdl, to_return = {'graph': FunctionArchitectureGraph})
+    # mdl = Pump(sp={'end_time': 100000}, track=[])
+    # import time
+    # t = time.time()
+    # mdl(100000)
+    # dt = time.time() - t
+    mdl = Pump()
+    res, hist = propagate.nominal(mdl, to_return = {'graph': FunctionArchitectureGraph})
 
     """
     endfaults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',

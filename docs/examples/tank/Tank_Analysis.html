@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hold-up Tank Model &mdash; fmdtools 2.2.1 documentation</title>
+  <title>Hold-up Tank Model &mdash; fmdtools 2.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=16656018"></script>
+      <script src="../../_static/documentation_options.js?v=219dea72"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-1">Version: 2.2.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -431,6 +431,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimContainer"><code class="docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
@@ -1237,7 +1238,7 @@ sub_faults:                    array(21)
 <p>Here, the store_water level drops until the indicator turns on and allows for the system to compensate to keep the tank from fully emptying. Blue represents nominal state and red is the fault scenario.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="s1">&#39;store_water&#39;</span><span class="p">,</span><span class="s1">&#39;leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span><span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span><span class="s1">&#39;endclass&#39;</span><span class="p">,</span><span class="s1">&#39;endfaults&#39;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="s1">&#39;store_water&#39;</span><span class="p">,</span><span class="s1">&#39;leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span><span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span><span class="s1">&#39;classify&#39;</span><span class="p">,</span><span class="s1">&#39;endfaults&#39;</span><span class="p">])</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;flows.valve1_sig.s.action&#39;</span><span class="p">,</span> <span class="s1">&#39;flows.tank_sig.s.indicator&#39;</span><span class="p">,</span>
                             <span class="s1">&#39;fxns.store_water.s.level&#39;</span><span class="p">,</span> <span class="s1">&#39;fxns.store_water.s.net_flow&#39;</span><span class="p">,</span>
@@ -2256,7 +2257,7 @@ sub_faults:                    array(21)
 <p>Note that in these cases, because of the indicator/procedures, the operators are able to correct for the fault.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="s1">&#39;human.aa.acts.detect&#39;</span><span class="p">,</span><span class="s1">&#39;false_low&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span><span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span><span class="s1">&#39;endclass&#39;</span><span class="p">,</span><span class="s1">&#39;endfaults&#39;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="s1">&#39;human.aa.acts.detect&#39;</span><span class="p">,</span><span class="s1">&#39;false_low&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span><span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span><span class="s1">&#39;classify&#39;</span><span class="p">,</span><span class="s1">&#39;endfaults&#39;</span><span class="p">])</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;flows.valve1_sig.s.action&#39;</span><span class="p">,</span>
                        <span class="s1">&#39;flows.tank_sig.s.indicator&#39;</span><span class="p">,</span>
@@ -2701,7 +2702,7 @@ sub_faults:                    array(21)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="s1">&#39;human.aa.acts.detect&#39;</span><span class="p">,</span><span class="s1">&#39;false_high&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span><span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span><span class="s1">&#39;endclass&#39;</span><span class="p">,</span><span class="s1">&#39;endfaults&#39;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="s1">&#39;human.aa.acts.detect&#39;</span><span class="p">,</span><span class="s1">&#39;false_high&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span><span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span><span class="s1">&#39;classify&#39;</span><span class="p">,</span><span class="s1">&#39;endfaults&#39;</span><span class="p">])</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;flows.valve1_sig.s.action&#39;</span><span class="p">,</span>
                        <span class="s1">&#39;flows.tank_sig.s.indicator&#39;</span><span class="p">,</span>
@@ -2752,7 +2753,7 @@ sub_faults:                    array(21)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2766,7 +2767,7 @@ sub_faults:                    array(21)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span><span class="o">.</span><span class="n">add_fault_phases</span><span class="p">(</span><span class="n">n_joint</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+<span class="n">results</span><span class="p">,</span> <span class="n">mdlhists</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2778,7 +2779,7 @@ sub_faults:                    array(21)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fmea_tab</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">result_summary_fmea</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhist</span><span class="p">)</span> <span class="c1">#note, this is currently behaving odd even without the joint fault cases</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fmea_tab</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">result_summary_fmea</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">mdlhist</span><span class="p">)</span> <span class="c1">#note, this is currently behaving odd even without the joint fault cases</span>
 <span class="n">fmea_tab</span>
 </pre></div>
 </div>

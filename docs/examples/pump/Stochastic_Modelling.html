@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stochastic Modelling in fmdtools &mdash; fmdtools 2.2.1 documentation</title>
+  <title>Stochastic Modelling in fmdtools &mdash; fmdtools 2.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=16656018"></script>
+      <script src="../../_static/documentation_options.js?v=219dea72"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-1">Version: 2.2.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -431,6 +431,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimContainer"><code class="docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
@@ -967,7 +968,7 @@ class ImportEERandState(State):
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
-<span class="n">endclass</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;fxns.import_ee.r.s.effstate&#39;</span><span class="p">,</span> 
                             <span class="s1">&#39;fxns.import_ee.r.s.grid_noise&#39;</span><span class="p">,</span> 
                             <span class="s1">&#39;fxns.import_signal.r.s.sig_noise&#39;</span><span class="p">,</span>
@@ -983,7 +984,7 @@ class ImportEERandState(State):
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
-<span class="n">endclass</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1005,7 +1006,7 @@ class ImportEERandState(State):
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
-<span class="n">endclass</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+<span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                       <span class="n">mdl_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;seed&#39;</span><span class="p">:</span><span class="mi">110</span><span class="p">}))</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;fxns.import_ee.r.s.effstate&#39;</span><span class="p">,</span> 
                             <span class="s1">&#39;fxns.import_ee.r.s.grid_noise&#39;</span><span class="p">,</span> 
@@ -1022,7 +1023,7 @@ class ImportEERandState(State):
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
-<span class="n">endclass</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;export_water&#39;</span><span class="p">,</span><span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> 
+<span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;export_water&#39;</span><span class="p">,</span><span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> 
                                        <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mdl_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;seed&#39;</span><span class="p">:</span><span class="mi">110</span><span class="p">}))</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;fxns.move_water.r.s.eff&#39;</span><span class="p">,</span> 
                         <span class="s1">&#39;fxns.move_water.s.total_flow&#39;</span><span class="p">,</span>
@@ -1053,7 +1054,7 @@ class ImportEERandState(State):
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
-<span class="n">endclass</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;import_signal&#39;</span><span class="p">,</span> <span class="s1">&#39;no_sig&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> 
+<span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;import_signal&#39;</span><span class="p">,</span> <span class="s1">&#39;no_sig&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> 
                                         <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mdl_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;seed&#39;</span><span class="p">:</span><span class="mi">110</span><span class="p">}))</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;fxns.import_ee.r.s.effstate&#39;</span><span class="p">,</span> 
                         <span class="s1">&#39;fxns.import_ee.r.s.grid_noise&#39;</span><span class="p">,</span> 
@@ -1142,7 +1143,7 @@ add_variable_replicates(self, x_combos, replicates=1, seed_comb=&#39;shared&#39;
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">parameter_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">parameter_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1268,7 +1269,7 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\common.py:336: Degene
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">faultdomains</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fd&quot;</span><span class="p">:</span> <span class="p">((</span><span class="s2">&quot;fault&quot;</span><span class="p">,</span> <span class="s2">&quot;export_water&quot;</span><span class="p">,</span> <span class="s2">&quot;block&quot;</span><span class="p">),</span> <span class="p">{})}</span>
 <span class="n">faultsamples</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fs&quot;</span><span class="p">:</span> <span class="p">((</span><span class="s2">&quot;fault_phases&quot;</span><span class="p">,</span> <span class="s2">&quot;fd&quot;</span><span class="p">),</span> <span class="p">{})}</span>
-<span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="p">,</span> <span class="n">apps</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">nested_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">faultdomains</span><span class="o">=</span><span class="n">faultdomains</span><span class="p">,</span> <span class="n">faultsamples</span><span class="o">=</span><span class="n">faultsamples</span><span class="p">)</span>
+<span class="n">results</span><span class="p">,</span> <span class="n">mdlhists</span><span class="p">,</span> <span class="n">apps</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">nested_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">faultdomains</span><span class="o">=</span><span class="n">faultdomains</span><span class="p">,</span> <span class="n">faultsamples</span><span class="o">=</span><span class="n">faultsamples</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1716,7 +1717,7 @@ Faults found during the nominal run [&#39;move_water.mech_break&#39;]
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.analyze.tabulate</span><span class="w"> </span><span class="kn">import</span> <span class="n">NestedComparison</span>
-<span class="n">comp</span> <span class="o">=</span> <span class="n">NestedComparison</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;p.delay&quot;</span><span class="p">],</span> <span class="n">apps</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;fault&quot;</span><span class="p">],</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">],</span> <span class="n">ci_metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">],</span> <span class="n">default_stat</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
+<span class="n">comp</span> <span class="o">=</span> <span class="n">NestedComparison</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;p.delay&quot;</span><span class="p">],</span> <span class="n">apps</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;fault&quot;</span><span class="p">],</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">],</span> <span class="n">ci_metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">],</span> <span class="n">default_stat</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

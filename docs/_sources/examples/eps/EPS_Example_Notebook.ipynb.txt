@@ -19,7 +19,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": 9,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:07:20.866555Z",
@@ -45,7 +45,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 10,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:07:22.461705Z",
@@ -81,7 +81,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": 11,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:07:22.886743Z",
@@ -104,7 +104,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 12,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:07:22.929379Z",
@@ -146,7 +146,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": 13,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:07:23.549797Z",
@@ -182,7 +182,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 14,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:07:23.967200Z",
@@ -196,13 +196,13 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00<00:00, 39.75it/s]\n"
+      "SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00<00:00, 82.29it/s]\n"
      ]
     }
    ],
    "source": [
     "mdl= EPS(track='all')\n",
-    "endclasses, mdlhists = propagate.single_faults(mdl, staged=True)"
+    "results, mdlhists = propagate.single_faults(mdl, staged=True)"
    ]
   },
   {
@@ -214,7 +214,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 15,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:07:24.823607Z",
@@ -230,7 +230,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 16,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:07:24.829589Z",
@@ -562,128 +562,52 @@
        "</div>"
       ],
       "text/plain": [
-       "                                                                                         degraded  \\\n",
-       "nominal                                                                                        []   \n",
-       "eps_fxns_ee_to_he_open_circuit_t0p0                                    ['ee_to_he', 'ee_h', 'he']   \n",
-       "eps_fxns_supply_ee_open_circuit_t0p0            ['supply_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_o', ...   \n",
-       "eps_fxns_ee_to_he_high_heat_t0p0                ['supply_ee', 'store_ee', 'ee_to_he', 'ee_2', ...   \n",
-       "eps_fxns_ee_to_oe_optical_resist_t0p0              ['ee_to_oe', 'ee_o', 'oe', 'he', 'waste_he_o']   \n",
-       "eps_fxns_supply_ee_short_t0p0                   ['supply_ee', 'store_ee', 'distribute_ee', 'ee...   \n",
-       "eps_fxns_ee_to_he_low_heat_t0p0                                                ['ee_to_he', 'he']   \n",
-       "eps_fxns_ee_to_oe_burnt_out_t0p0                   ['ee_to_oe', 'ee_o', 'oe', 'he', 'waste_he_o']   \n",
-       "eps_fxns_import_signal_no_signal_t0p0           ['import_signal', 'ee_2', 'ee_3', 'ee_m', 'ee_...   \n",
-       "eps_fxns_ee_to_he_toohigh_heat_t0p0             ['store_ee', 'distribute_ee', 'ee_to_he', 'ee_...   \n",
-       "eps_fxns_supply_ee_adverse_resist_t0p0          ['supply_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_o', ...   \n",
-       "eps_fxns_export_waste_ho_ineffective_sink_t0p0            ['export_waste_ho', 'he', 'waste_he_o']   \n",
-       "eps_fxns_export_waste_ho_hot_sink_t0p0                    ['export_waste_ho', 'he', 'waste_he_o']   \n",
-       "eps_fxns_export_waste_h1_ineffective_sink_t0p0            ['export_waste_h1', 'he', 'waste_he_1']   \n",
-       "eps_fxns_export_waste_h1_hot_sink_t0p0                    ['export_waste_h1', 'he', 'waste_he_1']   \n",
-       "eps_fxns_export_waste_hm_hot_sink_t0p0                    ['export_waste_hm', 'he', 'waste_he_m']   \n",
-       "eps_fxns_export_waste_hm_ineffective_sink_t0p0            ['export_waste_hm', 'he', 'waste_he_m']   \n",
-       "eps_fxns_export_he_hot_sink_t0p0                                              ['export_he', 'he']   \n",
-       "eps_fxns_import_ee_low_v_t0p0                   ['import_ee', 'ee_1', 'ee_2', 'ee_3', 'ee_m', ...   \n",
-       "eps_fxns_export_he_ineffective_sink_t0p0                                      ['export_he', 'he']   \n",
-       "eps_fxns_store_ee_low_storage_t0p0                                                   ['store_ee']   \n",
-       "eps_fxns_supply_ee_major_overload_t0p0          ['supply_ee', 'store_ee', 'ee_2', 'ee_3', 'ee_...   \n",
-       "eps_fxns_import_ee_no_v_t0p0                    ['import_ee', 'ee_1', 'ee_2', 'ee_3', 'ee_m', ...   \n",
-       "eps_fxns_store_ee_no_storage_t0p0               ['store_ee', 'ee_3', 'ee_m', 'ee_o', 'ee_h', '...   \n",
-       "eps_fxns_import_ee_high_v_t0p0                  ['import_ee', 'store_ee', 'ee_1', 'ee_2', 'ee_...   \n",
-       "eps_fxns_import_signal_partial_signal_t0p0      ['import_signal', 'ee_2', 'ee_3', 'ee_m', 'ee_...   \n",
-       "eps_fxns_distribute_ee_adverse_resist_t0p0      ['distribute_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_...   \n",
-       "eps_fxns_ee_to_me_open_circuit_t0p0                ['ee_to_me', 'ee_m', 'me', 'he', 'waste_he_m']   \n",
-       "eps_fxns_distribute_ee_poor_alloc_t0p0          ['distribute_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_...   \n",
-       "eps_fxns_ee_to_me_high_torque_t0p0                 ['ee_to_me', 'ee_m', 'me', 'he', 'waste_he_m']   \n",
-       "eps_fxns_supply_ee_minor_overload_t0p0          ['supply_ee', 'store_ee', 'distribute_ee', 'ee...   \n",
-       "eps_fxns_distribute_ee_open_circuit_t0p0        ['distribute_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_...   \n",
-       "eps_fxns_distribute_ee_short_t0p0               ['store_ee', 'distribute_ee', 'ee_3', 'ee_m', ...   \n",
-       "eps_fxns_ee_to_me_short_t0p0                    ['store_ee', 'distribute_ee', 'ee_to_me', 'ee_...   \n",
-       "eps_fxns_ee_to_me_toohigh_torque_t0p0           ['store_ee', 'distribute_ee', 'ee_to_me', 'ee_...   \n",
-       "eps_fxns_ee_to_me_low_torque_t0p0               ['store_ee', 'distribute_ee', 'ee_to_me', 'ee_...   \n",
-       "\n",
-       "                                                                                    faulty  \\\n",
-       "nominal                                                                                 []   \n",
-       "eps_fxns_ee_to_he_open_circuit_t0p0                                           ['ee_to_he']   \n",
-       "eps_fxns_supply_ee_open_circuit_t0p0                                         ['supply_ee']   \n",
-       "eps_fxns_ee_to_he_high_heat_t0p0                     ['supply_ee', 'store_ee', 'ee_to_he']   \n",
-       "eps_fxns_ee_to_oe_optical_resist_t0p0                                         ['ee_to_oe']   \n",
-       "eps_fxns_supply_ee_short_t0p0                   ['supply_ee', 'store_ee', 'distribute_ee']   \n",
-       "eps_fxns_ee_to_he_low_heat_t0p0                                               ['ee_to_he']   \n",
-       "eps_fxns_ee_to_oe_burnt_out_t0p0                                              ['ee_to_oe']   \n",
-       "eps_fxns_import_signal_no_signal_t0p0                                    ['import_signal']   \n",
-       "eps_fxns_ee_to_he_toohigh_heat_t0p0              ['store_ee', 'distribute_ee', 'ee_to_he']   \n",
-       "eps_fxns_supply_ee_adverse_resist_t0p0                                       ['supply_ee']   \n",
-       "eps_fxns_export_waste_ho_ineffective_sink_t0p0                         ['export_waste_ho']   \n",
-       "eps_fxns_export_waste_ho_hot_sink_t0p0                                 ['export_waste_ho']   \n",
-       "eps_fxns_export_waste_h1_ineffective_sink_t0p0                         ['export_waste_h1']   \n",
-       "eps_fxns_export_waste_h1_hot_sink_t0p0                                 ['export_waste_h1']   \n",
-       "eps_fxns_export_waste_hm_hot_sink_t0p0                                 ['export_waste_hm']   \n",
-       "eps_fxns_export_waste_hm_ineffective_sink_t0p0                         ['export_waste_hm']   \n",
-       "eps_fxns_export_he_hot_sink_t0p0                                             ['export_he']   \n",
-       "eps_fxns_import_ee_low_v_t0p0                                                ['import_ee']   \n",
-       "eps_fxns_export_he_ineffective_sink_t0p0                                     ['export_he']   \n",
-       "eps_fxns_store_ee_low_storage_t0p0                                            ['store_ee']   \n",
-       "eps_fxns_supply_ee_major_overload_t0p0                           ['supply_ee', 'store_ee']   \n",
-       "eps_fxns_import_ee_no_v_t0p0                                                 ['import_ee']   \n",
-       "eps_fxns_store_ee_no_storage_t0p0                                             ['store_ee']   \n",
-       "eps_fxns_import_ee_high_v_t0p0                                   ['import_ee', 'store_ee']   \n",
-       "eps_fxns_import_signal_partial_signal_t0p0                               ['import_signal']   \n",
-       "eps_fxns_distribute_ee_adverse_resist_t0p0                               ['distribute_ee']   \n",
-       "eps_fxns_ee_to_me_open_circuit_t0p0                                           ['ee_to_me']   \n",
-       "eps_fxns_distribute_ee_poor_alloc_t0p0                                   ['distribute_ee']   \n",
-       "eps_fxns_ee_to_me_high_torque_t0p0                                            ['ee_to_me']   \n",
-       "eps_fxns_supply_ee_minor_overload_t0p0          ['supply_ee', 'store_ee', 'distribute_ee']   \n",
-       "eps_fxns_distribute_ee_open_circuit_t0p0                                 ['distribute_ee']   \n",
-       "eps_fxns_distribute_ee_short_t0p0                            ['store_ee', 'distribute_ee']   \n",
-       "eps_fxns_ee_to_me_short_t0p0                     ['store_ee', 'distribute_ee', 'ee_to_me']   \n",
-       "eps_fxns_ee_to_me_toohigh_torque_t0p0            ['store_ee', 'distribute_ee', 'ee_to_me']   \n",
-       "eps_fxns_ee_to_me_low_torque_t0p0                ['store_ee', 'distribute_ee', 'ee_to_me']   \n",
-       "\n",
-       "                                                    rate    cost expected_cost  \n",
-       "nominal                                              1.0     0.0           0.0  \n",
-       "eps_fxns_ee_to_he_open_circuit_t0p0                  0.0   550.0         2.409  \n",
-       "eps_fxns_supply_ee_open_circuit_t0p0                 0.0  1450.0        3.1755  \n",
-       "eps_fxns_ee_to_he_high_heat_t0p0                     0.0  2500.0         10.95  \n",
-       "eps_fxns_ee_to_oe_optical_resist_t0p0                0.0   520.0        11.388  \n",
-       "eps_fxns_supply_ee_short_t0p0                        0.0  5150.0        22.557  \n",
-       "eps_fxns_ee_to_he_low_heat_t0p0                 0.000002   550.0         48.18  \n",
-       "eps_fxns_ee_to_oe_burnt_out_t0p0                0.000002   550.0         48.18  \n",
-       "eps_fxns_import_signal_no_signal_t0p0           0.000001  2000.0          87.6  \n",
-       "eps_fxns_ee_to_he_toohigh_heat_t0p0                  0.0  5100.0        111.69  \n",
-       "eps_fxns_supply_ee_adverse_resist_t0p0          0.000002  1650.0        144.54  \n",
-       "eps_fxns_export_waste_ho_ineffective_sink_t0p0  0.000005  1000.0         219.0  \n",
-       "eps_fxns_export_waste_ho_hot_sink_t0p0           0.00001   500.0         219.0  \n",
-       "eps_fxns_export_waste_h1_ineffective_sink_t0p0  0.000005  1000.0         219.0  \n",
-       "eps_fxns_export_waste_h1_hot_sink_t0p0           0.00001   500.0         219.0  \n",
-       "eps_fxns_export_waste_hm_hot_sink_t0p0           0.00001   500.0         219.0  \n",
-       "eps_fxns_export_waste_hm_ineffective_sink_t0p0  0.000005  1000.0         219.0  \n",
-       "eps_fxns_export_he_hot_sink_t0p0                 0.00001   600.0         262.8  \n",
-       "eps_fxns_import_ee_low_v_t0p0                    0.00001   700.0         306.6  \n",
-       "eps_fxns_export_he_ineffective_sink_t0p0        0.000005  1500.0         328.5  \n",
-       "eps_fxns_store_ee_low_storage_t0p0              0.000005  2000.0         438.0  \n",
-       "eps_fxns_supply_ee_major_overload_t0p0          0.000003  3650.0        479.61  \n",
-       "eps_fxns_import_ee_no_v_t0p0                     0.00001  1550.0         678.9  \n",
-       "eps_fxns_store_ee_no_storage_t0p0               0.000005  3250.0        711.75  \n",
-       "eps_fxns_import_ee_high_v_t0p0                  0.000005  3350.0        733.65  \n",
-       "eps_fxns_import_signal_partial_signal_t0p0       0.00001  2000.0         876.0  \n",
-       "eps_fxns_distribute_ee_adverse_resist_t0p0       0.00001  2750.0        1204.5  \n",
-       "eps_fxns_ee_to_me_open_circuit_t0p0              0.00005   650.0        1423.5  \n",
-       "eps_fxns_distribute_ee_poor_alloc_t0p0           0.00002  1750.0        1533.0  \n",
-       "eps_fxns_ee_to_me_high_torque_t0p0                0.0001   450.0        1971.0  \n",
-       "eps_fxns_supply_ee_minor_overload_t0p0           0.00001  5150.0        2255.7  \n",
-       "eps_fxns_distribute_ee_open_circuit_t0p0         0.00003  2750.0        3613.5  \n",
-       "eps_fxns_distribute_ee_short_t0p0                0.00002  4750.0        4161.0  \n",
-       "eps_fxns_ee_to_me_short_t0p0                     0.00005  4950.0       10840.5  \n",
-       "eps_fxns_ee_to_me_toohigh_torque_t0p0            0.00005  5050.0       11059.5  \n",
-       "eps_fxns_ee_to_me_low_torque_t0p0                 0.0001  4950.0       21681.0  "
+       "                                                                                         degraded                                      faulty      rate    cost expected_cost\n",
+       "nominal                                                                                        []                                          []       1.0     0.0           0.0\n",
+       "eps_fxns_ee_to_he_open_circuit_t0p0                                    ['ee_to_he', 'ee_h', 'he']                                ['ee_to_he']       0.0   550.0         2.409\n",
+       "eps_fxns_supply_ee_open_circuit_t0p0            ['supply_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_o', ...                               ['supply_ee']       0.0  1450.0        3.1755\n",
+       "eps_fxns_ee_to_he_high_heat_t0p0                ['supply_ee', 'store_ee', 'ee_to_he', 'ee_2', ...       ['supply_ee', 'store_ee', 'ee_to_he']       0.0  2500.0         10.95\n",
+       "eps_fxns_ee_to_oe_optical_resist_t0p0              ['ee_to_oe', 'ee_o', 'oe', 'he', 'waste_he_o']                                ['ee_to_oe']       0.0   520.0        11.388\n",
+       "eps_fxns_supply_ee_short_t0p0                   ['supply_ee', 'store_ee', 'distribute_ee', 'ee...  ['supply_ee', 'store_ee', 'distribute_ee']       0.0  5150.0        22.557\n",
+       "eps_fxns_ee_to_he_low_heat_t0p0                                                ['ee_to_he', 'he']                                ['ee_to_he']  0.000002   550.0         48.18\n",
+       "eps_fxns_ee_to_oe_burnt_out_t0p0                   ['ee_to_oe', 'ee_o', 'oe', 'he', 'waste_he_o']                                ['ee_to_oe']  0.000002   550.0         48.18\n",
+       "eps_fxns_import_signal_no_signal_t0p0           ['import_signal', 'ee_2', 'ee_3', 'ee_m', 'ee_...                           ['import_signal']  0.000001  2000.0          87.6\n",
+       "eps_fxns_ee_to_he_toohigh_heat_t0p0             ['store_ee', 'distribute_ee', 'ee_to_he', 'ee_...   ['store_ee', 'distribute_ee', 'ee_to_he']       0.0  5100.0        111.69\n",
+       "eps_fxns_supply_ee_adverse_resist_t0p0          ['supply_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_o', ...                               ['supply_ee']  0.000002  1650.0        144.54\n",
+       "eps_fxns_export_waste_ho_ineffective_sink_t0p0            ['export_waste_ho', 'he', 'waste_he_o']                         ['export_waste_ho']  0.000005  1000.0         219.0\n",
+       "eps_fxns_export_waste_ho_hot_sink_t0p0                    ['export_waste_ho', 'he', 'waste_he_o']                         ['export_waste_ho']   0.00001   500.0         219.0\n",
+       "eps_fxns_export_waste_h1_ineffective_sink_t0p0            ['export_waste_h1', 'he', 'waste_he_1']                         ['export_waste_h1']  0.000005  1000.0         219.0\n",
+       "eps_fxns_export_waste_h1_hot_sink_t0p0                    ['export_waste_h1', 'he', 'waste_he_1']                         ['export_waste_h1']   0.00001   500.0         219.0\n",
+       "eps_fxns_export_waste_hm_hot_sink_t0p0                    ['export_waste_hm', 'he', 'waste_he_m']                         ['export_waste_hm']   0.00001   500.0         219.0\n",
+       "eps_fxns_export_waste_hm_ineffective_sink_t0p0            ['export_waste_hm', 'he', 'waste_he_m']                         ['export_waste_hm']  0.000005  1000.0         219.0\n",
+       "eps_fxns_export_he_hot_sink_t0p0                                              ['export_he', 'he']                               ['export_he']   0.00001   600.0         262.8\n",
+       "eps_fxns_import_ee_low_v_t0p0                   ['import_ee', 'ee_1', 'ee_2', 'ee_3', 'ee_m', ...                               ['import_ee']   0.00001   700.0         306.6\n",
+       "eps_fxns_export_he_ineffective_sink_t0p0                                      ['export_he', 'he']                               ['export_he']  0.000005  1500.0         328.5\n",
+       "eps_fxns_store_ee_low_storage_t0p0                                                   ['store_ee']                                ['store_ee']  0.000005  2000.0         438.0\n",
+       "eps_fxns_supply_ee_major_overload_t0p0          ['supply_ee', 'store_ee', 'ee_2', 'ee_3', 'ee_...                   ['supply_ee', 'store_ee']  0.000003  3650.0        479.61\n",
+       "eps_fxns_import_ee_no_v_t0p0                    ['import_ee', 'ee_1', 'ee_2', 'ee_3', 'ee_m', ...                               ['import_ee']   0.00001  1550.0         678.9\n",
+       "eps_fxns_store_ee_no_storage_t0p0               ['store_ee', 'ee_3', 'ee_m', 'ee_o', 'ee_h', '...                                ['store_ee']  0.000005  3250.0        711.75\n",
+       "eps_fxns_import_ee_high_v_t0p0                  ['import_ee', 'store_ee', 'ee_1', 'ee_2', 'ee_...                   ['import_ee', 'store_ee']  0.000005  3350.0        733.65\n",
+       "eps_fxns_import_signal_partial_signal_t0p0      ['import_signal', 'ee_2', 'ee_3', 'ee_m', 'ee_...                           ['import_signal']   0.00001  2000.0         876.0\n",
+       "eps_fxns_distribute_ee_adverse_resist_t0p0      ['distribute_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_...                           ['distribute_ee']   0.00001  2750.0        1204.5\n",
+       "eps_fxns_ee_to_me_open_circuit_t0p0                ['ee_to_me', 'ee_m', 'me', 'he', 'waste_he_m']                                ['ee_to_me']   0.00005   650.0        1423.5\n",
+       "eps_fxns_distribute_ee_poor_alloc_t0p0          ['distribute_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_...                           ['distribute_ee']   0.00002  1750.0        1533.0\n",
+       "eps_fxns_ee_to_me_high_torque_t0p0                 ['ee_to_me', 'ee_m', 'me', 'he', 'waste_he_m']                                ['ee_to_me']    0.0001   450.0        1971.0\n",
+       "eps_fxns_supply_ee_minor_overload_t0p0          ['supply_ee', 'store_ee', 'distribute_ee', 'ee...  ['supply_ee', 'store_ee', 'distribute_ee']   0.00001  5150.0        2255.7\n",
+       "eps_fxns_distribute_ee_open_circuit_t0p0        ['distribute_ee', 'ee_2', 'ee_3', 'ee_m', 'ee_...                           ['distribute_ee']   0.00003  2750.0        3613.5\n",
+       "eps_fxns_distribute_ee_short_t0p0               ['store_ee', 'distribute_ee', 'ee_3', 'ee_m', ...               ['store_ee', 'distribute_ee']   0.00002  4750.0        4161.0\n",
+       "eps_fxns_ee_to_me_short_t0p0                    ['store_ee', 'distribute_ee', 'ee_to_me', 'ee_...   ['store_ee', 'distribute_ee', 'ee_to_me']   0.00005  4950.0       10840.5\n",
+       "eps_fxns_ee_to_me_toohigh_torque_t0p0           ['store_ee', 'distribute_ee', 'ee_to_me', 'ee_...   ['store_ee', 'distribute_ee', 'ee_to_me']   0.00005  5050.0       11059.5\n",
+       "eps_fxns_ee_to_me_low_torque_t0p0               ['store_ee', 'distribute_ee', 'ee_to_me', 'ee_...   ['store_ee', 'distribute_ee', 'ee_to_me']    0.0001  4950.0       21681.0"
       ]
      },
-     "execution_count": 8,
+     "execution_count": 16,
      "metadata": {},
      "output_type": "execute_result"
     }
    ],
    "source": [
-    "tab = result_summary_fmea(endclasses, mdlhists, *mdl.fxns, *mdl.flows)\n",
+    "tab = result_summary_fmea(results, mdlhists, *mdl.fxns, *mdl.flows)\n",
     "tab.sort_values(\"expected_cost\")"
    ]
   }

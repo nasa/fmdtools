@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.analyze &mdash; fmdtools 2.2.1 documentation</title>
+  <title>fmdtools.analyze &mdash; fmdtools 2.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=16656018"></script>
+      <script src="../_static/documentation_options.js?v=219dea72"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-1">Version: 2.2.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -431,6 +431,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.BaseSimContainer"><code class="docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
@@ -1043,7 +1044,7 @@ legend. Default is False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>files_to_read</strong> – files to load for endclasses/mdlhists.</p>
+<dd class="field-even"><p><strong>files_to_read</strong> – files to load for results/mdlhists.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
@@ -1306,7 +1307,7 @@ r.load_folder()</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.create_simple_fmea">
 <span class="sig-name descname"><span class="pre">create_simple_fmea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">metrics</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.create_simple_fmea" title="Link to this definition"></a></dt>
-<dd><p>Make a simple FMEA-stype table of the metrics in the endclasses
+<dd><p>Make a simple FMEA-stype table of the metrics in the end-state classification
 of a list of fault scenarios run. If metrics not provided, returns all</p>
 </dd></dl>
 
@@ -1700,7 +1701,7 @@ the global kwargs (or default behavior).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.save">
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.save" title="Link to this definition"></a></dt>
-<dd><p>Save a given result variable (endclasses or mdlhists) to a file filename.</p>
+<dd><p>Save a given result variable (result or history) to a file filename.</p>
 <p>Files can be saved as npz, csv, or json.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1814,7 +1815,7 @@ loaded from a file (where keys are strings) (used in csv/json results).</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.load">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renest_dict=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rclass=&lt;class</span> <span class="pre">'fmdtools.analyze.result.Result'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.load" title="Link to this definition"></a></dt>
-<dd><p>Load a given (endclasses or mdlhists) results dictionary from a (npz/csv/json) file.</p>
+<dd><p>Load a given (result or history) results dictionary from a (npz/csv/json) file.</p>
 <p>e.g. a file saved using process.save_result or save_args in propagate functions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2610,7 +2611,7 @@ The default is False.</p></li>
 <p>Translates simulation outputs to pandas tables for display, export, etc.</p>
 <p>Uses methods:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.result_summary_fmea" title="fmdtools.analyze.tabulate.result_summary_fmea"><code class="xref py py-func docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a>: Make a table of endclass metrics, along with degraded functions/flows.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.result_summary_fmea" title="fmdtools.analyze.tabulate.result_summary_fmea"><code class="xref py py-func docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a>: Make a table of metrics from classify(), along with degraded functions/flows.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.result_summary" title="fmdtools.analyze.tabulate.result_summary"><code class="xref py py-func docutils literal notranslate"><span class="pre">result_summary()</span></code></a>: Make a a table of a summary dictionary from a given model run.</p></li>
 </ul>
 <p>and classes:</p>
@@ -2823,7 +2824,7 @@ set of scenarios for the given factor level.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">comp</span> <span class="o">=</span> <span class="n">Comparison</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exp_ps</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">factors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;p.x&#39;</span><span class="p">],</span> <span class="n">default_stat</span><span class="o">=</span><span class="s1">&#39;expected&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">comp</span><span class="o">.</span><span class="n">sort_by_factors</span><span class="p">(</span><span class="s2">&quot;p.x&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">comp</span>
-<span class="go">{&#39;a&#39;: {(np.int64(0),): np.float64(0.0), (np.int64(1),): np.float64(1.0), (2,): np.float64(4.0), (np.int64(3),): np.float64(9.0), (np.int64(4),): np.float64(16.0), (np.int64(5),): np.float64(25.0), (np.int64(6),): np.float64(36.0), (np.int64(7),): np.float64(49.0), (np.int64(8),): np.float64(64.0), (np.int64(9),): np.float64(81.0), (np.int64(10),): np.float64(100.0)}}</span>
+<span class="go">&lt;Comparison: 1 metric(s), 11 entries, metrics=[&#39;a&#39;]&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">comp</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
 <span class="go">        a</span>
 <span class="go">10  100.0</span>
@@ -2898,7 +2899,7 @@ set of scenarios for the given factor level.</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.FMEA">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.tabulate.</span></span><span class="sig-name descname"><span class="pre">FMEA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('function',</span> <span class="pre">'fault')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tend.classify.'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.FMEA" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.tabulate.BaseTab" title="fmdtools.analyze.tabulate.BaseTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTab</span></code></a></p>
-<p>Make a user-definable fmea of the endclasses of a set of fault scenarios.</p>
+<p>Make a user-definable fmea of the classify metrics for a set of fault scenarios.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2908,8 +2909,8 @@ set of scenarios for the given factor level.</p>
 key structure to res. The default is {}.</p></li>
 <li><p><strong>group_by</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Way of grouping fmea rows by scenario fields.
 The default is (‘function’, ‘fault’).</p></li>
-<li><p><strong>prefix</strong> (<em>str</em>) – Prefix for the metrics to use for get_metric. Default is ‘endclass.’, which
-gets the metrics from endclass (output of classify() method) only.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) – Prefix for the metrics to use for get_metric. Default is ‘tend.classify’, which
+gets the metrics from the classify() at the final timestep only.</p></li>
 <li><p><strong>rates/weights</strong> (<em>str</em><em>(</em><em>s</em><em>)</em>) – Weighting or rate factor to use for weighted averages and expectations.
 Can be any value from the result (e,g. rates=’rate’) or the FaultSample
 (e.g., rates=’scenario.rate’).</p></li>
@@ -2924,15 +2925,17 @@ All other kwargs will be kwargs to Result.get_metric
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.sim.sample</span><span class="w"> </span><span class="kn">import</span> <span class="n">exfs</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Result</span><span class="p">({</span><span class="n">scen</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39;.tend.classify&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;rate&#39;</span><span class="p">:</span> <span class="n">scen</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">:</span> <span class="n">i</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">scen</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">exfs</span><span class="o">.</span><span class="n">scenarios</span><span class="p">())})</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exfs</span><span class="p">)</span>
+<span class="go">&lt;FMEA: 3 metric(s), 4 entries, metrics=[&#39;average_scenario_rate&#39;, &#39;sum_cost&#39;, &#39;expected_cost&#39;]&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exfs</span><span class="p">)</span><span class="o">.</span><span class="n">as_table</span><span class="p">(</span><span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;sum_cost&quot;</span><span class="p">)</span>
-<span class="go">                                  average_scenario_rate  ...  expected_cost</span>
-<span class="go">exfxnarch.fxns.ex_fxn2 short                        0.0  ...            0.0</span>
-<span class="go">exfxnarch.fxns.ex_fxn  short                        0.0  ...            0.0</span>
-<span class="go">exfxnarch.fxns.ex_fxn2 no_charge                    0.0  ...            0.0</span>
-<span class="go">exfxnarch.fxns.ex_fxn  no_charge                    0.0  ...            0.0</span>
-
-<span class="go">[4 rows x 3 columns]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exfs</span><span class="p">,</span> <span class="n">average_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">],</span> <span class="n">sum_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">],</span> <span class="n">expected_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">],</span> <span class="n">rates</span><span class="o">=</span><span class="s2">&quot;rate&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
+<span class="go">                                  average_scenario_rate  sum_cost  expected_cost</span>
+<span class="go">exfxnarch.fxns.ex_fxn2 short                        0.0        13            0.0</span>
+<span class="go">exfxnarch.fxns.ex_fxn  short                        0.0         9            0.0</span>
+<span class="go">exfxnarch.fxns.ex_fxn2 no_charge                    0.0         5            0.0</span>
+<span class="go">exfxnarch.fxns.ex_fxn  no_charge                    0.0         1            0.0</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exfs</span><span class="p">,</span> <span class="n">average_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">],</span> <span class="n">sum_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">],</span> <span class="n">expected_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">],</span> <span class="n">rates</span><span class="o">=</span><span class="s2">&quot;rate&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
 <span class="go">                                  average_rate  sum_cost  expected_cost</span>
 <span class="go">exfxnarch.fxns.ex_fxn2 short               1.5        13             20</span>
 <span class="go">exfxnarch.fxns.ex_fxn  short               1.5         9             14</span>
@@ -3012,7 +3015,7 @@ statistic over in the apps. Default is [‘time’]</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ps</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><em>ParameterSample</em></a>) – ParameterSample sample approach simulated in the model.</p></li>
 <li><p><strong>res</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result dict for the set of simulations produced by running the model over ps</p></li>
-<li><p><strong>metric</strong> (<em>str</em>) – Value to get from endclasses for the scenario(s). The default is ‘cost’.</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – Value to get from classify metrics for the scenario(s). The default is ‘cost’.</p></li>
 <li><p><strong>x_param</strong> (<em>str</em>) – Parameter range desired to visualize in the operational envelope. Can be any
 property that changes over the nomapp
 (e.g., <cite>r.seed</cite>, <cite>inputparams.x_in</cite>, <cite>p.x</cite>…)</p></li>
@@ -3103,7 +3106,7 @@ Default is lambda x: x == 0.0</p></li>
 <li><p><strong>result</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with end-state classification</p></li>
 <li><p><strong>mdlhist</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History of model states</p></li>
 <li><p><strong>*attrs</strong> (<em>str</em>) – Names of attributes to check in the history for degradation/faulty.</p></li>
-<li><p><strong>t</strong> (<em>float</em>) – Time to get the endclass from. Default is “end”.</p></li>
+<li><p><strong>t</strong> (<em>float</em>) – Time to get the classify dict from. Default is “end”.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -3152,18 +3155,16 @@ Default is lambda x: x == 0.0</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mdl</span> <span class="o">=</span> <span class="n">ExFxnArch</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="p">,</span> <span class="n">hist</span> <span class="o">=</span> <span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">exfs</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result_summary_fmea</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
-<span class="go">                                                         degraded  ...  flowval</span>
-<span class="go">nominal                                                        []  ...  10100.0</span>
-<span class="go">exfxnarch_fxns_ex_fxn_no_charge_t1              [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...   5050.0</span>
-<span class="go">exfxnarch_fxns_ex_fxn_no_charge_t2              [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...   5150.0</span>
-<span class="go">exfxnarch_fxns_ex_fxn2_no_charge_t1  [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...   5050.0</span>
-<span class="go">exfxnarch_fxns_ex_fxn2_no_charge_t2  [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...   5150.0</span>
-<span class="go">exfxnarch_fxns_ex_fxn_short_t1                  [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...   5050.0</span>
-<span class="go">exfxnarch_fxns_ex_fxn_short_t2                  [&#39;ex_fxn&#39;, &#39;exf&#39;]  ...   5150.0</span>
-<span class="go">exfxnarch_fxns_ex_fxn2_short_t1      [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...   5050.0</span>
-<span class="go">exfxnarch_fxns_ex_fxn2_short_t2      [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  ...   5150.0</span>
-
-<span class="go">[9 rows x 3 columns]</span>
+<span class="go">                                                         degraded       faulty  flowval</span>
+<span class="go">nominal                                                        []           []  10100.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn_no_charge_t1              [&#39;ex_fxn&#39;, &#39;exf&#39;]   [&#39;ex_fxn&#39;]   5050.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn_no_charge_t2              [&#39;ex_fxn&#39;, &#39;exf&#39;]   [&#39;ex_fxn&#39;]   5150.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn2_no_charge_t1  [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  [&#39;ex_fxn2&#39;]   5050.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn2_no_charge_t2  [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  [&#39;ex_fxn2&#39;]   5150.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn_short_t1                  [&#39;ex_fxn&#39;, &#39;exf&#39;]   [&#39;ex_fxn&#39;]   5050.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn_short_t2                  [&#39;ex_fxn&#39;, &#39;exf&#39;]   [&#39;ex_fxn&#39;]   5150.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn2_short_t1      [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  [&#39;ex_fxn2&#39;]   5050.0</span>
+<span class="go">exfxnarch_fxns_ex_fxn2_short_t2      [&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;, &#39;exf&#39;]  [&#39;ex_fxn2&#39;]   5150.0</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -3539,14 +3540,14 @@ each row</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.phases.samplemetric">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.phases.</span></span><span class="sig-name descname"><span class="pre">samplemetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faultsamp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rate'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_rad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{:.2e}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'stem'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'end'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">scen_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.phases.samplemetric" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.phases.</span></span><span class="sig-name descname"><span class="pre">samplemetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faultsamp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rate'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_rad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{:.2e}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'stem'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'end'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">scen_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.phases.samplemetric" title="Link to this definition"></a></dt>
 <dd><p>Plot the sample metric and rate of a given fault over sample times.</p>
 <p>(note: not currently compatible with joint fault modes)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>faultsamp</strong> (<em>FaultSamp</em>) – Fault sample defining the underlying samples to take with phasemap</p></li>
-<li><p><strong>endclasses</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – A Result with the end classification of each fault (metrics, etc)</p></li>
+<li><p><strong>res</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – A Result with the end classification of each fault (metrics, etc)</p></li>
 <li><p><strong>metric</strong> (<em>str</em><em>, </em><em>optional</em>) – Metric to plot. The default is ‘cost’</p></li>
 <li><p><strong>rad</strong> (<em>str</em><em>, </em><em>optional</em>) – Metric to plot as a radius at each sample. Default is ‘rate’.</p></li>
 <li><p><strong>rad_scale</strong> (<em>float</em><em>, </em><em>optional</em>) – Scale factor for radius. Default is 0.01, which makes the max rad size 1/100 of
@@ -3569,13 +3570,13 @@ the max metric value.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.phases.samplemetrics">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.phases.</span></span><span class="sig-name descname"><span class="pre">samplemetrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.phases.samplemetrics" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.phases.</span></span><span class="sig-name descname"><span class="pre">samplemetrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.phases.samplemetrics" title="Link to this definition"></a></dt>
 <dd><p>Plot costs and rates of a set of faults injected over time according to the sample.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>app</strong> (<em>sampleapproach</em>) – The sample approach used to run the list of faults</p></li>
-<li><p><strong>endclasses</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Results over the scenarios defined in app.</p></li>
+<li><p><strong>res</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Results over the scenarios defined in app.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to samplemetric</p></li>
 </ul>
 </dd>

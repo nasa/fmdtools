@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.flow &mdash; fmdtools 2.2.1 documentation</title>
+  <title>fmdtools.define.flow &mdash; fmdtools 2.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=16656018"></script>
+      <script src="../_static/documentation_options.js?v=219dea72"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-1">Version: 2.2.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -431,6 +431,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.BaseSimContainer"><code class="docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
@@ -787,14 +788,14 @@ and respresent shared variables or states.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span> <span class="o">=</span> <span class="n">ExampleFlow</span><span class="p">(</span><span class="s1">&#39;exf&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span>
 <span class="go">exf ExampleFlow</span>
-<span class="go">- s=ExampleState(x=np.float64(0.0), y=np.float64(1.0))</span>
+<span class="go">- s=ExampleState(x=0.0, y=1.0)</span>
 </pre></div>
 </div>
 <p>Note that copying creates independent copies of states:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exf2</span> <span class="o">=</span> <span class="n">exf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf2</span>
 <span class="go">exf ExampleFlow</span>
-<span class="go">- s=ExampleState(x=np.float64(0.0), y=np.float64(1.0))</span>
+<span class="go">- s=ExampleState(x=0.0, y=1.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf2</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">2.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf2</span><span class="o">.</span><span class="n">s</span> <span class="o">==</span> <span class="n">exf</span><span class="o">.</span><span class="n">s</span>
 <span class="go">False</span>
@@ -820,17 +821,19 @@ and respresent shared variables or states.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.base.Flow.create_hist">
-<span class="sig-name descname"><span class="pre">create_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.base.Flow.create_hist" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">create_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.base.Flow.create_hist" title="Link to this definition"></a></dt>
 <dd><p>Create state history of the object over the timerange.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>timerange</strong> (<em>array</em>) – Numpy array of times to initialize in the dictionary.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>hist</strong> – A history of each recorded block property over the given timerange.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>hist</strong> (<em>History</em>) – A history of each recorded block property over the given timerange.</p></li>
+<li><p><strong>track</strong> (<em>Track</em>) – Argument to set track. Only used if history has not already been created.
+Default is None.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -951,26 +954,26 @@ as well as a single global view (which may represent the actual value)</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_flow</span> <span class="o">=</span> <span class="n">exf</span><span class="o">.</span><span class="n">create_local</span><span class="p">(</span><span class="s2">&quot;sub_flow&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_flow</span>
 <span class="go">sub_flow ExampleMultiFlow</span>
-<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>
+<span class="go">- s=ExampleState(x=1.0, y=1.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_flow</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span>
 <span class="go">examplemultiflow ExampleMultiFlow</span>
-<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>
+<span class="go">- s=ExampleState(x=1.0, y=1.0)</span>
 <span class="go">LOCALS:</span>
-<span class="go">- sub_flow=(s=(x=np.float64(0.0), y=np.float64(0.0)))</span>
+<span class="go">- sub_flow=(s=(x=0.0, y=0.0))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">to_get</span><span class="o">=</span><span class="s2">&quot;sub_flow&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span>
 <span class="go">examplemultiflow ExampleMultiFlow</span>
-<span class="go">- s=ExampleState(x=np.float64(0.0), y=np.float64(0.0))</span>
+<span class="go">- s=ExampleState(x=0.0, y=0.0)</span>
 <span class="go">LOCALS:</span>
-<span class="go">- sub_flow=(s=(x=np.float64(0.0), y=np.float64(0.0)))</span>
+<span class="go">- sub_flow=(s=(x=0.0, y=0.0))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_flow</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">to_get</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span>
 <span class="go">examplemultiflow ExampleMultiFlow</span>
-<span class="go">- s=ExampleState(x=np.float64(10.0), y=np.float64(10.0))</span>
+<span class="go">- s=ExampleState(x=10.0, y=10.0)</span>
 <span class="go">LOCALS:</span>
-<span class="go">- sub_flow=(s=(x=np.float64(10.0), y=np.float64(0.0)))</span>
+<span class="go">- sub_flow=(s=(x=10.0, y=0.0))</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -1003,7 +1006,7 @@ as well as a single global view (which may represent the actual value)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.create_hist">
-<span class="sig-name descname"><span class="pre">create_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.create_hist" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">create_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.create_hist" title="Link to this definition"></a></dt>
 <dd><p>Create history for entire flow structure (with sub-flows).</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span> <span class="o">=</span> <span class="n">ExampleMultiFlow</span><span class="p">()</span>
@@ -1102,13 +1105,13 @@ same initial states as the multiflow</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_f2</span> <span class="o">=</span> <span class="n">exf</span><span class="o">.</span><span class="n">create_local</span><span class="p">(</span><span class="s2">&quot;sub_f2&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_f</span><span class="o">.</span><span class="n">get_view</span><span class="p">(</span><span class="s2">&quot;global&quot;</span><span class="p">)</span>
 <span class="go">examplemultiflow ExampleMultiFlow</span>
-<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>
+<span class="go">- s=ExampleState(x=1.0, y=1.0)</span>
 <span class="go">LOCALS:</span>
-<span class="go">- sub_f=(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
-<span class="go">- sub_f2=(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
+<span class="go">- sub_f=(s=(x=1.0, y=1.0))</span>
+<span class="go">- sub_f2=(s=(x=1.0, y=1.0))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sub_f</span><span class="o">.</span><span class="n">get_view</span><span class="p">(</span><span class="s2">&quot;sub_f2&quot;</span><span class="p">)</span>
 <span class="go">sub_f2 ExampleMultiFlow</span>
-<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>
+<span class="go">- s=ExampleState(x=1.0, y=1.0)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1294,29 +1297,29 @@ and “received” (a set of messages received).</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="o">=</span> <span class="n">ecf</span><span class="o">.</span><span class="n">create_comms</span><span class="p">(</span><span class="s2">&quot;t2&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ecf</span>
 <span class="go">examplecommsflow ExampleCommsFlow</span>
-<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>
+<span class="go">- s=ExampleState(x=1.0, y=1.0)</span>
 <span class="go">COMMS:</span>
-<span class="go">- t1=(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
-<span class="go">- t2=(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
+<span class="go">- t1=(s=(x=1.0, y=1.0))</span>
+<span class="go">- t2=(s=(x=1.0, y=1.0))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;t2&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span>
 <span class="go">t1 ExampleCommsFlow</span>
-<span class="go">- s=ExampleState(x=np.float64(10.0), y=np.float64(10.0))</span>
-<span class="go">- out(): t1_out(s=(x=np.float64(10.0), y=np.float64(1.0)))</span>
+<span class="go">- s=ExampleState(x=10.0, y=10.0)</span>
+<span class="go">- out(): t1_out(s=(x=10.0, y=1.0))</span>
 <span class="go">- inbox(): {}</span>
 <span class="go">- received(): {}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span>
 <span class="go">t2 ExampleCommsFlow</span>
-<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(1.0))</span>
-<span class="go">- out(): t2_out(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
+<span class="go">- s=ExampleState(x=1.0, y=1.0)</span>
+<span class="go">- out(): t2_out(s=(x=1.0, y=1.0))</span>
 <span class="go">- inbox(): {&#39;t1&#39;: (&#39;x&#39;,)}</span>
 <span class="go">- received(): {}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span><span class="o">.</span><span class="n">receive</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span>
 <span class="go">t2 ExampleCommsFlow</span>
-<span class="go">- s=ExampleState(x=np.float64(10.0), y=np.float64(1.0))</span>
-<span class="go">- out(): t2_out(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
+<span class="go">- s=ExampleState(x=10.0, y=1.0)</span>
+<span class="go">- out(): t2_out(s=(x=1.0, y=1.0))</span>
 <span class="go">- inbox(): {}</span>
 <span class="go">- received(): {&#39;t1&#39;: (&#39;x&#39;,)}</span>
 </pre></div>

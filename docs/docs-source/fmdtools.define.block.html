@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.block &mdash; fmdtools 2.2.1 documentation</title>
+  <title>fmdtools.define.block &mdash; fmdtools 2.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=16656018"></script>
+      <script src="../_static/documentation_options.js?v=219dea72"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-1">Version: 2.2.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -431,6 +431,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.BaseSimContainer"><code class="docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
@@ -1084,7 +1085,7 @@ densities of random states over time.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.SimParam.dt">
-<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.block.base.SimParam.dt" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.block.base.SimParam.dt" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1094,7 +1095,7 @@ densities of random states over time.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.SimParam.end_time">
-<span class="sig-name descname"><span class="pre">end_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.block.base.SimParam.end_time" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">end_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.block.base.SimParam.end_time" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1156,7 +1157,7 @@ densities of random states over time.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.SimParam.start_time">
-<span class="sig-name descname"><span class="pre">start_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.block.base.SimParam.start_time" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">start_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.block.base.SimParam.start_time" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1679,12 +1680,12 @@ used when executing in architectures. Default is “static”</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exa</span>
 <span class="go">exampleaction ExampleAction</span>
 <span class="go">- t=ActionTime(time=-0.1, timers={})</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
+<span class="go">- exf=ExampleFlow(s=(x=1.0, y=1.0))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exa</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exa</span>
 <span class="go">exampleaction ExampleAction</span>
 <span class="go">- t=ActionTime(time=1.0, timers={})</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(2.0), y=np.float64(1.0)))</span>
+<span class="go">- exf=ExampleFlow(s=(x=2.0, y=1.0))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exa</span><span class="o">.</span><span class="n">indicate_done</span><span class="p">()</span>
 <span class="go">True</span>
 </pre></div>
@@ -1836,12 +1837,12 @@ used when executing in architectures. Default is “static”</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.action.ActionTime.dt">
-<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.dt" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.dt" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id7">
-<span class="sig-name descname"><span class="pre">duration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">duration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1867,7 +1868,7 @@ used when executing in architectures. Default is “static”</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id8">
-<span class="sig-name descname"><span class="pre">out_delay</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">out_delay</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1884,17 +1885,17 @@ used when executing in architectures. Default is “static”</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.action.ActionTime.t_ind">
-<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.t_ind" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int32</span></em><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.t_ind" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id9">
-<span class="sig-name descname"><span class="pre">t_loc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">t_loc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.action.ActionTime.time">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.time" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.time" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2052,17 +2053,17 @@ that maybe multifunctional.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span>
 <span class="go">examplecomponent ExampleComponent</span>
 <span class="go">- t=Time(time=-0.1, timers={})</span>
-<span class="go">- s=ExampleState(x=np.float64(0.0), y=np.float64(0.0))</span>
+<span class="go">- s=ExampleState(x=0.0, y=0.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span>
 <span class="go">examplecomponent ExampleComponent</span>
 <span class="go">- t=Time(time=1.0, timers={})</span>
-<span class="go">- s=ExampleState(x=np.float64(2.0), y=np.float64(1.0))</span>
+<span class="go">- s=ExampleState(x=2.0, y=1.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span>
 <span class="go">examplecomponent ExampleComponent</span>
 <span class="go">- t=Time(time=2.0, timers={})</span>
-<span class="go">- s=ExampleState(x=np.float64(2.0), y=np.float64(2.0))</span>
+<span class="go">- s=ExampleState(x=2.0, y=2.0)</span>
 </pre></div>
 </div>
 <p>Calling a particular propagation step individually only runs the given behavior
@@ -2071,7 +2072,7 @@ method (in this case, dynamic and not static).</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span>
 <span class="go">examplecomponent ExampleComponent</span>
 <span class="go">- t=Time(time=3.0, timers={})</span>
-<span class="go">- s=ExampleState(x=np.float64(2.0), y=np.float64(3.0))</span>
+<span class="go">- s=ExampleState(x=2.0, y=3.0)</span>
 </pre></div>
 </div>
 <p>Note that we can also simulate to a given time, which should give the same results.
@@ -2080,7 +2081,7 @@ method (in this case, dynamic and not static).</p>
 &gt;&gt;&gt; c2
 examplecomponent ExampleComponent
 - t=Time(time=2.0, timers={})
-- s=ExampleState(x=np.float64(2.0), y=np.float64(2.0))</p>
+- s=ExampleState(x=2.0, y=2.0)</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.component.Component.base_type">
 <span class="sig-name descname"><span class="pre">base_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.component.Component.base_type" title="Link to this definition"></a></dt>
@@ -2316,9 +2317,9 @@ graph within the function.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span>
 <span class="go">exf ExampleFunction</span>
 <span class="go">- t=Time(time=-0.1, timers={})</span>
-<span class="go">- s=ExampleState(x=np.float64(0.0), y=np.float64(0.0))</span>
+<span class="go">- s=ExampleState(x=0.0, y=0.0)</span>
 <span class="go">- m=ExampleMode(mode=&#39;standby&#39;, faults=set(), sub_faults=False)</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
+<span class="go">- exf=ExampleFlow(s=(x=1.0, y=1.0))</span>
 </pre></div>
 </div>
 <p>Behavior can be called using __call__ or the user-defined behavior method:</p>
@@ -2326,9 +2327,9 @@ graph within the function.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span>
 <span class="go">exf ExampleFunction</span>
 <span class="go">- t=Time(time=1.0, timers={})</span>
-<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(0.0))</span>
+<span class="go">- s=ExampleState(x=1.0, y=0.0)</span>
 <span class="go">- m=ExampleMode(mode=&#39;standby&#39;, faults=set(), sub_faults=False)</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(2.0), y=np.float64(1.0)))</span>
+<span class="go">- exf=ExampleFlow(s=(x=2.0, y=1.0))</span>
 </pre></div>
 </div>
 <p>Which can also be used to inject faults:</p>
@@ -2336,9 +2337,9 @@ graph within the function.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exf</span>
 <span class="go">exf ExampleFunction</span>
 <span class="go">- t=Time(time=2.0, timers={})</span>
-<span class="go">- s=ExampleState(x=np.float64(1.0), y=np.float64(3.0))</span>
+<span class="go">- s=ExampleState(x=1.0, y=3.0)</span>
 <span class="go">- m=ExampleMode(mode=&#39;no_charge&#39;, faults={&#39;no_charge&#39;}, sub_faults=False)</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(3.0), y=np.float64(1.0)))</span>
+<span class="go">- exf=ExampleFlow(s=(x=3.0, y=1.0))</span>
 </pre></div>
 </div>
 <dl class="py attribute">

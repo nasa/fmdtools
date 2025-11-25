@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Tutorial &mdash; fmdtools 2.2.1 documentation</title>
+  <title>fmdtools Tutorial &mdash; fmdtools 2.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=16656018"></script>
+      <script src="../../_static/documentation_options.js?v=219dea72"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -75,7 +75,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-1">Version: 2.2.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -429,6 +429,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimContainer"><code class="docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
@@ -836,11 +837,11 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.nominal</span></code> method, which returns:
 endresults, which is a result (or a dict of multiple results) specified by the <code class="docutils literal notranslate"><span class="pre">to_return</span></code> option, e.g.:</p>
 <ul class="simple">
-<li><p>‘endclass’ (default), which provides the dict from <code class="docutils literal notranslate"><span class="pre">mdl.find_classification</span></code></p></li>
+<li><p>‘classify’ (default), which provides the dict from <code class="docutils literal notranslate"><span class="pre">mdl.find_classification</span></code></p></li>
 <li><p>‘graph’ or <code class="docutils literal notranslate"><span class="pre">fmdtools.define.graph.Graph</span></code> subclass for the model.</p></li>
 <li><p>‘fxnname.varname’/’flowname.varname’: which gets the values of these variables at a the end</p></li>
 <li><p>a list of the above arguments (to return a dict of multiple)</p></li>
-<li><p>a dict of lists (for multiple over time), e.g. <code class="docutils literal notranslate"><span class="pre">{time:[varnames,...</span> <span class="pre">'endclass']}</span></code></p></li>
+<li><p>a dict of lists (for multiple over time), e.g. <code class="docutils literal notranslate"><span class="pre">{time:[varnames,...</span> <span class="pre">'classify']}</span></code></p></li>
 </ul>
 <p>and mdlhist, which is a history of model states specified by the <code class="docutils literal notranslate"><span class="pre">track</span></code> option. Some of these options include:</p>
 <ul class="simple">
@@ -859,7 +860,7 @@ endresults, which is a result (or a dict of multiple results) specified by the <
 </div>
 </div>
 </div>
-<p>Note that an <code class="docutils literal notranslate"><span class="pre">endclass</span></code> dictionary can take arbitrary form based on what is produced in <code class="docutils literal notranslate"><span class="pre">find_classification</span></code>. By default, we often return:</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">Result</span></code> can take arbitrary form based on what is produced in <code class="docutils literal notranslate"><span class="pre">classify</span></code>. By default, we often return:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">rate</span></code>, which is the rate for the scenario calculated from the underlying fault probability model (defined in the <code class="docutils literal notranslate"><span class="pre">Mode</span></code> for each <code class="docutils literal notranslate"><span class="pre">Function</span></code>),</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cost</span></code>, which is some cost calculated based on the consequences of the scenario</p></li>
@@ -918,7 +919,7 @@ endresults, which is a result (or a dict of multiple results) specified by the <
 <p>It can be helpful to view what these results look like–a <code class="docutils literal notranslate"><span class="pre">Result</span></code> of faults injected at particular times with their correspnding <code class="docutils literal notranslate"><span class="pre">Result</span></code> dictionaries.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses_samp</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_samp</span>
 </pre></div>
 </div>
 </div>
@@ -926,7 +927,7 @@ endresults, which is a result (or a dict of multiple results) specified by the <
 <p>We can look at/use a more structured version using:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ec_nest</span> <span class="o">=</span> <span class="n">endclasses_samp</span><span class="o">.</span><span class="n">nest</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ec_nest</span> <span class="o">=</span> <span class="n">results_samp</span><span class="o">.</span><span class="n">nest</span><span class="p">()</span>
 <span class="n">ec_nest</span>
 </pre></div>
 </div>
@@ -952,10 +953,10 @@ endresults, which is a result (or a dict of multiple results) specified by the <
 </section>
 <section id="saving-work">
 <h2>5.) Saving Work<a class="headerlink" href="#saving-work" title="Link to this heading"></a></h2>
-<p>In computationally expensive simulations, running a lot of computational simulations can take a considerable amount of time. As a result, it becomes impractical to run a new simulation every time one wishes to analyse its data. Results from fmdtools simulations (endclasses or mdlhists) can be saved as pickle, csv, or json files in this instance using either:</p>
+<p>In computationally expensive simulations, running a lot of computational simulations can take a considerable amount of time. As a result, it becomes impractical to run a new simulation every time one wishes to analyse its data. Results from fmdtools simulations (Result or History) can be saved as pickle, csv, or json files in this instance using either:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Result.save</span></code>/<code class="docutils literal notranslate"><span class="pre">History.save</span></code> or</p></li>
-<li><p>passing a save_args dictionary to the respective propagate functions (e.g., <code class="docutils literal notranslate"><span class="pre">{'endclass':{'filename':'file.pkl','overwrite':True}</span></code>)</p></li>
+<li><p>passing a save_args dictionary to the respective propagate functions (e.g., <code class="docutils literal notranslate"><span class="pre">{'classify':{'filename':'file.pkl','overwrite':True}</span></code>)</p></li>
 </ul>
 <p>and then loaded using:</p>
 <ul class="simple">
@@ -964,14 +965,14 @@ endresults, which is a result (or a dict of multiple results) specified by the <
 <p>For example, for this variable:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses_samp</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_samp</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses_saved</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_saved</span>
 </pre></div>
 </div>
 </div>

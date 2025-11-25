@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.architecture &mdash; fmdtools 2.2.1 documentation</title>
+  <title>fmdtools.define.architecture &mdash; fmdtools 2.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=16656018"></script>
+      <script src="../_static/documentation_options.js?v=219dea72"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-1">Version: 2.2.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -431,6 +431,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.BaseSimContainer"><code class="docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
@@ -1381,7 +1382,7 @@ time-step (True) or stays in the current action (False). Default is False.</p></
 <span class="go">- t=Time(time=-0.1, timers={})</span>
 <span class="go">- m=Mode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)</span>
 <span class="go">FLOWS:</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(1.0), y=np.float64(1.0)))</span>
+<span class="go">- exf=ExampleFlow(s=(x=1.0, y=1.0))</span>
 <span class="go">ACTS:</span>
 <span class="go">- act_1=ExampleAction()</span>
 <span class="go">- act_2=ExampleAction()</span>
@@ -1396,7 +1397,7 @@ time-step (True) or stays in the current action (False). Default is False.</p></
 <span class="go">- t=Time(time=2.0, timers={})</span>
 <span class="go">- m=Mode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)</span>
 <span class="go">FLOWS:</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(4.0), y=np.float64(1.0)))</span>
+<span class="go">- exf=ExampleFlow(s=(x=4.0, y=1.0))</span>
 <span class="go">ACTS:</span>
 <span class="go">- act_1=ExampleAction()</span>
 <span class="go">- act_2=ExampleAction()</span>
@@ -1827,24 +1828,24 @@ to determine how individual component behaviors aggregate as a given function.</
 <span class="go">- t=Time(time=-0.1, timers={})</span>
 <span class="go">- m=Mode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)</span>
 <span class="go">COMPS:</span>
-<span class="go">- c1=ExampleComponent(s=(x=np.float64(5.0), y=np.float64(5.0)))</span>
-<span class="go">- c2=ExampleComponent(s=(x=np.float64(10.0), y=np.float64(10.0)))</span>
+<span class="go">- c1=ExampleComponent(s=(x=5.0, y=5.0))</span>
+<span class="go">- c2=ExampleComponent(s=(x=10.0, y=10.0))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exc</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exc</span>
 <span class="go">examplecomponentarchitecture ExampleComponentArchitecture</span>
 <span class="go">- t=Time(time=1.0, timers={})</span>
 <span class="go">- m=Mode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)</span>
 <span class="go">COMPS:</span>
-<span class="go">- c1=ExampleComponent(s=(x=np.float64(7.0), y=np.float64(6.0)))</span>
-<span class="go">- c2=ExampleComponent(s=(x=np.float64(12.0), y=np.float64(11.0)))</span>
+<span class="go">- c1=ExampleComponent(s=(x=7.0, y=6.0))</span>
+<span class="go">- c2=ExampleComponent(s=(x=12.0, y=11.0))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exc</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exc</span>
 <span class="go">examplecomponentarchitecture ExampleComponentArchitecture</span>
 <span class="go">- t=Time(time=2.0, timers={})</span>
 <span class="go">- m=Mode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)</span>
 <span class="go">COMPS:</span>
-<span class="go">- c1=ExampleComponent(s=(x=np.float64(7.0), y=np.float64(7.0)))</span>
-<span class="go">- c2=ExampleComponent(s=(x=np.float64(12.0), y=np.float64(12.0)))</span>
+<span class="go">- c1=ExampleComponent(s=(x=7.0, y=7.0))</span>
+<span class="go">- c2=ExampleComponent(s=(x=12.0, y=12.0))</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -2202,10 +2203,10 @@ pipes.</p>
 <span class="go">- t=Time(time=-0.1, timers={})</span>
 <span class="go">- m=Mode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)</span>
 <span class="go">FLOWS:</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(0.0), y=np.float64(0.0)))</span>
+<span class="go">- exf=ExampleFlow(s=(x=0.0, y=0.0))</span>
 <span class="go">FXNS:</span>
-<span class="go">- ex_fxn=ExampleFunction(s=(x=np.float64(0.0), y=np.float64(0.0)), m=(mode=&#39;standby&#39;, faults=set(), sub_faults=False))</span>
-<span class="go">- ex_fxn2=ExampleFunction(s=(x=np.float64(0.0), y=np.float64(0.0)), m=(mode=&#39;standby&#39;, faults=set(), sub_faults=False))</span>
+<span class="go">- ex_fxn=ExampleFunction(s=(x=0.0, y=0.0), m=(mode=&#39;standby&#39;, faults=set(), sub_faults=False))</span>
+<span class="go">- ex_fxn2=ExampleFunction(s=(x=0.0, y=0.0), m=(mode=&#39;standby&#39;, faults=set(), sub_faults=False))</span>
 </pre></div>
 </div>
 <p>This type of functional architecture only has dynamic functions:</p>
@@ -2224,10 +2225,10 @@ their behavior methods:</p>
 <span class="go">- t=Time(time=1.0, timers={})</span>
 <span class="go">- m=Mode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)</span>
 <span class="go">FLOWS:</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(2.0), y=np.float64(0.0)))</span>
+<span class="go">- exf=ExampleFlow(s=(x=2.0, y=0.0))</span>
 <span class="go">FXNS:</span>
-<span class="go">- ex_fxn=ExampleFunction(s=(x=np.float64(1.0), y=np.float64(0.0)), m=(mode=&#39;standby&#39;, faults=set(), sub_faults=False))</span>
-<span class="go">- ex_fxn2=ExampleFunction(s=(x=np.float64(1.0), y=np.float64(0.0)), m=(mode=&#39;standby&#39;, faults=set(), sub_faults=False))</span>
+<span class="go">- ex_fxn=ExampleFunction(s=(x=1.0, y=0.0), m=(mode=&#39;standby&#39;, faults=set(), sub_faults=False))</span>
+<span class="go">- ex_fxn2=ExampleFunction(s=(x=1.0, y=0.0), m=(mode=&#39;standby&#39;, faults=set(), sub_faults=False))</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfa</span><span class="p">()</span>
@@ -2236,10 +2237,10 @@ their behavior methods:</p>
 <span class="go">- t=Time(time=2.0, timers={})</span>
 <span class="go">- m=Mode(mode=&#39;nominal&#39;, faults=set(), sub_faults=False)</span>
 <span class="go">FLOWS:</span>
-<span class="go">- exf=ExampleFlow(s=(x=np.float64(6.0), y=np.float64(0.0)))</span>
+<span class="go">- exf=ExampleFlow(s=(x=6.0, y=0.0))</span>
 <span class="go">FXNS:</span>
-<span class="go">- ex_fxn=ExampleFunction(s=(x=np.float64(2.0), y=np.float64(0.0)), m=(mode=&#39;standby&#39;, faults=set(), sub_faults=False))</span>
-<span class="go">- ex_fxn2=ExampleFunction(s=(x=np.float64(2.0), y=np.float64(0.0)), m=(mode=&#39;standby&#39;, faults=set(), sub_faults=False))</span>
+<span class="go">- ex_fxn=ExampleFunction(s=(x=2.0, y=0.0), m=(mode=&#39;standby&#39;, faults=set(), sub_faults=False))</span>
+<span class="go">- ex_fxn2=ExampleFunction(s=(x=2.0, y=0.0), m=(mode=&#39;standby&#39;, faults=set(), sub_faults=False))</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -2614,7 +2615,7 @@ The default is True.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">efa</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
 <span class="go">EdgeView([(&#39;exfxnarch.fxns.ex_fxn&#39;, &#39;exfxnarch.fxns.ex_fxn2&#39;)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">efa</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">[(</span><span class="s1">&#39;exfxnarch.fxns.ex_fxn&#39;</span><span class="p">,</span> <span class="s1">&#39;exfxnarch.fxns.ex_fxn2&#39;</span><span class="p">)]</span>
-<span class="go">{&#39;flows&#39;: &quot;[&#39;exfxnarch.flows.exf&#39;]&quot;, &#39;edgetype&#39;: &#39;flows&#39;, &#39;exfxnarch.flows.exf&#39;: {&#39;s&#39;: ExampleState(x=np.float64(0.0), y=np.float64(0.0)), &#39;indicators&#39;: []}}</span>
+<span class="go">{&#39;flows&#39;: &quot;[&#39;exfxnarch.flows.exf&#39;]&quot;, &#39;edgetype&#39;: &#39;flows&#39;, &#39;exfxnarch.flows.exf&#39;: {&#39;s&#39;: ExampleState(x=0.0, y=0.0), &#39;indicators&#39;: []}}</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -2693,7 +2694,7 @@ The default is True.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">efa</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
 <span class="go">NodeView((&#39;exfxnarch.flows.exf&#39;,))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">efa</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;exfxnarch.flows.exf&#39;</span><span class="p">]</span>
-<span class="go">{&#39;nodetype&#39;: &#39;Flow&#39;, &#39;classname&#39;: &#39;ExampleFlow&#39;, &#39;bipartite&#39;: 1, &#39;s&#39;: ExampleState(x=np.float64(0.0), y=np.float64(0.0)), &#39;indicators&#39;: []}</span>
+<span class="go">{&#39;nodetype&#39;: &#39;Flow&#39;, &#39;classname&#39;: &#39;ExampleFlow&#39;, &#39;bipartite&#39;: 1, &#39;s&#39;: ExampleState(x=0.0, y=0.0), &#39;indicators&#39;: []}</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -3051,7 +3052,7 @@ geoms. We can then access the individual geoms in the geoms dict, e.g.,:</p>
 <span class="go">polys.ex_poly.s.occupied:     array(101)</span>
 <span class="go">polys.ex_poly.s.buffer_around: array(101)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span><span class="o">.</span><span class="n">return_mutables</span><span class="p">()</span>
-<span class="go">((False, 1.0), (False, 1.0), (False, 1.0), (-0.1, 0, False, False, False))</span>
+<span class="go">((False, 1.0), (False, 1.0), (False, 1.0), (np.float64(-0.1), np.int32(0), False, False, False))</span>
 </pre></div>
 </div>
 <p>GeomArchitectures are also simulable provided dynamic_behavior and static_behavior

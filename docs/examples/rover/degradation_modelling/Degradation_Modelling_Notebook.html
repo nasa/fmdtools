@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Degradation Modelling &mdash; fmdtools 2.2.1 documentation</title>
+  <title>Degradation Modelling &mdash; fmdtools 2.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../../_static/fmdtools_ico.ico"/>
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=16656018"></script>
+      <script src="../../../_static/documentation_options.js?v=219dea72"></script>
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#version-2-2-1">Version: 2.2.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -431,6 +431,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimContainer"><code class="docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
@@ -881,7 +882,7 @@ Below we simulate these to model to the degradation behaviors being modelled in 
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.sim.sample</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParameterSample</span>
 <span class="n">ps</span> <span class="o">=</span> <span class="n">ParameterSample</span><span class="p">()</span>
 <span class="n">ps</span><span class="o">.</span><span class="n">add_variable_replicates</span><span class="p">([],</span> <span class="n">replicates</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">seed_comb</span><span class="o">=</span><span class="s1">&#39;independent&#39;</span><span class="p">)</span>
-<span class="n">endclasses_deg</span><span class="p">,</span> <span class="n">mdlhists_deg</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">parameter_sample</span><span class="p">(</span><span class="n">deg_mdl</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">results_deg</span><span class="p">,</span> <span class="n">mdlhists_deg</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">parameter_sample</span><span class="p">(</span><span class="n">deg_mdl</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -26983,7 +26984,7 @@ AADErv8F1BKu8eWSjXYAAAAASUVORK5CYII=\
 <p>Simulating the nominal scenario for these parameters:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">behave_endclasses</span><span class="p">,</span> <span class="n">behave_mdlhists</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">parameter_sample</span><span class="p">(</span><span class="n">fault_mdl</span><span class="p">,</span> <span class="n">phs</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">behave_results</span><span class="p">,</span> <span class="n">behave_mdlhists</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">parameter_sample</span><span class="p">(</span><span class="n">fault_mdl</span><span class="p">,</span> <span class="n">phs</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -27022,7 +27023,7 @@ AADErv8F1BKu8eWSjXYAAAAASUVORK5CYII=\
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">behave_endclasses</span><span class="o">.</span><span class="n">state_probabilities</span><span class="p">(</span><span class="s1">&#39;prob&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">behave_results</span><span class="o">.</span><span class="n">state_probabilities</span><span class="p">(</span><span class="s1">&#39;prob&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -27041,7 +27042,7 @@ AADErv8F1BKu8eWSjXYAAAAASUVORK5CYII=\
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ne</span> <span class="o">=</span> <span class="n">NominalEnvelope</span><span class="p">(</span><span class="n">phs</span><span class="p">,</span> <span class="n">behave_endclasses</span><span class="p">,</span> <span class="s1">&#39;classification&#39;</span><span class="p">,</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ne</span> <span class="o">=</span> <span class="n">NominalEnvelope</span><span class="p">(</span><span class="n">phs</span><span class="p">,</span> <span class="n">behave_results</span><span class="p">,</span> <span class="s1">&#39;classification&#39;</span><span class="p">,</span>
                      <span class="s1">&#39;p.degradation.friction&#39;</span><span class="p">,</span> <span class="s1">&#39;p.degradation.drift&#39;</span><span class="p">,</span>
                      <span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">&#39;nominal mission&#39;</span><span class="p">)</span>
 <span class="n">ne</span><span class="o">.</span><span class="n">plot_scatter</span><span class="p">()</span>
@@ -27058,7 +27059,7 @@ AADErv8F1BKu8eWSjXYAAAAASUVORK5CYII=\
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ne</span> <span class="o">=</span> <span class="n">NominalEnvelope</span><span class="p">(</span><span class="n">phs</span><span class="p">,</span> <span class="n">behave_endclasses</span><span class="p">,</span> <span class="s1">&#39;classification&#39;</span><span class="p">,</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ne</span> <span class="o">=</span> <span class="n">NominalEnvelope</span><span class="p">(</span><span class="n">phs</span><span class="p">,</span> <span class="n">behave_results</span><span class="p">,</span> <span class="s1">&#39;classification&#39;</span><span class="p">,</span>
                      <span class="s1">&#39;inputparams.t&#39;</span><span class="p">,</span> <span class="s1">&#39;inputparams.rep&#39;</span><span class="p">,</span>
                      <span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">&#39;nominal mission&#39;</span><span class="p">)</span>
 <span class="n">ne</span><span class="o">.</span><span class="n">plot_scatter</span><span class="p">()</span>

@@ -125,7 +125,7 @@ numpy < 2.0
 # license: (BSD) https://numpy.org/doc/stable/license.html
 matplotlib
 # license: (mixed) https://matplotlib.org/stable/users/license.html
-pandas
+pandas[all]
 # license: (BSD 3-clause) https://pandas.pydata.org/pandas-docs/stable/getting_started/overview.html#license
 ordered-set
 # license: (MIT) https://github.com/rspeer/ordered-set/blob/master/MIT-LICENSE
@@ -245,7 +245,7 @@ To cite a particular version of the fmdtools, you may use:
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
   version = {2.2.1},
-  date = {2025-9-30},
+  date = {2025-11-24},
 }
 ```
 

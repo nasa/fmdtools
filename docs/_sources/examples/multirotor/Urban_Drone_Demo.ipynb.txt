@@ -681,7 +681,7 @@
    "id": "e49cb623",
    "metadata": {},
    "source": [
-    "Here we inject a large list of faults in the system and evaluate their relative consequences in terms of metrics calculated in find_classification:"
+    "Here we inject a large list of faults in the system and evaluate their relative consequences in terms of metrics calculated in classify:"
    ]
   },
   {

@@ -897,7 +897,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 20,
+   "execution_count": null,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:46:08.976828Z",
@@ -919,7 +919,7 @@
     }
    ],
    "source": [
-    "resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=3,track='all',to_return=['graph','endclass','endfaults'])\n",
+    "resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=3,track='all',to_return=['graph','classify','endfaults'])\n",
     "\n",
     "fig, ax = mdlhist.plot_line('flows.valve1_sig.s.action', 'flows.tank_sig.s.indicator',\n",
     "                            'fxns.store_water.s.level', 'fxns.store_water.s.net_flow',\n",
@@ -2430,7 +2430,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 24,
+   "execution_count": null,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:46:09.913594Z",
@@ -2462,7 +2462,7 @@
     }
    ],
    "source": [
-    "resgraph, mdlhist = propagate.one_fault(mdl,'human.aa.acts.detect','false_low', time=3, track='all',to_return=['graph','endclass','endfaults'])\n",
+    "resgraph, mdlhist = propagate.one_fault(mdl,'human.aa.acts.detect','false_low', time=3, track='all',to_return=['graph','classify','endfaults'])\n",
     "\n",
     "fig, ax = mdlhist.plot_line('flows.valve1_sig.s.action',\n",
     "                       'flows.tank_sig.s.indicator',\n",
@@ -2989,7 +2989,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 26,
+   "execution_count": null,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:46:10.675282Z",
@@ -3021,7 +3021,7 @@
     }
    ],
    "source": [
-    "resgraph, mdlhist = propagate.one_fault(mdl,'human.aa.acts.detect','false_high', time=3, track='all',to_return=['graph','endclass','endfaults'])\n",
+    "resgraph, mdlhist = propagate.one_fault(mdl,'human.aa.acts.detect','false_high', time=3, track='all',to_return=['graph','classify','endfaults'])\n",
     "\n",
     "fig, ax = mdlhist.plot_line('flows.valve1_sig.s.action',\n",
     "                       'flows.tank_sig.s.indicator',\n",
@@ -3086,7 +3086,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 28,
+   "execution_count": null,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:46:11.443216Z",
@@ -3105,7 +3105,7 @@
     }
    ],
    "source": [
-    "endclasses, mdlhists = propagate.fault_sample(mdl, fs)"
+    "results, mdlhists = propagate.fault_sample(mdl, fs)"
    ]
   },
   {
@@ -3117,7 +3117,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 29,
+   "execution_count": null,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:46:13.008651Z",
@@ -3137,12 +3137,12 @@
    ],
    "source": [
     "fs.add_fault_phases(n_joint=2)\n",
-    "endclasses, mdlhists=propagate.fault_sample(mdl, fs, track=\"all\")"
+    "results, mdlhists=propagate.fault_sample(mdl, fs, track=\"all\")"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 30,
+   "execution_count": null,
    "metadata": {
     "execution": {
      "iopub.execute_input": "2025-03-12T17:46:25.526845Z",
@@ -3310,7 +3310,7 @@
     }
    ],
    "source": [
-    "fmea_tab = an.tabulate.result_summary_fmea(endclasses, mdlhist) #note, this is currently behaving odd even without the joint fault cases\n",
+    "fmea_tab = an.tabulate.result_summary_fmea(results, mdlhist) #note, this is currently behaving odd even without the joint fault cases\n",
     "fmea_tab"
    ]
   },

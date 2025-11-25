@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Optimization using the ProblemInterface class &mdash; fmdtools 2.2.1 documentation</title>
+  <title>Optimization using the ProblemInterface class &mdash; fmdtools 2.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=16656018"></script>
+      <script src="../../_static/documentation_options.js?v=219dea72"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-1">Version: 2.2.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -431,6 +431,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimContainer"><code class="docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
@@ -753,7 +754,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
         <span class="c1"># In this case, we are optimizing the total flow in the `MoveWater` function as read at time t=25. </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;move_water.s.total_flow&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">negative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="c1"># We can additionally add constraints to the problem, in this case pressure as read at t=25.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_constraint</span><span class="p">(</span><span class="s1">&#39;g1&#39;</span><span class="p">,</span> <span class="s2">&quot;wat_1.s.pressure&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s1">&#39;less&#39;</span><span class="p">,</span> <span class="n">negative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_result_constraint</span><span class="p">(</span><span class="s1">&#39;g1&#39;</span><span class="p">,</span> <span class="s2">&quot;wat_2.s.pressure&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s1">&#39;less&#39;</span><span class="p">,</span> <span class="n">negative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -799,7 +800,32 @@ CONSTRAINTS
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-5.039999999999998
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(-5.039999999999998)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(-31.5)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span><span class="o">.</span><span class="n">res</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>t25p0.move_water.s.total_flow:      31.5
+t25p0.wat_2.s.pressure:            150.0
 </pre></div>
 </div>
 </div>
@@ -814,11 +840,11 @@ CONSTRAINTS
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PumpDisturbanceProblem with:
 VARIABLES
- -move_water.r.s.eff                                         0.3000
+ -move_water.r.s.eff                                        15.0000
 OBJECTIVES
- -f1                                                        -5.0400
+ -f1                                                       -31.5000
 CONSTRAINTS
- -g1                                                        17.0000
+ -g1                                                      -130.0000
 </pre></div>
 </div>
 </div>
@@ -832,7 +858,7 @@ CONSTRAINTS
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/69ee04d4de5deb5888635e4580cb6e20fcc6864ee3d9337f90f169e189c5a7d1.png" src="../../_images/69ee04d4de5deb5888635e4580cb6e20fcc6864ee3d9337f90f169e189c5a7d1.png" />
+<img alt="../../_images/586e9fde2f752a2d89246b61c11f0c5479c145e9180dc05933b1320fe90cdd45.png" src="../../_images/586e9fde2f752a2d89246b61c11f0c5479c145e9180dc05933b1320fe90cdd45.png" />
 </div>
 </div>
 <p>As well as the actual history of the sim at the current variable value:</p>
@@ -844,7 +870,7 @@ CONSTRAINTS
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/4c5a260ff7511644b36a454a5f33526914cbe090e9882ff6a6d6c124ad6ae540.png" src="../../_images/4c5a260ff7511644b36a454a5f33526914cbe090e9882ff6a6d6c124ad6ae540.png" />
+<img alt="../../_images/dd8792f3ebe69db9e694433a3cc8d813596321dd37fde16d8fff2d2d4c01a7dd.png" src="../../_images/dd8792f3ebe69db9e694433a3cc8d813596321dd37fde16d8fff2d2d4c01a7dd.png" />
 </div>
 </div>
 </section>
@@ -892,15 +918,16 @@ CONSTRAINTS
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> message: Optimization terminated successfully
- success: True
-  status: 0
-     fun: -8.099999999999998
-       x: [ 2.000e+00]
-     nit: 2
-     jac: [-1.800e+00]
-    nfev: 4
-    njev: 2
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     message: Optimization terminated successfully
+     success: True
+      status: 0
+         fun: -8.099999999999998
+           x: [ 2.000e+00]
+         nit: 2
+         jac: [-1.800e+00]
+        nfev: 4
+        njev: 2
+ multipliers: [ 1.800e-01]
 </pre></div>
 </div>
 </div>
@@ -926,19 +953,31 @@ CONSTRAINTS
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span><span class="o">.</span><span class="n">g1</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(-0.0)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span><span class="o">.</span><span class="n">iter_hist</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>time:                           array(8)
-iter:                           array(8)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>time:                          array(10)
+iter:                          array(10)
 variables: 
---move_water.r.s.eff:           array(8)
+--move_water.r.s.eff:          array(10)
 objectives: 
---f1:                           array(8)
+--f1:                          array(10)
 constraints: 
---g1:                           array(8)
+--g1:                          array(10)
 </pre></div>
 </div>
 </div>
@@ -953,7 +992,7 @@ constraints:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/3ede29bdadc63f750262da8ca993d22c6a266d9bbeed15e0c862d5978b343c8e.png" src="../../_images/3ede29bdadc63f750262da8ca993d22c6a266d9bbeed15e0c862d5978b343c8e.png" />
+<img alt="../../_images/4b6858cbcf1a9563dbdc2fbc1a9c0ec585c8fd322145e76b6927c7afbdd5e260.png" src="../../_images/4b6858cbcf1a9563dbdc2fbc1a9c0ec585c8fd322145e76b6927c7afbdd5e260.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -965,7 +1004,7 @@ constraints:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/7d04f3eae1b17d46149bf7e538f7a8fca13dd653bf47057ccfb60a2ba818d2d7.png" src="../../_images/7d04f3eae1b17d46149bf7e538f7a8fca13dd653bf47057ccfb60a2ba818d2d7.png" />
+<img alt="../../_images/6a139ae5cd0c6a0da5897968294bd674328c2cfe6eec479273d833feeb9a5f57.png" src="../../_images/6a139ae5cd0c6a0da5897968294bd674328c2cfe6eec479273d833feeb9a5f57.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -975,7 +1014,7 @@ constraints:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.000000014901161
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2
 </pre></div>
 </div>
 </div>
@@ -1040,7 +1079,7 @@ constraints:
 </div>
 </div>
 <p>We can now set up the <code class="docutils literal notranslate"><span class="pre">ParameterSimProblem</span></code>:</p>
-<p>Our objective for this problem will be to minimize the cost model overall scenarios that is defined in <code class="docutils literal notranslate"><span class="pre">mdl.find_classification</span></code>.</p>
+<p>Our objective for this problem will be to minimize the cost model overall scenarios that is defined in <code class="docutils literal notranslate"><span class="pre">mdl.classify</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.sim.search</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParameterSimProblem</span>
@@ -1064,7 +1103,7 @@ constraints:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>13894.0625
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(13894.0625)
 </pre></div>
 </div>
 </div>
@@ -1076,7 +1115,7 @@ constraints:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>15152.5
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(15152.5)
 </pre></div>
 </div>
 </div>
@@ -1089,7 +1128,7 @@ constraints:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a1ee686b62a32d6b799fae986730013075d6e6f50236bfe311c19709a1256815.png" src="../../_images/a1ee686b62a32d6b799fae986730013075d6e6f50236bfe311c19709a1256815.png" />
+<img alt="../../_images/feb9a03c7977cce8a74cb4b33bf9870c4046b8bea0133b72d22866936dc4c489.png" src="../../_images/feb9a03c7977cce8a74cb4b33bf9870c4046b8bea0133b72d22866936dc4c489.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1123,15 +1162,16 @@ pump_fxns_export_wat            3056.875
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> message: Optimization terminated successfully
- success: True
-  status: 0
-     fun: 15163.75
-       x: [ 5.000e+00]
-     nit: 1
-     jac: [ 0.000e+00]
-    nfev: 2
-    njev: 1
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     message: Optimization terminated successfully
+     success: True
+      status: 0
+         fun: 15163.75
+           x: [ 5.000e+00]
+         nit: 1
+         jac: [ 0.000e+00]
+        nfev: 2
+        njev: 1
+ multipliers: []
 </pre></div>
 </div>
 </div>
@@ -1180,10 +1220,10 @@ pump_fxns_export_wat            3056.875
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x24712f5d5d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x1b070673770&gt;
 </pre></div>
 </div>
-<img alt="../../_images/7d00331c0763c4c327f841c4116023c33453764d1eda931c7a6c315060cd0d11.png" src="../../_images/7d00331c0763c4c327f841c4116023c33453764d1eda931c7a6c315060cd0d11.png" />
+<img alt="../../_images/744b8a870906310459b5c5b5da4682f882b44e75b49cb191a4921b8c6627e6af.png" src="../../_images/744b8a870906310459b5c5b5da4682f882b44e75b49cb191a4921b8c6627e6af.png" />
 </div>
 </div>
 <p>As shown, the objective appears to be non-differentiable, with several plateaus between the starting point (20) and the minimum. Since the <code class="docutils literal notranslate"><span class="pre">SLSQP</span></code> solver is a gradient-based solver, it probably sees the gradient as 0 at this point, making it think the result is already an optimum.</p>
@@ -1206,6 +1246,18 @@ pump_fxns_export_wat            3056.875
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">n_var</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_obj</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_con</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xl</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xu</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">out</span><span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_inter</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">37</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">pymoo.core.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">ElementwiseProblem</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="k">class</span><span class="w"> </span><span class="nc">Prob</span><span class="p">(</span><span class="n">ElementwiseProblem</span><span class="p">):</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem_inter</span><span class="p">):</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;pymoo&#39;
 </pre></div>
 </div>
 </div>

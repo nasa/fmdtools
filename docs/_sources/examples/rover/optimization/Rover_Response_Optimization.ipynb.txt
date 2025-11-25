@@ -205,7 +205,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "We can define multiple objectives, below we will use the end distanceand total_deviation from find_classification. "
+    "We can define multiple objectives, below we will use the end distance and total_deviation from `classify`. "
    ]
   },
   {

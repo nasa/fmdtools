@@ -520,7 +520,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 14,
+   "execution_count": null,
    "id": "a76053f0",
    "metadata": {
     "execution": {
@@ -544,7 +544,7 @@
    ],
    "source": [
     "mdl = Pump()\n",
-    "endclass, mdlhist = propagate.nominal(mdl)\n",
+    "result, mdlhist = propagate.nominal(mdl)\n",
     "fig, axs = mdlhist.plot_line('fxns.import_ee.r.s.effstate', \n",
     "                            'fxns.import_ee.r.s.grid_noise', \n",
     "                            'fxns.import_signal.r.s.sig_noise',\n",
@@ -561,7 +561,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 15,
+   "execution_count": null,
    "id": "f8fd9c65",
    "metadata": {
     "execution": {
@@ -574,7 +574,7 @@
    "outputs": [],
    "source": [
     "mdl = Pump()\n",
-    "endclass, mdlhist = propagate.nominal(mdl, run_stochastic=True)"
+    "result, mdlhist = propagate.nominal(mdl, run_stochastic=True)"
    ]
   },
   {
@@ -618,7 +618,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 17,
+   "execution_count": null,
    "id": "2b477e12",
    "metadata": {
     "execution": {
@@ -642,7 +642,7 @@
    ],
    "source": [
     "mdl = Pump()\n",
-    "endclass, mdlhist = propagate.nominal(mdl, run_stochastic=True, \n",
+    "result, mdlhist = propagate.nominal(mdl, run_stochastic=True, \n",
     "                                      mdl_kwargs=dict(r={'seed':110}))\n",
     "fig, axs = mdlhist.plot_line('fxns.import_ee.r.s.effstate', \n",
     "                            'fxns.import_ee.r.s.grid_noise', \n",
@@ -660,7 +660,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 18,
+   "execution_count": null,
    "id": "6ca3cd91",
    "metadata": {
     "execution": {
@@ -684,7 +684,7 @@
    ],
    "source": [
     "mdl = Pump()\n",
-    "endclass, mdlhist = propagate.one_fault(mdl, 'export_water','block', time=20, \n",
+    "result, mdlhist = propagate.one_fault(mdl, 'export_water','block', time=20, \n",
     "                                       run_stochastic=True, mdl_kwargs=dict(r={'seed':110}))\n",
     "fig = mdlhist.plot_line('fxns.move_water.r.s.eff', \n",
     "                        'fxns.move_water.s.total_flow',\n",
@@ -742,7 +742,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 20,
+   "execution_count": null,
    "id": "5118bdb4",
    "metadata": {
     "execution": {
@@ -766,7 +766,7 @@
    ],
    "source": [
     "mdl = Pump()\n",
-    "endclass, mdlhist = propagate.one_fault(mdl, 'import_signal', 'no_sig', time=20, \n",
+    "result, mdlhist = propagate.one_fault(mdl, 'import_signal', 'no_sig', time=20, \n",
     "                                        run_stochastic=True, mdl_kwargs=dict(r={'seed':110}))\n",
     "fig = mdlhist.plot_line('fxns.import_ee.r.s.effstate', \n",
     "                        'fxns.import_ee.r.s.grid_noise', \n",
@@ -914,7 +914,7 @@
     }
    ],
    "source": [
-    "endclasses, mdlhists = propagate.parameter_sample(mdl, ps, run_stochastic=True)"
+    "results, mdlhists = propagate.parameter_sample(mdl, ps, run_stochastic=True)"
    ]
   },
   {
@@ -1182,7 +1182,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 30,
+   "execution_count": null,
    "id": "8a95d986",
    "metadata": {
     "execution": {
@@ -2123,7 +2123,7 @@
    "source": [
     "faultdomains = {\"fd\": ((\"fault\", \"export_water\", \"block\"), {})}\n",
     "faultsamples = {\"fs\": ((\"fault_phases\", \"fd\"), {})}\n",
-    "endclasses, mdlhists, apps=propagate.nested_sample(mdl, ps, run_stochastic=True, faultdomains=faultdomains, faultsamples=faultsamples)"
+    "results, mdlhists, apps=propagate.nested_sample(mdl, ps, run_stochastic=True, faultdomains=faultdomains, faultsamples=faultsamples)"
    ]
   },
   {
@@ -2236,7 +2236,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 34,
+   "execution_count": null,
    "id": "c5365822",
    "metadata": {
     "execution": {
@@ -2250,7 +2250,7 @@
    "source": [
     "import numpy as np\n",
     "from fmdtools.analyze.tabulate import NestedComparison\n",
-    "comp = NestedComparison(endclasses, ps, [\"p.delay\"], apps, [\"fault\"], metrics=['cost'], ci_metrics=['cost'], default_stat=np.mean)"
+    "comp = NestedComparison(results, ps, [\"p.delay\"], apps, [\"fault\"], metrics=['cost'], ci_metrics=['cost'], default_stat=np.mean)"
    ]
   },
   {

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Paper Demonstration &mdash; fmdtools 2.2.1 documentation</title>
+  <title>fmdtools Paper Demonstration &mdash; fmdtools 2.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=16656018"></script>
+      <script src="../../_static/documentation_options.js?v=219dea72"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-1">Version: 2.2.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -431,6 +431,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimContainer"><code class="docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
@@ -896,7 +897,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/51c3fce649049091560d11da273a1c682dbf649baed93b8c5c4532ec7d2c4671.png" src="../../_images/51c3fce649049091560d11da273a1c682dbf649baed93b8c5c4532ec7d2c4671.png" />
+<img alt="../../_images/7b43d055389b75f930792bba7f8a293927e5b01c2c1ca6d03396b1e6419c7271.png" src="../../_images/7b43d055389b75f930792bba7f8a293927e5b01c2c1ca6d03396b1e6419c7271.png" />
 </div>
 </div>
 <p>Note that a variety of views of the model graph can be used for analysis/visualization. Below we use the ModelFxnGraph</p>
@@ -917,7 +918,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/83bb1e70e5cc21ae8d0034c256c9a71a54589e6d6b0c0ddfdf224a905511021e.png" src="../../_images/83bb1e70e5cc21ae8d0034c256c9a71a54589e6d6b0c0ddfdf224a905511021e.png" />
+<img alt="../../_images/d9548b894744f0e7829df6c6748c9b8d568bf98b295f3d8e8bc7190afe4c7a0c.png" src="../../_images/d9548b894744f0e7829df6c6748c9b8d568bf98b295f3d8e8bc7190afe4c7a0c.png" />
 </div>
 </div>
 <section id="network-analysis">
@@ -939,7 +940,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ASPL: 1.14
 Modularity: 0.00
-Robustness Coefficient: 99.14
+Robustness Coefficient: 99.35
 </pre></div>
 </div>
 </div>
@@ -953,7 +954,7 @@ Robustness Coefficient: 99.14
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/9f2b0a38e27893ad89fb1f1a516115cde7d52a9bd1407f51487802c0bcf15acc.png" src="../../_images/9f2b0a38e27893ad89fb1f1a516115cde7d52a9bd1407f51487802c0bcf15acc.png" />
+<img alt="../../_images/9319132283334be12cefeeefb508e23fc3a1eb71a6a33ad5688e3922b028c088.png" src="../../_images/9319132283334be12cefeeefb508e23fc3a1eb71a6a33ad5688e3922b028c088.png" />
 </div>
 </div>
 <p>As shown, no bridging notes are found. This is somewhat expected, since functiongraph functions are for the most part all connected to the same flows.</p>
@@ -965,7 +966,7 @@ Robustness Coefficient: 99.14
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/60dfeb2d217bcc8c729dbb967f3f802b258b636ede5fda6d573bdd66fa13874d.png" src="../../_images/60dfeb2d217bcc8c729dbb967f3f802b258b636ede5fda6d573bdd66fa13874d.png" />
+<img alt="../../_images/9385fb9da93691e789abc21eac6e9d7df8873768c586527056f6db21f8b86887.png" src="../../_images/9385fb9da93691e789abc21eac6e9d7df8873768c586527056f6db21f8b86887.png" />
 </div>
 </div>
 <p>However, some functions do have more connected to them than others. In this case-, path planning and control, along with the structure.</p>
@@ -993,7 +994,7 @@ High Degree Nodes: [(&#39;drone.fxns.ctl_dof&#39;, 6), (&#39;drone.fxns.plan_pat
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/7cfa7285fdbf076fc970abc360d07816845df69a2255d30cab36c2da9dcd6e93.png" src="../../_images/7cfa7285fdbf076fc970abc360d07816845df69a2255d30cab36c2da9dcd6e93.png" />
+<img alt="../../_images/c47080ca920199341d2fbc16773eda521da97d1ad1302a42ad5d5c4a0024d04a.png" src="../../_images/c47080ca920199341d2fbc16773eda521da97d1ad1302a42ad5d5c4a0024d04a.png" />
 </div>
 </div>
 <p>The above analysis includes only function nodes. It is also possible to treat the entire model graph (containing both functions and flows) as a unipartite-like graph and perform similar analysis on both function and flow nodes.</p>
@@ -1012,7 +1013,7 @@ High Degree Nodes: [(&#39;drone.fxns.ctl_dof&#39;, 6), (&#39;drone.fxns.plan_pat
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ASPL, functions and flows: 2.30
 Modularity, functions and flows: 0.32
-Robustness Coefficient, functions and flows: 85.56
+Robustness Coefficient, functions and flows: 85.74
 </pre></div>
 </div>
 </div>
@@ -1025,8 +1026,8 @@ Robustness Coefficient, functions and flows: 85.56
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/7eb6909deffc4fc6dbc1236fedc9cb4c1325e7743910ed00b1076fdc7ba35079.png" src="../../_images/7eb6909deffc4fc6dbc1236fedc9cb4c1325e7743910ed00b1076fdc7ba35079.png" />
-<img alt="../../_images/f41b82ab35e6651cc8fe2ada9c8870eb876cd66b5a753cf512fa624d2d6591e6.png" src="../../_images/f41b82ab35e6651cc8fe2ada9c8870eb876cd66b5a753cf512fa624d2d6591e6.png" />
+<img alt="../../_images/28139ef09ff1d6fe7f8a8107b3b600a709a56993f0533474d849ce8c25214419.png" src="../../_images/28139ef09ff1d6fe7f8a8107b3b600a709a56993f0533474d849ce8c25214419.png" />
+<img alt="../../_images/2487ad3a19e8c7b7daf53a6d12fddf9895af104ebe51f5817258b4e331eecf0c.png" src="../../_images/2487ad3a19e8c7b7daf53a6d12fddf9895af104ebe51f5817258b4e331eecf0c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1050,7 +1051,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/303e2a147917a22b4429bdb69813274bc52555bc811b6379b02c07a825591d85.png" src="../../_images/303e2a147917a22b4429bdb69813274bc52555bc811b6379b02c07a825591d85.png" />
+<img alt="../../_images/29b0065aa2c3abed46d45695695e9861281793d08ec245ad3dc7555b7865bae6.png" src="../../_images/29b0065aa2c3abed46d45695695e9861281793d08ec245ad3dc7555b7865bae6.png" />
 </div>
 </div>
 <p>The SFF model can be simulated with options for simulation time, infection (failure) rate, and recovery (fix) rate. The start node can be selected or chosen randomly. Plotting includes an option for error bars. This models the system’s response to a failure using an analogy of an epidemic spreading through a network.</p>
@@ -1062,7 +1063,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/730be692930e1b4c373d5c7500e2828f31b837d7a284659161c53de001ad77e5.png" src="../../_images/730be692930e1b4c373d5c7500e2828f31b837d7a284659161c53de001ad77e5.png" />
+<img alt="../../_images/c802c3ee73657230c2baeb5f2c721d26f2796306779ed47d14c20c04aee4e799.png" src="../../_images/c802c3ee73657230c2baeb5f2c721d26f2796306779ed47d14c20c04aee4e799.png" />
 </div>
 </div>
 </section>
@@ -1083,12 +1084,12 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.sim</span><span class="w"> </span><span class="kn">import</span> <span class="n">propagate</span>
 <span class="n">static_mdl</span> <span class="o">=</span> <span class="n">Drone_Static</span><span class="p">()</span>
-<span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">single_faults</span><span class="p">(</span><span class="n">static_mdl</span><span class="p">)</span>
+<span class="n">results</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">single_faults</span><span class="p">(</span><span class="n">static_mdl</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 20/20 [00:00&lt;00:00, 61.02it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 20/20 [00:00&lt;00:00, 110.19it/s]
 </pre></div>
 </div>
 </div>
@@ -1097,7 +1098,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.analyze</span><span class="w"> </span><span class="kn">import</span> <span class="n">tabulate</span>
-<span class="n">static_fmea</span> <span class="o">=</span> <span class="n">tabulate</span><span class="o">.</span><span class="n">result_summary_fmea</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="p">,</span> <span class="o">*</span><span class="n">static_mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">static_mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
+<span class="n">static_fmea</span> <span class="o">=</span> <span class="n">tabulate</span><span class="o">.</span><span class="n">result_summary_fmea</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">mdlhists</span><span class="p">,</span> <span class="o">*</span><span class="n">static_mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">static_mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
 <span class="n">static_fmea</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;expected_cost&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1354,7 +1355,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/9d01192ba9e32068420289de67242cf0c19df1edd2379d39c9a8fbb80d07feb8.png" src="../../_images/9d01192ba9e32068420289de67242cf0c19df1edd2379d39c9a8fbb80d07feb8.png" />
+<img alt="../../_images/dff8d632b4c6c6c55fe97722411b54f7ddd3f6e14fd5932db0385c5ecb74a0a6.png" src="../../_images/dff8d632b4c6c6c55fe97722411b54f7ddd3f6e14fd5932db0385c5ecb74a0a6.png" />
 </div>
 </div>
 </section>
@@ -1375,7 +1376,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note: because of the complicated functions, the model must be re-instantiated for each function in order to work in this case</span>
 
 <span class="n">dynamic_mdl</span> <span class="o">=</span> <span class="n">Drone_Dynamic</span><span class="p">()</span>
-<span class="n">endclass</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">dynamic_mdl</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">dynamic_mdl</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1393,14 +1394,14 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/946f3d15c144253be4b6162d871a2a95be6a694651b5686ddbbce9cade6e98ae.png" src="../../_images/946f3d15c144253be4b6162d871a2a95be6a694651b5686ddbbce9cade6e98ae.png" />
+<img alt="../../_images/120e7c77481c7afb4db550d33c300fb0de745c57576c275bfb7e8179ae70a15f.png" src="../../_images/120e7c77481c7afb4db550d33c300fb0de745c57576c275bfb7e8179ae70a15f.png" />
 </div>
 </div>
 <p>As shown below, in the case of the break in the AffectDOF function, the system crashes:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dynamic_mdl</span> <span class="o">=</span> <span class="n">Drone_Dynamic</span><span class="p">()</span>
-<span class="n">endclass</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">dynamic_mdl</span><span class="p">,</span><span class="s1">&#39;affect_dof&#39;</span><span class="p">,</span> <span class="s1">&#39;mechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">resultmdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">dynamic_mdl</span><span class="p">,</span><span class="s1">&#39;affect_dof&#39;</span><span class="p">,</span> <span class="s1">&#39;mechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1417,7 +1418,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/9e3ee80c1015c7d3b1593ba1eeb50b2b1dc7db352c84c1dbfe371a84c5395f1b.png" src="../../_images/9e3ee80c1015c7d3b1593ba1eeb50b2b1dc7db352c84c1dbfe371a84c5395f1b.png" />
+<img alt="../../_images/137474926e561de325b363f2f2129002e04521ff2c5132e42b3802d1cd7f2046.png" src="../../_images/137474926e561de325b363f2f2129002e04521ff2c5132e42b3802d1cd7f2046.png" />
 </div>
 </div>
 <p>Finally, we can see how the cost function of this scenario changes over time. As shown, when the fault is injected early, it has a lower cost because it crashes at the landing pad and not in a dangerous area. When it is injected at the end, the cost is minimal because the drone has already landed.</p>
@@ -1436,12 +1437,12 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_comp_endclasses</span><span class="p">,</span> <span class="n">quad_comp_mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_quad_comp</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_comp_results</span><span class="p">,</span> <span class="n">quad_comp_mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_quad_comp</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:01&lt;00:00, 12.39it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 30.41it/s]
 </pre></div>
 </div>
 </div>
@@ -1453,7 +1454,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(0.0)
 </pre></div>
 </div>
 </div>
@@ -1461,18 +1462,18 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.analyze</span><span class="w"> </span><span class="kn">import</span> <span class="n">phases</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">phases</span><span class="o">.</span><span class="n">samplemetric</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">quad_comp_endclasses</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">phases</span><span class="o">.</span><span class="n">samplemetric</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">quad_comp_results</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;cost_over_time.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a34c899d7ac7b054a548e6f3a3be4b1c905b43e1202f2d247af0e157cce8aa62.png" src="../../_images/a34c899d7ac7b054a548e6f3a3be4b1c905b43e1202f2d247af0e157cce8aa62.png" />
+<img alt="../../_images/c491f399bf8a4d182ec54e4897406c13e8a8ac17cdfe4dc1ccc6ae3037f1f67a.png" src="../../_images/c491f399bf8a4d182ec54e4897406c13e8a8ac17cdfe4dc1ccc6ae3037f1f67a.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_comp_endclasses</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_comp_results</span>
 </pre></div>
 </div>
 </div>
@@ -1539,7 +1540,7 @@ affect_dof_mechbreak  25.000000000000007
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hierarchical_model</span> <span class="o">=</span> <span class="n">Drone_Hierarchical</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;arch&#39;</span><span class="p">:</span><span class="s1">&#39;quad&#39;</span><span class="p">})</span>
-<span class="n">endclass</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">hierarchical_model</span><span class="p">,</span><span class="s1">&#39;affect_dof.ca.comps.rf&#39;</span><span class="p">,</span> <span class="s1">&#39;mechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">hierarchical_model</span><span class="p">,</span><span class="s1">&#39;affect_dof.ca.comps.rf&#39;</span><span class="p">,</span> <span class="s1">&#39;mechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1552,14 +1553,14 @@ affect_dof_mechbreak  25.000000000000007
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/5ee9fd3e8192c8a6b06795e8e845559c88c9c8ff5eed38a8c0f3f26360f93de2.png" src="../../_images/5ee9fd3e8192c8a6b06795e8e845559c88c9c8ff5eed38a8c0f3f26360f93de2.png" />
+<img alt="../../_images/23588cb9666fecc6c735ff6df4df6e981b2f27a1250cb29ba6c7329268d427b5.png" src="../../_images/23588cb9666fecc6c735ff6df4df6e981b2f27a1250cb29ba6c7329268d427b5.png" />
 </div>
 </div>
 <p>Then we can see how the octorotor architecture performs in the same case:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hierarchical_model</span> <span class="o">=</span> <span class="n">Drone_Hierarchical</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;arch&#39;</span><span class="p">:</span><span class="s1">&#39;oct&#39;</span><span class="p">})</span>
-<span class="n">endclass</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">hierarchical_model</span><span class="p">,</span><span class="s1">&#39;affect_dof.ca.comps.rf&#39;</span><span class="p">,</span> <span class="s1">&#39;mechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">hierarchical_model</span><span class="p">,</span><span class="s1">&#39;affect_dof.ca.comps.rf&#39;</span><span class="p">,</span> <span class="s1">&#39;mechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1576,7 +1577,7 @@ affect_dof_mechbreak  25.000000000000007
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/0212a77150fbc6008e2f077c86ff28601d693bd23307c03cb52da624190b322d.png" src="../../_images/0212a77150fbc6008e2f077c86ff28601d693bd23307c03cb52da624190b322d.png" />
+<img alt="../../_images/dc86c389aa1a83b817a4b150c14b182fb3f8e2f413af61fbf0cfe3b521db9eac.png" src="../../_images/dc86c389aa1a83b817a4b150c14b182fb3f8e2f413af61fbf0cfe3b521db9eac.png" />
 </div>
 </div>
 <p>As shown, the octorotor architecture enables the quadrotor to recover from the fault and land.</p>
@@ -1700,19 +1701,19 @@ affect_dof_mechbreak  25.000000000000007
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_endclasses</span><span class="p">,</span> <span class="n">quad_mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_quad</span><span class="p">,</span> <span class="n">fs_quad</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_results</span><span class="p">,</span> <span class="n">quad_mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_quad</span><span class="p">,</span> <span class="n">fs_quad</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:12&lt;00:00,  3.91it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:06&lt;00:00,  7.50it/s]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_tab</span><span class="o">=</span><span class="n">quad_endclasses</span><span class="o">.</span><span class="n">create_simple_fmea</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_tab</span><span class="o">=</span><span class="n">quad_results</span><span class="o">.</span><span class="n">create_simple_fmea</span><span class="p">()</span>
 <span class="n">quad_tab</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;expected_cost&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1743,19 +1744,7 @@ affect_dof_mechbreak  25.000000000000007
   </thead>
   <tbody>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185800.0</td>
-      <td>37160.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185800.0</td>
-      <td>37160.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf_ctlbreak_t8p0</th>
+      <th>drone_fxns_affect_dof_ctlbreak_t8p0</th>
       <td>2.000000e-06</td>
       <td>185800.0</td>
       <td>37160.0</td>
@@ -1767,37 +1756,37 @@ affect_dof_mechbreak  25.000000000000007
       <td>37160.0</td>
     </tr>
     <tr>
+      <th>drone_fxns_affect_dof_ca_comps_lr_ctlbreak_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>185800.0</td>
+      <td>37160.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rf_ctlbreak_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>185800.0</td>
+      <td>37160.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rr_ctlbreak_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>185800.0</td>
+      <td>37160.0</td>
+    </tr>
+    <tr>
       <th>drone_fxns_affect_dof_ca_comps_lf_ctlup_t8p0</th>
       <td>2.000000e-06</td>
       <td>185300.0</td>
       <td>37060.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_ctlup_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_ctldn_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr_ctlup_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr_ctldn_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
       <th>drone_fxns_affect_dof_ca_comps_rf_ctldn_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>185300.0</td>
+      <td>37060.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_lr_ctlup_t8p0</th>
       <td>2.000000e-06</td>
       <td>185300.0</td>
       <td>37060.0</td>
@@ -1815,25 +1804,55 @@ affect_dof_mechbreak  25.000000000000007
       <td>37060.0</td>
     </tr>
     <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rr_ctlup_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>185300.0</td>
+      <td>37060.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_lr_ctldn_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>185300.0</td>
+      <td>37060.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rr_ctldn_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>185300.0</td>
+      <td>37060.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ctldn_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>185300.0</td>
+      <td>37060.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_mechbreak_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>185300.0</td>
+      <td>18530.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_short_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>185000.0</td>
+      <td>18500.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_openc_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>185000.0</td>
+      <td>18500.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_lr_short_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>185000.0</td>
+      <td>18500.0</td>
+    </tr>
+    <tr>
       <th>drone_fxns_affect_dof_ca_comps_lf_openc_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lf_short_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr_short_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_openc_t8p0</th>
       <td>1.000000e-06</td>
       <td>185000.0</td>
       <td>18500.0</td>
@@ -1851,13 +1870,25 @@ affect_dof_mechbreak  25.000000000000007
       <td>18500.0</td>
     </tr>
     <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rr_short_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>185000.0</td>
+      <td>18500.0</td>
+    </tr>
+    <tr>
       <th>drone_fxns_affect_dof_ca_comps_rr_openc_t8p0</th>
       <td>1.000000e-06</td>
       <td>185000.0</td>
       <td>18500.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_short_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_lr_openc_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>185000.0</td>
+      <td>18500.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_lf_short_t8p0</th>
       <td>1.000000e-06</td>
       <td>185000.0</td>
       <td>18500.0</td>
@@ -1869,7 +1900,7 @@ affect_dof_mechbreak  25.000000000000007
       <td>18480.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lf_mechbreak_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_lr_mechbreak_t8p0</th>
       <td>1.000000e-06</td>
       <td>184800.0</td>
       <td>18480.0</td>
@@ -1881,16 +1912,16 @@ affect_dof_mechbreak  25.000000000000007
       <td>18480.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_mechbreak_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_lf_mechbreak_t8p0</th>
       <td>1.000000e-06</td>
       <td>184800.0</td>
       <td>18480.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf_mechfriction_t8p0</th>
-      <td>5.000000e-07</td>
-      <td>185300.0</td>
-      <td>9265.0</td>
+      <th>drone_fxns_affect_dof_ctlup_t8p0</th>
+      <td>2.000000e-06</td>
+      <td>50500.0</td>
+      <td>10100.0</td>
     </tr>
     <tr>
       <th>drone_fxns_affect_dof_ca_comps_rr_mechfriction_t8p0</th>
@@ -1905,22 +1936,22 @@ affect_dof_mechbreak  25.000000000000007
       <td>9265.0</td>
     </tr>
     <tr>
+      <th>drone_fxns_affect_dof_ca_comps_rf_mechfriction_t8p0</th>
+      <td>5.000000e-07</td>
+      <td>185300.0</td>
+      <td>9265.0</td>
+    </tr>
+    <tr>
       <th>drone_fxns_affect_dof_ca_comps_lf_mechfriction_t8p0</th>
       <td>5.000000e-07</td>
       <td>185300.0</td>
       <td>9265.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_propbreak_t8p0</th>
+      <th>drone_fxns_affect_dof_propbreak_t8p0</th>
       <td>3.000000e-07</td>
-      <td>184800.0</td>
-      <td>5544.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf_propbreak_t8p0</th>
-      <td>3.000000e-07</td>
-      <td>184800.0</td>
-      <td>5544.0</td>
+      <td>185000.0</td>
+      <td>5550.0</td>
     </tr>
     <tr>
       <th>drone_fxns_affect_dof_ca_comps_rr_propbreak_t8p0</th>
@@ -1935,13 +1966,25 @@ affect_dof_mechbreak  25.000000000000007
       <td>5544.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr_propstuck_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_rf_propbreak_t8p0</th>
+      <td>3.000000e-07</td>
+      <td>184800.0</td>
+      <td>5544.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_ca_comps_lr_propbreak_t8p0</th>
+      <td>3.000000e-07</td>
+      <td>184800.0</td>
+      <td>5544.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_propstuck_t8p0</th>
       <td>2.000000e-07</td>
       <td>185000.0</td>
       <td>3700.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lf_propstuck_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_rr_propstuck_t8p0</th>
       <td>2.000000e-07</td>
       <td>185000.0</td>
       <td>3700.0</td>
@@ -1953,19 +1996,25 @@ affect_dof_mechbreak  25.000000000000007
       <td>3700.0</td>
     </tr>
     <tr>
+      <th>drone_fxns_affect_dof_ca_comps_lf_propstuck_t8p0</th>
+      <td>2.000000e-07</td>
+      <td>185000.0</td>
+      <td>3700.0</td>
+    </tr>
+    <tr>
       <th>drone_fxns_affect_dof_ca_comps_rf_propstuck_t8p0</th>
       <td>2.000000e-07</td>
       <td>185000.0</td>
       <td>3700.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr_propwarp_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_lr_propwarp_t8p0</th>
       <td>1.000000e-07</td>
       <td>185000.0</td>
       <td>1850.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf_propwarp_t8p0</th>
+      <th>drone_fxns_affect_dof_propwarp_t8p0</th>
       <td>1.000000e-07</td>
       <td>185000.0</td>
       <td>1850.0</td>
@@ -1977,70 +2026,22 @@ affect_dof_mechbreak  25.000000000000007
       <td>1850.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_propwarp_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_rf_propwarp_t8p0</th>
       <td>1.000000e-07</td>
       <td>185000.0</td>
       <td>1850.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ctlup_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>500.0</td>
-      <td>100.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ctldn_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>500.0</td>
-      <td>100.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_mechbreak_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>500.0</td>
-      <td>50.0</td>
+      <th>drone_fxns_affect_dof_ca_comps_rr_propwarp_t8p0</th>
+      <td>1.000000e-07</td>
+      <td>185000.0</td>
+      <td>1850.0</td>
     </tr>
     <tr>
       <th>drone_fxns_affect_dof_mechfriction_t8p0</th>
       <td>5.000000e-07</td>
       <td>500.0</td>
       <td>25.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_short_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>200.0</td>
-      <td>20.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_openc_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>200.0</td>
-      <td>20.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_propbreak_t8p0</th>
-      <td>3.000000e-07</td>
-      <td>200.0</td>
-      <td>6.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_propstuck_t8p0</th>
-      <td>2.000000e-07</td>
-      <td>200.0</td>
-      <td>4.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_propwarp_t8p0</th>
-      <td>1.000000e-07</td>
-      <td>200.0</td>
-      <td>2.0</td>
     </tr>
     <tr>
       <th>nominal</th>
@@ -2061,7 +2062,7 @@ affect_dof_mechbreak  25.000000000000007
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>749003.0000000001
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>899451.0000000001
 </pre></div>
 </div>
 </div>
@@ -2076,7 +2077,7 @@ affect_dof_mechbreak  25.000000000000007
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.0400000000000006e-05
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.800000000000001e-05
 </pre></div>
 </div>
 </div>
@@ -2090,7 +2091,7 @@ affect_dof_mechbreak  25.000000000000007
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>40
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>48
 </pre></div>
 </div>
 </div>
@@ -2104,7 +2105,7 @@ affect_dof_mechbreak  25.000000000000007
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.7843137254901961
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.9411764705882353
 </pre></div>
 </div>
 </div>
@@ -2268,19 +2269,19 @@ affect_dof_mechbreak  25.000000000000007
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_endclasses</span><span class="p">,</span> <span class="n">oct_mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_oct</span><span class="p">,</span> <span class="n">fs_oct</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_results</span><span class="p">,</span> <span class="n">oct_mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_oct</span><span class="p">,</span> <span class="n">fs_oct</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:24&lt;00:00,  3.64it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:18&lt;00:00,  4.86it/s]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_tab</span> <span class="o">=</span> <span class="n">oct_endclasses</span><span class="o">.</span><span class="n">create_simple_fmea</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_tab</span> <span class="o">=</span> <span class="n">oct_results</span><span class="o">.</span><span class="n">create_simple_fmea</span><span class="p">()</span>
 <span class="n">oct_tab</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;expected_cost&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2311,34 +2312,34 @@ affect_dof_mechbreak  25.000000000000007
   </thead>
   <tbody>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lf2_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rf_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
       <th>drone_fxns_affect_dof_ctlbreak_t8p0</th>
       <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
+      <td>188600.0</td>
+      <td>37720.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr2_ctlbreak_t8p0</th>
+      <th>drone_fxns_affect_dof_ctldn_t8p0</th>
       <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
+      <td>188100.0</td>
+      <td>37620.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
+      <th>drone_fxns_affect_dof_mechbreak_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>188100.0</td>
+      <td>18810.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_short_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>187800.0</td>
+      <td>18780.0</td>
+    </tr>
+    <tr>
+      <th>drone_fxns_affect_dof_openc_t8p0</th>
+      <td>1.000000e-06</td>
+      <td>187800.0</td>
+      <td>18780.0</td>
     </tr>
     <tr>
       <th>...</th>
@@ -2347,25 +2348,25 @@ affect_dof_mechbreak  25.000000000000007
       <td>...</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr2_propwarp_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_rf_propwarp_t8p0</th>
       <td>1.000000e-07</td>
       <td>200.0</td>
       <td>2.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lf_propwarp_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_rf2_propwarp_t8p0</th>
       <td>1.000000e-07</td>
       <td>200.0</td>
       <td>2.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_rr_propwarp_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_lf2_propwarp_t8p0</th>
       <td>1.000000e-07</td>
       <td>200.0</td>
       <td>2.0</td>
     </tr>
     <tr>
-      <th>drone_fxns_affect_dof_ca_comps_lr_propwarp_t8p0</th>
+      <th>drone_fxns_affect_dof_ca_comps_rr2_propwarp_t8p0</th>
       <td>1.000000e-07</td>
       <td>200.0</td>
       <td>2.0</td>
@@ -2390,7 +2391,7 @@ affect_dof_mechbreak  25.000000000000007
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4743.000000000001
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>157319.00000000003
 </pre></div>
 </div>
 </div>
@@ -2405,7 +2406,7 @@ affect_dof_mechbreak  25.000000000000007
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7.600000000000001e-06
 </pre></div>
 </div>
 </div>
@@ -2419,7 +2420,7 @@ affect_dof_mechbreak  25.000000000000007
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8
 </pre></div>
 </div>
 </div>
@@ -2433,7 +2434,7 @@ affect_dof_mechbreak  25.000000000000007
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.08791208791208792
 </pre></div>
 </div>
 </div>

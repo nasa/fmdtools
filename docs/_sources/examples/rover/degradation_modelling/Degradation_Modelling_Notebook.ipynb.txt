@@ -355,7 +355,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
+   "execution_count": null,
    "id": "812c5a17",
    "metadata": {
     "execution": {
@@ -378,7 +378,7 @@
     "from fmdtools.sim.sample import ParameterSample\n",
     "ps = ParameterSample()\n",
     "ps.add_variable_replicates([], replicates=100, seed_comb='independent')\n",
-    "endclasses_deg, mdlhists_deg = prop.parameter_sample(deg_mdl, ps, run_stochastic=True)"
+    "results_deg, mdlhists_deg = prop.parameter_sample(deg_mdl, ps, run_stochastic=True)"
    ]
   },
   {
@@ -26627,7 +26627,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 20,
+   "execution_count": null,
    "id": "8e28dac4",
    "metadata": {
     "execution": {
@@ -26648,7 +26648,7 @@
    ],
    "source": [
     "\n",
-    "behave_endclasses, behave_mdlhists = prop.parameter_sample(fault_mdl, phs)"
+    "behave_results, behave_mdlhists = prop.parameter_sample(fault_mdl, phs)"
    ]
   },
   {
@@ -26714,7 +26714,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 23,
+   "execution_count": null,
    "id": "c925b301",
    "metadata": {
     "execution": {
@@ -26737,7 +26737,7 @@
     }
    ],
    "source": [
-    "behave_endclasses.state_probabilities('prob')"
+    "behave_results.state_probabilities('prob')"
    ]
   },
   {
@@ -26759,7 +26759,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 25,
+   "execution_count": null,
    "id": "595b089f",
    "metadata": {
     "execution": {
@@ -26793,7 +26793,7 @@
     }
    ],
    "source": [
-    "ne = NominalEnvelope(phs, behave_endclasses, 'classification',\n",
+    "ne = NominalEnvelope(phs, behave_results, 'classification',\n",
     "                     'p.degradation.friction', 'p.degradation.drift',\n",
     "                     func = lambda x: x == 'nominal mission')\n",
     "ne.plot_scatter()"
@@ -26801,7 +26801,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 26,
+   "execution_count": null,
    "id": "0da1e436",
    "metadata": {
     "execution": {
@@ -26835,7 +26835,7 @@
     }
    ],
    "source": [
-    "ne = NominalEnvelope(phs, behave_endclasses, 'classification',\n",
+    "ne = NominalEnvelope(phs, behave_results, 'classification',\n",
     "                     'inputparams.t', 'inputparams.rep',\n",
     "                     func = lambda x: x == 'nominal mission')\n",
     "ne.plot_scatter()"

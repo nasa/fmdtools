@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pump Example Notebook &mdash; fmdtools 2.2.1 documentation</title>
+  <title>Pump Example Notebook &mdash; fmdtools 2.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=16656018"></script>
+      <script src="../../_static/documentation_options.js?v=219dea72"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-1">Version: 2.2.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -431,6 +431,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs-source/fmdtools.sim.html">fmdtools.sim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimContainer"><code class="docutils literal notranslate"><span class="pre">BaseSimContainer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.BaseSimulation"><code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiEventSimulation"><code class="docutils literal notranslate"><span class="pre">MultiEventSimulation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.sim.html#fmdtools.sim.propagate.MultiSimulation"><code class="docutils literal notranslate"><span class="pre">MultiSimulation</span></code></a></li>
@@ -1263,7 +1264,7 @@ fxns.export_water.m.sub_faults: array(56)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;move_water&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
-                                        <span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span><span class="s1">&#39;endclass&#39;</span><span class="p">,</span><span class="s1">&#39;endfaults&#39;</span><span class="p">])</span>
+                                        <span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span><span class="s1">&#39;classify&#39;</span><span class="p">,</span><span class="s1">&#39;endfaults&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -2269,7 +2270,7 @@ move_water_short_t10.tend.graph: &lt;fmdtools.define.architecture.function.Funct
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist_full</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;move_water&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span>
-                                        <span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span><span class="s1">&#39;endclass&#39;</span><span class="p">,</span><span class="s1">&#39;endfaults&#39;</span><span class="p">])</span>
+                                        <span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span><span class="s1">&#39;classify&#39;</span><span class="p">,</span><span class="s1">&#39;endfaults&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -46049,7 +46050,7 @@ move_water_short_t10           array(56)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults2</span><span class="p">,</span> <span class="n">mdlhist2</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;export_water&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span> 
-                                          <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;endclass&#39;</span><span class="p">,</span> <span class="s1">&#39;graph&#39;</span><span class="p">,</span> <span class="s1">&#39;endfaults&#39;</span><span class="p">])</span>
+                                          <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">to_return</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;classify&#39;</span><span class="p">,</span> <span class="s1">&#39;graph&#39;</span><span class="p">,</span> <span class="s1">&#39;endfaults&#39;</span><span class="p">])</span>
 <span class="n">summ</span> <span class="o">=</span> <span class="n">mdlhist_full</span><span class="o">.</span><span class="n">get_fault_degradation_summary</span><span class="p">(</span><span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -46261,7 +46262,7 @@ time:                               27.5
 <p>See below:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">single_faults</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span><span class="p">,</span> <span class="n">mdlhists</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">single_faults</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -46274,7 +46275,7 @@ time:                               27.5
 <p>We can visualize the metrics for each scenario using <code class="docutils literal notranslate"><span class="pre">Result.create_simple_fmea</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses</span><span class="o">.</span><span class="n">create_simple_fmea</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span><span class="o">.</span><span class="n">create_simple_fmea</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -46364,7 +46365,7 @@ time:                               27.5
 <p>We can see corresponding degradations using <code class="docutils literal notranslate"><span class="pre">tabulate.result_summary.fmea()</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fullfmea</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">result_summary_fmea</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fullfmea</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">result_summary_fmea</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">mdlhists</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
 <span class="n">fullfmea</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -46528,8 +46529,8 @@ time:                               27.5
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
-<span class="n">simplefmea</span> <span class="o">=</span> <span class="n">endclasses</span><span class="o">.</span><span class="n">create_simple_fmea</span><span class="p">()</span> <span class="c1">#note the costs are the same, but the rates and expected costs are not</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span><span class="p">,</span> <span class="n">mdlhists</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+<span class="n">simplefmea</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">create_simple_fmea</span><span class="p">()</span> <span class="c1">#note the costs are the same, but the rates and expected costs are not</span>
 <span class="n">simplefmea</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -46599,7 +46600,7 @@ time:                               27.5
 <p>We can now summarize the risks of faults over the operational phases and overall using the <code class="docutils literal notranslate"><span class="pre">FMEA</span></code> class:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phasefmea</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">FMEA</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">group_by</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;fault&#39;</span><span class="p">,</span> <span class="s1">&#39;phase&#39;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phasefmea</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">FMEA</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">group_by</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;fault&#39;</span><span class="p">,</span> <span class="s1">&#39;phase&#39;</span><span class="p">))</span>
 <span class="n">phasefmea</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -46821,7 +46822,7 @@ time:                               27.5
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">summfmea</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">FMEA</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">summfmea</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">FMEA</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
 <span class="n">summfmea</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -47000,10 +47001,10 @@ time:                               27.5
 </section>
 <section id="save-load">
 <h2>Save/Load<a class="headerlink" href="#save-load" title="Link to this heading"></a></h2>
-<p>In detailed simulations, running a lot of computational simulations can take a considerable amount of time. As a result, it becomes impractical to run a new simulation every time one wishes to analyse its data. Results from fmdtools simulations (endclasses or mdlhists) can be saved as pickle, csv, or json files in this instance using either:</p>
+<p>In detailed simulations, running a lot of computational simulations can take a considerable amount of time. As a result, it becomes impractical to run a new simulation every time one wishes to analyse its data. Results from fmdtools simulations (results or histories) can be saved as npz, csv, or json files in this instance using either:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Result.save</span></code> or <code class="docutils literal notranslate"><span class="pre">History.save</span></code> or</p></li>
-<li><p>passing a save_args dictionary to the respective propagate functions (e.g., {‘endclass’:{‘filename’:’file.pkl’,’overwrite’:True})</p></li>
+<li><p>passing a save_args dictionary to the respective propagate functions (e.g., {‘classify’:{‘filename’:’file.pkl’,’overwrite’:True})</p></li>
 </ul>
 <p>and then loaded using:</p>
 <ul class="simple">
