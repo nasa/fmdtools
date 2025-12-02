@@ -174,5 +174,10 @@ if __name__ == "__main__":
     e.hi.ga.points['ex_point'].s.occupied=True
     d = e.copy()
     d.hi.ga.points['ex_point'].s.occupied
+
+
+    c = ExampleEnvironment(track=None)
+    b = c.copy()
+    b.ga.h
     import doctest
     doctest.testmod(verbose=True)

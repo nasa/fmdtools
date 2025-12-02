@@ -580,7 +580,8 @@ class Architecture(Simulable):
         copy : Architecture
             Copy of the curent architecture.
         """
-        cargs = dict(p=getattr(self, 'p', {}),
+        cargs = dict(root=self.root,
+                     p=getattr(self, 'p', {}),
                      sp=getattr(self, 'sp', {}),
                      track=getattr(self, 'track', {}),
                      h=self.h.copy(),

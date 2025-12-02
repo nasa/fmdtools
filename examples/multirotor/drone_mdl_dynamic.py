@@ -451,7 +451,8 @@ class Drone(FunctionArchitecture):
         totcost = repcost + crashcost + lostcost
         rate = scen.rate
         expcost = totcost*rate*1e5
-        return {'rate': rate, 'cost': totcost, 'expected_cost': expcost}
+        return {'rate': rate, 'cost': totcost, 'expected_cost': expcost,
+                'lost_cost': lostcost, 'crashcost': crashcost}
 
 
 def finddist(p1, p2):

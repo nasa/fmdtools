@@ -795,4 +795,8 @@ if __name__ == "__main__":
     doctest.testmod(verbose=True)
 
     static_mdl = Drone()
+    fig, ax = static_mdl.as_modelgraph().draw()
+
+    result, history = propagate.one_fault(static_mdl, "store_ee", "nocharge")
+
     results, mdlhists = propagate.single_faults(static_mdl)
