@@ -81,13 +81,16 @@ class Environment(CommsFlow):
         # NOTE: p and s also init here because if not, they are overritten
         # may need to change in the future
         self.init_roletypes('container', "coords", "arch", r=r, p=p, s=s, sp=sp)
-        if 'p' not in c and getattr(self.coords_c, 'container_p', None) == getattr(self, 'container_p', None):
-            c = {**c, 'p': p}
-        if 'p' not in ga and getattr(self.arch_ga, 'container_p', None) == getattr(self, 'container_p', None):
-            ga = {**ga, 'p': p}
         r_kwargs = {'run_stochastic': self.r.run_stochastic, 'seed': self.r.seed}
-        c = {**{'r': r_kwargs}, **c}
-        ga = {**{'r': r_kwargs, 'sp': self.sp.get_sub_kwargs()}, **ga}
+        if isinstance(c, dict):
+            if 'p' not in c and getattr(self.coords_c, 'container_p', None) == getattr(self, 'container_p', None):
+                c = {**c, 'p': p}
+            c = {**{'r': r_kwargs}, **c}
+        if isinstance(ga, dict):
+            if 'p' not in ga and getattr(self.arch_ga, 'container_p', None) == getattr(self, 'container_p', None):
+                ga = {**ga, 'p': p}
+            ga = {**{'r': r_kwargs, 'sp': self.sp.get_sub_kwargs()}, **ga}
+
         self.init_roletypes('coords', 'arch', c=c, ga=ga)
 
     def base_type(self):
@@ -129,6 +132,15 @@ class Environment(CommsFlow):
         >>> d.ga.lines['ex_line'].s.occupied = True
         >>> e.ga.lines['ex_line'].s.occupied
         False
+
+        This should also be the case for contained local versions:
+
+        >>> e = ExampleEnvironment("env")
+        >>> hi = e.create_local("hi")
+        >>> e.hi.ga.points['ex_point'].s.occupied=True
+        >>> d = e.copy()
+        >>> d.hi.ga.points['ex_point'].s.occupied
+        True
         """
         cop = super().copy(glob=glob, p=p, s=s)
         cop.r.assign(self.r)
@@ -158,6 +170,9 @@ class ExampleEnvironment(Environment):
 
 if __name__ == "__main__":
     e = ExampleEnvironment("env")
+    e.create_local("hi")
+    e.hi.ga.points['ex_point'].s.occupied=True
     d = e.copy()
+    d.hi.ga.points['ex_point'].s.occupied
     import doctest
     doctest.testmod(verbose=True)

@@ -289,7 +289,7 @@ class MultiFlow(Flow):
         cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track, root=self.root)
         for loc in self.locals:
             local = getattr(self, loc)
-            cop.create_local(local.name, **local.copy_mut_containers(), as_copy=True)
+            cop.create_local(local.name, **local.copy_mutes(), as_copy=True)
         return cop
 
     def create_hist(self, timerange, track=None):

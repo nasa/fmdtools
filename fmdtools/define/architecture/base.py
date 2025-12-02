@@ -611,7 +611,7 @@ class Architecture(Simulable):
             else:
                 if flow.glob.name not in globs:
                     globs[flow.glob.name] = flow.glob.copy()
-                cflows[fn] = flow.copy(glob=globs[flow.glob.name])
+                cflows[fn] = globs[flow.glob.name].get_view(fn)
         return cflows
 
     def get_all_possible_track(self):
