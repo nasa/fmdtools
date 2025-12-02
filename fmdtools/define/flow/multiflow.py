@@ -284,6 +284,8 @@ class MultiFlow(Flow):
         """Copy the flow and create new sub-flow copies for it."""
         if not s and hasattr(self, 's'):
             s = self.s.asdict()
+        if not glob and self.glob.name != self.name:
+            raise Exception("Unable to copy "+self.name+" without "+self.glob.name+".")
         cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track, root=self.root)
         for loc in self.locals:
             local = getattr(self, loc)
