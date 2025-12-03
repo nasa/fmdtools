@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for examples/rover/rover_model.py: 93%</title>
+    <title>Coverage for examples/rover/rover_model.py: 89%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
-    <script src="coverage_html_cb_6fb7b396.js" defer></script>
+    <link rel="stylesheet" href="style_cb_8432e98f.css" type="text/css">
+    <script src="coverage_html_cb_bcae5fc4.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
     <div class="content">
         <h1>
-            <span class="text">Coverage for </span><b>examples/rover/rover_model.py</b>:
-            <span class="pc_cov">93%</span>
+            <span class="text">Coverage for </span><b>examples&#8201;/&#8201;rover&#8201;/&#8201;rover_model.py</b>:
+            <span class="pc_cov">89%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">481 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">446<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">35<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">429<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">52<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">47<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_25d7572d601709fe_rover_model_human_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-12-02 18:52 -0800
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.12.0">coverage.py v7.12.0</a>,
+            created at 2025-12-03 09:31 -0800
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -920,17 +920,17 @@
     <p class="run"><span class="n"><a id="t838" href="#t838">838</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">off_power</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t839" href="#t839">839</a></span><span class="t">        <span class="key">elif</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">in_mode</span><span class="op">(</span><span class="str">"supply"</span><span class="op">,</span> <span class="str">"depleted"</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t840" href="#t840">840</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">supply_power</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t841" href="#t841">841</a></span><span class="t">        <span class="key">elif</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">in_mode</span><span class="op">(</span><span class="str">"short"</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t842" href="#t842">842</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">short_power</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t843" href="#t843">843</a></span><span class="t">        <span class="key">elif</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">in_mode</span><span class="op">(</span><span class="str">"no_charge"</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t844" href="#t844">844</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">no_charge_power</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t841" href="#t841">841</a></span><span class="t">        <span class="key">elif</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">in_mode</span><span class="op">(</span><span class="str">"short"</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t842" href="#t842">842</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">short_power</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t843" href="#t843">843</a></span><span class="t">        <span class="key">elif</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">in_mode</span><span class="op">(</span><span class="str">"no_charge"</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t844" href="#t844">844</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">no_charge_power</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t845" href="#t845">845</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t846" href="#t846">846</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">in_mode</span><span class="op">(</span><span class="str">"charge"</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t847" href="#t847">847</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">charge_power_usage</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t848" href="#t848">848</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t849" href="#t849">849</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">power_usage</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t850" href="#t850">850</a></span><span class="t">            <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">in_mode</span><span class="op">(</span><span class="str">"short"</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t851" href="#t851">851</a></span><span class="t">                <span class="nam">self</span><span class="op">.</span><span class="nam">short_power_usage</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t851" href="#t851">851</a></span><span class="t">                <span class="nam">self</span><span class="op">.</span><span class="nam">short_power_usage</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t852" href="#t852">852</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t853" href="#t853">853</a></span><span class="t">    <span class="key">def</span> <span class="nam">dynamic_behavior</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t854" href="#t854">854</a></span><span class="t">        <span class="str">"""Charge increment over time."""</span>&nbsp;</span><span class="r"></span></p>
@@ -939,18 +939,18 @@
     <p class="pln"><span class="n"><a id="t857" href="#t857">857</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t858" href="#t858">858</a></span><span class="t">    <span class="key">def</span> <span class="nam">short_power</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t859" href="#t859">859</a></span><span class="t">        <span class="str">"""Short in power supply means now power provided."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t860" href="#t860">860</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">charge</span> <span class="op">></span> <span class="num">0.1</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t861" href="#t861">861</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">ee_5</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">5</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t862" href="#t862">862</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">ee_12</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">12</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t863" href="#t863">863</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">ee_15</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">15</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t860" href="#t860">860</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">charge</span> <span class="op">></span> <span class="num">0.1</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t861" href="#t861">861</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">ee_5</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">5</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t862" href="#t862">862</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">ee_12</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">12</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t863" href="#t863">863</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">ee_15</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">15</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t864" href="#t864">864</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t865" href="#t865">865</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">no_charge_power</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t865" href="#t865">865</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">no_charge_power</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t866" href="#t866">866</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t867" href="#t867">867</a></span><span class="t">    <span class="key">def</span> <span class="nam">no_charge_power</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t868" href="#t868">868</a></span><span class="t">        <span class="str">"""Battery is out of charge."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t869" href="#t869">869</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">ee_5</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">0</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t870" href="#t870">870</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">ee_12</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">0</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t871" href="#t871">871</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">ee_15</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t869" href="#t869">869</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">ee_5</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t870" href="#t870">870</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">ee_12</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t871" href="#t871">871</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">ee_15</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">0</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t872" href="#t872">872</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t873" href="#t873">873</a></span><span class="t">    <span class="key">def</span> <span class="nam">off_power</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t874" href="#t874">874</a></span><span class="t">        <span class="str">"""Power supply is shut off."""</span>&nbsp;</span><span class="r"></span></p>
@@ -967,9 +967,9 @@
     <p class="run"><span class="n"><a id="t885" href="#t885">885</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">ee_12</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">12</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t886" href="#t886">886</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">ee_15</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">v</span> <span class="op">=</span> <span class="num">15</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t887" href="#t887">887</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t888" href="#t888">888</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">to_fault</span><span class="op">(</span><span class="str">"no_charge"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t888" href="#t888">888</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">to_fault</span><span class="op">(</span><span class="str">"no_charge"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t889" href="#t889">889</a></span><span class="t">        <span class="key">if</span> <span class="key">not</span> <span class="nam">self</span><span class="op">.</span><span class="nam">switch</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">power</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t890" href="#t890">890</a></span><span class="t">            <span class="key">if</span> <span class="key">not</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">any_faults</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t890" href="#t890">890</a></span><span class="t">            <span class="key">if</span> <span class="key">not</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">any_faults</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t891" href="#t891">891</a></span><span class="t">                <span class="nam">self</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">set_mode</span><span class="op">(</span><span class="str">"off"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t892" href="#t892">892</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t893" href="#t893">893</a></span><span class="t">    <span class="key">def</span> <span class="nam">power_usage</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -985,7 +985,7 @@
     <p class="pln"><span class="n"><a id="t903" href="#t903">903</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t904" href="#t904">904</a></span><span class="t">    <span class="key">def</span> <span class="nam">short_power_usage</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t905" href="#t905">905</a></span><span class="t">        <span class="str">"""Calculate power usage when there is a short (calculated as 10x)."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t906" href="#t906">906</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">power</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">power</span> <span class="op">*</span> <span class="num">10</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t906" href="#t906">906</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">power</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">power</span> <span class="op">*</span> <span class="num">10</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t907" href="#t907">907</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t908" href="#t908">908</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t909" href="#t909">909</a></span><span class="t"><span class="key">class</span> <span class="nam">OverrideMode</span><span class="op">(</span><span class="nam">Mode</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1177,7 +1177,7 @@
     <p class="pln"><span class="n"><a id="t1095" href="#t1095">1095</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1096" href="#t1096">1096</a></span><span class="t">        <span class="com"># mission is fault if any fault modes are present</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1097" href="#t1097">1097</a></span><span class="t">        <span class="key">if</span> <span class="nam">any</span><span class="op">(</span><span class="nam">modeproperties</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t1098" href="#t1098">1098</a></span><span class="t">            <span class="nam">classification</span> <span class="op">=</span> <span class="nam">classification</span> <span class="op">+</span> <span class="str">" faulty"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t1098" href="#t1098">1098</a></span><span class="t">            <span class="nam">classification</span> <span class="op">=</span> <span class="nam">classification</span> <span class="op">+</span> <span class="str">" faulty"</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1099" href="#t1099">1099</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1100" href="#t1100">1100</a></span><span class="t">        <span class="com"># missing is nominal in no fault modes are present</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1101" href="#t1101">1101</a></span><span class="t">        <span class="key">if</span> <span class="key">not</span> <span class="nam">classification</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1310,8 +1310,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_25d7572d601709fe_rover_model_human_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
-            created at 2025-12-02 18:52 -0800
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.12.0">coverage.py v7.12.0</a>,
+            created at 2025-12-03 09:31 -0800
         </p>
     </div>
 </footer>
