@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools/define/flow/commsflow.py: 68%</title>
+    <title>Coverage for fmdtools/define/flow/commsflow.py: 67%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_8432e98f.css" type="text/css">
-    <script src="coverage_html_cb_bcae5fc4.js" defer></script>
+    <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
+    <script src="coverage_html_cb_6fb7b396.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
     <div class="content">
         <h1>
-            <span class="text">Coverage for </span><b>fmdtools&#8201;/&#8201;define&#8201;/&#8201;flow&#8201;/&#8201;commsflow.py</b>:
-            <span class="pc_cov">68%</span>
+            <span class="text">Coverage for </span><b>fmdtools/define/flow/commsflow.py</b>:
+            <span class="pc_cov">67%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">127 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">86<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">41<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">85<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">42<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">17<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_e09a65d317df48af_multiflow_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.12.0">coverage.py v7.12.0</a>,
-            created at 2025-11-24 17:04 -0800
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
+            created at 2025-12-02 18:52 -0800
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -343,11 +343,11 @@
     <p class="pln"><span class="n"><a id="t261" href="#t261">261</a></span><span class="t">        <span class="str">"""Copy the CommsFlow (and all subflows)."""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t262" href="#t262">262</a></span><span class="t">        <span class="nam">cop</span> <span class="op">=</span> <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="nam">name</span><span class="op">=</span><span class="nam">name</span><span class="op">,</span> <span class="nam">glob</span><span class="op">=</span><span class="nam">glob</span><span class="op">,</span> <span class="nam">p</span><span class="op">=</span><span class="nam">p</span><span class="op">,</span> <span class="nam">s</span><span class="op">=</span><span class="nam">s</span><span class="op">,</span> <span class="nam">track</span><span class="op">=</span><span class="nam">track</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t263" href="#t263">263</a></span><span class="t">        <span class="key">for</span> <span class="nam">fxn</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">fxns</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t264" href="#t264">264</a></span><span class="t">            <span class="nam">cop</span><span class="op">.</span><span class="nam">create_comms</span><span class="op">(</span><span class="nam">fxn</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t265" href="#t265">265</a></span><span class="t">                             <span class="nam">prev_in</span><span class="op">=</span><span class="nam">copy</span><span class="op">.</span><span class="nam">deepcopy</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">fxns</span><span class="op">[</span><span class="nam">fxn</span><span class="op">]</span><span class="op">[</span><span class="str">"in"</span><span class="op">]</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t266" href="#t266">266</a></span><span class="t">                             <span class="nam">received</span><span class="op">=</span><span class="nam">copy</span><span class="op">.</span><span class="nam">deepcopy</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">fxns</span><span class="op">[</span><span class="nam">fxn</span><span class="op">]</span><span class="op">[</span><span class="str">"received"</span><span class="op">]</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t267" href="#t267">267</a></span><span class="t">                             <span class="nam">ports</span><span class="op">=</span><span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">fxns</span><span class="op">[</span><span class="nam">fxn</span><span class="op">]</span><span class="op">[</span><span class="str">'internal'</span><span class="op">]</span><span class="op">,</span> <span class="str">"locals"</span><span class="op">,</span> <span class="op">[</span><span class="op">]</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t268" href="#t268">268</a></span><span class="t">                             <span class="nam">as_copy</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t264" href="#t264">264</a></span><span class="t">            <span class="nam">cop</span><span class="op">.</span><span class="nam">create_comms</span><span class="op">(</span><span class="nam">fxn</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t265" href="#t265">265</a></span><span class="t">                             <span class="nam">prev_in</span><span class="op">=</span><span class="nam">copy</span><span class="op">.</span><span class="nam">deepcopy</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">fxns</span><span class="op">[</span><span class="nam">fxn</span><span class="op">]</span><span class="op">[</span><span class="str">"in"</span><span class="op">]</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t266" href="#t266">266</a></span><span class="t">                             <span class="nam">received</span><span class="op">=</span><span class="nam">copy</span><span class="op">.</span><span class="nam">deepcopy</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">fxns</span><span class="op">[</span><span class="nam">fxn</span><span class="op">]</span><span class="op">[</span><span class="str">"received"</span><span class="op">]</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t267" href="#t267">267</a></span><span class="t">                             <span class="nam">ports</span><span class="op">=</span><span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">fxns</span><span class="op">[</span><span class="nam">fxn</span><span class="op">]</span><span class="op">[</span><span class="str">'internal'</span><span class="op">]</span><span class="op">,</span> <span class="str">"locals"</span><span class="op">,</span> <span class="op">[</span><span class="op">]</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t268" href="#t268">268</a></span><span class="t">                             <span class="nam">as_copy</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t269" href="#t269">269</a></span><span class="t">        <span class="key">return</span> <span class="nam">cop</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t270" href="#t270">270</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t271" href="#t271">271</a></span><span class="t">    <span class="key">def</span> <span class="nam">find_mutables</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -417,8 +417,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_e09a65d317df48af_multiflow_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.12.0">coverage.py v7.12.0</a>,
-            created at 2025-11-24 17:04 -0800
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
+            created at 2025-12-02 18:52 -0800
         </p>
     </div>
 </footer>
