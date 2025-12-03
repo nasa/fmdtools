@@ -26,9 +26,9 @@ from aerialdrm.base.aircraft.state import AircraftPosition
 import math
 
 class HurricaneControlState(ControlState):
-    """ControlState defining the current state of the aircraft's FlightGrid and 
-    correspondent planning.
-    
+    """
+    ControlState defining the current state of the planning over the grid.
+
     Fields
     ------
     closest_dist: float [outdated?]
@@ -38,8 +38,9 @@ class HurricaneControlState(ControlState):
     planned: bool
         Whether or not flightgrid is up to date
     """
+
     closest_dist: float = 100.0
-    flightgrid: DroneFlightGrid = DroneFlightGrid(HurricaneEnvironment())
+    flightgrid: DroneFlightGrid = DroneFlightGrid(env = HurricaneEnvironment())
     planned: bool = False
 
     
@@ -53,7 +54,7 @@ class HurricaneControlParameter(Parameter):
     blocksize: float = 2.5
     
 class HurricaneControlFlight(ControlFlight):
-    __slots__ = ()
+
     flow_environment = HurricaneEnvironment
     container_s = HurricaneControlState
     container_p = HurricaneControlParameter
@@ -84,7 +85,6 @@ class HurricaneControlFlight(ControlFlight):
     def static_behavior(self):
         if not self.s.planned:
             self.replan_mission()
-            self.s.planned = True
         super().static_behavior()
             
     def gen_flight_grid(self):
@@ -97,10 +97,7 @@ class HurricaneControlFlight(ControlFlight):
         return grid
         
     def replan_mission(self):
-        """
-        re-evaluates flight path based on flight circumstance. 
-        """
-        
+        """Re-evaluate flight path based on flight circumstance."""
         ap = AircraftPosition() # calculator
         ap.assign(self.trajectories.perc_traj.s) # initialize current perceived state as actual
         start = self.s.flightplan[0]
@@ -148,13 +145,13 @@ class HurricaneControlFlight(ControlFlight):
 
         # if new_path == None:
         #     return
-        if new_path and new_path[0] == (curr_x, curr_y):
+        if new_path and new_path[0] == (curr_x, curr_y) and len(new_path) > 1:
             new_path = new_path[1:]
         self.s.flightplan = new_path
         self.s.pt = 0
+        self.s.planned = True
         
 class HurricaneAviate(Aviate):
-    __slots__ = ()
 
     def dynamic_behavior(self):
         super().dynamic_behavior()
@@ -285,11 +282,18 @@ if __name__ == "__main__":
     from fmdtools.sim import propagate
     from fmdtools.sim.sample import FaultDomain, FaultSample
 
+    hcs = HurricaneControlState()
+    hcs.create_hist([0.0, 1.0])
+
+
     h = HurricaneAviate()
     hc = HurricaneConditions()
     hcf = HurricaneControlFlight()
 
     ha = HurricaneAircraftArchitecture()
+
+    hcs = HurricaneControlState()
+    hcs2 = hcs.copy()
 
     cf = ha.fxns['control_flight']
     cf.static_behavior()
@@ -320,6 +324,7 @@ if __name__ == "__main__":
 
     from fmdtools.analyze.phases import from_hist
     plot_flightpath(ha, hist)
+
     # haa = HurricaneAircraftArchitecture(p={'depletion': 40.0})
 
     # res, hist = prop.nominal(haa)
