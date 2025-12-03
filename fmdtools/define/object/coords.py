@@ -1689,6 +1689,7 @@ class MetricCoords(BaseCoords):
     array([[0, 1],
            [0, 4]])
     """
+
     __slots__ = ('__dict__', )
     roletypes = ['container', 'value']
 
