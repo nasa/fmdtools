@@ -21,7 +21,6 @@ class Aviate(Function):
     """
     Function that moves the drone within the environment.
 
-
     Examples
     --------
     >>> t = Trajectories()
@@ -89,7 +88,7 @@ class Aviate(Function):
         distance of the desired trajectory.
         """
         self.trajectories.s.assign(self.trajectories.des_traj.s, 'dx', 'dy', 'dz')
-        self.electricity.s.current_high = 2.0
+        self.electricity.s.current_high = 1.0
         self.force.s.put(lift_support=1.0)
 
     def falling_behavior(self):

@@ -49,7 +49,7 @@ class PerceiveEnvironment(Function):
         """
         if self.electricity.s.voltage_low > 0.0 and not self.m.any_faults():
             # perceive current location, goal, etc
-            self.perc_traj.update()
+            self.perc_traj.update("x", "y", "z", "dx", "dy", "dz")
 
 
 if __name__ == "__main__":

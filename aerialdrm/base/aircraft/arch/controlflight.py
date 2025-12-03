@@ -137,9 +137,7 @@ class ControlFlight(Function):
             self.des_traj.s.put(dz=-self.trajectories.s.z)
 
     def dynamic_behavior(self):
-        """
-        Propagate overall modal logic for flight control.
-        """
+        """Propagate overall modal logic for flight control."""
         if not self.m.in_mode('loss'):
             self.trajectories.perc_traj.update('goal_x', 'goal_y', 'goal_z',
                                                to_get='des_traj')

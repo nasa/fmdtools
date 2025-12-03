@@ -19,7 +19,7 @@ import math
 class DroneFlightGridParam(CoordsParam):
     """
     Parameters for configuring the DroneFlightGrid.
-    
+
     Class Variables
     ---------------
     x_size : int
@@ -30,7 +30,7 @@ class DroneFlightGridParam(CoordsParam):
         Coordinate resolution
     max_cost : float
         Maximum cost before algorithm termination
-    
+
     Fields
     ---------------
     state_grid_costs : tuple
@@ -42,10 +42,11 @@ class DroneFlightGridParam(CoordsParam):
         Holds total costs from every single-timestep accessible FlightGrid point
         in a dictionary entry; each FlightGrid point has its own dictionary
     """
+
     x_size: int = 120
     y_size: int = 120
     blocksize: float = 1.0
-    max_cost = 1000000.0
+    max_cost: float = 1000000.0
     
 class DroneFlightGrid(Coords):
     """
@@ -76,8 +77,8 @@ class DroneFlightGrid(Coords):
     True
     >>> path[-1] == goal or len(path[-1]) == 2
     True
-
     """
+
     __slots__ = ('env', 'env_coords')
     container_p = DroneFlightGridParam
     state_grid_costs: tuple = (float, 0.0)
@@ -260,8 +261,7 @@ class DroneFlightGrid(Coords):
     def a_star_worldcoords(self, start_xy, goal_xy, max_distance, disallowed_cost, 
                occupied_cost, restricted_cost, fuel_rate, obstacle):
         """
-        Converts start_xy & goal_xy world coordinates into DroneFlightGid indices, 
-        takes a_star functionality.
+        Convert start_xy & goal_xy and run a*.
 
         Parameters
         ----------

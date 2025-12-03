@@ -23,7 +23,7 @@ from aerialdrm.hurricane.hurricaneenvironment import HurricaneEnvironment, prope
 from aerialdrm.hurricane.hurricaneenvironment import HurricaneConditions
 from aerialdrm.hurricane.hurricaneflightpath import DroneFlightGrid, DroneFlightGridParam
 from aerialdrm.base.aircraft.state import AircraftPosition
-import math
+
 
 class HurricaneControlState(ControlState):
     """
@@ -41,7 +41,10 @@ class HurricaneControlState(ControlState):
 
     closest_dist: float = 100.0
     flightgrid: DroneFlightGrid = DroneFlightGrid(env = HurricaneEnvironment())
+    endpt: tuple = (100.0, 100.0)
     planned: bool = False
+    reconfigured_proxthreat: bool = False
+    reconfigured_charge: bool = False
 
     
 class HurricaneControlParameter(Parameter):
@@ -58,14 +61,16 @@ class HurricaneControlFlight(ControlFlight):
     flow_environment = HurricaneEnvironment
     container_s = HurricaneControlState
     container_p = HurricaneControlParameter
-    default_track = {'s': ["closest_dist", 'planned', 'pt'], 'm': ['mode']}
+    default_track = {'s': ["closest_dist", 'planned', 'pt', 'flightplan'], 'm': ['mode']}
     
     def set_faultmode(self):
         super().set_faultmode()
 
         if 0.0 < self.electricity.s.charge <= 25.0:
-            if self.s.pt > 0:
+            if self.s.pt > 0 and not self.s.reconfigured_charge:
                 self.replan_mission()
+                self.s.pt = 1
+                self.s.reconfigured_charge = True
             elif (not self.m.any_faults() and len(self.s.flightplan) > 1) or self.electricity.s.charge <= 15.0:
                 if not self.m.any_faults():
                     self.m.set_mode('descend')
@@ -75,12 +80,15 @@ class HurricaneControlFlight(ControlFlight):
         if self.p.with_proxthreat: # with proxthreat? investigate
             if self.s.closest_dist <= 0.0 and not self.m.any_faults():
                 self.m.set_mode('pause')
-            # new v
-            if self.s.closest_dist <= 10.0 and not self.m.any_faults():
-                self.replan_mission()
-            # new ^
-            elif self.m.in_mode('pause'):
-                self.m.set_mode('flight')
+            elif self.s.closest_dist <= 10.0 and not self.m.any_faults():
+                if not self.s.reconfigured_proxthreat:
+                    self.replan_mission()
+                    self.s.pt = 1
+                    self.s.reconfigured_proxthreat = True
+            else:
+                if self.m.in_mode('pause'):
+                    self.m.set_mode('flight')
+                self.s.reconfigured_proxthreat = False
                 
     def static_behavior(self):
         if not self.s.planned:
@@ -88,53 +96,27 @@ class HurricaneControlFlight(ControlFlight):
         super().static_behavior()
             
     def gen_flight_grid(self):
-        dfgp = DroneFlightGridParam(
-            fuel_rate = self.p.fuel_rate,
-            disallowed_cost = self.p.disallowed_cost,
-            occupied_cost = self.p.occupied_cost,
-            restricted_cost = self.p.restricted_cost)
+        dfgp = DroneFlightGridParam(blocksize=self.p.blocksize,
+                                    x_size=120/self.p.blocksize,
+                                    y_size=120/self.p.blocksize,
+                                    max_cost=1000000*self.p.blocksize)
         grid = DroneFlightGrid(env = self.environment, p = dfgp)
         return grid
         
     def replan_mission(self):
         """Re-evaluate flight path based on flight circumstance."""
-        ap = AircraftPosition() # calculator
-        ap.assign(self.trajectories.perc_traj.s) # initialize current perceived state as actual
-        start = self.s.flightplan[0]
-        ap.assign(start, 'goal_x', 'goal_y')
-        end = self.s.flightplan[-1]
-        ap.assign(end, 'goal_x', 'goal_y')
-        
-        curr_x, curr_y = self.trajectories.perc_traj.s.get('x', 'y')
-        goal_x, goal_y = self.s.flightplan[-1]
         grid = self.gen_flight_grid()
-        fuel_rate = self.p.fuel_rate
-        obstacle = False
-        if self.s.closest_dist <= 10:
-            """
-            if UAV within distance 10:
-                run A* as normal, except turn on "obstacle" boolean indicator 
-                to require A* consideration for UAV safety
-            """    
-            obstacle = True 
+        # if UAV within distance 10, require A* consideration for UAV safety
+        obstacle = self.s.closest_dist <= 10
+        # if battery low, bump fuel cost proportionally to current battery level
         if 0.0 < self.electricity.s.charge <= 25.0:
-            """
-            If battery low:
-                run A* as normal, except bump fuel cost inversely proportional to 
-                current fuel level
-            """
             fuel_rate = self.p.fuel_rate * 25000.0 / self.electricity.s.charge
-
         else:
-            """
-            If flight condition nominal:
-                run standard A*
-            """
-            pass
-
+            fuel_rate = self.p.fuel_rate
+        curr_pt = self.trajectories.perc_traj.s.gett('x', 'y')
         new_path = grid.a_star_worldcoords(
-            start_xy = (curr_x, curr_y), 
-            goal_xy = (goal_x, goal_y), 
+            start_xy = curr_pt, 
+            goal_xy = self.s.endpt, 
             max_distance = self.p.max_distance,
             disallowed_cost = self.p.disallowed_cost,
             occupied_cost = self.p.occupied_cost,
@@ -143,9 +125,7 @@ class HurricaneControlFlight(ControlFlight):
             obstacle = obstacle
             )
 
-        # if new_path == None:
-        #     return
-        if new_path and new_path[0] == (curr_x, curr_y) and len(new_path) > 1:
+        if new_path and new_path[0] == curr_pt and len(new_path) > 1:
             new_path = new_path[1:]
         self.s.flightplan = new_path
         self.s.pt = 0
@@ -163,15 +143,16 @@ class HurricaneAircraftArchParameter(Parameter):
     """Overall Parameter Defining the AircraftArchitecture."""
 
     startpt: tuple = (10.0, 10.0)
+    endpt: tuple = (100.0, 100.0)
     flightplan: tuple = ((10.0, 10.0), (50.0, 10.0), (50.0, 100.0), (100.0, 100.0)) 
     height: float = 25.0
     depletion: float = 25.0
     with_proxthreat: bool = True
-    fuel_rate: float       = 20.0
+    fuel_rate: float = 20.0
     disallowed_cost: float = 10.0
-    occupied_cost: float   = 20.0
+    occupied_cost: float = 20.0
     restricted_cost: float = 1000000.0
-    max_distance: int      = 5
+    max_distance: int = 5
 
 class HurricaneAircraftArchitecture(FunctionArchitecture):
     """
@@ -190,10 +171,9 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
         - hold_payload : the structure of the drone
     """
 
-    __slots__ = ()
     container_p = HurricaneAircraftArchParameter
     # default_sp = {'end_condition': 'indicate_landed'}
-    default_sp = {'end_time': 35}
+    default_sp = {'end_time': 100}
 
     def init_architecture(self, **kwargs):
         """Initialize the architecture of the aircraft."""
@@ -206,7 +186,7 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
         self.add_fxn('conditions', HurricaneConditions, 'environment')
         self.add_fxn('control_flight', HurricaneControlFlight,
                      'trajectories', 'force', 'electricity', 'environment',
-                     s={'flightplan': self.p.flightplan, 'height': self.p.height},
+                     s={'flightplan': self.p.flightplan, 'height': self.p.height, 'endpt': self.p.endpt},
                      p={'with_proxthreat': self.p.with_proxthreat,
                         'fuel_rate': self.p.fuel_rate,
                         'disallowed_cost': self.p.disallowed_cost,
@@ -255,7 +235,7 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
                 'crash': crash}
 
 
-def plot_flightpath(mdl, hist, **kwargs):
+def plot_flightpath(mdl, hist, plan_colors=['red', 'orange', 'purple', 'yellow'], **kwargs):
     fig, ax = mdl.flows['environment'].c.show(properties=properties,
                                               collections=collections)
     start = mdl.p.flightplan[0]
@@ -265,12 +245,24 @@ def plot_flightpath(mdl, hist, **kwargs):
     fig, ax = hist.plot_trajectories('trajectories.s.x',
                                      'trajectories.s.y',
                                      fig=fig, ax=ax, **kwargs)
-    cf   = mdl.fxns['control_flight']
-    plan = cf.s.flightplan
-    if plan:
+
+    plan_hist = hist.fxns.control_flight.s.flightplan
+    plans = [plan_hist[0]]
+    inds = [0]
+    for i, plan in enumerate(plan_hist):
+        if plan != plans[-1]:
+            plans.append(plan)
+            inds.append(i)
+
+    for i, plan in enumerate(plans):
         xs, ys = zip(*plan)
-        ax.plot(xs, ys, '--', label='planned path', color='red')  # Make line red
-        ax.scatter(xs, ys, marker='o', label='waypoints', color='red', s=10)  # Make dots red, smaller
+        ind = inds[i]
+        ax.plot(xs, ys, '--', label='plan t='+str(ind), color=plan_colors[i])  # Make line red
+        ax.scatter(xs, ys, marker='o', label='waypoints', color=plan_colors[i], s=10)  # Make dots red, smaller
+        ax.scatter(hist.flows.trajectories.s.x[ind],
+                   hist.flows.trajectories.s.y[ind],
+                   marker="*", s=20, color=plan_colors[i],
+                   label="replan pt="+str(ind))
     consolidate_legend(ax)
     return fig, ax
 
@@ -281,6 +273,10 @@ if __name__ == "__main__":
     from fmdtools.analyze.phases import from_hist
     from fmdtools.sim import propagate
     from fmdtools.sim.sample import FaultDomain, FaultSample
+
+    haa = HurricaneAircraftArchitecture()
+    haa()
+    haa2 = haa.copy()
 
     hcs = HurricaneControlState()
     hcs.create_hist([0.0, 1.0])
@@ -295,11 +291,14 @@ if __name__ == "__main__":
     hcs = HurricaneControlState()
     hcs2 = hcs.copy()
 
+
     cf = ha.fxns['control_flight']
     cf.static_behavior()
     fg = FunctionArchitectureGraph(ha)
     fg.draw()
     res, hist = propagate.nominal(ha)
+    hist.plot_line('flows.trajectories.s.x', 'flows.trajectories.s.y','flows.trajectories.s.z', 'fxns.control_flight.m.mode', 'flows.electricity.s.charge')
+    hist.fxns.control_flight.s.flightplan
 
 
     ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 10)
@@ -323,7 +322,12 @@ if __name__ == "__main__":
     doctest.testmod(verbose=True)
 
     from fmdtools.analyze.phases import from_hist
-    plot_flightpath(ha, hist)
+    fig, ax = plot_flightpath(ha, hist)
+    ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 11, fig=fig, ax=ax)
+    #ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 10, fig=fig, ax=ax)
+    
+    ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 18, fig=fig, ax=ax)
+    ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 20, fig=fig, ax=ax)
 
     # haa = HurricaneAircraftArchitecture(p={'depletion': 40.0})
 
