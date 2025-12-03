@@ -287,10 +287,14 @@ class MultiFlow(Flow):
         if not glob and self.glob.name != self.name:
             raise Exception("Unable to copy "+self.name+" without "+self.glob.name+".")
         cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track, root=self.root)
+        if hasattr(self, 'h'):
+            cop.h = self.h.copy()
         for loc in self.locals:
             local = getattr(self, loc)
             mutes = local.copy_mutes(exclude=['local'])
-            cop.create_local(local.name, **mutes, as_copy=True)
+            cl = cop.create_local(local.name, **mutes, as_copy=True)
+            if hasattr(cl, 'h'):
+                cop.h[loc] = cl.h
         return cop
 
     def create_hist(self, timerange, track=None):
