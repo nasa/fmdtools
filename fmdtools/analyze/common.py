@@ -718,7 +718,7 @@ def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
 
     # generate legend with consolidated labels/handles
     ax.legend(by_label.values(), by_label.keys(),
-              bbox_to_anchor=bbox_to_anchor, loc=loc, **kwargs)
+              bbox_to_anchor=bbox_to_anchor, loc=loc, **filter_kwargs(ax.legend, **kwargs))
 
 
 def mark_times(ax, tick, time, *plot_values, fontsize=8, rounddec=1, pretext="t="):
