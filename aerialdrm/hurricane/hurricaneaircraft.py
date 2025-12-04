@@ -68,10 +68,11 @@ class HurricaneControlFlight(ControlFlight):
 
         if 0.0 < self.electricity.s.charge <= 25.0:
             if self.s.pt > 0 and not self.s.reconfigured_charge:
+                self.set_depletion_land_loc()
                 self.replan_mission()
                 self.s.pt = 1
                 self.s.reconfigured_charge = True
-            elif (not self.m.any_faults() and len(self.s.flightplan) > 1) or self.electricity.s.charge <= 15.0:
+            elif self.electricity.s.charge <= 15.0:
                 if not self.m.any_faults():
                     self.m.set_mode('descend')
 
@@ -94,7 +95,21 @@ class HurricaneControlFlight(ControlFlight):
         if not self.s.planned:
             self.replan_mission()
         super().static_behavior()
-            
+
+    def set_depletion_land_loc(self):
+        ts = self.trajectories.s.copy()
+        ts.assign(self.environment.c.start, "goal_x", "goal_y")
+        dist_to_start = ts.calc_dist_to_travel(1000)
+        ts.assign(self.environment.c.end, "goal_x", "goal_y")
+        dist_to_end = ts.calc_dist_to_travel(1000)
+        if dist_to_end < self.electricity.s.charge:
+            self.s.endpt = self.environment.c.end
+        elif dist_to_start < self.electricity.s.charge:
+            self.s.endpt = self.environment.c.start
+        else:
+            pt = self.trajectories.s.gett('x', 'y')
+            self.s.endpt = self.environment.c.find_closest(*pt, 'suitable')
+
     def gen_flight_grid(self):
         dfgp = DroneFlightGridParam(blocksize=self.p.blocksize,
                                     x_size=120/self.p.blocksize,
@@ -244,7 +259,7 @@ def plot_flightpath(mdl, hist, plan_colors=['red', 'orange', 'purple', 'yellow']
     ax.scatter([end[0]],   [end[1]],   label="end",   color="red")
     fig, ax = hist.plot_trajectories('trajectories.s.x',
                                      'trajectories.s.y',
-                                     fig=fig, ax=ax, **kwargs)
+                                     fig=fig, ax=ax, linewidth=3, **kwargs)
 
     plan_hist = hist.fxns.control_flight.s.flightplan
     plans = [plan_hist[0]]
@@ -257,7 +272,7 @@ def plot_flightpath(mdl, hist, plan_colors=['red', 'orange', 'purple', 'yellow']
     for i, plan in enumerate(plans):
         xs, ys = zip(*plan)
         ind = inds[i]
-        ax.plot(xs, ys, '--', label='plan t='+str(ind), color=plan_colors[i])  # Make line red
+        ax.plot(xs, ys, '--', label='plan t='+str(ind), color=plan_colors[i], linewidth=1)  # Make line red
         ax.scatter(xs, ys, marker='o', label='waypoints', color=plan_colors[i], s=10)  # Make dots red, smaller
         ax.scatter(hist.flows.trajectories.s.x[ind],
                    hist.flows.trajectories.s.y[ind],
@@ -266,6 +281,24 @@ def plot_flightpath(mdl, hist, plan_colors=['red', 'orange', 'purple', 'yellow']
     consolidate_legend(ax)
     return fig, ax
 
+
+def plot_land_sites(mdl, hists, text="split",
+                    ft_kwar={'faulty': dict(linewidth=1, alpha=0.3, color='red')}):
+    fig, ax = mdl.flows['environment'].c.show(properties=properties,
+                                              collections=collections)
+
+    hists.plot_trajectories('trajectories.s.x', 'trajectories.s.y', fig=fig, ax=ax,
+                            indiv_kwargs = ft_kwar)
+    for scen, hist in hists.nest(1).items():
+        x = hist.flows.trajectories.s.x[-1]
+        y = hist.flows.trajectories.s.y[-1]
+        ax.scatter(x, y, marker="x", color="red", label="land site", s=50)
+        if text:
+            if text == "split":
+                scen = scen.split("_")[-1]
+            ax.text(x, y, scen)
+    consolidate_legend(ax)
+    return fig, ax
 
 
 if __name__ == "__main__":
@@ -311,12 +344,16 @@ if __name__ == "__main__":
     fd.add_fault('store_and_supply_ee', 'depletion', '25', disturbances=(('electricity.s.charge', 25.0), ))
 
     fs = FaultSample(fd, phasemap=pm)
-    fs.add_fault_phases('in_use', method='all')
+    fs.add_fault_phases("in_use", args=(10, ))
+    # fs.add_fault_phases('in_use', method='all')
     fs
 
     ress, hists = propagate.fault_sample(ha, fs)
 
-    hists.plot_trajectories('trajectories.s.x', 'trajectories.s.y', 'trajectories.s.z')
+
+    fig, ax = ha.flows['environment'].c.show_z("disallowed", z="", collections=collections)
+    hists.plot_trajectories('trajectories.s.x', 'trajectories.s.y', 'trajectories.s.z', fig=fig, ax=ax)
+    fig, ax = plot_land_sites(ha, hists)
 
     import doctest
     doctest.testmod(verbose=True)
@@ -328,6 +365,7 @@ if __name__ == "__main__":
     
     ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 18, fig=fig, ax=ax)
     ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 20, fig=fig, ax=ax)
+
 
     # haa = HurricaneAircraftArchitecture(p={'depletion': 40.0})
 

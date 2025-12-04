@@ -44,6 +44,7 @@ class HurricaneCoords(Coords):
         self.set_pts([self.start, self.end], 'occupied', False)
         self.set_pts([self.start, self.end], 'disallowed', False)
 
+
 properties = {'disallowed': {'color': 'blue', 'proplab': 'disallowed', 'alpha': 0.5},
               'occupied': {'color': 'red', 'proplab': 'occupied', 'alpha': 0.5},
               'restricted': {'color': 'grey', 'proplab': 'restricted', 'alpha': 0.75}}
