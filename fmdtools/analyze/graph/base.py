@@ -1447,6 +1447,84 @@ class Graph(object):
 
         return Graph(subg, check_info=False)
 
+    def calc_resilience_score(self, metric='combined'):
+        """
+        Calculate overall resilience score for the graph (0-100 scale).
+
+        Combines multiple graph metrics to produce a single resilience indicator.
+        Higher scores indicate more resilient system structures.
+
+        Parameters
+        ----------
+        metric : str, optional
+            Scoring method to use:
+
+            - 'combined': Weighted combination of connectivity, redundancy, modularity
+            - 'connectivity': Based on connectivity and ASPL
+            - 'redundancy': Based on average degree and edge density
+            - 'modularity': Based on modularity score only
+
+            Default is 'combined'.
+
+        Returns
+        -------
+        float
+            Resilience score between 0 and 100.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> score = graph.calc_resilience_score()
+        >>> 0 <= score <= 100
+        True
+        """
+        g_undirected = self.g.to_undirected()
+        is_connected = nx.is_connected(g_undirected)
+        num_nodes = self.g.number_of_nodes()
+
+        if num_nodes == 0:
+            return 0.0
+
+        # Connectivity component (0-40 points)
+        if metric in ['combined', 'connectivity']:
+            if is_connected:
+                connectivity_score = 40.0
+            else:
+                num_components = nx.number_connected_components(g_undirected)
+                connectivity_score = 40.0 * (1.0 - (num_components - 1) / num_nodes)
+
+            # Penalize long average path lengths
+            if is_connected:
+                aspl = self.calc_aspl()
+                max_aspl = num_nodes / 2
+                aspl_penalty = min(20.0, (aspl / max_aspl) * 20.0)
+                connectivity_score -= aspl_penalty
+
+        # Redundancy component (0-30 points)
+        if metric in ['combined', 'redundancy']:
+            avg_degree = sum(dict(self.g.degree()).values()) / num_nodes
+            density = nx.density(self.g)
+            redundancy_score = min(30.0, (avg_degree / num_nodes) * 15.0 + density * 15.0)
+
+        # Modularity component (0-30 points)
+        if metric in ['combined', 'modularity']:
+            modularity = self.calc_modularity()
+            modularity_score = (modularity + 1.0) / 2.0 * 30.0
+
+        # Calculate final score based on metric
+        if metric == 'combined':
+            score = connectivity_score + redundancy_score + modularity_score
+        elif metric == 'connectivity':
+            score = connectivity_score * 2.5
+        elif metric == 'redundancy':
+            score = redundancy_score * 3.33
+        elif metric == 'modularity':
+            score = modularity_score * 3.33
+        else:
+            raise ValueError(f"Unknown metric: {metric}")
+
+        return min(100.0, max(0.0, score))
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
