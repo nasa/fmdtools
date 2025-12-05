@@ -485,8 +485,17 @@ class Graph(object):
 
             style = self._get_node_style(nodetype)
 
+            # Build tooltip from node attributes
+            tooltip_parts = []
+            for key, val in node_data.items():
+                if key not in ['nodetype', 'pos'] and val:
+                    # Escape special characters for XML
+                    val_str = str(val).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
+                    tooltip_parts.append(f"{key}: {val_str}")
+            tooltip = "&#10;".join(tooltip_parts) if tooltip_parts else str(node)
+
             xml_parts.append(
-                f'        <mxCell id="{node}" value="{node}" style="{style}" vertex="1" parent="1">'
+                f'        <mxCell id="{node}" value="{node}" style="{style}" vertex="1" parent="1" tooltip="{tooltip}">'
             )
             xml_parts.append(
                 f'          <mxGeometry x="{x}" y="{y}" width="80" height="40" as="geometry"/>'
@@ -977,6 +986,340 @@ class Graph(object):
         plt.ylabel('Number of nodes')
         plt.show()
         return fig
+
+    def calc_betweenness_centrality(self, normalized=True):
+        """
+        Compute betweenness centrality for all nodes.
+
+        Betweenness centrality measures the extent to which a node lies on paths
+        between other nodes. Nodes with high betweenness may have considerable
+        influence within a network by virtue of their control over information
+        passing between others.
+
+        Parameters
+        ----------
+        normalized : bool, optional
+            Whether to normalize values by 2/((n-1)(n-2)) for undirected graphs.
+            Default is True.
+
+        Returns
+        -------
+        dict
+            Dictionary of nodes with betweenness centrality as values.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> centrality = graph.calc_betweenness_centrality()
+        >>> type(centrality)
+        <class 'dict'>
+        """
+        return nx.betweenness_centrality(self.g, normalized=normalized)
+
+    def calc_closeness_centrality(self):
+        """
+        Compute closeness centrality for all nodes.
+
+        Closeness centrality measures how close a node is to all other nodes in
+        the network. Nodes with high closeness can spread information efficiently.
+
+        Returns
+        -------
+        dict
+            Dictionary of nodes with closeness centrality as values.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> centrality = graph.calc_closeness_centrality()
+        >>> type(centrality)
+        <class 'dict'>
+        """
+        return nx.closeness_centrality(self.g)
+
+    def calc_eigenvector_centrality(self, max_iter=100):
+        """
+        Compute eigenvector centrality for all nodes.
+
+        Eigenvector centrality computes the centrality for a node based on the
+        centrality of its neighbors. Connections to high-scoring nodes contribute
+        more to the score than connections to low-scoring nodes.
+
+        Note: For disconnected graphs, this returns a dictionary with zero values
+        for all nodes, as eigenvector centrality is not well-defined in such cases.
+
+        Parameters
+        ----------
+        max_iter : int, optional
+            Maximum number of iterations for power method convergence.
+            Default is 100.
+
+        Returns
+        -------
+        dict
+            Dictionary of nodes with eigenvector centrality as values.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> centrality = graph.calc_eigenvector_centrality()
+        >>> type(centrality)
+        <class 'dict'>
+        """
+        # Check if graph is connected (required for eigenvector centrality)
+        g_check = self.g if self.g.is_directed() else self.g.to_undirected()
+        is_connected = (nx.is_strongly_connected(g_check) if self.g.is_directed()
+                       else nx.is_connected(g_check))
+        
+        if not is_connected:
+            # Return zero centrality for disconnected graphs
+            return {node: 0.0 for node in self.g.nodes()}
+        
+        try:
+            return nx.eigenvector_centrality(self.g, max_iter=max_iter)
+        except (nx.PowerIterationFailedConvergence, nx.NetworkXError):
+            # Fall back to numpy method if power iteration fails
+            try:
+                return nx.eigenvector_centrality_numpy(self.g)
+            except (nx.AmbiguousSolution, nx.NetworkXError):
+                # If all else fails, return zeros
+                return {node: 0.0 for node in self.g.nodes()}
+
+    def plot_centrality(self, metric='betweenness', title='', cmap='YlOrRd', **kwargs):
+        """
+        Plot nodes colored by centrality metric.
+
+        Visualizes the graph with nodes grouped by their centrality scores into
+        quartiles (low, medium_low, medium_high, high).
+
+        Parameters
+        ----------
+        metric : str, optional
+            Centrality type to compute and visualize. Options:
+            - 'betweenness': Betweenness centrality
+            - 'closeness': Closeness centrality
+            - 'eigenvector': Eigenvector centrality
+            - 'degree': Degree centrality
+            Default is 'betweenness'.
+        title : str, optional
+            Plot title. If empty, generates title from metric name.
+        cmap : str, optional
+            Matplotlib colormap name for coloring nodes. Default is 'YlOrRd'.
+        **kwargs : dict
+            Additional keyword arguments passed to Graph.draw().
+
+        Returns
+        -------
+        fig : matplotlib.figure.Figure
+            The figure containing the plot.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> graph.set_pos(auto='spring')
+        >>> fig = graph.plot_centrality(metric='betweenness')
+        """
+        # Calculate centrality based on metric
+        if metric == 'betweenness':
+            centrality = self.calc_betweenness_centrality()
+        elif metric == 'closeness':
+            centrality = self.calc_closeness_centrality()
+        elif metric == 'eigenvector':
+            centrality = self.calc_eigenvector_centrality()
+        elif metric == 'degree':
+            centrality = dict(self.g.degree())
+        else:
+            raise ValueError(f"Unknown metric: {metric}. "
+                           "Choose from 'betweenness', 'closeness', 'eigenvector', 'degree'")
+
+        # Get centrality values
+        values = np.array(list(centrality.values()))
+        if len(values) == 0:
+            raise ValueError("Graph has no nodes to compute centrality for")
+
+        # Check if all values are zero (e.g., disconnected graph for eigenvector)
+        if np.all(values == 0):
+            # Use uniform grouping for zero centrality
+            nodes_list = list(centrality.keys())
+            group_size = max(1, len(nodes_list) // 4)
+            groups = {
+                'low': nodes_list[:group_size],
+                'medium_low': nodes_list[group_size:2*group_size],
+                'medium_high': nodes_list[2*group_size:3*group_size],
+                'high': nodes_list[3*group_size:]
+            }
+        else:
+            # Create node groups by centrality quartiles
+            q1, q2, q3 = np.percentile(values, [25, 50, 75])
+            groups = {'low': [], 'medium_low': [], 'medium_high': [], 'high': []}
+
+            for node, val in centrality.items():
+                if val <= q1:
+                    groups['low'].append(node)
+                elif val <= q2:
+                    groups['medium_low'].append(node)
+                elif val <= q3:
+                    groups['medium_high'].append(node)
+                else:
+                    groups['high'].append(node)
+        # Add node groups
+        for group_name, nodes in groups.items():
+            if nodes:
+                self.add_node_groups(**{f'{metric}_{group_name}': nodes})
+
+        # Set node styles with color gradient
+        import matplotlib as mpl
+        try:
+            # Use new API (matplotlib >= 3.7)
+            colormap = mpl.colormaps.get_cmap(cmap)
+        except AttributeError:
+            # Fall back to old API for older matplotlib versions
+            import matplotlib.cm as cm
+            colormap = cm.get_cmap(cmap)
+        colors = [colormap(0.2), colormap(0.4), colormap(0.7), colormap(0.95)]
+        style_dict = {}
+        for i, group_name in enumerate(['low', 'medium_low', 'medium_high', 'high']):
+            if groups[group_name]:
+                style_dict[f'{metric}_{group_name}'] = {
+                    'nx_node_color': colors[i],
+                    'gv_fillcolor': f'#{int(colors[i][0]*255):02x}{int(colors[i][1]*255):02x}{int(colors[i][2]*255):02x}'
+                }
+
+        self.set_node_styles(group=style_dict)
+
+        # Generate title if not provided
+        if not title:
+            title = f'{metric.capitalize()} Centrality'
+
+        return self.draw(title=title, **kwargs)
+
+    def summary(self):
+        """
+        Generate a summary dictionary of key graph metrics.
+
+        Provides a quick overview of graph structure and properties useful for
+        model documentation, comparison, and resilience analysis.
+
+        Returns
+        -------
+        dict
+            Summary statistics including:
+
+            - num_nodes : int
+                Number of nodes in the graph
+            - num_edges : int
+                Number of edges in the graph
+            - density : float
+                Graph density (ratio of actual to possible edges)
+            - is_connected : bool
+                Whether the graph is connected (undirected)
+            - num_components : int
+                Number of connected components
+            - avg_degree : float
+                Average node degree
+            - aspl : float
+                Average shortest path length (only if connected)
+            - modularity : float
+                Network modularity score
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> summary = graph.summary()
+        >>> 'num_nodes' in summary
+        True
+        >>> 'density' in summary
+        True
+        """
+        g_undirected = self.g.to_undirected()
+        is_connected = nx.is_connected(g_undirected)
+
+        num_nodes = self.g.number_of_nodes()
+        if num_nodes == 0:
+            raise ValueError("Cannot compute summary for empty graph")
+
+        summary_dict = {
+            'num_nodes': num_nodes,
+            'num_edges': self.g.number_of_edges(),
+            'density': nx.density(self.g),
+            'is_connected': is_connected,
+            'num_components': nx.number_connected_components(g_undirected),
+            'avg_degree': sum(dict(self.g.degree()).values()) / num_nodes,
+        }
+
+        # Only compute ASPL if graph is connected
+        if is_connected:
+            summary_dict['aspl'] = self.calc_aspl()
+        else:
+            summary_dict['aspl'] = None
+
+        summary_dict['modularity'] = self.calc_modularity()
+
+        return summary_dict
+
+    def compare_with(self, other_graph):
+        """
+        Compare this graph with another graph structure.
+
+        Useful for comparing nominal vs faulty model states, different model
+        versions, or analyzing structural changes over time.
+
+        Parameters
+        ----------
+        other_graph : Graph
+            Another Graph object to compare with.
+
+        Returns
+        -------
+        dict
+            Comparison metrics including:
+
+            - nodes_added : list
+                Nodes present in other_graph but not in self
+            - nodes_removed : list
+                Nodes present in self but not in other_graph
+            - edges_added : list
+                Edges present in other_graph but not in self
+            - edges_removed : list
+                Edges present in self but not in other_graph
+            - structure_similarity : float
+                Jaccard similarity coefficient of edges (0 to 1)
+
+        Examples
+        --------
+        >>> graph1 = Graph(ex_nxgraph)
+        >>> graph2 = Graph(ex_nxgraph.copy())
+        >>> comparison = graph1.compare_with(graph2)
+        >>> comparison['structure_similarity']
+        1.0
+        """
+        if not isinstance(other_graph, Graph):
+            raise TypeError("other_graph must be a Graph object")
+
+        self_nodes = set(self.g.nodes())
+        other_nodes = set(other_graph.g.nodes())
+        self_edges = set(self.g.edges())
+        other_edges = set(other_graph.g.edges())
+
+        nodes_added = other_nodes - self_nodes
+        nodes_removed = self_nodes - other_nodes
+        edges_added = other_edges - self_edges
+        edges_removed = self_edges - other_edges
+
+        # Jaccard similarity for edges
+        union_edges = self_edges | other_edges
+        if len(union_edges) > 0:
+            similarity = len(self_edges & other_edges) / len(union_edges)
+        else:
+            similarity = 1.0
+
+        return {
+            'nodes_added': list(nodes_added),
+            'nodes_removed': list(nodes_removed),
+            'edges_added': list(edges_added),
+            'edges_removed': list(edges_removed),
+            'structure_similarity': similarity
+        }
 
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):

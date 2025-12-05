@@ -91,6 +91,72 @@ class ModelGraphTests(unittest.TestCase):
         mg.draw_from(11, hist)
         mg.draw_graphviz_from(11, hist, disp=False)
 
+    def test_centrality_methods(self):
+        """Test new centrality calculation methods."""
+        mg = FunctionArchitectureGraph(self.mdl)
+        
+        # Test betweenness centrality
+        bc = mg.calc_betweenness_centrality()
+        self.assertIsInstance(bc, dict)
+        self.assertGreater(len(bc), 0)
+        
+        # Test closeness centrality
+        cc = mg.calc_closeness_centrality()
+        self.assertIsInstance(cc, dict)
+        self.assertGreater(len(cc), 0)
+        
+        # Test eigenvector centrality
+        ec = mg.calc_eigenvector_centrality()
+        self.assertIsInstance(ec, dict)
+        self.assertGreater(len(ec), 0)
+
+    def test_plot_centrality(self):
+        """Test centrality visualization method."""
+        mg = FunctionArchitectureGraph(self.mdl)
+        mg.set_pos(auto='spring')
+        
+        # Test different centrality metrics
+        for metric in ['betweenness', 'closeness', 'degree']:
+            fig = mg.plot_centrality(metric=metric)
+            self.assertIsNotNone(fig)
+
+    def test_summary_method(self):
+        """Test graph summary method."""
+        mg = FunctionArchitectureGraph(self.mdl)
+        summary = mg.summary()
+        
+        # Check all expected keys are present
+        expected_keys = ['num_nodes', 'num_edges', 'density', 'is_connected',
+                        'num_components', 'avg_degree', 'modularity']
+        for key in expected_keys:
+            self.assertIn(key, summary)
+        
+        # Check types
+        self.assertIsInstance(summary['num_nodes'], int)
+        self.assertIsInstance(summary['num_edges'], int)
+        self.assertIsInstance(summary['density'], float)
+        self.assertIsInstance(summary['is_connected'], bool)
+
+    def test_compare_with_method(self):
+        """Test graph comparison method."""
+        mg1 = FunctionArchitectureGraph(self.mdl)
+        mg2 = FunctionArchitectureGraph(self.mdl)
+        
+        # Compare identical graphs
+        comparison = mg1.compare_with(mg2)
+        self.assertEqual(comparison['structure_similarity'], 1.0)
+        self.assertEqual(len(comparison['nodes_added']), 0)
+        self.assertEqual(len(comparison['nodes_removed']), 0)
+        
+        # Test with faulty graph
+        er, hist = propagate.one_fault(self.mdl, 'move_water', 'short',
+                                       time=10, to_return=['graph'])
+        mg_faulty = er.faulty.tend.graph
+        comparison = mg1.compare_with(mg_faulty)
+        self.assertIsInstance(comparison['structure_similarity'], float)
+        self.assertGreaterEqual(comparison['structure_similarity'], 0.0)
+        self.assertLessEqual(comparison['structure_similarity'], 1.0)
+
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()
 
