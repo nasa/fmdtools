@@ -141,13 +141,13 @@ class ModelGraphTests(unittest.TestCase):
         """Test graph comparison method."""
         mg1 = FunctionArchitectureGraph(self.mdl)
         mg2 = FunctionArchitectureGraph(self.mdl)
-        
+
         # Compare identical graphs
         comparison = mg1.compare_with(mg2)
         self.assertEqual(comparison['structure_similarity'], 1.0)
         self.assertEqual(len(comparison['nodes_added']), 0)
         self.assertEqual(len(comparison['nodes_removed']), 0)
-        
+
         # Test with faulty graph
         er, hist = propagate.one_fault(self.mdl, 'move_water', 'short',
                                        time=10, to_return=['graph'])
@@ -156,6 +156,118 @@ class ModelGraphTests(unittest.TestCase):
         self.assertIsInstance(comparison['structure_similarity'], float)
         self.assertGreaterEqual(comparison['structure_similarity'], 0.0)
         self.assertLessEqual(comparison['structure_similarity'], 1.0)
+
+    def test_path_analysis_methods(self):
+        """Test path finding methods."""
+        mg = FunctionArchitectureGraph(self.rvr)
+        nodes = list(mg.g.nodes())
+
+        if len(nodes) >= 2:
+            source, target = nodes[0], nodes[-1]
+
+            # Test find_critical_paths
+            paths = mg.find_critical_paths(source, target, k=3)
+            self.assertIsInstance(paths, list)
+
+            # Test find_all_simple_paths
+            all_paths = mg.find_all_simple_paths(source, target, cutoff=5)
+            self.assertIsInstance(all_paths, list)
+
+            # Test with invalid nodes
+            with self.assertRaises(ValueError):
+                mg.find_critical_paths('nonexistent_node', target)
+
+    def test_subgraph_extraction(self):
+        """Test subgraph extraction method."""
+        from fmdtools.analyze.graph.base import Graph
+        mg = FunctionArchitectureGraph(self.rvr)
+        nodes = list(mg.g.nodes())
+
+        if len(nodes) > 0:
+            # Test ego graph extraction
+            center = nodes[0]
+            subgraph = mg.extract_subgraph(center_node=center, radius=1)
+            self.assertIsInstance(subgraph, Graph)
+            self.assertGreater(subgraph.g.number_of_nodes(), 0)
+
+            # Test with node list
+            if len(nodes) >= 3:
+                subgraph2 = mg.extract_subgraph(nodes=nodes[:3])
+                self.assertEqual(subgraph2.g.number_of_nodes(), 3)
+
+            # Test error handling
+            with self.assertRaises(ValueError):
+                mg.extract_subgraph(center_node='nonexistent_node')
+
+    def test_resilience_score(self):
+        """Test resilience scoring method."""
+        mg = FunctionArchitectureGraph(self.mdl)
+
+        # Test combined metric
+        score = mg.calc_resilience_score(metric='combined')
+        self.assertIsInstance(score, float)
+        self.assertGreaterEqual(score, 0.0)
+        self.assertLessEqual(score, 100.0)
+
+        # Test other metrics
+        for metric in ['connectivity', 'redundancy', 'modularity']:
+            score = mg.calc_resilience_score(metric=metric)
+            self.assertIsInstance(score, float)
+            self.assertGreaterEqual(score, 0.0)
+            self.assertLessEqual(score, 100.0)
+
+        # Test invalid metric
+        with self.assertRaises(ValueError):
+            mg.calc_resilience_score(metric='invalid')
+
+    def test_node_removal_impact(self):
+        """Test node removal impact assessment."""
+        mg = FunctionArchitectureGraph(self.mdl)
+        nodes = list(mg.g.nodes())
+
+        if len(nodes) > 0:
+            node = nodes[0]
+            impact = mg.assess_node_removal_impact(node)
+
+            # Check all expected keys present
+            expected_keys = ['disconnected_nodes', 'new_components',
+                           'original_components', 'aspl_change', 'connectivity_loss']
+            for key in expected_keys:
+                self.assertIn(key, impact)
+
+            # Check types
+            self.assertIsInstance(impact['disconnected_nodes'], list)
+            self.assertIsInstance(impact['new_components'], int)
+            self.assertIsInstance(impact['original_components'], int)
+            self.assertIsInstance(impact['connectivity_loss'], float)
+
+            # Test error handling
+            with self.assertRaises(ValueError):
+                mg.assess_node_removal_impact('nonexistent_node')
+
+    def test_vulnerable_nodes(self):
+        """Test vulnerable node identification."""
+        mg = FunctionArchitectureGraph(self.rvr)
+
+        # Test combined metric
+        vulnerable = mg.find_vulnerable_nodes(metric='combined', top_k=3)
+        self.assertIsInstance(vulnerable, list)
+        self.assertLessEqual(len(vulnerable), 3)
+
+        # Check structure
+        if len(vulnerable) > 0:
+            self.assertIsInstance(vulnerable[0], tuple)
+            self.assertEqual(len(vulnerable[0]), 2)
+
+        # Test other metrics
+        for metric in ['betweenness', 'degree', 'bridge']:
+            vulnerable = mg.find_vulnerable_nodes(metric=metric, top_k=5)
+            self.assertIsInstance(vulnerable, list)
+            self.assertLessEqual(len(vulnerable), 5)
+
+        # Test invalid metric
+        with self.assertRaises(ValueError):
+            mg.find_vulnerable_nodes(metric='invalid')
 
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()
