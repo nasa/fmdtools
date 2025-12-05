@@ -1321,6 +1321,49 @@ class Graph(object):
             'structure_similarity': similarity
         }
 
+    def find_critical_paths(self, source, target, k=3, weight=None):
+        """
+        Find k shortest paths between source and target nodes.
+
+        Identifies alternate routes between nodes, useful for analyzing resilience
+        and cascade failure potential. If a primary path fails, existence of
+        alternate paths indicates system redundancy.
+
+        Parameters
+        ----------
+        source : str
+            Starting node name.
+        target : str
+            Ending node name.
+        k : int, optional
+            Number of shortest paths to find. Default is 3.
+        weight : str, optional
+            Edge attribute to use as weight. Default is None (unweighted).
+
+        Returns
+        -------
+        list
+            List of paths, where each path is a list of node names.
+            Returns empty list if no paths exist or if k paths cannot be found.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> paths = graph.find_critical_paths('function_a', 'function_c', k=2)
+        >>> isinstance(paths, list)
+        True
+        """
+        if source not in self.g.nodes():
+            raise ValueError(f"Source node '{source}' not in graph")
+        if target not in self.g.nodes():
+            raise ValueError(f"Target node '{target}' not in graph")
+
+        try:
+            paths = list(nx.shortest_simple_paths(self.g, source, target, weight=weight))
+            return paths[:k]
+        except (nx.NetworkXNoPath, nx.NodeNotFound):
+            return []
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
