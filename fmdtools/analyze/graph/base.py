@@ -1028,6 +1028,54 @@ class Graph(object):
         """
         return nx.closeness_centrality(self.g)
 
+    def calc_eigenvector_centrality(self, max_iter=100):
+        """
+        Compute eigenvector centrality for all nodes.
+
+        Eigenvector centrality computes the centrality for a node based on the
+        centrality of its neighbors. Connections to high-scoring nodes contribute
+        more to the score than connections to low-scoring nodes.
+
+        Note: For disconnected graphs, this returns a dictionary with zero values
+        for all nodes, as eigenvector centrality is not well-defined in such cases.
+
+        Parameters
+        ----------
+        max_iter : int, optional
+            Maximum number of iterations for power method convergence.
+            Default is 100.
+
+        Returns
+        -------
+        dict
+            Dictionary of nodes with eigenvector centrality as values.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> centrality = graph.calc_eigenvector_centrality()
+        >>> type(centrality)
+        <class 'dict'>
+        """
+        # Check if graph is connected (required for eigenvector centrality)
+        g_check = self.g if self.g.is_directed() else self.g.to_undirected()
+        is_connected = (nx.is_strongly_connected(g_check) if self.g.is_directed()
+                       else nx.is_connected(g_check))
+
+        if not is_connected:
+            # Return zero centrality for disconnected graphs
+            return {node: 0.0 for node in self.g.nodes()}
+
+        try:
+            return nx.eigenvector_centrality(self.g, max_iter=max_iter)
+        except (nx.PowerIterationFailedConvergence, nx.NetworkXError):
+            # Fall back to numpy method if power iteration fails
+            try:
+                return nx.eigenvector_centrality_numpy(self.g)
+            except (nx.AmbiguousSolution, nx.NetworkXError):
+                # If all else fails, return zeros
+                return {node: 0.0 for node in self.g.nodes()}
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """

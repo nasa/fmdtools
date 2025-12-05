@@ -105,6 +105,13 @@ class ModelGraphTests(unittest.TestCase):
         self.assertIsInstance(cc, dict)
         self.assertGreater(len(cc), 0)
 
+    def test_eigenvector_centrality(self):
+        """Test eigenvector centrality calculation."""
+        mg = FunctionArchitectureGraph(self.mdl)
+        ec = mg.calc_eigenvector_centrality()
+        self.assertIsInstance(ec, dict)
+        self.assertGreater(len(ec), 0)
+
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()
 
