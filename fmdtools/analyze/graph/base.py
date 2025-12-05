@@ -1321,6 +1321,376 @@ class Graph(object):
             'structure_similarity': similarity
         }
 
+    def find_critical_paths(self, source, target, k=3, weight=None):
+        """
+        Find k shortest paths between source and target nodes.
+
+        Identifies alternate routes between nodes, useful for analyzing resilience
+        and cascade failure potential. If a primary path fails, existence of
+        alternate paths indicates system redundancy.
+
+        Parameters
+        ----------
+        source : str
+            Starting node name.
+        target : str
+            Ending node name.
+        k : int, optional
+            Number of shortest paths to find. Default is 3.
+        weight : str, optional
+            Edge attribute to use as weight. Default is None (unweighted).
+
+        Returns
+        -------
+        list
+            List of paths, where each path is a list of node names.
+            Returns empty list if no paths exist or if k paths cannot be found.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> paths = graph.find_critical_paths('function_a', 'function_c', k=2)
+        >>> isinstance(paths, list)
+        True
+        """
+        if source not in self.g.nodes():
+            raise ValueError(f"Source node '{source}' not in graph")
+        if target not in self.g.nodes():
+            raise ValueError(f"Target node '{target}' not in graph")
+
+        try:
+            paths = list(nx.shortest_simple_paths(self.g, source, target, weight=weight))
+            return paths[:k]
+        except (nx.NetworkXNoPath, nx.NodeNotFound):
+            return []
+
+    def find_all_simple_paths(self, source, target, cutoff=None):
+        """
+        Find all simple paths between source and target nodes.
+
+        Simple paths have no repeated nodes. Useful for understanding all
+        possible information flow routes between two components.
+
+        Parameters
+        ----------
+        source : str
+            Starting node name.
+        target : str
+            Ending node name.
+        cutoff : int, optional
+            Maximum path length. Default is None (no limit).
+
+        Returns
+        -------
+        list
+            List of all simple paths between source and target.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> paths = graph.find_all_simple_paths('function_a', 'function_c')
+        >>> isinstance(paths, list)
+        True
+        """
+        if source not in self.g.nodes():
+            raise ValueError(f"Source node '{source}' not in graph")
+        if target not in self.g.nodes():
+            raise ValueError(f"Target node '{target}' not in graph")
+
+        try:
+            return list(nx.all_simple_paths(self.g, source, target, cutoff=cutoff))
+        except (nx.NetworkXNoPath, nx.NodeNotFound):
+            return []
+
+    def extract_subgraph(self, nodes=None, radius=1, center_node=None):
+        """
+        Extract a subgraph around specified nodes or a center node.
+
+        Useful for focusing analysis on specific system regions and their
+        immediate neighborhoods.
+
+        Parameters
+        ----------
+        nodes : list, optional
+            List of node names to include in subgraph. If None, must provide
+            center_node.
+        radius : int, optional
+            If center_node is provided, include all nodes within this many hops.
+            Default is 1.
+        center_node : str, optional
+            Node to use as center for ego graph extraction. If provided, nodes
+            parameter is ignored.
+
+        Returns
+        -------
+        Graph
+            New Graph object containing the subgraph.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> subgraph = graph.extract_subgraph(center_node='function_a', radius=1)
+        >>> isinstance(subgraph, Graph)
+        True
+        """
+        if center_node is not None:
+            if center_node not in self.g.nodes():
+                raise ValueError(f"Center node '{center_node}' not in graph")
+            subg = nx.ego_graph(self.g, center_node, radius=radius)
+        elif nodes is not None:
+            if not all(n in self.g.nodes() for n in nodes):
+                missing = [n for n in nodes if n not in self.g.nodes()]
+                raise ValueError(f"Nodes not in graph: {missing}")
+            subg = self.g.subgraph(nodes).copy()
+        else:
+            raise ValueError("Must provide either 'nodes' or 'center_node'")
+
+        return Graph(subg, check_info=False)
+
+    def calc_resilience_score(self, metric='combined'):
+        """
+        Calculate overall resilience score for the graph (0-100 scale).
+
+        Combines multiple graph metrics to produce a single resilience indicator.
+        Higher scores indicate more resilient system structures.
+
+        Parameters
+        ----------
+        metric : str, optional
+            Scoring method to use:
+
+            - 'combined': Weighted combination of connectivity, redundancy, modularity
+            - 'connectivity': Based on connectivity and ASPL
+            - 'redundancy': Based on average degree and edge density
+            - 'modularity': Based on modularity score only
+
+            Default is 'combined'.
+
+        Returns
+        -------
+        float
+            Resilience score between 0 and 100.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> score = graph.calc_resilience_score()
+        >>> 0 <= score <= 100
+        True
+        """
+        g_undirected = self.g.to_undirected()
+        is_connected = nx.is_connected(g_undirected)
+        num_nodes = self.g.number_of_nodes()
+
+        if num_nodes == 0:
+            return 0.0
+
+        # Connectivity component (0-40 points)
+        if metric in ['combined', 'connectivity']:
+            if is_connected:
+                connectivity_score = 40.0
+            else:
+                num_components = nx.number_connected_components(g_undirected)
+                connectivity_score = 40.0 * (1.0 - (num_components - 1) / num_nodes)
+
+            # Penalize long average path lengths
+            if is_connected:
+                aspl = self.calc_aspl()
+                max_aspl = num_nodes / 2
+                aspl_penalty = min(20.0, (aspl / max_aspl) * 20.0)
+                connectivity_score -= aspl_penalty
+
+        # Redundancy component (0-30 points)
+        if metric in ['combined', 'redundancy']:
+            avg_degree = sum(dict(self.g.degree()).values()) / num_nodes
+            density = nx.density(self.g)
+            redundancy_score = min(30.0, (avg_degree / num_nodes) * 15.0 + density * 15.0)
+
+        # Modularity component (0-30 points)
+        if metric in ['combined', 'modularity']:
+            modularity = self.calc_modularity()
+            modularity_score = (modularity + 1.0) / 2.0 * 30.0
+
+        # Calculate final score based on metric
+        if metric == 'combined':
+            score = connectivity_score + redundancy_score + modularity_score
+        elif metric == 'connectivity':
+            score = connectivity_score * 2.5
+        elif metric == 'redundancy':
+            score = redundancy_score * 3.33
+        elif metric == 'modularity':
+            score = modularity_score * 3.33
+        else:
+            raise ValueError(f"Unknown metric: {metric}")
+
+        return min(100.0, max(0.0, score))
+
+    def assess_node_removal_impact(self, node):
+        """
+        Assess the impact of removing a node from the graph.
+
+        Predicts what happens if a node fails, useful for proactive fault
+        scenario planning and identifying critical single points of failure.
+
+        Parameters
+        ----------
+        node : str
+            Name of node to assess removal impact.
+
+        Returns
+        -------
+        dict
+            Impact assessment including:
+
+            - disconnected_nodes : list
+                Nodes that become unreachable after removal
+            - new_components : int
+                Number of components after removal
+            - original_components : int
+                Number of components before removal
+            - aspl_change : float
+                Change in average shortest path length (None if disconnected)
+            - connectivity_loss : float
+                Fraction of node pairs that lose connectivity (0 to 1)
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> impact = graph.assess_node_removal_impact('function_a')
+        >>> 'disconnected_nodes' in impact
+        True
+        """
+        if node not in self.g.nodes():
+            raise ValueError(f"Node '{node}' not in graph")
+
+        # Get original graph properties
+        g_undirected = self.g.to_undirected()
+        original_connected = nx.is_connected(g_undirected)
+        original_components = nx.number_connected_components(g_undirected)
+
+        # Create copy without the node
+        g_temp = self.g.copy()
+        g_temp.remove_node(node)
+        g_temp_undirected = g_temp.to_undirected()
+
+        # Count new components
+        new_components = nx.number_connected_components(g_temp_undirected)
+        new_connected = nx.is_connected(g_temp_undirected)
+
+        # Find disconnected nodes
+        if original_connected and not new_connected:
+            # Find nodes in smaller components
+            components = list(nx.connected_components(g_temp_undirected))
+            largest_component = max(components, key=len)
+            disconnected_nodes = [n for comp in components if comp != largest_component
+                                 for n in comp]
+        else:
+            disconnected_nodes = []
+
+        # Calculate ASPL change
+        aspl_change = None
+        if original_connected and new_connected:
+            try:
+                original_aspl = nx.average_shortest_path_length(g_undirected)
+                new_aspl = nx.average_shortest_path_length(g_temp_undirected)
+                aspl_change = new_aspl - original_aspl
+            except nx.NetworkXError:
+                aspl_change = None
+
+        # Calculate connectivity loss
+        if original_connected and not new_connected:
+            connectivity_loss = len(disconnected_nodes) / len(g_temp.nodes()) if g_temp.nodes() else 1.0
+        else:
+            connectivity_loss = 0.0
+
+        return {
+            'disconnected_nodes': disconnected_nodes,
+            'new_components': new_components,
+            'original_components': original_components,
+            'aspl_change': aspl_change,
+            'connectivity_loss': connectivity_loss
+        }
+
+    def find_vulnerable_nodes(self, metric='combined', top_k=5):
+        """
+        Identify most vulnerable nodes based on structural importance.
+
+        Combines multiple centrality and connectivity metrics to find nodes
+        whose failure would most impact system resilience.
+
+        Parameters
+        ----------
+        metric : str, optional
+            Vulnerability metric to use:
+
+            - 'combined': Weighted combination of betweenness, degree, bridge status
+            - 'betweenness': Based on betweenness centrality only
+            - 'degree': Based on node degree only
+            - 'bridge': Based on articulation points (bridges)
+
+            Default is 'combined'.
+        top_k : int, optional
+            Number of top vulnerable nodes to return. Default is 5.
+
+        Returns
+        -------
+        list
+            List of tuples (node_name, vulnerability_score) sorted by score
+            (highest first).
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> vulnerable = graph.find_vulnerable_nodes(top_k=3)
+        >>> isinstance(vulnerable, list)
+        True
+        >>> len(vulnerable) <= 3
+        True
+        """
+        if metric == 'combined':
+            # Get betweenness centrality
+            betweenness = self.calc_betweenness_centrality()
+
+            # Get degree centrality
+            degrees = dict(self.g.degree())
+            max_degree = max(degrees.values()) if degrees else 1
+            degree_centrality = {n: d / max_degree for n, d in degrees.items()}
+
+            # Get articulation points (bridges)
+            g_undirected = self.g.to_undirected()
+            articulation_points = set(nx.articulation_points(g_undirected))
+            bridge_score = {n: 1.0 if n in articulation_points else 0.0
+                          for n in self.g.nodes()}
+
+            # Combine scores (weights: betweenness=0.4, degree=0.3, bridge=0.3)
+            vulnerability = {}
+            for node in self.g.nodes():
+                vuln_score = (0.4 * betweenness[node] +
+                            0.3 * degree_centrality[node] +
+                            0.3 * bridge_score[node])
+                vulnerability[node] = vuln_score
+
+        elif metric == 'betweenness':
+            vulnerability = self.calc_betweenness_centrality()
+
+        elif metric == 'degree':
+            degrees = dict(self.g.degree())
+            max_degree = max(degrees.values()) if degrees else 1
+            vulnerability = {n: d / max_degree for n, d in degrees.items()}
+
+        elif metric == 'bridge':
+            g_undirected = self.g.to_undirected()
+            articulation_points = set(nx.articulation_points(g_undirected))
+            vulnerability = {n: 1.0 if n in articulation_points else 0.0
+                           for n in self.g.nodes()}
+
+        else:
+            raise ValueError(f"Unknown metric: {metric}")
+
+        # Sort and return top k
+        sorted_nodes = sorted(vulnerability.items(), key=lambda x: x[1], reverse=True)
+        return sorted_nodes[:min(top_k, len(sorted_nodes))]
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
