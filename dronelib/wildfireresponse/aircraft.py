@@ -6,10 +6,10 @@ from fmdtools.define.container.mode import Mode
 from fmdtools.define.container.time import Time
 
 
-from aerialdrm.wildfire.fireenvironment import FireEnvironment, double_size_p
+from dronelib.wildfireresponse.environment import FireEnvironment, double_size_p
 
-from aerialdrm.base.aircraft.aircraft import BaseAircraft
-from aerialdrm.base.aircraft.state import AircraftState
+from dronelib.base.aircraft import BaseAircraft
+from dronelib.base.state import AircraftState
 
 
 

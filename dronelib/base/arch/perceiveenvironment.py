@@ -4,7 +4,7 @@
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode
 
-from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity, AircraftEnvironment
+from dronelib.base.arch.flows import Trajectories, Force, Electricity, AircraftEnvironment
 
 
 class PerceiveEnvironmentMode(Mode):

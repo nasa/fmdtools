@@ -6,7 +6,7 @@ maintainers = [
   {name = "Daniel Hulse", email = "daniel.e.hulse@nasa.gov"}
 ]
 classifiers = []
-description = "Aerial disaster response model"
+description = "Drone Resilience Modeling Library"
 license = {file="TBD"}
 name = "aerialdrm"
 version="0.2"
@@ -23,7 +23,7 @@ requires = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["aerialdrm*"]
+include = ["dronelib*"]
 
 [tool.coverage.report]
 exclude_also = [

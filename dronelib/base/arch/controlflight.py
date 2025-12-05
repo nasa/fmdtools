@@ -6,8 +6,8 @@ from fmdtools.define.block.function import Function
 from fmdtools.define.container.state import State
 from fmdtools.define.container.mode import Mode
 
-from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
-from aerialdrm.base.aircraft.arch.flows import AircraftEnvironment
+from dronelib.base.arch.flows import Trajectories, Force, Electricity
+from dronelib.base.arch.flows import AircraftEnvironment
 
 
 class ControlState(State):

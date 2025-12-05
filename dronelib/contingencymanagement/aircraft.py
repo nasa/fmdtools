@@ -8,31 +8,29 @@ from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.architecture.function import FunctionArchitectureGraph
 from fmdtools.analyze.common import consolidate_legend
 from fmdtools.define.container.parameter import Parameter
-import fmdtools.sim.propagate as prop
 
 
-from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
-from aerialdrm.base.aircraft.arch.aviate import Aviate
-from aerialdrm.base.aircraft.arch.controlflight import ControlFlight, ControlState
-from aerialdrm.base.aircraft.arch.storeee import StoreAndSupplyElectricity
-from aerialdrm.base.aircraft.arch.perceiveenvironment import PerceiveEnvironment
-from aerialdrm.base.aircraft.arch.holdpayload import HoldPayload
+from dronelib.base.arch.flows import Trajectories, Force, Electricity
+from dronelib.base.arch.aviate import Aviate
+from dronelib.base.arch.controlflight import ControlFlight, ControlState
+from dronelib.base.arch.storeee import StoreAndSupplyElectricity
+from dronelib.base.arch.perceiveenvironment import PerceiveEnvironment
+from dronelib.base.arch.holdpayload import HoldPayload
 
 
-from aerialdrm.hurricane.hurricaneenvironment import HurricaneEnvironment, properties, collections
-from aerialdrm.hurricane.hurricaneenvironment import HurricaneConditions
-from aerialdrm.hurricane.hurricaneflightpath import DroneFlightGrid, DroneFlightGridParam
-from aerialdrm.base.aircraft.state import AircraftPosition
+from dronelib.contingencymanagement.environment import ContingencyEnvironment, properties, collections
+from dronelib.contingencymanagement.environment import ContingencyConditions
+from dronelib.contingencymanagement.flightplanner import DroneFlightGrid, DroneFlightGridParam
 
 
-class HurricaneControlState(ControlState):
+class ContingencyControlState(ControlState):
     """
     ControlState defining the current state of the planning over the grid.
 
     Fields
     ------
     closest_dist: float [outdated?]
-    flightgrid: HurricaneFlightGrid
+    flightgrid: ContingencyFlightGrid
         FlightGrid for current aviation plan; subject to update with faults/
         environmental updates
     planned: bool
@@ -40,14 +38,14 @@ class HurricaneControlState(ControlState):
     """
 
     closest_dist: float = 100.0
-    flightgrid: DroneFlightGrid = DroneFlightGrid(env = HurricaneEnvironment())
+    flightgrid: DroneFlightGrid = DroneFlightGrid(env = ContingencyEnvironment())
     endpt: tuple = (100.0, 100.0)
     planned: bool = False
     reconfigured_proxthreat: bool = False
     reconfigured_charge: bool = False
 
     
-class HurricaneControlParameter(Parameter):
+class ContingencyControlParameter(Parameter):
     with_proxthreat: bool = True
     fuel_rate: float = 20.0
     disallowed_cost: float = 10.0
@@ -56,11 +54,11 @@ class HurricaneControlParameter(Parameter):
     max_distance: int = 5
     blocksize: float = 2.5
     
-class HurricaneControlFlight(ControlFlight):
+class ContingencyControlFlight(ControlFlight):
 
-    flow_environment = HurricaneEnvironment
-    container_s = HurricaneControlState
-    container_p = HurricaneControlParameter
+    flow_environment = ContingencyEnvironment
+    container_s = ContingencyControlState
+    container_p = ContingencyControlParameter
     default_track = {'s': ["closest_dist", 'planned', 'pt', 'flightplan'], 'm': ['mode']}
     
     def set_faultmode(self):
@@ -146,7 +144,7 @@ class HurricaneControlFlight(ControlFlight):
         self.s.pt = 0
         self.s.planned = True
         
-class HurricaneAviate(Aviate):
+class ContingencyAviate(Aviate):
 
     def dynamic_behavior(self):
         super().dynamic_behavior()
@@ -154,7 +152,7 @@ class HurricaneAviate(Aviate):
 
 
 
-class HurricaneAircraftArchParameter(Parameter):
+class ContingencyAircraftArchParameter(Parameter):
     """Overall Parameter Defining the AircraftArchitecture."""
 
     startpt: tuple = (10.0, 10.0)
@@ -169,7 +167,7 @@ class HurricaneAircraftArchParameter(Parameter):
     restricted_cost: float = 1000000.0
     max_distance: int = 5
 
-class HurricaneAircraftArchitecture(FunctionArchitecture):
+class ContingencyAircraftArchitecture(FunctionArchitecture):
     """
     Overall drone architecture.
 
@@ -186,7 +184,7 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
         - hold_payload : the structure of the drone
     """
 
-    container_p = HurricaneAircraftArchParameter
+    container_p = ContingencyAircraftArchParameter
     # default_sp = {'end_condition': 'indicate_landed'}
     default_sp = {'end_time': 100}
 
@@ -196,10 +194,10 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
         self.add_flow('electricity', Electricity)
         self.add_flow('trajectories', Trajectories,
                       s={'x': self.p.startpt[0], 'y': self.p.startpt[1]})
-        self.add_flow('environment', HurricaneEnvironment)
+        self.add_flow('environment', ContingencyEnvironment)
 
-        self.add_fxn('conditions', HurricaneConditions, 'environment')
-        self.add_fxn('control_flight', HurricaneControlFlight,
+        self.add_fxn('conditions', ContingencyConditions, 'environment')
+        self.add_fxn('control_flight', ContingencyControlFlight,
                      'trajectories', 'force', 'electricity', 'environment',
                      s={'flightplan': self.p.flightplan, 'height': self.p.height, 'endpt': self.p.endpt},
                      p={'with_proxthreat': self.p.with_proxthreat,
@@ -208,7 +206,7 @@ class HurricaneAircraftArchitecture(FunctionArchitecture):
                         'occupied_cost':   self.p.occupied_cost,
                         'restricted_cost': self.p.restricted_cost,
                         'max_distance':    self.p.max_distance})
-        self.add_fxn('aviate', HurricaneAviate,
+        self.add_fxn('aviate', ContingencyAviate,
                      'trajectories', 'force', 'electricity', 'environment')
         m = {'fault_depletion':
              {'disturbances': (('electricity.s.charge', self.p.depletion), )}}
@@ -307,21 +305,21 @@ if __name__ == "__main__":
     from fmdtools.sim import propagate
     from fmdtools.sim.sample import FaultDomain, FaultSample
 
-    haa = HurricaneAircraftArchitecture()
+    haa = ContingencyAircraftArchitecture()
     haa()
     haa2 = haa.copy()
 
-    hcs = HurricaneControlState()
+    hcs = ContingencyControlState()
     hcs.create_hist([0.0, 1.0])
 
 
-    h = HurricaneAviate()
-    hc = HurricaneConditions()
-    hcf = HurricaneControlFlight()
+    h = ContingencyAviate()
+    hc = ContingencyConditions()
+    hcf = ContingencyControlFlight()
 
-    ha = HurricaneAircraftArchitecture()
+    ha = ContingencyAircraftArchitecture()
 
-    hcs = HurricaneControlState()
+    hcs = ContingencyControlState()
     hcs2 = hcs.copy()
 
 
@@ -367,7 +365,7 @@ if __name__ == "__main__":
     ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 20, fig=fig, ax=ax)
 
 
-    # haa = HurricaneAircraftArchitecture(p={'depletion': 40.0})
+    # haa = ContingencyAircraftArchitecture(p={'depletion': 40.0})
 
     # res, hist = prop.nominal(haa)
     # pm = from_hist(hist)

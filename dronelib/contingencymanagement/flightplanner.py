@@ -54,10 +54,10 @@ class DroneFlightGrid(Coords):
 
     Examples
     --------
-    >>> from aerialdrm.hurricane.hurricaneflightpath import DroneFlightGrid, DroneFlightGridParam
-    >>> from aerialdrm.hurricane.hurricaneenvironment import HurricaneEnvironment, HurricaneCoordsParam
-    >>> env_param = HurricaneCoordsParam(x_size=12, y_size=12, blocksize=10.0)
-    >>> env = HurricaneEnvironment(p=env_param)
+    >>> from dronelib.contingencymanagement.flightplanner import DroneFlightGrid, DroneFlightGridParam
+    >>> from dronelib.contingencymanagement.environment import ContingencyEnvironment, ContingencyCoordsParam
+    >>> env_param = ContingencyCoordsParam(x_size=12, y_size=12, blocksize=10.0)
+    >>> env = ContingencyEnvironment(p=env_param)
     >>> param = DroneFlightGridParam(x_size=120, y_size=120, blocksize=1.0)
     >>> grid = DroneFlightGrid(env, p=param)
     >>> start = (10.0, 10.0)

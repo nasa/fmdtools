@@ -8,7 +8,7 @@ from fmdtools.define.environment import Environment
 from fmdtools.define.container.parameter import Parameter
 
 
-from aerialdrm.base.aircraft.state import AircraftPosition3
+from dronelib.base.state import AircraftPosition3
 
 
 class ForceState(State):

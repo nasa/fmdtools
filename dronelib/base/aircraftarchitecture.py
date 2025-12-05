@@ -6,13 +6,13 @@ from fmdtools.define.container.parameter import Parameter
 import fmdtools.sim.propagate as prop
 
 
-from aerialdrm.base.aircraft.arch.flows import Trajectories, Force, Electricity
-from aerialdrm.base.aircraft.arch.flows import AircraftEnvironment
-from aerialdrm.base.aircraft.arch.aviate import Aviate
-from aerialdrm.base.aircraft.arch.controlflight import ControlFlight
-from aerialdrm.base.aircraft.arch.storeee import StoreAndSupplyElectricity
-from aerialdrm.base.aircraft.arch.perceiveenvironment import PerceiveEnvironment
-from aerialdrm.base.aircraft.arch.holdpayload import HoldPayload
+from dronelib.base.arch.flows import Trajectories, Force, Electricity
+from dronelib.base.arch.flows import AircraftEnvironment
+from dronelib.base.arch.aviate import Aviate
+from dronelib.base.arch.controlflight import ControlFlight
+from dronelib.base.arch.storeee import StoreAndSupplyElectricity
+from dronelib.base.arch.perceiveenvironment import PerceiveEnvironment
+from dronelib.base.arch.holdpayload import HoldPayload
 
 
 class AircraftArchParameter(Parameter):

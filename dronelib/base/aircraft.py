@@ -6,8 +6,8 @@ Created on Thu Mar 13 16:20:28 2025
 """
 from fmdtools.define.block.function import Function
 
-from aerialdrm.base.aircraft.state import AircraftState
-from aerialdrm.base.aircraft.parameter import AircraftParameter
+from dronelib.base.state import AircraftState
+from dronelib.base.parameter import AircraftParameter
 
 
 class BaseAircraft(Function):

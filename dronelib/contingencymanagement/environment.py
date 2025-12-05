@@ -5,8 +5,8 @@ Created on Thu Mar 20 14:55:43 2025
 @author: dhulse
 """
 
-from aerialdrm.base.aircraft.arch.flows import AircraftEnvironment
-from aerialdrm.base.aircraft.state import AircraftPosition3
+from dronelib.base.arch.flows import AircraftEnvironment
+from dronelib.base.state import AircraftPosition3
 from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.define.object.geom import GeomPoint, PointParam
@@ -15,13 +15,13 @@ from fmdtools.define.block.function import Function
 from shapely import distance
 import numpy as np
 
-class HurricaneCoordsParam(CoordsParam):
+class ContingencyCoordsParam(CoordsParam):
     x_size: int = 12
     y_size: int = 12
     blocksize: float = 10.0
 
-class HurricaneCoords(Coords):
-    container_p = HurricaneCoordsParam
+class ContingencyCoords(Coords):
+    container_p = ContingencyCoordsParam
     feature_occupied = (bool, False)
     feature_disallowed = (bool, False)
     feature_restricted = (bool, False)
@@ -73,7 +73,7 @@ class Threat(GeomPoint):
         self.s.update_position(self.s.buffer_speed)
 
 
-class HurricaneThreats(GeomArchitecture):
+class ContingencyThreats(GeomArchitecture):
 
     def init_architecture(self, **kwargs):
         self.add_point('self', Threat)
@@ -95,10 +95,10 @@ class HurricaneThreats(GeomArchitecture):
                 dists[threatname] = distance(self_envelope, threat_envelope)
         return dists
 
-class HurricaneEnvironment(AircraftEnvironment):
+class ContingencyEnvironment(AircraftEnvironment):
 
-    coords_c = HurricaneCoords
-    arch_ga = HurricaneThreats 
+    coords_c = ContingencyCoords
+    arch_ga = ContingencyThreats 
     def show(self, *args, **kwargs):
         fig, ax = self.c.show(properties=properties, collections=collections,
                               coll_overlay=False)
@@ -106,16 +106,16 @@ class HurricaneEnvironment(AircraftEnvironment):
         return fig, ax
     """override environment init method. Seems AircraftEnvironment flow is TBD?"""
     
-class HurricaneConditions(Function):
+class ContingencyConditions(Function):
     __slots__ = ('environment', )
-    flow_environment = HurricaneEnvironment
+    flow_environment = ContingencyEnvironment
 
     def dynamic_behavior(self):
         self.environment.ga.update_positions()
 
 
 if __name__ == "__main__":
-    hc = HurricaneCoords()
+    hc = ContingencyCoords()
     # hc.show(properties=properties, collections=collections)
     # hc.show(collections={'suitable': {}})
     # hc.show_collection("suitable", **collections['suitable'])
@@ -136,18 +136,18 @@ if __name__ == "__main__":
                                    'end': {'color': 'lightgreen'}},
                       coll_overlay=False, border_offset=0.0)
 
-    # he = HurricaneEnvironment()
-    ht = HurricaneThreats()
+    # he = ContingencyEnvironment()
+    ht = ContingencyThreats()
     ht.show()
 
-    he = HurricaneEnvironment()
+    he = ContingencyEnvironment()
     he.show()
     he.ga.update_positions()
     he.show()
     he.ga.update_positions()
     he.show()
 
-    hc = HurricaneConditions(track=['environment'])
+    hc = ContingencyConditions(track=['environment'])
     from fmdtools.sim import propagate
     res, hist = propagate.nominal(hc)
 

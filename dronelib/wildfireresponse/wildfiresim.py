@@ -13,9 +13,9 @@ from fmdtools.sim.sample import ParameterSample
 from fmdtools.sim.search import ParameterSimProblem
 from fmdtools.sim.sample import ParameterDomain
 
-from aerialdrm.wildfire.fireenvironment import FireEnvironment, FirePropagation, FireMapParam
-from aerialdrm.wildfire.fireenvironment import sim_properties, double_size_p
-from aerialdrm.wildfire.fireaircraft import FireAircraft
+from dronelib.wildfireresponse.environment import FireEnvironment, FirePropagation, FireMapParam
+from dronelib.wildfireresponse.environment import sim_properties, double_size_p
+from dronelib.wildfireresponse.aircraft import FireAircraft
 import numpy as np
 
 
