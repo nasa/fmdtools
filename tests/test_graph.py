@@ -98,6 +98,13 @@ class ModelGraphTests(unittest.TestCase):
         self.assertIsInstance(bc, dict)
         self.assertGreater(len(bc), 0)
 
+    def test_closeness_centrality(self):
+        """Test closeness centrality calculation."""
+        mg = FunctionArchitectureGraph(self.mdl)
+        cc = mg.calc_closeness_centrality()
+        self.assertIsInstance(cc, dict)
+        self.assertGreater(len(cc), 0)
+
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()
 

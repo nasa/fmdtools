@@ -1007,6 +1007,27 @@ class Graph(object):
         """
         return nx.betweenness_centrality(self.g, normalized=normalized)
 
+    def calc_closeness_centrality(self):
+        """
+        Compute closeness centrality for all nodes.
+
+        Closeness centrality measures how close a node is to all other nodes in
+        the network. Nodes with high closeness can spread information efficiently.
+
+        Returns
+        -------
+        dict
+            Dictionary of nodes with closeness centrality as values.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> centrality = graph.calc_closeness_centrality()
+        >>> type(centrality)
+        <class 'dict'>
+        """
+        return nx.closeness_centrality(self.g)
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
