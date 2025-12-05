@@ -1221,7 +1221,7 @@ class GraphInteractor:
 
     def print_pos(self):
         """Print the current node positions in the graph from the console."""
-        print({k: list(v) for k, v in self.g_obj.pos.items()})
+        print({k: [float(v[0]), float(v[1])] for k, v in self.g_obj.pos.items()})
 
 
 """Example graph for testing. Matches example from FRDL spec."""

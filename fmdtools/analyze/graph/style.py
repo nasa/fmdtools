@@ -631,12 +631,12 @@ class OtherNodeStyle(NodeStyle):
 class EnvironmentNodeStyle(NodeStyle):
     """Style representing Environment objects."""
 
-    nx_node_shape: str = 's'
+    nx_node_shape: str = 'h'
     nx_linewidths: int = 1
     gv_style: str = 'filled'
-    gv_shape: str = 'rectangle'
+    gv_shape: str = 'hexagon'
     gv_penwidth: str = '1'
-    drawio_shape: str = 'rectangle'
+    drawio_shape: str = 'hexagon'
     drawio_fillcolor: str = '#ffccff'  # Light pink
     drawio_strokecolor: str = '#cc66cc'  # Darker pink
 

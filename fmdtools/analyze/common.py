@@ -38,6 +38,7 @@ specific language governing permissions and limitations under the License.
 import numpy as np
 import os
 import matplotlib.pyplot as plt
+from matplotlib import rcParams
 import inspect
 from scipy.stats import bootstrap
 from fmdtools.define.base import filter_kwargs
@@ -717,8 +718,10 @@ def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
     by_label = dict(zip(labels, handles))
 
     # generate legend with consolidated labels/handles
+    leg_k = [k.split('.')[1] for k in rcParams if 'legend' in k]
+    kw = {k: v for k, v in kwargs.items() if k in leg_k}
     ax.legend(by_label.values(), by_label.keys(),
-              bbox_to_anchor=bbox_to_anchor, loc=loc, **filter_kwargs(ax.legend, **kwargs))
+              bbox_to_anchor=bbox_to_anchor, loc=loc, **kw)
 
 
 def mark_times(ax, tick, time, *plot_values, fontsize=8, rounddec=1, pretext="t="):
