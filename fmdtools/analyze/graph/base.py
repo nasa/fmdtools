@@ -1402,6 +1402,51 @@ class Graph(object):
         except (nx.NetworkXNoPath, nx.NodeNotFound):
             return []
 
+    def extract_subgraph(self, nodes=None, radius=1, center_node=None):
+        """
+        Extract a subgraph around specified nodes or a center node.
+
+        Useful for focusing analysis on specific system regions and their
+        immediate neighborhoods.
+
+        Parameters
+        ----------
+        nodes : list, optional
+            List of node names to include in subgraph. If None, must provide
+            center_node.
+        radius : int, optional
+            If center_node is provided, include all nodes within this many hops.
+            Default is 1.
+        center_node : str, optional
+            Node to use as center for ego graph extraction. If provided, nodes
+            parameter is ignored.
+
+        Returns
+        -------
+        Graph
+            New Graph object containing the subgraph.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> subgraph = graph.extract_subgraph(center_node='function_a', radius=1)
+        >>> isinstance(subgraph, Graph)
+        True
+        """
+        if center_node is not None:
+            if center_node not in self.g.nodes():
+                raise ValueError(f"Center node '{center_node}' not in graph")
+            subg = nx.ego_graph(self.g, center_node, radius=radius)
+        elif nodes is not None:
+            if not all(n in self.g.nodes() for n in nodes):
+                missing = [n for n in nodes if n not in self.g.nodes()]
+                raise ValueError(f"Nodes not in graph: {missing}")
+            subg = self.g.subgraph(nodes).copy()
+        else:
+            raise ValueError("Must provide either 'nodes' or 'center_node'")
+
+        return Graph(subg, check_info=False)
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
