@@ -978,6 +978,35 @@ class Graph(object):
         plt.show()
         return fig
 
+    def calc_betweenness_centrality(self, normalized=True):
+        """
+        Compute betweenness centrality for all nodes.
+
+        Betweenness centrality measures the extent to which a node lies on paths
+        between other nodes. Nodes with high betweenness may have considerable
+        influence within a network by virtue of their control over information
+        passing between others.
+
+        Parameters
+        ----------
+        normalized : bool, optional
+            Whether to normalize values by 2/((n-1)(n-2)) for undirected graphs.
+            Default is True.
+
+        Returns
+        -------
+        dict
+            Dictionary of nodes with betweenness centrality as values.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> centrality = graph.calc_betweenness_centrality()
+        >>> type(centrality)
+        <class 'dict'>
+        """
+        return nx.betweenness_centrality(self.g, normalized=normalized)
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """

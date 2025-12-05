@@ -91,6 +91,13 @@ class ModelGraphTests(unittest.TestCase):
         mg.draw_from(11, hist)
         mg.draw_graphviz_from(11, hist, disp=False)
 
+    def test_betweenness_centrality(self):
+        """Test betweenness centrality calculation."""
+        mg = FunctionArchitectureGraph(self.mdl)
+        bc = mg.calc_betweenness_centrality()
+        self.assertIsInstance(bc, dict)
+        self.assertGreater(len(bc), 0)
+
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()
 
