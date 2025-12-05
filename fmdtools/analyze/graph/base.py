@@ -1611,6 +1611,86 @@ class Graph(object):
             'connectivity_loss': connectivity_loss
         }
 
+    def find_vulnerable_nodes(self, metric='combined', top_k=5):
+        """
+        Identify most vulnerable nodes based on structural importance.
+
+        Combines multiple centrality and connectivity metrics to find nodes
+        whose failure would most impact system resilience.
+
+        Parameters
+        ----------
+        metric : str, optional
+            Vulnerability metric to use:
+
+            - 'combined': Weighted combination of betweenness, degree, bridge status
+            - 'betweenness': Based on betweenness centrality only
+            - 'degree': Based on node degree only
+            - 'bridge': Based on articulation points (bridges)
+
+            Default is 'combined'.
+        top_k : int, optional
+            Number of top vulnerable nodes to return. Default is 5.
+
+        Returns
+        -------
+        list
+            List of tuples (node_name, vulnerability_score) sorted by score
+            (highest first).
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> vulnerable = graph.find_vulnerable_nodes(top_k=3)
+        >>> isinstance(vulnerable, list)
+        True
+        >>> len(vulnerable) <= 3
+        True
+        """
+        if metric == 'combined':
+            # Get betweenness centrality
+            betweenness = self.calc_betweenness_centrality()
+
+            # Get degree centrality
+            degrees = dict(self.g.degree())
+            max_degree = max(degrees.values()) if degrees else 1
+            degree_centrality = {n: d / max_degree for n, d in degrees.items()}
+
+            # Get articulation points (bridges)
+            g_undirected = self.g.to_undirected()
+            articulation_points = set(nx.articulation_points(g_undirected))
+            bridge_score = {n: 1.0 if n in articulation_points else 0.0
+                          for n in self.g.nodes()}
+
+            # Combine scores (weights: betweenness=0.4, degree=0.3, bridge=0.3)
+            vulnerability = {}
+            for node in self.g.nodes():
+                vuln_score = (0.4 * betweenness[node] +
+                            0.3 * degree_centrality[node] +
+                            0.3 * bridge_score[node])
+                vulnerability[node] = vuln_score
+
+        elif metric == 'betweenness':
+            vulnerability = self.calc_betweenness_centrality()
+
+        elif metric == 'degree':
+            degrees = dict(self.g.degree())
+            max_degree = max(degrees.values()) if degrees else 1
+            vulnerability = {n: d / max_degree for n, d in degrees.items()}
+
+        elif metric == 'bridge':
+            g_undirected = self.g.to_undirected()
+            articulation_points = set(nx.articulation_points(g_undirected))
+            vulnerability = {n: 1.0 if n in articulation_points else 0.0
+                           for n in self.g.nodes()}
+
+        else:
+            raise ValueError(f"Unknown metric: {metric}")
+
+        # Sort and return top k
+        sorted_nodes = sorted(vulnerability.items(), key=lambda x: x[1], reverse=True)
+        return sorted_nodes[:min(top_k, len(sorted_nodes))]
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
