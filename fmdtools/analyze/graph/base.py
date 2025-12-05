@@ -1364,6 +1364,44 @@ class Graph(object):
         except (nx.NetworkXNoPath, nx.NodeNotFound):
             return []
 
+    def find_all_simple_paths(self, source, target, cutoff=None):
+        """
+        Find all simple paths between source and target nodes.
+
+        Simple paths have no repeated nodes. Useful for understanding all
+        possible information flow routes between two components.
+
+        Parameters
+        ----------
+        source : str
+            Starting node name.
+        target : str
+            Ending node name.
+        cutoff : int, optional
+            Maximum path length. Default is None (no limit).
+
+        Returns
+        -------
+        list
+            List of all simple paths between source and target.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> paths = graph.find_all_simple_paths('function_a', 'function_c')
+        >>> isinstance(paths, list)
+        True
+        """
+        if source not in self.g.nodes():
+            raise ValueError(f"Source node '{source}' not in graph")
+        if target not in self.g.nodes():
+            raise ValueError(f"Target node '{target}' not in graph")
+
+        try:
+            return list(nx.all_simple_paths(self.g, source, target, cutoff=cutoff))
+        except (nx.NetworkXNoPath, nx.NodeNotFound):
+            return []
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
