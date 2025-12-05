@@ -1525,6 +1525,92 @@ class Graph(object):
 
         return min(100.0, max(0.0, score))
 
+    def assess_node_removal_impact(self, node):
+        """
+        Assess the impact of removing a node from the graph.
+
+        Predicts what happens if a node fails, useful for proactive fault
+        scenario planning and identifying critical single points of failure.
+
+        Parameters
+        ----------
+        node : str
+            Name of node to assess removal impact.
+
+        Returns
+        -------
+        dict
+            Impact assessment including:
+
+            - disconnected_nodes : list
+                Nodes that become unreachable after removal
+            - new_components : int
+                Number of components after removal
+            - original_components : int
+                Number of components before removal
+            - aspl_change : float
+                Change in average shortest path length (None if disconnected)
+            - connectivity_loss : float
+                Fraction of node pairs that lose connectivity (0 to 1)
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> impact = graph.assess_node_removal_impact('function_a')
+        >>> 'disconnected_nodes' in impact
+        True
+        """
+        if node not in self.g.nodes():
+            raise ValueError(f"Node '{node}' not in graph")
+
+        # Get original graph properties
+        g_undirected = self.g.to_undirected()
+        original_connected = nx.is_connected(g_undirected)
+        original_components = nx.number_connected_components(g_undirected)
+
+        # Create copy without the node
+        g_temp = self.g.copy()
+        g_temp.remove_node(node)
+        g_temp_undirected = g_temp.to_undirected()
+
+        # Count new components
+        new_components = nx.number_connected_components(g_temp_undirected)
+        new_connected = nx.is_connected(g_temp_undirected)
+
+        # Find disconnected nodes
+        if original_connected and not new_connected:
+            # Find nodes in smaller components
+            components = list(nx.connected_components(g_temp_undirected))
+            largest_component = max(components, key=len)
+            disconnected_nodes = [n for comp in components if comp != largest_component
+                                 for n in comp]
+        else:
+            disconnected_nodes = []
+
+        # Calculate ASPL change
+        aspl_change = None
+        if original_connected and new_connected:
+            try:
+                original_aspl = nx.average_shortest_path_length(g_undirected)
+                new_aspl = nx.average_shortest_path_length(g_temp_undirected)
+                aspl_change = new_aspl - original_aspl
+            except nx.NetworkXError:
+                aspl_change = None
+
+        # Calculate connectivity loss
+        if original_connected and not new_connected:
+            connectivity_loss = len(disconnected_nodes) / len(g_temp.nodes()) if g_temp.nodes() else 1.0
+        else:
+            connectivity_loss = 0.0
+
+        return {
+            'disconnected_nodes': disconnected_nodes,
+            'new_components': new_components,
+            'original_components': original_components,
+            'aspl_change': aspl_change,
+            'connectivity_loss': connectivity_loss
+        }
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
