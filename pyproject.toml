@@ -8,10 +8,10 @@ maintainers = [
 classifiers = []
 description = "Drone Resilience Modeling Library"
 license = {file="TBD"}
-name = "aerialdrm"
-version="0.2"
+name = "dronelib"
+version="0.3"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.13"
 
 dependencies = ["fmdtools >= 2.2.0"]
 

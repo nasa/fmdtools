@@ -1,4 +1,4 @@
-# dronelib
+# dronelib 0.3
 
 The Drone Resilience Modelling Library (dronelib) is a library that can be used to simulate drones interacting with their environment at a high level. The goal of the dronelib package is to enable the rapid simulation of drones in the airspace.
 
@@ -31,7 +31,7 @@ a.) To set up with Spyder, first install Spyder 6 or later.
 
 b.) run `uv pip install spyder-kernels==3.1.*` (or whatever version is required by your version of Python/spyder).
 
-c.) Then the console can be made as the ipython console in Spyder (by setting the console path to `aerialdrm-dev\Scripts\python.exe` in preferences).
+c.) Then the console can be made as the ipython console in Spyder (by setting the console path to `.venv\Scripts\python.exe` in preferences).
 
 3.) Install dronelib
 
