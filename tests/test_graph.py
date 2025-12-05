@@ -112,6 +112,16 @@ class ModelGraphTests(unittest.TestCase):
         self.assertIsInstance(ec, dict)
         self.assertGreater(len(ec), 0)
 
+    def test_plot_centrality(self):
+        """Test centrality visualization method."""
+        mg = FunctionArchitectureGraph(self.mdl)
+        mg.set_pos(auto='spring')
+
+        # Test different centrality metrics
+        for metric in ['betweenness', 'closeness', 'degree']:
+            fig = mg.plot_centrality(metric=metric)
+            self.assertIsNotNone(fig)
+
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()
 

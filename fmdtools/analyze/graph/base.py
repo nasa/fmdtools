@@ -1076,6 +1076,114 @@ class Graph(object):
                 # If all else fails, return zeros
                 return {node: 0.0 for node in self.g.nodes()}
 
+    def plot_centrality(self, metric='betweenness', title='', cmap='YlOrRd', **kwargs):
+        """
+        Plot nodes colored by centrality metric.
+
+        Visualizes the graph with nodes grouped by their centrality scores into
+        quartiles (low, medium_low, medium_high, high).
+
+        Parameters
+        ----------
+        metric : str, optional
+            Centrality type to compute and visualize. Options:
+            - 'betweenness': Betweenness centrality
+            - 'closeness': Closeness centrality
+            - 'eigenvector': Eigenvector centrality
+            - 'degree': Degree centrality
+            Default is 'betweenness'.
+        title : str, optional
+            Plot title. If empty, generates title from metric name.
+        cmap : str, optional
+            Matplotlib colormap name for coloring nodes. Default is 'YlOrRd'.
+        **kwargs : dict
+            Additional keyword arguments passed to Graph.draw().
+
+        Returns
+        -------
+        fig : matplotlib.figure.Figure
+            The figure containing the plot.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> graph.set_pos(auto='spring')
+        >>> fig = graph.plot_centrality(metric='betweenness')
+        """
+        # Calculate centrality based on metric
+        if metric == 'betweenness':
+            centrality = self.calc_betweenness_centrality()
+        elif metric == 'closeness':
+            centrality = self.calc_closeness_centrality()
+        elif metric == 'eigenvector':
+            centrality = self.calc_eigenvector_centrality()
+        elif metric == 'degree':
+            centrality = dict(self.g.degree())
+        else:
+            raise ValueError(f"Unknown metric: {metric}. "
+                           "Choose from 'betweenness', 'closeness', 'eigenvector', 'degree'")
+
+        # Get centrality values
+        values = np.array(list(centrality.values()))
+        if len(values) == 0:
+            raise ValueError("Graph has no nodes to compute centrality for")
+
+        # Check if all values are zero (e.g., disconnected graph for eigenvector)
+        if np.all(values == 0):
+            # Use uniform grouping for zero centrality
+            nodes_list = list(centrality.keys())
+            group_size = max(1, len(nodes_list) // 4)
+            groups = {
+                'low': nodes_list[:group_size],
+                'medium_low': nodes_list[group_size:2*group_size],
+                'medium_high': nodes_list[2*group_size:3*group_size],
+                'high': nodes_list[3*group_size:]
+            }
+        else:
+            # Create node groups by centrality quartiles
+            q1, q2, q3 = np.percentile(values, [25, 50, 75])
+            groups = {'low': [], 'medium_low': [], 'medium_high': [], 'high': []}
+
+            for node, val in centrality.items():
+                if val <= q1:
+                    groups['low'].append(node)
+                elif val <= q2:
+                    groups['medium_low'].append(node)
+                elif val <= q3:
+                    groups['medium_high'].append(node)
+                else:
+                    groups['high'].append(node)
+        # Add node groups
+        for group_name, nodes in groups.items():
+            if nodes:
+                self.add_node_groups(**{f'{metric}_{group_name}': nodes})
+
+        # Set node styles with color gradient
+        import matplotlib as mpl
+        try:
+            # Use new API (matplotlib >= 3.7)
+            colormap = mpl.colormaps.get_cmap(cmap)
+        except AttributeError:
+            # Fall back to old API for older matplotlib versions
+            import matplotlib.cm as cm
+            colormap = cm.get_cmap(cmap)
+        colors = [colormap(0.2), colormap(0.4), colormap(0.7), colormap(0.95)]
+        style_dict = {}
+        for i, group_name in enumerate(['low', 'medium_low', 'medium_high', 'high']):
+            if groups[group_name]:
+                style_dict[f'{metric}_{group_name}'] = {
+                    'nx_node_color': colors[i],
+                    'gv_fillcolor': f'#{int(colors[i][0]*255):02x}{int(colors[i][1]*255):02x}{int(colors[i][2]*255):02x}'
+                }
+
+        self.set_node_styles(group=style_dict)
+
+        # Generate title if not provided
+        if not title:
+            title = f'{metric.capitalize()} Centrality'
+
+        return self.draw(title=title, **kwargs)
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
