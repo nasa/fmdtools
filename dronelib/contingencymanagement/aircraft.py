@@ -8,6 +8,7 @@ from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.architecture.function import FunctionArchitectureGraph
 from fmdtools.analyze.common import consolidate_legend
 from fmdtools.define.container.parameter import Parameter
+from fmdtools.analyze.history import History
 
 
 from dronelib.base.arch.flows import Trajectories, Force, Electricity
@@ -74,9 +75,10 @@ class ContingencyControlFlight(ControlFlight):
                 if not self.m.any_faults():
                     self.m.set_mode('descend')
 
-        dists = self.environment.ga.calc_dist_to_threats()
-        self.s.closest_dist = min([*dists.values()])
         if self.p.with_proxthreat: # with proxthreat? investigate
+            dists = self.environment.ga.calc_dist_to_threats()
+            if dists:
+                self.s.closest_dist = min([*dists.values()])
             if self.s.closest_dist <= 0.0 and not self.m.any_faults():
                 self.m.set_mode('pause')
             elif self.s.closest_dist <= 10.0 and not self.m.any_faults():
@@ -138,8 +140,6 @@ class ContingencyControlFlight(ControlFlight):
             obstacle = obstacle
             )
 
-        if new_path and new_path[0] == curr_pt and len(new_path) > 1:
-            new_path = new_path[1:]
         self.s.flightplan = new_path
         self.s.pt = 0
         self.s.planned = True
@@ -161,6 +161,7 @@ class ContingencyAircraftArchParameter(Parameter):
     height: float = 25.0
     depletion: float = 25.0
     with_proxthreat: bool = True
+    intruders: str = "across"
     fuel_rate: float = 20.0
     disallowed_cost: float = 10.0
     occupied_cost: float = 20.0
@@ -194,7 +195,8 @@ class ContingencyAircraftArchitecture(FunctionArchitecture):
         self.add_flow('electricity', Electricity)
         self.add_flow('trajectories', Trajectories,
                       s={'x': self.p.startpt[0], 'y': self.p.startpt[1]})
-        self.add_flow('environment', ContingencyEnvironment)
+        self.add_flow('environment', ContingencyEnvironment,
+                      p={'intruders': self.p.intruders})
 
         self.add_fxn('conditions', ContingencyConditions, 'environment')
         self.add_fxn('control_flight', ContingencyControlFlight,
@@ -248,45 +250,42 @@ class ContingencyAircraftArchitecture(FunctionArchitecture):
                 'crash': crash}
 
 
-def plot_flightpath(mdl, hist, plan_colors=['red', 'orange', 'purple', 'yellow'], **kwargs):
+def plot_environment(mdl, properties=properties, collections=collections,
+                     fig={}, ax={}):
     fig, ax = mdl.flows['environment'].c.show(properties=properties,
-                                              collections=collections)
+                                              collections=collections,
+                                              fig=fig, ax=ax)
     start = mdl.p.flightplan[0]
     end   = mdl.p.flightplan[-1]
-    ax.scatter([start[0]], [start[1]], label="start", color="green")
-    ax.scatter([end[0]],   [end[1]],   label="end",   color="red")
-    fig, ax = hist.plot_trajectories('trajectories.s.x',
-                                     'trajectories.s.y',
-                                     fig=fig, ax=ax, linewidth=3, **kwargs)
+    ax.scatter([start[0]], [start[1]], label="start", color="green", s=100, marker="X")
+    ax.scatter([end[0]],   [end[1]],   label="end", color="red", s=100, marker="X")
+    return fig, ax
 
-    plan_hist = hist.fxns.control_flight.s.flightplan
+
+def collect_plans(history):
+    plan_hist = history.fxns.control_flight.s.flightplan
     plans = [plan_hist[0]]
     inds = [0]
     for i, plan in enumerate(plan_hist):
         if plan != plans[-1]:
             plans.append(plan)
             inds.append(i)
+    return plans, inds
 
-    for i, plan in enumerate(plans):
-        xs, ys = zip(*plan)
-        ind = inds[i]
-        ax.plot(xs, ys, '--', label='plan t='+str(ind), color=plan_colors[i], linewidth=1)  # Make line red
-        ax.scatter(xs, ys, marker='o', label='waypoints', color=plan_colors[i], s=10)  # Make dots red, smaller
-        ax.scatter(hist.flows.trajectories.s.x[ind],
-                   hist.flows.trajectories.s.y[ind],
+
+def plot_plan(ax, plan, inds, i, history, plan_colors=['red', 'orange', 'purple', 'yellow']):
+    xs, ys = zip(*plan)
+    ind = inds[i]
+    ax.plot(xs, ys, '--', label='plan t='+str(ind), color=plan_colors[i], linewidth=1)  # Make line red
+    ax.scatter(xs, ys, marker='o', label='waypoints', color=plan_colors[i], s=10)  # Make dots red, smaller
+    if i > 0:
+        ax.scatter(history.flows.trajectories.s.x[ind],
+                   history.flows.trajectories.s.y[ind],
                    marker="*", s=20, color=plan_colors[i],
                    label="replan pt="+str(ind))
-    consolidate_legend(ax)
-    return fig, ax
 
 
-def plot_land_sites(mdl, hists, text="split",
-                    ft_kwar={'faulty': dict(linewidth=1, alpha=0.3, color='red')}):
-    fig, ax = mdl.flows['environment'].c.show(properties=properties,
-                                              collections=collections)
-
-    hists.plot_trajectories('trajectories.s.x', 'trajectories.s.y', fig=fig, ax=ax,
-                            indiv_kwargs = ft_kwar)
+def plot_land_sites(ax, hists, text=""):
     for scen, hist in hists.nest(1).items():
         x = hist.flows.trajectories.s.x[-1]
         y = hist.flows.trajectories.s.y[-1]
@@ -295,8 +294,38 @@ def plot_land_sites(mdl, hists, text="split",
             if text == "split":
                 scen = scen.split("_")[-1]
             ax.text(x, y, scen)
+
+
+def plot_flightpath(mdl={}, history={}, fig={}, ax={}, with_plans=True, with_land_sites=True,
+                    ft_kwar={}, text="", **kwargs):
+
+    fig, ax = plot_environment(mdl, fig=fig, ax=ax, **kwargs)
+
+    if 'nominal' in history.nest(1) and not ft_kwar:
+        ft_kwar={'faulty': dict(linewidth=1, alpha=0.5, color='red'),
+                 'nominal': dict(linewidth=3, color='blue', linestyle="--")}
+    fig, ax = history.plot_trajectories('trajectories.s.x',
+                                        'trajectories.s.y',
+                                        fig=fig, ax=ax, indiv_kwargs=ft_kwar)
+
+    if with_plans:
+        if 'nominal' in history.nest(1):
+            phist = history.nominal
+        else:
+            phist = history
+        plans, inds = collect_plans(phist)
+        for i, plan in enumerate(plans):
+            plot_plan(ax, plan, inds, i, phist)
+    if with_land_sites:
+        if 'nominal' not in history.nest(1):
+            hists = History(nominal=history)
+        else:
+            hists = history
+        plot_land_sites(ax, hists, text=text)
+
     consolidate_legend(ax)
     return fig, ax
+
 
 
 if __name__ == "__main__":
@@ -317,7 +346,7 @@ if __name__ == "__main__":
     hc = ContingencyConditions()
     hcf = ContingencyControlFlight()
 
-    ha = ContingencyAircraftArchitecture()
+    ha = ContingencyAircraftArchitecture(p={'intruders': ''})
 
     hcs = ContingencyControlState()
     hcs2 = hcs.copy()
@@ -351,7 +380,7 @@ if __name__ == "__main__":
 
     fig, ax = ha.flows['environment'].c.show_z("disallowed", z="", collections=collections)
     hists.plot_trajectories('trajectories.s.x', 'trajectories.s.y', 'trajectories.s.z', fig=fig, ax=ax)
-    fig, ax = plot_land_sites(ha, hists)
+    fig, ax = plot_flightpath(ha, hists, with_land_sites=True, text="split")
 
     import doctest
     doctest.testmod(verbose=True)

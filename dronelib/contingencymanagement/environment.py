@@ -7,6 +7,7 @@ Created on Thu Mar 20 14:55:43 2025
 
 from dronelib.base.arch.flows import AircraftEnvironment
 from dronelib.base.state import AircraftPosition3
+from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.define.object.geom import GeomPoint, PointParam
@@ -48,7 +49,7 @@ class ContingencyCoords(Coords):
 properties = {'disallowed': {'color': 'blue', 'proplab': 'disallowed', 'alpha': 0.5},
               'occupied': {'color': 'red', 'proplab': 'occupied', 'alpha': 0.5},
               'restricted': {'color': 'grey', 'proplab': 'restricted', 'alpha': 0.75}}
-collections = {'suitable': {"label": False, 'color': 'lightgreen'}}
+collections = {'suitable': {"label": "suitable", 'color': 'lightgreen'}}
 
 
 class ThreatState(AircraftPosition3):
@@ -63,6 +64,7 @@ class ThreatParam(PointParam):
 
     buffer_envelope: float = 1.0
     buffer_safety: float = 25.0
+    intruders: str = 'across'
 
 
 class Threat(GeomPoint):
@@ -73,13 +75,22 @@ class Threat(GeomPoint):
         self.s.update_position(self.s.buffer_speed)
 
 
+class ContingencyThreatsParam(Parameter):
+    intruders: str = 'across'
+
+
 class ContingencyThreats(GeomArchitecture):
+    container_p = ContingencyThreatsParam
 
     def init_architecture(self, **kwargs):
         self.add_point('self', Threat)
-        s = {'buffer_speed': 5.0, 'x': 100, 'y': 0.0, 'z': 25.0,
-             'goal_x': 0.0, 'goal_y': 100.0, 'goal_z': 25.0}
-        self.add_point("uav", Threat, s=s)
+        if self.p.intruders == "across":
+            s = {'buffer_speed': 5.0, 'x': 100, 'y': 0.0, 'z': 25.0,
+                 'goal_x': 0.0, 'goal_y': 100.0, 'goal_z': 25.0}
+            self.add_point("uav", Threat, s=s)
+        elif self.p.intruders:
+            raise Exception("Invalid option for intruders: "+self.p.intruders)
+            
 
     def update_positions(self):
         for threatname, threat in self.points.items():
@@ -95,8 +106,10 @@ class ContingencyThreats(GeomArchitecture):
                 dists[threatname] = distance(self_envelope, threat_envelope)
         return dists
 
-class ContingencyEnvironment(AircraftEnvironment):
 
+class ContingencyEnvironment(AircraftEnvironment):
+    
+    container_p = ContingencyThreatsParam
     coords_c = ContingencyCoords
     arch_ga = ContingencyThreats 
     def show(self, *args, **kwargs):
