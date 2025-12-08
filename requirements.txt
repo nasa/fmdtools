@@ -1,6 +1,5 @@
 scipy
 tqdm
-multiprocessing
 networkx
 numpy >= 2.0
 matplotlib >= 3.7.0
