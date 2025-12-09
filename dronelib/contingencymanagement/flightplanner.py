@@ -55,9 +55,8 @@ class DroneFlightGrid(Coords):
     Examples
     --------
     >>> from dronelib.contingencymanagement.flightplanner import DroneFlightGrid, DroneFlightGridParam
-    >>> from dronelib.contingencymanagement.environment import ContingencyEnvironment, ContingencyCoordsParam
-    >>> env_param = ContingencyCoordsParam(x_size=12, y_size=12, blocksize=10.0)
-    >>> env = ContingencyEnvironment(p=env_param)
+    >>> from dronelib.contingencymanagement.environment import ContingencyEnvironment
+    >>> env = ContingencyEnvironment()
     >>> param = DroneFlightGridParam(x_size=120, y_size=120, blocksize=1.0)
     >>> grid = DroneFlightGrid(env, p=param)
     >>> start = (10.0, 10.0)
@@ -229,7 +228,9 @@ class DroneFlightGrid(Coords):
             (Arbitrarily high) Cost adder for flying in restricted zones.
         fuel_rate : float
             Cost multiplier due to fuel consumption.
-            
+        obstacle: boolean
+            Whether or not there exists an aerial UAV threat.
+
         Returns
         -------
         path : tuple(tuple(int, int))
@@ -237,7 +238,9 @@ class DroneFlightGrid(Coords):
         """
         G = self.nx_graph_gen(max_distance, disallowed_cost, occupied_cost,
                               restricted_cost, fuel_rate, obstacle)
-        heuristic = lambda a, b: math.hypot(a[0] - b[0], a[1] - b[1])
+        def heuristic(a, b):
+            return math.hypot(a[0] - b[0], a[1] - b[1]) * fuel_rate
+
         if start not in G:
             print(f"Start node {start} not in graph")
         if goal not in G:
@@ -249,15 +252,138 @@ class DroneFlightGrid(Coords):
                                    weight = "weight"))
         cost = sum(G[u][v]["weight"] for u, v in zip(path[:-1], path[1:]))
         if cost > self.p.max_cost:
-            G_test = self.nx_graph_gen(max_distance, disallowed_cost, occupied_cost, restricted_cost, 0, obstacle)
-            cost_test = nx.astar_path_length(G_test, start, goal, heuristic = heuristic, weight = "weight")
+            G_test = self.nx_graph_gen(max_distance, disallowed_cost,
+                                       occupied_cost, restricted_cost,
+                                       0, obstacle)
+            cost_test = nx.astar_path_length(G_test, start, goal,
+                                             heuristic=lambda a,b: 0.0,
+                                             weight = "weight")
             if cost_test < self.p.max_cost:
-                """detect fuel infeasibility as opposed to environmental"""
-                # PLAN to land at the reachable spot with the LOWEST cost to goal + cost to reach associated reachable spot.
+                end = self.find_new_goal(start, max_distance, disallowed_cost,
+                                         occupied_cost, restricted_cost,
+                                         fuel_rate, obstacle)
+                end = (end[0] +
+                       self.env_coords.p.blocksize//(2 * self.p.blocksize),
+                       end[1] +
+                       self.env_coords.p.blocksize // (2 * self.p.blocksize))
+                path =  self.a_star(start, end, max_distance, disallowed_cost,
+                                    occupied_cost, restricted_cost,
+                                    fuel_rate, obstacle)
             else:
                 path = (start, start)
         return path
-    
+
+    def find_new_goal(self, start_idx, max_distance,
+                      disallowed_cost, occupied_cost,
+                      restricted_cost, fuel_rate, obstacle):
+        """
+        Identify the nearest reachable grid cell.
+
+        Grid cell must satisfy prioritized suitability criteria under
+        cost-constrained pathfinding framework.
+
+        Returns
+        -------
+        (j, i) tuple grid index of new target location
+        """
+        G = self.nx_graph_gen(max_distance, disallowed_cost,
+                              occupied_cost, restricted_cost,
+                              fuel_rate, obstacle)
+        j0, i0 = start_idx
+        psize = self.env_coords.p.blocksize
+        fsize = self.p.blocksize
+        x0 = j0 * fsize + fsize / 2
+        y0 = i0 * fsize + fsize / 2
+
+        closest = self.env_coords.find_closest(x0, y0, "suitable")
+        if closest is not None:
+            j = int(closest[0] // fsize) - int(psize // (2 * fsize))
+            i = int(closest[1] // fsize) - int(psize // (2 * fsize))
+            candidate = (j, i)
+            if (candidate in G
+                    and self.is_feasible_path(G, start_idx, candidate,
+                                              fuel_rate)):
+                return candidate
+
+        suitable_coords = self.env_coords.suitable
+        if suitable_coords is not None and len(suitable_coords) > 0:
+            sorted_coords = sorted(
+                [((x - x0)**2 + (y - y0)**2, x, y) for x, y in suitable_coords]
+            )
+            for _, x, y in sorted_coords:
+                j = int(x // fsize) - int(psize // (2 * fsize))
+                i = int(y // fsize) - int(psize // (2 * fsize))
+                candidate = (j, i)
+                if candidate in G and self.is_feasible_path(G, start_idx,
+                                                            candidate,
+                                                            fuel_rate):
+                    return candidate
+
+        found = [None, None]
+        coarse_start = (round(x0 / psize), round(y0 / psize))
+        shell_radius = 1
+        max_shell = max(self.env_coords.p.x_size, self.env_coords.p.y_size)
+
+        while None in found and shell_radius < max_shell:
+            for dj in range(-shell_radius, shell_radius + 1):
+                for di in range(-shell_radius, shell_radius + 1):
+                    if abs(dj) != shell_radius and abs(di) != shell_radius:
+                        continue
+                    cj = coarse_start[0] + dj
+                    ci = coarse_start[1] + di
+                    if not (0 <= cj < self.env_coords.p.x_size
+                            and 0 <= ci < self.env_coords.p.y_size):
+                        continue
+                    x = cj * psize + psize / 2
+                    y = ci * psize + psize / 2
+                    disallowed = self.env_coords.get(x, y, 'disallowed',
+                                                     outside=True)
+                    occupied = self.env_coords.get(x, y, 'occupied',
+                                                   outside=True)
+                    restricted = self.env_coords.get(x, y, 'restricted',
+                                                     outside=True)
+                    j = int((x - fsize / 2) / fsize)
+                    i = int((y - fsize / 2) / fsize)
+                    candidate = (j, i)
+                    if candidate not in G:
+                        continue
+                    if not self.is_feasible_path(G, start_idx, candidate,
+                                                 fuel_rate):
+                        continue
+                    if (disallowed and not occupied and not restricted
+                            and found[0] is None):
+                        found[0] = candidate
+                    elif (occupied and not disallowed and not restricted and
+                          found[1] is None):
+                        found[1] = candidate
+            shell_radius += 1
+
+        for fallback in found:
+            if fallback is not None:
+                return fallback
+        return start_idx
+
+    def is_feasible_path(self, G, start, goal, fuel_rate):
+        """
+        Takes in a graph, start node, and end node.
+        Returns whether a path exists between start/goal within max_cost
+
+        Parameters
+        ----------
+        start : tuple
+            i/j grid indices of start location
+        goal : tuple
+            i/j grid indices of goal location
+        """
+        try:
+            def heuristic(a, b):
+                return math.hypot(a[0] - b[0], a[1] - b[1]) * fuel_rate
+            cost = nx.astar_path_length(G, start, goal, heuristic=heuristic,
+                                        weight="weight")
+            return cost <= self.p.max_cost
+        except nx.NetworkXNoPath:
+            return False
+
     def a_star_worldcoords(self, start_xy, goal_xy, max_distance, disallowed_cost, 
                occupied_cost, restricted_cost, fuel_rate, obstacle):
         """
