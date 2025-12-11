@@ -537,7 +537,7 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
 
 
 def add_title_xylabs(ax, title='', xlabel='', ylabel='', zlabel='',
-                     xlim=(), ylim=(), zlim=()):
+                     xlim=(), ylim=(), zlim=(), aspect=''):
     """Add/set title, x/y labels, and limits to the given axis."""
     if xlabel:
         ax.set_xlabel(xlabel)
@@ -552,6 +552,8 @@ def add_title_xylabs(ax, title='', xlabel='', ylabel='', zlabel='',
             ax.set_zlim(*zlim)
         if zlabel:
             ax.set_zlabel(zlabel)
+    if aspect:
+        ax.set_aspect(aspect)
     if title:
         ax.set_title(title)
 

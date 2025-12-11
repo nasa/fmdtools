@@ -232,7 +232,7 @@ class Geom(BaseObject):
         return vect_at_shape
 
     def show(self, shapes={'all': {}}, fig=None, ax=None, figsize=(4, 4), z=False,
-             geomlabel='', **kwargs):
+             geomlabel='', legend=True, **kwargs):
         """
         Show a Geom (shape and buffers) as lines on a plot.
 
@@ -288,7 +288,8 @@ class Geom(BaseObject):
             elif isinstance(shape, Polygon):
                 ax.plot(*shape.exterior.xy, **local_kwargs)
         ax.axis('equal')
-        consolidate_legend(ax, **l_kw)
+        if legend:
+            consolidate_legend(ax, **l_kw)
         add_title_xylabs(ax, **t_kw)
         return fig, ax
 
