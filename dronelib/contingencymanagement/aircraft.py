@@ -6,7 +6,8 @@ Created on Fri Mar 14 14:10:02 2025
 """
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.architecture.function import FunctionArchitectureGraph
-from fmdtools.analyze.common import consolidate_legend
+from fmdtools.analyze.common import consolidate_legend, add_title_xylabs, setup_plot
+from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.analyze.history import History
 
@@ -22,6 +23,8 @@ from dronelib.base.arch.holdpayload import HoldPayload
 from dronelib.contingencymanagement.environment import ContingencyEnvironment, properties, collections
 from dronelib.contingencymanagement.environment import ContingencyConditions
 from dronelib.contingencymanagement.flightplanner import DroneFlightGrid, DroneFlightGridParam
+
+import numpy as np
 
 
 class ContingencyControlState(ControlState):
@@ -75,7 +78,7 @@ class ContingencyControlFlight(ControlFlight):
                 if not self.m.any_faults():
                     self.m.set_mode('descend')
 
-        if self.p.with_proxthreat: # with proxthreat? investigate
+        if self.p.with_proxthreat:
             dists = self.environment.ga.calc_dist_to_threats()
             if dists:
                 self.s.closest_dist = min([*dists.values()])
@@ -111,10 +114,11 @@ class ContingencyControlFlight(ControlFlight):
             self.s.endpt = self.environment.c.find_closest(*pt, 'suitable')
 
     def gen_flight_grid(self):
+        # max cost set such that re-planning doesn't occur in DroneFlightGrid
         dfgp = DroneFlightGridParam(blocksize=self.p.blocksize,
                                     x_size=120/self.p.blocksize,
                                     y_size=120/self.p.blocksize,
-                                    max_cost=1000000*self.p.blocksize)
+                                    max_cost=np.inf)
         grid = DroneFlightGrid(env = self.environment, p = dfgp)
         return grid
         
@@ -251,10 +255,11 @@ class ContingencyAircraftArchitecture(FunctionArchitecture):
 
 
 def plot_environment(mdl, properties=properties, collections=collections,
-                     fig={}, ax={}):
+                     fig={}, ax={}, legend_kwargs={}, **kwargs):
     fig, ax = mdl.flows['environment'].c.show(properties=properties,
                                               collections=collections,
-                                              fig=fig, ax=ax)
+                                              fig=fig, ax=ax,
+                                              legend_kwargs=legend_kwargs)
     start = mdl.p.flightplan[0]
     end   = mdl.p.flightplan[-1]
     ax.scatter([start[0]], [start[1]], label="start", color="green", s=100, marker="X")
@@ -273,7 +278,7 @@ def collect_plans(history):
     return plans, inds
 
 
-def plot_plan(ax, plan, inds, i, history, plan_colors=['red', 'orange', 'purple', 'yellow']):
+def plot_plan(ax, plan, inds, i, history, plan_colors=['gray', 'purple', 'orange', 'yellow']):
     xs, ys = zip(*plan)
     ind = inds[i]
     ax.plot(xs, ys, '--', label='plan t='+str(ind), color=plan_colors[i], linewidth=1)  # Make line red
@@ -285,28 +290,35 @@ def plot_plan(ax, plan, inds, i, history, plan_colors=['red', 'orange', 'purple'
                    label="replan pt="+str(ind))
 
 
-def plot_land_sites(ax, hists, text=""):
+def plot_locations(ax, hists, text="", label="location", color="blue"):
     for scen, hist in hists.nest(1).items():
         x = hist.flows.trajectories.s.x[-1]
         y = hist.flows.trajectories.s.y[-1]
-        ax.scatter(x, y, marker="x", color="red", label="land site", s=50)
+        ax.scatter(x, y, marker="^", color=color, label=label, s=50)
         if text:
             if text == "split":
                 scen = scen.split("_")[-1]
             ax.text(x, y, scen)
 
 
-def plot_flightpath(mdl={}, history={}, fig={}, ax={}, with_plans=True, with_land_sites=True,
-                    ft_kwar={}, text="", **kwargs):
+def plot_flightpath(mdl={}, history={}, fig={}, ax={}, with_plans=True, with_locations=True,
+                    boundaries_at=False, ft_kwar={}, text="", title="",
+                    legend_kwargs={}, **kwargs):
 
-    fig, ax = plot_environment(mdl, fig=fig, ax=ax, **kwargs)
+    fig, ax = plot_environment(mdl, fig=fig, ax=ax, legend_kwargs=legend_kwargs,
+                               **kwargs)
+
 
     if 'nominal' in history.nest(1) and not ft_kwar:
         ft_kwar={'faulty': dict(linewidth=1, alpha=0.5, color='red'),
                  'nominal': dict(linewidth=3, color='blue', linestyle="--")}
+        kw = {}
+    else:
+        kw = dict(linewidth=3, color='blue', linestyle="--")
+    kw['legend'] = legend_kwargs is not False
     fig, ax = history.plot_trajectories('trajectories.s.x',
                                         'trajectories.s.y',
-                                        fig=fig, ax=ax, indiv_kwargs=ft_kwar)
+                                        fig=fig, ax=ax, indiv_kwargs=ft_kwar, **kw)
 
     if with_plans:
         if 'nominal' in history.nest(1):
@@ -316,17 +328,50 @@ def plot_flightpath(mdl={}, history={}, fig={}, ax={}, with_plans=True, with_lan
         plans, inds = collect_plans(phist)
         for i, plan in enumerate(plans):
             plot_plan(ax, plan, inds, i, phist)
-    if with_land_sites:
+    if with_locations:
         if 'nominal' not in history.nest(1):
             hists = History(nominal=history)
         else:
             hists = history
-        plot_land_sites(ax, hists, text=text)
+        plot_locations(ax, hists, text=text)
+    if boundaries_at is not False:
+        if 'nominal' in history.nest(1):
+            bhist = history.nominal
+        else:
+            bhist = history
+        geoms = dict()
+        for pt in mdl.flows['environment'].ga.points:
+            if pt == 'self':
+                geoms[pt] = {'shapes': {'envelope': {'color': 'blue'}}}
+            else:
+                geoms[pt] = {'shapes': {'safety': {'color': 'orange'}, 'envelope': {'color': 'gray'}}}
+        fig, ax = mdl.flows['environment'].ga.show_from(bhist.flows.environment.ga,
+                                                        boundaries_at,
+                                                        fig=fig, ax=ax, geoms=geoms,
+                                                        legend = legend_kwargs is not False)
+        
 
-    consolidate_legend(ax)
+    add_title_xylabs(ax, title=title, aspect='equal', **kwargs)
+    if legend_kwargs is not False:
+        consolidate_legend(ax, **legend_kwargs)
     return fig, ax
 
 
+def plot_flightpath_from(time, history={}, with_boundaries=True, **kwargs):
+    hist = history.cut(time, newcopy=True)
+    kwargs = prep_animation_title(time, **kwargs)
+    kwargs = clear_prev_figure(**kwargs)
+    if with_boundaries:
+        with_boundaries=time
+    return plot_flightpath(history=hist, boundaries_at=with_boundaries, **kwargs)
+
+
+def create_legend_plot(ax, **kwargs):
+    fig, ax2 = setup_plot(**kwargs)
+    ax2.axis("off")
+    consolidate_legend(ax2, loc='center', bbox_to_anchor=(0.5,0.5), add_handles=[ax],
+                       old_legend=ax.get_legend())
+    return fig, ax2
 
 if __name__ == "__main__":
 
@@ -357,6 +402,7 @@ if __name__ == "__main__":
     fg = FunctionArchitectureGraph(ha)
     fg.draw()
     res, hist = propagate.nominal(ha)
+    fig, ax = plot_flightpath(ha, hist, legend_kwargs=False, boundaries_at=10)
     hist.plot_line('flows.trajectories.s.x', 'flows.trajectories.s.y','flows.trajectories.s.z', 'fxns.control_flight.m.mode', 'flows.electricity.s.charge')
     hist.fxns.control_flight.s.flightplan
 
@@ -380,7 +426,7 @@ if __name__ == "__main__":
 
     fig, ax = ha.flows['environment'].c.show_z("disallowed", z="", collections=collections)
     hists.plot_trajectories('trajectories.s.x', 'trajectories.s.y', 'trajectories.s.z', fig=fig, ax=ax)
-    fig, ax = plot_flightpath(ha, hists, with_land_sites=True, text="split")
+    fig, ax = plot_flightpath(ha, hists, with_locations=True, text="split")
 
     import doctest
     doctest.testmod(verbose=True)
@@ -393,6 +439,8 @@ if __name__ == "__main__":
     ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 18, fig=fig, ax=ax)
     ha.flows['environment'].ga.show_from(hist.flows.environment.ga, 20, fig=fig, ax=ax)
 
+
+    ani = hist.animate(plot_flightpath_from, mdl=ha)
 
     # haa = ContingencyAircraftArchitecture(p={'depletion': 40.0})
 

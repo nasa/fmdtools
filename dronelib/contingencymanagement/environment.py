@@ -85,7 +85,7 @@ class ContingencyThreats(GeomArchitecture):
     def init_architecture(self, **kwargs):
         self.add_point('self', Threat)
         if self.p.intruders == "across":
-            s = {'buffer_speed': 5.0, 'x': 100, 'y': 0.0, 'z': 25.0,
+            s = {'buffer_speed': 3.5, 'x': 100, 'y': 0.0, 'z': 25.0,
                  'goal_x': 0.0, 'goal_y': 100.0, 'goal_z': 25.0}
             self.add_point("uav", Threat, s=s)
         elif self.p.intruders:

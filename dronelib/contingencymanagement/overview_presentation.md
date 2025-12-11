@@ -79,12 +79,22 @@ To do this, we adapt the base `dronelib` library build with `fmdtools` to repres
 
 - Drone at a constant height
 
-- Re-planning occurs when hazardous or unexpected conditions are identified: **airspace intrusion** or **low battery**
+- Re-plans when hazardous conditions are identified:
+    - **airspace intrusion** or **low battery**
 
-![bg right:50% width:550px](environment.svg)
+![bg right:50% width:450px vertical](nominal_flightpath3d.gif)
+
+![bg right:50% width:400px](nominal_flightpath.gif)
 
 ---
 # How resilient is the drone to airspace intrusion?
+
+- Without proximity to threat functionality, drone may fly into errant intruding drone
+
+- Proximity to threat functionality causes a pause in mission as well as mission re-planning
+
+![bg right:50% width:400px vertical](intrusion_without_proxthreat.gif)
+![bg right:50% width:400px vertical](intrusion_with_proxthreat.gif)
 
 ---
 # Would the drone still be resilient to airspace intrusion in a different scenario?
