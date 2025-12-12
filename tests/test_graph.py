@@ -91,36 +91,101 @@ class ModelGraphTests(unittest.TestCase):
         mg.draw_from(11, hist)
         mg.draw_graphviz_from(11, hist, disp=False)
 
-    def test_betweenness_centrality(self):
-        """Test betweenness centrality calculation."""
-        mg = FunctionArchitectureGraph(self.mdl)
-        bc = mg.calc_betweenness_centrality()
-        self.assertIsInstance(bc, dict)
-        self.assertGreater(len(bc), 0)
-
-    def test_closeness_centrality(self):
-        """Test closeness centrality calculation."""
-        mg = FunctionArchitectureGraph(self.mdl)
-        cc = mg.calc_closeness_centrality()
-        self.assertIsInstance(cc, dict)
-        self.assertGreater(len(cc), 0)
-
-    def test_eigenvector_centrality(self):
-        """Test eigenvector centrality calculation."""
-        mg = FunctionArchitectureGraph(self.mdl)
-        ec = mg.calc_eigenvector_centrality()
-        self.assertIsInstance(ec, dict)
-        self.assertGreater(len(ec), 0)
-
     def test_plot_centrality(self):
-        """Test centrality visualization method."""
+        """Test centrality visualization with predefined and custom metrics."""
+        import networkx as nx
         mg = FunctionArchitectureGraph(self.mdl)
         mg.set_pos(auto='spring')
 
-        # Test different centrality metrics
+        # Test predefined metrics
         for metric in ['betweenness', 'closeness', 'degree']:
             fig = mg.plot_centrality(metric=metric)
             self.assertIsNotNone(fig)
+            # Verify node groups were created
+            self.assertGreater(len(mg.node_groups), 0)
+
+        # Test custom metric function
+        custom_metric = lambda g: nx.pagerank(g)
+        fig = mg.plot_centrality(metric=custom_metric, title='PageRank')
+        self.assertIsNotNone(fig)
+
+        # Test custom quartiles
+        fig = mg.plot_centrality(metric='degree', quartiles=[0, 30, 70, 100])
+        self.assertIsNotNone(fig)
+
+    def test_summary(self):
+        """Test graph summary statistics."""
+        mg = FunctionArchitectureGraph(self.mdl)
+        summary = mg.summary()
+
+        # Check all expected keys are present
+        expected_keys = ['num_nodes', 'num_edges', 'density', 'is_connected',
+                        'num_components', 'avg_degree', 'aspl', 'modularity']
+        for key in expected_keys:
+            self.assertIn(key, summary)
+
+        # Check types and value constraints
+        self.assertIsInstance(summary['num_nodes'], int)
+        self.assertGreater(summary['num_nodes'], 0)
+
+        self.assertIsInstance(summary['num_edges'], int)
+        self.assertGreaterEqual(summary['num_edges'], 0)
+
+        self.assertIsInstance(summary['density'], float)
+        self.assertGreaterEqual(summary['density'], 0.0)
+        self.assertLessEqual(summary['density'], 1.0)
+
+        self.assertIsInstance(summary['is_connected'], bool)
+
+        self.assertIsInstance(summary['num_components'], int)
+        self.assertGreater(summary['num_components'], 0)
+
+        self.assertIsInstance(summary['avg_degree'], float)
+        self.assertGreaterEqual(summary['avg_degree'], 0.0)
+
+        # ASPL should be float if connected, None if not
+        if summary['is_connected']:
+            self.assertIsInstance(summary['aspl'], float)
+            self.assertGreater(summary['aspl'], 0.0)
+        else:
+            self.assertIsNone(summary['aspl'])
+
+        self.assertIsInstance(summary['modularity'], float)
+
+    def test_compare_with(self):
+        """Test graph comparison between model variants."""
+        pump_graph = FunctionArchitectureGraph(self.mdl)
+        rover_graph = FunctionArchitectureGraph(self.rvr)
+
+        comparison = pump_graph.compare_with(rover_graph)
+
+        # Check all expected keys are present
+        expected_keys = ['nodes_added', 'nodes_removed', 'edges_added', 'edges_removed',
+                        'structure_similarity', 'summary_this', 'summary_other']
+        for key in expected_keys:
+            self.assertIn(key, comparison)
+
+        # Check types
+        self.assertIsInstance(comparison['nodes_added'], set)
+        self.assertIsInstance(comparison['nodes_removed'], set)
+        self.assertIsInstance(comparison['edges_added'], set)
+        self.assertIsInstance(comparison['edges_removed'], set)
+        self.assertIsInstance(comparison['structure_similarity'], float)
+        self.assertIsInstance(comparison['summary_this'], dict)
+        self.assertIsInstance(comparison['summary_other'], dict)
+
+        # Check value constraints
+        self.assertGreaterEqual(comparison['structure_similarity'], 0.0)
+        self.assertLessEqual(comparison['structure_similarity'], 1.0)
+
+        # Pump and Rover should have different structures
+        self.assertLess(comparison['structure_similarity'], 1.0)
+        # Should have some differences (nodes or edges)
+        has_differences = (len(comparison['nodes_added']) > 0 or
+                          len(comparison['nodes_removed']) > 0 or
+                          len(comparison['edges_added']) > 0 or
+                          len(comparison['edges_removed']) > 0)
+        self.assertTrue(has_differences)
 
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()
