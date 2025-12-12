@@ -620,7 +620,7 @@ class History(Result):
     def plot_line(self, *plot_values, cols=2, aggregation='individual',
                   legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', titles={},
                   title='', indiv_kwargs={}, time_slice=[], time_slice_label=None,
-                  figsize='default', comp_groups={},
+                  figsize='default', comp_groups={}, fig=None, ax=None,
                   v_padding=None, h_padding=None, title_padding=0.0,
                   phases={}, phase_kwargs={}, legend_title=None, **kwargs):
         """
@@ -701,11 +701,12 @@ class History(Result):
                                                                      indiv_kwargs)
         fig, axs, cols, rows, subplot_titles = multiplot_helper(cols, *plot_values,
                                                                 figsize=figsize,
-                                                                titles=titles)
+                                                                titles=titles,
+                                                                fig=fig)
 
         for i, value in enumerate(plot_values):
             ax = axs[i]
-            ax.grid()
+            ax.grid("on")
             if i >= (rows-1)*cols and xlabel:
                 xlab = xlabel
             else:
@@ -743,6 +744,39 @@ class History(Result):
         multiplot_legend_title(grouphists, axs, ax, legend_loc, title,
                                v_padding, h_padding, title_padding, legend_title)
         return fig, axs
+
+    def plot_line_from(self, t, plot_values=(), t_line=False, **kwargs):
+        """
+        Plot trajectories using History.plot_trajectories up to a given timestep.
+
+        Parameters
+        ----------
+        t : int
+            time index to plot trajectories from.
+        plot_values : tuple, optional
+            plot_values args for History.plot_trajectories. The default is ().
+        t_line : bool
+            Whether or not to plot a line at the given time.
+        **kwargs : kwargs
+            Keyword arguments to History.plot_trajectories.
+
+        Returns
+        -------
+        fig : figure
+            Matplotlib figure object
+        ax : axis
+            Corresponding matplotlib axis
+        """
+        kwargs = prep_animation_title(t, **kwargs)
+        kwargs = clear_prev_figure(**kwargs)
+        kwargs['max_ind'] = t
+        max_time = np.max([i[-1] for i in self.get_values('time').values()])
+        if t_line:
+            kwargs['time_slice'] = [t]
+        kwargs['xlim'] = (0, max_time)
+        newhist = self.cut(end_ind=t, newcopy=True)
+
+        return newhist.plot_line(*plot_values, **kwargs)
 
     def plot_individual_line(self, value, fig=None, ax=None, figsize=(6, 4),
                              time='time', xlabel='', ylabel='', title='',
