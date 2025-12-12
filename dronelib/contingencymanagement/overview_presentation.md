@@ -4,7 +4,7 @@ style: |
   .small-text {
     font-size: 0.7em;
     line-height: 1.0; /* Adjust line height as needed */
-  }
+    }
 ---
 
 # Drone Contingency Management Model:
@@ -99,11 +99,107 @@ To do this, we adapt the base `dronelib` library build with `fmdtools` to repres
 ---
 # Would the drone still be resilient to airspace intrusion in a different scenario?
 
+![bg right:50% width:400px vertical](intrusion_middle_down.gif)
+![bg right:50% width:400px vertical](intrusion_middle_down_over.gif)
+
+- If the intruder is easily avoidable, we can plan around it
+- If not easily avoidable, this can cause issues
+    - No logic for "running away"
+    - May replan into restricted flight area
+
 ---
 # How resilient is the drone to battery depletion?
 
----
-# Would the drone still be resilient to battery faults in a different mission?
+![width:350px](depletion_t20_traj.svg)
+- When SoC is below a threshold, flies to closest suitable location
+
+![bg right:50% width:400px vertical](depletion_t20_line.gif)
 
 ---
-# Conclusions
+
+# How resilient is the drone to battery depletion overall?
+.
+.
+.
+.
+.
+.
+.
+- When there is some battery left, the drone is able to replan
+- Otherwise, the drone may not make it to a suitable landing spot or may crash
+
+
+
+
+
+
+![bg width:400px](depletion_25p_scens.gif)
+![bg width:400px](depletion_18p_scens.gif)
+![bg width:400px](depletion_0p_scens.gif)
+
+---
+# How resilient is the drone to battery depletion overall?
+
+
+<style scoped>section { font-size: 20px; }</style>
+|       Scenario SoC                  |   mission complete |   unsuitable site |   disallowed site |   occupied site |   damaged |   crashed |
+|:------------------------|-------------------:|------------------:|------------------:|----------------:|----------:|----------:|
+| 0% |                10 |                90 |                40 |              10 |       100 |       100 |
+| 18% |                 10 |                40 |                20 |              20 |         0 |         0 |
+| 25% |                 10 |                 0 |                 0 |               0 |         0 |         0 |
+
+- Adequate mission recovery at 25% SoC - all suitable landings
+- More unsuitable landings at 18% SoC (at 15% the drone lands immediately)
+- At 0% the drone crashes
+
+---
+# Would the drone still be resilient in a different mission?
+
+![bg right width:400px](25p_scens_all_disallowed.gif)
+
+**No!**, consider the 25% depletion scenarios at right:
+- Flying over disallowed area
+- Statistics: 20% mission complete, 40% in disallowed locations
+
+Effectiveness of drone safety features is **mission and scenario-dependent**
+
+---
+# Analysis Conclusions
+
+Important Drone Features:
+- Proximity to Threat functionality can improve drone resilience to flightplan intrusions
+
+- Battery monitoring can also help improve drone resilience to battery faults
+
+- Both of these require **in-flight environmental risk perception** and **risk-aware replanning** to be used effectively
+
+But, **Execution Matters...**
+- Need to have adequate battery redundancy to respond effectively--which may be different depending on the type of mission (are there bail-out points?)
+- Re-planning to avoid approaching drones is more difficult than static ones
+
+---
+# Potential Future Work
+- A variety of bug fixes and feature improvements
+    - More robust logic for avoiding errant drones
+    - More robust logic for battery depletion path planning
+    - ...
+- Can we use this to determine whether a drone is "safe enough" for a mission of interest
+    - Mission: Start, end location and map
+    - Is the battery adequate?
+    - Can we bail out if another vehicle flies through?
+- Evaluating other interesting hazardous scenarios
+    - Wind, etc.
+
+---
+# Drone Resilience Library Conclusions
+<style scoped>section { font-size: 25px; }</style>
+
+1. Resilience models help us understand **dynamic** aspects of safety, such as...
+    - **Dynamical system behaviors** (power draw, flight behavior, etc.) that key system functionality, performance, and safety is ultimately based on
+    - **When/where a hazard occurs** in a dynamic mission/environmental context
+    - **Dynamic resources (e.g., energy storage)** the system can leverage to mitigate those faults and their effectiveness
+
+2. This Drone Library and resulting Contingency Management model was implemented in **fmdtools**, which provides straightforward interfaces for building, simulating, and analyzing resilience models in **Python**
+    - Most analyses and visuals used fmdtools constructs (modeling classes, simulation and analysis methods) directly rather than writing custom code
+    - Underlying methodology and code constructs **can be adapted to a range of applications** (autonomous vehicles, space, etc), not just drones
+    - If you want to make something similar, **you don't have to start from scratch** (start with fmdtools!)

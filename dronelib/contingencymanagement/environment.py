@@ -16,13 +16,15 @@ from fmdtools.define.block.function import Function
 from shapely import distance
 import numpy as np
 
-class ContingencyCoordsParam(CoordsParam):
+class ContingencyEnvironmentParam(CoordsParam):
     x_size: int = 12
     y_size: int = 12
     blocksize: float = 10.0
+    gridcase: str = "mix"
+    intruders: str = 'across'
 
 class ContingencyCoords(Coords):
-    container_p = ContingencyCoordsParam
+    container_p = ContingencyEnvironmentParam
     feature_occupied = (bool, False)
     feature_disallowed = (bool, False)
     feature_restricted = (bool, False)
@@ -34,14 +36,21 @@ class ContingencyCoords(Coords):
     point_end = (100.0, 100.0)
 
     def init_properties(self, **kwargs):
-
-        self.set_rand_pts('occupied', True, 50)
-        self.set_range('disallowed', True, xmin=30, xmax=60, ymin=70)
-        self.set_range('disallowed', True, xmin=20, xmax=60, ymax=30)
-        # self.set_rand_pts('disallowed', True, 30)
-        self.set_range('restricted', True, xmax=20, ymin=30)
-        self.set_range('restricted', True, xmin=60, ymax=70)
-        self.set_range('restricted', True, ymin=110)
+        if self.p.gridcase == 'mix':
+            self.set_rand_pts('occupied', True, 50)
+            self.set_range('disallowed', True, xmin=30, xmax=60, ymin=70)
+            self.set_range('disallowed', True, xmin=20, xmax=60, ymax=30)
+            # self.set_rand_pts('disallowed', True, 30)
+            self.set_range('restricted', True, xmax=20, ymin=30)
+            self.set_range('restricted', True, xmin=60, ymax=70)
+            self.set_range('restricted', True, ymin=110)
+        elif self.p.gridcase == 'all_disallowed':
+            self.set_range('disallowed', True, xmin=0, xmax=110, ymin=0, ymax=110)
+            self.set_range('restricted', True, xmax=20, ymin=30)
+            self.set_range('restricted', True, xmin=60, ymax=70)
+            self.set_range('restricted', True, ymin=110)
+        else:
+            raise Exception("Invalid grid case option: "+self.p.gridcase)
         self.set_pts([self.start, self.end], 'occupied', False)
         self.set_pts([self.start, self.end], 'disallowed', False)
 
@@ -75,18 +84,28 @@ class Threat(GeomPoint):
         self.s.update_position(self.s.buffer_speed)
 
 
-class ContingencyThreatsParam(Parameter):
-    intruders: str = 'across'
-
-
 class ContingencyThreats(GeomArchitecture):
-    container_p = ContingencyThreatsParam
+    container_p = ContingencyEnvironmentParam
 
     def init_architecture(self, **kwargs):
         self.add_point('self', Threat)
         if self.p.intruders == "across":
             s = {'buffer_speed': 3.5, 'x': 100, 'y': 0.0, 'z': 25.0,
                  'goal_x': 0.0, 'goal_y': 100.0, 'goal_z': 25.0}
+            self.add_point("uav", Threat, s=s)
+        elif self.p.intruders == "middle":
+            s = {'buffer_speed': 0.0, 'x': 60, 'y': 60, 'z': 25.0,
+                 'goal_x': 60.0, 'goal_y': 60.0, 'goal_z': 25.0}
+            self.add_point("uav", Threat, s=s)
+        elif self.p.intruders == "down":
+            s = {'buffer_speed': 2.5,
+                 'x': 60, 'y': 120, 'z': 25.0,
+                 'goal_x': 60.0, 'goal_y': 0.0, 'goal_z': 25.0}
+            self.add_point("uav", Threat, s=s)
+        elif self.p.intruders == "down-over":
+            s = {'buffer_speed': 2.5,
+                 'x': 40, 'y': 120, 'z': 25.0,
+                 'goal_x': 40.0, 'goal_y': 0.0, 'goal_z': 25.0}
             self.add_point("uav", Threat, s=s)
         elif self.p.intruders:
             raise Exception("Invalid option for intruders: "+self.p.intruders)
@@ -109,7 +128,7 @@ class ContingencyThreats(GeomArchitecture):
 
 class ContingencyEnvironment(AircraftEnvironment):
     
-    container_p = ContingencyThreatsParam
+    container_p = ContingencyEnvironmentParam
     coords_c = ContingencyCoords
     arch_ga = ContingencyThreats 
     def show(self, *args, **kwargs):
@@ -128,7 +147,7 @@ class ContingencyConditions(Function):
 
 
 if __name__ == "__main__":
-    hc = ContingencyCoords()
+    hc = ContingencyCoords(p={'gridcase': 'all_disallowed'})
     # hc.show(properties=properties, collections=collections)
     # hc.show(collections={'suitable': {}})
     # hc.show_collection("suitable", **collections['suitable'])

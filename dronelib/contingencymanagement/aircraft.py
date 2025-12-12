@@ -166,6 +166,7 @@ class ContingencyAircraftArchParameter(Parameter):
     depletion: float = 25.0
     with_proxthreat: bool = True
     intruders: str = "across"
+    gridcase: str = "mix"
     fuel_rate: float = 20.0
     disallowed_cost: float = 10.0
     occupied_cost: float = 20.0
@@ -200,7 +201,7 @@ class ContingencyAircraftArchitecture(FunctionArchitecture):
         self.add_flow('trajectories', Trajectories,
                       s={'x': self.p.startpt[0], 'y': self.p.startpt[1]})
         self.add_flow('environment', ContingencyEnvironment,
-                      p={'intruders': self.p.intruders})
+                      p={'intruders': self.p.intruders, 'gridcase': self.p.gridcase})
 
         self.add_fxn('conditions', ContingencyConditions, 'environment')
         self.add_fxn('control_flight', ContingencyControlFlight,
@@ -402,6 +403,7 @@ if __name__ == "__main__":
     fg = FunctionArchitectureGraph(ha)
     fg.draw()
     res, hist = propagate.nominal(ha)
+    hist.plot_line_from(15, plot_values=('flows.trajectories.s.x', 'flows.trajectories.s.y','flows.trajectories.s.z', 'fxns.control_flight.m.mode', 'flows.electricity.s.charge'), t_line=True)
     fig, ax = plot_flightpath(ha, hist, legend_kwargs=False, boundaries_at=10)
     hist.plot_line('flows.trajectories.s.x', 'flows.trajectories.s.y','flows.trajectories.s.z', 'fxns.control_flight.m.mode', 'flows.electricity.s.charge')
     hist.fxns.control_flight.s.flightplan
