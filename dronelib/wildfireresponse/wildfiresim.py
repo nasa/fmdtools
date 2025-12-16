@@ -116,8 +116,6 @@ class BasePlacementProblem(ParameterSimProblem):
         ----------
         p : dict, optional
             Non-default model parameters. The default is def_p.
-        num_strikes : int, optional
-            Number of strikes to optimize over. The default is 4.
         track : list/dict, optional
             Track argument for model instantiation. The default is None.
         seed : int, optional

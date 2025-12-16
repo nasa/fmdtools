@@ -75,9 +75,10 @@ Other parts could be added as needed e.g., for reconnaissance, lead planes, heli
 ---
 # How effective are different numbers of aircraft?
 
-![width: 600px](multi_drone_response.gif)
+![width:500px](multi_drone_response.gif)
 
-- More effective (Fire out at t=29 not t=257 min) due to more response capacity!
+- More effective (Fire out at t=25 min) due to more rapid response!
+    - Fire is out before spreading out of control
 - Assumption is one base per asset - can be improved in future work
 
 ---
@@ -88,7 +89,7 @@ Other parts could be added as needed e.g., for reconnaissance, lead planes, heli
 ![bg right:50% width:350px vertical](opt_burn_area.svg)
 
 - Study showed that response performs better when the base is closer to faster-burning fuels
-- Down to 34% area burned from 38% burned (see figures at right) over a range of 50 3-strike fire scenarios.
+- Down to 5% average area burned from 8% (see figures at right) over a range of 50 3-strike fire scenarios.
 - This optimization approach can be re-used to tailor the response to different maps 
 
 See: [Hulse, D. E., Mbaye, S., & Davies, M. D. (2025). Determining Optimal Asset Location for Rapid and Efficient Wildfire Suppression: A Simulation-Based Approach. In AIAA SCITECH 2025 Forum (p. 0451).](https://ntrs.nasa.gov/api/citations/20240015828/downloads/Wildfire%20Simulation%20Optimization.pdf)
@@ -97,8 +98,8 @@ See: [Hulse, D. E., Mbaye, S., & Davies, M. D. (2025). Determining Optimal Asset
 ---
 # What about alternative fire scenarios?
 
-![bg right:50% width:500px vertical](five_strike_grass.gif)
-![bg right:50% width:500px vertical](five_strike_forest.gif)
+![bg right:50% width:500px vertical](three_strike_grass.gif)
+![bg right:50% width:500px vertical](three_strike_forest.gif)
 
 - Grass -> Fire more likely to spread uncontrollably
 - Forest -> Fire mitigated quickly without spreading
@@ -127,7 +128,7 @@ Potential extensions:
 ---
 # Conclusions for fmdtools
 
-- Showcases ability of fmdtools to model Systems of Systems where
+- Showcases ability of fmdtools to model Systems of Systems where:
     - Multiple assets interacting with a shared environment
     - Many scenarios (strike locations, maps) for environment are possible
     - Environment also changes dynamically over time
