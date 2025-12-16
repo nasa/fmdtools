@@ -701,6 +701,8 @@ class BaseCoords(BaseObject):
             if vmin == vmax:
                 vmax = vmin + 1.0
         kwargs = {**kwargs, **default_kwargs}
+        if proplab == "prop":
+            proplab = prop
         if not hatch:
             im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **kwargs)
             patch = mpatches.Patch(color=color, label=proplab)
@@ -714,8 +716,6 @@ class BaseCoords(BaseObject):
             self.show_property_text(prop, fig=fig, ax=ax, **text_kwargs)
 
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
-        if proplab == "prop":
-            proplab = prop
 
         if p.dtype == 'bool':
             if legend_kwargs is not False:
