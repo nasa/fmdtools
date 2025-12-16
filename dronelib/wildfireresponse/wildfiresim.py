@@ -16,6 +16,8 @@ from fmdtools.sim.sample import ParameterDomain
 from dronelib.wildfireresponse.environment import FireEnvironment, FirePropagation, FireMapParam
 from dronelib.wildfireresponse.environment import sim_properties, double_size_p
 from dronelib.wildfireresponse.aircraft import FireAircraft
+from fmdtools.analyze.common import consolidate_legend, add_title_xylabs
+from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
 import numpy as np
 
 
@@ -64,6 +66,38 @@ def_p = {'firemapparam': {**double_size_p,
                           "num_strikes": 6}}
 
 
+def plot_combined_response_from(time, history={}, mdl=None, fig=None, ax=None,
+                                legend_kwargs={}, title='', **kwargs):
+    kw = prep_animation_title(time, title=title)
+    title = kw['title']
+    if fig:
+        kw = clear_prev_figure(fig=fig, ax=ax)
+        fig = kw.get('fig', None)
+        ax = kw.get('ax', None)
+    fig, ax = mdl.flows['fireenvironment'].c.show_from(time,
+                                                       history.flows.fireenvironment.c,
+                                                       properties = sim_properties,
+                                                       legend_kwargs=legend_kwargs,
+                                                       fig=fig, ax=ax)
+    nhist = history.cut(time, newcopy=True)
+    legend = legend_kwargs is not False
+    for fxnname in nhist.fxns.nest(1):
+        if 'aircraft_' in fxnname:
+            fig, ax = nhist.plot_trajectories(fxnname+'.s.x', fxnname+'.s.y',
+                                              fig=fig, ax=ax, time_groups=['nominal'],
+                                              linestyle='--', color='purple', lw=1,
+                                              legend=legend, label='flightpath')
+            fh = nhist.fxns.get(fxnname)
+            slc = fh.get_slice(time)
+            ax.scatter(slc.s.x, slc.s.y, marker="^", label=fxnname)
+
+    add_title_xylabs(ax, title=title, aspect='equal',
+                     xlabel = "x (km)", ylabel = "y (km)",
+                     **kwargs)
+    if legend:
+        consolidate_legend(ax, **legend_kwargs)
+    return fig, ax
+
 def create_scen_sample(seed=10, replicates=10):
     ps = ParameterSample(seed=seed)
     ps.add_variable_replicates([], replicates=replicates, seed_comb='independent')
@@ -76,7 +110,7 @@ class BasePlacementProblem(ParameterSimProblem):
     def init_problem(self, p=def_p, track=None, seed=10, replicates=10,
                      **kwargs):
         """
-        Initializes base optimization problem.
+        Initialize base optimization problem.
 
         Parameters
         ----------
