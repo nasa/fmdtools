@@ -4,14 +4,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for examples/multirotor/drone_mdl_static.py: 84%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_8432e98f.css" type="text/css">
-    <script src="coverage_html_cb_bcae5fc4.js" defer></script>
+    <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
+    <script src="coverage_html_cb_6fb7b396.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
     <div class="content">
         <h1>
-            <span class="text">Coverage for </span><b>examples&#8201;/&#8201;multirotor&#8201;/&#8201;drone_mdl_static.py</b>:
+            <span class="text">Coverage for </span><b>examples/multirotor/drone_mdl_static.py</b>:
             <span class="pc_cov">84%</span>
         </h1>
         <aside id="help_panel_wrapper">
@@ -57,15 +57,15 @@
             <span class="text">299 statements &nbsp;</span>
             <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">250<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">49<span class="text"> missing</span></button>
-            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">6<span class="text"> excluded</span></button>
+            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">8<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="z_a2266ba4c933f375_drone_mdl_rural_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_25d7572d601709fe_rover_model_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.12.0">coverage.py v7.12.0</a>,
-            created at 2025-11-24 16:00 -0800
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
+            created at 2025-12-03 17:39 -0800
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -877,7 +877,11 @@
     <p class="exc show_exc"><span class="n"><a id="t795" href="#t795">795</a></span><span class="t">    <span class="nam">doctest</span><span class="op">.</span><span class="nam">testmod</span><span class="op">(</span><span class="nam">verbose</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t796" href="#t796">796</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t797" href="#t797">797</a></span><span class="t">    <span class="nam">static_mdl</span> <span class="op">=</span> <span class="nam">Drone</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t798" href="#t798">798</a></span><span class="t">    <span class="nam">results</span><span class="op">,</span> <span class="nam">mdlhists</span> <span class="op">=</span> <span class="nam">propagate</span><span class="op">.</span><span class="nam">single_faults</span><span class="op">(</span><span class="nam">static_mdl</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t798" href="#t798">798</a></span><span class="t">    <span class="nam">fig</span><span class="op">,</span> <span class="nam">ax</span> <span class="op">=</span> <span class="nam">static_mdl</span><span class="op">.</span><span class="nam">as_modelgraph</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">draw</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t799" href="#t799">799</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t800" href="#t800">800</a></span><span class="t">    <span class="nam">result</span><span class="op">,</span> <span class="nam">history</span> <span class="op">=</span> <span class="nam">propagate</span><span class="op">.</span><span class="nam">one_fault</span><span class="op">(</span><span class="nam">static_mdl</span><span class="op">,</span> <span class="str">"store_ee"</span><span class="op">,</span> <span class="str">"nocharge"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t801" href="#t801">801</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t802" href="#t802">802</a></span><span class="t">    <span class="nam">results</span><span class="op">,</span> <span class="nam">mdlhists</span> <span class="op">=</span> <span class="nam">propagate</span><span class="op">.</span><span class="nam">single_faults</span><span class="op">(</span><span class="nam">static_mdl</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -886,8 +890,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_25d7572d601709fe_rover_model_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.12.0">coverage.py v7.12.0</a>,
-            created at 2025-11-24 16:00 -0800
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.10.6">coverage.py v7.10.6</a>,
+            created at 2025-12-03 17:39 -0800
         </p>
     </div>
 </footer>

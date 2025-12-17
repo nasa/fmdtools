@@ -348,7 +348,7 @@ if __name__ == "__main__":
     import multiprocessing as mp
     from fmdtools.sim.sample import FaultDomain, FaultSample
     from fmdtools.analyze.phases import PhaseMap
-    """
+
     # check rf_mechbreack fault propagation in quad architecture:
     hierarchical_model = Drone(p=DroneParam(arch='quad'))
     result, mdlhist = fs.propagate.one_fault(hierarchical_model,
@@ -379,4 +379,3 @@ if __name__ == "__main__":
     fig, ax = hist.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
                                      time_groups=['nominal'],
                                      indiv_kwargs={'faulty': fault_kwargs})
-    """

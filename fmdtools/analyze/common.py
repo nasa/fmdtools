@@ -38,6 +38,7 @@ specific language governing permissions and limitations under the License.
 import numpy as np
 import os
 import matplotlib.pyplot as plt
+from matplotlib import rcParams
 import inspect
 from scipy.stats import bootstrap
 from fmdtools.define.base import filter_kwargs
@@ -536,7 +537,7 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
 
 
 def add_title_xylabs(ax, title='', xlabel='', ylabel='', zlabel='',
-                     xlim=(), ylim=(), zlim=()):
+                     xlim=(), ylim=(), zlim=(), aspect=''):
     """Add/set title, x/y labels, and limits to the given axis."""
     if xlabel:
         ax.set_xlabel(xlabel)
@@ -551,6 +552,8 @@ def add_title_xylabs(ax, title='', xlabel='', ylabel='', zlabel='',
             ax.set_zlim(*zlim)
         if zlabel:
             ax.set_zlabel(zlabel)
+    if aspect:
+        ax.set_aspect(aspect)
     if title:
         ax.set_title(title)
 
@@ -717,8 +720,10 @@ def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
     by_label = dict(zip(labels, handles))
 
     # generate legend with consolidated labels/handles
+    leg_k = [k.split('.')[1] for k in rcParams if 'legend' in k]
+    kw = {k: v for k, v in kwargs.items() if k in leg_k}
     ax.legend(by_label.values(), by_label.keys(),
-              bbox_to_anchor=bbox_to_anchor, loc=loc, **kwargs)
+              bbox_to_anchor=bbox_to_anchor, loc=loc, **kw)
 
 
 def mark_times(ax, tick, time, *plot_values, fontsize=8, rounddec=1, pretext="t="):

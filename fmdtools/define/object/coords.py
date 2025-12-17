@@ -701,6 +701,8 @@ class BaseCoords(BaseObject):
             if vmin == vmax:
                 vmax = vmin + 1.0
         kwargs = {**kwargs, **default_kwargs}
+        if proplab == "prop":
+            proplab = prop
         if not hatch:
             im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **kwargs)
             patch = mpatches.Patch(color=color, label=proplab)
@@ -714,8 +716,6 @@ class BaseCoords(BaseObject):
             self.show_property_text(prop, fig=fig, ax=ax, **text_kwargs)
 
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
-        if proplab == "prop":
-            proplab = prop
 
         if p.dtype == 'bool':
             if legend_kwargs is not False:
@@ -1452,7 +1452,7 @@ class Coords(BaseCoords):
         else:
             raise Exception("Not a point or collection")
 
-    def show_collection(self, prop, fig=None, ax=None, label='prop', z="",
+    def show_collection(self, prop, fig=None, ax=None, label='prop', text=False, z="",
                         xlabel='x', ylabel='y', title='',
                         legend_kwargs=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
         """
@@ -1467,7 +1467,9 @@ class Coords(BaseCoords):
         ax : matplotlib.axis, optional
             Existing axis. The default is None.
         label : str/bool, optional
-            Label for the collection. The default is True, which shows the collection
+            Label for the collection. Default is 'prop', the collection name.
+        text : str/bool, optional
+            Text to display on collection. The default is True, which shows the collection
             name. If False, no label is provided. If a string, the string is used as
             the label.
         z: str
@@ -1506,13 +1508,11 @@ class Coords(BaseCoords):
 
         coll = self.get_collection(prop)
         for i, pt in enumerate(coll):
-            if label is bool or label == 'prop':
-                lab = prop
-            else:
-                lab = label
+            if label == 'prop':
+                label = prop
             corner = pt - np.array([0.5*self.p.blocksize, 0.5*self.p.blocksize])
             rect = Rectangle(corner, self.p.blocksize, self.p.blocksize,
-                             label=lab, **kwargs)
+                             label=label, **kwargs)
             ax.add_patch(rect)
             if isinstance(z, str) and z:
                 z_h = self.get(pt[0], pt[1], z)
@@ -1522,12 +1522,15 @@ class Coords(BaseCoords):
                 art3d.patch_2d_to_3d(rect, z=z_h)
             else:
                 z_h = None
-            if label:
+            if text:
+                text = str(text)
+                if text == 'prop':
+                    text = prop
                 if z_h is not None:
                     textloc = [*pt, z_h+text_z_offset]
                 else:
                     textloc = pt
-                ax.text(*textloc, lab,
+                ax.text(*textloc, text,
                         horizontalalignment="center", verticalalignment="center")
         if legend_kwargs is not False:
             if legend_kwargs is True:
@@ -1689,6 +1692,7 @@ class MetricCoords(BaseCoords):
     array([[0, 1],
            [0, 4]])
     """
+
     __slots__ = ('__dict__', )
     roletypes = ['container', 'value']
 
@@ -1717,13 +1721,13 @@ if __name__ == "__main__":
     ex.show_collection("high_v", z="v")
     ex.show_z("st", z="v",
               collections={"pts": {"color": "blue", 'text_z_offset': 2.0},
-                           "high_v": {"alpha": 0.5, "color": "red"}},
+                           "high_v": {"alpha": 0.5, "color": "red", "text": "hi"}},
               legend_kwargs=True)
 
     ex.st[1]=1
     ex.show({"st": {'hatch': 'xx', 'color': 'red'}},
             collections={"high_v": {"alpha": 0.5, "color": "blue"}})
     ex.show({"st": {'hatch': 'xx', 'color': 'red'}},
-            collections={"high_v": {"alpha": 0.5, "color": "blue", 'label': "hi"}})
+            collections={"high_v": {"alpha": 0.5, "color": "blue", 'label': "hi", "text": True}})
     import doctest
     doctest.testmod(verbose=True)

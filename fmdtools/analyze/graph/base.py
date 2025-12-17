@@ -978,6 +978,335 @@ class Graph(object):
         plt.show()
         return fig
 
+    def plot_centrality(self, metric='betweenness', title='', cmap='YlOrRd',
+                       metric_func=None, quartiles=None, quartile_styles=None, **kwargs):
+        """
+        Plot nodes colored by a centrality or custom metric.
+
+        Visualizes the graph with nodes grouped by their metric scores into
+        quartiles. Supports both predefined centrality metrics and custom
+        metric functions.
+
+        Parameters
+        ----------
+        metric : str or callable, optional
+            If str: Predefined centrality type. Options:
+            - 'betweenness': Betweenness centrality (via NetworkX)
+            - 'closeness': Closeness centrality (via NetworkX)
+            - 'eigenvector': Eigenvector centrality (via NetworkX)
+            - 'degree': Degree centrality
+            If callable: Function that accepts self.g and returns dict of {node: value}.
+            Default is 'betweenness'.
+        title : str, optional
+            Plot title. If empty, generates title from metric name.
+        cmap : str, optional
+            Matplotlib colormap name for coloring nodes. Default is 'YlOrRd'.
+        metric_func : callable, optional
+            Deprecated. Use metric parameter instead.
+            Function that accepts self.g and returns dict of {node: value}.
+        quartiles : list, optional
+            Percentile boundaries for grouping nodes. Default is [0, 25, 50, 75].
+            Must have length >= 2.
+        quartile_styles : dict, optional
+            Custom styles for each quartile group. Keys are quartile indices (0, 1, 2, 3),
+            values are style dicts with 'nx_node_color' and/or 'gv_fillcolor'.
+            Example: {0: {'nx_node_color': 'red'}, 3: {'nx_node_color': 'blue'}}
+        **kwargs : dict
+            Additional keyword arguments passed to Graph.draw().
+
+        Returns
+        -------
+        fig : matplotlib.figure.Figure
+            The figure containing the plot.
+
+        Examples
+        --------
+        >>> # Using predefined metric
+        >>> graph = Graph(ex_nxgraph)
+        >>> graph.set_pos(auto='spring')
+        >>> fig = graph.plot_centrality(metric='betweenness')
+        >>>
+        >>> # Using custom metric function
+        >>> import networkx as nx
+        >>> custom_metric = lambda g: nx.pagerank(g)
+        >>> fig = graph.plot_centrality(metric=custom_metric, title='PageRank')
+        >>>
+        >>> # Using custom quartiles and styles
+        >>> quartile_styles = {0: {'nx_node_color': 'lightblue'},
+        ...                    3: {'nx_node_color': 'darkred'}}
+        >>> fig = graph.plot_centrality(metric='degree', quartiles=[0, 30, 60, 90],
+        ...                             quartile_styles=quartile_styles)
+        """
+        # Handle deprecated metric_func parameter
+        if metric_func is not None:
+            metric = metric_func
+
+        # Set default quartiles
+        if quartiles is None:
+            quartiles = [0, 25, 50, 75]
+
+        if len(quartiles) < 2:
+            raise ValueError("quartiles must have at least 2 values")
+
+        # Calculate centrality based on metric
+        if callable(metric):
+            centrality = metric(self.g)
+            metric_name = getattr(metric, '__name__', 'custom')
+        elif metric == 'betweenness':
+            centrality = nx.betweenness_centrality(self.g)
+            metric_name = 'betweenness'
+        elif metric == 'closeness':
+            centrality = nx.closeness_centrality(self.g)
+            metric_name = 'closeness'
+        elif metric == 'eigenvector':
+            # Handle eigenvector centrality for potentially disconnected graphs
+            g_check = self.g if self.g.is_directed() else self.g.to_undirected()
+            is_connected = (nx.is_strongly_connected(g_check) if self.g.is_directed()
+                           else nx.is_connected(g_check))
+            if not is_connected:
+                centrality = {node: 0.0 for node in self.g.nodes()}
+            else:
+                try:
+                    centrality = nx.eigenvector_centrality(self.g, max_iter=100)
+                except (nx.PowerIterationFailedConvergence, nx.NetworkXError):
+                    try:
+                        centrality = nx.eigenvector_centrality_numpy(self.g)
+                    except (nx.AmbiguousSolution, nx.NetworkXError):
+                        centrality = {node: 0.0 for node in self.g.nodes()}
+            metric_name = 'eigenvector'
+        elif metric == 'degree':
+            centrality = dict(self.g.degree())
+            metric_name = 'degree'
+        else:
+            raise ValueError(f"Unknown metric: {metric}. "
+                           "Choose from 'betweenness', 'closeness', 'eigenvector', 'degree', "
+                           "or provide a callable.")
+
+        # Get centrality values
+        values = np.array(list(centrality.values()))
+        if len(values) == 0:
+            raise ValueError("Graph has no nodes to compute centrality for")
+
+        # Create quartile group names
+        num_groups = len(quartiles)
+        if num_groups == 4:
+            group_names = ['low', 'medium_low', 'medium_high', 'high']
+        else:
+            group_names = [f'q{i}' for i in range(num_groups)]
+
+        # Check if all values are zero
+        if np.all(values == 0):
+            # Use uniform grouping for zero centrality
+            nodes_list = list(centrality.keys())
+            group_size = max(1, len(nodes_list) // num_groups)
+            groups = {}
+            for i, group_name in enumerate(group_names):
+                start_idx = i * group_size
+                end_idx = (i + 1) * group_size if i < num_groups - 1 else len(nodes_list)
+                groups[group_name] = nodes_list[start_idx:end_idx]
+        else:
+            # Create node groups by centrality quartiles
+            percentile_values = np.percentile(values, quartiles)
+            groups = {name: [] for name in group_names}
+
+            for node, val in centrality.items():
+                # Find which quartile this node belongs to
+                for i in range(len(percentile_values) - 1):
+                    if val <= percentile_values[i + 1]:
+                        groups[group_names[i]].append(node)
+                        break
+                else:
+                    # Handle nodes above highest percentile
+                    groups[group_names[-1]].append(node)
+
+        # Add node groups
+        for group_name, nodes in groups.items():
+            if nodes:
+                self.add_node_groups(**{f'{metric_name}_{group_name}': nodes})
+
+        # Set node styles with color gradient
+        import matplotlib as mpl
+        try:
+            # Use new API (matplotlib >= 3.7)
+            colormap = mpl.colormaps.get_cmap(cmap)
+        except AttributeError:
+            # Fall back to old API for older matplotlib versions
+            import matplotlib.cm as cm
+            colormap = cm.get_cmap(cmap)
+
+        # Generate default colors
+        color_positions = np.linspace(0.2, 0.95, num_groups)
+        colors = [colormap(pos) for pos in color_positions]
+
+        # Build style dictionary
+        style_dict = {}
+        for i, group_name in enumerate(group_names):
+            if groups[group_name]:
+                # Use custom style if provided, otherwise use default
+                if quartile_styles and i in quartile_styles:
+                    custom_style = quartile_styles[i]
+                    default_style = {
+                        'nx_node_color': colors[i],
+                        'gv_fillcolor': f'#{int(colors[i][0]*255):02x}{int(colors[i][1]*255):02x}{int(colors[i][2]*255):02x}'
+                    }
+                    # Merge custom with default
+                    node_style = {**default_style, **custom_style}
+                else:
+                    node_style = {
+                        'nx_node_color': colors[i],
+                        'gv_fillcolor': f'#{int(colors[i][0]*255):02x}{int(colors[i][1]*255):02x}{int(colors[i][2]*255):02x}'
+                    }
+                style_dict[f'{metric_name}_{group_name}'] = node_style
+
+        self.set_node_styles(group=style_dict)
+
+        # Generate title if not provided
+        if not title:
+            title = f'{metric_name.capitalize()} Centrality'
+
+        return self.draw(title=title, **kwargs)
+
+    def summary(self):
+        """
+        Generate a summary dictionary of key graph metrics.
+
+        Provides a quick overview of graph structure and properties useful for
+        model documentation, comparison, and resilience analysis.
+
+        Returns
+        -------
+        dict
+            Summary statistics including:
+            - num_nodes : int
+                Number of nodes in the graph
+            - num_edges : int
+                Number of edges in the graph
+            - density : float
+                Graph density (ratio of actual to possible edges)
+            - is_connected : bool
+                Whether the graph is connected (for directed graphs, this checks
+                weak connectivity)
+            - num_components : int
+                Number of connected components (weakly connected for directed graphs)
+            - avg_degree : float
+                Average node degree
+            - aspl : float or None
+                Average shortest path length (only if graph is connected, None otherwise)
+            - modularity : float
+                Network modularity score (measures strength of division into communities)
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> summary = graph.summary()
+        >>> summary['num_nodes']
+        5
+        >>> summary['density']
+        0.4
+        """
+        # Convert to undirected for connectivity checks
+        g_undirected = self.g.to_undirected()
+        is_connected = nx.is_connected(g_undirected)
+
+        num_nodes = self.g.number_of_nodes()
+        if num_nodes == 0:
+            raise ValueError("Cannot compute summary for empty graph")
+
+        summary_dict = {
+            'num_nodes': num_nodes,
+            'num_edges': self.g.number_of_edges(),
+            'density': nx.density(self.g),
+            'is_connected': is_connected,
+            'num_components': nx.number_connected_components(g_undirected),
+            'avg_degree': sum(dict(self.g.degree()).values()) / num_nodes,
+        }
+
+        # Only compute ASPL if graph is connected
+        if is_connected:
+            summary_dict['aspl'] = self.calc_aspl()
+        else:
+            summary_dict['aspl'] = None
+
+        summary_dict['modularity'] = self.calc_modularity()
+
+        return summary_dict
+
+    def compare_with(self, other_graph):
+        """
+        Compare this graph with another graph to identify structural differences.
+
+        Useful for comparing different model variants, design alternatives, or
+        tracking how model structure evolves across versions.
+
+        Parameters
+        ----------
+        other_graph : Graph
+            Another Graph object to compare with.
+
+        Returns
+        -------
+        dict
+            Comparison results including:
+            - nodes_added : set
+                Nodes present in other_graph but not in this graph
+            - nodes_removed : set
+                Nodes present in this graph but not in other_graph
+            - edges_added : set
+                Edges present in other_graph but not in this graph
+            - edges_removed : set
+                Edges present in this graph but not in other_graph
+            - structure_similarity : float
+                Jaccard similarity coefficient for overall structure (0-1)
+            - summary_this : dict
+                Summary statistics for this graph
+            - summary_other : dict
+                Summary statistics for the other graph
+
+        Examples
+        --------
+        >>> from examples.pump.ex_pump import Pump
+        >>> from examples.rover.rover_model import Rover
+        >>> from fmdtools.define.architecture.function import FunctionArchitectureGraph
+        >>> pump_graph = FunctionArchitectureGraph(Pump())
+        >>> rover_graph = FunctionArchitectureGraph(Rover())
+        >>> comparison = pump_graph.compare_with(rover_graph)
+        >>> len(comparison['nodes_added']) > 0
+        True
+        """
+        nodes_this = set(self.g.nodes())
+        nodes_other = set(other_graph.g.nodes())
+        edges_this = set(self.g.edges())
+        edges_other = set(other_graph.g.edges())
+
+        nodes_added = nodes_other - nodes_this
+        nodes_removed = nodes_this - nodes_other
+        edges_added = edges_other - edges_this
+        edges_removed = edges_this - edges_other
+
+        # Calculate structure similarity using Jaccard coefficient
+        all_nodes = nodes_this | nodes_other
+        common_nodes = nodes_this & nodes_other
+        all_edges = edges_this | edges_other
+        common_edges = edges_this & edges_other
+
+        if len(all_nodes) == 0 and len(all_edges) == 0:
+            structure_similarity = 1.0
+        else:
+            # Weight nodes and edges equally
+            node_sim = len(common_nodes) / len(all_nodes) if len(all_nodes) > 0 else 1.0
+            edge_sim = len(common_edges) / len(all_edges) if len(all_edges) > 0 else 1.0
+            structure_similarity = (node_sim + edge_sim) / 2
+
+        return {
+            'nodes_added': nodes_added,
+            'nodes_removed': nodes_removed,
+            'edges_added': edges_added,
+            'edges_removed': edges_removed,
+            'structure_similarity': structure_similarity,
+            'summary_this': self.summary(),
+            'summary_other': other_graph.summary()
+        }
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
@@ -1221,7 +1550,7 @@ class GraphInteractor:
 
     def print_pos(self):
         """Print the current node positions in the graph from the console."""
-        print({k: list(v) for k, v in self.g_obj.pos.items()})
+        print({k: [float(v[0]), float(v[1])] for k, v in self.g_obj.pos.items()})
 
 
 """Example graph for testing. Matches example from FRDL spec."""

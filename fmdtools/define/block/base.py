@@ -28,6 +28,7 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
 from fmdtools.define.container.mode import Fault
 from fmdtools.analyze.result import Result
+from fmdtools.analyze.history import History
 from fmdtools.analyze.graph.base import Graph
 
 import itertools
@@ -224,7 +225,7 @@ class Simulable(BaseObject):
 
     def init_hist(self, h={}):
         """Initialize the history of the sim using SimParam parameters and track."""
-        if not h:
+        if not isinstance(h, History):
             timerange = self.sp.get_histrange()
             self.h = self.create_hist(timerange)
         else:
@@ -1001,7 +1002,7 @@ class Block(Simulable):
             if 'arch' in self.roletypes:
                 arch_dict = {role: getattr(self, role)
                              for role in self.get_roles('arch')}
-                paramdict = {**paramdict, 'sp': self.sp, **arch_dict}
+                paramdict = {**paramdict, 'sp': self.sp, 'root': self.root, **arch_dict}
             cop = self.__class__(self.name, *args, flows=flows, **paramdict)
             cop.assign_roles('container', self)
         except TypeError as e:

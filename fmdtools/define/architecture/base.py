@@ -23,6 +23,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.object.base import check_pickleability, BaseObject, get_dict_repr
 from fmdtools.define.flow.base import Flow
+from fmdtools.define.flow.multiflow import MultiFlow
 from fmdtools.define.block.base import Simulable
 from fmdtools.define.object.base import init_obj, get_obj_name
 from fmdtools.analyze.common import get_sub_include
@@ -295,8 +296,8 @@ class Architecture(Simulable):
             Name of the object
         objclass : class, optional
             Class to instantiate in the dict. The default is BaseObject.
-        as_copy : bool
-            Whether to instantiate obj as a copy. The default is fault.
+        use_copy : bool
+            Whether to use existing copy in self.flows. The default is False.
         **kwargs : kwargs
             Non-default kwargs to send to the object class.
         """
@@ -579,7 +580,8 @@ class Architecture(Simulable):
         copy : Architecture
             Copy of the curent architecture.
         """
-        cargs = dict(p=getattr(self, 'p', {}),
+        cargs = dict(root=self.root,
+                     p=getattr(self, 'p', {}),
                      sp=getattr(self, 'sp', {}),
                      track=getattr(self, 'track', {}),
                      h=self.h.copy(),
@@ -590,14 +592,28 @@ class Architecture(Simulable):
             cargs[flex_role+'s'] = getattr(self, flex_role+'s')
         # if flows provided from above, use those flows. Otherwise copy own.
         if hasattr(self, 'flows'):
-            cargs['flows'] = {f: flows[f] if f in flows else obj.copy()
-                              for f, obj in self.flows.items()}
+            cargs['flows'] = self.copy_flows(flows=flows)
 
         if hasattr(self, 'r'):
             cargs['r'] = self.r.copy()
         cop = self.__class__(**cargs)
         cop.assign_roles('container', self)
         return cop
+
+    def copy_flows(self, flows={}):
+        """Copy flows, along with MultiFlow structures if present."""
+        globs = {}
+        cflows = {}
+        for fn, flow in self.flows.items():
+            if fn in flows:
+                cflows[fn] = flows[fn]
+            elif not isinstance(flow, MultiFlow) or flow.glob.name == flow.name:
+                cflows[fn] = flow.copy()
+            else:
+                if flow.glob.name not in globs:
+                    globs[flow.glob.name] = flow.glob.copy()
+                cflows[fn] = globs[flow.glob.name].get_view(fn)
+        return cflows
 
     def get_all_possible_track(self):
         return super().get_all_possible_track() + self.flexible_roles

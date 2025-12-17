@@ -620,11 +620,11 @@ class BaseObject(metaclass=BaseType):
         return self.get_roles_as_dict(*flexible_roles, with_flex=True,
                                       with_prefixes=flex_prefixes)
 
-    def copy_mut_containers(self):
+    def copy_mutes(self, *mute_types, **kwargs):
         """Return copies of the mutable containers."""
         return {k: v.copy()
-                for k, v in self.get_roles_as_dict('container',
-                                                   with_immutable=False).items()}
+                for k, v in self.get_roles_as_dict(*mute_types, with_immutable=False,
+                                                   **kwargs).items()}
 
     def get_roles_as_dict(self, *roletypes, with_immutable=True, with_prefix=False,
                           with_flex=True, exclude=[], **kwargs):

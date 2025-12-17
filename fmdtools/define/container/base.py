@@ -317,6 +317,8 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
             try:
                 true_type = self.__annotations__[fieldname]
                 super().__setattr__(fieldname, true_type(value))
+            except AttributeError:
+                super().__setattr__(fieldname, value)
             except TypeError as e:
                 raise Exception("Poorly Specified field " + fieldname +
                                 " in class " + self.__class__.__name__) from e

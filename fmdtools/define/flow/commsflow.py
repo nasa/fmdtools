@@ -147,7 +147,9 @@ class CommsFlow(MultiFlow):
 
     def send(self, fxn_to, *states, fxn_from="local"):
         """
-        Sends a function's (fxn_from) view for the CommsFlow to another function fxn_to
+        Send a function's view to another function.
+
+        Sends function's (fxn_from) view for the CommsFlow to another function fxn_to
         by updating the function's out property and fxn_to's inbox list. Note that the
         other function must call recieve on the other end for the message to be fully
         received (update its internal view).

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.architecture &mdash; fmdtools 2.2.2 documentation</title>
+  <title>fmdtools.define.architecture &mdash; fmdtools 2.2.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=219dea72"></script>
+      <script src="../_static/documentation_options.js?v=85e56e6b"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-2">Version: 2.2.2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-2-3">Version: 2.2.3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -831,7 +831,7 @@ of instantiated.</p>
 <li><p><strong>flex_role</strong> (<em>str</em>) – Name of the role dictionary to initialize the object in.</p></li>
 <li><p><strong>name</strong> (<em>str</em>) – Name of the object</p></li>
 <li><p><strong>objclass</strong> (<em>class</em><em>, </em><em>optional</em>) – Class to instantiate in the dict. The default is BaseObject.</p></li>
-<li><p><strong>as_copy</strong> (<em>bool</em>) – Whether to instantiate obj as a copy. The default is fault.</p></li>
+<li><p><strong>use_copy</strong> (<em>bool</em>) – Whether to use existing copy in self.flows. The default is False.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Non-default kwargs to send to the object class.</p></li>
 </ul>
 </dd>
@@ -988,6 +988,12 @@ Default is True.</p></li>
 <dd class="field-odd"><p><a class="reference internal" href="#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture">Architecture</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.copy_flows">
+<span class="sig-name descname"><span class="pre">copy_flows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.copy_flows" title="Link to this definition"></a></dt>
+<dd><p>Copy flows, along with MultiFlow structures if present.</p>
 </dd></dl>
 
 <dl class="py method">
