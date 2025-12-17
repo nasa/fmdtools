@@ -6,8 +6,8 @@ Created on Thu Mar 13 16:20:28 2025
 """
 from fmdtools.define.block.function import Function
 
-from airspacelib.base.state import AircraftState
-from airspacelib.base.parameter import AircraftParameter
+from examples.airspacelib.base.state import AircraftState
+from examples.airspacelib.base.parameter import AircraftParameter
 
 
 class BaseAircraft(Function):

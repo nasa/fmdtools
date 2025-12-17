@@ -76,7 +76,11 @@ doctest_modules = ["fmdtools/define/container/base.py",
                    "examples/rover/rover_model_human.py",
                    "examples/multirotor/drone_mdl_static.py",
                    "examples/multirotor/drone_mdl_dynamic.py",
-                   "examples/multirotor/drone_mdl_hierarchical.py"]
+                   "examples/multirotor/drone_mdl_hierarchical.py",
+                   "examples/airspacelib/base/state.py",
+                   "examples/airspacelib/base/arch/perceiveenvironment.py",
+                   "examples/airspacelib/base/arch/controlflight.py",
+                   "examples/airspacelib/base/arch/aviate.py"]
 
 
 # list of fast-running notebooks:

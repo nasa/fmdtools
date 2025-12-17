@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Environment for contingency management model."""
 
-from airspacelib.base.arch.flows import AircraftEnvironment
-from airspacelib.base.state import AircraftPosition3
+from examples.airspacelib.base.arch.flows import AircraftEnvironment
+from examples.airspacelib.base.state import AircraftPosition3
 
 from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.architecture.geom import GeomArchitecture

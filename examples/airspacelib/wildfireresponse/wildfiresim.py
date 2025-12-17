@@ -5,9 +5,9 @@ Overall integrated wildfire simulation.
 
 @author: smbaye and dhulse
 """
-from airspacelib.wildfireresponse.environment import FireEnvironment, FirePropagation, FireMapParam
-from airspacelib.wildfireresponse.environment import sim_properties, double_size_p
-from airspacelib.wildfireresponse.aircraft import FireAircraft
+from examples.airspacelib.wildfireresponse.environment import FireEnvironment, FirePropagation, FireMapParam
+from examples.airspacelib.wildfireresponse.environment import sim_properties, double_size_p
+from examples.airspacelib.wildfireresponse.aircraft import FireAircraft
 
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.container.parameter import Parameter

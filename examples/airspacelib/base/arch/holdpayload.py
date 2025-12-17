@@ -4,7 +4,7 @@
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode
 
-from airspacelib.base.arch.flows import Trajectories, Force
+from examples.airspacelib.base.arch.flows import Trajectories, Force
 
 
 class HoldPayloadMode(Mode):

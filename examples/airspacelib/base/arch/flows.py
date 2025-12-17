@@ -8,7 +8,7 @@ from fmdtools.define.environment import Environment
 from fmdtools.define.container.parameter import Parameter
 
 
-from airspacelib.base.state import AircraftPosition3
+from examples.airspacelib.base.state import AircraftPosition3
 
 
 class ForceState(State):

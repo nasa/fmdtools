@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Module for assets (e.g. aircraft, etc.) that fight the fire."""
-from airspacelib.wildfireresponse.environment import FireEnvironment, double_size_p
-from airspacelib.base.aircraft import BaseAircraft
-from airspacelib.base.state import AircraftState
+from examples.airspacelib.wildfireresponse.environment import FireEnvironment, double_size_p
+from examples.airspacelib.base.aircraft import BaseAircraft
+from examples.airspacelib.base.state import AircraftState
 
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.container.time import Time

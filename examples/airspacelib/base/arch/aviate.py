@@ -5,8 +5,8 @@
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.function import Function
 
-from airspacelib.base.arch.flows import Trajectories, Force, Electricity
-from airspacelib.base.arch.flows import AircraftEnvironment
+from examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
+from examples.airspacelib.base.arch.flows import AircraftEnvironment
 import numpy as np
 
 class AviateMode(Mode):

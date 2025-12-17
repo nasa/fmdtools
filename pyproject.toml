@@ -48,7 +48,7 @@ requires = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["fmdtools*", "examples*"]
+include = ["fmdtools*", "examples*", "tests*"]
 
 [tool.coverage.report]
 exclude_also = [
