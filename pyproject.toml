@@ -6,14 +6,14 @@ maintainers = [
   {name = "Daniel Hulse", email = "daniel.e.hulse@nasa.gov"}
 ]
 classifiers = []
-description = "Drone Resilience Modeling Library"
+description = "Airspace Resilience Modeling Library"
 license = {file="TBD"}
-name = "dronelib"
-version="0.3"
+name = "airspacelib"
+version="0.4"
 readme = "README.md"
 requires-python = ">=3.13"
 
-dependencies = ["fmdtools >= 2.2.0"]
+dependencies = ["fmdtools >= 2.3.0"]
 
 
 [build-system]
@@ -23,7 +23,7 @@ requires = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["dronelib*"]
+include = ["airspacelib*"]
 
 [tool.coverage.report]
 exclude_also = [

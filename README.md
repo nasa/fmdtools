@@ -1,22 +1,22 @@
-# dronelib 0.3
+# airspacelib 0.4
 
-The Drone Resilience Modelling Library (dronelib) is a library that can be used to simulate drones interacting with their environment at a high level. The goal of the dronelib package is to enable the rapid simulation of drones in the airspace.
+The Airspace Resilience Modelling Library (airspacelib) is a library that can be used to simulate drones and other aircraft interacting with their environment at a high level. The goal of the airspacelib package is to enable the rapid simulation of drones in the airspace.
 
-The dronelib package extends the fmdtools modeling and simulation libary with drone-specific classes to represent drone behaviors (e.g., 3-d trajectory, navigation, etc).
+The airspacelib package extends the fmdtools modeling and simulation libary with drone-specific classes to represent drone behaviors (e.g., 3-d trajectory, navigation, etc).
 
 It also provides a number of worked examples of drone modelling in a range of use-cases, including drone in-flight contingency management and wildfire response.
 
 ## Structure
 
-The dronelib package has the following structure:
-- dronelib.base: base classes that can be adapted to new case studies
-- dronelib.contingencymanagement: case study modelling a drone that must perform in-flight contingency management to respond to battery depletion and airspace intrusion scenarios
-- dronelib.wildfireresponse: case study modelling a set of drones in a wildfire response situation
+The airspacelib package has the following structure:
+- airspacelib.base: base classes that can be adapted to new case studies
+- airspacelib.contingencymanagement: case study modelling a drone that must perform in-flight contingency management to respond to battery depletion and airspace intrusion scenarios
+- airspacelib.wildfireresponse: case study modelling a set of drones in a wildfire response situation
 
 ## Requirements
 
 ```
-fmdtools v2.2.3
+fmdtools v2.3.0
 ```
 
 ## Installation
@@ -33,7 +33,7 @@ b.) run `uv pip install spyder-kernels==3.1.*` (or whatever version is required 
 
 c.) Then the console can be made as the ipython console in Spyder (by setting the console path to `.venv\Scripts\python.exe` in preferences).
 
-3.) Install dronelib
+3.) Install airspacelib
 
 a.) If using a set version of fmdtools, use `uv pip install -e .`
 
@@ -42,7 +42,7 @@ b.) If co-developing with fmdtools, install fmdtools as a development dependency
 ### Using pip directly
 
 ```
-   pip install -e "/path/to/dronelib" 
+   pip install -e "/path/to/airspacelib" 
 ```
 
 ## Contributors
