@@ -1,0 +1,66 @@
+[project]
+authors = [
+  {name = "fmdtools Developers"},
+]
+maintainers = [
+  {name = "Daniel Hulse", email = "daniel.e.hulse@nasa.gov"}
+]
+classifiers = []
+description = "Airspace Resilience Modeling Library"
+license = {file="TBD"}
+name = "airspacelib"
+version="0.4"
+readme = "README.md"
+requires-python = ">=3.13"
+
+dependencies = ["fmdtools >= 2.3.0"]
+
+
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools>=61.0.0"
+]
+
+[tool.setuptools.packages.find]
+include = ["airspacelib*"]
+
+[tool.coverage.report]
+exclude_also = [
+    "def __repr__",
+    "raise ",
+    "if 0:",
+    "if __name__ == .__main__.:",
+	"def script_"
+    ]
+omit = [
+    # omit everything in /build
+    "/_build/*",
+    "/docs/*",
+    "*.pyc",
+    "*/__pycache__/*",
+    "*/tmp/*",
+    # omit overall test
+    "run_all_tests.py",
+    "*/__init__.py",
+    "*/ipykernel*",
+    "*/Temp/*"
+    ]
+
+[tool.coverage.run]
+omit = [
+    # omit everything in /build
+    "/_build/*",
+    "/docs/*",
+    "*.pyc",
+    "*/__pycache__/*",
+    "*/tmp/*",
+    # omit overall test
+    "run_all_tests.py",
+    "*/__init__.py",
+    "*/ipykernel*",
+    "*/Temp/*"
+    ]
+
+
+
