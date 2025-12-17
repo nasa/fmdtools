@@ -1,28 +1,43 @@
 # -*- coding: utf-8 -*-
-"""
-Module for assets (e.g. aircraft, etc.)
-"""
-from fmdtools.define.container.mode import Mode
-from fmdtools.define.container.time import Time
-
-
+"""Module for assets (e.g. aircraft, etc.) that fight the fire."""
 from dronelib.wildfireresponse.environment import FireEnvironment, double_size_p
-
 from dronelib.base.aircraft import BaseAircraft
 from dronelib.base.state import AircraftState
 
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.container.time import Time
+import fmdtools.sim.propagate as prop
 
 
 class  AircraftModes(Mode):
+    """
+    Aircraft modes defining firefighing behavior.
+
+    Modes
+    -----
+    resupply: Mode
+        Resupplying fuel and retardant at air base.
+    fly_to_fire : Mode
+        Flying to the fire.
+    mitigate_fire : Mode
+        Performing a fire mitigation action (i.e., water drop).
+    fly_to_base : Mode
+        Flying to the base for resupply.
+    """
+
     opermodes = ("resupply", "fly_to_fire", "mitigate_fire", "fly_to_base")
     mode: str = "resupply"
 
 
 class AircraftTime(Time):
+    """Timers for aircraft resupply."""
+
     timernames = ('resupply', )
 
 
 class FireAircraftState(AircraftState):
+    """State of aircraft. Retardant set at 100%."""
+
     retardant_status: float = 100  # starting retardant at 100%
 
 
@@ -35,10 +50,12 @@ class FireAircraft(BaseAircraft):
     flow_fireenvironment = FireEnvironment
 
     def init_block(self, **kwargs):
+        """Set initial aircraft location to its assigned base."""
         self.s.x = self.fireenvironment.c.p.base_locations[self.p.base][0]
         self.s.y = self.fireenvironment.c.p.base_locations[self.p.base][1]
 
     def set_fire_goal(self):
+        """Determine fire to fly to to perform fire mitigation."""
         if [*self.fireenvironment.c.find_all_prop("burning")]:
             self.m.set_mode("fly_to_fire")
             pt = self.s.get("x", "y")
@@ -47,6 +64,7 @@ class FireAircraft(BaseAircraft):
                 self.s.assign(closest, "goal_x", "goal_y")
 
     def dynamic_behavior(self):
+        """Overall dynamic behavior of the Aircraft."""
         if self.m.in_mode("resupply"):
             if self.t.timers['resupply'].indicate_complete() or self.t.timers['resupply'].indicate_standby():
                 self.s.retardant_status = 100
@@ -77,7 +95,7 @@ class FireAircraft(BaseAircraft):
 
 
 if __name__ == "__main__":
-    import fmdtools.sim.propagate as prop
+
     a = FireAircraft()
     fe = FireEnvironment(c={"p": {**double_size_p, "base_locations": ((42.0, 20.0),)}})
     fe.prop_time()

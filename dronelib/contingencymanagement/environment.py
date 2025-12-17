@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 20 14:55:43 2025
-
-@author: dhulse
-"""
+"""Environment for contingency management model."""
 
 from dronelib.base.arch.flows import AircraftEnvironment
 from dronelib.base.state import AircraftPosition3
-from fmdtools.define.container.parameter import Parameter
+
 from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.define.object.geom import GeomPoint, PointParam
@@ -17,6 +13,29 @@ from shapely import distance
 import numpy as np
 
 class ContingencyEnvironmentParam(CoordsParam):
+    """
+    Parameter defining the Environment flow.
+
+    Parameters
+    ----------
+    x_size: int
+        Number of grid cells in the x. Default is 12.
+    y_size: int
+        Number of grid cells in the y. Default is 12.
+    blocksize: float
+        Size of grid cells. Default is 10.0, or 10 meters.
+    gridcase : str
+        Type of grid with options (Default is "mix"):
+            "mix" - assortment of properties through allowed corridor
+            "all_disallowed" - all landing areas disallowed.
+    intruders : str
+        Whether and how there are intruders (Default is "accross"):
+            -"accross" has an intruder fly across the path
+            "middle" has an intruder waiting in the middle of the path
+            "down" has an intruder fly down through part of the path
+            "down-over" has an intruder fly down over the path
+    """
+
     x_size: int = 12
     y_size: int = 12
     blocksize: float = 10.0
@@ -24,6 +43,31 @@ class ContingencyEnvironmentParam(CoordsParam):
     intruders: str = 'across'
 
 class ContingencyCoords(Coords):
+    """
+    Coordinate grid defining environment the drone flies over.
+
+    Features
+    --------
+    occupied : bool
+        Whether or not a ground point is occupied (e.g., by a person or vehicle).
+    disallowed : bool
+        Whether or not the drone is disallowed from landing on a cell.
+    restricted : bool
+        Whether or not a given area has flight restrictions barring entry.
+
+    Collections
+    -----------
+    suitable : bool
+        Whether a cell is suitable to land in.
+
+    Points
+    -----
+    start : tuple
+        Starting location of the drone.
+    end : tuple
+        Ending location of hte drone.
+    """
+
     container_p = ContingencyEnvironmentParam
     feature_occupied = (bool, False)
     feature_disallowed = (bool, False)
@@ -36,6 +80,7 @@ class ContingencyCoords(Coords):
     point_end = (100.0, 100.0)
 
     def init_properties(self, **kwargs):
+        """Set properties of the grid based on the grid case."""
         if self.p.gridcase == 'mix':
             self.set_rand_pts('occupied', True, 50)
             self.set_range('disallowed', True, xmin=30, xmax=60, ymin=70)
@@ -55,6 +100,7 @@ class ContingencyCoords(Coords):
         self.set_pts([self.start, self.end], 'disallowed', False)
 
 
+"""Default properties to show (and their attributes) in vizualizations."""
 properties = {'disallowed': {'color': 'blue', 'proplab': 'disallowed', 'alpha': 0.5},
               'occupied': {'color': 'red', 'proplab': 'occupied', 'alpha': 0.5},
               'restricted': {'color': 'grey', 'proplab': 'restricted', 'alpha': 0.75}}
@@ -62,32 +108,58 @@ collections = {'suitable': {"label": "suitable", 'color': 'lightgreen'}}
 
 
 class ThreatState(AircraftPosition3):
+    """
+    State of an external threat (e.g., intruder).
+
+    Extends AircraftPosition3 with the following:
+
+    Parameters
+    ----------
+    buffer_speed: float
+        The speed of the threat.
+    """
 
     buffer_speed: float = 10.0
 
     def update_speed(self):
+        """Update speed buffer based on its velocity."""
         self.buffer_speed = self.get_vel()
 
 
 class ThreatParam(PointParam):
+    """
+    Parameter defining the exteral threat shape.
+
+    Parameters
+    ----------
+    buffer_envelope : float
+        The physical envelope of the threat. Default is 1.0 meters.
+    buffer_safety : float
+        The distance from the threat needed for safety. Default is 25.0 meters.
+    """
 
     buffer_envelope: float = 1.0
     buffer_safety: float = 25.0
-    intruders: str = 'across'
 
 
 class Threat(GeomPoint):
+    """Point geometry (and buffers) defining drone and intruders."""
+
     container_p = ThreatParam
     container_s = ThreatState
 
     def update_position(self):
+        """Update position given known speed."""
         self.s.update_position(self.s.buffer_speed)
 
 
 class ContingencyThreats(GeomArchitecture):
+    """Overall environment-defining geometries of the drone and external threats."""
+
     container_p = ContingencyEnvironmentParam
 
     def init_architecture(self, **kwargs):
+        """Initialize drone and intruders given 'intruders' options."""
         self.add_point('self', Threat)
         if self.p.intruders == "across":
             s = {'buffer_speed': 3.5, 'x': 100, 'y': 0.0, 'z': 25.0,
@@ -112,11 +184,13 @@ class ContingencyThreats(GeomArchitecture):
             
 
     def update_positions(self):
+        """Update positions of the threats."""
         for threatname, threat in self.points.items():
             if threatname != 'self':
                 threat.update_position()
 
     def calc_dist_to_threats(self, self_shape='envelope', threat_shape='safety'):
+        """Calculate distancses b/t self_shape for self and threat_shape for threats."""
         dists = {}
         self_envelope = self.points['self'].get_shape(self_shape)
         for threatname, threat in self.points.items():
@@ -127,22 +201,27 @@ class ContingencyThreats(GeomArchitecture):
 
 
 class ContingencyEnvironment(AircraftEnvironment):
-    
+    """Overall environment of drone with threats and grid."""
+
     container_p = ContingencyEnvironmentParam
     coords_c = ContingencyCoords
     arch_ga = ContingencyThreats 
+
     def show(self, *args, **kwargs):
+        """Show combined view of threats and coords."""
         fig, ax = self.c.show(properties=properties, collections=collections,
                               coll_overlay=False)
         self.ga.show(fig=fig, ax=ax)
         return fig, ax
-    """override environment init method. Seems AircraftEnvironment flow is TBD?"""
-    
+
+
 class ContingencyConditions(Function):
-    __slots__ = ('environment', )
+    """Function to update positions of external intruders."""
+
     flow_environment = ContingencyEnvironment
 
     def dynamic_behavior(self):
+        """Update intruder positions."""
         self.environment.ga.update_positions()
 
 
@@ -156,13 +235,6 @@ if __name__ == "__main__":
 
     hc.show(properties=props, collections=colls)
 
-    from fmdtools.analyze.common import setup_plot, add_title_xylabs
-    from matplotlib.colors import to_rgba, ListedColormap, TABLEAU_COLORS
-    # fig, ax = setup_plot(fig=None, ax=None)
-    # pallette=[*TABLEAU_COLORS.keys()]
-    # hc._show_properties({}, fig, ax, pallette)
-    # hc._show_collections(collections, fig, ax, pallette, c_offset=0)
-    # add_title_xylabs(ax, title='li', xlabel='x', ylabel='y')
 
     fig, ax = hc.show(collections={'start': {'color': 'lightblue'},
                                    'end': {'color': 'lightgreen'}},

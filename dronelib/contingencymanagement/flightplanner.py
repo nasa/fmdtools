@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun 18 14:30:59 2025
+Constructs for flight planning.
 
 @author: cwang29
 
+Called externally via:
 a_star_worldcoords()
   └─► a_star()
         └─► nx_graph_gen()
@@ -13,6 +14,7 @@ a_star_worldcoords()
         └─► nx.astar_path()
 """
 from fmdtools.define.object.coords import Coords, CoordsParam
+
 import networkx as nx
 import math
 
@@ -96,8 +98,22 @@ class DroneFlightGrid(Coords):
                          disallowed_cost, occupied_cost, restricted_cost,
                          max_distance, obstacle):
         """
-        Assign edge weights between all accessible nodes in flight grid,
-        accounting for environmental and fuel costs.
+        Assign edge weights between all accessible nodes in flight grid.
+
+        Accounts for environmental and fuel costs.
+
+        Parameters
+        ----------
+        fuel_rate : float
+            Fuel rate determining cost of fuel use
+        disallowed_cost : float
+            Cost for flying over disallowed areas
+        restricted_cost : float
+            Cost for flying through restreicted areas
+        max_distance : float
+            Maximum distance possible
+        obstacle: bool
+            Whether or not there is an obstacle.
         """
         self.get_grid_costs(disallowed_cost,
                             occupied_cost, restricted_cost, obstacle)
@@ -126,8 +142,18 @@ class DroneFlightGrid(Coords):
 
     def get_grid_costs(self, disallowed_cost, occupied_cost, restricted_cost, obstacle):
         """
-        Assign suboptimality of all environment regions 
-        into correspondent FlightGrid areas.
+        Assign suboptimality of all environment regions into FlightGrid areas.
+
+        Parameters
+        ----------
+        disallowed_cost : float
+            Cost for flying over disallowed areas
+        restricted_cost : float
+            Cost for flying through restreicted areas
+        max_distance : float
+            Maximum distance possible
+        obstacle: bool
+            Whether or not there is an obstacle.
         """
         unsafe_points = set()
         if obstacle:
@@ -182,6 +208,7 @@ class DroneFlightGrid(Coords):
                 self.set(i, j, 'grid_costs', total)
 
     def neighbor_gen(self, j, i, max_distance):
+        """Generate neighbor points to j,i within given max_distance."""
         neighbors = set()
         for dj in range(-max_distance, max_distance + 1):
             for di in range(-max_distance, max_distance + 1):
@@ -194,6 +221,7 @@ class DroneFlightGrid(Coords):
     
     def nx_graph_gen(self, max_distance, disallowed_cost,
                      occupied_cost, restricted_cost, fuel_rate, obstacle):
+        """Generate a networkx graph of edge weights to run a* on."""
         flight_grid = nx.DiGraph()
         self.get_edge_weights(fuel_rate,
                               disallowed_cost, occupied_cost,
@@ -365,8 +393,7 @@ class DroneFlightGrid(Coords):
 
     def is_feasible_path(self, G, start, goal, fuel_rate):
         """
-        Takes in a graph, start node, and end node.
-        Returns whether a path exists between start/goal within max_cost
+        Determine whether a path exists between start/goal within max_cost.
 
         Parameters
         ----------

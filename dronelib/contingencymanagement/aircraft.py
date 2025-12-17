@@ -4,14 +4,6 @@ Created on Fri Mar 14 14:10:02 2025
 
 @author: dhulse
 """
-from fmdtools.define.architecture.function import FunctionArchitecture
-from fmdtools.define.architecture.function import FunctionArchitectureGraph
-from fmdtools.analyze.common import consolidate_legend, add_title_xylabs, setup_plot
-from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
-from fmdtools.define.container.parameter import Parameter
-from fmdtools.analyze.history import History
-
-
 from dronelib.base.arch.flows import Trajectories, Force, Electricity
 from dronelib.base.arch.aviate import Aviate
 from dronelib.base.arch.controlflight import ControlFlight, ControlState
@@ -19,10 +11,19 @@ from dronelib.base.arch.storeee import StoreAndSupplyElectricity
 from dronelib.base.arch.perceiveenvironment import PerceiveEnvironment
 from dronelib.base.arch.holdpayload import HoldPayload
 
-
 from dronelib.contingencymanagement.environment import ContingencyEnvironment, properties, collections
 from dronelib.contingencymanagement.environment import ContingencyConditions
 from dronelib.contingencymanagement.flightplanner import DroneFlightGrid, DroneFlightGridParam
+
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.architecture.function import FunctionArchitectureGraph
+from fmdtools.analyze.common import consolidate_legend, add_title_xylabs, setup_plot
+from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.analyze.history import History
+from fmdtools.analyze.phases import from_hist
+from fmdtools.sim import propagate
+from fmdtools.sim.sample import FaultDomain, FaultSample
 
 import numpy as np
 
@@ -33,12 +34,19 @@ class ContingencyControlState(ControlState):
 
     Fields
     ------
-    closest_dist: float [outdated?]
+    closest_dist: float
+        Distance to the closest drone.
     flightgrid: ContingencyFlightGrid
         FlightGrid for current aviation plan; subject to update with faults/
         environmental updates
+    endpt : tuple
+        End-point of current flight plan
     planned: bool
-        Whether or not flightgrid is up to date
+        Whether or not the flight-plan has been generated to the current goal.
+    reconfigured_proxthreat : bool
+        Whether or not proxthreat has triggered flight replanning (replans if not)
+    reconfigured_charge : bool
+        Whether or not low charge has triggered flight replanning (replans if not)
     """
 
     closest_dist: float = 100.0
@@ -50,6 +58,27 @@ class ContingencyControlState(ControlState):
 
     
 class ContingencyControlParameter(Parameter):
+    """
+    Parameter defining the control of the drone.
+
+    Parameters
+    ----------
+    with_proxthreat : bool
+        Whether or not proximity to threat functionality is enabled
+    fuel_rate : float
+        The fuel usage rate of the drone. Default is 20.0
+    disallowed_cost : float
+        Cost for flying over disallowed areas. Default is 10.0
+    occupied_cost : float
+        Cost for flying over occupied areas. Default is 20.0
+    restricted_cost : float
+        Cost for flying in restricted areas. Default is 1000000.
+    max_distance : int
+        Maximum distance for grid? Default is 5.
+    blocksize : float
+        Block size of grid. Default is 2.5
+    """
+
     with_proxthreat: bool = True
     fuel_rate: float = 20.0
     disallowed_cost: float = 10.0
@@ -59,6 +88,7 @@ class ContingencyControlParameter(Parameter):
     blocksize: float = 2.5
     
 class ContingencyControlFlight(ControlFlight):
+    """Function that controls the drone."""
 
     flow_environment = ContingencyEnvironment
     container_s = ContingencyControlState
@@ -66,6 +96,7 @@ class ContingencyControlFlight(ControlFlight):
     default_track = {'s': ["closest_dist", 'planned', 'pt', 'flightplan'], 'm': ['mode']}
     
     def set_faultmode(self):
+        """Set contingency actions for the drone in proxthreat/low charge cases."""
         super().set_faultmode()
 
         if 0.0 < self.electricity.s.charge <= 25.0:
@@ -95,11 +126,13 @@ class ContingencyControlFlight(ControlFlight):
                 self.s.reconfigured_proxthreat = False
                 
     def static_behavior(self):
+        """Simulate static behavior for planning."""
         if not self.s.planned:
             self.replan_mission()
         super().static_behavior()
 
     def set_depletion_land_loc(self):
+        """Set new landing location in depletion scenario."""
         ts = self.trajectories.s.copy()
         ts.assign(self.environment.c.start, "goal_x", "goal_y")
         dist_to_start = ts.calc_dist_to_travel(1000)
@@ -114,6 +147,7 @@ class ContingencyControlFlight(ControlFlight):
             self.s.endpt = self.environment.c.find_closest(*pt, 'suitable')
 
     def gen_flight_grid(self):
+        """Generate flight grid."""
         # max cost set such that re-planning doesn't occur in DroneFlightGrid
         dfgp = DroneFlightGridParam(blocksize=self.p.blocksize,
                                     x_size=120/self.p.blocksize,
@@ -148,7 +182,9 @@ class ContingencyControlFlight(ControlFlight):
         self.s.pt = 0
         self.s.planned = True
         
+
 class ContingencyAviate(Aviate):
+    """Movement of the drone. Updates encironment point."""
 
     def dynamic_behavior(self):
         super().dynamic_behavior()
@@ -224,6 +260,7 @@ class ContingencyAircraftArchitecture(FunctionArchitecture):
         self.add_fxn('hold_payload', HoldPayload, 'trajectories', 'force')
 
     def indicate_unsuitable_landing(self):
+        """Indicate if landed in an unsuitable area."""
         coords = [*self.flows['trajectories'].s.get('x', 'y')]
         if self.flows['trajectories'].s.z > 0.0:
             return False
@@ -231,6 +268,7 @@ class ContingencyAircraftArchitecture(FunctionArchitecture):
             return coords not in [[*i] for i in [*self.flows['environment'].c.suitable]]
 
     def indicate_landed(self):
+        """Indicate if landed."""
         return self.flows['trajectories'].s.z == 0.0 and self.t.time > 5.0
 
     def classify(self, scen, **kwargs):
@@ -257,6 +295,33 @@ class ContingencyAircraftArchitecture(FunctionArchitecture):
 
 def plot_environment(mdl, properties=properties, collections=collections,
                      fig={}, ax={}, legend_kwargs={}, **kwargs):
+    """
+    Plot the environment of the drone.
+
+    Parameters
+    ----------
+    mdl : ContingencyAircraftArchitecture
+        Aircraft architecture simualted.
+    properties : dict, optional
+        Properties of the Coords to show. The default is properties.
+    collections : dict, optional
+        Collections of the Coords to show. The default is collections.
+    fig : mpl.Figure, optional
+        Figure to show on. The default is {}.
+    ax : mpl.axis, optional
+        Axis to add to. The default is {}.
+    legend_kwargs : dict, optional
+        Keyword arguments to legend. The default is {}.
+    **kwargs : kwargs
+        Other kwargs (unused)
+
+    Returns
+    -------
+    fig : mpl.Figure
+        Figure with environment of drone shown.
+    ax : mpl.axis
+        Corresponding figure axis.
+    """
     fig, ax = mdl.flows['environment'].c.show(properties=properties,
                                               collections=collections,
                                               fig=fig, ax=ax,
@@ -269,6 +334,7 @@ def plot_environment(mdl, properties=properties, collections=collections,
 
 
 def collect_plans(history):
+    """Get all flight plans from a given history and their indices (helper)."""
     plan_hist = history.fxns.control_flight.s.flightplan
     plans = [plan_hist[0]]
     inds = [0]
@@ -280,6 +346,7 @@ def collect_plans(history):
 
 
 def plot_plan(ax, plan, inds, i, history, plan_colors=['gray', 'purple', 'orange', 'yellow']):
+    """Plot a flight plan on an axis at point i in a history (helper)."""
     xs, ys = zip(*plan)
     ind = inds[i]
     ax.plot(xs, ys, '--', label='plan t='+str(ind), color=plan_colors[i], linewidth=1)  # Make line red
@@ -292,6 +359,7 @@ def plot_plan(ax, plan, inds, i, history, plan_colors=['gray', 'purple', 'orange
 
 
 def plot_locations(ax, hists, text="", label="location", color="blue"):
+    """Plot the locations of the drone on an axis with given text (helper)."""
     for scen, hist in hists.nest(1).items():
         x = hist.flows.trajectories.s.x[-1]
         y = hist.flows.trajectories.s.y[-1]
@@ -305,7 +373,44 @@ def plot_locations(ax, hists, text="", label="location", color="blue"):
 def plot_flightpath(mdl={}, history={}, fig={}, ax={}, with_plans=True, with_locations=True,
                     boundaries_at=False, ft_kwar={}, text="", title="",
                     legend_kwargs={}, **kwargs):
+    """
+    Plot the fligthpath of a drone over its environment, along with other information.
 
+    Parameters
+    ----------
+    mdl : ContingencyAircraftArchitecture
+        Aircraft architecture simualted.
+    history : History, optional
+        History (may be nested) of model states from simulation. The default is {}.
+    fig : mpl.Figure, optional
+        Figure to show on. The default is {}.
+    ax : mpl.axis, optional
+        Axis to add to. The default is {}.
+    with_plans : bool, optional
+        Whether to overlay flight plans on the plot. The default is True.
+    with_locations : bool, optional
+        Whether to overlay locations on the plot. The default is True.
+    boundaries_at : bool, optional
+        Whether or not to show threat/intruder shapes on the plot. The default is False.
+    ft_kwar : dict, optional
+        Keyword arguments to faulty trajectories. The default is {}.
+    text :str, optional
+        Text to show for points ("split" is just last portion or "" is none).
+        The default is "".
+    title : str, optional
+        Title for the plot. The default is "".
+    legend_kwargs : dict, optional
+        Keyword arguments to legend. The default is {}.
+    **kwargs : kwargs
+        kwargs to add_title_xylabs
+
+    Returns
+    -------
+    fig : mpl.Figure
+        Figure with environment of drone shown.
+    ax : mpl.axis
+        Corresponding figure axis.
+    """
     fig, ax = plot_environment(mdl, fig=fig, ax=ax, legend_kwargs=legend_kwargs,
                                **kwargs)
 
@@ -359,6 +464,28 @@ def plot_flightpath(mdl={}, history={}, fig={}, ax={}, with_plans=True, with_loc
 
 
 def plot_flightpath_from(time, history={}, with_boundaries=True, **kwargs):
+    """
+    Plot combined environment and flightpath at time.
+
+    Parameters
+    ----------
+    time : int
+        Simulation time.
+    history : History, optional
+        History to plot from. The default is {}.
+    with_boundaries : bool, optional
+        Whether to plot boundaries of threats. The default is True.
+    **kwargs : kwargs
+        kwargs for plot_flightpath.
+
+    Returns
+    -------
+    fig : mpl.Figure
+        Figure with environment of drone shown.
+    ax : mpl.axis
+        Corresponding figure axis.
+
+    """
     hist = history.cut(time, newcopy=True)
     kwargs = prep_animation_title(time, **kwargs)
     kwargs = clear_prev_figure(**kwargs)
@@ -368,6 +495,7 @@ def plot_flightpath_from(time, history={}, with_boundaries=True, **kwargs):
 
 
 def create_legend_plot(ax, **kwargs):
+    """Plot the legend for an axis ax on its own."""
     fig, ax2 = setup_plot(**kwargs)
     ax2.axis("off")
     consolidate_legend(ax2, loc='center', bbox_to_anchor=(0.5,0.5), add_handles=[ax],
@@ -375,10 +503,6 @@ def create_legend_plot(ax, **kwargs):
     return fig, ax2
 
 if __name__ == "__main__":
-
-    from fmdtools.analyze.phases import from_hist
-    from fmdtools.sim import propagate
-    from fmdtools.sim.sample import FaultDomain, FaultSample
 
     haa = ContingencyAircraftArchitecture()
     haa()

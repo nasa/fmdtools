@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun  5 09:33:54 2024
+Overall integrated wildfire simulation.
 
 @author: smbaye and dhulse
 """
+from dronelib.wildfireresponse.environment import FireEnvironment, FirePropagation, FireMapParam
+from dronelib.wildfireresponse.environment import sim_properties, double_size_p
+from dronelib.wildfireresponse.aircraft import FireAircraft
 
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.container.parameter import Parameter
@@ -12,12 +15,11 @@ from fmdtools.define.container.rand import Rand
 from fmdtools.sim.sample import ParameterSample
 from fmdtools.sim.search import ParameterSimProblem
 from fmdtools.sim.sample import ParameterDomain
-
-from dronelib.wildfireresponse.environment import FireEnvironment, FirePropagation, FireMapParam
-from dronelib.wildfireresponse.environment import sim_properties, double_size_p
-from dronelib.wildfireresponse.aircraft import FireAircraft
 from fmdtools.analyze.common import consolidate_legend, add_title_xylabs
 from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
+from fmdtools.define.architecture.function import FunctionArchitectureGraph
+import fmdtools.sim.propagate as prop
+
 import numpy as np
 
 
@@ -28,6 +30,7 @@ class WildFireSimParameter(Parameter):
 
     @classmethod
     def from_base_loc(cls, x, y, p=double_size_p):
+        """Create parameter from base location x,y."""
         fmp = {**p.get('firemapparam', {}), 'base_locations': ((x, y), )}
         return WildFireSimParameter(firemapparam=fmp)
 
@@ -35,13 +38,12 @@ class WildFireSimParameter(Parameter):
 class WildfireSim(FunctionArchitecture):
     """Simulation of wildfire propagation and response."""
 
-    __slots__ = ()
     container_p = WildFireSimParameter
     container_r = Rand
     default_sp = {'end_time': 400, "end_condition": "indicate_complete"}
 
     def init_architecture(self, **kwargs):
-
+        """Initialize architecture with aircraft at bases."""
         # self.add_flow("supplies")
         self.add_flow("fireenvironment", FireEnvironment,
                       c={"p": self.p.firemapparam})
@@ -53,6 +55,7 @@ class WildfireSim(FunctionArchitecture):
         self.add_fxn("firepropagation", FirePropagation, "fireenvironment")
 
     def classify(self, **kwargs):
+        """Calculate percent burned for a given simulation."""
         return {'perc_burned': self.flows['fireenvironment'].c.calc_perc_burned(),
                 'burn_pts': self.flows['fireenvironment'].c.get_all_burned()}
 
@@ -61,6 +64,7 @@ class WildfireSim(FunctionArchitecture):
         return self.flows['fireenvironment'].c.indicate_contained()
 
 
+"""Default overall simulation parameter."""
 def_p = {'firemapparam': {**double_size_p,
                           "base_locations": ((42.0, 20.0), (20.0, 20.0)),
                           "num_strikes": 6}}
@@ -68,6 +72,35 @@ def_p = {'firemapparam': {**double_size_p,
 
 def plot_combined_response_from(time, history={}, mdl=None, fig=None, ax=None,
                                 legend_kwargs={}, title='', **kwargs):
+    """
+    Plot the overall progression of the simulation up to a given time.
+
+    Parameters
+    ----------
+    time : int
+        Time-step to simulate to.
+    history : History, optional
+        History of model states. The default is {}.
+    mdl : WildfireSim, optional
+        Wildfire Simulation model. The default is None.
+    fig : matplotlib figure, optional
+        Figure to attach to. The default is None.
+    ax : matplotlib axis, optional
+        Axis to attach to. The default is None.
+    legend_kwargs : dict, optional
+        kwargs for legend (removes legend if False). The default is {}.
+    title : str, optional
+        Title for the plot. The default is ''.
+    **kwargs : kwargs
+        kwargs to add_title_xylabs.
+
+    Returns
+    -------
+    fig : mpl.figure
+        Figure with response shown.
+    ax : mpl.axis
+        Axis of figure.
+    """
     kw = prep_animation_title(time, title=title)
     title = kw['title']
     if fig:
@@ -99,6 +132,7 @@ def plot_combined_response_from(time, history={}, mdl=None, fig=None, ax=None,
     return fig, ax
 
 def create_scen_sample(seed=10, replicates=10):
+    """Create sample of scenarios for a given seed and replicates."""
     ps = ParameterSample(seed=seed)
     ps.add_variable_replicates([], replicates=replicates, seed_comb='independent')
     return ps
@@ -142,9 +176,6 @@ class BasePlacementProblem(ParameterSimProblem):
 
 
 if __name__ == "__main__":
-    from fmdtools.define.architecture.function import FunctionArchitectureGraph
-    import fmdtools.sim.propagate as prop
-
     mdl = WildfireSim(p=def_p,
                       r={'seed': 100})
 
