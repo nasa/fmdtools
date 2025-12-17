@@ -284,6 +284,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../examples/rover/Model_Structure_Visualization_Tutorial.html#full-model-containment-graph">Full Model Containment Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/rover/Model_Structure_Visualization_Tutorial.html#run-order">Run Order</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/rover/Model_Structure_Visualization_Tutorial.html#behavior-fault-visualization">Behavior/Fault Visualization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Model_Structure_Visualization_Tutorial.html#graph-metrics-and-analysis">Graph Metrics and Analysis</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/rover/FaultSample_Use-Cases.html">Defining Fault Sampling Approaches in fmdtools</a><ul>
@@ -1585,7 +1586,7 @@ will ignore that key.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.style.EnvironmentNodeStyle">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.style.</span></span><span class="sig-name descname"><span class="pre">EnvironmentNodeStyle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx_node_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_linewidths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_node_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'lightgrey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_node_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_edgecolors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'grey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_cmap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_vmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_vmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gv_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'rectangle'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gv_penwidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gv_style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'filled'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gv_fillcolor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'lightgrey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gv_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'grey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'rectangle'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_fillcolor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#ffccff'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_strokecolor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#cc66cc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_fontsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_fontstyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_gradient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_shadow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_rounded</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_strokewidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.style.EnvironmentNodeStyle" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.style.</span></span><span class="sig-name descname"><span class="pre">EnvironmentNodeStyle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx_node_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'h'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_linewidths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_node_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'lightgrey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_node_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_edgecolors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'grey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_cmap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_vmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx_vmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gv_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'hexagon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gv_penwidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gv_style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'filled'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gv_fillcolor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'lightgrey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gv_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'grey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'hexagon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_fillcolor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#ffccff'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_strokecolor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#cc66cc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_fontsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_fontstyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_gradient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_shadow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_rounded</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_strokewidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawio_opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.style.EnvironmentNodeStyle" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.style.NodeStyle" title="fmdtools.analyze.graph.style.NodeStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeStyle</span></code></a></p>
 <p>Style representing Environment objects.</p>
 <dl class="py attribute">
@@ -1595,7 +1596,7 @@ will ignore that key.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.style.EnvironmentNodeStyle.drawio_shape">
-<span class="sig-name descname"><span class="pre">drawio_shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'rectangle'</span></em><a class="headerlink" href="#fmdtools.analyze.graph.style.EnvironmentNodeStyle.drawio_shape" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">drawio_shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hexagon'</span></em><a class="headerlink" href="#fmdtools.analyze.graph.style.EnvironmentNodeStyle.drawio_shape" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1610,7 +1611,7 @@ will ignore that key.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.style.EnvironmentNodeStyle.gv_shape">
-<span class="sig-name descname"><span class="pre">gv_shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'rectangle'</span></em><a class="headerlink" href="#fmdtools.analyze.graph.style.EnvironmentNodeStyle.gv_shape" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">gv_shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hexagon'</span></em><a class="headerlink" href="#fmdtools.analyze.graph.style.EnvironmentNodeStyle.gv_shape" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1625,7 +1626,7 @@ will ignore that key.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.style.EnvironmentNodeStyle.nx_node_shape">
-<span class="sig-name descname"><span class="pre">nx_node_shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'s'</span></em><a class="headerlink" href="#fmdtools.analyze.graph.style.EnvironmentNodeStyle.nx_node_shape" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">nx_node_shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'h'</span></em><a class="headerlink" href="#fmdtools.analyze.graph.style.EnvironmentNodeStyle.nx_node_shape" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2436,6 +2437,73 @@ with red nodes</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.analyze.graph.base.Graph.compare_with">
+<span class="sig-name descname"><span class="pre">compare_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.base.Graph.compare_with" title="Link to this definition"></a></dt>
+<dd><p>Compare this graph with another graph to identify structural differences.</p>
+<p>Useful for comparing different model variants, design alternatives, or
+tracking how model structure evolves across versions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other_graph</strong> (<a class="reference internal" href="#fmdtools.analyze.graph.base.Graph" title="fmdtools.analyze.graph.base.Graph"><em>Graph</em></a>) – Another Graph object to compare with.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Comparison results including:
+- nodes_added : set</p>
+<blockquote>
+<div><p>Nodes present in other_graph but not in this graph</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>nodes_removed<span class="classifier">set</span></dt><dd><p>Nodes present in this graph but not in other_graph</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>edges_added<span class="classifier">set</span></dt><dd><p>Edges present in other_graph but not in this graph</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>edges_removed<span class="classifier">set</span></dt><dd><p>Edges present in this graph but not in other_graph</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>structure_similarity<span class="classifier">float</span></dt><dd><p>Jaccard similarity coefficient for overall structure (0-1)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>summary_this<span class="classifier">dict</span></dt><dd><p>Summary statistics for this graph</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>summary_other<span class="classifier">dict</span></dt><dd><p>Summary statistics for the other graph</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">examples.pump.ex_pump</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pump</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">examples.rover.rover_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Rover</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.define.architecture.function</span><span class="w"> </span><span class="kn">import</span> <span class="n">FunctionArchitectureGraph</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pump_graph</span> <span class="o">=</span> <span class="n">FunctionArchitectureGraph</span><span class="p">(</span><span class="n">Pump</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rover_graph</span> <span class="o">=</span> <span class="n">FunctionArchitectureGraph</span><span class="p">(</span><span class="n">Rover</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">comparison</span> <span class="o">=</span> <span class="n">pump_graph</span><span class="o">.</span><span class="n">compare_with</span><span class="p">(</span><span class="n">rover_graph</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">comparison</span><span class="p">[</span><span class="s1">&#39;nodes_added&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.base.Graph.draw">
 <span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withlegend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">0.5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'center</span> <span class="pre">left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_labelspacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_borderpad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saveas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.base.Graph.draw" title="Link to this definition"></a></dt>
 <dd><p>Draw a graph with given styles corresponding to the node/edge properties.</p>
@@ -2588,6 +2656,62 @@ Can also provide kwargs for Digraph() initialization.</p></li>
 <dd class="field-odd"><p>matplotlib figure</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.analyze.graph.base.Graph.plot_centrality">
+<span class="sig-name descname"><span class="pre">plot_centrality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'betweenness'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'YlOrRd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quartiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quartile_styles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.base.Graph.plot_centrality" title="Link to this definition"></a></dt>
+<dd><p>Plot nodes colored by a centrality or custom metric.</p>
+<p>Visualizes the graph with nodes grouped by their metric scores into
+quartiles. Supports both predefined centrality metrics and custom
+metric functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metric</strong> (<em>str</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – If str: Predefined centrality type. Options:
+- ‘betweenness’: Betweenness centrality (via NetworkX)
+- ‘closeness’: Closeness centrality (via NetworkX)
+- ‘eigenvector’: Eigenvector centrality (via NetworkX)
+- ‘degree’: Degree centrality
+If callable: Function that accepts self.g and returns dict of {node: value}.
+Default is ‘betweenness’.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Plot title. If empty, generates title from metric name.</p></li>
+<li><p><strong>cmap</strong> (<em>str</em><em>, </em><em>optional</em>) – Matplotlib colormap name for coloring nodes. Default is ‘YlOrRd’.</p></li>
+<li><p><strong>metric_func</strong> (<em>callable</em><em>, </em><em>optional</em>) – Deprecated. Use metric parameter instead.
+Function that accepts self.g and returns dict of {node: value}.</p></li>
+<li><p><strong>quartiles</strong> (<em>list</em><em>, </em><em>optional</em>) – Percentile boundaries for grouping nodes. Default is [0, 25, 50, 75].
+Must have length &gt;= 2.</p></li>
+<li><p><strong>quartile_styles</strong> (<em>dict</em><em>, </em><em>optional</em>) – Custom styles for each quartile group. Keys are quartile indices (0, 1, 2, 3),
+values are style dicts with ‘nx_node_color’ and/or ‘gv_fillcolor’.
+Example: {0: {‘nx_node_color’: ‘red’}, 3: {‘nx_node_color’: ‘blue’}}</p></li>
+<li><p><strong>**kwargs</strong> (<em>dict</em>) – Additional keyword arguments passed to Graph.draw().</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fig</strong> – The figure containing the plot.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.figure.Figure</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Using predefined metric</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="n">ex_nxgraph</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">set_pos</span><span class="p">(</span><span class="n">auto</span><span class="o">=</span><span class="s1">&#39;spring&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">plot_centrality</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="s1">&#39;betweenness&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Using custom metric function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">custom_metric</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">g</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">plot_centrality</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">custom_metric</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;PageRank&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Using custom quartiles and styles</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">quartile_styles</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;nx_node_color&#39;</span><span class="p">:</span> <span class="s1">&#39;lightblue&#39;</span><span class="p">},</span>
+<span class="gp">... </span>                   <span class="mi">3</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;nx_node_color&#39;</span><span class="p">:</span> <span class="s1">&#39;darkred&#39;</span><span class="p">}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">plot_centrality</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="s1">&#39;degree&#39;</span><span class="p">,</span> <span class="n">quartiles</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">],</span>
+<span class="gp">... </span>                            <span class="n">quartile_styles</span><span class="o">=</span><span class="n">quartile_styles</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -2760,6 +2884,74 @@ is provided, calls method_layout, where method is the string provided</p></li>
 <dd class="field-odd"><p>plot of susc, fail, and fix nodes over time</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.analyze.graph.base.Graph.summary">
+<span class="sig-name descname"><span class="pre">summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.base.Graph.summary" title="Link to this definition"></a></dt>
+<dd><p>Generate a summary dictionary of key graph metrics.</p>
+<p>Provides a quick overview of graph structure and properties useful for
+model documentation, comparison, and resilience analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>Summary statistics including:
+- num_nodes : int</p>
+<blockquote>
+<div><p>Number of nodes in the graph</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>num_edges<span class="classifier">int</span></dt><dd><p>Number of edges in the graph</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>density<span class="classifier">float</span></dt><dd><p>Graph density (ratio of actual to possible edges)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>is_connected<span class="classifier">bool</span></dt><dd><p>Whether the graph is connected (for directed graphs, this checks
+weak connectivity)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>num_components<span class="classifier">int</span></dt><dd><p>Number of connected components (weakly connected for directed graphs)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>avg_degree<span class="classifier">float</span></dt><dd><p>Average node degree</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>aspl<span class="classifier">float or None</span></dt><dd><p>Average shortest path length (only if graph is connected, None otherwise)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>modularity<span class="classifier">float</span></dt><dd><p>Network modularity score (measures strength of division into communities)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="n">ex_nxgraph</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">summary</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">summary</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">summary</span><span class="p">[</span><span class="s1">&#39;density&#39;</span><span class="p">]</span>
+<span class="go">0.4</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
