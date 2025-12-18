@@ -14,6 +14,7 @@ NASA Contributors
 * [Sequoia Andrade](https://github.com/sequoiarose), contributor 
 * [Hannah Walsh](https://github.com/walshh), contributor 
 * [Chris Teubert](https://github.com/teubert), contributor
+* [Seydou Mbaye], contributor
 
 External Contributors
 ------------------

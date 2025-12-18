@@ -25,7 +25,7 @@ from fmdtools.analyze.common import suite_for_plots
 from fmdtools.sim import propagate
 
 import unittest
-
+import networkx as nx
 
 class ModelGraphTests(unittest.TestCase):
     def setUp(self):
@@ -93,24 +93,26 @@ class ModelGraphTests(unittest.TestCase):
 
     def test_plot_centrality(self):
         """Test centrality visualization with predefined and custom metrics."""
-        import networkx as nx
-        mg = FunctionArchitectureGraph(self.mdl)
-        mg.set_pos(auto='spring')
-
         # Test predefined metrics
         for metric in ['betweenness', 'closeness', 'degree']:
-            fig = mg.plot_centrality(metric=metric)
+            mg = FunctionArchitectureGraph(self.mdl)
+            mg.set_pos(auto='spring')
+            fig = mg.plot_node_percentiles(metric=metric)
             self.assertIsNotNone(fig)
             # Verify node groups were created
             self.assertGreater(len(mg.node_groups), 0)
 
         # Test custom metric function
+        mg = FunctionArchitectureGraph(self.mdl)
+        mg.set_pos(auto='spring')
         custom_metric = lambda g: nx.pagerank(g)
-        fig = mg.plot_centrality(metric=custom_metric, title='PageRank')
+        fig = mg.plot_node_percentiles(metric=custom_metric, title='PageRank')
         self.assertIsNotNone(fig)
 
         # Test custom quartiles
-        fig = mg.plot_centrality(metric='degree', quartiles=[0, 30, 70, 100])
+        mg = FunctionArchitectureGraph(self.mdl)
+        mg.set_pos(auto='spring')
+        fig = mg.plot_node_percentiles(metric='degree', quartiles=[0, 30, 70, 100])
         self.assertIsNotNone(fig)
 
     def test_summary(self):

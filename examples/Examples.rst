@@ -109,3 +109,20 @@ Taxiway
    
    ../examples/taxiway/readme.rst
    ../examples/taxiway/Paper_Notebook.ipynb
+
+
+Airspace Library
++++++++++++++++++++++++++++++++++++++++++++++
+
+:doc:`/examples/airspacelib <../examples/airspacelib/readme>` provides a demonstration of developing a library to model aircraft in a shared airspace, demonstrating how fmdtools can be used to build new libraries for domain-specific applications.
+
+.. toctree::
+   :hidden:
+   
+   ../examples/airspacelib/readme.rst
+   ../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.md
+   ../examples/airspacelib/wildfireresponse/Wildfire_Demo.ipynb
+   ../examples/airspacelib/wildfireresponse/paper_demo.ipynb
+   ../examples/airspacelib/contingencymanagement/overview_presentation.md
+   ../examples/airspacelib/contingencymanagement/demo_notebook.ipynb
+   ../examples/airspacelib/contingencymanagement/proxthreat_notebook.ipynb

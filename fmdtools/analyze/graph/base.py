@@ -978,8 +978,113 @@ class Graph(object):
         plt.show()
         return fig
 
-    def plot_centrality(self, metric='betweenness', title='', cmap='YlOrRd',
-                       metric_func=None, quartiles=None, quartile_styles=None, **kwargs):
+    def calc_node_betweenness(self):
+        """Calculate betweenness for nodes."""
+        return nx.betweenness_centrality(self.g)
+
+    def calc_node_closeness(self):
+        """Calculate closeness dict for nodes."""
+        return nx.closeness_centrality(self.g)
+
+    def calc_node_degree(self):
+        """Calculate degree dict for nodes."""
+        return dict(self.g.degree())
+
+    def calc_node_eigenvector(self):
+        """Calculate eigenvector centrality for nodes."""
+        # Handle eigenvector centrality for potentially disconnected graphs
+        g_check = self.g if self.g.is_directed() else self.g.to_undirected()
+        is_connected = (nx.is_strongly_connected(g_check) if self.g.is_directed()
+                       else nx.is_connected(g_check))
+        if not is_connected:
+            centrality = {node: 0.0 for node in self.g.nodes()}
+        else:
+            try:
+                centrality = nx.eigenvector_centrality(self.g, max_iter=100)
+            except (nx.PowerIterationFailedConvergence, nx.NetworkXError):
+                try:
+                    centrality = nx.eigenvector_centrality_numpy(self.g)
+                except (nx.AmbiguousSolution, nx.NetworkXError):
+                    centrality = {node: 0.0 for node in self.g.nodes()}
+        return centrality
+
+    def get_node_percentiles(self, metric='betweenness', quartiles = [0, 25, 50, 75]):
+        """
+        Get the quartiles of a node for a given metric.
+
+        Parameters
+        ----------
+        metric : str or callable, optional
+            If str: Predefined centrality (calls calc_strname). Options:
+            - 'betweenness': Betweenness centrality (via NetworkX)
+            - 'closeness': Closeness centrality (via NetworkX)
+            - 'eigenvector': Eigenvector centrality (via NetworkX)
+            - 'degree': Degree centrality
+            If callable: Function that accepts self.g and returns dict of {node: value}.
+            Default is 'betweenness'.
+        quartiles : list, optional
+            Percentile boundaries for grouping nodes. Default is [0, 25, 50, 75].
+            Must have length >= 2.
+
+        Returns
+        -------
+        groups : dict
+            Dict of nodes in each quartile.
+
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> graph.get_node_percentiles("degree")
+        {0: ['external_signals', 'external_energy_in', 'external_material_in', 'external_material_out', 'external_energy_out'], 25: [], 50: ['control_signal', 'internal_energy'], 75: ['function_a', 'function_b', 'function_c']}
+        """
+        num_groups = len(quartiles)
+        if num_groups < 2:
+            raise ValueError("quartiles must have at least 2 values")
+
+        # Calculate centrality based on metric
+        if callable(metric):
+            centrality = metric(self.g)
+        elif hasattr(self, "calc_node_"+metric):
+            centrality = getattr(self, "calc_node_"+metric)()
+        else:
+            raise Exception("Invalid option for metric: "+metric)
+
+        # Get centrality values
+        values = np.array(list(centrality.values()))
+        if len(values) == 0:
+            raise ValueError("Graph has no nodes to compute centrality for")
+
+        # Check if all values are zero
+        if np.all(values == 0):
+            # Use uniform grouping for zero centrality
+            nodes_list = list(centrality.keys())
+            group_size = max(1, len(nodes_list) // num_groups)
+            groups = {}
+            for i, group_name in enumerate(quartiles):
+                start_idx = i * group_size
+                end_idx = (i + 1) * group_size if i < num_groups - 1 else len(nodes_list)
+                groups[group_name] = nodes_list[start_idx:end_idx]
+        else:
+            # Create node groups by centrality quartiles
+            percentile_values = np.percentile(values, quartiles)
+            groups = {name: [] for name in quartiles}
+
+            for node, val in centrality.items():
+                # Find which quartile this node belongs to
+                for i in range(len(percentile_values) - 1):
+                    if val <= percentile_values[i + 1]:
+                        groups[quartiles[i]].append(node)
+                        break
+                else:
+                    # Handle nodes above highest percentile
+                    groups[quartiles[-1]].append(node)
+        return groups
+
+
+    def plot_node_percentiles(self, metric='betweenness', title='',
+                              colormap=plt.cm.coolwarm,
+                              quartiles = [0, 25, 50, 75], quartile_names={},
+                              quartile_styles={}, **kwargs):
         """
         Plot nodes colored by a centrality or custom metric.
 
@@ -989,24 +1094,12 @@ class Graph(object):
 
         Parameters
         ----------
-        metric : str or callable, optional
-            If str: Predefined centrality type. Options:
-            - 'betweenness': Betweenness centrality (via NetworkX)
-            - 'closeness': Closeness centrality (via NetworkX)
-            - 'eigenvector': Eigenvector centrality (via NetworkX)
-            - 'degree': Degree centrality
-            If callable: Function that accepts self.g and returns dict of {node: value}.
-            Default is 'betweenness'.
         title : str, optional
             Plot title. If empty, generates title from metric name.
-        cmap : str, optional
-            Matplotlib colormap name for coloring nodes. Default is 'YlOrRd'.
-        metric_func : callable, optional
-            Deprecated. Use metric parameter instead.
-            Function that accepts self.g and returns dict of {node: value}.
-        quartiles : list, optional
-            Percentile boundaries for grouping nodes. Default is [0, 25, 50, 75].
-            Must have length >= 2.
+        colormap : matplotlib colormap, optional
+            Matplotlib colormap object for coloring nodes. plt.cm.coolwarm.
+        quartile_names : dict, optional
+            Names for quartile labels. Default is {}, which is just the numbers.
         quartile_styles : dict, optional
             Custom styles for each quartile group. Keys are quartile indices (0, 1, 2, 3),
             values are style dicts with 'nx_node_color' and/or 'gv_fillcolor'.
@@ -1024,145 +1117,40 @@ class Graph(object):
         >>> # Using predefined metric
         >>> graph = Graph(ex_nxgraph)
         >>> graph.set_pos(auto='spring')
-        >>> fig = graph.plot_centrality(metric='betweenness')
+        >>> fig = graph.plot_node_percentiles(metric='betweenness')
         >>>
         >>> # Using custom metric function
         >>> import networkx as nx
         >>> custom_metric = lambda g: nx.pagerank(g)
-        >>> fig = graph.plot_centrality(metric=custom_metric, title='PageRank')
+        >>> fig = graph.plot_node_percentiles(metric=custom_metric, title='PageRank')
         >>>
         >>> # Using custom quartiles and styles
-        >>> quartile_styles = {0: {'nx_node_color': 'lightblue'},
-        ...                    3: {'nx_node_color': 'darkred'}}
-        >>> fig = graph.plot_centrality(metric='degree', quartiles=[0, 30, 60, 90],
-        ...                             quartile_styles=quartile_styles)
+        >>> quartile_styles = {"0": {'nx_node_color': 'orange'},
+        ...                    "30": {'nx_node_color': 'green'}}
+        >>> fig = graph.plot_node_percentiles(metric='degree', quartiles=[0, 30, 60, 90],
+        ...                                   quartile_styles=quartile_styles)
         """
-        # Handle deprecated metric_func parameter
-        if metric_func is not None:
-            metric = metric_func
+        groups = self.get_node_percentiles(metric=metric, quartiles=quartiles)
+        groups = {quartile_names.get(g, str(g)): v for g, v in groups.items()}
+        self.add_node_groups(**groups)
 
-        # Set default quartiles
-        if quartiles is None:
-            quartiles = [0, 25, 50, 75]
-
-        if len(quartiles) < 2:
-            raise ValueError("quartiles must have at least 2 values")
-
-        # Calculate centrality based on metric
-        if callable(metric):
-            centrality = metric(self.g)
-            metric_name = getattr(metric, '__name__', 'custom')
-        elif metric == 'betweenness':
-            centrality = nx.betweenness_centrality(self.g)
-            metric_name = 'betweenness'
-        elif metric == 'closeness':
-            centrality = nx.closeness_centrality(self.g)
-            metric_name = 'closeness'
-        elif metric == 'eigenvector':
-            # Handle eigenvector centrality for potentially disconnected graphs
-            g_check = self.g if self.g.is_directed() else self.g.to_undirected()
-            is_connected = (nx.is_strongly_connected(g_check) if self.g.is_directed()
-                           else nx.is_connected(g_check))
-            if not is_connected:
-                centrality = {node: 0.0 for node in self.g.nodes()}
-            else:
-                try:
-                    centrality = nx.eigenvector_centrality(self.g, max_iter=100)
-                except (nx.PowerIterationFailedConvergence, nx.NetworkXError):
-                    try:
-                        centrality = nx.eigenvector_centrality_numpy(self.g)
-                    except (nx.AmbiguousSolution, nx.NetworkXError):
-                        centrality = {node: 0.0 for node in self.g.nodes()}
-            metric_name = 'eigenvector'
-        elif metric == 'degree':
-            centrality = dict(self.g.degree())
-            metric_name = 'degree'
-        else:
-            raise ValueError(f"Unknown metric: {metric}. "
-                           "Choose from 'betweenness', 'closeness', 'eigenvector', 'degree', "
-                           "or provide a callable.")
-
-        # Get centrality values
-        values = np.array(list(centrality.values()))
-        if len(values) == 0:
-            raise ValueError("Graph has no nodes to compute centrality for")
-
-        # Create quartile group names
-        num_groups = len(quartiles)
-        if num_groups == 4:
-            group_names = ['low', 'medium_low', 'medium_high', 'high']
-        else:
-            group_names = [f'q{i}' for i in range(num_groups)]
-
-        # Check if all values are zero
-        if np.all(values == 0):
-            # Use uniform grouping for zero centrality
-            nodes_list = list(centrality.keys())
-            group_size = max(1, len(nodes_list) // num_groups)
-            groups = {}
-            for i, group_name in enumerate(group_names):
-                start_idx = i * group_size
-                end_idx = (i + 1) * group_size if i < num_groups - 1 else len(nodes_list)
-                groups[group_name] = nodes_list[start_idx:end_idx]
-        else:
-            # Create node groups by centrality quartiles
-            percentile_values = np.percentile(values, quartiles)
-            groups = {name: [] for name in group_names}
-
-            for node, val in centrality.items():
-                # Find which quartile this node belongs to
-                for i in range(len(percentile_values) - 1):
-                    if val <= percentile_values[i + 1]:
-                        groups[group_names[i]].append(node)
-                        break
-                else:
-                    # Handle nodes above highest percentile
-                    groups[group_names[-1]].append(node)
-
-        # Add node groups
-        for group_name, nodes in groups.items():
-            if nodes:
-                self.add_node_groups(**{f'{metric_name}_{group_name}': nodes})
-
-        # Set node styles with color gradient
-        import matplotlib as mpl
-        try:
-            # Use new API (matplotlib >= 3.7)
-            colormap = mpl.colormaps.get_cmap(cmap)
-        except AttributeError:
-            # Fall back to old API for older matplotlib versions
-            import matplotlib.cm as cm
-            colormap = cm.get_cmap(cmap)
-
-        # Generate default colors
-        color_positions = np.linspace(0.2, 0.95, num_groups)
-        colors = [colormap(pos) for pos in color_positions]
-
+        # Generate colors from cmap
+        colors = [colormap(i/100) for i in quartiles]
         # Build style dictionary
         style_dict = {}
-        for i, group_name in enumerate(group_names):
-            if groups[group_name]:
-                # Use custom style if provided, otherwise use default
-                if quartile_styles and i in quartile_styles:
-                    custom_style = quartile_styles[i]
-                    default_style = {
-                        'nx_node_color': colors[i],
-                        'gv_fillcolor': f'#{int(colors[i][0]*255):02x}{int(colors[i][1]*255):02x}{int(colors[i][2]*255):02x}'
-                    }
-                    # Merge custom with default
-                    node_style = {**default_style, **custom_style}
-                else:
-                    node_style = {
-                        'nx_node_color': colors[i],
-                        'gv_fillcolor': f'#{int(colors[i][0]*255):02x}{int(colors[i][1]*255):02x}{int(colors[i][2]*255):02x}'
-                    }
-                style_dict[f'{metric_name}_{group_name}'] = node_style
+        for i, group_name in enumerate(groups):
+            default_style = {'nx_node_color': np.array([colors[i]]),
+                             'gv_fillcolor': f'#{int(colors[i][0]*255):02x}{int(colors[i][1]*255):02x}{int(colors[i][2]*255):02x}'}
+            style = {**default_style, **quartile_styles.get(group_name, {})}
+            style_dict[group_name] = style
 
         self.set_node_styles(group=style_dict)
 
         # Generate title if not provided
         if not title:
-            title = f'{metric_name.capitalize()} Centrality'
+            if callable(metric):
+                metric = metric.__name__
+            title = "Percentiles of Node "+metric
 
         return self.draw(title=title, **kwargs)
 
@@ -1200,9 +1188,9 @@ class Graph(object):
         >>> graph = Graph(ex_nxgraph)
         >>> summary = graph.summary()
         >>> summary['num_nodes']
-        5
-        >>> summary['density']
-        0.4
+        10
+        >>> summary['num_edges']
+        12
         """
         # Convert to undirected for connectivity checks
         g_undirected = self.g.to_undirected()
