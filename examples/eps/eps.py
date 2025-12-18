@@ -477,6 +477,8 @@ if __name__ == "__main__":
     import numpy as np
 
     mdl = EPS(track=['fxns', 'flows', 'i'])
+    fg = FunctionArchitectureGraph(mdl)
+    fig, ax = fg.plot_node_percentiles(metric="degree", quartiles=[0, 30, 70, 100])
     result, mdlhists = propagate.one_fault(mdl, "distribute_ee", "short")
 
     result, mdlhists = propagate.one_fault(mdl, "distribute_ee", "short",

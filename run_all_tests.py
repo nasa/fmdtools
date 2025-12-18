@@ -101,7 +101,11 @@ slow_notebooks = ["examples/multirotor/Multirotor_Optimization.ipynb",
                   "examples/pump/Optimization.ipynb",
                   "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",
                   "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",
-                  "examples/pump/Parallelism_Tutorial.ipynb"]
+                  "examples/pump/Parallelism_Tutorial.ipynb",
+                  "examples/airspacelib/wildfireresponse/Wildfire_Demo.ipynb",
+                  "examples/airspacelib/contingencymanagement/demo_notebook.ipynb",
+                  "examples/airspacelib/contingencymanagement/proxthreat_notebook.ipynb"
+                  ]
 
 # for testing extremely slow notebooks that can't be run to completion :
 too_slow_notebooks = ["examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",
@@ -111,7 +115,8 @@ too_slow_notebooks = ["examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",
                       "examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb",  # extremely slow notebook
                       "examples/rover/optimization/Search_Comparison.ipynb",  # extremely slow
                       "examples/rover/ParameterSample_Use-Cases.ipynb", # timeout fails (over 300s)
-                      "examples/tank/Tank_Optimization.ipynb"
+                      "examples/tank/Tank_Optimization.ipynb",
+                      "examples/airspacelib/wildfireresponse/paper_demo.ipynb"
                       ]
 
 
