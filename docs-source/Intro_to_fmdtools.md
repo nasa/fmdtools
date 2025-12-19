@@ -12,7 +12,7 @@ marp: true
 
 -----------------
 
-# Overview
+## Overview
 
 <style scoped>section{font-size:27px;}</style>
 
@@ -29,7 +29,7 @@ marp: true
         - Visualization/Analysis
 
 -----------------
-# Prerequisites
+## Prerequisites
 
 - Ideally, some pre-existing Python and Git knowledge
 - Python distribution (anaconda or uv)
@@ -42,27 +42,27 @@ marp: true
     - [git-scm](https://git-scm.com/) (stand-alone CLI)
 
 -----------------
-# Motivation: Modeling System Resilience
+## Motivation: Modeling System Resilience
 
 Resilience means taking a **dynamic understanding of risk and safety**
 
 ![resilience idea, width:1000px](./figures/powerpoint/resilience_idea.svg)
 
 -----------------
-# Why is Resilience Important?
+## Why is Resilience Important?
 
 ![resilience importance width:1000px](./figures/powerpoint/resilience_importance.svg)
 
 -----------------
 
-#  <!-- fit --> Enabling a proactive design process - especially when we don't have data
+##  <!-- fit --> Enabling a proactive design process - especially when we don't have data
 
 ![width:900px](./figures/powerpoint/resilience_design.svg)
 
 
 -----------------
 
-# Why fmdtools? Possible Competitors:
+## Why fmdtools? Possible Competitors:
 
 - Uncertainty Quantification tools:  (e.g. OpenCossan)
     - Does not incorporate fault modeling/propagation/visualization aspects
@@ -74,7 +74,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 -----------------
 
-# Why fmdtools? Pros:
+## Why fmdtools? Pros:
 
 - Highly Expressive, modular model representation.
     - faults from any component can propagate to any other connected component 
@@ -89,7 +89,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 -----------------
 
-# Why **not** fmdtools? Cons:
+## Why **not** fmdtools? Cons:
 
 - You already have a pre-existing system model
     - fmdtools models are built in fmdtools
@@ -101,13 +101,13 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 -----------------
 
-# What is fmdtools? A Python package for **design**, **simulation**, and **analysis** of resilience.
+## What is fmdtools? A Python package for **design**, **simulation**, and **analysis** of resilience.
 
 ![module organization width:990px](./figures/uml/module_organization.svg)
 
 -----------------
 
-# What is fmdtools? Repo Structure
+## What is fmdtools? Repo Structure
 
 
 [Repository](https://github.com/nasa/fmdtools/)
@@ -120,7 +120,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 -----------------
 <style scoped>section{font-size:27px;}</style>
-# Activity: Download and Install fmdtools
+## Activity: Download and Install fmdtools
 
 - repo link: [https://github.com/nasa/fmdtools/](https://github.com/nasa/fmdtools/)
 - set up repo:
@@ -135,13 +135,13 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 -----------------
 
-# Analysis Workflow/Structure
+## Analysis Workflow/Structure
 
 ![Analysis Workflow width:950px](./figures/powerpoint/workflow.svg)
 
 -----------------
 
-# Defining a Model
+## Defining a Model
 <style scoped>section{font-size:25px;}</style>
 - What do we want out of a model?
     - What behaviors and how much fidelity do we need?
@@ -158,13 +158,13 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 -----------------
 
-# Defining a Model
+## Defining a Model
 
 ![formalism example, width:1000](./figures/powerpoint/formalism_example.svg)
 
 -----------------
 
-# Concept: Static Propagation
+## Concept: Static Propagation
 
 ![Static Propagation](./figures/drawio/propagation.svg)
 
@@ -172,7 +172,7 @@ In a single timestep, functions with `static_behavior()` methods simulate until 
 
 -----------------
 
-# Concept: Propagation over Time
+## Concept: Propagation over Time
 
 <style scoped> { columns: 2; } </style>
 
@@ -183,7 +183,7 @@ In a single timestep, functions with `static_behavior()` methods simulate until 
 ![Dynamic Propagation width:600px](./figures/drawio/propagationovertime.svg)
 
 -----------------
-# Python Concept: Classes and Object-Oriented Programming
+## Python Concept: Classes and Object-Oriented Programming
 
 Classes are the core of object-oriented programming. A class in python might look like:
 ```
@@ -204,7 +204,7 @@ Classes are instantiated to form objects, which we can then use to manipulate da
 ```
 
 -----------------
-# Why classes and objects?
+## Why classes and objects?
 
 - Classes give you the ability to **group data and methods** together to satisfy an overall use-case
 - Classes define the "template"--what should an object include, be able to do, how should it be instantiated, etc.
@@ -214,7 +214,7 @@ Classes are instantiated to form objects, which we can then use to manipulate da
 - **Independence:** New objects are independent of old objects, so, e.g., if you want a new sim while keeping the old one you can do that
 
 -----------------
-# Python dataclasses (and similar)
+## Python dataclasses (and similar)
 
 fmdtools uses the recordclass package to define dataclasses: https://github.com/intellimath/recordclass
 
@@ -233,12 +233,12 @@ Dataclasses let you define the data as **fields** and then lets you directly ins
 Dataclasses are used in fmdtools for **Containers**
 
 -----------------
-# Containers - The building blocks of simulations
+## Containers - The building blocks of simulations
 ![container example](./figures/powerpoint/container_structures.svg)
 - Containers are used to define various attributes of Functions and Flows
 
 -----------------
-# Class aggregation in fmdtools BaseObject
+## Class aggregation in fmdtools BaseObject
 
 In fmdtools, **BaseObject** classes (Functions, Flows, etc.) aggregate Containers classes, allowing you to instantiate multiple at the same time, e.g., in the class:
 ```
@@ -253,7 +253,7 @@ class ExampleObject(BaseObject):
 1.0
 ```
 -----------------
-# Main classes in fmdtools
+## Main classes in fmdtools
 
 ![flow example](./figures/drawio/class_diagram.svg)
 
@@ -267,23 +267,23 @@ class ExampleObject(BaseObject):
 
 
 -----------------
-# Flow Code Template
+## Flow Code Template
 ![flow example](./figures/powerpoint/flow_structure.svg)
 - Flows represent connections or shared variables between different functions. Think of them as Function inputs/outputs.
 - Flows are build from container classes like states, along with their own methods/variables.
 
 -----------------
-# Function Code Template
+## Function Code Template
 
 ![Function Code Template](./figures/powerpoint/fxnblock_structure.svg)
 
 -----------------
-# Function Architecture Code Template
+## Function Architecture Code Template
 
 ![Model Code Template](./figures/powerpoint/fxnarch_structure.svg)
 
 -----------------
-# Demo Model Activity: examples/pump/ex_pump.py
+## Demo Model Activity: examples/pump/ex_pump.py
 
 Notice the definitions and structure:
 - **States**: `WaterStates`, `EEStates`, `SignalStates`
@@ -297,7 +297,7 @@ Notice the definitions and structure:
 - **Parameter**: `PumpParam` defines values we can change in the simulation
 
 -----------------
-# Why do we structure models this way?
+## Why do we structure models this way?
 
 - **Enabling undirected propagation:** Behavior from any Block in an Architecture can propagate to anything else, which is important for capturing the full set of hazardous behavior
 - **Composability and Parameterization:** OOP gives us the ability to create a number of co-existing model variants by varying parameters as well as creating sub-classes with different containers
@@ -306,7 +306,7 @@ Notice the definitions and structure:
 
 -----------------
 
-# More Resources for Model Definition
+## More Resources for Model Definition
 
 - Note the docs for model definition are in [https://nasa.github.io/fmdtools/docs-source/fmdtools.define.html](https://nasa.github.io/fmdtools/docs-source/fmdtools.define.html)
 
@@ -314,7 +314,7 @@ Notice the definitions and structure:
 
 -----------------
 
-# Notebook Activity:
+## Notebook Activity:
 
 Open `/examples/pump/Tutorial_unfilled.ipynb`:
 - Instantiate the model
@@ -328,7 +328,7 @@ Open `/examples/pump/Tutorial_unfilled.ipynb`:
 
 -----------------
 
-# Simulation Concepts: Types of Simulations
+## Simulation Concepts: Types of Simulations
 
 ![Dynamic Propagation, width:1000px](./figures/powerpoint/simulation_types.svg)
 
@@ -336,7 +336,7 @@ For more info on syntax/arguments, see documentation for [`fmdtools.sim.propagat
 
 -----------------
 
-# Simulation Concepts: Sampling Approaches
+## Simulation Concepts: Sampling Approaches
 
 These classes define **multi-run simulations** which can be used to quantify uncertain performance/resiliences:
 
@@ -352,7 +352,7 @@ See docs for: [`fmdtools.sim.fault_sample`](https://nasa.github.io/fmdtools/docs
 
 -----------------
 
-# Simulation Concepts: Things to Consider
+## Simulation Concepts: Things to Consider
 
 **Static/Dynamic propagation:** How function states propagate to each other in a single time-step and multiple time-steps?
 
@@ -365,7 +365,7 @@ See docs for: [`fmdtools.sim.fault_sample`](https://nasa.github.io/fmdtools/docs
 
 -----------------
 
-# Activity: Simulate the Model
+## Activity: Simulate the Model
 
 Run fault propagation methods:
 - `propagate.nominal()`,  `propagate.one_fault()`, `propagate.fault_sample()`
@@ -380,7 +380,7 @@ Explore:
 
 -----------------
 
-# Analysis Modules - see docs for [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html)
+## Analysis Modules - see docs for [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html)
 
 ![Analyze Modules width:1000px](./figures/powerpoint/analyze_module_structure.svg)
 
@@ -388,7 +388,7 @@ Explore:
 
 -----------------
 
-# Analysis Activity
+## Analysis Activity
 
 **Visualize the results:**
 - Show model graph
@@ -403,7 +403,7 @@ Explore:
 
 -----------------
 
-# Starting your own repo/project
+## Starting your own repo/project
 
 1.) Use `uv init` to create a template project, with its own virtual environment at `.venv`, `README.md`, and `pyproject.toml` files.
 - Fill in these files (e.g., fmdtools version, contributors, project description)
@@ -421,7 +421,7 @@ Explore:
 
 -----------------
 
-# Conclusions/Summary
+## Conclusions/Summary
 
 - **fmdtools** is an environment for designing resilient systems
     - `/define` enables model definition
@@ -434,7 +434,7 @@ Explore:
 
 -----------------
 
-# Further Reading/Links
+## Further Reading/Links
 
 - More advanced topics ([see examples](../examples/Examples.rst)), including Search and optimization, Human, Systems-of-Systems modeling, and Modeling Stochastic Behavior
 
