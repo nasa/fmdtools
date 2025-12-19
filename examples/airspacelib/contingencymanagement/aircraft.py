@@ -433,6 +433,10 @@ def plot_flightpath(mdl={}, history={}, fig={}, ax={}, with_plans=True, with_loc
     else:
         kw = dict(linewidth=3, color='blue', linestyle="--")
     kw['legend'] = legend_kwargs is not False
+    if 'time_ticks' in kwargs:
+        kw['time_ticks'] = kwargs.pop("time_ticks")
+    if 'time_groups' in kwargs:
+        kw['time_groups'] = kwargs.pop("time_groups")
     fig, ax = history.plot_trajectories('trajectories.s.x',
                                         'trajectories.s.y',
                                         fig=fig, ax=ax, indiv_kwargs=ft_kwar, **kw)

@@ -116,7 +116,7 @@ too_slow_notebooks = ["examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",
                       "examples/rover/optimization/Search_Comparison.ipynb",  # extremely slow
                       "examples/rover/ParameterSample_Use-Cases.ipynb", # timeout fails (over 300s)
                       "examples/tank/Tank_Optimization.ipynb",
-                      "examples/airspacelib/wildfireresponse/paper_demo.ipynb"
+                      "examples/airspacelib/wildfireresponse/paper_figures.ipynb"
                       ]
 
 
