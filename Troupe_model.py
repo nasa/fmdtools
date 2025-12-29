@@ -60,56 +60,6 @@ class GroundControlParams(Parameter):
     dest_buffer: float = 0.3
     speed: float = 0.1
 
-
-class EnvironmentParams(CoordsParam):
-    """
-    Define the map parameters (default is 1000mX1000m grid where each point 
-   is 0.1m).
-
-    Fields
-    -------
-    x_size: int
-        number of blocks in x direction
-    y_size: int
-        number of blocks in y direction
-    blocksize: float
-        size of each block
-    operator_params: GroundControlParams
-        takes in the destination point from ground control
-    num_occupied: int
-        number of occupied grid points to initiate the map with
-    occupied: feature
-        places in the map that are occupied and the rover can't reach
-    explored: state
-        areas of the map where the rover has exploed
-    perecieved_objects: state
-        objects that are percieved and mapped
-    perecieved_end_zone: feature
-        acceptable end zone corresponding to the desitination point
-    start: base
-        base location
-    all_occupied: collection
-        all points that are occupied
-    all_endzone: collection
-        all points that are in th end zone
-    """
-
-    x_size: int = 100
-    y_size: int = 100
-    blocksize: float = 0.3
-    operator_params: GroundControlParams = GroundControlParams()
-
-    num_occupied: int = 50
-    state_explored: tuple = (bool, False)
-    state_perceived_objects: tuple = (bool, False)
-    state_rover_path: tuple = (bool, False)
-    feature_occupied: tuple = (bool, False)
-    feature_end_zone: tuple = (bool, False)
-    point_base: tuple = (5.1, 5.1)
-    collect_all_occupied: tuple = ("occupied", True)
-    collect_all_endzone: tuple = ("end_zone", True)
-
-
 class MissionParams(Parameter):
     """
     Define the parameter inputs re;ated to the mission.
@@ -131,14 +81,84 @@ class MissionParams(Parameter):
         sensing fault, sensing will be delayed beyond this value.
     sense_malfunc_rate: float
         error rate when the sensor malfunctions
+    safety_buffer: float
+        the safety buffer the rover should maintain inbetween itself and obstacles
     """
 
-    loc_pos_error: float = 0.1
+    sense_error_mean: float = 0.0
+    sense_error_std: float = 0.05
     num_waypoints: int = 5
     max_sense_delay: int = 4
-    sense_malfunc_rate: float = 0.3
+    sense_malfunc_mean: float = 0.0
+    sense_malfunc_std: float = 0.2
     vision_range: float = 5.0
     max_ghost_points: int = 1
+    safety_buffer: float = 0.6
+
+class EnvironmentParams(CoordsParam):
+    """
+    Define the map parameters (default is 1000mX1000m grid where each point 
+   is 0.1m).
+
+    Fields
+    -------
+    x_size: int
+        number of blocks in x direction
+    y_size: int
+        number of blocks in y direction
+    blocksize: float
+        size of each block
+    operator_params: GroundControlParams
+        takes in the destination point from ground control
+    num_occupied: int
+        number of occupied grid points to initiate the map with
+    explored: state
+        areas of the map where the rover has exploed
+    perecieved_objects: state
+        objects that are percieved and mapped
+    rover_path: state
+        areas in the map the rover has travelled
+    occupied: feature
+        places in the map that are occupied and the rover can't reach
+    end_zone: feature
+        acceptable end zone corresponding to the desitination point
+    danger_zone: feature
+        area surrounding obstacles the rover should not go to
+    point: base
+        base location
+    all_occupied: collection
+        all points that are occupied
+    all_endzone: collection
+        all points that are in th end zone
+    all_dangerzone: collection
+        all points that the rover should not travel to
+    """
+
+    x_size: int = 100
+    y_size: int = 100
+    blocksize: float = 0.3
+    operator_params: GroundControlParams = GroundControlParams()
+    mission_params: MissionParams = MissionParams()
+
+    num_occupied: int = 50
+    num_obstacle_clusters: int = 10
+    cluster_size: int = 10
+    max_obstacle_length: int = 3
+    max_obstacle_width: int = 3
+    state_explored: tuple = (bool, False)
+    state_perceived_objects: tuple = (bool, False)
+    state_rover_path: tuple = (bool, False)
+    state_danger_zone: tuple = (bool, False)
+    state_curr_obstacles: tuple = (bool, False)
+    state_curr_visibility: tuple = (bool, False)
+    feature_occupied: tuple = (bool, False)
+    feature_end_zone: tuple = (bool, False)
+    point_base: tuple = (5.1, 5.1)
+    collect_all_occupied: tuple = ("occupied", True)
+    collect_all_endzone: tuple = ("end_zone", True)
+
+
+
 
 
 class RoverParams(Parameter):
@@ -173,6 +193,8 @@ class EnvironmentGrid(Coords):
         """
         self.set_rand_pts("occupied", True,
                           self.p.num_occupied, pts=self.pts[1:-1])
+        obstacles = self.find_all_prop ('occupied', True)
+        self.create_obstacle_clusters(obstacles)
         end_zone = Point(
             self.p.operator_params.destination[0], 
             self.p.operator_params.destination[1]
@@ -180,8 +202,64 @@ class EnvironmentGrid(Coords):
         for i in self.pts:
             if end_zone.contains(Point(i[0], i[1])):
                 self.set(i[0], i[1], "end_zone", True)
+        obstacles = self.find_all_prop ('occupied', True)
 
+            
+    def create_obstacle_clusters(self, obstacles):
+        '''creates obstacle clusters based on input parameters'''
+        cluster_index = self.r.rng.choice(self.p.num_occupied, size=self.p.num_obstacle_clusters, replace=False)
+        for pos, index in enumerate(cluster_index):
+            cluster_size = self.r.rng.integers(2, self.p.cluster_size, endpoint=True)
 
+            if pos % 2 == 1:
+                # clusters are built horizontally when the index is an odd number
+                build_direction = 'horizontal'
+                self.build_clusters(build_direction, cluster_size, obstacles[index])
+                                        
+            else:
+                #clusters are built vertically when the index is an even number
+                build_direction = 'vertical'
+                self.build_clusters(build_direction, cluster_size, obstacles[index])
+
+    def build_clusters (self, build_direction, size, start_point):
+        len_count = 1
+        cluster_count = 1
+        new_obstacles = list()
+        new_obstacles.append (start_point)
+        
+        if build_direction == 'horizontal':
+            prim_fil_dir = 'right'
+            sec_fil_dir = 'up'
+        else:
+            prim_fil_dir = 'up'
+            sec_fil_dir = 'right'
+            
+        while (cluster_count < size):
+            while (len_count < self.p.max_obstacle_length and cluster_count < size):
+                cluster_points = self.get_neighbors(new_obstacles[-1][0], new_obstacles[-1][1], prim_fil_dir)
+                new_obstacles = new_obstacles + cluster_points
+                len_count += 1
+                cluster_count += 1
+            self.set_pts(new_obstacles, "occupied", True)
+            if cluster_count < size:
+                cluster_points = self.get_neighbors(new_obstacles[-1][0], new_obstacles[-1][1], sec_fil_dir)
+                new_obstacles = new_obstacles + cluster_points
+                cluster_count += 1
+                new_obstacles = new_obstacles[-1:]
+                self.set_pts(new_obstacles, "occupied", True)
+                if build_direction == 'horizontal':
+                    if prim_fil_dir == 'right':
+                        prim_fil_dir = 'left'
+                    else:
+                        prim_fil_dir = 'right'
+                else:
+                    if prim_fil_dir == 'up':
+                        prim_fil_dir = 'down'
+                    else:
+                        prim_fil_dir = 'up'
+                len_count = 1
+                
+                
 class EnvironmentState(State):
     """
     States relating the rover with its environment.
@@ -278,16 +356,21 @@ class LocationPoseState(State):
 
     curr_x: float = 5.1
     curr_y: float = 5.1
-    heading_angle: float = 0.0
-    velocity: list = [0, 0]
+    dir_i: float = 0.0 
+    dir_j: float = 0.0
  
 
 
-class LocationPose(MultiFlow):
+class LocationPose(Flow):
     """Flow for the Locationa and Pose of the Rover"""
 
     __slots__ = ()
     container_s = LocationPoseState
+    container_p = EnvironmentParams
+    
+    def init_block(self, **kwargs):
+        self.s.curr_x = self.p.environment.point_base[0]
+        self.s.curr_y = self.p.environment.point_base[1]
 
 class SenseDataState(State):
     '''
@@ -436,8 +519,9 @@ class SupplyPower(Function):
 
 class MapState(State):
     '''state for the map function. Tracks the obstacles that are within the
-    vision cone'''
+    vision cone, second state tracks if the map is reset for no_self_map fault'''
     obstacles_inrange: list = []
+    map_reset: bool = False
 
 
 class MapMode(Mode):
@@ -487,15 +571,19 @@ class Map(Function):
             self.m.set_mode("on")
             self.ee.s.a = 0.1
             
+            
             #All percieved points are set to unexplored when 
             #no_self_map fault is present
-            if self.m.has_fault("no_self_map"):
+            if self.m.has_fault("no_self_map") and self.s.map_reset == False:
+                self.ee.s.power_draw = True
+                self.ee.s.a += 1
                 explored_pts = self.environment.c.find_all_prop(
                     "explored", True)
                 self.environment.c.set_pts(explored_pts, "explored", False)
                 self.environment.c.set_pts(
                     explored_pts, "perceived_objects", False)
                 self.s.obstacles_inrange = list()
+                self.s.map_reset = True
             
             # perception occurs when video/lidar is present
             if not self.m.has_fault("no_feed"):
@@ -565,7 +653,7 @@ class Map(Function):
                 # add the visible obstacles to the tracked obstacle list
                 self.s.obstacles_inrange = self.s.obstacles_inrange + visible_obstacle_pts
                 
-                # update the environment to with the percieved information
+                # update the historic map with the percieved information 
                 self.environment.c.set_pts(
                     visible_obstacle_pts, "perceived_objects", True
                 )
@@ -573,7 +661,24 @@ class Map(Function):
                     visible_obstacle_pts, "explored", True)
                 self.environment.c.set_pts(
                     visible_explored_pts, "explored", True)
-
+                
+                # update current visible map states
+                prev_explored_pts = self.environment.c.find_all_prop(
+                    "curr_visibility", True)
+                self.environment.c.set_pts(prev_explored_pts, "curr_visibility", False)
+                self.environment.c.set_pts(
+                    prev_explored_pts, "curr_obstacles", False)
+                
+                curr_explored_pts = self.environment.c.find_all_prop(
+                    "explored", True)
+                curr_cone_pts = self.check_in_cone (curr_explored_pts, vision_cone)
+                self.environment.c.set_pts(
+                    self.s.obstacles_inrange, "curr_obstacles", True
+                )
+                self.environment.c.set_pts(
+                    self.s.obstacles_inrange, "curr_visibility", True)
+                self.environment.c.set_pts(
+                    curr_cone_pts, "curr_visibility", True)
             else:
                 # when there is no_feed the mapping does not draw power
                 self.ee.s.power_draw = False
@@ -771,7 +876,15 @@ class Sense(Function):
         if self.m.has_fault('position_est_malfunc'):
             self.sense_data.s.malfunc_pose = True
 
-            
+class NavigateState(State):
+    location_error: list = [0.0, 0.0]   
+    pose_error: list = [0.0, 0.0]
+    perceived_loc: list = [0.0, 0.0]
+    perceived_dir: list = [0.0, 0.0]
+    sense_malfunc_error_loc: list = [0.0, 0.0]
+    sense_malfunc_error_dir: list = [0.0, 0.0]
+ 
+    
 class NavigateMode(Mode):
     fm_args = (
         "steering_stuck",
@@ -788,24 +901,27 @@ class NavigateMode(Mode):
 
 
 class Navigate(Function):
-    __slots__ = ("ee", "environment", "location_pose", "location_pose_est", "sense_data")
+    __slots__ = ("ee", "environment", "location_pose", "sense_data")
     container_m = NavigateMode
     container_p = RoverParams
+    container_s = NavigateState 
+    container_r = Rand 
     flow_ee = EE
     flow_environment = RoverEnvironment
     flow_location_pose = LocationPose
     flow_sense_data = SenseData
-    
-    def init_block(self, **kwargs):
-        self.location_pose_est = self.location_pose.create_local(self.name)
 
+    def init_block(self, **kwargs):
+        self.s.perceived_loc[0] = self.p.environment.point_base[0]
+        self.s.perceived_loc[1] = self.p.environment.point_base[1]
+        
     def dynamic_behavior(self, time):
         if self.ee.s.v == 12:
             if not self.environment.c.in_range (self.p.ground_control.destination[0], self.p.ground_control.destination[1]):
                 raise Exception ("Desitination is out of bounds or the defined map. Maximun x value is " + str(self.p.environment.x_size * self.p.environment.blocksize)
                                  + "Maximum y value is " + str(self.p.environment.y_size * self.p.environment.blocksize) + ".")
-            if self.environment.c.get(self.p.ground_control.destination[0], self.p.ground_control.destination[1], 'explored'):
-                if self.environment.c.get(self.p.ground_control.destination[0], self.p.ground_control.destination[1], 'occupied'):
+            if self.environment.c.get(self.p.ground_control.destination[0], self.p.ground_control.destination[1], 'curr_visibility'):
+                if self.environment.c.get(self.p.ground_control.destination[0], self.p.ground_control.destination[1], 'curr_obstacles'):
                     self.m.set_mode('idle')
                 else:
                     self.m.set_mode('drive')
@@ -815,6 +931,16 @@ class Navigate(Function):
             if self.m.in_mode('idle'):
                 self.ee.s.a += 0.1
             else:
+                #path planning
+                ##identify dangerzones
+                obstacles = self.environment.c.find_all_prop ('curr_obstacles', True)
+                visible_map = self.environment.c.find_all_prop ('curr_visibility', True)
+                for i in obstacles:
+                    danger_zone = Point(i[0], i[1]).buffer(self.p.mission.safety_buffer)
+                    for j in visible_map:
+                        if danger_zone.contains(Point(j[0], j[1])):
+                            self.environment.c.set(j[0], j[1], "danger_zone", True)
+                #self.est_cur_locdir()
                 delta_i = self.p.ground_control.destination[0] - \
                     self.location_pose.s.curr_x
                 delta_j = self.p.ground_control.destination[1] - \
@@ -831,8 +957,39 @@ class Navigate(Function):
 
         self.environment.c.set(self.location_pose.s.curr_x, self.location_pose.s.curr_y, 'rover_path', True)
         return
+    
+    # def find_shortest_distance (self, pts):
+    #     for i in pts:
+    #         if 
+    def est_cur_locdir (self):
+        if self.sense_data.s.location == False:
+            self.s.location_error = self.get_error_rate(self.p.mission.sense_error_mean, self.p.mission.sense_error_std)
+            self.s.perceived_loc = self.assign_error(self.s.perceived_loc, self.s.location_error)
+        else:
+            if self.sense_data.s.malfunc_location == True:
+                self.s.sense_malfunc_error_loc = self.get_error_rate(self.p.mission.sense_malfunc_mean, self.p.mission.sense_malfunc_std)
+            first_x = self.location_pose.h.s.curr_x[int(self.t.time)-self.sense_data.s.delay] + self.location_pose.h.s.curr_x[int(self.t.time)-self.sense_data.s.delay] * self.s.sense_malfunc_error_loc[0] 
+            first_y = self.location_pose.h.s.curr_y[int(self.t.time)-self.sense_data.s.delay] + self.location_pose.h.s.curr_y[int(self.t.time)-self.sense_data.s.delay] * self.s.sense_malfunc_error_loc[1]
+            print (self.sense_data.s.delay)
 
+            
+           # for i in range (self.sense_data.s.delay):
+                
+        if self.sense_data.s.pose == False:
+            self.s.pose_error = self.get_error_rate(self.p.mission.sense_error_mean, self.p.mission.sense_error_std)
+            self.s.perceived_dir = self.assign_error(self.s.perceived_dir, self.s.pose_error)   
+        else:
+            if self.sense_data.s.malfunc_pose == True:
+                self.s.sense_malfunc_error_dir = self.get_error_rate(self.p.mission.sense_malfunc_mean, self.p.params.sense_malfunc_std)
 
+        
+    def get_error_rate (self, mean_error, std_error):
+        return self.r.rng.normal(mean_error, std_error, size=2) 
+    
+    def assign_error (self, value, error_rate):
+        for ind, rate in enumerate(error_rate):
+            value[ind] += value[ind] * rate
+        return value
 class Rover(FunctionArchitecture):
     __slots__ = ()
     container_p = RoverParams
@@ -855,7 +1012,7 @@ class Rover(FunctionArchitecture):
         # self.add_fxn("communicate", Communicate, "ee_comms", "comms")
         self.add_fxn("map", Map, "environment", "ee",
                      "location_pose", p=self.p.mission)
-        self.add_fxn("sense", Sense, "sense_data", "ee")
+        self.add_fxn("sense", Sense, "sense_data", "location_pose", "ee", "environment")
         self.add_fxn(
             "navigate", Navigate, "location_pose", "ee", "environment", "sense_data", p=self.p
         )
@@ -930,7 +1087,7 @@ class Rover(FunctionArchitecture):
         )
         
         false_negetive_objects = self.flows["environment"].c.find_all(
-            perceived_objects=(False, np.equal), occupied=(True, np.equal))
+            perceived_objects=(False, np.equal), occupied=(True, np.equal), explored=(True, np.equal))
         
         false_positive_objects = self.flows["environment"].c.find_all(
             perceived_objects=(True, np.equal), occupied=(False, np.equal))
@@ -961,7 +1118,7 @@ if __name__ == "__main__":
     # mdl.flows['environment'].c.assign_from(hist.flows.environment.c, len(hist.time)-1, 'perceived_objects')
 
     ex2, hist2 = prop.one_fault(
-        mdl, "map", "no_self_map", time=10, run_stochastic=True, seed=50
+        mdl, "map", "no_obstacle_detection", time=50, run_stochastic=True, seed=50
     )
     mdl.flows["environment"].c.assign_from(
         hist2.faulty.flows.environment.c, len(
@@ -970,8 +1127,19 @@ if __name__ == "__main__":
     mdl.flows["environment"].c.assign_from(
         hist2.faulty.flows.environment.c,
         len(hist2.faulty.time) - 1,
-        "perceived_objects"
-    )
+        "perceived_objects")
+    mdl.flows["environment"].c.assign_from(
+        hist2.faulty.flows.environment.c,
+        len(hist2.faulty.time) - 1,
+        "rover_path")
+    mdl.flows["environment"].c.assign_from(
+        hist2.faulty.flows.environment.c,
+        len(hist2.faulty.time) - 1,
+        "curr_visibility")
+    mdl.flows["environment"].c.assign_from(
+        hist2.faulty.flows.environment.c,
+        len(hist2.faulty.time) - 1,
+        "curr_obstacles")
     mdl.flows["environment"].c.show(
         {"explored": {}},
         collections={"all_occupied": {"label": False},
@@ -982,28 +1150,34 @@ if __name__ == "__main__":
 
     mdl.flows["environment"].c.show(
         {
-            "explored": {"color": "blue", "alpha": 0.3},
-            "perceived_objects": {"color": "yellow", "alpha": 0.6},
+            "explored": {"color": "blue", "alpha": 0.1},
+            "perceived_objects": {"color": "yellow", "alpha": 0.5},
             "rover_path": {"color": "black", "alpha": 0.6},
+            "curr_visibility": {"color": "green", "alpha": 0.6},
+            "curr_obstacles": {"color": "purple", "alpha": 0.6},
+            "danger_zone": {'color': 'red', 'alpha': 0.3},
         },
         collections={
-            "all_occupied": {"label": False, "color": "red"},
+            "all_occupied": {"label": False, "color": "red"}, 
             "all_endzone": {"label": False, "color": "green"},
         }, coll_overlay=False,
         linewidth=0.0,
     )
-    
+
     animation = mdl.flows["environment"].c.animate(
-        hist2.faulty.flows.environment.c, properties ={"explored": {"color": "blue", "alpha": 0.3},
-    "perceived_objects": {"color": "yellow", "alpha": 0.6}, "rover_path": {"color": "black", "alpha": 0.6}
+        hist2.faulty.flows.environment.c, properties ={"explored": {"color": "blue", "alpha": 0.1},
+    "perceived_objects": {"color": "yellow", "alpha": 0.5}, "rover_path": {"color": "black", "alpha": 0.6},
+            "curr_visibility": {"color": "green", "alpha": 0.6},
+            "curr_obstacles": {"color": "purple", "alpha": 0.6},
+            "danger_zone": {'color': 'red', 'alpha': 0.3},
     },
     collections={
     "all_occupied": {"label": False, "color": "red"},
     "all_endzone": {"label": False, "color": "green"}}, coll_overlay=False, linewidth =0.0)
     
     progress_callback = lambda i, n: print(f'Saving frame {i}/{n}')
-    #animation.save('Troupe_faulty_ghost_obstacle_detection.mp4', progress_callback=progress_callback)
-    animation.save('Troupe_faulty_no_self_map.mp4', progress_callback=progress_callback)
+    animation.save('Troupe_test.mp4', progress_callback=progress_callback)
+    # animation.save('Troupe_faulty_no_self_map.mp4', progress_callback=progress_callback)
     
     # animation = mdl.flows["environment"].c.animate(
     #     hist2.nominal.flows.environment.c, properties ={"explored": {"color": "blue", "alpha": 0.3},
