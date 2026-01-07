@@ -78,46 +78,46 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#author-daniel-hulse">Author: Daniel Hulse</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#version-2-3-0">Version: 2.3.0</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#why-is-resilience-important">Why is Resilience Important?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-a-proactive-design-process-especially-when-we-don-t-have-data"><!-- fit --> Enabling a proactive design process - especially when we don’t have data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#why-fmdtools-pros">Why fmdtools? Pros:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#activity-download-and-install-fmdtools">Activity: Download and Install fmdtools</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defining-a-model">Defining a Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Defining a Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#concept-static-propagation">Concept: Static Propagation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#concept-propagation-over-time">Concept: Propagation over Time</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-concept-classes-and-object-oriented-programming">Python Concept: Classes and Object-Oriented Programming</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#why-classes-and-objects">Why classes and objects?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-dataclasses-and-similar">Python dataclasses (and similar)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#containers-the-building-blocks-of-simulations">Containers - The building blocks of simulations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#class-aggregation-in-fmdtools-baseobject">Class aggregation in fmdtools BaseObject</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#main-classes-in-fmdtools">Main classes in fmdtools</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#flow-code-template">Flow Code Template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#function-code-template">Function Code Template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#function-architecture-code-template">Function Architecture Code Template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#why-do-we-structure-models-this-way">Why do we structure models this way?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#more-resources-for-model-definition">More Resources for Model Definition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notebook-activity">Notebook Activity:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#simulation-concepts-types-of-simulations">Simulation Concepts: Types of Simulations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#simulation-concepts-sampling-approaches">Simulation Concepts: Sampling Approaches</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#simulation-concepts-things-to-consider">Simulation Concepts: Things to Consider</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#activity-simulate-the-model">Activity: Simulate the Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analysis-modules-see-docs-for-fmdtools-analyze">Analysis Modules - see docs for <code class="docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analysis-activity">Analysis Activity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#starting-your-own-repo-project">Starting your own repo/project</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conclusions-summary">Conclusions/Summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading-links">Further Reading/Links</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#why-is-resilience-important">Why is Resilience Important?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enabling-a-proactive-design-process-especially-when-we-don-t-have-data"><!-- fit --> Enabling a proactive design process - especially when we don’t have data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#why-fmdtools-pros">Why fmdtools? Pros:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#activity-download-and-install-fmdtools">Activity: Download and Install fmdtools</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#defining-a-model">Defining a Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Defining a Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#concept-static-propagation">Concept: Static Propagation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#concept-propagation-over-time">Concept: Propagation over Time</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#python-concept-classes-and-object-oriented-programming">Python Concept: Classes and Object-Oriented Programming</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#why-classes-and-objects">Why classes and objects?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#python-dataclasses-and-similar">Python dataclasses (and similar)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#containers-the-building-blocks-of-simulations">Containers - The building blocks of simulations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#class-aggregation-in-fmdtools-baseobject">Class aggregation in fmdtools BaseObject</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#main-classes-in-fmdtools">Main classes in fmdtools</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#flow-code-template">Flow Code Template</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#function-code-template">Function Code Template</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#function-architecture-code-template">Function Architecture Code Template</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#why-do-we-structure-models-this-way">Why do we structure models this way?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#more-resources-for-model-definition">More Resources for Model Definition</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#notebook-activity">Notebook Activity:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#simulation-concepts-types-of-simulations">Simulation Concepts: Types of Simulations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#simulation-concepts-sampling-approaches">Simulation Concepts: Sampling Approaches</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#simulation-concepts-things-to-consider">Simulation Concepts: Things to Consider</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#activity-simulate-the-model">Activity: Simulate the Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-modules-see-docs-for-fmdtools-analyze">Analysis Modules - see docs for <code class="docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-activity">Analysis Activity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#starting-your-own-repo-project">Starting your own repo/project</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#conclusions-summary">Conclusions/Summary</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#further-reading-links">Further Reading/Links</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#glossary">Glossary</a></li>
@@ -361,41 +361,39 @@
 <li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/readme.html#references">References</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html">Wilfire Response Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#modelling-multi-drone-wildfire-response">Modelling multi-drone wildfire response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html">Wildfire Response Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#why-understanding-effectiveness-of-drones-in-wildfire-response">Why - Understanding Effectiveness of Drones in Wildfire response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#what-are-we-trying-to-do">What are we trying to do?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#setup-model-structure">Setup: Model Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#setup-environment-and-mission">Setup: Environment and Mission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#how-effective-are-different-numbers-of-aircraft">How effective are different numbers of aircraft?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#what-if-we-move-the-location-of-the-air-base">What if we move the location of the air base?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#what-about-alternative-fire-scenarios">What about alternative fire scenarios?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#conclusions-and-path-s-from-here">Conclusions and Path(s) from here</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#conclusions-for-fmdtools">Conclusions for fmdtools</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#why-understanding-effectiveness-of-drones-in-wildfire-response">Why - Understanding Effectiveness of Drones in Wildfire response</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#what-are-we-trying-to-do">What are we trying to do?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#setup-model-structure">Setup: Model Structure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#setup-environment-and-mission">Setup: Environment and Mission</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#how-effective-are-different-numbers-of-aircraft">How effective are different numbers of aircraft?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#what-if-we-move-the-location-of-the-air-base">What if we move the location of the air base?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#what-about-alternative-fire-scenarios">What about alternative fire scenarios?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#conclusions-and-path-s-from-here">Conclusions and Path(s) from here</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.html#conclusions-for-fmdtools">Conclusions for fmdtools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/Wildfire_Demo.html">Base Optimization Project</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/wildfireresponse/Wildfire_Demo.html#model-overview">Model Overview</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html">Drone Contingency Management Model:</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#modelling-drone-contingency-actions-in-a-shared-airspace">Modelling drone contingency actions in a shared airspace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html">Drone Contingency Management Model Overview:</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#why-understanding-drone-safety-in-shared-airspace">Why - Understanding drone safety in shared airspace</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#what-are-we-trying-to-do">What are we trying to do?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#setup-model-structure">Setup: Model Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#setup-environment-and-mission">Setup: Environment and Mission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#setup-path-planning-and-reconfiguration">Setup: Path planning and reconfiguration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#how-resilient-is-the-drone-to-airspace-intrusion">How resilient is the drone to airspace intrusion?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#would-the-drone-still-be-resilient-to-airspace-intrusion-in-a-different-scenario">Would the drone still be resilient to airspace intrusion in a different scenario?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#how-resilient-is-the-drone-to-battery-depletion">How resilient is the drone to battery depletion?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#how-resilient-is-the-drone-to-battery-depletion-overall">How resilient is the drone to battery depletion overall?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#id1">How resilient is the drone to battery depletion overall?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#would-the-drone-still-be-resilient-in-a-different-mission">Would the drone still be resilient in a different mission?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#analysis-conclusions">Analysis Conclusions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#potential-future-work">Potential Future Work</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#drone-resilience-library-conclusions">Drone Resilience Library Conclusions</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#why-understanding-drone-safety-in-shared-airspace">Why - Understanding drone safety in shared airspace</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#what-are-we-trying-to-do">What are we trying to do?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#setup-model-structure">Setup: Model Structure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#setup-environment-and-mission">Setup: Environment and Mission</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#setup-path-planning-and-reconfiguration">Setup: Path planning and reconfiguration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#how-resilient-is-the-drone-to-airspace-intrusion">How resilient is the drone to airspace intrusion?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#would-the-drone-still-be-resilient-to-airspace-intrusion-in-a-different-scenario">Would the drone still be resilient to airspace intrusion in a different scenario?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#how-resilient-is-the-drone-to-battery-depletion">How resilient is the drone to battery depletion?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#how-resilient-is-the-drone-to-battery-depletion-overall">How resilient is the drone to battery depletion overall?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#id1">How resilient is the drone to battery depletion overall?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#would-the-drone-still-be-resilient-in-a-different-mission">Would the drone still be resilient in a different mission?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#analysis-conclusions">Analysis Conclusions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#potential-future-work">Potential Future Work</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/overview_presentation.html#drone-resilience-library-conclusions">Drone Resilience Library Conclusions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/demo_notebook.html">Contingency Management Drone Model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/demo_notebook.html#environment">Environment</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/contingencymanagement/demo_notebook.html#simulation">Simulation</a></li>
@@ -784,10 +782,9 @@
 <section id="version-2-3-0">
 <h2>Version: 2.3.0<a class="headerlink" href="#version-2-3-0" title="Link to this heading"></a></h2>
 </section>
-</section>
 <hr class="docutils" />
 <section id="overview">
-<h1>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h1>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <style scoped>section{font-size:27px;}</style>
 <ul class="simple">
 <li><p><strong>Overview of fmdtools</strong></p>
@@ -814,7 +811,7 @@
 </section>
 <hr class="docutils" />
 <section id="prerequisites">
-<h1>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h1>
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Ideally, some pre-existing Python and Git knowledge</p></li>
 <li><p>Python distribution (anaconda or uv)</p>
@@ -838,23 +835,23 @@
 </section>
 <hr class="docutils" />
 <section id="motivation-modeling-system-resilience">
-<h1>Motivation: Modeling System Resilience<a class="headerlink" href="#motivation-modeling-system-resilience" title="Link to this heading"></a></h1>
+<h2>Motivation: Modeling System Resilience<a class="headerlink" href="#motivation-modeling-system-resilience" title="Link to this heading"></a></h2>
 <p>Resilience means taking a <strong>dynamic understanding of risk and safety</strong></p>
 <p><img alt="resilience idea, width:1000px" src="../_images/resilience_idea.svg" /></p>
 </section>
 <hr class="docutils" />
 <section id="why-is-resilience-important">
-<h1>Why is Resilience Important?<a class="headerlink" href="#why-is-resilience-important" title="Link to this heading"></a></h1>
+<h2>Why is Resilience Important?<a class="headerlink" href="#why-is-resilience-important" title="Link to this heading"></a></h2>
 <p><img alt="resilience importance width:1000px" src="../_images/resilience_importance.svg" /></p>
 </section>
 <hr class="docutils" />
 <section id="enabling-a-proactive-design-process-especially-when-we-don-t-have-data">
-<h1><!-- fit --> Enabling a proactive design process - especially when we don’t have data<a class="headerlink" href="#enabling-a-proactive-design-process-especially-when-we-don-t-have-data" title="Link to this heading"></a></h1>
+<h2><!-- fit --> Enabling a proactive design process - especially when we don’t have data<a class="headerlink" href="#enabling-a-proactive-design-process-especially-when-we-don-t-have-data" title="Link to this heading"></a></h2>
 <p><img alt="width:900px" src="../_images/resilience_design.svg" /></p>
 </section>
 <hr class="docutils" />
 <section id="why-fmdtools-possible-competitors">
-<h1>Why fmdtools? Possible Competitors:<a class="headerlink" href="#why-fmdtools-possible-competitors" title="Link to this heading"></a></h1>
+<h2>Why fmdtools? Possible Competitors:<a class="headerlink" href="#why-fmdtools-possible-competitors" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Uncertainty Quantification tools:  (e.g. OpenCossan)</p>
 <ul>
@@ -876,7 +873,7 @@
 </section>
 <hr class="docutils" />
 <section id="why-fmdtools-pros">
-<h1>Why fmdtools? Pros:<a class="headerlink" href="#why-fmdtools-pros" title="Link to this heading"></a></h1>
+<h2>Why fmdtools? Pros:<a class="headerlink" href="#why-fmdtools-pros" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Highly Expressive, modular model representation.</p>
 <ul>
@@ -901,7 +898,7 @@
 </section>
 <hr class="docutils" />
 <section id="why-not-fmdtools-cons">
-<h1>Why <strong>not</strong> fmdtools? Cons:<a class="headerlink" href="#why-not-fmdtools-cons" title="Link to this heading"></a></h1>
+<h2>Why <strong>not</strong> fmdtools? Cons:<a class="headerlink" href="#why-not-fmdtools-cons" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>You already have a pre-existing system model</p>
 <ul>
@@ -919,12 +916,12 @@
 </section>
 <hr class="docutils" />
 <section id="what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">
-<h1>What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.<a class="headerlink" href="#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience" title="Link to this heading"></a></h1>
+<h2>What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.<a class="headerlink" href="#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience" title="Link to this heading"></a></h2>
 <p><img alt="module organization width:990px" src="../_images/module_organization.svg" /></p>
 </section>
 <hr class="docutils" />
 <section id="what-is-fmdtools-repo-structure">
-<h1>What is fmdtools? Repo Structure<a class="headerlink" href="#what-is-fmdtools-repo-structure" title="Link to this heading"></a></h1>
+<h2>What is fmdtools? Repo Structure<a class="headerlink" href="#what-is-fmdtools-repo-structure" title="Link to this heading"></a></h2>
 <p><a class="reference external" href="https://github.com/nasa/fmdtools/">Repository</a></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">/fmdtools</span></code>: installable package directory</p></li>
@@ -938,7 +935,7 @@
 <style scoped>section{font-size:27px;}</style>
 </section>
 <section id="activity-download-and-install-fmdtools">
-<h1>Activity: Download and Install fmdtools<a class="headerlink" href="#activity-download-and-install-fmdtools" title="Link to this heading"></a></h1>
+<h2>Activity: Download and Install fmdtools<a class="headerlink" href="#activity-download-and-install-fmdtools" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>repo link: <a class="reference external" href="https://github.com/nasa/fmdtools/">https://github.com/nasa/fmdtools/</a></p></li>
 <li><p>set up repo:</p>
@@ -966,12 +963,12 @@
 </section>
 <hr class="docutils" />
 <section id="analysis-workflow-structure">
-<h1>Analysis Workflow/Structure<a class="headerlink" href="#analysis-workflow-structure" title="Link to this heading"></a></h1>
+<h2>Analysis Workflow/Structure<a class="headerlink" href="#analysis-workflow-structure" title="Link to this heading"></a></h2>
 <p><img alt="Analysis Workflow width:950px" src="../_images/workflow.svg" /></p>
 </section>
 <hr class="docutils" />
 <section id="defining-a-model">
-<h1>Defining a Model<a class="headerlink" href="#defining-a-model" title="Link to this heading"></a></h1>
+<h2>Defining a Model<a class="headerlink" href="#defining-a-model" title="Link to this heading"></a></h2>
 <style scoped>section{font-size:25px;}</style>
 <ul class="simple">
 <li><p>What do we want out of a model?</p>
@@ -1005,18 +1002,18 @@
 </section>
 <hr class="docutils" />
 <section id="id1">
-<h1>Defining a Model<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<h2>Defining a Model<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p><img alt="formalism example, width:1000" src="../_images/formalism_example.svg" /></p>
 </section>
 <hr class="docutils" />
 <section id="concept-static-propagation">
-<h1>Concept: Static Propagation<a class="headerlink" href="#concept-static-propagation" title="Link to this heading"></a></h1>
+<h2>Concept: Static Propagation<a class="headerlink" href="#concept-static-propagation" title="Link to this heading"></a></h2>
 <p><img alt="Static Propagation" src="../_images/propagation.svg" /></p>
 <p>In a single timestep, functions with <code class="docutils literal notranslate"><span class="pre">static_behavior()</span></code> methods simulate until behaviors converge (i.e., no new state values)</p>
 </section>
 <hr class="docutils" />
 <section id="concept-propagation-over-time">
-<h1>Concept: Propagation over Time<a class="headerlink" href="#concept-propagation-over-time" title="Link to this heading"></a></h1>
+<h2>Concept: Propagation over Time<a class="headerlink" href="#concept-propagation-over-time" title="Link to this heading"></a></h2>
 <style scoped> { columns: 2; } </style>
 <ul class="simple">
 <li><p>Model increments (simulated + history updated) over each time-step until a <strong>defined final time-step</strong> or <strong>specified indicator returns true</strong>.</p></li>
@@ -1026,7 +1023,7 @@
 </section>
 <hr class="docutils" />
 <section id="python-concept-classes-and-object-oriented-programming">
-<h1>Python Concept: Classes and Object-Oriented Programming<a class="headerlink" href="#python-concept-classes-and-object-oriented-programming" title="Link to this heading"></a></h1>
+<h2>Python Concept: Classes and Object-Oriented Programming<a class="headerlink" href="#python-concept-classes-and-object-oriented-programming" title="Link to this heading"></a></h2>
 <p>Classes are the core of object-oriented programming. A class in python might look like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Hello</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># &lt;- Class variables define data used by all objects</span>
@@ -1047,7 +1044,7 @@
 </section>
 <hr class="docutils" />
 <section id="why-classes-and-objects">
-<h1>Why classes and objects?<a class="headerlink" href="#why-classes-and-objects" title="Link to this heading"></a></h1>
+<h2>Why classes and objects?<a class="headerlink" href="#why-classes-and-objects" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Classes give you the ability to <strong>group data and methods</strong> together to satisfy an overall use-case</p></li>
 <li><p>Classes define the “template”–what should an object include, be able to do, how should it be instantiated, etc.</p></li>
@@ -1059,7 +1056,7 @@
 </section>
 <hr class="docutils" />
 <section id="python-dataclasses-and-similar">
-<h1>Python dataclasses (and similar)<a class="headerlink" href="#python-dataclasses-and-similar" title="Link to this heading"></a></h1>
+<h2>Python dataclasses (and similar)<a class="headerlink" href="#python-dataclasses-and-similar" title="Link to this heading"></a></h2>
 <p>fmdtools uses the recordclass package to define dataclasses: https://github.com/intellimath/recordclass</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">recordclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataobject</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">(</span><span class="n">dataobject</span><span class="p">):</span>
@@ -1077,7 +1074,7 @@
 </section>
 <hr class="docutils" />
 <section id="containers-the-building-blocks-of-simulations">
-<h1>Containers - The building blocks of simulations<a class="headerlink" href="#containers-the-building-blocks-of-simulations" title="Link to this heading"></a></h1>
+<h2>Containers - The building blocks of simulations<a class="headerlink" href="#containers-the-building-blocks-of-simulations" title="Link to this heading"></a></h2>
 <p><img alt="container example" src="../_images/container_structures.svg" /></p>
 <ul class="simple">
 <li><p>Containers are used to define various attributes of Functions and Flows</p></li>
@@ -1085,7 +1082,7 @@
 </section>
 <hr class="docutils" />
 <section id="class-aggregation-in-fmdtools-baseobject">
-<h1>Class aggregation in fmdtools BaseObject<a class="headerlink" href="#class-aggregation-in-fmdtools-baseobject" title="Link to this heading"></a></h1>
+<h2>Class aggregation in fmdtools BaseObject<a class="headerlink" href="#class-aggregation-in-fmdtools-baseobject" title="Link to this heading"></a></h2>
 <p>In fmdtools, <strong>BaseObject</strong> classes (Functions, Flows, etc.) aggregate Containers classes, allowing you to instantiate multiple at the same time, e.g., in the class:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ExampleObject</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
     <span class="n">container_s</span> <span class="o">=</span> <span class="n">StateName</span>
@@ -1103,7 +1100,7 @@
 </section>
 <hr class="docutils" />
 <section id="main-classes-in-fmdtools">
-<h1>Main classes in fmdtools<a class="headerlink" href="#main-classes-in-fmdtools" title="Link to this heading"></a></h1>
+<h2>Main classes in fmdtools<a class="headerlink" href="#main-classes-in-fmdtools" title="Link to this heading"></a></h2>
 <p><img alt="flow example" src="../_images/class_diagram.svg" /></p>
 <p><strong>Containers</strong> are used to represent properties of <strong>Objects</strong> (all classes below)</p>
 <p><strong>Blocks</strong> are the main behaviors of the system (e.g., Functions or Components)</p>
@@ -1112,7 +1109,7 @@
 </section>
 <hr class="docutils" />
 <section id="flow-code-template">
-<h1>Flow Code Template<a class="headerlink" href="#flow-code-template" title="Link to this heading"></a></h1>
+<h2>Flow Code Template<a class="headerlink" href="#flow-code-template" title="Link to this heading"></a></h2>
 <p><img alt="flow example" src="../_images/flow_structure.svg" /></p>
 <ul class="simple">
 <li><p>Flows represent connections or shared variables between different functions. Think of them as Function inputs/outputs.</p></li>
@@ -1121,17 +1118,17 @@
 </section>
 <hr class="docutils" />
 <section id="function-code-template">
-<h1>Function Code Template<a class="headerlink" href="#function-code-template" title="Link to this heading"></a></h1>
+<h2>Function Code Template<a class="headerlink" href="#function-code-template" title="Link to this heading"></a></h2>
 <p><img alt="Function Code Template" src="../_images/fxnblock_structure.svg" /></p>
 </section>
 <hr class="docutils" />
 <section id="function-architecture-code-template">
-<h1>Function Architecture Code Template<a class="headerlink" href="#function-architecture-code-template" title="Link to this heading"></a></h1>
+<h2>Function Architecture Code Template<a class="headerlink" href="#function-architecture-code-template" title="Link to this heading"></a></h2>
 <p><img alt="Model Code Template" src="../_images/fxnarch_structure.svg" /></p>
 </section>
 <hr class="docutils" />
 <section id="demo-model-activity-examples-pump-ex-pump-py">
-<h1>Demo Model Activity: examples/pump/ex_pump.py<a class="headerlink" href="#demo-model-activity-examples-pump-ex-pump-py" title="Link to this heading"></a></h1>
+<h2>Demo Model Activity: examples/pump/ex_pump.py<a class="headerlink" href="#demo-model-activity-examples-pump-ex-pump-py" title="Link to this heading"></a></h2>
 <p>Notice the definitions and structure:</p>
 <ul class="simple">
 <li><p><strong>States</strong>: <code class="docutils literal notranslate"><span class="pre">WaterStates</span></code>, <code class="docutils literal notranslate"><span class="pre">EEStates</span></code>, <code class="docutils literal notranslate"><span class="pre">SignalStates</span></code></p></li>
@@ -1153,7 +1150,7 @@
 </section>
 <hr class="docutils" />
 <section id="why-do-we-structure-models-this-way">
-<h1>Why do we structure models this way?<a class="headerlink" href="#why-do-we-structure-models-this-way" title="Link to this heading"></a></h1>
+<h2>Why do we structure models this way?<a class="headerlink" href="#why-do-we-structure-models-this-way" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><strong>Enabling undirected propagation:</strong> Behavior from any Block in an Architecture can propagate to anything else, which is important for capturing the full set of hazardous behavior</p></li>
 <li><p><strong>Composability and Parameterization:</strong> OOP gives us the ability to create a number of co-existing model variants by varying parameters as well as creating sub-classes with different containers</p></li>
@@ -1162,7 +1159,7 @@
 </section>
 <hr class="docutils" />
 <section id="more-resources-for-model-definition">
-<h1>More Resources for Model Definition<a class="headerlink" href="#more-resources-for-model-definition" title="Link to this heading"></a></h1>
+<h2>More Resources for Model Definition<a class="headerlink" href="#more-resources-for-model-definition" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Note the docs for model definition are in <a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.define.html">https://nasa.github.io/fmdtools/docs-source/fmdtools.define.html</a></p></li>
 <li><p>Other examples also can be helpful: <a class="reference external" href="https://nasa.github.io/fmdtools/examples/Examples.html">https://nasa.github.io/fmdtools/examples/Examples.html</a></p></li>
@@ -1170,7 +1167,7 @@
 </section>
 <hr class="docutils" />
 <section id="notebook-activity">
-<h1>Notebook Activity:<a class="headerlink" href="#notebook-activity" title="Link to this heading"></a></h1>
+<h2>Notebook Activity:<a class="headerlink" href="#notebook-activity" title="Link to this heading"></a></h2>
 <p>Open <code class="docutils literal notranslate"><span class="pre">/examples/pump/Tutorial_unfilled.ipynb</span></code>:</p>
 <ul class="simple">
 <li><p>Instantiate the model</p>
@@ -1191,13 +1188,13 @@ What does the model directory look like?</p></li>
 </section>
 <hr class="docutils" />
 <section id="simulation-concepts-types-of-simulations">
-<h1>Simulation Concepts: Types of Simulations<a class="headerlink" href="#simulation-concepts-types-of-simulations" title="Link to this heading"></a></h1>
+<h2>Simulation Concepts: Types of Simulations<a class="headerlink" href="#simulation-concepts-types-of-simulations" title="Link to this heading"></a></h2>
 <p><img alt="Dynamic Propagation, width:1000px" src="../_images/simulation_types.svg" /></p>
 <p>For more info on syntax/arguments, see documentation for <a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.sim.html#fmdtools-sim-propagate"><code class="docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a>.</p>
 </section>
 <hr class="docutils" />
 <section id="simulation-concepts-sampling-approaches">
-<h1>Simulation Concepts: Sampling Approaches<a class="headerlink" href="#simulation-concepts-sampling-approaches" title="Link to this heading"></a></h1>
+<h2>Simulation Concepts: Sampling Approaches<a class="headerlink" href="#simulation-concepts-sampling-approaches" title="Link to this heading"></a></h2>
 <p>These classes define <strong>multi-run simulations</strong> which can be used to quantify uncertain performance/resiliences:</p>
 <ul class="simple">
 <li><p><strong>SampleApproach</strong>/<strong>FaultSample</strong>: Which faults to sample and when</p>
@@ -1217,7 +1214,7 @@ What does the model directory look like?</p></li>
 </section>
 <hr class="docutils" />
 <section id="simulation-concepts-things-to-consider">
-<h1>Simulation Concepts: Things to Consider<a class="headerlink" href="#simulation-concepts-things-to-consider" title="Link to this heading"></a></h1>
+<h2>Simulation Concepts: Things to Consider<a class="headerlink" href="#simulation-concepts-things-to-consider" title="Link to this heading"></a></h2>
 <p><strong>Static/Dynamic propagation:</strong> How function states propagate to each other in a single time-step and multiple time-steps?</p>
 <p><strong>Stochastic Propagation:</strong> Whether and how stochastic states are instantiated over time</p>
 <ul class="simple">
@@ -1231,7 +1228,7 @@ What does the model directory look like?</p></li>
 </section>
 <hr class="docutils" />
 <section id="activity-simulate-the-model">
-<h1>Activity: Simulate the Model<a class="headerlink" href="#activity-simulate-the-model" title="Link to this heading"></a></h1>
+<h2>Activity: Simulate the Model<a class="headerlink" href="#activity-simulate-the-model" title="Link to this heading"></a></h2>
 <p>Run fault propagation methods:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">propagate.nominal()</span></code>,  <code class="docutils literal notranslate"><span class="pre">propagate.one_fault()</span></code>, <code class="docutils literal notranslate"><span class="pre">propagate.fault_sample()</span></code></p></li>
@@ -1249,12 +1246,12 @@ What does the model directory look like?</p></li>
 </section>
 <hr class="docutils" />
 <section id="analysis-modules-see-docs-for-fmdtools-analyze">
-<h1>Analysis Modules - see docs for <a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html"><code class="docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code></a><a class="headerlink" href="#analysis-modules-see-docs-for-fmdtools-analyze" title="Link to this heading"></a></h1>
+<h2>Analysis Modules - see docs for <a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html"><code class="docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code></a><a class="headerlink" href="#analysis-modules-see-docs-for-fmdtools-analyze" title="Link to this heading"></a></h2>
 <p><img alt="Analyze Modules width:1000px" src="../_images/analyze_module_structure.svg" /></p>
 </section>
 <hr class="docutils" />
 <section id="analysis-activity">
-<h1>Analysis Activity<a class="headerlink" href="#analysis-activity" title="Link to this heading"></a></h1>
+<h2>Analysis Activity<a class="headerlink" href="#analysis-activity" title="Link to this heading"></a></h2>
 <p><strong>Visualize the results:</strong></p>
 <ul class="simple">
 <li><p>Show model graph</p></li>
@@ -1271,7 +1268,7 @@ What does the model directory look like?</p></li>
 </section>
 <hr class="docutils" />
 <section id="starting-your-own-repo-project">
-<h1>Starting your own repo/project<a class="headerlink" href="#starting-your-own-repo-project" title="Link to this heading"></a></h1>
+<h2>Starting your own repo/project<a class="headerlink" href="#starting-your-own-repo-project" title="Link to this heading"></a></h2>
 <p>1.) Use <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">init</span></code> to create a template project, with its own virtual environment at <code class="docutils literal notranslate"><span class="pre">.venv</span></code>, <code class="docutils literal notranslate"><span class="pre">README.md</span></code>, and <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> files.</p>
 <ul class="simple">
 <li><p>Fill in these files (e.g., fmdtools version, contributors, project description)</p></li>
@@ -1287,7 +1284,7 @@ What does the model directory look like?</p></li>
 </section>
 <hr class="docutils" />
 <section id="conclusions-summary">
-<h1>Conclusions/Summary<a class="headerlink" href="#conclusions-summary" title="Link to this heading"></a></h1>
+<h2>Conclusions/Summary<a class="headerlink" href="#conclusions-summary" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><strong>fmdtools</strong> is an environment for designing resilient systems</p>
 <ul>
@@ -1307,7 +1304,7 @@ What does the model directory look like?</p></li>
 </section>
 <hr class="docutils" />
 <section id="further-reading-links">
-<h1>Further Reading/Links<a class="headerlink" href="#further-reading-links" title="Link to this heading"></a></h1>
+<h2>Further Reading/Links<a class="headerlink" href="#further-reading-links" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>More advanced topics (<a class="reference internal" href="../examples/Examples.html"><span class="std std-doc">see examples</span></a>), including Search and optimization, Human, Systems-of-Systems modeling, and Modeling Stochastic Behavior</p></li>
 <li><p><a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#model-development-best-practices">Model Development Guide</a>: Has best practices for developing models in a strategic way (especially helpful for complex models)</p></li>
@@ -1317,6 +1314,7 @@ What does the model directory look like?</p></li>
 </ul>
 </li>
 </ul>
+</section>
 </section>
 
 
