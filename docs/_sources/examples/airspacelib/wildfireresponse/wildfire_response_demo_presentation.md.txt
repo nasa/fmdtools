@@ -7,13 +7,13 @@ style: |
     }
 ---
 
-# Wildfire Response Model Overview
+# Wilfire Response Model
 
-Modelling multi-drone wildfire response
+## Modelling multi-drone wildfire response
 
 ---
 
-## Why - Understanding Effectiveness of Drones in Wildfire response
+# Why - Understanding Effectiveness of Drones in Wildfire response
 <style scoped>section { font-size: 20px; }</style>
 ![bg right:40% width:450px](drone-wildfire-pic.webp)
 
@@ -33,7 +33,7 @@ Modelling multi-drone wildfire response
 
 ---
 
-## What are we trying to do?
+# What are we trying to do?
 
 - Simulate firefighting response effectiveness of wildfire suppressions in a range of configurations, such as:
     - Types of aircraft
@@ -44,7 +44,7 @@ Modelling multi-drone wildfire response
 
 ---
 
-## Setup: Model Structure
+# Setup: Model Structure
 
 ![bg right:40% width:450px](response_structure.svg)
 
@@ -58,7 +58,7 @@ Other parts could be added as needed e.g., for reconnaissance, lead planes, heli
 
 ---
 
-## Setup: Environment and Mission
+# Setup: Environment and Mission
 
 ![bg right:50% width:600px vertical](single_aircraft_response.gif)
 ![bg right:50% width:400px vertical](single_aircraft_modes.gif)
@@ -73,7 +73,7 @@ Other parts could be added as needed e.g., for reconnaissance, lead planes, heli
 - Fire location determined at base and refined in flight
 
 ---
-## How effective are different numbers of aircraft?
+# How effective are different numbers of aircraft?
 
 ![width:500px](multi_drone_response.gif)
 
@@ -82,7 +82,7 @@ Other parts could be added as needed e.g., for reconnaissance, lead planes, heli
 - Assumption is one base per asset - can be improved in future work
 
 ---
-## What if we move the location of the air base?
+# What if we move the location of the air base?
 <style scoped>section { font-size: 20px; }</style>
 
 ![bg right:50% width:350px vertical](init_burn_area.svg)
@@ -96,7 +96,7 @@ See: [Hulse, D. E., Mbaye, S., & Davies, M. D. (2025). Determining Optimal Asset
 
 
 ---
-## What about alternative fire scenarios?
+# What about alternative fire scenarios?
 
 ![bg right:50% width:500px vertical](three_strike_grass.gif)
 ![bg right:50% width:500px vertical](three_strike_forest.gif)
@@ -108,7 +108,7 @@ These assumptions are simplistic!
 - Real fires are much less predictable and firefighting is much less effective
 
 ---
-## Conclusions and Path(s) from here
+# Conclusions and Path(s) from here
 <style scoped>section { font-size: 25px; }</style>
 
 What we have:
@@ -126,7 +126,7 @@ Potential extensions:
  <p class="small-text">* Andrade, S. R., & Hulse, D. E. (2022). Evaluation and improvement of system-of-systems resilience in a simulation of wildfire emergency response. IEEE Systems Journal, 17(2), 1877-1888. ntrs.nasa.gov/api/citations/20210021739/downloads/ISJ-RE-21-13446-finalpdf-combined.pdf </p>
 
 ---
-## Conclusions for fmdtools
+# Conclusions for fmdtools
 
 - Showcases ability of fmdtools to model Systems of Systems where:
     - Multiple assets interacting with a shared environment
