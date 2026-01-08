@@ -5,6 +5,7 @@ Testing script for fmdtools internal build environment.
 
 Requires pytest, nbmake, pytest-html, pytest-cov.
 """
+import conftest
 import pytest
 import argparse
 
