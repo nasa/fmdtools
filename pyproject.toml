@@ -59,7 +59,7 @@ dev = [{include-group = "docs"}, {include-group = "test"}]
 
 [tool.pytest.ini_options]
 addopts = "--cache-clear --doctest-modules --nbmake --cov"
-pythonpath = ["."]
+pythonpath = [".", "fmdtools", "tests", "examples"]
 
 [tool.setuptools.packages.find]
 include = ["fmdtools*", "examples*", "tests*"]

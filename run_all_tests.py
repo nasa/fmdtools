@@ -8,7 +8,8 @@ Requires pytest, nbmake, pytest-html, pytest-cov.
 import pytest
 import argparse
 
-def main(testtype="doctests", auto_build_reports=True):
+
+def main(testtype="doctests", auto_build_reports=False):
     rep_args=[]
     if auto_build_reports:
         rep_args = ["--cov-report", "html:auto"]

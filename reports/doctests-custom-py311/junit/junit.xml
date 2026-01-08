@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="2" failures="0" skipped="0" tests="2" time="0.192" timestamp="2026-01-08T14:26:25.991728-08:00" hostname="starlight"><testcase classname="" name="fmdtools.define.container.base" time="0.000"><error message="collection failure">#x1B[31mImportError while importing test module 'C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\define\container\base.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+#x1B[1m#x1B[31m..\..\..\AppData\Roaming\uv\python\cpython-3.11.11-windows-x86_64-none\Lib\importlib\__init__.py#x1B[0m:126: in import_module
+    #x1B[0m#x1B[94mreturn#x1B[39;49;00m _bootstrap._gcd_import(name[level:], package, level)#x1B[90m#x1B[39;49;00m
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^#x1B[90m#x1B[39;49;00m
+#x1B[1m#x1B[31mfmdtools\__init__.py#x1B[0m:20: in &lt;module&gt;
+    #x1B[0m#x1B[94mimport#x1B[39;49;00m#x1B[90m #x1B[39;49;00m#x1B[04m#x1B[96mfmdtools#x1B[39;49;00m#x1B[04m#x1B[96m.#x1B[39;49;00m#x1B[04m#x1B[96mdefine#x1B[39;49;00m#x1B[90m #x1B[39;49;00m#x1B[94mas#x1B[39;49;00m#x1B[90m #x1B[39;49;00m#x1B[04m#x1B[96mdefine#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+#x1B[1m#x1B[31mE   ModuleNotFoundError: No module named 'fmdtools.define'#x1B[0m#x1B[0m</error><error message="collection failure">#x1B[31mImportError while importing test module 'C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\define\container\base.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+#x1B[1m#x1B[31m..\..\..\AppData\Roaming\uv\python\cpython-3.11.11-windows-x86_64-none\Lib\importlib\__init__.py#x1B[0m:126: in import_module
+    #x1B[0m#x1B[94mreturn#x1B[39;49;00m _bootstrap._gcd_import(name[level:], package, level)#x1B[90m#x1B[39;49;00m
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^#x1B[90m#x1B[39;49;00m
+#x1B[1m#x1B[31mfmdtools\__init__.py#x1B[0m:20: in &lt;module&gt;
+    #x1B[0m#x1B[94mimport#x1B[39;49;00m#x1B[90m #x1B[39;49;00m#x1B[04m#x1B[96mfmdtools#x1B[39;49;00m#x1B[04m#x1B[96m.#x1B[39;49;00m#x1B[04m#x1B[96mdefine#x1B[39;49;00m#x1B[90m #x1B[39;49;00m#x1B[94mas#x1B[39;49;00m#x1B[90m #x1B[39;49;00m#x1B[04m#x1B[96mdefine#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+#x1B[1m#x1B[31mE   ModuleNotFoundError: No module named 'fmdtools.define'#x1B[0m#x1B[0m</error></testcase></testsuite></testsuites>
