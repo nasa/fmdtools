@@ -14,7 +14,7 @@ def main(testtype="doctests", auto_build_reports=False):
     if auto_build_reports:
         rep_args = ["--cov-report", "html:auto"]
     pytest.main(["--testtype="+testtype,
-                 "auto_build_reports="+str(auto_build_reports), *rep_args])
+                 "--auto_build_reports="+str(auto_build_reports), *rep_args])
 
 
 if __name__ == "__main__":
