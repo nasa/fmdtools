@@ -664,6 +664,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#fmdtools-publication-list">fmdtools Publication List</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-to-contribute">How to Contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#development-installation">Development Installation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#repository-structure">Repository Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#git-structure-and-setup">Git Structure and Setup</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#git-development-workflow">Git Development Workflow</a></li>
@@ -845,6 +846,26 @@
 <section id="how-to-contribute">
 <h2>How to Contribute<a class="headerlink" href="#how-to-contribute" title="Link to this heading"></a></h2>
 <p>Development of fmdtools is coordinated by the <a class="reference internal" href="../CONTRIBUTORS.html"><span class="doc">fmdtools team</span></a> at NASA Ames Research Center. As an NASA-developed and maintained open-source tool, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (<a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf">Individual CLA</a> , <a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf">Corporate CLA</a>).</p>
+<section id="development-installation">
+<h3>Development Installation<a class="headerlink" href="#development-installation" title="Link to this heading"></a></h3>
+<p>To develop fmdtools, use an editable install with all optional dependencies. In the terminal:</p>
+<p>``
+cd “/path/to/fmdtools_folder”
+git clone <a class="reference external" href="https://github.com/nasa/fmdtools.git">https://github.com/nasa/fmdtools.git</a>  #replace with bitbucket url if developing internally
+uv venv –python 3.13       # Set up project virtual environment. Use the primarily-supported python version
+.venv/Scripts/activate      # Activate the virtual environment. On mac and linux: source .venv/bin/activate
+uv pip install -e .[all] –group dev  # Installs both examples and all testing/documentation/dev workflow dependencies
+``</p>
+<p>If developing with Spyder, you will want to set this Python venv as your default interpreter.</p>
+<p>You may do this by navigating to:
+Tools &gt; Python interpreter &gt; Selected intepreter</p>
+<p>And then selecting the interpreter from the file menu. The path should look something like:
+<code class="docutils literal notranslate"><span class="pre">path/to/fmdtools/.venv/Scripts/python.exe</span></code></p>
+<p>After clicking “Apply”, close the ipython console panel so that the console will restart.</p>
+<p>At this point, there may be an error message in the ipython console if <code class="docutils literal notranslate"><span class="pre">spyder-kernels</span></code> is not installed or the wrong version. To fix this, go back to the terminal and install using</p>
+<p><code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">spyder-kernels==&lt;VERSION&gt;</span></code></p>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;VERSION&gt;</span></code> is the version reccomended in the error message.</p>
+</section>
 <section id="repository-structure">
 <h3>Repository Structure<a class="headerlink" href="#repository-structure" title="Link to this heading"></a></h3>
 <a class="reference internal image-reference" href="../_images/repo_organization.svg"><img alt="../_images/repo_organization.svg" src="../_images/repo_organization.svg" style="width: 800px;" />
@@ -859,7 +880,7 @@
 </ul>
 <p>There are additionally a few scripts/config files with specific purposes to serve the development process:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">run_all_tests.py</span></code> which is a script that runs tests defined in <cite>/tests</cite> and <cite>/examples</cite>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">conftest.py</span></code> which defines configuration options for pytest (our testing suite),</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> which defines all python project and build configuration information,</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">conf.py</span></code> which defines sphinx documentation settings, and</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">MAKE</span></code>, which is used to build the sphinx documentation.</p></li>
@@ -1046,11 +1067,6 @@
 <span class="o">./</span><span class="n">make</span> <span class="n">html</span>
 </pre></div>
 </div>
-<p>Note that building the docs page with sphinx requires the following dependencies, which should be installed beforehand:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myst</span><span class="o">-</span><span class="n">nb</span>
-<span class="n">sphinx_rtd_theme</span>
-</pre></div>
-</div>
 </section>
 <section id="style-formatting">
 <h3>Style/Formatting<a class="headerlink" href="#style-formatting" title="Link to this heading"></a></h3>
@@ -1109,8 +1125,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <h3>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h3>
 <p>There are two major types of tests:</p>
 <ul class="simple">
-<li><p>quantitative tests, which are tests running <code class="docutils literal notranslate"><span class="pre">run_all_tests.py</span></code>, and</p></li>
-<li><p>qualitative tests, which are the example notebooks</p></li>
+<li><p>quantitative tests, which are tests that <cite>pytest</cite> can return, and</p></li>
+<li><p>qualitative tests, which plots/figures that are to be verified by checking the outputs the example notebooks</p></li>
 </ul>
 </section>
 </section>
