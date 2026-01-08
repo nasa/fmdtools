@@ -54,7 +54,7 @@ requires = [
 docs = ["sphinx", "myst-nb", "sphinx_rtd_theme", "nbsphinx"]
 test = ["nbmake", "pytest-html", "coverage", "pytest-cov", "genbadge[all]"]
 uv_env = ["spyder-kernels", "jupyter"]
-dev = [{include-group = "docs"}, include_group = "test", include_group = "uv_env"]
+dev = [{include-group = "docs"}, {include_group = "test"}, {include_group = "uv_env"}]
 
 
 [tool.pytest.ini_options]
