@@ -47,8 +47,12 @@ requires = [
   "setuptools>=61.0.0"
 ]
 
+[tool.pytest.ini_options]
+addopts = "--cache-clear --doctest-modules --nbmake --cov"
+
 [tool.setuptools.packages.find]
 include = ["fmdtools*", "examples*", "tests*"]
+
 
 [tool.coverage.report]
 exclude_also = [
