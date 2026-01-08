@@ -38,6 +38,7 @@ dependencies = ["scipy",
 
 [project.optional-dependencies]
 examples = ["deap", "pymoo", "scikit-learn", "multiprocess", "pathos", "adjustText"]
+all = ["fmdtools[examples]"]
 
 [project.urls]
 Documentation = "https://nasa.github.io/fmdtools/"
@@ -53,8 +54,7 @@ requires = [
 [dependency-groups]
 docs = ["sphinx", "myst-nb", "sphinx_rtd_theme", "nbsphinx"]
 test = ["nbmake", "pytest-html", "coverage", "pytest-cov", "genbadge[all]"]
-uv_env = ["spyder-kernels", "jupyter"]
-dev = [{include-group = "docs"}, {include-group = "test"}, {include-group = "uv_env"}]
+dev = [{include-group = "docs"}, {include-group = "test"}]
 
 
 [tool.pytest.ini_options]
