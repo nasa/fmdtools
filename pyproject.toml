@@ -36,6 +36,9 @@ dependencies = ["scipy",
                 "shapely >= 2.0"
 ]
 
+[project.optional-dependencies]
+examples = ["deap", "pymoo", "scikit-learn", "multiprocess", "pathos", "adjustText"]
+
 [project.urls]
 Documentation = "https://nasa.github.io/fmdtools/"
 source-code = "https://github.com/nasa/fmdtools"
@@ -46,6 +49,13 @@ build-backend = "setuptools.build_meta"
 requires = [
   "setuptools>=61.0.0"
 ]
+
+[dependency-groups]
+docs = ["sphinx", "myst-nb", "sphinx_rtd_theme", "nbsphinx"]
+test = ["nbmake", "pytest-html", "coverage", "pytest-cov", "genbadge[all]"]
+uv_env = ["spyder-kernels", "jupyter"]
+dev = [{include-group = "docs"}, include_group = "test", include_group = "uv_env"]
+
 
 [tool.pytest.ini_options]
 addopts = "--cache-clear --doctest-modules --nbmake --cov"

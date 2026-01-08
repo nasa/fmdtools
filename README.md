@@ -94,16 +94,21 @@ For development as well as interactive use of tutorials and models, we reccomend
 For this installation, fmdtools can be downloaded from the [fmdtools github repository](https://github.com/nasa/fmdtools/) using:
 
 ```
+   cd /path/to/fmdtools
    git clone https://github.com/nasa/fmdtools.git
 ```
 
 This may then be installed using:
 
 ```
-   pip install -e "/path/to/fmdtools" 
+   pip install -e .[all] --group dev
 ```
 
-Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` you can checkout the tag corresponding to the version you want, e.g.:
+Which will install both fmdtools as well as examples (`[all]` option) as well as testing and development dependencies (`--group dev` option)
+
+More guidance on development installations is provided in [How to Contribute](https://nasa.github.io/fmdtools/docs-source/Contributions.html#how-to-contribute)
+
+Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` in the context of a development install you can checkout the tag corresponding to the version you want, e.g.:
 
 ```
    git checkout v2.3.0
@@ -186,10 +191,9 @@ One `fmdtools` is installed, you should be able to run:
 import fmdtools
 ```
 
-To check the version of fmdtools, you can run the following:
+To check the version of fmdtools, you can check:
 ```
-import importlib.metadata
-importlib.metadata.version("fmdtools")
+fmdtools.__version__
 ```
 which should return the current version of fmdtools.
 

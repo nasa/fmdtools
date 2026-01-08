@@ -1194,7 +1194,7 @@
 </reflist>
 </comment>
 <name>
-<val>run_all_tests.py</val>
+<val>conftest.py</val>
 </name>
 <presentation>
 <reflist>

@@ -15,6 +15,37 @@ How to Contribute
 Development of fmdtools is coordinated by the :doc:`fmdtools team <../CONTRIBUTORS>` at NASA Ames Research Center. As an NASA-developed and maintained open-source tool, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
 
 
+Development Installation
+------------------------
+
+To develop fmdtools, use an editable install with all optional dependencies. In the terminal:
+
+``
+cd "/path/to/fmdtools_folder"
+git clone https://github.com/nasa/fmdtools.git  #replace with bitbucket url if developing internally
+uv venv --python 3.13       # Set up project virtual environment. Use the primarily-supported python version
+.venv/Scripts/activate      # Activate the virtual environment. On mac and linux: source .venv/bin/activate
+uv pip install -e .[all] --group dev  # Installs both examples and all testing/documentation/dev workflow dependencies
+``
+
+If developing with Spyder, you will want to set this Python venv as your default interpreter.
+
+You may do this by navigating to:
+Tools > Python interpreter > Selected intepreter
+
+And then selecting the interpreter from the file menu. The path should look something like:
+``path/to/fmdtools/.venv/Scripts/python.exe``
+
+
+After clicking "Apply", close the ipython console panel so that the console will restart.
+
+At this point, there may be an error message in the ipython console if ``spyder-kernels`` is not installed or the wrong version. To fix this, go back to the terminal and install using
+
+``uv pip install spyder-kernels==<VERSION>``
+
+where ``<VERSION>`` is the version reccomended in the error message.
+
+
 Repository Structure
 --------------------
 
@@ -31,7 +62,7 @@ Getting started with development first requires some basic familiarity with the 
 
 There are additionally a few scripts/config files with specific purposes to serve the development process:
 
-- ``run_all_tests.py`` which is a script that runs tests defined in `/tests` and `/examples`,
+- ``conftest.py`` which defines configuration options for pytest (our testing suite),
 - ``pyproject.toml`` which defines all python project and build configuration information,
 - ``conf.py`` which defines sphinx documentation settings, and
 - ``MAKE``, which is used to build the sphinx documentation.
@@ -138,11 +169,6 @@ Documentation is generated using Sphinx, which generates html from rst files. Th
 	./make clean
 	./make html
 
-Note that building the docs page with sphinx requires the following dependencies, which should be installed beforehand::
-
-	myst-nb
-	sphinx_rtd_theme
-
 Style/Formatting
 ----------------
 
@@ -206,6 +232,6 @@ Testing
 
 There are two major types of tests:
 
-- quantitative tests, which are tests running ``run_all_tests.py``, and
-- qualitative tests, which are the example notebooks
+- quantitative tests, which are tests that `pytest` can return, and
+- qualitative tests, which plots/figures that are to be verified by checking the outputs the example notebooks
 
