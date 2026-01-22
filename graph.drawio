@@ -6,34 +6,34 @@
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
         <mxCell id="function_a" value="function_a" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#6699cc;fontSize=12;fontStyle=normal" vertex="1" parent="1">
-          <mxGeometry x="916.4700444558171" y="1203.009370027617" width="80" height="40" as="geometry"/>
+          <mxGeometry x="746.2480582079473" y="1030.0991004765413" width="80" height="40" as="geometry"/>
         </mxCell>
         <mxCell id="function_b" value="function_b" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#6699cc;fontSize=12;fontStyle=normal" vertex="1" parent="1">
-          <mxGeometry x="1799.1313778512133" y="1272.0821196209458" width="80" height="40" as="geometry"/>
+          <mxGeometry x="1436.723754327742" y="2049.3338461945327" width="80" height="40" as="geometry"/>
         </mxCell>
         <mxCell id="function_c" value="function_c" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#6699cc;fontSize=12;fontStyle=normal" vertex="1" parent="1">
-          <mxGeometry x="2617.6258029755304" y="2239.708671247513" width="80" height="40" as="geometry"/>
+          <mxGeometry x="2528.286361458985" y="2269.610487264544" width="80" height="40" as="geometry"/>
         </mxCell>
         <mxCell id="external_signals" value="external_signals" style="ellipse;whiteSpace=wrap;html=1;fillColor=#90EE90;strokeColor=#228B22;fontSize=12;fontStyle=normal" vertex="1" parent="1">
-          <mxGeometry x="200.0" y="1169.8087927577221" width="80" height="40" as="geometry"/>
+          <mxGeometry x="200.0" y="200.0" width="80" height="40" as="geometry"/>
         </mxCell>
         <mxCell id="control_signal" value="control_signal" style="ellipse;whiteSpace=wrap;html=1;fillColor=#90EE90;strokeColor=#228B22;fontSize=12;fontStyle=normal" vertex="1" parent="1">
-          <mxGeometry x="1253.4589732020386" y="786.7772197848735" width="80" height="40" as="geometry"/>
+          <mxGeometry x="773.239991727691" y="1764.7754263208685" width="80" height="40" as="geometry"/>
         </mxCell>
         <mxCell id="external_energy_in" value="external_energy_in" style="ellipse;whiteSpace=wrap;html=1;fillColor=#90EE90;strokeColor=#228B22;fontSize=12;fontStyle=normal" vertex="1" parent="1">
-          <mxGeometry x="1949.229528804045" y="200.0" width="80" height="40" as="geometry"/>
+          <mxGeometry x="989.2358726557308" y="3061.283627269425" width="80" height="40" as="geometry"/>
         </mxCell>
         <mxCell id="internal_energy" value="internal_energy" style="ellipse;whiteSpace=wrap;html=1;fillColor=#90EE90;strokeColor=#228B22;fontSize=12;fontStyle=normal" vertex="1" parent="1">
-          <mxGeometry x="2304.8509809805873" y="1616.9489713834578" width="80" height="40" as="geometry"/>
+          <mxGeometry x="1978.4002063569073" y="2408.1468553127506" width="80" height="40" as="geometry"/>
         </mxCell>
         <mxCell id="external_material_in" value="external_material_in" style="ellipse;whiteSpace=wrap;html=1;fillColor=#90EE90;strokeColor=#228B22;fontSize=12;fontStyle=normal" vertex="1" parent="1">
-          <mxGeometry x="3185.8604501830337" y="2967.3120794164265" width="80" height="40" as="geometry"/>
+          <mxGeometry x="3325.0" y="2375.569877989641" width="80" height="40" as="geometry"/>
         </mxCell>
         <mxCell id="external_material_out" value="external_material_out" style="ellipse;whiteSpace=wrap;html=1;fillColor=#90EE90;strokeColor=#228B22;fontSize=12;fontStyle=normal" vertex="1" parent="1">
-          <mxGeometry x="3325.0" y="1970.1493800237763" width="80" height="40" as="geometry"/>
+          <mxGeometry x="3027.130673136398" y="1337.7749532229818" width="80" height="40" as="geometry"/>
         </mxCell>
         <mxCell id="external_energy_out" value="external_energy_out" style="ellipse;whiteSpace=wrap;html=1;fillColor=#90EE90;strokeColor=#228B22;fontSize=12;fontStyle=normal" vertex="1" parent="1">
-          <mxGeometry x="2547.5052107085403" y="3325.0" width="80" height="40" as="geometry"/>
+          <mxGeometry x="2923.2262818039308" y="3325.0" width="80" height="40" as="geometry"/>
         </mxCell>
         <mxCell id="edge_function_a_external_signals" style="strokeWidth=1;strokeColor=black;startArrow=diamondThin;endArrow=none" edge="1" parent="1" source="function_a" target="external_signals">
           <mxGeometry relative="1" as="geometry"/>
