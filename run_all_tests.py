@@ -20,13 +20,13 @@ def main(testtype="doctests", auto_build_reports=False):
     print("sys paths: "+"\n ".join(sys.path))
 
     try:
-        pytest.main(["-v",
-                     "--import-mode=importlib",
-                     "--testtype="+testtype,
-                     "--auto_build_reports="+str(auto_build_reports), *rep_args])
+        pytest.main(["-v")
+                     #"--testtype="+testtype,
+                     #"--auto_build_reports="+str(auto_build_reports), *rep_args])
     except:
         print("os cwd: "+os.getcwd())
         print("sys paths: "+"\n ".join(sys.path))
+        import conftest
 
 
 if __name__ == "__main__":
