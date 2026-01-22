@@ -21,7 +21,8 @@ def main(testtype="doctests", auto_build_reports=False):
     # import conftest
     # print(conftest)
 
-    pytest.main(["--testtype="+testtype,
+    pytest.main(["-v",
+                 "--testtype="+testtype,
                  "--auto_build_reports="+str(auto_build_reports), *rep_args])
 
 
