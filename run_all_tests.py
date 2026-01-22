@@ -18,8 +18,8 @@ def main(testtype="doctests", auto_build_reports=False):
 
     print("os cwd: "+os.getcwd())
     print("sys paths: "+"\n ".join(sys.path))
-    import conftest
-    print(conftest)
+    # import conftest
+    # print(conftest)
 
     pytest.main(["--testtype="+testtype,
                  "--auto_build_reports="+str(auto_build_reports), *rep_args])
