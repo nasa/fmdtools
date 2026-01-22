@@ -20,7 +20,7 @@ def main(testtype="doctests", auto_build_reports=False):
     print("sys paths: "+"\n ".join(sys.path))
 
     try:
-        pytest.main(["-v")
+        pytest.main(["-v"])
                      #"--testtype="+testtype,
                      #"--auto_build_reports="+str(auto_build_reports), *rep_args])
     except:
