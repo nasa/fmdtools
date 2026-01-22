@@ -5,7 +5,6 @@ Testing script for fmdtools internal build environment.
 
 Requires pytest, nbmake, pytest-html, pytest-cov.
 """
-import conftest
 import pytest
 import argparse
 import sys
@@ -16,9 +15,12 @@ def main(testtype="doctests", auto_build_reports=False):
     rep_args=[]
     if auto_build_reports:
         rep_args = ["--cov-report", "html:auto"]
-    print(conftest)
+
     print("os cwd: "+os.getcwd())
     print("sys paths: "+"\n ".join(sys.path))
+    import conftest
+    print(conftest)
+
     pytest.main(["--testtype="+testtype,
                  "--auto_build_reports="+str(auto_build_reports), *rep_args])
 
