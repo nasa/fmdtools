@@ -22,7 +22,6 @@ troupe_model/
 #*csv
 
 #profiling
-conftest.py
 profiling.py
 speedtest*
 
