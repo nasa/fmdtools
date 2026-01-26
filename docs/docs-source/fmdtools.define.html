@@ -6,18 +6,18 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define &mdash; fmdtools 2.3.0 documentation</title>
+  <title>fmdtools.define &mdash; fmdtools 2.3.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
 
   
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/documentation_options.js?v=67b02a41"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-3-0">Version: 2.3.0</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-3-1">Version: 2.3.1</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
@@ -779,7 +779,7 @@
 <p>Package for modelling system structure and behavior.</p>
 <p>The define package provides the building blocks to develop a simulation. Simulations are defined in the sub-classes of the <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code></a> class (in the <a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block" title="fmdtools.define.block"><code class="xref py py-mod docutils literal notranslate"><span class="pre">block</span></code></a> and <a class="reference internal" href="fmdtools.define.architecture.html#module-fmdtools.define.architecture" title="fmdtools.define.architecture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">architecture</span></code></a> subpackages), as shown below:</p>
 <figure class="align-default" id="id3">
-<a class="reference internal image-reference" href="../_images/block_inheritance.svg"><img alt="Inheritance of simulable fmdtools classes" src="../_images/block_inheritance.svg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/block_inheritance.svg"><img alt="Inheritance of simulable fmdtools classes" src="../_images/block_inheritance.svg" width="800" />
 </a>
 <figcaption>
 <p><span class="caption-text">Structure of simulable fmdtools subclasses used for developing simulations.</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
@@ -1109,14 +1109,14 @@ one_line is False.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>true_type</strong> (<em>class/type</em>) – Class/type to set to</p></li>
-<li><p><strong>new_arg</strong> (<em>value</em>) – Value to set as.</p></li>
+<li><p><strong>new_arg</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.BaseObjCon.value" title="fmdtools.sim.search.BaseObjCon.value"><em>value</em></a>) – Value to set as.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>new_arg</strong> – Value with correct type (if possible).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>value</p>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.BaseObjCon.value" title="fmdtools.sim.search.BaseObjCon.value">value</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1160,7 +1160,7 @@ one_line is False.</p></li>
 <p>Module for representing environments with the <a class="reference internal" href="#fmdtools.define.environment.Environment" title="fmdtools.define.environment.Environment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code></a> class.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.environment.Environment">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.environment.</span></span><span class="sig-name descname"><span class="pre">Environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ga</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.environment.</span></span><span class="sig-name descname"><span class="pre">Environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ga</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fmdtools.define.flow.html#fmdtools.define.flow.commsflow.CommsFlow" title="fmdtools.define.flow.commsflow.CommsFlow"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></p>
 <p>Class for representing environments (in development).</p>
 <p>Environments are CommsFlows in order to readily enable perception as well as

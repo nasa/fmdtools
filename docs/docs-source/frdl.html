@@ -6,18 +6,18 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FRDL &mdash; fmdtools 2.3.0 documentation</title>
+  <title>FRDL &mdash; fmdtools 2.3.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
 
   
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/documentation_options.js?v=67b02a41"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-3-0">Version: 2.3.0</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-3-1">Version: 2.3.1</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
@@ -814,7 +814,7 @@
 <section id="blocks">
 <h4>Blocks<a class="headerlink" href="#blocks" title="Link to this heading"></a></h4>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/blocks.svg"><img alt="FRDL Block Classes" src="../_images/blocks.svg" style="width: 450px;" />
+<a class="reference internal image-reference" href="../_images/blocks.svg"><img alt="FRDL Block Classes" src="../_images/blocks.svg" width="450" />
 </a>
 </figure>
 <p>Blocks in FRDL are behavioral elements of the system, meaning they are expected to perform a given behavior. Behavior is any operation, such as an equation, modification, or constraint that the block imposes on the system. For example, <code class="docutils literal notranslate"><span class="pre">Fly</span></code>, <code class="docutils literal notranslate"><span class="pre">Transfer</span> <span class="pre">Heat</span></code>, and <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">X</span> <span class="pre">to</span> <span class="pre">One</span></code> may all be considered behaviors which blocks would embody. Blocks may further be annotated with <a class="reference internal" href="#annotations">Annotations</a> to describe structural and behavioral properties of the block. FRDL supports three major block classes, shown above and described below.</p>
@@ -837,7 +837,7 @@
 <h4>Flows<a class="headerlink" href="#flows" title="Link to this heading"></a></h4>
 <p>Flows represent the means by which blocks may interact, and may be thought of as shared variables, inputs/outputs, or a shared environment. For example, in a circuit, electricity represents the flow between elements of the circuit.</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/types_of_flow.svg"><img alt="FRDL Flow classes." src="../_images/types_of_flow.svg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/types_of_flow.svg"><img alt="FRDL Flow classes." src="../_images/types_of_flow.svg" width="800" />
 </a>
 </figure>
 <p>There are three main types of flow, shown above. Base flows represent directly coupled links between functions (i.e., an aggregation), meaning that properties of the flow in one block directly correspond to the properties of the flow in another. Flows correspond directly to the <a class="reference internal" href="fmdtools.define.flow.html#fmdtools.define.flow.base.Flow" title="fmdtools.define.flow.base.Flow"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flow</span></code></a> class in fmdtools.</p>
@@ -887,7 +887,7 @@
 <section id="annotations">
 <h4>Annotations<a class="headerlink" href="#annotations" title="Link to this heading"></a></h4>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/block_annotations.svg"><img alt="FRDL Annotations" src="../_images/block_annotations.svg" style="width: 600px;" />
+<a class="reference internal image-reference" href="../_images/block_annotations.svg"><img alt="FRDL Annotations" src="../_images/block_annotations.svg" width="600" />
 </a>
 </figure>
 <p>Annotations may be used to clarify known properties of objects, such as blocks and flows. An overview of these annotations (described next) is provided above. While it is not required to use any of these annotations, they are provided as a part of the language to better inform analyses with relevant information.</p>
@@ -940,7 +940,7 @@
 <section id="function-in-context-diagram">
 <h6>Function-in-Context Diagram<a class="headerlink" href="#function-in-context-diagram" title="Link to this heading"></a></h6>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_ficd_singleprop.svg"><img alt="Function in Context Diagram" src="../_images/frdl_ficd_singleprop.svg" style="width: 700px;" />
+<a class="reference internal image-reference" href="../_images/frdl_ficd_singleprop.svg"><img alt="Function in Context Diagram" src="../_images/frdl_ficd_singleprop.svg" width="700" />
 </a>
 </figure>
 <p>The Function-in-Context Diagram describes the system as a single function that interacts with a number of external functions representing the external socio-technical environment of the system. For example, in the above diagram, the function <code class="docutils literal notranslate"><span class="pre">Function</span> <span class="pre">Name</span></code> is controled by signal input via <code class="docutils literal notranslate"><span class="pre">External</span> <span class="pre">Signals</span></code> from <code class="docutils literal notranslate"><span class="pre">Control</span> <span class="pre">Function</span> <span class="pre">Name</span></code> and takes in Material and Signal flow inputs. It then produces <code class="docutils literal notranslate"><span class="pre">External</span> <span class="pre">Energy</span></code> (evacuated as waste) as well as an output material.</p>
@@ -948,7 +948,7 @@
 <section id="function-architecture-diagram">
 <h6>Function Architecture Diagram<a class="headerlink" href="#function-architecture-diagram" title="Link to this heading"></a></h6>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_fad_singleprop.svg"><img alt="Function Architecture Diagram" src="../_images/frdl_fad_singleprop.svg" style="width: 600px;" />
+<a class="reference internal image-reference" href="../_images/frdl_fad_singleprop.svg"><img alt="Function Architecture Diagram" src="../_images/frdl_fad_singleprop.svg" width="600" />
 </a>
 </figure>
 <p>The Function architecture diagram describes the decomposition of the overall system function into further functions. For example, in the above image, the function <code class="docutils literal notranslate"><span class="pre">Function</span> <span class="pre">A</span></code> produces <code class="docutils literal notranslate"><span class="pre">Control</span> <span class="pre">Signal</span></code>, which controls the energy supplied by <code class="docutils literal notranslate"><span class="pre">Function</span> <span class="pre">B</span></code> that in term modifies the material in <code class="docutils literal notranslate"><span class="pre">Function</span> <span class="pre">C</span></code>, which also produces a <code class="docutils literal notranslate"><span class="pre">waste</span> <span class="pre">energy</span> <span class="pre">out</span></code> flow.</p>
@@ -992,7 +992,7 @@
 <section id="action-architectures">
 <h4>Action Architectures<a class="headerlink" href="#action-architectures" title="Link to this heading"></a></h4>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_actionarchitecture.svg"><img alt="Action Architecture Diagram" src="../_images/frdl_actionarchitecture.svg" style="width: 600px;" />
+<a class="reference internal image-reference" href="../_images/frdl_actionarchitecture.svg"><img alt="Action Architecture Diagram" src="../_images/frdl_actionarchitecture.svg" width="600" />
 </a>
 </figure>
 <p>Action architectures specify the sequence and interactions between logical actions performed by the system. They may be considered as similar to state machine diagrams as well as activity diagrams, except with the explicit specification of the means of interaction via flows. For example, in the diagram above, the system starts at <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">1</span></code>, which affects <code class="docutils literal notranslate"><span class="pre">Flow</span> <span class="pre">2</span></code>, then proceeds to <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">2</span></code> which modifies <code class="docutils literal notranslate"><span class="pre">Flow</span> <span class="pre">2</span></code>, and then either (if <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">2</span></code> fails) proceeds to <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">4</span></code> followed by <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">1</span></code>, or (if <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">2</span></code> Completes) proceeds to <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">3</span></code>, which uses <code class="docutils literal notranslate"><span class="pre">Flow</span> <span class="pre">2</span></code>.</p>
@@ -1001,7 +1001,7 @@
 <section id="component-architectures">
 <h4>Component Architectures<a class="headerlink" href="#component-architectures" title="Link to this heading"></a></h4>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_componentarchitecture.svg"><img alt="Component Architecture Diagram" src="../_images/frdl_componentarchitecture.svg" style="width: 600px;" />
+<a class="reference internal image-reference" href="../_images/frdl_componentarchitecture.svg"><img alt="Component Architecture Diagram" src="../_images/frdl_componentarchitecture.svg" width="600" />
 </a>
 </figure>
 <p>Component architectures specify the interactions between components in a system. While component architectures can be modelled with a variety of conventions, in the FRDL methodology they are generally used to represent the interactions between components fulfilling a particular function (though more uses are possible). This is to help manage the complexity of interactions, since components (and component architectures) can fulfill a range of functions with complex, multidisciplinary behaviors that may be difficult to represent all on a single diagram. Instead, different component component architecture diagrams should be constructed for each function, which each show the component interactions involved in fulfilling that function. Then, the propagation behavior for component faults can be traced first to the immediate effects at each function level (where the component is present), and at the function architecture level across the system.</p>
@@ -1014,7 +1014,7 @@
 <h4>Modelling<a class="headerlink" href="#modelling" title="Link to this heading"></a></h4>
 <p>Modelling is meant to be an iterative process in which the model is developed and revised as information (e.g., behaviors, design decisions, elicited hazards) is elicited and modified. For a given architecture, the following procedure may be used:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/modelling_process.svg"><img alt="FRDL Modelling Process" src="../_images/modelling_process.svg" style="width: 400px;" />
+<a class="reference internal image-reference" href="../_images/modelling_process.svg"><img alt="FRDL Modelling Process" src="../_images/modelling_process.svg" width="400" />
 </a>
 </figure>
 <p>In this approach, the modeller first identifies functions and flows, stitches them together with relationships, and then annotates them with detailed type, behavior, and propagation information.</p>
@@ -1078,7 +1078,7 @@
 <section id="function-action-relationship">
 <h4>Function/Action Relationship<a class="headerlink" href="#function-action-relationship" title="Link to this heading"></a></h4>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/functions_vs_actions.svg"><img alt="Actions live &quot;within&quot; functions" src="../_images/functions_vs_actions.svg" style="width: 400px;" />
+<a class="reference internal image-reference" href="../_images/functions_vs_actions.svg"><img alt="Actions live &quot;within&quot; functions" src="../_images/functions_vs_actions.svg" width="400" />
 </a>
 </figure>
 <p>The relationship between functions and actions is illustrated above. Actions represent <strong>logical behaviors</strong> and are meant to live within the function(s) that control the system. These controlling functions thus contain or “own” the actions. As such, <a class="reference internal" href="#action-architectures">Action Architectures</a> can be viewed as living within the functions that control the system (whether they represent operators, avionics, etc.).</p>
@@ -1086,7 +1086,7 @@
 <section id="function-component-relationship">
 <h4>Function/Component Relationship<a class="headerlink" href="#function-component-relationship" title="Link to this heading"></a></h4>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/functions_vs_components.svg"><img alt="Components are aggregated by functions" src="../_images/functions_vs_components.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/functions_vs_components.svg"><img alt="Components are aggregated by functions" src="../_images/functions_vs_components.svg" width="500" />
 </a>
 </figure>
 <p>The relationship between functions and components is illustrated above. Components represent the physical embodiment of functional behaviors, but do not always map directly to functions in a one-to-one manner. Generally, functions can be thought of as high-level behaviors (e.g., acceleration, force-balance, energy balance, etc.) and thus can involve a few different components when embodied. For example, supporting a payload may require a number of structural components, whose overall functionality would be defined using force balance equation(s) over entire assemblies. Conversely, the wheels of a vehicle (illustrated above) may contribute to a range of different functions, including supporting the vehicle, turning the vehicle, and moving the vehicle forward.</p>
@@ -1095,7 +1095,7 @@
 <section id="flows-as-nodes">
 <h4>Flows as Nodes<a class="headerlink" href="#flows-as-nodes" title="Link to this heading"></a></h4>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/edges_vs_nodes.svg"><img alt="Concept of flows being represented as nodes rather than edges." src="../_images/edges_vs_nodes.svg" style="width: 600px;" />
+<a class="reference internal image-reference" href="../_images/edges_vs_nodes.svg"><img alt="Concept of flows being represented as nodes rather than edges." src="../_images/edges_vs_nodes.svg" width="600" />
 </a>
 </figure>
 <p>One of the unique features of the FRDL ontology is the representation of flows as nodes. As illustrated above, this is different than most other graphical languages (such as EMS models, function-flow block diagrams, SysML block and activity diagrams, STAMP models), which usually represent nodes as edges, rather than nodes.</p>
@@ -1108,7 +1108,7 @@
 </ol>
 <p>These properties of FRDL’s bipartite graph representation are illustrated in the example below.</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/flow_edge_scalability.svg"><img alt="Concept of bipartite graphs being more scalable than unipartite graphs." src="../_images/flow_edge_scalability.svg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/flow_edge_scalability.svg"><img alt="Concept of bipartite graphs being more scalable than unipartite graphs." src="../_images/flow_edge_scalability.svg" width="800" />
 </a>
 </figure>
 <p>As shown, the FRDL functional architecture (at left) has three flows connecting four functions (no propagation annotations are provided to keep the illustration generic). The equivalent unipartite representation of this architecture is (shown at right), and has nine flows connecting the functions. Because flows are not grouped, each function has more connections that must be tracked down during analysis (Function 1 has 5 arrows going out of it instead of 2 connections). This is further complicated by the fact that several of these flows are essentially duplicates connecting different pairs of functions, leading to ambiguities in practice, because it may be difficult to tell whether the flows are actually the same objects. Additionally, flow arrows cross twice instead of just once, meaning the representation becomes less clear as the number of interactions increase.</p>
@@ -1249,13 +1249,13 @@
 <h4>Bread Making<a class="headerlink" href="#bread-making" title="Link to this heading"></a></h4>
 <p>To illustrate how FRDL can better clarify the dynamic behavior of a system in the context of analysis, consider the process of baking bread. The source draw.io file for this example is provided <a class="reference download internal" download="" href="../_downloads/17e6e276ba963e643711b513a0107e6c/bread_making.drawio"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>. In a typical EMS-based failure model, the designer may represent the system with the following structure.</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/fbed_diagram.svg"><img alt="EMS model of baking bread." src="../_images/fbed_diagram.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/fbed_diagram.svg"><img alt="EMS model of baking bread." src="../_images/fbed_diagram.svg" width="500" />
 </a>
 </figure>
 <p>The behavior of this model, as noted in the diagram, is ambiguous because it is not clear whether the process is continuous or discrete. In the discrete interpretation, a baker may place a single loaf of bread in the oven, after which they take the bread out. As a result, we can assume that (in the context of failure propagation), if there is a failure to break bread, the main effect will be that the bread to be exported will be unbaked. This well-represented in the spacio-temporal representation of how flows connect flows. In the continuous interpretation, on the other hand, the dough is continuously placed on a conveyor belt that moves the bread through the oven and exports it when it has been baked. As a result, in the context of failure analysis, if there is a failure to bake bread (caused, for example, by a loss of power to the unit), we may also not be able to import bread and incoming dough may be stopped prior to entering the oven.</p>
 <p>In FRDL, these two interpretations would lead to models with different propagation arrows as well as flow tags. The discrete case would be represented as shown below:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_discrete.svg"><img alt="FRDL model of the baking a loaf of bread." src="../_images/frdl_discrete.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/frdl_discrete.svg"><img alt="FRDL model of the baking a loaf of bread." src="../_images/frdl_discrete.svg" width="500" />
 </a>
 </figure>
 <p>As shown, this model is specified with dynamics tags that specify that:</p>
@@ -1267,7 +1267,7 @@
 <p>As a result, a failure in the <code class="docutils literal notranslate"><span class="pre">Bake</span> <span class="pre">bread</span> <span class="pre">from</span> <span class="pre">dough</span></code> function <em>could</em> lead to uncooked dough being exported, the baking never finishing (and thus bread never being exported), and/or adverse current draw, depending on the specific fault mode.</p>
 <p>In contrast, the continuous case would be represented as shown below:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_continuous.svg"><img alt="FRDL model of the continuous baking of bread." src="../_images/frdl_continuous.svg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/frdl_continuous.svg"><img alt="FRDL model of the continuous baking of bread." src="../_images/frdl_continuous.svg" width="800" />
 </a>
 </figure>
 <p>While the structure of this model is similar to the previous flow, the interpretation is quite different because of the separated dough/bread flows as well as the different dynamics tags and propagation arrows. Specifically, this model specifies that:</p>
@@ -1279,7 +1279,7 @@
 <p>As a result, a failure in the <code class="docutils literal notranslate"><span class="pre">Bread</span> <span class="pre">bread</span> <span class="pre">from</span> <span class="pre">dough</span></code> function <em>could</em> not only lead to uncooked dough being exported (as well as the other effects for the discrete case), it could also lead to a blockage of incoming dough, which could ruin the batch if not attended to.</p>
 <p>For example, consider the failure condition of a stuck conveyor, shown below in the continuous model.</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/conveyor_stuck_1.svg"><img alt="Stuck conveyor in function diagram" src="../_images/conveyor_stuck_1.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_1.svg"><img alt="Stuck conveyor in function diagram" src="../_images/conveyor_stuck_1.svg" width="500" />
 </a>
 </figure>
 <p>The analysis of causes and effects are shown below:</p>
@@ -1287,19 +1287,19 @@
 <h5>Effects Analysis<a class="headerlink" href="#effects-analysis" title="Link to this heading"></a></h5>
 <p>For the first step of effects analysis, the potential effects on flows are identified as shown below:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/conveyor_stuck_2.svg"><img alt="Effects analysis step 1" src="../_images/conveyor_stuck_2.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_2.svg"><img alt="Effects analysis step 1" src="../_images/conveyor_stuck_2.svg" width="500" />
 </a>
 </figure>
 <p>As shown, there are potential effects for each flow–both expected (change in flow of bread/dough) and potentially unexpected (adverse current draw).</p>
 <p>For the second step, the effects on function behaviors are identified:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/conveyor_stuck_3.svg"><img alt="Effects analysis step 2" src="../_images/conveyor_stuck_3.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_3.svg"><img alt="Effects analysis step 2" src="../_images/conveyor_stuck_3.svg" width="500" />
 </a>
 </figure>
 <p>As shown, this gets us to the system boundary of the model in terms of input/output functions. We can also identify some some effects to the instantiating function from the passing of time (dough likely to burn).</p>
 <p>This process can continue as long as there are more potential effects to uncover. We continue tracing the effects for one more step below:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/conveyor_stuck_4.svg"><img alt="Effects analysis step 3" src="../_images/conveyor_stuck_4.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_4.svg"><img alt="Effects analysis step 3" src="../_images/conveyor_stuck_4.svg" width="500" />
 </a>
 </figure>
 <p>As shown, if the electricity draw is too high, a circuit would be blown, which would essentially stop the machine.</p>
@@ -1309,13 +1309,13 @@
 <h5>Causal Analysis<a class="headerlink" href="#causal-analysis" title="Link to this heading"></a></h5>
 <p>For the first step of causal analysis, the potential effects on flows are shown below:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/conveyor_stuck_cause1.svg"><img alt="Causal analysis step 1." src="../_images/conveyor_stuck_cause1.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_cause1.svg"><img alt="Causal analysis step 1." src="../_images/conveyor_stuck_cause1.svg" width="500" />
 </a>
 </figure>
 <p>As shown, causes are identified for each flow. We can note the plausibility of these causal mechanisms (dough jamming seeming less likely than a power supply cut).</p>
 <p>For the second step, these causes can be further traced to functions:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/conveyor_stuck_cause2.svg"><img alt="Causal analysis step 2." src="../_images/conveyor_stuck_cause2.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/conveyor_stuck_cause2.svg"><img alt="Causal analysis step 2." src="../_images/conveyor_stuck_cause2.svg" width="500" />
 </a>
 </figure>
 <p>This is about as far as the analysis can go for causal analysis with this diagram. That said, many more potential causes (and effects) could be delineated if the Function-in-Context Diagram shown here was further broken up into a Function Architecture Diagram, since more details about how the conveyor works would be provided.</p>
@@ -1355,19 +1355,19 @@
 <h4>Circuit<a class="headerlink" href="#circuit" title="Link to this heading"></a></h4>
 <p>To illustrated how FRDL can better represent coupled technical behaviors in conventional engineered systems, this section provides an example of representing an electric power system. The source draw.io file for this example is provided <a class="reference download internal" download="" href="../_downloads/1fc491a462b0cbe2a86f10fa469dbe59/circuit_models.drawio"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>. An EMS-based model of this system could look as shown below:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/fbed_circuit.svg"><img alt="EMS model of an electric power system." src="../_images/fbed_circuit.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/fbed_circuit.svg"><img alt="EMS model of an electric power system." src="../_images/fbed_circuit.svg" width="500" />
 </a>
 </figure>
 <p>As shown, the goal of this system is to regulate the supply of electrical energy, which it exports from the <code class="docutils literal notranslate"><span class="pre">Export</span> <span class="pre">EE</span></code> function to external loads. In the process, some of the electrical energy is converted into waste heat. Because this model applies the spacio-temporal view of functional flow inherent to the EMS, representation, reasoning about failures using the direction of the arrows could lead to incorrect or incomplete results. For example, in the fault scenario in which there is a short in the Store EE function, the shown graph implies that the electrical energy output would degrade, meaning that EE can no longer be modulated and exported to external electrical loads. This leaves out that the short in the Store EE function would also cause adverse current draw, from the <code class="docutils literal notranslate"><span class="pre">Import</span> <span class="pre">EE</span></code> source, which could damage the upstream source and wiring.</p>
 <p>In contrast, an FRDL function architecture diagram of this system is shown below.</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_circuit.svg"><img alt="FRDL model of an electric power system." src="../_images/frdl_circuit.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/frdl_circuit.svg"><img alt="FRDL model of an electric power system." src="../_images/frdl_circuit.svg" width="500" />
 </a>
 </figure>
 <p>As shown, this model provides more detail about how the flow of electricity propagates behaviors throughout the system. In particular, both the forward flow of voltage from the source to the sinks and the reverse flow of current from the sinks to the source are provided. Similarly, there is now a more informed representation of the dynamics of the system–that the functions are activated and deactivated by the new voltage applied initially by the <code class="docutils literal notranslate"><span class="pre">Import</span> <span class="pre">EE</span></code> function. Thus, analyzing a short in the <code class="docutils literal notranslate"><span class="pre">Store</span> <span class="pre">EE</span></code> function in this model would lead to a more-informed idea of how behavior would propagate in the circuit–not just propagating forward (via the voltage activations) to degrade the supply of electricity to the load, but also propagating backwards via current activations.</p>
 <p>Below this is illustrated in the hazard analysis of a short in the “Modulate EE” function, shown below:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_circuit_0.svg"><img alt="FRDL model of an electric power system with a short in the Modulate EE function." src="../_images/frdl_circuit_0.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/frdl_circuit_0.svg"><img alt="FRDL model of an electric power system with a short in the Modulate EE function." src="../_images/frdl_circuit_0.svg" width="500" />
 </a>
 </figure>
 <p>The next subsections show how the FRDL-based hazard analysis procedure can be used to analyze the effects and causes of this hazard, resulting in a summary capturing the corresponding hazard table information.</p>
@@ -1375,25 +1375,25 @@
 <h5>Effects Analysis<a class="headerlink" href="#id2" title="Link to this heading"></a></h5>
 <p>In the first step of the analysis procedure, the effect on flows is evaluated:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_circuit_1.svg"><img alt="Effects analysis of the short scenario, step 1." src="../_images/frdl_circuit_1.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/frdl_circuit_1.svg"><img alt="Effects analysis of the short scenario, step 1." src="../_images/frdl_circuit_1.svg" width="500" />
 </a>
 </figure>
 <p>As shown, the output of “Modulate EE” produces no voltage, since the power is now moving through the “Modulate EE” function. This further results in increased current draw though the power input.</p>
 <p>In the second step, further effects on functions are evaluated:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_circuit_2.svg"><img alt="Effects analysis of the short scenario, step 2." src="../_images/frdl_circuit_2.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/frdl_circuit_2.svg"><img alt="Effects analysis of the short scenario, step 2." src="../_images/frdl_circuit_2.svg" width="500" />
 </a>
 </figure>
 <p>As shown, the high current draw can cause a depletion of energy storage, as well as a burn-out of the upstream power supply. It also results in a lack of electrical energy exported.</p>
 <p>This results in further changes to electricity flows, shown below:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_circuit_3.svg"><img alt="Effects analysis of the short scenario, step 3." src="../_images/frdl_circuit_3.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/frdl_circuit_3.svg"><img alt="Effects analysis of the short scenario, step 3." src="../_images/frdl_circuit_3.svg" width="500" />
 </a>
 </figure>
 <p>As shown, because the upstream circuitry has been burnt out, it no longer provides voltage.</p>
 <p>This results in further downstream effects, combined in a single diagram below for brevity:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_circuit_4.svg"><img alt="Effects analysis of the short scenario, step 4." src="../_images/frdl_circuit_4.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/frdl_circuit_4.svg"><img alt="Effects analysis of the short scenario, step 4." src="../_images/frdl_circuit_4.svg" width="500" />
 </a>
 </figure>
 </section>
@@ -1401,13 +1401,13 @@
 <h5>Causal Analysis<a class="headerlink" href="#id3" title="Link to this heading"></a></h5>
 <p>The causal analysis for the circuit is much simpler. The first step is shown below:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_circuit_cause1.svg"><img alt="Causal analysis of the short scenario, step 1." src="../_images/frdl_circuit_cause1.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/frdl_circuit_cause1.svg"><img alt="Causal analysis of the short scenario, step 1." src="../_images/frdl_circuit_cause1.svg" width="500" />
 </a>
 </figure>
 <p>As shown, the main identified flow effect is too high of voltage being applied, causing increased heat from the underlying component, resulting in the circuit melting and their being a short.</p>
 <p>This condition is further propagated in step 2, below:</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/frdl_circuit_cause2.svg"><img alt="Causal analysis of the short scenario, step 2." src="../_images/frdl_circuit_cause2.svg" style="width: 500px;" />
+<a class="reference internal image-reference" href="../_images/frdl_circuit_cause2.svg"><img alt="Causal analysis of the short scenario, step 2." src="../_images/frdl_circuit_cause2.svg" width="500" />
 </a>
 </figure>
 <p>As shown, the increased voltage can result from too high of a voltage input to the entire circuit, or the voltage being provided from the “Store EE” function at too high a level. This causal analysis was fairly simple, but it shows some potential flaws in our model–we predict that the “Modulate EE” function could heat up or down depending on its current draw, but the only heat moving through the model is exported from the “Convert EE to HE” function.</p>

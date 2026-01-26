@@ -6,18 +6,18 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.container &mdash; fmdtools 2.3.0 documentation</title>
+  <title>fmdtools.define.container &mdash; fmdtools 2.3.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
 
   
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/documentation_options.js?v=67b02a41"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-3-0">Version: 2.3.0</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-3-1">Version: 2.3.1</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
@@ -780,7 +780,7 @@
 <p>Package defining system variables other base constructs.</p>
 <p>The containers subpackage provides the elemental building puzzle pieces needed (i.e., containers for holding states, modes, etc.) to develop simulations, shown below.</p>
 <figure class="align-default" id="id39">
-<a class="reference internal image-reference" href="../_images/Containers.svg"><img alt="fmdtools container classes" src="../_images/Containers.svg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/Containers.svg"><img alt="fmdtools container classes" src="../_images/Containers.svg" width="800" />
 </a>
 <figcaption>
 <p><span class="caption-text">Container classes in fmdtools and their inheritance.</span><a class="headerlink" href="#id39" title="Link to this image"></a></p>
@@ -814,7 +814,7 @@
 <p>Defines <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a> class which other containers inherit from.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.base.</span></span><span class="sig-name descname"><span class="pre">BaseContainer</span></span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.base.</span></span><span class="sig-name descname"><span class="pre">BaseContainer</span></span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dataobject</span></code></p>
 <p>Base container class.</p>
 <p>A container is a dataobject (from the recordclass library) that fulfills a specific
@@ -948,7 +948,7 @@ The default is None.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.default_track">
-<span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'all'</span></em><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.default_track" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">default_track</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'all'</span></span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.default_track" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1017,7 +1017,7 @@ The default is None.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>obj</strong> (<em>dataobject</em>) – State/Mode/Rand. Requires .default_track class variable.</p></li>
-<li><p><strong>track</strong> (<em>track</em>) – str/tuple. Attributes to track.
+<li><p><strong>track</strong> (<a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.base.Architecture.track" title="fmdtools.define.architecture.base.Architecture.track"><em>track</em></a>) – str/tuple. Attributes to track.
 ‘all’ tracks all fields
 ‘default’ tracks fields defined in default_track for the dataobject
 ‘none’ tracks none of the fields</p></li>
@@ -1071,7 +1071,7 @@ The default is None.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.rolename">
-<span class="sig-name descname"><span class="pre">rolename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'x'</span></em><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.rolename" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rolename</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'x'</span></span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.rolename" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1106,7 +1106,7 @@ float in initialization.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fieldname</strong> (<em>str</em>) – Name of the field.</p></li>
-<li><p><strong>value</strong> (<em>value</em>) – Value to set the field to.</p></li>
+<li><p><strong>value</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.BaseObjCon.value" title="fmdtools.sim.search.BaseObjCon.value"><em>value</em></a>) – Value to set the field to.</p></li>
 <li><p><strong>as_copy</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to copy value. The default is True.</p></li>
 </ul>
 </dd>
@@ -1144,34 +1144,34 @@ float in initialization.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.ExContainer">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.base.</span></span><span class="sig-name descname"><span class="pre">ExContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.ExContainer" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.base.</span></span><span class="sig-name descname"><span class="pre">ExContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.ExContainer" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
 <p>Create class ExContainer instance</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.ExContainer.x">
-<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.container.base.ExContainer.x" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">x</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#fmdtools.define.container.base.ExContainer.x" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.ExContainer.y">
-<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.container.base.ExContainer.y" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">y</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#fmdtools.define.container.base.ExContainer.y" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.ExNestContainer">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.base.</span></span><span class="sig-name descname"><span class="pre">ExNestContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fmdtools.define.container.base.ExContainer" title="fmdtools.define.container.base.ExContainer"><span class="pre">ExContainer</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ExContainer(x=1.0,</span> <span class="pre">y=2.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float64</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.ExNestContainer" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.base.</span></span><span class="sig-name descname"><span class="pre">ExNestContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fmdtools.define.container.base.ExContainer" title="fmdtools.define.container.base.ExContainer"><span class="pre">ExContainer</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ExContainer(x=1.0,</span> <span class="pre">y=2.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float64</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.ExNestContainer" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
 <p>Create class ExNestContainer instance</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.ExNestContainer.e1">
-<span class="sig-name descname"><span class="pre">e1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#fmdtools.define.container.base.ExContainer" title="fmdtools.define.container.base.ExContainer"><span class="pre">ExContainer</span></a></em><a class="headerlink" href="#fmdtools.define.container.base.ExNestContainer.e1" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">e1</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#fmdtools.define.container.base.ExContainer" title="fmdtools.define.container.base.ExContainer"><span class="pre">ExContainer</span></a></span><a class="headerlink" href="#fmdtools.define.container.base.ExNestContainer.e1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.ExNestContainer.z">
-<span class="sig-name descname"><span class="pre">z</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.container.base.ExNestContainer.z" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">z</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.base.ExNestContainer.z" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1197,7 +1197,7 @@ float in initialization.</p>
 <h2>fmdtools.define.container.mode<a class="headerlink" href="#fmdtools-define-container-mode" title="Link to this heading"></a></h2>
 <p>The following template shows the basic syntax to use to define modes:</p>
 <figure class="align-default" id="id40">
-<a class="reference internal image-reference" href="../_images/mode_structure.svg"><img alt="Structure of a Mode Class" src="../_images/mode_structure.svg" style="width: 600px;" />
+<a class="reference internal image-reference" href="../_images/mode_structure.svg"><img alt="Structure of a Mode Class" src="../_images/mode_structure.svg" width="600" />
 </a>
 <figcaption>
 <p><span class="caption-text">Mode class template/example.</span><a class="headerlink" href="#id40" title="Link to this image"></a></p>
@@ -1212,54 +1212,54 @@ held in Blocks.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">ExampleMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">ExampleMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a></p>
 <p>Example mode for testing/docs.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.exclusive">
-<span class="sig-name descname"><span class="pre">exclusive</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.exclusive" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">exclusive</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.exclusive" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.fault_low">
-<span class="sig-name descname"><span class="pre">fault_low</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.fault_low" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">fault_low</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.fault_low" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.fault_no_charge">
-<span class="sig-name descname"><span class="pre">fault_no_charge</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Fault(prob=1e-05,</span> <span class="pre">cost=100,</span> <span class="pre">phases=(('standby',</span> <span class="pre">1.0),),</span> <span class="pre">disturbances=(),</span> <span class="pre">units='sim')</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.fault_no_charge" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">fault_no_charge</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Fault(prob=1e-05,</span> <span class="pre">cost=100,</span> <span class="pre">phases=(('standby',</span> <span class="pre">1.0),),</span> <span class="pre">disturbances=(),</span> <span class="pre">units='sim')</span></span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.fault_no_charge" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.fault_short">
-<span class="sig-name descname"><span class="pre">fault_short</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(1e-05,</span> <span class="pre">100,</span> <span class="pre">(('supply',</span> <span class="pre">1.0),))</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.fault_short" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">fault_short</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(1e-05,</span> <span class="pre">100,</span> <span class="pre">(('supply',</span> <span class="pre">1.0),))</span></span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.fault_short" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.faults">
-<span class="sig-name descname"><span class="pre">faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.faults" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">faults</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.faults" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.mode">
-<span class="sig-name descname"><span class="pre">mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.mode" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mode</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.mode" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.opermodes">
-<span class="sig-name descname"><span class="pre">opermodes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('supply',</span> <span class="pre">'charge',</span> <span class="pre">'standby')</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.opermodes" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">opermodes</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('supply',</span> <span class="pre">'charge',</span> <span class="pre">'standby')</span></span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.opermodes" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.ExampleMode.sub_faults">
-<span class="sig-name descname"><span class="pre">sub_faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.sub_faults" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sub_faults</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.mode.ExampleMode.sub_faults" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Fault">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">Fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">failrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Fault" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">Fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">failrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Fault" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
 <p>Stores Default Attributes for individual fault modes.</p>
 <section id="fields">
@@ -1325,32 +1325,32 @@ define the fault rate. The default is ‘hr’.</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Fault.cost">
-<span class="sig-name descname"><span class="pre">cost</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Fault.cost" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">cost</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Fault.cost" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Fault.disturbances">
-<span class="sig-name descname"><span class="pre">disturbances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Fault.disturbances" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">disturbances</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Fault.disturbances" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Fault.phases">
-<span class="sig-name descname"><span class="pre">phases</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Fault.phases" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">phases</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Fault.phases" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Fault.prob">
-<span class="sig-name descname"><span class="pre">prob</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Fault.prob" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">prob</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Fault.prob" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Fault.units">
-<span class="sig-name descname"><span class="pre">units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str_</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Fault.units" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">units</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str_</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Fault.units" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Fault.valid_fault">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">valid_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Fault.valid_fault" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">valid_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Fault.valid_fault" title="Link to this definition"></a></dt>
 <dd><p>Check if the external fault is a valid fault (has same keys).</p>
 </dd></dl>
 
@@ -1359,7 +1359,7 @@ define the fault rate. The default is ‘hr’.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.HumanErrorMode">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">HumanErrorMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">HumanErrorMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a></p>
 <p>Mode for Human Errors using HEART-based model.</p>
 <p>Overall failrate of human error determined by given:</p>
@@ -1397,29 +1397,29 @@ task.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.HumanErrorMode.failrate">
-<span class="sig-name descname"><span class="pre">failrate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.failrate" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">failrate</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.failrate" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.HumanErrorMode.faults">
-<span class="sig-name descname"><span class="pre">faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.faults" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">faults</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></span><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.faults" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.HumanErrorMode.gtp">
-<span class="sig-name descname"><span class="pre">gtp</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.gtp" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">gtp</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></span><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.gtp" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.HumanErrorMode.sub_faults">
-<span class="sig-name descname"><span class="pre">sub_faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.sub_faults" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sub_faults</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.mode.HumanErrorMode.sub_faults" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.mode.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
 <p>Class for defining the mode property (and probability model) held in Blocks.</p>
 <p>Mode is meant to be inherited in order to define the specific faults related to a
@@ -1479,7 +1479,7 @@ their properties</p>
 <dd><p>Add fault (a str) to the block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>*fault</strong> (<em>str</em><em>(</em><em>s</em><em>)</em>) – name(s) of the fault to add to the black</p>
+<dd class="field-odd"><p><strong>*fault</strong> (<em>str</em><em>(</em><a class="reference internal" href="fmdtools.define.block.html#id5" title="fmdtools.define.block.base.Block.s"><em>s</em></a><em>)</em>) – name(s) of the fault to add to the black</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -1515,22 +1515,22 @@ their properties</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.default_track">
-<span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('mode',</span> <span class="pre">'faults',</span> <span class="pre">'sub_faults')</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.default_track" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">default_track</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('mode',</span> <span class="pre">'faults',</span> <span class="pre">'sub_faults')</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.default_track" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.exclusive">
-<span class="sig-name descname"><span class="pre">exclusive</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.exclusive" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">exclusive</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.exclusive" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.failrate">
-<span class="sig-name descname"><span class="pre">failrate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.failrate" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">failrate</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.failrate" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.faults">
-<span class="sig-name descname"><span class="pre">faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.faults" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">faults</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.faults" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1607,7 +1607,7 @@ Can also be parameters of the fault.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.mode">
-<span class="sig-name descname"><span class="pre">mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'nominal'</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.mode" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mode</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'nominal'</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.mode" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1623,7 +1623,7 @@ Can also be parameters of the fault.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.opermodes">
-<span class="sig-name descname"><span class="pre">opermodes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('nominal',)</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.opermodes" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">opermodes</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('nominal',)</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.opermodes" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1677,7 +1677,7 @@ Can also be parameters of the fault.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.rolename">
-<span class="sig-name descname"><span class="pre">rolename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'m'</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.rolename" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rolename</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'m'</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.rolename" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1693,7 +1693,7 @@ Can also be parameters of the fault.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.sub_faults">
-<span class="sig-name descname"><span class="pre">sub_faults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.mode.Mode.sub_faults" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sub_faults</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.sub_faults" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1717,7 +1717,7 @@ Can also be parameters of the fault.</p>
 <p>State classes are used to represent mutables properties of the system that change over time.</p>
 <p>State classes are extended and deployed by the user, as shown below:</p>
 <figure class="align-default" id="id41">
-<a class="reference internal image-reference" href="../_images/StateExample.svg"><img alt="example state class" src="../_images/StateExample.svg" style="width: 600px;" />
+<a class="reference internal image-reference" href="../_images/StateExample.svg"><img alt="example state class" src="../_images/StateExample.svg" width="600" />
 </a>
 <figcaption>
 <p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a> class to hold x/y fields.</span><a class="headerlink" href="#id41" title="Link to this image"></a></p>
@@ -1725,7 +1725,7 @@ Can also be parameters of the fault.</p>
 </figure>
 <p>The following template shows the basic syntax used to define states:</p>
 <figure class="align-default" id="id42">
-<a class="reference internal image-reference" href="../_images/state_structure.svg"><img alt="Structure of a State Class" src="../_images/state_structure.svg" style="width: 600px;" />
+<a class="reference internal image-reference" href="../_images/state_structure.svg"><img alt="Structure of a State Class" src="../_images/state_structure.svg" width="600" />
 </a>
 <figcaption>
 <p><span class="caption-text">State class template/example.</span><a class="headerlink" href="#id42" title="Link to this image"></a></p>
@@ -1733,7 +1733,7 @@ Can also be parameters of the fault.</p>
 </figure>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.state.State">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.state.</span></span><span class="sig-name descname"><span class="pre">State</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.state.</span></span><span class="sig-name descname"><span class="pre">State</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
 <p>Class for working with model states.</p>
 <p>States which are variables in the model which change over time.</p>
@@ -1892,7 +1892,7 @@ increments e.g.,:</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>as_copy</strong> (<em>bool</em>) – set to True for dicts/sets to be copied rather than referenced</p></li>
-<li><p><strong>**kwargs</strong> (<em>values</em>) – fields and values to set.</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ConstraintConnector.values" title="fmdtools.sim.search.ConstraintConnector.values"><em>values</em></a>) – fields and values to set.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1998,7 +1998,7 @@ The default is 2 (points to the place in the model)</p></li>
 <p>Defines <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to represent attributes that do not change.</p>
 <p><a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> classes are used to represent immutable properties of the system. <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> classes are extended and deployed by the user, as shown below:</p>
 <figure class="align-default" id="id43">
-<a class="reference internal image-reference" href="../_images/ParameterExample.svg"><img alt="example parameter class" src="../_images/ParameterExample.svg" style="width: 600px;" />
+<a class="reference internal image-reference" href="../_images/ParameterExample.svg"><img alt="example parameter class" src="../_images/ParameterExample.svg" width="600" />
 </a>
 <figcaption>
 <p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to hold x/y/z fields.</span><a class="headerlink" href="#id43" title="Link to this image"></a></p>
@@ -2006,7 +2006,7 @@ The default is 2 (points to the place in the model)</p></li>
 </figure>
 <p>The following template shows the basic syntax to use to define parameters:</p>
 <figure class="align-default" id="id44">
-<a class="reference internal image-reference" href="../_images/parameter_structure.svg"><img alt="Structure of a Parameter Class" src="../_images/parameter_structure.svg" style="width: 600px;" />
+<a class="reference internal image-reference" href="../_images/parameter_structure.svg"><img alt="Structure of a Parameter Class" src="../_images/parameter_structure.svg" width="600" />
 </a>
 <figcaption>
 <p><span class="caption-text">Parameter class template/example.</span><a class="headerlink" href="#id44" title="Link to this image"></a></p>
@@ -2014,7 +2014,7 @@ The default is 2 (points to the place in the model)</p></li>
 </figure>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.parameter.Parameter">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.parameter.</span></span><span class="sig-name descname"><span class="pre">Parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.parameter.Parameter" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.parameter.</span></span><span class="sig-name descname"><span class="pre">Parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.parameter.Parameter" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
 <p>The Parameter class defines model/function/flow values which are immutable.</p>
 <p>That is, the same from model instantiation through a simulation. Parameters
@@ -2164,49 +2164,49 @@ and random.permutation.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.ExampleRand">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">ExampleRand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">ExampleRand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.rand.Rand" title="fmdtools.define.container.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a></p>
 <p>Example Rand for testing and docs.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.ExampleRand.probdens">
-<span class="sig-name descname"><span class="pre">probdens</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.probdens" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">probdens</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.probdens" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.ExampleRand.probs">
-<span class="sig-name descname"><span class="pre">probs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.probs" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">probs</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></span><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.probs" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.ExampleRand.rng">
-<span class="sig-name descname"><span class="pre">rng</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Generator</span></em><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.rng" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rng</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Generator</span></span><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.rng" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.ExampleRand.run_stochastic">
-<span class="sig-name descname"><span class="pre">run_stochastic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.run_stochastic" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">run_stochastic</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.run_stochastic" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.ExampleRand.s">
-<span class="sig-name descname"><span class="pre">s</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#fmdtools.define.container.rand.RandState" title="fmdtools.define.container.rand.RandState"><span class="pre">RandState</span></a></em><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.s" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">s</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#fmdtools.define.container.rand.RandState" title="fmdtools.define.container.rand.RandState"><span class="pre">RandState</span></a></span><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.s" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.ExampleRand.seed">
-<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int64</span></em><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.seed" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">seed</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int64</span></span><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.seed" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.ExampleRand.track_pdf">
-<span class="sig-name descname"><span class="pre">track_pdf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.track_pdf" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">track_pdf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.rand.ExampleRand.track_pdf" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">Rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.Rand" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">Rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.Rand" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
 <p>Class for defining and interacting with random states of the model.</p>
 <dl class="py attribute">
@@ -2314,7 +2314,7 @@ np.float64(0.08847044068025682)
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.default_track">
-<span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('s',</span> <span class="pre">'probdens')</span></em><a class="headerlink" href="#fmdtools.define.container.rand.Rand.default_track" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">default_track</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('s',</span> <span class="pre">'probdens')</span></span><a class="headerlink" href="#fmdtools.define.container.rand.Rand.default_track" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2349,12 +2349,12 @@ np.float64(0.08847044068025682)
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.probdens">
-<span class="sig-name descname"><span class="pre">probdens</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.container.rand.Rand.probdens" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">probdens</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.rand.Rand.probdens" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">probs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">probs</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2377,22 +2377,22 @@ np.float64(0.08847044068025682)
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id26">
-<span class="sig-name descname"><span class="pre">rng</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Generator</span></em><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rng</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Generator</span></span><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.rolename">
-<span class="sig-name descname"><span class="pre">rolename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'r'</span></em><a class="headerlink" href="#fmdtools.define.container.rand.Rand.rolename" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rolename</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'r'</span></span><a class="headerlink" href="#fmdtools.define.container.rand.Rand.rolename" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id27">
-<span class="sig-name descname"><span class="pre">run_stochastic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">run_stochastic</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id28">
-<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int64</span></em><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">seed</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int64</span></span><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2425,7 +2425,7 @@ np.float64(0.08847044068025682)
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id29">
-<span class="sig-name descname"><span class="pre">track_pdf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">track_pdf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2444,12 +2444,12 @@ np.float64(0.08847044068025682)
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.RandState">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">RandState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.RandState" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">RandState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.RandState" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
 <p>Example random state for testing and docs.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.RandState.noise">
-<span class="sig-name descname"><span class="pre">noise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.container.rand.RandState.noise" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">noise</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.rand.RandState.noise" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2692,59 +2692,59 @@ to calculate the probabilities/probability densities.</p>
 <p>Defines <a class="reference internal" href="#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a> class for containing timers and time-related constructs.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.time.</span></span><span class="sig-name descname"><span class="pre">ExtendedTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.time.</span></span><span class="sig-name descname"><span class="pre">ExtendedTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a></p>
 <p>Example extended time class for testing, etc.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.dt">
-<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.dt" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.dt" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.executed_dynamic">
-<span class="sig-name descname"><span class="pre">executed_dynamic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executed_dynamic" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">executed_dynamic</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executed_dynamic" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.executed_static">
-<span class="sig-name descname"><span class="pre">executed_static</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executed_static" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">executed_static</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executed_static" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.executing">
-<span class="sig-name descname"><span class="pre">executing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executing" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">executing</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executing" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.t_ind">
-<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int32</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.t_ind" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">t_ind</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int32</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.t_ind" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.time">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.time" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.time" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.timernames">
-<span class="sig-name descname"><span class="pre">timernames</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('t1',</span> <span class="pre">'t2')</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.timernames" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">timernames</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('t1',</span> <span class="pre">'t2')</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.timernames" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.timers">
-<span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.timers" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">timers</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.timers" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.use_local">
-<span class="sig-name descname"><span class="pre">use_local</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.use_local" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">use_local</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.use_local" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.Time">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.time.</span></span><span class="sig-name descname"><span class="pre">Time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.time.</span></span><span class="sig-name descname"><span class="pre">Time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
 <p>Class for defining all time-based aspects of a Block (e.g., time, timestep, timers).</p>
 <dl class="py attribute">
@@ -2889,27 +2889,27 @@ Gets set as true when time is updated and false when the timestep is incremented
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.Time.default_track">
-<span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'timers'</span></em><a class="headerlink" href="#fmdtools.define.container.time.Time.default_track" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">default_track</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'timers'</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.default_track" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id30">
-<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id31">
-<span class="sig-name descname"><span class="pre">executed_dynamic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">executed_dynamic</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id32">
-<span class="sig-name descname"><span class="pre">executed_static</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">executed_static</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id33">
-<span class="sig-name descname"><span class="pre">executing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">executing</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2943,7 +2943,7 @@ Otherwise gets the time at the next timestep.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.Time.local_dt">
-<span class="sig-name descname"><span class="pre">local_dt</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(1.0)</span></em><a class="headerlink" href="#fmdtools.define.container.time.Time.local_dt" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">local_dt</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(1.0)</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.local_dt" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2960,7 +2960,7 @@ Otherwise gets the time at the next timestep.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.Time.rolename">
-<span class="sig-name descname"><span class="pre">rolename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'t'</span></em><a class="headerlink" href="#fmdtools.define.container.time.Time.rolename" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rolename</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'t'</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.rolename" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2973,22 +2973,22 @@ global_timestep.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id34">
-<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int32</span></em><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">t_ind</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int32</span></span><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id35">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></em><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id36">
-<span class="sig-name descname"><span class="pre">timernames</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#id36" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">timernames</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></span><a class="headerlink" href="#id36" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id37">
-<span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#id37" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">timers</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#id37" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2999,7 +2999,7 @@ global_timestep.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id38">
-<span class="sig-name descname"><span class="pre">use_local</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id38" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">use_local</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#id38" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
