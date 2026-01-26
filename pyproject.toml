@@ -30,7 +30,7 @@ dependencies = ["scipy",
                 "pandas[all]",
                 "ordered-set",
                 "dill",
-                "recordclass == 0.23.1",
+                "recordclass == 0.24",
                 "pytest",
                 "graphviz",
                 "shapely >= 2.0"
@@ -55,6 +55,9 @@ requires = [
 docs = ["sphinx", "myst-nb", "sphinx_rtd_theme", "nbsphinx"]
 test = ["nbmake", "pytest-html", "coverage", "pytest-cov", "genbadge[all]"]
 dev = [{include-group = "docs"}, {include-group = "test"}]
+
+[tool.uv]
+required-environments = ["sys_platform == 'win32' and platform_machine == 'AMD64'"]
 
 
 [tool.pytest.ini_options]
