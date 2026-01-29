@@ -14184,7 +14184,7 @@ node[name="PyTest"] {
 </UML:Property>
 <UML:Package id="6592ea39-0e3e-11ef-8686-300505445c7c">
 <name>
-<val>asg_demo</val>
+<val>human_hazard_mitigation</val>
 </name>
 <nestingPackage>
 <ref refid="156fd18e-f734-11ed-b956-38baf8f02de5"/>
@@ -14263,7 +14263,7 @@ node[name="PyTest"] {
 <ref refid="6592ea39-0e3e-11ef-8686-300505445c7c"/>
 </element>
 <name>
-<val>demo_model_asg</val>
+<val>main_model_asg</val>
 </name>
 <ownedPresentation>
 <reflist>

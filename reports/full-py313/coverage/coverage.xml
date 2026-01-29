@@ -1316,9 +1316,9 @@
 				</class>
 			</classes>
 		</package>
-		<package name="examples.asg_demo" line-rate="0.6211" branch-rate="0" complexity="0">
+		<package name="examples.human_hazard_mitigation" line-rate="0.6211" branch-rate="0" complexity="0">
 			<classes>
-				<class name="demo_model.py" filename="examples/asg_demo/demo_model.py" complexity="0" line-rate="0.6211" branch-rate="0">
+				<class name="demo_model.py" filename="examples/human_hazard_mitigation/demo_model.py" complexity="0" line-rate="0.6211" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="18" hits="1"/>

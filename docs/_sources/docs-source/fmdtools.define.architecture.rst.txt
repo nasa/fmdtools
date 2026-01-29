@@ -28,7 +28,7 @@ fmdtools.define.architecture.action
 
 The ActionArchitecture class is used to represent a sequenced of action taken by an agent. It is a composition of instantiated Action objects, Flow objects, and conditions as shown below:
 
-.. figure:: ../examples/asg_demo/demo_model_asg.svg
+.. figure:: ../examples/human_hazard_mitigation/demo_model_asg.svg
    :width: 800
    :alt: Structure of an ActionArchitecture
    
@@ -36,13 +36,13 @@ The ActionArchitecture class is used to represent a sequenced of action taken by
 
 In the Human action architecture, a human operator percieves and acts on a hazard and the total number of hazards acted on is recorded in the outcome flow. This can also be represented in :term:`FRDL` using:
 
-.. figure:: ../examples/asg_demo/demo_model_asg_frdl.svg
+.. figure:: ../examples/human_hazard_mitigation/demo_model_asg_frdl.svg
    :width: 600
    :alt: Structure of an ActionArchitecture in FRDL
    
    Propagation network of example Action Architecture.
 
-For more info on this example, see: :doc:`The Action Sequence Graph Demo Model <../examples/asg_demo/readme>`.
+For more info on this example, see: :doc:`The Action Sequence Graph Demo Model <../examples/human_hazard_mitigation/readme>`.
 
 .. autoclass:: fmdtools.define.architecture.action.ActionArchitecture
    :members:

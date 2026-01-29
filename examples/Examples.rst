@@ -57,16 +57,16 @@ EPS
    ../examples/eps/readme.rst
    ../examples/eps/EPS_Example_Notebook.ipynb
 
-Action Sequence Graph
+Human Hazard Mitigation
 +++++++++++++++++++++++++++++++++++++++++++++
 
-:doc:`/examples/asg_demo <../examples/asg_demo/readme>` provides a very basic model of an Action Architecture, otherwise known as an Action Sequence Graph.
+:doc:`/examples/human_hazard_mitigation <../examples/human_hazard_mitigation/readme>` provides a very basic model of an Action Architecture, otherwise known as an Action Sequence Graph.
 
 .. toctree::
    :hidden:
    
-   ../examples/asg_demo/readme.rst
-   ../examples/asg_demo/Action_Sequence_Graph.ipynb
+   ../examples/human_hazard_mitigation/readme.rst
+   ../examples/human_hazard_mitigation/Tutorial_ActionArchitecture.ipynb
 
 Rover
 +++++++++++++++++++++++++++++++++++++++++++++
