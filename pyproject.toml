@@ -64,8 +64,9 @@ required-environments = ["sys_platform == 'win32' and platform_machine == 'AMD64
 addopts = "--cache-clear --doctest-modules --nbmake --cov"
 pythonpath = [".", "fmdtools", "tests", "examples"]
 
-[tool.setuptools.packages.find]
-include = ["fmdtools*", "examples*", "tests*"]
+[tool.setuptools.package-dir]
+fmdtools = "src/fmdtools"
+fmdtools_examples = "examples"
 
 
 [tool.coverage.report]
