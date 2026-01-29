@@ -16,7 +16,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from fmdtools_examples.eps.eps import EPS
+from fmdtools_examples.electric_power_system.model_main import EPS
 
 from fmdtools_tests.common import CommonTests
 

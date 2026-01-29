@@ -46,16 +46,16 @@ Tank
    ../examples/tank/Tank_Optimization.ipynb
 
 
-EPS
+Electric Power System
 +++++++++++++++++++++++++++++++++++++++++++++
 
-:doc:`/examples/eps <../examples/eps/readme>` provides a model of a simple electric power system, which shows how undirected propagation can be used in a simple static (i.e., one time-step) moelling use-case.
+:doc:`/examples/electric_power_system <../examples/electric_power_system/readme>` provides a model of a simple electric power system, which shows how undirected propagation can be used in a simple static (i.e., one time-step) moelling use-case.
 
 .. toctree::
    :hidden:
    
-   ../examples/eps/readme.rst
-   ../examples/eps/EPS_Example_Notebook.ipynb
+   ../examples/electric_power_system/readme.rst
+   ../examples/electric_power_system/Demo_StaticModels.ipynb
 
 Human Hazard Mitigation
 +++++++++++++++++++++++++++++++++++++++++++++
