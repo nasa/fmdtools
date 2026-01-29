@@ -22,8 +22,8 @@ marp: true
     - Common Classes/Functions
     - Basic Syntax
 - **Coding Activity**
-    - Example model: [`examples/pump/ex_pump.py`](../examples/pump/ex_pump.py)
-    - Workbook: [`examples/pump/Tutorial_unfilled.ipynb`](../examples/pump/Tutorial_unfilled.ipynb)
+    - Example model: [`examples/water_pump/model_main.py`](../examples/water_pump/model_main.py)
+    - Workbook: [`examples/water_pump/tutorial_fmdtools_basics.ipynb`](../examples/water_pump/tutorial_fmdtools_basics.ipynb)
         - Model Instantiation
         - Simulation
         - Visualization/Analysis
@@ -283,7 +283,7 @@ class ExampleObject(BaseObject):
 ![Model Code Template](./figures/powerpoint/fxnarch_structure.svg)
 
 -----------------
-## Demo Model Activity: examples/pump/ex_pump.py
+## Demo Model Activity: examples/water_pump/model_main.py
 
 Notice the definitions and structure:
 - **States**: `WaterStates`, `EEStates`, `SignalStates`
@@ -316,7 +316,7 @@ Notice the definitions and structure:
 
 ## Notebook Activity:
 
-Open `/examples/pump/Tutorial_unfilled.ipynb`:
+Open `/examples/water_pump/tutorial_fmdtools_basics.ipynb`:
 - Instantiate the model
     - `mdl = Pump()`
 - Explore structure

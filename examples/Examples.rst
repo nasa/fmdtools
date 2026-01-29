@@ -5,20 +5,20 @@ Examples
 
 This repository provides several examples models in the `/examples` directory, with some corresponding documentation in the form of notebooks (which may be accessed here). 
 
-Pump
+Water Pump
 +++++++++++++++++++++++++++++++++++++++++++++
 
-:doc:`examples/ex_pump <../examples/pump/readme>` is an example of a simple pump model to demonstrate various capabilities of fmdtools. This includes a tutorial notebook, demostration of plot capabilities, optimization and stochastic modeling.
+:doc:`examples/model_main <../examples/water_pump/readme>` is an example of a simple pump model to demonstrate various capabilities of fmdtools. This includes a tutorial notebook, demostration of plot capabilities, optimization and stochastic modeling.
 
 .. toctree::
    :hidden:
    
-   ../examples/pump/readme.rst
-   ../examples/pump/Tutorial_complete.ipynb
-   ../examples/pump/Pump_Example_Notebook.ipynb
-   ../examples/pump/Parallelism_Tutorial.ipynb
-   ../examples/pump/Optimization.ipynb
-   ../examples/pump/Stochastic_Modelling.ipynb
+   ../examples/water_pump/readme.rst
+   ../examples/water_pump/demo_fault_analysis.ipynb
+   ../examples/water_pump/tutorial_fmdtools_basics.ipynb
+   ../examples/water_pump/tutorial_optimization.ipynb
+   ../examples/water_pump/tutorial_parallelism.ipynb
+   ../examples/water_pump/tutorial_stochastic_behavior.ipynb
 
 Multirotor Drone
 +++++++++++++++++++++++++++++++++++++++++++++
@@ -31,7 +31,7 @@ Multirotor Drone
    ../examples/multirotor_drone/readme.rst
    ../examples/multirotor_drone/paper_ijphm_fmdtools.ipynb
    ../examples/multirotor_drone/demo_urban_flight.ipynb
-   ../examples/multirotor_drone/multirotor_drone_Optimization.ipynb
+   ../examples/multirotor_drone/demo_optimization_architectures.ipynb
  
 Tank
 +++++++++++++++++++++++++++++++++++++++++++++

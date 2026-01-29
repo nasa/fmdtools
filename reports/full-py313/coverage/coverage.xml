@@ -3385,9 +3385,9 @@
 				</class>
 			</classes>
 		</package>
-		<package name="examples.pump" line-rate="0.9239" branch-rate="0" complexity="0">
+		<package name="examples.water_pump" line-rate="0.9239" branch-rate="0" complexity="0">
 			<classes>
-				<class name="ex_pump.py" filename="examples/pump/ex_pump.py" complexity="0" line-rate="0.9797" branch-rate="0">
+				<class name="model_main.py" filename="examples/water_pump/model_main.py" complexity="0" line-rate="0.9797" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="36" hits="1"/>
@@ -3589,7 +3589,7 @@
 						<line number="568" hits="1"/>
 					</lines>
 				</class>
-				<class name="jointfaults_ex.py" filename="examples/pump/jointfaults_ex.py" complexity="0" line-rate="1" branch-rate="0">
+				<class name="script_jointfaults.py" filename="examples/water_pump/script_jointfaults.py" complexity="0" line-rate="1" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="9" hits="1"/>
@@ -3600,7 +3600,7 @@
 						<line number="14" hits="1"/>
 					</lines>
 				</class>
-				<class name="parallelism_methods.py" filename="examples/pump/parallelism_methods.py" complexity="0" line-rate="0.2388" branch-rate="0">
+				<class name="script_parallelism.py" filename="examples/water_pump/script_parallelism.py" complexity="0" line-rate="0.2388" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="20" hits="1"/>
@@ -3672,7 +3672,7 @@
 						<line number="167" hits="0"/>
 					</lines>
 				</class>
-				<class name="pump_indiv.py" filename="examples/pump/pump_indiv.py" complexity="0" line-rate="1" branch-rate="0">
+				<class name="model_indiv.py" filename="examples/water_pump/water_model_indiv.py" complexity="0" line-rate="1" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="20" hits="1"/>
@@ -3691,7 +3691,7 @@
 						<line number="44" hits="1"/>
 					</lines>
 				</class>
-				<class name="pump_stochastic.py" filename="examples/pump/pump_stochastic.py" complexity="0" line-rate="1" branch-rate="0">
+				<class name="model_stochastic.py" filename="examples/water_pump/water_model_stochastic.py" complexity="0" line-rate="1" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="22" hits="1"/>
@@ -3774,7 +3774,7 @@
 						<line number="137" hits="1"/>
 					</lines>
 				</class>
-				<class name="test_pump.py" filename="examples/pump/test_pump.py" complexity="0" line-rate="0.9771" branch-rate="0">
+				<class name="test_pump.py" filename="examples/water_pump/test_pump.py" complexity="0" line-rate="0.9771" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="21" hits="1"/>
@@ -3997,7 +3997,7 @@
 						<line number="325" hits="1"/>
 					</lines>
 				</class>
-				<class name="test_pump_example.py" filename="examples/pump/test_pump_example.py" complexity="0" line-rate="1" branch-rate="0">
+				<class name="test_pump_example.py" filename="examples/water_pump/test_pump_example.py" complexity="0" line-rate="1" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="29" hits="1"/>
@@ -4117,7 +4117,7 @@
 						<line number="201" hits="1"/>
 					</lines>
 				</class>
-				<class name="test_pump_stochastic.py" filename="examples/pump/test_pump_stochastic.py" complexity="0" line-rate="0.9686" branch-rate="0">
+				<class name="test_model_stochastic.py" filename="examples/water_pump/test_model_stochastic.py" complexity="0" line-rate="0.9686" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="20" hits="1"/>
