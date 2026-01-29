@@ -17,15 +17,15 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools_examples.multirotor.drone_mdl_static import EE, Force, Control
-from fmdtools_examples.multirotor.drone_mdl_static import DistEE
-from fmdtools_examples.multirotor.drone_mdl_rural import DesTraj, DOFs, HSig, RSig
-from fmdtools_examples.multirotor.drone_mdl_rural import ManageHealth, StoreEE, CtlDOF
-from fmdtools_examples.multirotor.drone_mdl_rural import PlanPath as PlanPathRural
-from fmdtools_examples.multirotor.drone_mdl_rural import DronePhysicalParameters, ResPolicy
-from fmdtools_examples.multirotor.drone_mdl_rural import HoldPayload as HoldPayloadRural
-from fmdtools_examples.multirotor.drone_mdl_rural import AffectDOF as AffectDOFRural
-from fmdtools_examples.multirotor.drone_mdl_rural import Drone as DroneRural
+from fmdtools_examples.multirotor_drone.model_static import EE, Force, Control
+from fmdtools_examples.multirotor_drone.model_static import DistEE
+from fmdtools_examples.multirotor_drone.model_rural import DesTraj, DOFs, HSig, RSig
+from fmdtools_examples.multirotor_drone.model_rural import ManageHealth, StoreEE, CtlDOF
+from fmdtools_examples.multirotor_drone.model_rural import PlanPath as PlanPathRural
+from fmdtools_examples.multirotor_drone.model_rural import DronePhysicalParameters, ResPolicy
+from fmdtools_examples.multirotor_drone.model_rural import HoldPayload as HoldPayloadRural
+from fmdtools_examples.multirotor_drone.model_rural import AffectDOF as AffectDOFRural
+from fmdtools_examples.multirotor_drone.model_rural import Drone as DroneRural
 
 from fmdtools.define.block.component import Component
 from fmdtools.define.container.mode import Mode
@@ -538,9 +538,10 @@ if __name__ == "__main__":
                                  rates='rate')
     statsfmea.sort_by_metric("average_cost")
     statsfmea.as_table()
+    import matplotlib.colors as mcolors
     statsfmea.as_plots("average_repcost", "average_unsafe_flight_time", "average_cost", "average_rate",
                        color_factor="function", suppress_ticklabels=True,
-                       legend_loc=2)
+                       legend_loc=2, pallette=[*mcolors.XKCD_COLORS])
 
 
     #move_quad = make_move_quad(mdlhist, phases['PlanPath']['move'])

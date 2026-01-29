@@ -78,9 +78,9 @@ doctest_modules = ["fmdtools/define/container/base.py",
                    "fmdtools/analyze/common.py",
                    "examples/rover/rover_model.py",
                    "examples/rover/rover_model_human.py",
-                   "examples/multirotor/drone_mdl_static.py",
-                   "examples/multirotor/drone_mdl_dynamic.py",
-                   "examples/multirotor/drone_mdl_hierarchical.py",
+                   "examples/multirotor_drone/model_static.py",
+                   "examples/multirotor_drone/model_dynamic.py",
+                   "examples/multirotor_drone/model_hierarchical.py",
                    "examples/airspacelib/base/state.py",
                    "examples/airspacelib/base/arch/perceiveenvironment.py",
                    "examples/airspacelib/base/arch/controlflight.py",
@@ -90,7 +90,7 @@ doctest_modules = ["fmdtools/define/container/base.py",
 fast_notebooks = ["examples/human_hazard_mitigation/Tutorial_ActionArchitecture.ipynb",
                   "examples/electric_power_system/Demo_StaticModels.ipynb",
                   "examples/state_communication/Tutorial_MultiFlow_and_CommsFlow.ipynb"
-                  "examples/multirotor/Demonstration.ipynb",
+                  "examples/multirotor_drone/paper_ijphm_fmdtools.ipynb",
                   "examples/pump/Pump_Example_Notebook.ipynb",
                   "examples/pump/Tutorial_complete.ipynb",
                   "examples/rover/Model_Structure_Visualization_Tutorial.ipynb",
@@ -101,7 +101,7 @@ fast_notebooks = ["examples/human_hazard_mitigation/Tutorial_ActionArchitecture.
                   ]
 
 # list of slow-running notebooks:
-slow_notebooks = ["examples/multirotor/Multirotor_Optimization.ipynb",
+slow_notebooks = ["examples/multirotor_drone/multirotor_drone_Optimization.ipynb",
                   "examples/pump/Optimization.ipynb",
                   "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",
                   "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",
@@ -114,7 +114,7 @@ slow_notebooks = ["examples/multirotor/Multirotor_Optimization.ipynb",
 # for testing extremely slow notebooks that can't be run to completion :
 too_slow_notebooks = ["examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",
                       "examples/pump/Stochastic_Modelling.ipynb", # timeout comes back as failed
-                      "examples/multirotor/Urban_Drone_Demo.ipynb", # timeout comes back as failed
+                      "examples/multirotor_drone/demo_urban_flight.ipynb", # timeout comes back as failed
                       "examples/rover/optimization/Rover_Response_Optimization.ipynb",  # extremely slow notebook
                       "examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb",  # extremely slow notebook
                       "examples/rover/optimization/Search_Comparison.ipynb",  # extremely slow

@@ -659,7 +659,7 @@ class FaultDomain(object):
 
         Examples
         --------
-        >>> from fmdtools_examples.multirotor.drone_mdl_rural import Drone
+        >>> from fmdtools_examples.multirotor_drone.model_rural import Drone
         >>> fd = FaultDomain(Drone())
         >>> fd.add_singlecomp_modes("affect_dof")
         >>> fd
@@ -934,7 +934,7 @@ class FaultSample(BaseSample):
 
         Examples
         --------
-        >>> from fmdtools_examples.multirotor.drone_mdl_rural import Drone
+        >>> from fmdtools_examples.multirotor_drone.model_rural import Drone
         >>> mdl = Drone()
         >>> fd = FaultDomain(mdl)
         >>> fd.add_fault("affect_dof.ca.comps.rf", "propwarp")
@@ -979,7 +979,7 @@ class FaultSample(BaseSample):
 
         Examples
         --------
-        >>> from fmdtools_examples.multirotor.drone_mdl_rural import Drone
+        >>> from fmdtools_examples.multirotor_drone.model_rural import Drone
         >>> fd = FaultDomain(Drone())
         >>> fd.add_fault("affect_dof.ca.comps.rf", "propwarp")
         >>> fd.add_fault("affect_dof.ca.comps.lf", "propwarp")
@@ -1018,7 +1018,7 @@ class FaultSample(BaseSample):
 
         Examples
         --------
-        >>> from fmdtools_examples.multirotor.drone_mdl_rural import Drone
+        >>> from fmdtools_examples.multirotor_drone.model_rural import Drone
         >>> mdl = Drone()
         >>> fd = FaultDomain(mdl)
         >>> fd.add_fault("affect_dof.ca.comps.rf", "propwarp")
@@ -1088,7 +1088,7 @@ class FaultSample(BaseSample):
 
         Examples
         --------
-        >>> from fmdtools_examples.multirotor.drone_mdl_rural import Drone
+        >>> from fmdtools_examples.multirotor_drone.model_rural import Drone
         >>> mdl = Drone()
         >>> fd = FaultDomain(mdl)
         >>> fd.add_fault("affect_dof.ca.comps.rf", "propwarp")
@@ -1189,7 +1189,7 @@ class SampleApproach(BaseSample):
 
         Examples
         --------
-        >>> from fmdtools_examples.multirotor.drone_mdl_rural import Drone
+        >>> from fmdtools_examples.multirotor_drone.model_rural import Drone
         >>> s = SampleApproach(Drone())
         >>> s.add_faultdomain("all_faults", "all")
         >>> s
@@ -1240,7 +1240,7 @@ class SampleApproach(BaseSample):
 
         Examples
         --------
-        >>> from fmdtools_examples.multirotor.drone_mdl_rural import Drone
+        >>> from fmdtools_examples.multirotor_drone.model_rural import Drone
         >>> s = SampleApproach(Drone())
         >>> s.add_faultdomain("all_faults", "all")
         >>> s.add_faultsample("start_times", "fault_times", "all_faults", [1,3,4])
@@ -2078,7 +2078,7 @@ exp_ps_45.add_variable_ranges()
 
 
 if __name__ == "__main__":
-    from fmdtools_examples.multirotor.drone_mdl_rural import Drone
+    from fmdtools_examples.multirotor_drone.model_rural import Drone
     mdl = Drone()
     fd = FaultDomain(mdl)
     fd.add_fault("affect_dof.ca.comps.rf", "propwarp")

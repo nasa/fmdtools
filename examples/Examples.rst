@@ -20,18 +20,18 @@ Pump
    ../examples/pump/Optimization.ipynb
    ../examples/pump/Stochastic_Modelling.ipynb
 
-Multirotor
+Multirotor Drone
 +++++++++++++++++++++++++++++++++++++++++++++
 
-:doc:`/examples/multirotor <../examples/multirotor/readme>` includes several models of drones modelled at differing levels of detail. Includes a demonstration of how models can be matured as more details are added and how the system can be co-optimized.
+:doc:`/examples/multirotor_drone <../examples/multirotor_drone/readme>` includes several models of drones modelled at differing levels of detail. Includes a demonstration of how models can be matured as more details are added and how the system can be co-optimized.
  
  .. toctree::
    :hidden:
 
-   ../examples/multirotor/readme.rst
-   ../examples/multirotor/Demonstration.ipynb
-   ../examples/multirotor/Urban_Drone_Demo.ipynb
-   ../examples/multirotor/Multirotor_Optimization.ipynb
+   ../examples/multirotor_drone/readme.rst
+   ../examples/multirotor_drone/paper_ijphm_fmdtools.ipynb
+   ../examples/multirotor_drone/demo_urban_flight.ipynb
+   ../examples/multirotor_drone/multirotor_drone_Optimization.ipynb
  
 Tank
 +++++++++++++++++++++++++++++++++++++++++++++

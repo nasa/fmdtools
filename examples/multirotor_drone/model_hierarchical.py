@@ -16,13 +16,13 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from fmdtools_examples.multirotor.drone_mdl_static import m2to1, DistEE, BaseLine, ControlState
-from fmdtools_examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, DesTraj
-from fmdtools_examples.multirotor.drone_mdl_static import AffectDOFMode, AffectDOFState
-from fmdtools_examples.multirotor.drone_mdl_dynamic import StoreEE, CtlDOF, PlanPath, HoldPayload
-from fmdtools_examples.multirotor.drone_mdl_dynamic import ViewEnvironment, DroneEnvironment
-from fmdtools_examples.multirotor.drone_mdl_dynamic import Drone as DynDrone
-from fmdtools_examples.multirotor.drone_mdl_dynamic import AffectDOF as AffectDOFDynamic
+from fmdtools_examples.multirotor_drone.model_static import m2to1, DistEE, BaseLine, ControlState
+from fmdtools_examples.multirotor_drone.model_static import Force, EE, Control, DOFs, DesTraj
+from fmdtools_examples.multirotor_drone.model_static import AffectDOFMode, AffectDOFState
+from fmdtools_examples.multirotor_drone.model_dynamic import StoreEE, CtlDOF, PlanPath, HoldPayload
+from fmdtools_examples.multirotor_drone.model_dynamic import ViewEnvironment, DroneEnvironment
+from fmdtools_examples.multirotor_drone.model_dynamic import Drone as DynDrone
+from fmdtools_examples.multirotor_drone.model_dynamic import AffectDOF as AffectDOFDynamic
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.block.component import Component

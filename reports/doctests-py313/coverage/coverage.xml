@@ -1254,9 +1254,9 @@
 				</class>
 			</classes>
 		</package>
-		<package name="examples.multirotor" line-rate="0.7543" branch-rate="0" complexity="0">
+		<package name="examples.multirotor_drone" line-rate="0.7543" branch-rate="0" complexity="0">
 			<classes>
-				<class name="drone_mdl_dynamic.py" filename="examples/multirotor/drone_mdl_dynamic.py" complexity="0" line-rate="0.9447" branch-rate="0">
+				<class name="model_dynamic.py" filename="examples/multirotor_drone/model_dynamic.py" complexity="0" line-rate="0.9447" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="20" hits="1"/>
@@ -1460,7 +1460,7 @@
 						<line number="465" hits="1"/>
 					</lines>
 				</class>
-				<class name="drone_mdl_hierarchical.py" filename="examples/multirotor/drone_mdl_hierarchical.py" complexity="0" line-rate="0.8207" branch-rate="0">
+				<class name="model_hierarchical.py" filename="examples/multirotor_drone/model_hierarchical.py" complexity="0" line-rate="0.8207" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="19" hits="1"/>
@@ -1610,7 +1610,7 @@
 						<line number="339" hits="0"/>
 					</lines>
 				</class>
-				<class name="drone_mdl_rural.py" filename="examples/multirotor/drone_mdl_rural.py" complexity="0" line-rate="0.5757" branch-rate="0">
+				<class name="model_rural.py" filename="examples/multirotor_drone/model_rural.py" complexity="0" line-rate="0.5757" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="19" hits="1"/>
@@ -2018,7 +2018,7 @@
 						<line number="914" hits="1"/>
 					</lines>
 				</class>
-				<class name="drone_mdl_static.py" filename="examples/multirotor/drone_mdl_static.py" complexity="0" line-rate="0.8361" branch-rate="0">
+				<class name="model_static.py" filename="examples/multirotor_drone/model_static.py" complexity="0" line-rate="0.8361" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="20" hits="1"/>

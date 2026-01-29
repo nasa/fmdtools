@@ -2,7 +2,7 @@
 """
 Functions/classes for optimizing the drone defined in drone_mdl_opt.py.
 
-Used/tested in opt_drone_rural to demonstrate fmdtools.sim.search.
+Used/tested in script_opt_model_rural to demonstrate fmdtools.sim.search.
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -18,9 +18,9 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools_examples.multirotor.drone_mdl_rural import Drone, DroneParam, ResPolicy
-from fmdtools_examples.multirotor.drone_mdl_rural import DronePhysicalParameters
-from fmdtools_examples.multirotor.drone_mdl_dynamic import DroneEnvironmentGridParam
+from fmdtools_examples.multirotor_drone.model_rural import Drone, DroneParam, ResPolicy
+from fmdtools_examples.multirotor_drone.model_rural import DronePhysicalParameters
+from fmdtools_examples.multirotor_drone.model_dynamic import DroneEnvironmentGridParam
 
 from fmdtools.sim.sample import FaultDomain, FaultSample
 from fmdtools.sim import propagate as prop
