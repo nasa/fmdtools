@@ -17,6 +17,6 @@ specific language governing permissions and limitations under the License.
 
 import fmdtools_examples.airspacelib.base as base
 import  fmdtools_examples.airspacelib.contingencymanagement as contingencymanagement
-import  fmdtools_examples.examples.airspacelib.wildfireresponse as wildfireresponse
+import  fmdtools_examples.airspacelib.wildfireresponse as wildfireresponse
 
 __all__ = ['base', 'contingencymanagement', 'wildfireresponse']

@@ -88,15 +88,16 @@ Rover
    ../examples/rover/optimization/Search_Comparison.ipynb
    ../examples/rover/optimization/Rover_Response_Optimization.ipynb
 
-Multiflow Demo
+State Communication
 +++++++++++++++++++++++++++++++++++++++++++++
 
-:doc:`/examples/multiflow_demo <../examples/multiflow_demo/readme>` provides a is limited to the model in the file `multiflow_demo.py`, which shows basic usage of the :class:`~fmdtools.define.flow.multiflow.MultiFlow` and :class:`~fmdtools.define.flow.commsflow.CommsFlow` flow classes.
+:doc:`/examples/state_communication <../examples/state_communication/readme>` provides a is limited to the model in the file `state_communication.py`, which shows basic usage of the :class:`~fmdtools.define.flow.multiflow.MultiFlow` and :class:`~fmdtools.define.flow.commsflow.CommsFlow` flow classes.
 
 .. toctree::
    :hidden:
    
-   ../examples/multiflow_demo/readme.rst
+   ../examples/state_communication/readme.rst
+   ../examples/state_communication/Tutorial_MultiFlow_and_CommsFlow.ipynb
 
 Taxiway
 +++++++++++++++++++++++++++++++++++++++++++++

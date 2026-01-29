@@ -89,6 +89,7 @@ doctest_modules = ["fmdtools/define/container/base.py",
 # list of fast-running notebooks:
 fast_notebooks = ["examples/human_hazard_mitigation/Tutorial_ActionArchitecture.ipynb",
                   "examples/electric_power_system/Demo_StaticModels.ipynb",
+                  "examples/state_communication/Tutorial_MultiFlow_and_CommsFlow.ipynb"
                   "examples/multirotor/Demonstration.ipynb",
                   "examples/pump/Pump_Example_Notebook.ipynb",
                   "examples/pump/Tutorial_complete.ipynb",

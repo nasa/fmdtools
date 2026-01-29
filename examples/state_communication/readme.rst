@@ -1,13 +1,13 @@
 MultiFlow Demo Model
 ---------------------------------------------
 
-The multiflows example is limited to the model in the file multiflow_demo.py, which shows basic usage of the `~fmdtools.define.flow.multiflow.MultiFlow` and `~fmdtools.define.flow.commsflow.CommsFlow` flow classes.
+The multiflows example is limited to the model in the file state_communication.py, which shows basic usage of the `~fmdtools.define.flow.multiflow.MultiFlow` and `~fmdtools.define.flow.commsflow.CommsFlow` flow classes.
 
 Models
 /////////////////////////////////////////////
 
 
-- `multiflow_demo.py`: Base model.
+- `state_communication.py`: Base model.
 
 
 Scripts and tests:

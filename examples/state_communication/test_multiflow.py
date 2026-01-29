@@ -17,7 +17,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools_examples.multiflow_demo.multiflow_demo import ExModel
+from fmdtools_examples.state_communication.model_main import ExModel
 
 from fmdtools.sim import propagate
 
