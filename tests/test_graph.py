@@ -17,8 +17,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.pump.ex_pump import Pump
-from examples.rover.rover_model import Rover
+from fmdtools_examples.pump.ex_pump import Pump
+from fmdtools_examples.rover.rover_model import Rover
 from fmdtools.define.architecture.function import FunctionArchitectureGraph, FunctionArchitectureFxnGraph
 from fmdtools.define.architecture.function import FunctionArchitectureFlowGraph, FunctionArchitectureTypeGraph
 from fmdtools.analyze.common import suite_for_plots

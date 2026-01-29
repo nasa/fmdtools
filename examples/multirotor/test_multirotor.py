@@ -15,7 +15,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.multirotor.drone_mdl_rural import Drone, DroneParam
+from fmdtools_examples.multirotor.drone_mdl_rural import Drone, DroneParam
 
 from fmdtools.sim.sample import ParameterDomain
 from fmdtools.sim.search import ParameterSimProblem, SingleFaultScenarioProblem

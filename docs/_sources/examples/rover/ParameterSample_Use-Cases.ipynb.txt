@@ -56,7 +56,7 @@
    },
    "outputs": [],
    "source": [
-    "from examples.rover.rover_model import Rover"
+    "from fmdtools_examples.rover.rover_model import Rover"
    ]
   },
   {
@@ -97,7 +97,7 @@
     }
    ],
    "source": [
-    "from examples.rover.rover_model import RoverParam\n",
+    "from fmdtools_examples.rover.rover_model import RoverParam\n",
     "print(inspect.getsource(RoverParam))"
    ]
   },

@@ -26,7 +26,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.pump.ex_pump import ImportEE, MoveWat, Pump, Electricity
+from fmdtools_examples.pump.ex_pump import ImportEE, MoveWat, Pump, Electricity
 
 import fmdtools.sim.propagate as propagate
 

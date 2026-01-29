@@ -16,8 +16,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-import examples.airspacelib.contingencymanagement.aircraft as aircraft
-import examples.airspacelib.contingencymanagement.environment as environment
-import examples.airspacelib.contingencymanagement.flightplanner as flightplanner
+import fmdtools_examples.airspacelib.contingencymanagement.aircraft as aircraft
+import fmdtools_examples.airspacelib.contingencymanagement.environment as environment
+import fmdtools_examples.airspacelib.contingencymanagement.flightplanner as flightplanner
 
 __all__ = ['aircraft', 'environment', 'flightplanner']

@@ -11,7 +11,7 @@ import fmdtools.analyze as an
 from fmdtools.sim.sample import FaultSample, FaultDomain
 from fmdtools.analyze.phases import PhaseMap
 from fmdtools.analyze.history import History
-from examples.pump.ex_pump import Pump  # required to import entire module
+from fmdtools_examples.pump.ex_pump import Pump  # required to import entire module
 
 
 if __name__ == "__main__":

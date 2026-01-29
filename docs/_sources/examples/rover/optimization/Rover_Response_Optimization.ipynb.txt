@@ -51,7 +51,7 @@
    },
    "outputs": [],
    "source": [
-    "from examples.rover.rover_model import Rover, RoverParam"
+    "from fmdtools_examples.rover.rover_model import Rover, RoverParam"
    ]
   },
   {

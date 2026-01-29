@@ -17,9 +17,9 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.tank.tank_model import Tank
+from fmdtools_examples.tank.tank_model import Tank
 
-from tests.common import CommonTests
+from fmdtools_tests.common import CommonTests
 
 from fmdtools.sim import propagate as prop
 from fmdtools.sim.sample import FaultDomain, FaultSample, ParameterSample

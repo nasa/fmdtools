@@ -17,12 +17,12 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.multirotor.drone_mdl_static import DistEE
-from examples.multirotor.drone_mdl_static import HoldPayload as HoldPayloadStatic
-from examples.multirotor.drone_mdl_static import StoreEE as StaticstoreEE
-from examples.multirotor.drone_mdl_static import AffectDOF as AffectDOFStatic
-from examples.multirotor.drone_mdl_static import CtlDOF
-from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, DesTraj
+from fmdtools_examples.multirotor.drone_mdl_static import DistEE
+from fmdtools_examples.multirotor.drone_mdl_static import HoldPayload as HoldPayloadStatic
+from fmdtools_examples.multirotor.drone_mdl_static import StoreEE as StaticstoreEE
+from fmdtools_examples.multirotor.drone_mdl_static import AffectDOF as AffectDOFStatic
+from fmdtools_examples.multirotor.drone_mdl_static import CtlDOF
+from fmdtools_examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, DesTraj
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State

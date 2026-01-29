@@ -16,9 +16,9 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from examples.eps.eps import EPS
+from fmdtools_examples.eps.eps import EPS
 
-from tests.common import CommonTests
+from fmdtools_tests.common import CommonTests
 
 from fmdtools.sim import propagate as prop
 from fmdtools.sim.sample import FaultDomain, FaultSample

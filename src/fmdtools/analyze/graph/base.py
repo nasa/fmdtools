@@ -1252,8 +1252,8 @@ class Graph(object):
 
         Examples
         --------
-        >>> from examples.pump.ex_pump import Pump
-        >>> from examples.rover.rover_model import Rover
+        >>> from fmdtools_examples.pump.ex_pump import Pump
+        >>> from fmdtools_examples.rover.rover_model import Rover
         >>> from fmdtools.define.architecture.function import FunctionArchitectureGraph
         >>> pump_graph = FunctionArchitectureGraph(Pump())
         >>> rover_graph = FunctionArchitectureGraph(Rover())

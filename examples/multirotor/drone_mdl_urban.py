@@ -17,15 +17,15 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.multirotor.drone_mdl_static import EE, Force, Control
-from examples.multirotor.drone_mdl_static import DistEE
-from examples.multirotor.drone_mdl_rural import DesTraj, DOFs, HSig, RSig
-from examples.multirotor.drone_mdl_rural import ManageHealth, StoreEE, CtlDOF
-from examples.multirotor.drone_mdl_rural import PlanPath as PlanPathRural
-from examples.multirotor.drone_mdl_rural import DronePhysicalParameters, ResPolicy
-from examples.multirotor.drone_mdl_rural import HoldPayload as HoldPayloadRural
-from examples.multirotor.drone_mdl_rural import AffectDOF as AffectDOFRural
-from examples.multirotor.drone_mdl_rural import Drone as DroneRural
+from fmdtools_examples.multirotor.drone_mdl_static import EE, Force, Control
+from fmdtools_examples.multirotor.drone_mdl_static import DistEE
+from fmdtools_examples.multirotor.drone_mdl_rural import DesTraj, DOFs, HSig, RSig
+from fmdtools_examples.multirotor.drone_mdl_rural import ManageHealth, StoreEE, CtlDOF
+from fmdtools_examples.multirotor.drone_mdl_rural import PlanPath as PlanPathRural
+from fmdtools_examples.multirotor.drone_mdl_rural import DronePhysicalParameters, ResPolicy
+from fmdtools_examples.multirotor.drone_mdl_rural import HoldPayload as HoldPayloadRural
+from fmdtools_examples.multirotor.drone_mdl_rural import AffectDOF as AffectDOFRural
+from fmdtools_examples.multirotor.drone_mdl_rural import Drone as DroneRural
 
 from fmdtools.define.block.component import Component
 from fmdtools.define.container.mode import Mode

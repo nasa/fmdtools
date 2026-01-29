@@ -15,16 +15,16 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
-from examples.airspacelib.base.arch.aviate import Aviate
-from examples.airspacelib.base.arch.controlflight import ControlFlight, ControlState
-from examples.airspacelib.base.arch.storeee import StoreAndSupplyElectricity
-from examples.airspacelib.base.arch.perceiveenvironment import PerceiveEnvironment
-from examples.airspacelib.base.arch.holdpayload import HoldPayload
+from fmdtools_examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
+from fmdtools_examples.airspacelib.base.arch.aviate import Aviate
+from fmdtools_examples.airspacelib.base.arch.controlflight import ControlFlight, ControlState
+from fmdtools_examples.airspacelib.base.arch.storeee import StoreAndSupplyElectricity
+from fmdtools_examples.airspacelib.base.arch.perceiveenvironment import PerceiveEnvironment
+from fmdtools_examples.airspacelib.base.arch.holdpayload import HoldPayload
 
-from examples.airspacelib.contingencymanagement.environment import ContingencyEnvironment, properties, collections
-from examples.airspacelib.contingencymanagement.environment import ContingencyConditions
-from examples.airspacelib.contingencymanagement.flightplanner import DroneFlightGrid, DroneFlightGridParam
+from fmdtools_examples.airspacelib.contingencymanagement.environment import ContingencyEnvironment, properties, collections
+from fmdtools_examples.airspacelib.contingencymanagement.environment import ContingencyConditions
+from fmdtools_examples.airspacelib.contingencymanagement.flightplanner import DroneFlightGrid, DroneFlightGridParam
 
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.architecture.function import FunctionArchitectureGraph

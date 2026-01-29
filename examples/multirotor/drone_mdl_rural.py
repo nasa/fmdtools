@@ -16,17 +16,17 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from examples.multirotor.drone_mdl_static import EE, Force, Control, DesTraj, DOFs
-from examples.multirotor.drone_mdl_static import DistEE, StoreEEState
-from examples.multirotor.drone_mdl_static import CtlDOF as CtlDOFStat
+from fmdtools_examples.multirotor.drone_mdl_static import EE, Force, Control, DesTraj, DOFs
+from fmdtools_examples.multirotor.drone_mdl_static import DistEE, StoreEEState
+from fmdtools_examples.multirotor.drone_mdl_static import CtlDOF as CtlDOFStat
 
-from examples.multirotor.drone_mdl_dynamic import DroneEnvironmentGridParam
-from examples.multirotor.drone_mdl_dynamic import DroneEnvironment, ViewEnvironment
-from examples.multirotor.drone_mdl_dynamic import PlanPathState as PlanPathStateDyn
-from examples.multirotor.drone_mdl_dynamic import PlanPath as PlanPathDyn
-from examples.multirotor.drone_mdl_dynamic import HoldPayload as HoldPayloadDyn
+from fmdtools_examples.multirotor.drone_mdl_dynamic import DroneEnvironmentGridParam
+from fmdtools_examples.multirotor.drone_mdl_dynamic import DroneEnvironment, ViewEnvironment
+from fmdtools_examples.multirotor.drone_mdl_dynamic import PlanPathState as PlanPathStateDyn
+from fmdtools_examples.multirotor.drone_mdl_dynamic import PlanPath as PlanPathDyn
+from fmdtools_examples.multirotor.drone_mdl_dynamic import HoldPayload as HoldPayloadDyn
 
-from examples.multirotor.drone_mdl_hierarchical import AffectDOF as AffectDOFHierarchical
+from fmdtools_examples.multirotor.drone_mdl_hierarchical import AffectDOF as AffectDOFHierarchical
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State

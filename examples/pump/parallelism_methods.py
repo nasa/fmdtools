@@ -17,7 +17,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.pump.ex_pump import Pump, PumpParam
+from fmdtools_examples.pump.ex_pump import Pump, PumpParam
 import fmdtools.sim.propagate as propagate
 from fmdtools.sim.propagate import close_pool
 

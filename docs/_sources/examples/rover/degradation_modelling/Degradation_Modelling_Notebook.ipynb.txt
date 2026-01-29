@@ -45,7 +45,7 @@
    },
    "outputs": [],
    "source": [
-    "from examples.rover.rover_degradation import DriveDegradation, PSFDegradationLong, PSFDegradationShort"
+    "from fmdtools_examples.rover.rover_degradation import DriveDegradation, PSFDegradationLong, PSFDegradationShort"
    ]
   },
   {
@@ -178,7 +178,7 @@
     }
    ],
    "source": [
-    "from examples.rover.rover_model import Rover, plot_map\n",
+    "from fmdtools_examples.rover.rover_model import Rover, plot_map\n",
     "fault_mdl = Rover(p={'ground':{'linetype': 'turn'}})\n",
     "graph = fault_mdl.as_modelgraph()\n",
     "fig, ax = graph.draw()"
@@ -26535,7 +26535,7 @@
    "outputs": [],
    "source": [
     "from fmdtools.sim.sample import ParameterDomain, ParameterHistSample\n",
-    "from examples.rover.rover_model import RoverParam"
+    "from fmdtools_examples.rover.rover_model import RoverParam"
    ]
   },
   {
@@ -27554,7 +27554,7 @@
     }
    ],
    "source": [
-    "from examples.rover.rover_degradation import LongParams\n",
+    "from fmdtools_examples.rover.rover_degradation import LongParams\n",
     "pd_hl = ParameterDomain(LongParams)\n",
     "pd_hl.add_variable(\"experience_param\", var_lim=())\n",
     "pd_hl"
@@ -27901,7 +27901,7 @@
    },
    "outputs": [],
    "source": [
-    "from examples.rover.rover_degradation import PSFShortParams\n",
+    "from fmdtools_examples.rover.rover_degradation import PSFShortParams\n",
     "pd_short_long = ParameterDomain(PSFShortParams)\n",
     "pd_short_long.add_variable(\"experience\")\n",
     "ps_short_long = ParameterHistSample(hist_psf_long, 's.experience', paramdomain=pd_short_long)\n",
@@ -28118,7 +28118,7 @@
     }
    ],
    "source": [
-    "from examples.rover.rover_model_human import RoverHuman, RoverHumanParam\n",
+    "from fmdtools_examples.rover.rover_model_human import RoverHuman, RoverHumanParam\n",
     "pd_comb_mdl = ParameterDomain(RoverHumanParam)\n",
     "# pd_comb_mdl.add_constant('drive_modes', {\"mode_options\": \"manual\"})\n",
     "pd_comb_mdl.add_variable(\"psfs.fatigue\")\n",

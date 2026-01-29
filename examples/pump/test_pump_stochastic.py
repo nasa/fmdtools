@@ -17,9 +17,9 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.pump.pump_stochastic import Pump, PumpParam
+from fmdtools_examples.pump.pump_stochastic import Pump, PumpParam
 
-from tests.common import CommonTests
+from fmdtools_tests.common import CommonTests
 
 from fmdtools.sim import propagate as prop
 from fmdtools.sim.sample import ParameterSample, ParameterDomain

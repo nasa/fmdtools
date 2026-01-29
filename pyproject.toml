@@ -37,7 +37,7 @@ dependencies = ["scipy",
 ]
 
 [project.optional-dependencies]
-examples = ["deap", "pymoo", "scikit-learn", "multiprocess", "pathos", "adjustText"]
+examples = ["deap", "pymoo", "scikit-learn", "multiprocess", "pathos", "adjustText", "jinja2"]
 all = ["fmdtools[examples]"]
 
 [project.urls]
@@ -67,6 +67,7 @@ pythonpath = [".", "fmdtools", "tests", "examples"]
 [tool.setuptools.package-dir]
 fmdtools = "src/fmdtools"
 fmdtools_examples = "examples"
+fmdtools_tests = "tests"
 
 
 [tool.coverage.report]

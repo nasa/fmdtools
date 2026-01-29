@@ -25,10 +25,10 @@
    "source": [
     "from fmdtools.sim import propagate\n",
     "from fmdtools.define.architecture.function import FunctionArchitectureGraph\n",
-    "from examples.airspacelib.wildfireresponse.environment import FireMap, FireEnvironment, FirePropagation, sim_properties\n",
-    "from examples.airspacelib.wildfireresponse.aircraft import FireAircraft\n",
-    "from examples.airspacelib.wildfireresponse.wildfiresim import WildfireSim, plot_combined_response_from, double_size_p\n",
-    "from examples.airspacelib.wildfireresponse.wildfiresim import BasePlacementProblem\n",
+    "from fmdtools_examples.airspacelib.wildfireresponse.environment import FireMap, FireEnvironment, FirePropagation, sim_properties\n",
+    "from fmdtools_examples.airspacelib.wildfireresponse.aircraft import FireAircraft\n",
+    "from fmdtools_examples.airspacelib.wildfireresponse.wildfiresim import WildfireSim, plot_combined_response_from, double_size_p\n",
+    "from fmdtools_examples.airspacelib.wildfireresponse.wildfiresim import BasePlacementProblem\n",
     "from IPython.display import HTML\n",
     "import inspect"
    ]

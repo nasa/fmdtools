@@ -9,7 +9,7 @@ import fmdtools.sim.propagate as prop
 import fmdtools.analyze as an
 from fmdtools.sim.sample import FaultDomain, FaultSample
 from fmdtools.sim.search import DisturbanceProblem
-import examples.rover.rover_model as rvr
+import fmdtools_examples.rover.rover_model as rvr
 import tqdm
 
 import numpy as np

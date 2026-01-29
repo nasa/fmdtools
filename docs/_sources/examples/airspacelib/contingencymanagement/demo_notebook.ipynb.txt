@@ -23,9 +23,9 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "from examples.airspacelib.contingencymanagement.aircraft import ContingencyAircraftArchitecture\n",
-    "from examples.airspacelib.contingencymanagement.aircraft import plot_flightpath, plot_flightpath_from\n",
-    "from examples.airspacelib.contingencymanagement.environment import properties, collections\n",
+    "from fmdtools_examples.airspacelib.contingencymanagement.aircraft import ContingencyAircraftArchitecture\n",
+    "from fmdtools_examples.airspacelib.contingencymanagement.aircraft import plot_flightpath, plot_flightpath_from\n",
+    "from fmdtools_examples.airspacelib.contingencymanagement.environment import properties, collections\n",
     "from fmdtools.analyze.common import consolidate_legend\n",
     "from fmdtools.define.architecture.function import FunctionArchitectureGraph\n",
     "from fmdtools.sim import propagate\n",

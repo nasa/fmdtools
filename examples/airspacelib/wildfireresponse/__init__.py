@@ -16,9 +16,9 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-import examples.airspacelib.wildfireresponse.aircraft as aircraft
-import examples.airspacelib.wildfireresponse.environment as environment
-import examples.airspacelib.wildfireresponse.wildfiresim as wildfiresim
+import fmdtools_examples.airspacelib.wildfireresponse.aircraft as aircraft
+import fmdtools_examples.airspacelib.wildfireresponse.environment as environment
+import fmdtools_examples.airspacelib.wildfireresponse.wildfiresim as wildfiresim
 
 
 __all__ = ['aircraft', 'environment', 'wildfiresim']

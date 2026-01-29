@@ -19,12 +19,12 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.pump.ex_pump import MoveWat as DetMoveWat
-from examples.pump.ex_pump import ImportWater, ExportWater
-from examples.pump.ex_pump import ImportEE as DetImportEE
-from examples.pump.ex_pump import ImportSig as DetImportSig
-from examples.pump.ex_pump import PumpParam, Electricity, Water, Signal
-from examples.pump.ex_pump import Pump as DetPump
+from fmdtools_examples.pump.ex_pump import MoveWat as DetMoveWat
+from fmdtools_examples.pump.ex_pump import ImportWater, ExportWater
+from fmdtools_examples.pump.ex_pump import ImportEE as DetImportEE
+from fmdtools_examples.pump.ex_pump import ImportSig as DetImportSig
+from fmdtools_examples.pump.ex_pump import PumpParam, Electricity, Water, Signal
+from fmdtools_examples.pump.ex_pump import Pump as DetPump
 
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.container.state import State

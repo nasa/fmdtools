@@ -17,7 +17,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.rover.rover_model import Rover, RoverParam
+from fmdtools_examples.rover.rover_model import Rover, RoverParam
 
 import fmdtools.sim.propagate as prop
 from fmdtools.sim.sample import FaultDomain, FaultSample

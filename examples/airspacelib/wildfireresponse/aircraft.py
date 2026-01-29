@@ -15,9 +15,9 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from examples.airspacelib.wildfireresponse.environment import FireEnvironment, double_size_p
-from examples.airspacelib.base.aircraft import BaseAircraft
-from examples.airspacelib.base.state import AircraftState
+from fmdtools_examples.airspacelib.wildfireresponse.environment import FireEnvironment, double_size_p
+from fmdtools_examples.airspacelib.base.aircraft import BaseAircraft
+from fmdtools_examples.airspacelib.base.state import AircraftState
 
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.container.time import Time

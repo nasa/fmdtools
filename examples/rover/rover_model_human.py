@@ -31,13 +31,13 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.rover.rover_model import Switch, Comms, Video, Control
-from examples.rover.rover_model import Rover, RoverParam
-from examples.rover.rover_model import Ground, Pos, EE
-from examples.rover.rover_model import FaultSig, Power, Perception, Communications
-from examples.rover.rover_model import PlanPath, Override, Drive
-from examples.rover.rover_model import PlanPathState
-from examples.rover.rover_model import Operator as BaseOperator
+from fmdtools_examples.rover.rover_model import Switch, Comms, Video, Control
+from fmdtools_examples.rover.rover_model import Rover, RoverParam
+from fmdtools_examples.rover.rover_model import Ground, Pos, EE
+from fmdtools_examples.rover.rover_model import FaultSig, Power, Perception, Communications
+from fmdtools_examples.rover.rover_model import PlanPath, Override, Drive
+from fmdtools_examples.rover.rover_model import PlanPathState
+from fmdtools_examples.rover.rover_model import Operator as BaseOperator
 
 from fmdtools.define.block.action import Action
 from fmdtools.define.architecture.action import ActionArchitecture
@@ -519,7 +519,7 @@ if __name__ == "__main__":
     ag.draw()
     ag.draw_graphviz(layout='dot')
 
-    from examples.rover.rover_model import plot_map
+    from fmdtools_examples.rover.rover_model import plot_map
     from fmdtools.sim import propagate as prop
     endresults, mdlhist = prop.nominal(mdl)
     ec1, hist = prop.nominal(mdl)

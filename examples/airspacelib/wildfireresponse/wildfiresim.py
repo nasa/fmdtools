@@ -17,9 +17,9 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.airspacelib.wildfireresponse.environment import FireEnvironment, FirePropagation, FireMapParam
-from examples.airspacelib.wildfireresponse.environment import sim_properties, double_size_p
-from examples.airspacelib.wildfireresponse.aircraft import FireAircraft
+from fmdtools_examples.airspacelib.wildfireresponse.environment import FireEnvironment, FirePropagation, FireMapParam
+from fmdtools_examples.airspacelib.wildfireresponse.environment import sim_properties, double_size_p
+from fmdtools_examples.airspacelib.wildfireresponse.aircraft import FireAircraft
 
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.container.parameter import Parameter

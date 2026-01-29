@@ -775,7 +775,7 @@
    ],
    "source": [
     "from fmdtools.sim.sample import ParameterDomain\n",
-    "from examples.pump.pump_stochastic import PumpParam\n",
+    "from fmdtools_examples.pump.pump_stochastic import PumpParam\n",
     "pd = ParameterDomain(PumpParam)\n",
     "pd.add_variables(\"delay\")\n",
     "pd(4)"

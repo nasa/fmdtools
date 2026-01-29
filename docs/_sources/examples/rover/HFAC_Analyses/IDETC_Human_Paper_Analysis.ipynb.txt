@@ -24,8 +24,8 @@
    },
    "outputs": [],
    "source": [
-    "from examples.rover.rover_model_human import RoverHuman\n",
-    "from examples.rover.rover_model import plot_map\n",
+    "from fmdtools_examples.rover.rover_model_human import RoverHuman\n",
+    "from fmdtools_examples.rover.rover_model import plot_map\n",
     "\n",
     "import fmdtools.sim.propagate as prop\n",
     "import fmdtools.analyze as an\n",
@@ -243,7 +243,7 @@
     }
    ],
    "source": [
-    "from examples.rover.rover_model_human import asg_pos\n",
+    "from fmdtools_examples.rover.rover_model_human import asg_pos\n",
     "ag = mdl.fxns['operator'].aa.as_modelgraph()\n",
     "ag.set_pos(**asg_pos)\n",
     "fig, ax = ag.draw()"
@@ -1717,7 +1717,7 @@
     }
    ],
    "source": [
-    "from examples.rover.rover_model_human import RoverHumanParam\n",
+    "from fmdtools_examples.rover.rover_model_human import RoverHumanParam\n",
     "pd = ParameterDomain(RoverHumanParam)\n",
     "#pd.add_constant('ground.linetype', 'sine')\n",
     "#pd.add_constant('ground.amp', 4)\n",

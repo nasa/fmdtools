@@ -16,8 +16,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.airspacelib.base.arch.flows import AircraftEnvironment
-from examples.airspacelib.base.state import AircraftPosition3
+from fmdtools_examples.airspacelib.base.arch.flows import AircraftEnvironment
+from fmdtools_examples.airspacelib.base.state import AircraftPosition3
 
 from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.architecture.geom import GeomArchitecture

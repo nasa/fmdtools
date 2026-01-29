@@ -51,7 +51,7 @@
    },
    "outputs": [],
    "source": [
-    "from examples.rover.rover_model import Rover"
+    "from fmdtools_examples.rover.rover_model import Rover"
    ]
   },
   {
@@ -121,7 +121,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "from examples.rover.rover_mode_space import set_ranges, dist_ranges, p_test"
+    "from fmdtools_examples.rover.rover_mode_space import set_ranges, dist_ranges, p_test"
    ]
   },
   {

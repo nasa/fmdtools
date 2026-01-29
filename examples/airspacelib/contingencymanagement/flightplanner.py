@@ -69,8 +69,8 @@ class DroneFlightGrid(Coords):
 
     Examples
     --------
-    >>> from examples.airspacelib.contingencymanagement.flightplanner import DroneFlightGrid, DroneFlightGridParam
-    >>> from examples.airspacelib.contingencymanagement.environment import ContingencyEnvironment
+    >>> from fmdtools_examples.airspacelib.contingencymanagement.flightplanner import DroneFlightGrid, DroneFlightGridParam
+    >>> from fmdtools_examples.airspacelib.contingencymanagement.environment import ContingencyEnvironment
     >>> env = ContingencyEnvironment()
     >>> param = DroneFlightGridParam(x_size=120, y_size=120, blocksize=1.0)
     >>> grid = DroneFlightGrid(env, p=param)

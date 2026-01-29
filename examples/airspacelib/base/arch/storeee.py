@@ -20,7 +20,7 @@ from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode
 
 
-from examples.airspacelib.base.arch.flows import Force, Electricity
+from fmdtools_examples.airspacelib.base.arch.flows import Force, Electricity
 
 
 class StoreEEMode(Mode):

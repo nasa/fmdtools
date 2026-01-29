@@ -18,10 +18,10 @@ specific language governing permissions and limitations under the License.
 """
 
 
-from examples.pump.ex_pump import Pump, PumpParam
-from examples.pump.pump_indiv import MoveWatDynamic
+from fmdtools_examples.pump.ex_pump import Pump, PumpParam
+from fmdtools_examples.pump.pump_indiv import MoveWatDynamic
 
-from tests.common import CommonTests
+from fmdtools_tests.common import CommonTests
 
 from fmdtools.define.object.base import check_pickleability
 from fmdtools.sim import propagate as prop

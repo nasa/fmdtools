@@ -17,7 +17,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.pump.ex_pump import MoveWat
+from fmdtools_examples.pump.ex_pump import MoveWat
 
 import fmdtools.sim.propagate as prop
 from fmdtools.sim.sample import FaultSample, FaultDomain, ParameterSample
