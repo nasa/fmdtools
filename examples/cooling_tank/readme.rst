@@ -21,18 +21,16 @@ Scripts and tests:
 Notebooks
 /////////////////////////////////////////////
 
-- :doc:`Hold-up Tank Model <Tank_Analysis>` uses the :class:`~fmdtools.sim.sample.SampleApproach` class to model human interactions with the modeled system (in `tank_model.py`).
+- :doc:`Demo: Cooling Tank Model <demo_tank_model>` uses the :class:`~fmdtools.sim.sample.SampleApproach` class to model human interactions with the modeled system (in `model_main.py`).
 
-- :doc:`Tank Optimization <Tank_Optimization>` shows how design and contingency management of a system (in `tank_optimization_model.py`) can be co-optimized with the :class:`~fmdtools.sim.search.ProblemArchitecture` class, as well as external solvers.
+- :doc:`Paper: Optimization Architecture Comparison <paper_jmd_optimization>` shows how design and contingency management of a system (in `model_optimization.py`) can be co-optimized with the :class:`~fmdtools.sim.search.ProblemArchitecture` class, as well as external solvers.
 
 The support files include various implementations of the tank model.
 
 
-- The baseline Tank Model (`tank_model.py`), a dynamical implementation of a human-operated tank system to show how fmdtools can be used to model human errors.
+- The baseline Tank Model (`model_tank.py`), a dynamical implementation of a human-operated tank system to show how fmdtools can be used to model human errors.
 
-- A demonstration Optimization Tank Model (`tank_opt.py`), resilience optimization architectures using :class:`~fmdtools.sim.search.ProblemArchitecture`. 
- 
-- The main Tank optimization model (`tank_optimization.py`) similar to `tank_model` and `tank_opt` and is a dynamical implementation of a tank system with contingency management. 
+- A demonstration Optimization Tank Model (`model_optimization.py`), along with resilience optimization architectures using :class:`~fmdtools.sim.search.ProblemArchitecture`. 
 
 References
 /////////////////////////////////////////////

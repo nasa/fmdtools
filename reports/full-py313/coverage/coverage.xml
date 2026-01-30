@@ -5551,7 +5551,7 @@
 		</package>
 		<package name="examples.tank" line-rate="0.8028" branch-rate="0" complexity="0">
 			<classes>
-				<class name="tank_model.py" filename="examples/tank/tank_model.py" complexity="0" line-rate="0.9811" branch-rate="0">
+				<class name="tank_model.py" filename="examples/cooling_tank/tank_model.py" complexity="0" line-rate="0.9811" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="39" hits="1"/>
@@ -5820,7 +5820,7 @@
 						<line number="430" hits="1"/>
 					</lines>
 				</class>
-				<class name="tank_optimization_model.py" filename="examples/tank/tank_optimization_model.py" complexity="0" line-rate="0.4345" branch-rate="0">
+				<class name="tank_optimization_model.py" filename="examples/cooling_tank/tank_optimization_model.py" complexity="0" line-rate="0.4345" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="27" hits="1"/>
@@ -5970,7 +5970,7 @@
 						<line number="244" hits="0"/>
 					</lines>
 				</class>
-				<class name="test_tank.py" filename="examples/tank/test_tank.py" complexity="0" line-rate="0.8442" branch-rate="0">
+				<class name="test_tank.py" filename="examples/cooling_tank/test_tank.py" complexity="0" line-rate="0.8442" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="20" hits="1"/>

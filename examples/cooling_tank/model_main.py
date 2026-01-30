@@ -415,7 +415,7 @@ class Tank(FunctionArchitecture):
         self.add_fxn('guide_water_out', GuideLiquidOut, 'wat_out_1', 'wat_out_2')
         self.add_fxn('export_water', ExportLiquid, 'wat_out_2', 'valve2_sig')
         self.add_fxn('human', HumanActions, 'valve1_sig', 'tank_sig',
-                     'valve2_sig', aa={'reacttime': self.p.reacttime})
+                     'valve2_sig', aa={'p': {'reacttime': self.p.reacttime}})
 
     def classify(self, scen={}, hist={}, **kwargs):
         # here we define failure in terms of the water level getting too low or too high

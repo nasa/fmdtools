@@ -33,17 +33,17 @@ Multirotor Drone
    ../examples/multirotor_drone/demo_urban_flight.ipynb
    ../examples/multirotor_drone/demo_optimization_architectures.ipynb
  
-Tank
+Cooling Tank
 +++++++++++++++++++++++++++++++++++++++++++++
 
-:doc:`/examples/tank <../examples/tank/readme>` provides a fairly simple model of a tank, inlet valve, and outlet valve. It includes a demonstration of the model and optimization of said model.
+:doc:`/examples/tank <../examples/cooling_tank/readme>` provides a fairly simple model of a tank, inlet valve, and outlet valve. It includes a demonstration of the model and optimization of said model.
 
 .. toctree::
    :hidden:
    
-   ../examples/tank/readme.rst
-   ../examples/tank/Tank_Analysis.ipynb
-   ../examples/tank/Tank_Optimization.ipynb
+   ../examples/cooling_tank/readme.rst
+   ../examples/cooling_tank/demo_tank_model.ipynb
+   ../examples/cooling_tank/paper_jmd_optimization.ipynb
 
 
 Electric Power System

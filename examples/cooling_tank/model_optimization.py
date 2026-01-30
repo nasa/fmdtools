@@ -24,8 +24,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools_examples.tank.tank_model import TransportLiquidState, Signal, Liquid
-from fmdtools_examples.tank.tank_model import StoreLiquidMode
+from fmdtools_examples.cooling_tank.model_main import TransportLiquidState, Signal, Liquid
+from fmdtools_examples.cooling_tank.model_main import StoreLiquidMode
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State

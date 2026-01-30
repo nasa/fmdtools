@@ -96,7 +96,7 @@ fast_notebooks = ["examples/human_hazard_mitigation/Tutorial_ActionArchitecture.
                   "examples/navigating_rover/tutorial_model_structure_visualization.ipynb",
                   "examples/navigating_rover/tutorial_FaultSample.ipynb",
                   "examples/navigating_rover/navigating_demo_rover_model.ipynb",
-                  "examples/tank/Tank_Analysis.ipynb",
+                  "examples/cooling_tank/demo_tank_model.ipynb",
                   "examples/taxiway/Paper_Notebook.ipynb"
                   ]
 
@@ -119,7 +119,7 @@ too_slow_notebooks = ["examples/navigating_rover/paper_ifac_human.ipynb",
                       "examples/navigating_rover/paper_jmd_synthetic_modes.ipynb",  # extremely slow notebook
                       "examples/navigating_rover/paper_aiaa_coevolution.ipynb",  # extremely slow
                       "examples/navigating_rover/tutorial_ParameterSample.ipynb", # timeout fails (over 300s)
-                      "examples/tank/Tank_Optimization.ipynb",
+                      "examples/cooling_tank/paper_jmd_optimization.ipynb",
                       "examples/airspacelib/wildfireresponse/paper_figures.ipynb"
                       ]
 
