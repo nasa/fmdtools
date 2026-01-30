@@ -68,25 +68,25 @@ Human Hazard Mitigation
    ../examples/human_hazard_mitigation/readme.rst
    ../examples/human_hazard_mitigation/Tutorial_ActionArchitecture.ipynb
 
-Rover
+Navigating Rover
 +++++++++++++++++++++++++++++++++++++++++++++
 
-:doc:`/examples/rover <../examples/rover/readme>` showcases more advanced methodologies that can be used in fmdtools, and has essentially been the developers’ demo case study for advancing the state-of-the-art in resilience simulation.
+:doc:`/examples/navigating_rover <../examples/navigating_rover/readme>` showcases more advanced methodologies that can be used in fmdtools, and has essentially been the developers’ demo case study for advancing the state-of-the-art in resilience simulation.
 
 .. toctree::
    :hidden:
    
-   ../examples/rover/readme.rst
-   ../examples/rover/Rover_Setup_Notebook.ipynb
-   ../examples/rover/Model_Structure_Visualization_Tutorial.ipynb
-   ../examples/rover/FaultSample_Use-Cases.ipynb
-   ../examples/rover/ParameterSample_Use-Cases.ipynb
-   ../examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb
-   ../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb
-   ../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb
-   ../examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb
-   ../examples/rover/optimization/Search_Comparison.ipynb
-   ../examples/rover/optimization/Rover_Response_Optimization.ipynb
+   ../examples/navigating_rover/readme.rst
+   ../examples/navigating_rover/demo_rover_model.ipynb
+   ../examples/navigating_rover/demo_degradation.ipynb
+   ../examples/navigating_rover/demo_response_optimization.ipynb
+   ../examples/navigating_rover/tutorial_model_structure_visualization.ipynb
+   ../examples/navigating_rover/tutorial_FaultSample.ipynb
+   ../examples/navigating_rover/tutorial_ParameterSample.ipynb
+   ../examples/navigating_rover/paper_ifac_human.ipynb
+   ../examples/navigating_rover/paper_idetc_human.ipynb
+   ../examples/navigating_rover/paper_jmd_synthetic_modes.ipynb
+   ../examples/navigating_rover/paper_aiaa_coevolution.ipynb
 
 State Communication
 +++++++++++++++++++++++++++++++++++++++++++++

@@ -153,7 +153,7 @@ Some additional indirect dependencies (listed below) may be needed for developme
 deap
 # used for optimization of rover faults
 # license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt
-# the LGPL license and installation instructions are provided in ~/examples/rover/readme.rst
+# the LGPL license and installation instructions are provided in ~/examples/navigating_rover/readme.rst
 pymoo
 # used for optimization of tank and rover examples
 # license: (Apache 2.0) https://github.com/anyoptimization/pymoo/blob/main/LICENSE

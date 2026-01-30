@@ -2530,9 +2530,9 @@
 				</class>
 			</classes>
 		</package>
-		<package name="examples.rover" line-rate="0.6642" branch-rate="0" complexity="0">
+		<package name="examples.navigating_rover" line-rate="0.6642" branch-rate="0" complexity="0">
 			<classes>
-				<class name="rover_model.py" filename="examples/rover/rover_model.py" complexity="0" line-rate="0.6237" branch-rate="0">
+				<class name="rover_model.py" filename="examples/navigating_rover/model_main.py" complexity="0" line-rate="0.6237" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="42" hits="1"/>
@@ -3018,7 +3018,7 @@
 						<line number="1149" hits="0"/>
 					</lines>
 				</class>
-				<class name="rover_model_human.py" filename="examples/rover/rover_model_human.py" complexity="0" line-rate="0.7641" branch-rate="0">
+				<class name="model_human.py" filename="examples/navigating_rover/model_human.py" complexity="0" line-rate="0.7641" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="34" hits="1"/>

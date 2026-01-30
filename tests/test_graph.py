@@ -18,7 +18,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools_examples.water_pump.model_main import Pump
-from fmdtools_examples.rover.rover_model import Rover
+from fmdtools_examples.navigating_rover.model_main import Rover
 from fmdtools.define.architecture.function import FunctionArchitectureGraph, FunctionArchitectureFxnGraph
 from fmdtools.define.architecture.function import FunctionArchitectureFlowGraph, FunctionArchitectureTypeGraph
 from fmdtools.analyze.common import suite_for_plots

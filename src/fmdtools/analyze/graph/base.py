@@ -1253,7 +1253,7 @@ class Graph(object):
         Examples
         --------
         >>> from fmdtools_examples.water_pump.model_main import Pump
-        >>> from fmdtools_examples.rover.rover_model import Rover
+        >>> from fmdtools_examples.navigating_rover.model_main import Rover
         >>> from fmdtools.define.architecture.function import FunctionArchitectureGraph
         >>> pump_graph = FunctionArchitectureGraph(Pump())
         >>> rover_graph = FunctionArchitectureGraph(Rover())
