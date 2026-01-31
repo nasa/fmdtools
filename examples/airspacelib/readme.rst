@@ -15,21 +15,21 @@ The airspacelib package has the following structure:
 
 - airspacelib.base: base classes that can be adapted to new case studies
 
-- airspacelib.contingencymanagement: case study modelling a drone that must perform in-flight contingency management to respond to battery depletion and airspace intrusion scenarios, including:
+- airspacelib.contingency_management: case study modelling a drone that must perform in-flight contingency management to respond to battery depletion and airspace intrusion scenarios, including:
 
-  - :doc:`Wildfire Response Demo <wildfire_response_demo_presentation>` provides a high-level overview of the model and analyses
+  - :doc:`Wildfire Response Demo <contingency_management/wildfire_response_demo_presentation>` provides a high-level overview of the model and analyses
 
-  - :doc:`Wildfire Demo Notebook <Wildfire_Demo>` is a notebook showing some of the basics of modelling setup.
+  - :doc:`Demo: Wildfire Simulation <contingency_management/demo_wildfire>` is a notebook showing some of the basics of modelling setup.
 
-  - :doc:`Paper Demo Notebook <paper_demo>` provides some demonstration of optimizing base placements.
+  - :doc:`Paper[AIAA]: Optimal Asset Location <contingency_management/paper_aiaa_optimal_location>` provides some demonstration of optimizing base placements.
 
-- airspacelib.wildfireresponse: case study modelling a set of drones in a wildfire response situation. The documentation for this module includes:
+- airspacelib.wildfire_response: case study modelling a set of drones in a wildfire response situation. The documentation for this module includes:
 
-  - :doc:`Overview presentation <overview_presentation>`, a high-level overview 
+  - :doc:`Overview presentation <wildfire_response/overview_presentation>`, a high-level overview 
 
-  - :doc:`Demo notebook <demo_notebook>`,  a notebook showing some of the basics of modelling setup.
+  - :doc:`Demo: Contingency Management Drone Model <wildfire_response/demo_contingency>`,  a notebook showing some of the basics of modelling setup.
 
-  - :doc:`Proxtheat notebook <proxthreat_notebook>`, a notebook showing how proximity to threat functionality can be evaluated in the model.
+  - :doc:`Demo: Proxthreat <wildfire_response/demo_proxthreat>`, a notebook showing how proximity to threat functionality can be evaluated in the model.
 
 
 References

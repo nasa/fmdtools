@@ -99,17 +99,17 @@ State Communication
    ../examples/state_communication/readme.rst
    ../examples/state_communication/Tutorial_MultiFlow_and_CommsFlow.ipynb
 
-Taxiway
+Airport Taxiway
 +++++++++++++++++++++++++++++++++++++++++++++
 
-:doc:`/examples/taxiway <../examples/taxiway/readme>` provides a demonstration of how to create a multiagent, systems-of-systems model in fmdtools using the case study of (piloted and unpiloted) aircraft taxiing on a taxiway. 
+:doc:`/examples/airport_taxiway <../examples/airport_taxiway/readme>` provides a demonstration of how to create a multiagent, systems-of-systems model in fmdtools using the case study of (piloted and unpiloted) aircraft taxiing on a taxiway. 
 
 
 .. toctree::
    :hidden:
    
-   ../examples/taxiway/readme.rst
-   ../examples/taxiway/Paper_Notebook.ipynb
+   ../examples/airport_taxiway/readme.rst
+   ../examples/airport_taxiway/paper_jcise_dsa.ipynb
 
 
 Airspace Library
@@ -121,9 +121,9 @@ Airspace Library
    :hidden:
    
    ../examples/airspacelib/readme.rst
-   ../examples/airspacelib/wildfireresponse/wildfire_response_demo_presentation.md
-   ../examples/airspacelib/wildfireresponse/Wildfire_Demo.ipynb
-   ../examples/airspacelib/wildfireresponse/paper_demo.ipynb
-   ../examples/airspacelib/contingencymanagement/overview_presentation.md
-   ../examples/airspacelib/contingencymanagement/demo_notebook.ipynb
-   ../examples/airspacelib/contingencymanagement/proxthreat_notebook.ipynb
+   ../examples/airspacelib/wildfire_response/wildfire_response_demo_presentation.md
+   ../examples/airspacelib/wildfire_response/demo_wildfire.ipynb
+   ../examples/airspacelib/wildfire_response/paper_aiaa_optimal_location.ipynb
+   ../examples/airspacelib/contingency_management/overview_presentation.md
+   ../examples/airspacelib/contingency_management/demo_contingency.ipynb
+   ../examples/airspacelib/contingency_management/demo_proxthreat.ipynb

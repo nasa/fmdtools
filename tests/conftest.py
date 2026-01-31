@@ -97,7 +97,7 @@ fast_notebooks = ["examples/human_hazard_mitigation/Tutorial_ActionArchitecture.
                   "examples/navigating_rover/tutorial_FaultSample.ipynb",
                   "examples/navigating_rover/navigating_demo_rover_model.ipynb",
                   "examples/cooling_tank/demo_tank_model.ipynb",
-                  "examples/taxiway/Paper_Notebook.ipynb"
+                  "examples/airport_taxiway/paper_jcise_dsa.ipynb"
                   ]
 
 # list of slow-running notebooks:
@@ -106,9 +106,9 @@ slow_notebooks = ["examples/multirotor_drone/multirotor_drone_Optimization.ipynb
                   "examples/navigating_rover/demo_degradation.ipynb",
                   "examples/navigating_rover/paper_idetc_human.ipynb",
                   "examples/water_pump/tutorial_parallelism.ipynb",
-                  "examples/airspacelib/wildfireresponse/Wildfire_Demo.ipynb",
-                  "examples/airspacelib/contingencymanagement/demo_notebook.ipynb",
-                  "examples/airspacelib/contingencymanagement/proxthreat_notebook.ipynb"
+                  "examples/airspacelib/wildfire_response/demo_wildfire.ipynb",
+                  "examples/airspacelib/contingency_management/demo_contingency.ipynb",
+                  "examples/airspacelib/contingency_management/demo_proxthreat.ipynb"
                   ]
 
 # for testing extremely slow notebooks that can't be run to completion :
@@ -120,7 +120,7 @@ too_slow_notebooks = ["examples/navigating_rover/paper_ifac_human.ipynb",
                       "examples/navigating_rover/paper_aiaa_coevolution.ipynb",  # extremely slow
                       "examples/navigating_rover/tutorial_ParameterSample.ipynb", # timeout fails (over 300s)
                       "examples/cooling_tank/paper_jmd_optimization.ipynb",
-                      "examples/airspacelib/wildfireresponse/paper_figures.ipynb"
+                      "examples/airspacelib/wildfire_response/paper_aiaa_optimal_location.ipynb"
                       ]
 
 

@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 """
-Airspace library.
+Contingency management model.
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -15,8 +16,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-import fmdtools_examples.airspacelib.base as base
-import  fmdtools_examples.airspacelib.contingency_management as contingency_management
-import  fmdtools_examples.airspacelib.wildfire_response as wildfire_response
+import fmdtools_examples.airspacelib.contingency_management.model_aircraft as model_aircraft
+import fmdtools_examples.airspacelib.contingency_management.model_environment as model_environment
+import fmdtools_examples.airspacelib.contingency_management.model_flightplanner as model_flightplanner
 
-__all__ = ['base', 'contingency_management', 'wildfire_response']
+__all__ = ['model_aircraft', 'model_environment', 'model_flightplanner']

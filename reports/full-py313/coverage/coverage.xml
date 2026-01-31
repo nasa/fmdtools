@@ -484,9 +484,9 @@
 				</class>
 			</classes>
 		</package>
-		<package name="examples.airspacelib.contingencymanagement" line-rate="0.4614" branch-rate="0" complexity="0">
+		<package name="examples.airspacelib.contingency_management" line-rate="0.4614" branch-rate="0" complexity="0">
 			<classes>
-				<class name="aircraft.py" filename="examples/airspacelib/contingencymanagement/aircraft.py" complexity="0" line-rate="0.326" branch-rate="0">
+				<class name="aircraft.py" filename="examples/airspacelib/contingency_management/aircraft.py" complexity="0" line-rate="0.326" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="18" hits="1"/>
@@ -718,7 +718,7 @@
 						<line number="518" hits="0"/>
 					</lines>
 				</class>
-				<class name="environment.py" filename="examples/airspacelib/contingencymanagement/environment.py" complexity="0" line-rate="0.6667" branch-rate="0">
+				<class name="environment.py" filename="examples/airspacelib/contingency_management/environment.py" complexity="0" line-rate="0.6667" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="19" hits="1"/>
@@ -816,7 +816,7 @@
 						<line number="240" hits="0"/>
 					</lines>
 				</class>
-				<class name="flightplanner.py" filename="examples/airspacelib/contingencymanagement/flightplanner.py" complexity="0" line-rate="0.5202" branch-rate="0">
+				<class name="flightplanner.py" filename="examples/airspacelib/contingency_management/flightplanner.py" complexity="0" line-rate="0.5202" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="29" hits="1"/>
@@ -1021,9 +1021,9 @@
 				</class>
 			</classes>
 		</package>
-		<package name="examples.airspacelib.wildfireresponse" line-rate="0.4094" branch-rate="0" complexity="0">
+		<package name="examples.airspacelib.wildfire_response" line-rate="0.4094" branch-rate="0" complexity="0">
 			<classes>
-				<class name="aircraft.py" filename="examples/airspacelib/wildfireresponse/aircraft.py" complexity="0" line-rate="0.3818" branch-rate="0">
+				<class name="aircraft.py" filename="examples/airspacelib/wildfire_response/aircraft.py" complexity="0" line-rate="0.3818" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="18" hits="1"/>
@@ -1083,7 +1083,7 @@
 						<line number="109" hits="0"/>
 					</lines>
 				</class>
-				<class name="environment.py" filename="examples/airspacelib/wildfireresponse/environment.py" complexity="0" line-rate="0.4067" branch-rate="0">
+				<class name="environment.py" filename="examples/airspacelib/wildfire_response/environment.py" complexity="0" line-rate="0.4067" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="22" hits="1"/>
@@ -1238,7 +1238,7 @@
 						<line number="322" hits="1"/>
 					</lines>
 				</class>
-				<class name="wildfiresim.py" filename="examples/airspacelib/wildfireresponse/wildfiresim.py" complexity="0" line-rate="0.4366" branch-rate="0">
+				<class name="wildfiresim.py" filename="examples/airspacelib/wildfire_response/wildfiresim.py" complexity="0" line-rate="0.4366" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="20" hits="1"/>
@@ -6133,7 +6133,7 @@
 		</package>
 		<package name="examples.taxiway" line-rate="0.9127" branch-rate="0" complexity="0">
 			<classes>
-				<class name="ATC.py" filename="examples/taxiway/ATC.py" complexity="0" line-rate="0.8842" branch-rate="0">
+				<class name="ATC.py" filename="examples/airport_taxiway/ATC.py" complexity="0" line-rate="0.8842" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="18" hits="1"/>
@@ -6233,7 +6233,7 @@
 						<line number="185" hits="0"/>
 					</lines>
 				</class>
-				<class name="asset.py" filename="examples/taxiway/asset.py" complexity="0" line-rate="0.988" branch-rate="0">
+				<class name="asset.py" filename="examples/airport_taxiway/asset.py" complexity="0" line-rate="0.988" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="28" hits="1"/>
@@ -6571,7 +6571,7 @@
 						<line number="587" hits="1"/>
 					</lines>
 				</class>
-				<class name="common.py" filename="examples/taxiway/common.py" complexity="0" line-rate="0.8091" branch-rate="0">
+				<class name="common.py" filename="examples/airport_taxiway/common.py" complexity="0" line-rate="0.8091" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="26" hits="1"/>
@@ -6927,7 +6927,7 @@
 						<line number="859" hits="1"/>
 					</lines>
 				</class>
-				<class name="model.py" filename="examples/taxiway/model.py" complexity="0" line-rate="0.8667" branch-rate="0">
+				<class name="model.py" filename="examples/airport_taxiway/model.py" complexity="0" line-rate="0.8667" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="20" hits="1"/>
@@ -6962,7 +6962,7 @@
 						<line number="126" hits="0"/>
 					</lines>
 				</class>
-				<class name="test_asset.py" filename="examples/taxiway/test_asset.py" complexity="0" line-rate="1" branch-rate="0">
+				<class name="test_asset.py" filename="examples/airport_taxiway/test_asset.py" complexity="0" line-rate="1" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="20" hits="1"/>
@@ -7099,7 +7099,7 @@
 						<line number="279" hits="1"/>
 					</lines>
 				</class>
-				<class name="test_model.py" filename="examples/taxiway/test_model.py" complexity="0" line-rate="1" branch-rate="0">
+				<class name="test_model.py" filename="examples/airport_taxiway/test_model.py" complexity="0" line-rate="1" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="20" hits="1"/>

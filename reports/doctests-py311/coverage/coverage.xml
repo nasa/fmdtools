@@ -422,9 +422,9 @@
 				</class>
 			</classes>
 		</package>
-		<package name="examples.airspacelib.contingencymanagement" line-rate="0.3185" branch-rate="0" complexity="0">
+		<package name="examples.airspacelib.contingency_management" line-rate="0.3185" branch-rate="0" complexity="0">
 			<classes>
-				<class name="aircraft.py" filename="examples/airspacelib/contingencymanagement/aircraft.py" complexity="0" line-rate="0.326" branch-rate="0">
+				<class name="aircraft.py" filename="examples/airspacelib/contingency_management/aircraft.py" complexity="0" line-rate="0.326" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="18" hits="1"/>
@@ -656,7 +656,7 @@
 						<line number="518" hits="0"/>
 					</lines>
 				</class>
-				<class name="environment.py" filename="examples/airspacelib/contingencymanagement/environment.py" complexity="0" line-rate="0.6667" branch-rate="0">
+				<class name="environment.py" filename="examples/airspacelib/contingency_management/environment.py" complexity="0" line-rate="0.6667" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="19" hits="1"/>
@@ -754,7 +754,7 @@
 						<line number="240" hits="0"/>
 					</lines>
 				</class>
-				<class name="flightplanner.py" filename="examples/airspacelib/contingencymanagement/flightplanner.py" complexity="0" line-rate="0.1465" branch-rate="0">
+				<class name="flightplanner.py" filename="examples/airspacelib/contingency_management/flightplanner.py" complexity="0" line-rate="0.1465" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="29" hits="1"/>
@@ -959,9 +959,9 @@
 				</class>
 			</classes>
 		</package>
-		<package name="examples.airspacelib.wildfireresponse" line-rate="0.4094" branch-rate="0" complexity="0">
+		<package name="examples.airspacelib.wildfire_response" line-rate="0.4094" branch-rate="0" complexity="0">
 			<classes>
-				<class name="aircraft.py" filename="examples/airspacelib/wildfireresponse/aircraft.py" complexity="0" line-rate="0.3818" branch-rate="0">
+				<class name="aircraft.py" filename="examples/airspacelib/wildfire_response/aircraft.py" complexity="0" line-rate="0.3818" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="18" hits="1"/>
@@ -1021,7 +1021,7 @@
 						<line number="109" hits="0"/>
 					</lines>
 				</class>
-				<class name="environment.py" filename="examples/airspacelib/wildfireresponse/environment.py" complexity="0" line-rate="0.4067" branch-rate="0">
+				<class name="environment.py" filename="examples/airspacelib/wildfire_response/environment.py" complexity="0" line-rate="0.4067" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="22" hits="1"/>
@@ -1176,7 +1176,7 @@
 						<line number="322" hits="1"/>
 					</lines>
 				</class>
-				<class name="wildfiresim.py" filename="examples/airspacelib/wildfireresponse/wildfiresim.py" complexity="0" line-rate="0.4366" branch-rate="0">
+				<class name="wildfiresim.py" filename="examples/airspacelib/wildfire_response/wildfiresim.py" complexity="0" line-rate="0.4366" branch-rate="0">
 					<methods/>
 					<lines>
 						<line number="20" hits="1"/>

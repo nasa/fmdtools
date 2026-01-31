@@ -178,6 +178,18 @@ The FRDL ontology (see: :ref:`frdl`) was designed to help define system function
 
 As such, as a part of planning what a model is supposed to represent, it can be helpful to define the system in FRDL first, to fully outline the scope, behaviors, and key interactions of the model will be. This diagram can help make key system architecture decisions as well, keep track of what the overall goal-state of the model is to be, and help keep track of certain interaction details that can be helpful when explaining and debugging simulations.
 
+Use model constructs to simplify your code
+------------------------------------------
+The fmdtools codebase is quite large, and, as a result, it can be tempting to dive into modeling before learning about all of its capabilities. The problem with this is that many of these capabilities and interfaces are there to make your life easier, provided you understand and use them correctly. Below are some commonly-misunderstood constructs to integrate into your code:
+
+* :class:`~fmdtools.define.container.base.BaseContainer` has a number of very basic operations which can be used in all containers to reduce the length of lines dedicated solely to assignment and passing variables between constructs. Using these methods can furthermore enable one to more simply perform vector operations with reduced syntax.
+* :class:`~fmdtools.define.object.timer.Timer` can be used very simply to represent timed behavior and state-transitions. 
+* While modes can be used to describe fault modes in a very general way, faulty behavior that can also be queried from the model using the concept of a *disturbance*, which is merely a change in a given variable value. While disturbances are less general, they require much less to be implemented in the model. Disturbances can be passed as an argument (as a dict or as a part of a Sequence class) to :meth:`~fmdtools.sim.propagate.sequence()`
+* :class:`~fmdtools.define.container.parameter.Parameter` and parameter-generating functions are helpful for understanding the model operating envelope. In general, try to avoid having parameters that duplicate each other in some way.
+* Randomness can be used throughout, but use the specified interfaces (:class:`~fmdtools.define.container.rand.Rand`, etc.) so that a single seed is used to generate all of the rngs in the model. Not using these interfaces can lead to not being able to replicate results consistently.
+* A variety of custom attributes can be added to :class:`~fmdtools.define.block.function.Function` and :class:`~fmdtools.define.flow.base.Flow`, but not every custom attribute is going to work with staged execution and parallelism options. In general, use containers to represent things that change and parameters to represent things that don't change. If you want to do something fancy with data structures, you may need to re-implement :class:`~fmdtools.define.block.base` methods for copying and returning states to `propagate`.
+* If there's something that you'd like to do in an fmdtools model that is difficult with existing model structures, consider filing a bug report before implementing an ad-hoc solution. Alternatively, try developing your solution as a *feature* rather than a hack to solve a single use-case. If the features is in our scope and well-developed, we may try to incorporate it in our next release.
+
 
 Don't copy, inherit and functionalize
 -------------------------------------
@@ -323,17 +335,39 @@ Systems of Systems models involve the interaction of multiple systems in a singl
 
 Note that, unlike other model types, System of Systems models very often will have multiple copies of functions and flows instantiated in the model. As a result, it is important to use dedicated model structures to the overall structure from being intractable. Specifically, multiple copies of flows can be handled using the `MultiFlow` class while Communications between agents can be handled using the `CommsFlow` class. The `ModelTypeGraph` graph representation can be used to represent the model as just the types involved (rather than all instantiations). In general, it can be helpful to create tests/analyses for individual agents in addition to the overall system.
 
-Use model constructs to simplify your code
-------------------------------------------
-The fmdtools codebase is quite large, and, as a result, it can be tempting to dive into modeling before learning about all of its capabilities. The problem with this is that many of these capabilities and interfaces are there to make your life easier, provided you understand and use them correctly. Below are some commonly-misunderstood constructs to integrate into your code:
+Structuring your Project Repository
+-----------------------------------
 
-* :class:`~fmdtools.define.container.base.BaseContainer` has a number of very basic operations which can be used in all containers to reduce the length of lines dedicated solely to assignment and passing variables between constructs. Using these methods can furthermore enable one to more simply perform vector operations with reduced syntax.
-* :class:`~fmdtools.define.object.timer.Timer` can be used very simply to represent timed behavior and state-transitions. 
-* While modes can be used to describe fault modes in a very general way, faulty behavior that can also be queried from the model using the concept of a *disturbance*, which is merely a change in a given variable value. While disturbances are less general, they require much less to be implemented in the model. Disturbances can be passed as an argument (as a dict or as a part of a Sequence class) to :meth:`~fmdtools.sim.propagate.sequence()`
-* :class:`~fmdtools.define.container.parameter.Parameter` and parameter-generating functions are helpful for understanding the model operating envelope. In general, try to avoid having parameters that duplicate each other in some way.
-* Randomness can be used throughout, but use the specified interfaces (:class:`~fmdtools.define.container.rand.Rand`, etc.) so that a single seed is used to generate all of the rngs in the model. Not using these interfaces can lead to not being able to replicate results consistently.
-* A variety of custom attributes can be added to :class:`~fmdtools.define.block.function.Function` and :class:`~fmdtools.define.flow.base.Flow`, but not every custom attribute is going to work with staged execution and parallelism options. In general, use containers to represent things that change and parameters to represent things that don't change. If you want to do something fancy with data structures, you may need to re-implement :class:`~fmdtools.define.block.base` methods for copying and returning states to `propagate`.
-* If there's something that you'd like to do in an fmdtools model that is difficult with existing model structures, consider filing a bug report before implementing an ad-hoc solution. Alternatively, try developing your solution as a *feature* rather than a hack to solve a single use-case. If the features is in our scope and well-developed, we may try to incorporate it in our next release.
+When you use fmdtools for your own project, this code will invariably end up in a folder. 
+
+Best practice is to structure this folder using modern Python software development tools and standards (e.g., uv, git, pyproject.toml, pytest, etc). Meaning:
+1. Set up your folder as a git repository so you have version control.
+2. Use uv to manage your project, its dependencies, and set up a virtual environment for your project (ideally independent of others)
+3. Set up your repository using a git editable install (e.g., `uv pip install -e .`) to ensure consistency between your installation and builds
+4. Document project dependencies and usage in the README and pyproject.toml
+
+When it comes to structuring folders for various simulations, we have adopted the following conventions (see `/examples` in the repository):
+
+* Models should be named `model_variantname.py`, where variantname is the variant in the file. If there is a main model, name it `model_main.py`.
+* Tests should be named `test_testname.py` (standard python conventions).
+* Scripts should be named `script_scriptname.py`. 
+* Notebooks should be named `notebooktype_notebookname.ipynb`, where `notebooktype` is the type of notebook (e.g., `paper` for generating figures for a paper or `demo` for showcasing a project)
+* Any and all outputs from these files should be placed in folders with the name `outputs_generating_file_name/`
+
+These conventions help keep repositories from getting too cluttered and ensure that you can quickly find the file you need and understand its need and purpose.
+
+If your project gets big, or you have multiple models with shared classes, you may consider building a library out of it. In this case `examples/airspacelib` or the fmdtools library itself may be a good example of how to structure the folder.
+
+```
+src/libraryname/ 	# folder for library packages
+examples/ 			# folder for examples or usages of the libary
+tests/ 				# folder for tests and pytest configuration
+docs/ 				# folder for documentation
+pyproject.toml 		# Overall library configuration for tools
+README.md 			# Readme and overview of the library
+```
+
+In this case, the contents of examples would apply the naming schema above, while the library itself would have shorter names (e.g., names of their contained class(es)).
 
 Style advice
 ------------
