@@ -41,3 +41,7 @@ fmdtools.code-workspace
 fmdtools-dev/
 .venv/
 .coverage
+
+# ignore built quarto renders
+examples/**/*.html
+examples/**/*files
