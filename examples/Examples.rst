@@ -121,9 +121,9 @@ Airspace Library
    :hidden:
    
    ../examples/airspacelib/readme.rst
-   ../examples/airspacelib/wildfire_response/wildfire_response_demo_presentation.md
+   ../examples/airspacelib/wildfire_response/demo_overview.md
    ../examples/airspacelib/wildfire_response/demo_wildfire.ipynb
    ../examples/airspacelib/wildfire_response/paper_aiaa_optimal_location.ipynb
-   ../examples/airspacelib/contingency_management/overview_presentation.md
+   ../examples/airspacelib/contingency_management/demo_overview.md
    ../examples/airspacelib/contingency_management/demo_contingency.ipynb
    ../examples/airspacelib/contingency_management/demo_proxthreat.ipynb

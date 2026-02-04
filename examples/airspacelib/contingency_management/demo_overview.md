@@ -1,21 +1,15 @@
 ---
-marp: true
-style: |
-  .small-text {
-    font-size: 0.7em;
-    line-height: 1.0; /* Adjust line height as needed */
-    }
+title: Overview: Drone Contingency Management Model
+subtitle:  Modeling drone contingency actions in a shared airspace
+format:
+  revealjs:
+    margin: 0.1
+theme: default
 ---
 
-# Drone Contingency Management Model Overview:
-
- Modelling drone contingency actions in a shared airspace
-
-
----
 ## Why - Understanding drone safety in shared airspace
 
-![bg right:40% width:450px](FBI-drone-collision.webp)
+![](FBI-drone-collision.webp){fig-align="center"}
 
 
  - **Consider:**  Why can't drones and piloted aircraft fight fires at the same time?
@@ -27,7 +21,6 @@ style: |
  <p class="small-text">PC: FBI/KTLA, ktla.com/news/california/wildfires/fbi-looking-for-pilot-of-drone-that-grounded-plane-battling-palisades-fire/</p>
 
 
----
 ## What are we trying to do?
 
 Resilience models help us understand how well a system will mitigate hazardous scenarios. In this case, we want to:
@@ -40,11 +33,17 @@ Resilience models help us understand how well a system will mitigate hazardous s
 
 To do this, we adapt the base `airspacelib` library build with `fmdtools` to represent drone behavior, and its interactions with its environment in the relevant scenarios.
 
----
 ## Setup: Model Structure
-<style scoped>section { font-size: 20px; }</style>
 
-![bg right:50% width:550px](outputs_demo_contingency/hac_arch.svg)
+:::: {.columns}
+
+::: {.column width="50%"}
+    
+![](outputs_demo_contingency/hac_arch.svg)
+
+:::
+
+::: {.column width="50%"}
 
 - **aviate**: movement of the drone through the air
     - Alters true drone trajectory
@@ -58,9 +57,24 @@ To do this, we adapt the base `airspacelib` library build with `fmdtools` to rep
 
 - **conditions**: External update of environment
     - Determines external drone location(s)
+:::
+::::
 
----
+
+
+
+
 ## Setup: Environment and Mission
+
+:::: {.columns}
+
+::: {.column width="50%"}
+    
+![](outputs_demo_contingency/environment.svg)
+
+:::
+
+::: {.column width="50%"}
 
 - Drone's mission is to fly from lower-left start point to upper-right end point
 
@@ -69,75 +83,84 @@ To do this, we adapt the base `airspacelib` library build with `fmdtools` to rep
 - Can land in green "suitable" areas in emergencies
 
 - Cannot land in Occupied (red) and Disallowed (blue) areas
+:::
+::::
 
-![bg right:50% width:550px](outputs_demo_contingency/environment.svg)
 
----
 ## Setup: Path planning and reconfiguration 
+
+:::: {.columns}
+
+::: {.column width="50%"}  
+![](outputs_demo_contingency/nominal_flightpath3d.gif)
+:::
+
+::: {.column width="50%"}
+![](outputs_demo_contingency/nominal_flightpath.gif)
+:::
+::::
 
 - Drone plans path to goal while avoiding restricted airspace and minimizing landing risks
 
 - Drone at a constant height
 
-- Re-plans when hazardous conditions are identified:
-    - **airspace intrusion** or **low battery**
+- Re-plans when hazardous conditions are identified: **airspace intrusion** or **low battery**
 
-![bg right:50% width:450px vertical](outputs_demo_contingency/nominal_flightpath3d.gif)
 
-![bg right:50% width:400px](outputs_demo_contingency/nominal_flightpath.gif)
-
----
 ## How resilient is the drone to airspace intrusion?
+
+![bg right:50% width:400px vertical](outputs_demo_contingency/intrusion_without_proxthreat.gif)
+![bg right:50% width:400px vertical](outputs_demo_contingency/intrusion_with_proxthreat.gif)
 
 - Without proximity to threat functionality, drone may fly into errant intruding drone
 
 - Proximity to threat functionality causes a pause in mission as well as mission re-planning
 
-![bg right:50% width:400px vertical](outputs_demo_contingency/intrusion_without_proxthreat.gif)
-![bg right:50% width:400px vertical](outputs_demo_contingency/intrusion_with_proxthreat.gif)
+## Would the drone still be resilient to airspace intrusion in a different scenario? 
 
----
-## Would the drone still be resilient to airspace intrusion in a different scenario?
-
-![bg right:50% width:400px vertical](outputs_demo_contingency/intrusion_middle_down.gif)
-![bg right:50% width:400px vertical](outputs_demo_contingency/intrusion_middle_down_over.gif)
+![50% width:400px vertical](outputs_demo_contingency/intrusion_middle_down.gif)
+![50% width:400px vertical](outputs_demo_contingency/intrusion_middle_down_over.gif)
 
 - If the intruder is easily avoidable, we can plan around it
 - If not easily avoidable, this can cause issues
     - No logic for "running away"
     - May replan into restricted flight area
 
----
 ## How resilient is the drone to battery depletion?
 
-![width:350px](outputs_demo_contingency/depletion_t20_traj.svg)
+:::: {.columns}
+
+::: {.column width="50%"}  
+![](outputs_demo_contingency/depletion_t20_traj.svg)
+:::
+
+::: {.column width="50%"}
+![](outputs_demo_contingency/depletion_t20_line.gif)
+:::
+::::
+
 - When SoC is below a threshold, flies to closest suitable location
 
-![bg right:50% width:400px vertical](outputs_demo_contingency/depletion_t20_line.gif)
-
----
 
 ## How resilient is the drone to battery depletion overall?
-.
-.
-.
-.
-.
-.
-.
+
+
+:::: {.columns}
+::: {.column width="33%"}  
+![](outputs_demo_contingency/depletion_25p_scens.gif){height=350}
+:::
+::: {.column width="33%"}
+![](outputs_demo_contingency/depletion_18p_scens.gif){height=350}
+:::
+::: {.column width="33%"}
+![](outputs_demo_contingency/depletion_0p_scens.gif){height=350}
+:::
+::::
+
 - When there is some battery left, the drone is able to replan
+
 - Otherwise, the drone may not make it to a suitable landing spot or may crash
 
-
-
-
-
-
-![bg width:400px](outputs_demo_contingency/depletion_25p_scens.gif)
-![bg width:400px](outputs_demo_contingency/depletion_18p_scens.gif)
-![bg width:400px](outputs_demo_contingency/depletion_0p_scens.gif)
-
----
 ## How resilient is the drone to battery depletion overall?
 
 
@@ -152,18 +175,17 @@ To do this, we adapt the base `airspacelib` library build with `fmdtools` to rep
 - More unsuitable landings at 18% SoC (at 15% the drone lands immediately)
 - At 0% the drone crashes
 
----
 ## Would the drone still be resilient in a different mission?
 
-![bg right width:400px](outputs_demo_contingency/25p_scens_all_disallowed.gif)
+![](outputs_demo_contingency/25p_scens_all_disallowed.gif)
 
 **No!**, consider the 25% depletion scenarios at right:
+
 - Flying over disallowed area
 - Statistics: 20% mission complete, 40% in disallowed locations
 
 Effectiveness of drone safety features is **mission and scenario-dependent**
 
----
 ## Analysis Conclusions
 
 Important Drone Features:
@@ -177,7 +199,7 @@ But, **Execution Matters...**
 - Need to have adequate battery redundancy to respond effectively--which may be different depending on the type of mission (are there bail-out points?)
 - Re-planning to avoid approaching drones is more difficult than static ones
 
----
+
 ## Potential Future Work
 - A variety of bug fixes and feature improvements
     - More robust logic for avoiding errant drones
@@ -190,7 +212,6 @@ But, **Execution Matters...**
 - Evaluating other interesting hazardous scenarios
     - Wind, etc.
 
----
 ## Drone Resilience Library Conclusions
 <style scoped>section { font-size: 25px; }</style>
 

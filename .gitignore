@@ -45,3 +45,5 @@ fmdtools-dev/
 # ignore built quarto renders
 examples/**/*.html
 examples/**/*files
+docs-source/**/*.html
+docs-source/**/*files

@@ -17,7 +17,7 @@ The airspacelib package has the following structure:
 
 - airspacelib.contingency_management: case study modelling a drone that must perform in-flight contingency management to respond to battery depletion and airspace intrusion scenarios, including:
 
-  - :doc:`Wildfire Response Demo <contingency_management/wildfire_response_demo_presentation>` provides a high-level overview of the model and analyses
+  - :doc:`Wildfire Response Demo <contingency_management/demo_overview>` provides a high-level overview of the model and analyses
 
   - :doc:`Demo: Wildfire Simulation <contingency_management/demo_wildfire>` is a notebook showing some of the basics of modelling setup.
 
@@ -25,7 +25,7 @@ The airspacelib package has the following structure:
 
 - airspacelib.wildfire_response: case study modelling a set of drones in a wildfire response situation. The documentation for this module includes:
 
-  - :doc:`Overview presentation <wildfire_response/overview_presentation>`, a high-level overview 
+  - :doc:`Overview presentation <wildfire_response/demo_overview>`, a high-level overview of the simulation and what has been done with it
 
   - :doc:`Demo: Contingency Management Drone Model <wildfire_response/demo_contingency>`,  a notebook showing some of the basics of modelling setup.
 
