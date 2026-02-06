@@ -29,6 +29,7 @@ Multirotor Drone
    :hidden:
 
    ../examples/multirotor_drone/readme.rst
+   ../examples/multirotor_drone/tutorial_fmdtools_basics.ipynb
    ../examples/multirotor_drone/paper_ijphm_fmdtools.ipynb
    ../examples/multirotor_drone/demo_urban_flight.ipynb
    ../examples/multirotor_drone/demo_optimization_architectures.ipynb

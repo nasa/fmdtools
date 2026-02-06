@@ -91,6 +91,7 @@ fast_notebooks = ["examples/human_hazard_mitigation/Tutorial_ActionArchitecture.
                   "examples/electric_power_system/Demo_StaticModels.ipynb",
                   "examples/state_communication/Tutorial_MultiFlow_and_CommsFlow.ipynb"
                   "examples/multirotor_drone/paper_ijphm_fmdtools.ipynb",
+                  "examples/multirotor_drone/tutorial_fmdtools_basics.ipynb",
                   "examples/water_pump/demo_fault_analysis.ipynb",
                   "examples/water_pump/tutorial_fmdtools_basics.ipynb",
                   "examples/navigating_rover/tutorial_model_structure_visualization.ipynb",

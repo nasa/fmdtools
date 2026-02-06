@@ -13,9 +13,10 @@ author: Daniel Hulse
     - Project Structure
     - Common Classes/Functions
     - Basic Syntax
-- **Coding Activity**
-    - Example model: [`examples/water_pump/model_main.py`](../examples/water_pump/model_main.py)
-    - Workbook: [`examples/water_pump/tutorial_fmdtools_basics.ipynb`](../examples/water_pump/tutorial_fmdtools_basics.ipynb)
+- **Coding Activity** - Pump or Drone Example
+    - In the [`examples/water_pump`](../examples/water_pump/readme.rst) or [`examples/multirotor_drone`](../examples/multirotor_drone/readme.rst) folders
+    - Model
+    - Workbook:
         - Model Instantiation
         - Simulation
         - Visualization/Analysis
@@ -255,19 +256,19 @@ class ExampleObject(BaseObject):
 
 ## Demo Model Activity:  {.smaller}
 
-Open file: examples/water_pump/model_main.py
+Open file:
+
+- For Pump example: [examples/water_pump/model_main.py](../examples/water_pump/model_main.py)
+- For Drone example: [examples/multirotor_drone/model_static.py](../examples/multirotor_drone/model_static.py)
 
 Notice the definitions and structure:
 
-- **States**: `WaterStates`, `EEStates`, `SignalStates`
-- **Flows**: `Water`, `EE`, `Signal`
-- **Functions**: `ImportEE`, `ImportWater`, `ExportWater`, `MoveWater`, `ImportSignal`
-    - **Modes** (e.g., `ImportEEMode`, `ImportSigMode`)
-        - Mode probability model
-        - Actual modes in `fm_args` entry
-    - others attributes, e.g., `Timer`
-- **Model**: `Pump` connects functions, flows, and defines `end_classification`
-- **Parameter**: `PumpParam` defines values we can change in the simulation
+- **States** - What variables are defined for what states or flows?
+- **Modes** - What modes are defined for what functions?
+- **Flows** - What flows are defined and what do they contain?
+- **Functions** - What functions are defined, what do they contain, and what are their behaviors?
+- **FunctionArchitecture**: - How do functions and flows connect in a model? How are results classified?
+- **Parameter** - What immutable variables are defined and for what functions/architectures?
 
 ## Why do we structure models this way?  {.smaller}
 
@@ -284,10 +285,10 @@ Notice the definitions and structure:
 
 ## Notebook Activity:  {.smaller}
 
-Open `/examples/water_pump/tutorial_fmdtools_basics.ipynb`:
+Open `tutorial_fmdtools_basics.ipynb`:
 
 - Instantiate the model
-    - `mdl = Pump()`
+    - `mdl = Pump()` or `mdl = Drone()`
 - Explore structure
     - Try different parameters! 
     - Change things!

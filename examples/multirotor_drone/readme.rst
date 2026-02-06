@@ -28,7 +28,9 @@ Scripts and tests:
 Notebooks
 /////////////////////////////////////////////
 
-The multirotor example model has several models of drones modeled at differing levels of detail which are then used in the following example notebooks;
+The multirotor example model has several models of drones modeled at differing levels of detail which are then used in the following example notebooks:
+
+- The :doc:`Tutorial: fmdtools basics <tutorial_fmdtools_basics>` tutorial uses the multirotor model to show how to use fmdtools.
 
 - The :doc:`IJPHM Paper Notebook <paper_ijphm_fmdtools>`  is helpful for understanding how a model can be matured as more details are added, covering:
 
