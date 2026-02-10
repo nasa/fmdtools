@@ -15,9 +15,11 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('src'))
-sys.path.append(os.path.abspath("."))
-
+sys.path.insert(0, os.path.abspath('/src'))
+try:
+    import fmdtools
+except ModuleNotFoundError as e:
+    raise Exception("Are you regenerating docs from an editable install?") from e
 
 # -- Project information -----------------------------------------------------
 

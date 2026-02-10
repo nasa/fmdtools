@@ -293,11 +293,8 @@ class Line(Component, BaseLine):
         self.ctl = self.ctl.create_local(self.name)
 
     def static_behavior(self):
-        if self.force.s.support <= 0.0:
-            self.m.add_fault('mechbreak', 'propbreak')
-        elif self.force.s.support <= 0.5:
-            self.m.add_fault('mechfriction')
         self.calc_faults()
+        self.calc_damage()
         pwr = self.ctl.s.upward + self.ctl.s.forward
         self.ee.s.effort = self.ee_in.s.effort
         self.ee.s.rate = m2to1([self.ee_in.s.effort, self.s.e_to, pwr])
