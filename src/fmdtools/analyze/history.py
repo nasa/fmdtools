@@ -93,6 +93,12 @@ def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs, time='time'):
     return simhists, plot_values, grouphists, indiv_kwargs
 
 
+def inc_color(ax, kwargs):
+    """Increment to next color if not provided."""
+    if 'color' not in kwargs:
+        kwargs['color'] = ax._get_lines.get_next_color()
+
+
 class History(Result):
     """
     Class for recording and analyzing simulation histories.
@@ -785,8 +791,7 @@ class History(Result):
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         scens = [*self.nest(1).keys()]
         hist_to_plot = self.get_values(value)
-        if 'color' not in kwargs:
-            kwargs['color'] = ax._get_lines.get_next_color()
+        inc_color(ax, kwargs)
         for scen in scens:
             hist_to_plot = self.get(scen)
             h_value = hist_to_plot.get(value)
@@ -1140,6 +1145,7 @@ class History(Result):
         xs = [*self.get_values(xlab).values()]
         ys = [*self.get_values(ylab).values()]
         times = [i for k, i in self.get_values(time).items() if "t." not in k]
+        inc_color(ax, kwargs)
         for i, x in enumerate(xs):
             ax.plot(x, ys[i], **kwargs)
             if mark_time:
@@ -1154,10 +1160,12 @@ class History(Result):
 
         See History.plot_trajectory
         """
+        fig, ax = setup_plot(fig=fig, ax=ax, z=True, figsize=figsize)
         xs = [*self.get_values(xlab).values()]
         ys = [*self.get_values(ylab).values()]
         zs = [*self.get_values(zlab).values()]
         times = [i for k, i in self.get_values(time).items() if "t." not in k]
+        inc_color(ax, kwargs)
         for i, x in enumerate(xs):
             ax.plot(x, ys[i], zs[i], **kwargs)
             if mark_time:
