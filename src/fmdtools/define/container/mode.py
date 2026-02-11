@@ -278,6 +278,13 @@ class Mode(BaseContainer, readonly=False):
             faults = self.get_all_faultnames()
         return {k: self.get_fault(k) for k in faults}
 
+    def check_faults_possible(self, *faults):
+        """Raise exception if any of the faults not a valid defined fault mode."""
+        possible = [k for k in faults if k not in self.get_faults()]
+        if possible:
+            raise Exception("Faults "+str(possible)+
+                            " not defined for "+self.__class__.__name__)
+
     def set_mode(self, mode):
         """
         Set a mode in the block.
@@ -345,6 +352,7 @@ class Mode(BaseContainer, readonly=False):
         fault : str
             name of the fault mode to switch to
         """
+        self.check_faults_possible(fault)
         self.faults.clear()
         self.faults.add(fault)
         if self.exclusive:
@@ -372,6 +380,7 @@ class Mode(BaseContainer, readonly=False):
         """
         if len(faults) == 1 and (isinstance(faults[0], list) or isinstance(faults[0], dict)):
             faults = faults[0]
+        self.check_faults_possible(*faults)
         self.faults.update(faults)
         if isinstance(faults, dict):
             for faultname, fault in faults.items():
@@ -398,6 +407,7 @@ class Mode(BaseContainer, readonly=False):
         fault_to_add : str
             name of the fault to add in its place
         """
+        self.check_faults_possible(fault_to_add)
         self.faults.add(fault_to_add)
         self.faults.remove(fault_to_replace)
         if self.exclusive:
