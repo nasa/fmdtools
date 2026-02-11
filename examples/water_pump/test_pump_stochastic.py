@@ -17,7 +17,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools_examples.water_pump.water_model_stochastic import Pump, PumpParam
+from fmdtools_examples.water_pump.model_stochastic import Pump, PumpParam
 
 from fmdtools_tests.common import CommonTests
 
@@ -277,7 +277,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
 if __name__ == '__main__':
     # suite = unittest.TestSuite()
-    # suite.addTest(StochasticPumpTests("test_param_sample_isave"))
+    # suite.addTest(StochasticPumpTests("test_rand_paramsample_plot"))
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach_indiv"))
     # runner = unittest.TextTestRunner()
     # runner.run(suite)

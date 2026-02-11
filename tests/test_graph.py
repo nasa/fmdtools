@@ -26,6 +26,7 @@ from fmdtools.sim import propagate
 
 import unittest
 import networkx as nx
+from matplotlib import pyplot as plt
 
 class ModelGraphTests(unittest.TestCase):
     def setUp(self):
@@ -188,6 +189,10 @@ class ModelGraphTests(unittest.TestCase):
                           len(comparison['edges_added']) > 0 or
                           len(comparison['edges_removed']) > 0)
         self.assertTrue(has_differences)
+
+    def tearDown(self):
+        """Close plot to keep number of open figures low."""
+        plt.close()
 
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()

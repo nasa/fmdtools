@@ -311,6 +311,8 @@ def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
 
     Examples
     --------
+    >>> calc_metric_ci([[0.0, 0.0, 0.0], [0.0, 0.0, 1.0]], method=np.average)
+    (array([0. , 0. , 0.5]), array([0., 0., 0.]), array([0., 0., 1.]))
     >>> calc_metric_ci([1, 2, 3], method=np.average)
     (np.float64(2.0), np.float64(1.0), np.float64(3.0))
     >>> calc_metric_ci([[1,2,3], [2,3,4]], method=np.average)
@@ -330,8 +332,13 @@ def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
     if "weights" in kwargs and kwargs['weights'] is not None:
         raise Exception("Weights not able to be used w- bootstrap--use rates instead.")
     met_val = method(vals, axis=axis, **filter_kwargs(method, **kwargs))
-    if not np.all(vals == val):
-        bs = bootstrap([vals], method, axis=axis, **bs_kwar)
+    vals_vary = vals == val
+    if not np.all(vals_vary):
+        if np.any(np.all(vals_vary, axis=axis)):
+            # use more robust/basic algorithm if some indices don't vary
+            bs = bootstrap([vals], method, axis=axis, method="basic", **bs_kwar)
+        else:
+            bs = bootstrap([vals], method, axis=axis, **bs_kwar)
         return met_val, bs.confidence_interval.low, bs.confidence_interval.high
     elif return_anyway:
         return met_val, met_val, met_val

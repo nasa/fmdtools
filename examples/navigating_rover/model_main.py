@@ -597,8 +597,10 @@ class PlanPath(Function):
 
 def rdiff_from_vects(u_self, u_lin):
     """Determine the needed correction to reach from point 1 to point 2."""
+    u_self = np.array([u_self[0], u_self[1], 0.0])
+    u_lin = np.array([u_lin[0], u_lin[1], 0.0])
     d = np.dot(u_self, u_lin)
-    dr = np.sign(np.cross(u_self, u_lin))
+    dr = np.sign(np.cross(u_self, u_lin)[2])
     rdiff = dr * np.arccos(d/(np.linalg.norm(u_self)*np.linalg.norm(u_lin)+0.00001))
     return rdiff
 

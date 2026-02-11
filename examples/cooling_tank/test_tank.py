@@ -17,7 +17,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools_examples.cooling_tank.tank_model import Tank
+from fmdtools_examples.cooling_tank.model_main import Tank
 
 from fmdtools_tests.common import CommonTests
 

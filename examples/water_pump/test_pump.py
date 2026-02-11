@@ -19,7 +19,7 @@ specific language governing permissions and limitations under the License.
 
 
 from fmdtools_examples.water_pump.model_main import Pump, PumpParam
-from fmdtools_examples.water_pump.water_model_indiv import MoveWatDynamic
+from fmdtools_examples.water_pump.model_indiv import MoveWatDynamic
 
 from fmdtools_tests.common import CommonTests
 
