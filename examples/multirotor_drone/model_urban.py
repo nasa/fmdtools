@@ -361,6 +361,10 @@ class Drone(DroneRural):
         """Return true if the drone has entered the "landed" state."""
         return self.t.time > 1 and self.fxns['plan_path'].m.mode == 'taxi'
 
+    def scenario_finished(self):
+        """Return true if the drone is on the ground after having taken off."""
+        return self.t.time > 2 and self.fxns['hold_payload'].at_ground()
+
     def at_safe(self, dofs):
         """Check if drone is at a safe location (if in designated safe collection)."""
         return self.flows['environment'].c.in_area(dofs.s.x, dofs.s.y, "all_safe")
@@ -371,7 +375,7 @@ class Drone(DroneRural):
 
     def classify(self, scen={}, mdlhist={}, **kwargs):
         """Classify a given scenario based on land_metrics and expected cost model."""
-        faulttime = self.h.get_fault_time(metric='total')
+        faulttime = self.h.get_fault_time(metric='total')*self.sp.dt
 
         land_metrics = self.calc_land_metrics(scen, faulttime)
 
@@ -441,10 +445,10 @@ def plot_env_with_traj_z(mdlhists, mdl, legend=True, title="trajectory"):
     fig : matplotlib figure
     ax : matplotlib axis
     """
-    collections = {"all_occupied": {"color": "red", "label": False},
-                   "all_allowed": {"color": "yellow", "label": False},
-                   "start": {"color": "yellow", "label": True, "text_z_offset": 30},
-                   "end": {"color": "yellow", "label": True, "text_z_offset": 30}}
+    collections = {"all_occupied": {"color": "red"},
+                   "all_allowed": {"color": "yellow"},
+                   "start": {"color": "purple", "text_z_offset": 30},
+                   "end": {"color": "green", "text_z_offset": 30}}
 
     fig, ax = mdl.flows['environment'].c.show_z("height", voxels=False,
                                                 collections=collections)

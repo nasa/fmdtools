@@ -797,6 +797,23 @@ class Drone(FunctionArchitecture):
         return {"rate": rate, "cost": totcost, "expected_cost": expcost}
 
 
+pos= {'drone.fxns.store_ee': [-0.85, -0.63],
+        'drone.fxns.dist_ee': [-0.79, 0.09],
+        'drone.fxns.affect_dof': [0.69, 0.34],
+        'drone.fxns.ctl_dof': [-0.01, 0.45],
+        'drone.fxns.plan_path': [-0.55, 0.8],
+        'drone.fxns.hold_payload': [0.22, -0.72],
+        'drone.fxns.view_env': [0.77, -0.63],
+        'drone.flows.force_st': [-0.29, -0.66],
+        'drone.flows.force_lin': [0.24, -0.13],
+        'drone.flows.ee_1': [-0.82, -0.26],
+        'drone.flows.ee_mot': [-0.1, 0.14],
+        'drone.flows.ee_ctl': [-0.83, 0.45],
+        'drone.flows.ctl': [0.35, 0.61],
+        'drone.flows.dofs': [0.72, -0.06],
+        'drone.flows.des_traj': [0.09, 0.78]}
+
+
 if __name__ == "__main__":
     from fmdtools.sim import propagate
     import doctest
