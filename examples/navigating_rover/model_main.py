@@ -1129,6 +1129,26 @@ class Rover(FunctionArchitecture):
                 "endpt": endpt}
 
 
+pos = {'rover.flows.ground': [0.52, -0.44],
+       'rover.flows.pos_signal': [0.43, -0.05],
+       'rover.flows.pos': [-0.23, -0.5],
+       'rover.flows.ee_12': [-0.32, 0.03],
+       'rover.flows.ee_5': [-0.67, 0.2],
+       'rover.flows.ee_15': [-0.8, -0.53],
+       'rover.flows.video': [0.37, 0.42],
+       'rover.flows.auto_control': [-0.28, 0.89],
+       'rover.flows.motor_control': [-0.43, 0.38],
+       'rover.flows.switch': [-0.92, 0.37],
+       'rover.flows.comms': [-0.17, 0.61],
+       'rover.flows.fault_sig': [0.81, -0.65],
+       'rover.fxns.power': [-0.84, -0.18],
+       'rover.fxns.perception': [0.02, -0.25],
+       'rover.fxns.communications': [-0.0, 0.23],
+       'rover.fxns.operator': [-0.92, 0.87],
+       'rover.fxns.plan_path': [0.82, 0.68],
+       'rover.fxns.override': [-0.73, 0.7],
+       'rover.fxns.drive': [-0.5, -0.89]}
+
 def gen_param_space():
     """Generate parameter space when a range of parameters needs to be simulated."""
     paramspace = []
@@ -1143,11 +1163,13 @@ def gen_param_space():
     return paramspace
 
 
-def plot_map(mdl, hists):
+def plot_map(mdl, hists,
+             geoms = {'line': {'shapes': {'on': {}, 'shape': {}}}, 'start': {}, 'end': {}},
+             time_groups=['nominal'], coord_kwargs={}, **kwargs):
     fig, ax = hists.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
-                                      time_groups=['nominal'])
-    geoms = {'line': {'shapes': {'on': {}, 'shape': {}}}, 'start': {}, 'end': {}}
-    fig, ax = mdl.flows['ground'].ga.show(geoms=geoms, fig=fig, ax=ax)
+                                      time_groups=time_groups, **kwargs)
+    
+    fig, ax = mdl.flows['ground'].ga.show(geoms=geoms, fig=fig, ax=ax, **coord_kwargs)
     return fig, ax
 
 

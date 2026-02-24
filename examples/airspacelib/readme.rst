@@ -1,7 +1,7 @@
 Overview
 ---------------------------------------------
 
-The Airspace Resilience Modelling Library (airspacelib) is a library that can be used to simulate drones and other aircraft interacting with their environment at a high level. The goal of the airspacelib package is to enable the rapid simulation of drones in the airspace.
+The Airspace Resilience Modeling Library (airspacelib) is a library that can be used to simulate drones and other aircraft interacting with their environment at a high level. The goal of the airspacelib package is to enable the rapid simulation of drones in the airspace.
 
 The airspacelib package extends the fmdtools modeling and simulation libary with drone-specific classes to represent drone behaviors (e.g., 3D trajectory, navigation, etc).
 
