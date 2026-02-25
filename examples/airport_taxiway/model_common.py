@@ -27,7 +27,9 @@ from fmdtools.define.flow.multiflow import MultiFlow
 from fmdtools.define.flow.commsflow import CommsFlow
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
-from fmdtools.analyze.common import consolidate_legend
+from fmdtools.define.base import filter_kwargs
+from fmdtools.analyze.common import consolidate_legend, setup_plot, add_title_xylabs
+from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -391,7 +393,8 @@ class Environment(MultiFlow):
             self.s.area_allocation[new_area].add(asset)
 
     def show_map(self, legend=False, figsize=(6.5, 3.5), show_area_allocation=False,
-                 areas_to_label=["gate", "landing", "helipad", "takeoff"]):
+                 areas_to_label=["gate", "landing", "helipad", "takeoff"],
+                 fig=None, ax=None):
         """
         Show the map as a plot.
 
@@ -407,7 +410,7 @@ class Environment(MultiFlow):
         fig: matplotlib figure
         ax: matplotlib axis
         """
-        fig, ax = plt.subplots(figsize=figsize)
+        fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         airspace = plt.Rectangle(
             (self.p.air_loc[0] - 5, self.p.air_loc[1] - 5),
             10,
@@ -416,7 +419,7 @@ class Environment(MultiFlow):
             ec="blue",
         )
         ax.add_patch(airspace)
-        plt.text(
+        ax.text(
             self.p.air_loc[0],
             self.p.air_loc[1] + 5,
             "In Air",
@@ -441,7 +444,7 @@ class Environment(MultiFlow):
                 else:
                     area_text = "\n" + str(entry)
                 text = segname + area_text
-                plt.text(
+                ax.text(
                     lineobj.centroid.xy[0][0],
                     lineobj.centroid.xy[1][0],
                     text,
@@ -457,7 +460,7 @@ class Environment(MultiFlow):
 
         if legend:
             consolidate_legend(ax)
-        plt.axis('off')
+        ax.axis('off')
         return fig, ax
 
     def show_route(self, routename, color="red", legend=True, **kwargs):
@@ -743,7 +746,7 @@ def att_to_text(att):
     return str(att)
 
 
-def plot_tstep(mdl, mdlhist, t, fxnattr="", locattr="", markersize=10,
+def plot_tstep(t, history={}, mdl=None, fxnattr="", locattr="", markersize=10,
                show_area_allocation=True, asset_assignment=False, title="",
                assets_to_label="all", **kwargs):
     """
@@ -751,12 +754,12 @@ def plot_tstep(mdl, mdlhist, t, fxnattr="", locattr="", markersize=10,
 
     Parameters
     ----------
-    mdl : model
-        model with ground and Location
-    mdlhist : dict
-        Model history
     t : int
         time-step to plot
+    mdlhist : dict
+        Model history
+    mdl : model
+        model with ground and Location
     fxnattr : str
         function attribute to display on the plot (e.g., visioncov, mode, segment)
     locattr : str
@@ -778,22 +781,23 @@ def plot_tstep(mdl, mdlhist, t, fxnattr="", locattr="", markersize=10,
     ax: matplotlib axis
 
     """
+    kwargs = clear_prev_figure(**kwargs)
+    # fig, ax = setup_plot(**kwargs)
     if show_area_allocation == "size":
         show_area_allocation = {
             pl: len(plhist[t])
-            for pl, plhist in mdlhist.flows.ground.s.area_allocation.items()
+            for pl, plhist in history.flows.ground.s.area_allocation.items()
         }
     elif show_area_allocation:
         show_area_allocation = {
             pl: plhist[t]
-            for pl, plhist in mdlhist.flows.ground.s.area_allocation.items()
+            for pl, plhist in history.flows.ground.s.area_allocation.items()
         }
     fig, ax = mdl.flows["ground"].show_map(
-        **kwargs, show_area_allocation=show_area_allocation
-    )
+        **kwargs, show_area_allocation=show_area_allocation)
     texts = []
     for f in mdl.flows["location"].locals:
-        loc = mdlhist.flows.location.get(f)
+        loc = history.flows.location.get(f)
         x, y = loc.s.x[t], loc.s.y[t]
         xd, yd = loc.s.xd[t], loc.s.yd[t]
         mode, stage = loc.s.mode[t], loc.s.stage[t]
@@ -816,25 +820,25 @@ def plot_tstep(mdl, mdlhist, t, fxnattr="", locattr="", markersize=10,
             markeredgecolor = "purple"
         else:
             markeredgecolor = "grey"
-        plt.plot(x, y, marker=marker, markersize=markersize,
+        ax.plot(x, y, marker=marker, markersize=markersize,
                  markeredgecolor=markeredgecolor, color=color)
         text = f
         if assets_to_label == "all" or f in assets_to_label:
             if fxnattr:
                 try:
-                    atthist = mdlhist.fxns.get(f + "." + fxnattr)
+                    atthist = history.fxns.get(f + "." + fxnattr)
                 except Exception or AttributeError:
                     atthist = None
                 if (not atthist is None) and len(atthist) > 0:
                     if fxnattr == "s.visioncov" and atthist[t]:
-                        plt.plot(*atthist[t].exterior.xy)
+                        ax.plot(*atthist[t].exterior.xy)
                     if fxnattr in ["mode", "segment"]:
-                        text_add = mdlhist.fxns.get(f + "." + fxnattr)[t]
+                        text_add = history.fxns.get(f + "." + fxnattr)[t]
                         text = text + ": " + text_add
                     if fxnattr == "faults":
                         faults = {
                             fault
-                            for fault, hist in mdlhist.fxns["functions"][f][
+                            for fault, hist in history.fxns["functions"][f][
                                 "faults"
                             ].items()
                             if hist[t]
@@ -843,17 +847,19 @@ def plot_tstep(mdl, mdlhist, t, fxnattr="", locattr="", markersize=10,
                             text = text + ": " + str(faults)
             if locattr:
                 text_add = att_to_text(
-                    mdlhist.flows.location.get(f + ".s." + locattr)[t]
+                    history.flows.location.get(f + ".s." + locattr)[t]
                 )
                 text = text + ": " + text_add
             if asset_assignment:
-                assignment = str(mdlhist.fxns["ground"]["asset_assignment"][f][t])
-                area = str(mdlhist.fxns["ground"]["asset_area"][f][t])
+                assignment = str(history.fxns["ground"]["asset_assignment"][f][t])
+                area = str(history.fxns["ground"]["asset_area"][f][t])
                 text = text + ": (" + area + "->" + assignment + ")"
             textax = plt.text(x, y, text)
             texts.append(textax)
     if texts:
         adjust_text(texts)
-    plt.title(title + "(t=" + str(t) + ")")
-    plt.axis('off')
+    kwargs.pop('fig', None)
+    add_title_xylabs(ax, title=prep_animation_title(t, title=title),
+                     **filter_kwargs(add_title_xylabs, **kwargs))
+    ax.axis('off')
     return fig, ax

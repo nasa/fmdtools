@@ -79,6 +79,7 @@ Navigating Rover
    :hidden:
    
    ../examples/navigating_rover/readme.rst
+   ../examples/navigating_rover/demo_overview.ipynb
    ../examples/navigating_rover/demo_rover_model.ipynb
    ../examples/navigating_rover/demo_degradation.ipynb
    ../examples/navigating_rover/demo_response_optimization.ipynb

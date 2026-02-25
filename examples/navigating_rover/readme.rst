@@ -24,6 +24,8 @@ Scripts and tests:
 Notebooks
 /////////////////////////////////////////////
 
+- :doc:`Overview: Navigating Rover Model <demo_overview>` showcases the repository at a high level.
+
 - :doc:`Rover Setup Notebook <demo_rover_model>` introduces the model and basic usages.
 
 - :doc:`Tutorial: Model Structure Visualization <tutorial_model_structure_visualization>` is helpful for understanding how a given model simulates over time. It covers the class  :class:`~fmdtools.analyze.graph.Graph` and containing methods.
