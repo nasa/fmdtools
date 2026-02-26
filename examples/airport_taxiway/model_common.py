@@ -857,8 +857,9 @@ def plot_tstep(t, history={}, mdl=None, fxnattr="", locattr="", markersize=10,
             textax = plt.text(x, y, text)
             texts.append(textax)
     if texts:
+        # note - may print to console--known issue with adjustText 1.3.0
         adjust_text(texts)
-    kwargs.pop('fig', None)
+    _ = kwargs.pop('fig', None)
     add_title_xylabs(ax, title=prep_animation_title(t, title=title),
                      **filter_kwargs(add_title_xylabs, **kwargs))
     ax.axis('off')

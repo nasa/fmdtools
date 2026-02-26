@@ -75,7 +75,7 @@ def add_node(obj, g=None, name='', classname='', nodetype='', get_attrs=False,
     if get_source:
         g.nodes[name].update(get_code_attrs(obj))
     if get_states:
-        set_node_states(g, obj, name, time=time)
+        set_node_states(g, obj, name)
     return g
 
 

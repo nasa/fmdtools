@@ -133,19 +133,33 @@ if __name__ == "__main__":
 
     mdl = taxiway_model()
 
+
+    endresults, mdlhist = prop.one_fault(mdl, "ma3", "lost_sight",
+                                        to_return={93: {"graph.flows.location": {'with_root':False, 'with_methods': False}},
+                                                   110:{"graph.flows.location": {'with_root': False, 'with_methods': False}}, 
+                                                   20:["graph"], 120:['graph', "classify"]})
+    plot_tstep(50, history=mdlhist.faulty, mdl=mdl, fxnattr="s.visioncov")
+    endresults.faulty.t93p0.graph.flows.location
+
     mg = mdl.as_modelgraph()
     mg.draw()
 
-    ground_args = {'include_glob':True, "include_containers": ['s'],
+    ground_args = {'with_root':True, "include_containers": ['s'],
               'send_connections':{"asset_area":"asset_area", 
                                   "area_allocation":"area_allocation",
                                   "asset_assignment":"asset_assignment"}}
-    req_args = {'include_glob':False, "ports_only":True}
+    req_args = {'with_root':False, "ports_only":True}
+
+    endresults, mdlhist = prop.sequence(mdl, faultseq={7:{"atc": ["wrong_land_command"]}, 9: {"ua2":["lost_sight"]}}, 
+                                         to_return={93: {"graph.flows.location": {'with_root':False, 'with_methods': False}},
+                                                    110:{"graph.flows.location": {'with_root': False, 'with_methods': False}}, 
+                                                    20:["graph"], 120:['graph', "classify"]})
+
     endresults, mdlhist = prop.sequence(mdl, faultseq={7:{"atc": ["wrong_land_command"]}, 9: {"ua2":["lost_sight"]}}, 
                                          to_return={10:{"graph.flows.requests":(CommsFlowGraph, req_args)},
                                                     11:{"graph.flows.requests":(CommsFlowGraph, req_args),
                                                         "graph.flows.ground":(MultiFlowGraph, ground_args)},
-                                                    19:{"graph.flows.requests":{'include_glob':False, "ports_only":True}},
+                                                    19:{"graph.flows.requests":{'with_root':False, "ports_only":True}},
                                                     20:["graph"], 120: "classify"})
     ind_hist = create_fault_scen_metrics(mdlhist)
     fig, ax = ind_hist.plot_line("degraded_fields",
@@ -160,8 +174,8 @@ if __name__ == "__main__":
         "ma3",
         "lost_sight",
         to_return={
-            93: {"graph.flows.location": {"include_glob": False}},
-            110: {"graph.flows.location": {"include_glob": False}},
+            93: {"graph.flows.location": {"with_root": False}},
+            110: {"graph.flows.location": {"with_root": False}},
             20: ["graph"],
             120: ["graph", "classify"],
         },
@@ -186,11 +200,11 @@ if __name__ == "__main__":
     plot_course(mdl, mdlhist, "ua2")
     plot_course(mdl, mdlhist, "ua3")
 
-    plot_tstep(mdl, mdlhist, 50, fxnattr="s.visioncov")
-    plot_tstep(mdl, mdlhist, 75, fxnattr="s.visioncov")
-    plot_tstep(mdl, mdlhist, 100, fxnattr="s.visioncov")
-    plot_tstep(mdl, mdlhist, 110, fxnattr="s.visioncov")
-    plot_tstep(mdl, mdlhist, 115, fxnattr="s.visioncov")
+    plot_tstep(50, history=mdlhist, mdl=mdl, fxnattr="s.visioncov")
+    plot_tstep(75, history=mdlhist, mdl=mdl, fxnattr="s.visioncov")
+    plot_tstep(100, history=mdlhist, mdl=mdl, fxnattr="s.visioncov")
+    plot_tstep(110, history=mdlhist, mdl=mdl, fxnattr="s.visioncov")
+    plot_tstep(115, history=mdlhist, mdl=mdl, fxnattr="s.visioncov")
 
     vals = {"flows": {"location": {"ua2": {"s": {"x", "y", "speed", "mode", "stage"}}}}}
     mdlhist.plot_line(vals)
@@ -210,8 +224,8 @@ if __name__ == "__main__":
             120: "classify",
         },
     )
-    plot_tstep(mdl, mdlhist.faulty, 110, title="Aircraft crashed")
-    plot_tstep(mdl, mdlhist.faulty, 25, fxnattr="visioncov", areas_to_label=[])
+    plot_tstep(110, mdl=mdl, history=mdlhist.faulty, title="Aircraft crashed")
+    plot_tstep(25, mdl=mdl, history=mdlhist.faulty, fxnattr="visioncov", areas_to_label=[])
 
     ind_hist = create_fault_scen_metrics(mdlhist)
     fig, ax = ind_hist.plot_line("degraded_fields",

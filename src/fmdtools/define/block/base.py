@@ -358,6 +358,8 @@ class Simulable(BaseObject):
                 kwar = {**kwar, **arg[1], 'gtype': arg[0]}
             elif isinstance(arg, Graph):
                 kwar = {**kwar, 'gtype': arg}
+            elif isinstance(arg, dict):
+                kwar = {**arg}
 
             rgraph = obj.as_modelgraph(time=self.t.time, **kwar)
 

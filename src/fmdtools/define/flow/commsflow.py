@@ -34,9 +34,10 @@ import copy
 class CommsFlowGraph(MultiFlowGraph):
     """Create graph representation of the CommsFlow."""
 
-    def __init__(self, flow, role_nodes=['local'], recursive=True, **kwargs):
+    def __init__(self, flow, role_nodes=['local'], recursive=True, get_states=True,
+                 **kwargs):
         ModelGraph.__init__(self, flow, role_nodes=role_nodes, recursive=recursive,
-                            **kwargs)
+                            get_states=get_states, **kwargs)
 
 
 class CommsFlow(MultiFlow):

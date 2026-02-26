@@ -32,10 +32,11 @@ class MultiFlowGraph(ModelGraph):
     **kwargs : kwargs
     """
 
-    def __init__(self, flow, role_nodes=['local'], recursive=True, with_root=False,
-                 with_methods=False, **kwargs):
+    def __init__(self, flow, role_nodes=['local'], recursive=True, with_root=True,
+                 with_methods=False, get_states=True, **kwargs):
         ModelGraph.__init__(self, flow, role_nodes=role_nodes, recursive=recursive,
-                            with_root=with_root, with_methods=with_methods, **kwargs)
+                            with_root=with_root, with_methods=with_methods,
+                            get_states=get_states, **kwargs)
 
 
     def set_resgraph(self, other=False):
