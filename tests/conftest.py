@@ -87,8 +87,8 @@ doctest_modules = ["fmdtools/define/container/base.py",
                    "examples/airspacelib/base/arch/aviate.py"]
 
 # list of fast-running notebooks:
-fast_notebooks = ["examples/human_hazard_mitigation/Tutorial_ActionArchitecture.ipynb",
-                  "examples/electric_power_system/Demo_StaticModels.ipynb",
+fast_notebooks = ["examples/human_hazard_mitigation/tutorial_actionarchitecture.ipynb",
+                  "examples/electric_power_system/demo_static_models.ipynb",
                   "examples/state_communication/Tutorial_MultiFlow_and_CommsFlow.ipynb"
                   "examples/multirotor_drone/demo_overview.ipynb",
                   "examples/multirotor_drone/paper_ijphm_fmdtools.ipynb",

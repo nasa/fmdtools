@@ -52,7 +52,7 @@ requires = [
 ]
 
 [dependency-groups]
-docs = ["sphinx", "myst-nb", "sphinx_rtd_theme", "nbsphinx"]
+docs = ["sphinx", "myst-nb", "sphinx_rtd_theme", "nbsphinx", "myst-sphinx-gallery"]
 test = ["nbmake", "pytest-html", "coverage", "pytest-cov", "genbadge[all]"]
 dev = [{include-group = "docs"}, {include-group = "test"}]
 

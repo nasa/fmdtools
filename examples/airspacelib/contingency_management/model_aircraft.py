@@ -303,6 +303,16 @@ class ContingencyAircraftArchitecture(FunctionArchitecture):
                 'landing_damage': landing_damage,
                 'crash': crash}
 
+pos = {'contingencyaircraftarchitecture.flows.force': [-0.61, -0.05],
+       'contingencyaircraftarchitecture.flows.electricity': [-0.22, -0.22],
+       'contingencyaircraftarchitecture.flows.trajectories': [0.18, -0.05],
+       'contingencyaircraftarchitecture.flows.environment': [0.62, -0.24],
+       'contingencyaircraftarchitecture.fxns.conditions': [0.71, -0.63],
+       'contingencyaircraftarchitecture.fxns.control_flight': [0.15, -0.67],
+       'contingencyaircraftarchitecture.fxns.aviate': [-0.07, 0.62],
+       'contingencyaircraftarchitecture.fxns.store_and_supply_ee': [-0.58, -0.61],
+       'contingencyaircraftarchitecture.fxns.perceive_environment': [0.53, 0.42],
+       'contingencyaircraftarchitecture.fxns.hold_payload': [-0.55, 0.51]}
 
 def plot_environment(mdl, properties=properties, collections=collections,
                      fig={}, ax={}, legend_kwargs={}, **kwargs):

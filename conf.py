@@ -21,6 +21,8 @@ try:
 except ModuleNotFoundError as e:
     raise Exception("Are you regenerating docs from an editable install?") from e
 
+from myst_sphinx_gallery import GalleryConfig, FilesConfig, GalleryThumbnailConfig
+
 # -- Project information -----------------------------------------------------
 
 project = 'fmdtools'
@@ -39,7 +41,7 @@ version = release
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.intersphinx',
               'sphinx.ext.autosummary', 'sphinx.ext.intersphinx', 'sphinx.ext.autosectionlabel',
-              "myst_nb", "sphinx.ext.githubpages"]
+              "myst_nb", "sphinx.ext.githubpages", "myst_sphinx_gallery"]
 
 # "gaphor.extensions.sphinx"
 # gaphor_models = "/docs-source/figures/uml/module-reference-diagrams.gaphor"
@@ -54,7 +56,7 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'docs/', 'fmdtools-dev/', 'jupyter_execute/', '**.ipynb_checkpoints', '.venv']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'docs/', 'fmdtools-dev/', 'jupyter_execute/', '**.ipynb_checkpoints', '.venv', 'jupyter_execute', '*.html']
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -85,6 +87,10 @@ html_context = {"display_github": True,  # Integrate GitHub
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+# -- Options for MyST-Gallery
+
+myst_sphinx_gallery_config = GalleryConfig()
+myst_sphinx_gallery_failes_config = FilesConfig()
 
 
 # -- Latex Option ---------------
