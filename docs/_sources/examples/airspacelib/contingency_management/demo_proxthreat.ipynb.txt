@@ -5,7 +5,7 @@
    "id": "30a22f34",
    "metadata": {},
    "source": [
-    "# Demo: ProxThreat\n",
+    "# Demo: Drone Proximity to Threat Evaluation\n",
     "\n",
     "This notebook showcases the ability of the drone to detect and respond to threats in the Contingency scenario.\n",
     "\n",
