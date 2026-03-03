@@ -1,12 +1,13 @@
 ---
-marp: true
+title: Intro to FRDL
+subtitle: Intro to Hazard Analysis with the Functional Reasoning Design Language (FRDL)
+format: revealjs
+theme: default
 ---
 
-# Intro to Hazard Analysis with the Functional Reasoning Design Language (FRDL)
+## Why Perform Hazard Analysis? {.smaller}
 
----
-<style scoped>section{font-size:27px;}</style>
-# Why Perform Hazard Analysis? - The Need for Safety
+**The Need for Safety**
 
 - Complex Safety-Critical Systems, like Aircraft, Nuclear Power Plants, and Human Spaceflight systems have a high expectations of safety and many potential points of failure
 
@@ -16,24 +17,22 @@ marp: true
   - When we can still add design mitigations (we aren't stuck operating an unsafe system)
   - Before the hazards are realized (we aren't surprised by hazardous events we could have mitigated)
 
-
----
-<style scoped>section{font-size:27px;}</style>
-
-# How do you perform hazard analysis? Depends on the process or standard!
+## How do you perform hazard analysis? Depends on the process or standard! {.smaller}
 
 - Examples of Processes:
+
     - Failure Modes and Effects Analysis (FMEA)
     - Functional Hazard Analysis (FHA)
     - Hazard and Risk Analysis (HARA)
+
 - Examples of Standards:
+
     - **Generic:** ARP-926 "Fault/Failure Analysis Procedure"
     - **Automotive:** ISO-26262 "Road vehicles — Functional safety" 
     - **Aviation:** ARP-4761 "Guidelines And Methods For Conducting The Safety Assessment Process On Civil Airborne Systems And Equipment"
 
----
 
-# What a generic hazard assessment process looks like:
+## What a generic hazard assessment process looks like: {.smaller}
 
 1. **Define the system:** What is the name of the system (function, component, assembly, etc.) and what is its scope and environment (inputs, outputs, connections, operators, etc.)?
 2. **Identify hazards:** What things could go wrong in the system (e.g., faults, environmental conditions, misuses) that could lead to harm (e.g., loss of function, damage to property, harm to people, operators or the environment)?
@@ -43,9 +42,7 @@ marp: true
 
 Based on this, one may prescribe **mitigations** to reduce hazard risks
 
----
-
-# Constructing a hazard table (at its most basic)
+## Constructing a hazard table (at its most basic) {.smaller}
 
 | Function | Hazard | Causes  | Effects  |
 | -------- | ------- | ------- |------- |
@@ -55,34 +52,26 @@ Based on this, one may prescribe **mitigations** to reduce hazard risks
 
 *Exercise:* Construct a hazard table for a system of your choice. It could be a physical product, a vehicle, software, a task/process, or anything else you can think of.
 
---- 
-<style scoped>section{font-size:27px;}</style>
+## What is FRDL (and why use it for hazard analysis)? {.smaller}
 
-# What is FRDL (and why use it for hazard analysis)?
-
-- FRDL: Functional Reasoning Design Language
+FRDL: Functional Reasoning Design Language
 
 - Diagrams that you can use to represent the overall functions of a system and their *behavioral interactions* 
 
     - Functions: Functionality that the system provides
     - Behavioral interaction: Ways that the functions interact with each other
 
-- FRDL helps with hazard analysis by giving you a *model* of the system to base the assessment of causes and effects off of
+FRDL helps with hazard analysis by giving you a *model* of the system to base the assessment of causes and effects on
 
-    - Instead of just brain-storming possible causes/effects, you can use the model to see what parts of the system will be effected and how, giving you a more **complete** and **detailed** analysis
+- Instead of just brain-storming possible causes/effects, you can use the model to see what parts of the system will be effected and how, giving you a more **complete** and **detailed** analysis
 
----
+## What does an FRDL diagram look like? 
 
-# <!-- fit --> What does an FRDL diagram look like? (see [FRDL spec](https://nasa.github.io/fmdtools/docs-source/frdl.html#specification))
+(see [FRDL spec](https://nasa.github.io/fmdtools/docs-source/frdl.html#specification))
 
+![](./figures/frdl/diagrams/frdl_fad_singleprop_explanation.svg)
 
-![generic model, width:1150px](./figures/frdl/diagrams/frdl_fad_singleprop_explanation.svg)
-
-
-
----
-<style scoped>section{font-size:29px;}</style>
-# How do you analyze hazards with and FRDL diagram?
+## How do you analyze hazards with an FRDL diagram? {.smaller}
 
 0.) Imagine how the system is supposed to work nominally
 
@@ -94,34 +83,25 @@ Based on this, one may prescribe **mitigations** to reduce hazard risks
 
 For causes, run through this process in reverse. See [FRDL/Specification/Usage/Analysis](https://nasa.github.io/fmdtools/docs-source/frdl.html#analysis) for more details.
 
---- 
+## Example - Step 1
 
-# Example - Step 1
-
-![generic model, width:800px](./figures/frdl/diagrams/frdl_fad_singleprop_prop1.svg)
-
----
-
-# Example - Step 2
-
-![generic model, width:800px](./figures/frdl/diagrams/frdl_fad_singleprop_prop2.svg)
-
---- 
-
-# Example - Step 1 (again)
-
-![generic model, width:800px](./figures/frdl/diagrams/frdl_fad_singleprop_prop3.svg)
-
---- 
-
-# Example - Step 2 (again)
-
-![generic model, width:800px](./figures/frdl/diagrams/frdl_fad_singleprop_prop4.svg)
+![](./figures/frdl/diagrams/frdl_fad_singleprop_prop1.svg)
 
 
----
-<style scoped>section{font-size:27px;}</style>
-# Some Takeaways
+## Example - Step 2
+
+![](./figures/frdl/diagrams/frdl_fad_singleprop_prop2.svg)
+
+
+## Example - Step 1 (again)
+
+![](./figures/frdl/diagrams/frdl_fad_singleprop_prop3.svg)
+
+## Example - Step 2 (again)
+
+![](./figures/frdl/diagrams/frdl_fad_singleprop_prop4.svg)
+
+## Some Takeaways {.smaller}
 
 - Analyzing behavior in FRDL means working **directly with the diagram** to determine hazard effects, as opposed to just coming up with the effects out of your head
 
@@ -134,18 +114,15 @@ For causes, run through this process in reverse. See [FRDL/Specification/Usage/A
     - What assumptions to use when propagating behavior
     - When to stop the analysis
 
----
+## More Examples
 
-# More Examples
 | [Baking Bread](https://nasa.github.io/fmdtools/docs-source/frdl.html#bread-making) | [Circuit](https://nasa.github.io/fmdtools/docs-source/frdl.html#circuit) |
 |:------------------:|:------------------:|
 | ![bread making model, width:550px](./figures/frdl/examples/bread/frdl_continuous.svg) | ![circuit model, width:550px](./figures/frdl/examples/circuit/frdl_circuit.svg)|
 
 - Some explanation of these examples is provided in [FRDL/Guide/Examples](https://nasa.github.io/fmdtools/docs-source/frdl.html#examples)
 
----
-
-# More Helpful Information
+## More Helpful Information {.smaller}
 
 - The [FRDL Specification and Guide](https://nasa.github.io/fmdtools/docs-source/frdl.html#) has a good overview of the details of developing FRDL models (as well as analyzing hazards)
 

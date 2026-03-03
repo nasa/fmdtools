@@ -18,6 +18,16 @@
 
 [Click here to view the the full documentation website.](https://nasa.github.io/fmdtools)
 
+### Demo Portfolio
+
+See: [Examples](https://nasa.github.io/fmdtools/examples/Examples.html)
+
+<img src="/docs/_images/tutorial_fmdtools_basics.webp" width="15%"></img>
+<img src="/docs/_images/demo_proxthreat.webp" width="15%"></img>
+<img src="/docs/_images/demo_wildfire.webp" width="15%"></img>
+<img src="/docs/_images/paper_jcise_dsa.webp" width="15%"></img>
+<img src="/docs/_images/demo_urban_flight.webp" width="15%"></img> 
+<img src="/docs/_images/demo_degradation.webp" width="15%"></img>
 
 ## About
 
@@ -53,7 +63,7 @@ The fmdtools library is developed in Python 3.13 but is tested to maintain compa
 | 3.12 | [![Python 3.12 Tests](./reports/doctests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-py312/junit/report.html)    |
 | 3.13    | [![Python 3.13 Tests](./reports/doctests-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-py313/junit/report.html)   |
 
-Further (functional and integration) tests are performed in the Python 3.13 to ensure that examples run as desired. Thus, it is generally reccommended to use Python 3.13 with this version to keep pace with development, especially when running examples.
+Further (functional and integration) tests are performed in the Python 3.13 to ensure that examples run as desired. Thus, it is generally recommended to use Python 3.13 with this version to keep pace with development, especially when running examples.
 
 ### Set up python tooling environment
 
@@ -117,7 +127,7 @@ Note that this version reflects the latest version on the ``main`` git branch al
 
 #### Dependencies
 
-fmdtools requires `Python 3.13` and depends directly on the packages below (see requirements.txt). Note that the use of these depencencies is governed by their respective licences, which may be obtained at the provided links.
+fmdtools requires `Python 3.13` and depends directly on the packages below (see requirements.txt). Note that the use of these dependencies is governed by their respective licenses, which may be obtained at the provided links.
 
 ```
 scipy
@@ -153,7 +163,7 @@ Some additional indirect dependencies (listed below) may be needed for developme
 deap
 # used for optimization of rover faults
 # license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt
-# the LGPL license and installation instructions are provided in ~/examples/rover/readme.rst
+# the LGPL license and installation instructions are provided in ~/examples/navigating_rover/readme.rst
 pymoo
 # used for optimization of tank and rover examples
 # license: (Apache 2.0) https://github.com/anyoptimization/pymoo/blob/main/LICENSE

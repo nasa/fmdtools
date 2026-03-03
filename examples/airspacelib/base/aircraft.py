@@ -17,8 +17,8 @@ specific language governing permissions and limitations under the License.
 """
 from fmdtools.define.block.function import Function
 
-from examples.airspacelib.base.state import AircraftState
-from examples.airspacelib.base.parameter import AircraftParameter
+from fmdtools_examples.airspacelib.base.state import AircraftState
+from fmdtools_examples.airspacelib.base.parameter import AircraftParameter
 
 
 class BaseAircraft(Function):

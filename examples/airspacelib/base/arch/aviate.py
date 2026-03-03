@@ -18,8 +18,8 @@ specific language governing permissions and limitations under the License.
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.function import Function
 
-from examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
-from examples.airspacelib.base.arch.flows import AircraftEnvironment
+from fmdtools_examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
+from fmdtools_examples.airspacelib.base.arch.flows import AircraftEnvironment
 import numpy as np
 
 class AviateMode(Mode):

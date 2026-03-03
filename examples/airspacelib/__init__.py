@@ -15,8 +15,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-import examples.airspacelib.base as base
-import examples.airspacelib.contingencymanagement as contingencymanagement
-import examples.airspacelib.wildfireresponse as wildfireresponse
+import fmdtools_examples.airspacelib.base as base
+import  fmdtools_examples.airspacelib.contingency_management as contingency_management
+import  fmdtools_examples.airspacelib.wildfire_response as wildfire_response
 
-__all__ = ['base', 'contingencymanagement', 'wildfireresponse']
+__all__ = ['base', 'contingency_management', 'wildfire_response']

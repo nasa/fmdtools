@@ -31,7 +31,7 @@ uv pip install -e .[all] --group dev  # Installs both examples and all testing/d
 If developing with Spyder, you will want to set this Python venv as your default interpreter.
 
 You may do this by navigating to:
-Tools > Python interpreter > Selected intepreter
+Tools > Python interpreter > Selected interpreter
 
 And then selecting the interpreter from the file menu. The path should look something like:
 ``path/to/fmdtools/.venv/Scripts/python.exe``
@@ -43,7 +43,12 @@ At this point, there may be an error message in the ipython console if ``spyder-
 
 ``uv pip install spyder-kernels==<VERSION>``
 
-where ``<VERSION>`` is the version reccomended in the error message.
+where ``<VERSION>`` is the version recommended in the error message.
+
+
+To edit certain markdown files as presentations, it may be helpful to download quarto: https://quarto.org/
+
+If developing with VSCode, make sure to install the standard Python, Jupyter, and Quarto extensions.
 
 
 Repository Structure
@@ -62,7 +67,7 @@ Getting started with development first requires some basic familiarity with the 
 
 There are additionally a few scripts/config files with specific purposes to serve the development process:
 
-- ``conftest.py`` which defines configuration options for pytest (our testing suite),
+- ``tests/conftest.py`` which defines configuration options for pytest (our testing suite),
 - ``pyproject.toml`` which defines all python project and build configuration information,
 - ``conf.py`` which defines sphinx documentation settings, and
 - ``MAKE``, which is used to build the sphinx documentation.

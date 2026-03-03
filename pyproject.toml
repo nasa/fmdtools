@@ -37,7 +37,7 @@ dependencies = ["scipy",
 ]
 
 [project.optional-dependencies]
-examples = ["deap", "pymoo", "scikit-learn", "multiprocess", "pathos", "adjustText"]
+examples = ["deap", "pymoo", "scikit-learn", "multiprocess", "pathos", "adjustText", "jinja2"]
 all = ["fmdtools[examples]"]
 
 [project.urls]
@@ -52,7 +52,7 @@ requires = [
 ]
 
 [dependency-groups]
-docs = ["sphinx", "myst-nb", "sphinx_rtd_theme", "nbsphinx"]
+docs = ["sphinx", "myst-nb", "sphinx_rtd_theme", "nbsphinx", "myst-sphinx-gallery"]
 test = ["nbmake", "pytest-html", "coverage", "pytest-cov", "genbadge[all]"]
 dev = [{include-group = "docs"}, {include-group = "test"}]
 
@@ -64,8 +64,10 @@ required-environments = ["sys_platform == 'win32' and platform_machine == 'AMD64
 addopts = "--cache-clear --doctest-modules --nbmake --cov"
 pythonpath = [".", "fmdtools", "tests", "examples"]
 
-[tool.setuptools.packages.find]
-include = ["fmdtools*", "examples*", "tests*"]
+[tool.setuptools.package-dir]
+fmdtools = "src/fmdtools"
+fmdtools_examples = "examples"
+fmdtools_tests = "tests"
 
 
 [tool.coverage.report]

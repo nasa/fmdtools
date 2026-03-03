@@ -21,13 +21,13 @@ from fmdtools.define.container.parameter import Parameter
 import fmdtools.sim.propagate as prop
 
 
-from examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
-from examples.airspacelib.base.arch.flows import AircraftEnvironment
-from examples.airspacelib.base.arch.aviate import Aviate
-from examples.airspacelib.base.arch.controlflight import ControlFlight
-from examples.airspacelib.base.arch.storeee import StoreAndSupplyElectricity
-from examples.airspacelib.base.arch.perceiveenvironment import PerceiveEnvironment
-from examples.airspacelib.base.arch.holdpayload import HoldPayload
+from fmdtools_examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
+from fmdtools_examples.airspacelib.base.arch.flows import AircraftEnvironment
+from fmdtools_examples.airspacelib.base.arch.aviate import Aviate
+from fmdtools_examples.airspacelib.base.arch.controlflight import ControlFlight
+from fmdtools_examples.airspacelib.base.arch.storeee import StoreAndSupplyElectricity
+from fmdtools_examples.airspacelib.base.arch.perceiveenvironment import PerceiveEnvironment
+from fmdtools_examples.airspacelib.base.arch.holdpayload import HoldPayload
 
 
 class AircraftArchParameter(Parameter):

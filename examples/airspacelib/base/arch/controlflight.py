@@ -21,8 +21,8 @@ from fmdtools.define.block.function import Function
 from fmdtools.define.container.state import State
 from fmdtools.define.container.mode import Mode
 
-from examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
-from examples.airspacelib.base.arch.flows import AircraftEnvironment
+from fmdtools_examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
+from fmdtools_examples.airspacelib.base.arch.flows import AircraftEnvironment
 
 
 class ControlState(State):

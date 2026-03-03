@@ -17,8 +17,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from examples.pump.ex_pump import Pump
-from examples.rover.rover_model import Rover
+from fmdtools_examples.water_pump.model_main import Pump
+from fmdtools_examples.navigating_rover.model_main import Rover
 from fmdtools.define.architecture.function import FunctionArchitectureGraph, FunctionArchitectureFxnGraph
 from fmdtools.define.architecture.function import FunctionArchitectureFlowGraph, FunctionArchitectureTypeGraph
 from fmdtools.analyze.common import suite_for_plots
@@ -26,6 +26,7 @@ from fmdtools.sim import propagate
 
 import unittest
 import networkx as nx
+from matplotlib import pyplot as plt
 
 class ModelGraphTests(unittest.TestCase):
     def setUp(self):
@@ -188,6 +189,10 @@ class ModelGraphTests(unittest.TestCase):
                           len(comparison['edges_added']) > 0 or
                           len(comparison['edges_removed']) > 0)
         self.assertTrue(has_differences)
+
+    def tearDown(self):
+        """Close plot to keep number of open figures low."""
+        plt.close()
 
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()
