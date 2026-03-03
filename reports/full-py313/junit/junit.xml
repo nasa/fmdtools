@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="41" failures="0" skipped="0" tests="41" time="19.544" timestamp="2026-03-03T12:59:55.438141-08:00" hostname="bamboo-r4.ndc.nasa.gov"><testcase classname="" name="conf" time="0.000"><error message="collection failure">ImportError while importing test module '/home/bamboo/bamboo-agent-home/xml-data/build-dir/RAD-TEST-UVF/conf.py'.
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="41" failures="0" skipped="0" tests="41" time="19.926" timestamp="2026-03-03T13:05:15.391098-08:00" hostname="bamboo-r1.ndc.nasa.gov"><testcase classname="" name="conf" time="0.000"><error message="collection failure">ImportError while importing test module '/home/bamboo/bamboo-agent-home/xml-data/build-dir/RAD-TEST-UVF/conf.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
-../../../../.local/share/uv/python/cpython-3.13.7-linux-x86_64-gnu/lib/python3.13/importlib/__init__.py:88: in import_module
+../../../../.local/share/uv/python/cpython-3.13.9-linux-x86_64-gnu/lib/python3.13/importlib/__init__.py:88: in import_module
     return _bootstrap._gcd_import(name[level:], package, level)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 conf.py:24: in &lt;module&gt;
@@ -14,7 +14,7 @@ which is not the same as the test file we want to collect:
 HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules</error></testcase><testcase classname="" name="examples.airport_taxiway.test_model" time="0.000"><error message="collection failure">ImportError while importing test module '/home/bamboo/bamboo-agent-home/xml-data/build-dir/RAD-TEST-UVF/examples/airport_taxiway/test_model.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
-../../../../.local/share/uv/python/cpython-3.13.7-linux-x86_64-gnu/lib/python3.13/importlib/__init__.py:88: in import_module
+../../../../.local/share/uv/python/cpython-3.13.9-linux-x86_64-gnu/lib/python3.13/importlib/__init__.py:88: in import_module
     return _bootstrap._gcd_import(name[level:], package, level)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 examples/airport_taxiway/test_model.py:20: in &lt;module&gt;
@@ -22,7 +22,7 @@ examples/airport_taxiway/test_model.py:20: in &lt;module&gt;
 E   ImportError: cannot import name 'taxiway_model' from 'model_main' (/home/bamboo/bamboo-agent-home/xml-data/build-dir/RAD-TEST-UVF/docs/_downloads/830c0c682cb73d46a39f46d7c7778c66/model_main.py)</error><error message="collection failure">ImportError while importing test module '/home/bamboo/bamboo-agent-home/xml-data/build-dir/RAD-TEST-UVF/examples/airport_taxiway/test_model.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
-../../../../.local/share/uv/python/cpython-3.13.7-linux-x86_64-gnu/lib/python3.13/importlib/__init__.py:88: in import_module
+../../../../.local/share/uv/python/cpython-3.13.9-linux-x86_64-gnu/lib/python3.13/importlib/__init__.py:88: in import_module
     return _bootstrap._gcd_import(name[level:], package, level)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 examples/airport_taxiway/test_model.py:20: in &lt;module&gt;
