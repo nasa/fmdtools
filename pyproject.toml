@@ -61,7 +61,7 @@ required-environments = ["sys_platform == 'win32' and platform_machine == 'AMD64
 
 
 [tool.pytest.ini_options]
-addopts = "--cache-clear --doctest-modules --nbmake --cov"
+addopts = "--cache-clear --import-mode=importlib --doctest-modules --nbmake --cov"
 pythonpath = [".", "fmdtools", "tests", "examples"]
 
 [tool.setuptools.package-dir]
