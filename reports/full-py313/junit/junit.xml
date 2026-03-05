@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="2" failures="0" skipped="0" tests="2" time="20.301" timestamp="2026-03-05T15:26:29.085808-08:00" hostname="bamboo-r7.ndc.nasa.gov"><testcase classname="" name="build.lib.fmdtools_tests" time="0.000"><error message="collection failure">.venv/lib/python3.13/site-packages/pluggy/_manager.py:169: in register
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="20.179" timestamp="2026-03-05T15:51:57.544583-08:00" hostname="bamboo-r7.ndc.nasa.gov"><testcase classname="" name="build.lib.fmdtools_tests" time="0.000"><error message="collection failure">.venv/lib/python3.13/site-packages/pluggy/_manager.py:169: in register
     hook._maybe_apply_history(hookimpl)
 .venv/lib/python3.13/site-packages/pluggy/_hooks.py:580: in _maybe_apply_history
     res = self._hookexec(self.name, [method], kwargs, False)
@@ -12,9 +12,4 @@ build/lib/fmdtools_tests/conftest.py:142: in pytest_addoption
     self._anonymous.addoption(*opts, **attrs)
 .venv/lib/python3.13/site-packages/_pytest/config/argparsing.py:429: in addoption
     raise ValueError(f"option names {conflict} already added")
-E   ValueError: option names {'--skiplist'} already added</error></testcase><testcase classname="" name="conf" time="0.000"><error message="collection failure">ImportError while importing test module '/home/bamboo/bamboo-agent-home/xml-data/build-dir/RAD-TEST-UVF/conf.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-conf.py:24: in &lt;module&gt;
-    from myst_sphinx_gallery import GalleryConfig, FilesConfig, GalleryThumbnailConfig
-E   ModuleNotFoundError: No module named 'myst_sphinx_gallery'</error></testcase></testsuite></testsuites>
+E   ValueError: option names {'--skiplist'} already added</error></testcase></testsuite></testsuites>
