@@ -126,7 +126,7 @@ too_slow_notebooks = ["examples/navigating_rover/paper_ifac_human.ipynb",
                       "examples/navigating_rover/paper_aiaa_coevolution.ipynb",  # extremely slow
                       "examples/navigating_rover/tutorial_ParameterSample.ipynb", # timeout fails (over 300s)
                       "examples/cooling_tank/paper_jmd_optimization.ipynb",
-                      "examples/airspacelib/wildfire_response/paper_aiaa_optimal_location.ipynb"
+                      "examples/airspacelib/wildfire_response/paper_aiaa_optimal_location.ipynb",
                       "conf.py"]
 
 # tells pytest to ignore build files as well as overly slow notebooks
