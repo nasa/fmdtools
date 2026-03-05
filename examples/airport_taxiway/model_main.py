@@ -17,17 +17,16 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from model_atc import ATC
-from model_asset import Aircraft, Helicopter
-from model_common import (
-    TaxiwayParams,
-    Environment,
-    Location,
-    Requests,
-    plot_course,
-    plot_one_path,
-    plot_tstep,
-)
+from fmdtools_examples.airport_taxiway.model_atc import ATC
+from fmdtools_examples.airport_taxiway.model_asset import Aircraft, Helicopter
+from fmdtools_examples.airport_taxiway.model_common import (TaxiwayParams,
+                                                            Environment,
+                                                            Location,
+                                                            Requests,
+                                                            plot_course,
+                                                            plot_one_path,
+                                                            plot_tstep,
+                                                        )
 
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.sim import propagate as prop

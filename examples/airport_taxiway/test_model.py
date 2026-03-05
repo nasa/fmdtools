@@ -17,8 +17,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from model_main import taxiway_model
-from model_common import plot_course, plot_tstep
+from fmdtools_examples.airport_taxiway.model_main import taxiway_model
+from fmdtools_examples.airport_taxiway.model_common import plot_course, plot_tstep
 
 from fmdtools.sim import propagate as prop
 from fmdtools.analyze import phases
@@ -66,7 +66,7 @@ class ModelTests(unittest.TestCase):
     def test_atc_lost_ground_perception_plot(self):
         """Plot for atc losing ground perception."""
         res, hist = prop.one_fault(self.mdl, "atc", "lost_ground_perception", time=10)
-        plot_tstep(self.mdl, hist.faulty, 110, title="Aircraft backed up in air")
+        plot_tstep(110, history=hist.faulty, mdl=self.mdl, title="Aircraft backed up in air")
 
     def test_atc_wrong_land_command(self):
         """Test that wrong landing command by itself does not result in crashes."""

@@ -43,6 +43,9 @@ specific language governing permissions and limitations under the License.
 """
 from matplotlib import pyplot as plt
 import sys
+import pytest
+from pathlib import Path
+
 # listing of modules with doctests
 doctest_modules = ["src/fmdtools/define/container/base.py",
                    "src/fmdtools/define/container/state.py",
@@ -126,9 +129,8 @@ too_slow_notebooks = ["examples/navigating_rover/paper_ifac_human.ipynb",
                       "examples/airspacelib/wildfire_response/paper_aiaa_optimal_location.ipynb"
                       ]
 
-
 # tells pytest to ignore build files as well as overly slow notebooks
-collect_ignore =  ["_build", "docs", "tmp", *too_slow_notebooks,]
+collect_ignore =  ["_build", "docs", "tmp", "conf", *too_slow_notebooks,]
 
 
 def pytest_addoption(parser):
@@ -137,12 +139,28 @@ def pytest_addoption(parser):
 
     See pytest API for details on usage.
     """
+    parser.addoption("--skiplist", action="store_true",
+                 default=too_slow_notebooks, help="skip listed tests")
     parser.addoption("--testtype", action="store", default="doctests",
                      help="test type: full, doctests, or any other name",
                      type=str)
     parser.addoption("--auto_build_reports", action="store", default=False,
                      help="build_report: whether to build a report",
                      type=bool)
+
+
+def pytest_collection_modifyitems(config, items):
+    """Skip listed (too slow notebooks) by default."""
+    tests_to_skip = config.getoption("--skiplist")
+    if not tests_to_skip:
+        # --skiplist not given in cli, therefore move on
+        return
+    skip_listed = pytest.mark.skip(reason="included in --skiplist")
+    for item in items:
+        for testpath in tests_to_skip:
+            if Path(testpath).samefile(item.path):
+                print("skip: "+str(item.path)+" "+testpath)
+                item.add_marker(skip_listed)
 
 
 def pytest_configure(config):

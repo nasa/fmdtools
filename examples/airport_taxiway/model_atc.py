@@ -15,7 +15,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from model_common import Location, Requests, TaxiwayParams, Environment
+from fmdtools_examples.airport_taxiway.model_common import (Location, Requests,
+                                                            TaxiwayParams, Environment)
 
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode

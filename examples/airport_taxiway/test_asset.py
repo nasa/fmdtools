@@ -17,7 +17,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from model_common import (
+from fmdtools_examples.airport_taxiway.model_common import (
     TaxiwayParams,
     AssetParams,
     Environment,
@@ -26,7 +26,7 @@ from model_common import (
     plot_course,
     plot_tstep,
 )
-from model_asset import Aircraft, Helicopter
+from fmdtools_examples.airport_taxiway.model_asset import Aircraft, Helicopter
 
 from fmdtools.define.block.function import Function
 from fmdtools.define.architecture.function import FunctionArchitecture
@@ -194,33 +194,27 @@ class AssetTests(unittest.TestCase):
 
     def test_avoid_plot(self):
         endresults, mdlhist = prop.nominal(self.two_ac_model)
-        plot_tstep(
-            self.two_ac_model,
-            mdlhist,
-            76,
-            fxnattr="s.visioncov",
-            locattr="speed",
-            assets_to_label=["ma1"],
-            title="Visioncov means ma1 slows down",
-        )
-        plot_tstep(
-            self.two_ac_model,
-            mdlhist,
-            77,
-            fxnattr="s.visioncov",
-            locattr="speed",
-            assets_to_label=["ma1"],
-            title="Visioncov means ma1 stops",
-        )
-        plot_tstep(
-            self.two_ac_model,
-            mdlhist,
-            78,
-            fxnattr="s.visioncov",
-            locattr="speed",
-            assets_to_label=["ma1"],
-            title="Visioncov means ma1 stops",
-        )
+        plot_tstep(76,
+                   history=mdlhist,
+                   mdl=self.two_ac_model,
+                   fxnattr="s.visioncov",
+                   locattr="speed",
+                   assets_to_label=["ma1"],
+                   title="Visioncov means ma1 slows down")
+        plot_tstep(77,
+                   history=mdlhist,
+                   mdl=self.two_ac_model,
+                   fxnattr="s.visioncov",
+                   locattr="speed",
+                   assets_to_label=["ma1"],
+                   title="Visioncov means ma1 stops")
+        plot_tstep(78,
+                   history=mdlhist,
+                   mdl=self.two_ac_model,
+                   fxnattr="s.visioncov",
+                   locattr="speed",
+                   assets_to_label=["ma1"],
+                   title="Visioncov means ma1 stops")
 
     def test_lost_sight(self):
         endresults, mdlhist = prop.one_fault(self.two_ac_model, "ma1", "lost_sight")
@@ -237,22 +231,18 @@ class AssetTests(unittest.TestCase):
     def test_lost_sight_plot(self):
         endresults, mdlhist = prop.one_fault(self.two_ac_model, "ma1", "lost_sight")
         fhist = mdlhist.faulty
-        plot_tstep(
-            self.two_ac_model,
-            fhist,
-            76,
-            fxnattr="s.visioncov",
-            assets_to_label=["ma1"],
-            title="ma1 approaches ma2 with no vision cone",
-        )
-        plot_tstep(
-            self.two_ac_model,
-            fhist,
-            77,
-            fxnattr="m.faults",
-            assets_to_label=["ma1"],
-            title="ma1 crashes into ma2 (should show faults)",
-        )
+        plot_tstep(76,
+                   history=fhist,
+                   mdl=self.two_ac_model,
+                   fxnattr="s.visioncov",
+                   assets_to_label=["ma1"],
+                   title="ma1 approaches ma2 with no vision cone")
+        plot_tstep(77,
+                   history=fhist,
+                   mdl=self.two_ac_model,
+                   fxnattr="m.faults",
+                   assets_to_label=["ma1"],
+                   title="ma1 crashes into ma2 (should show faults)")
 
     def test_heli_cycle(self):
         """Tests that a single helicopter will land and take off as desired"""
@@ -273,9 +263,9 @@ class AssetTests(unittest.TestCase):
 
     def test_heli_cycle_plot(self):
         endresults, mdlhist = prop.nominal(self.heli_model)
-        plot_tstep(self.heli_model, mdlhist, 1, title="Empty landing spot")
-        plot_tstep(self.heli_model, mdlhist, 7, title="h1 at landing spot")
-        plot_tstep(self.heli_model, mdlhist, 59, title="h1 back in air")
+        plot_tstep(1, history=mdlhist, mdl=self.heli_model, title="Empty landing spot")
+        plot_tstep(7,  history=mdlhist, mdl=self.heli_model, title="h1 at landing spot")
+        plot_tstep(59, history=mdlhist, mdl=self.heli_model,  title="h1 back in air")
         mdlhist.fxns.h1
         # mdlhist['flows']['Perc_location']['h1']
 
