@@ -127,7 +127,7 @@ too_slow_notebooks = ["examples/navigating_rover/paper_ifac_human.ipynb",
                       "examples/navigating_rover/tutorial_ParameterSample.ipynb", # timeout fails (over 300s)
                       "examples/cooling_tank/paper_jmd_optimization.ipynb",
                       "examples/airspacelib/wildfire_response/paper_aiaa_optimal_location.ipynb"
-                      ]
+                      "conf.py"]
 
 # tells pytest to ignore build files as well as overly slow notebooks
 collect_ignore =  ["_build", "docs", "tmp", "conf", *too_slow_notebooks,]
@@ -159,7 +159,6 @@ def pytest_collection_modifyitems(config, items):
     for item in items:
         for testpath in tests_to_skip:
             if Path(testpath).samefile(item.path):
-                print("skip: "+str(item.path)+" "+testpath)
                 item.add_marker(skip_listed)
 
 
