@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tutorial: FaultSample &mdash; fmdtools 2.3.1 documentation</title>
+  <title>Tutorial: FaultSample &mdash; fmdtools 2.3.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=67b02a41"></script>
+      <script src="../../_static/documentation_options.js?v=5048a02b"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -230,12 +230,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../human_hazard_mitigation/readme.html">Human Hazard Mitigation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../human_hazard_mitigation/tutorial_actionarchitecture.html">Tutorial: ActionArchitecture</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../human_hazard_mitigation/tutorial_actionarchitecture.html#function-level-simulation">Function-level Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../human_hazard_mitigation/tutorial_actionarchitecture.html#model-simulation">Model Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../human_hazard_mitigation/tutorial_actionarchitecture.html#fault-simulation">Fault Simulation</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="../human_hazard_mitigation/readme.html#package-structure">Package Structure:</a></li>
 </ul>
 </li>
@@ -386,10 +380,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../state_communication/readme.html">State Communications</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../state_communication/tutorial_MultiFlow_and_CommsFlow.html">Tutorial: MultiFlow and CommsFlow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../state_communication/tutorial_MultiFlow_and_CommsFlow.html#building-flows">Building Flows</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="../state_communication/readme.html#package-structure">Package Structure:</a></li>
 </ul>
 </li>
@@ -862,7 +852,6 @@ Before proceeding, it can be helpful to look through their respective documentat
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>class Power(Function):
     &quot;&quot;&quot;Rover power supply.&quot;&quot;&quot;
 
-    __slots__ = (&quot;ee_15&quot;, &quot;ee_5&quot;, &quot;ee_12&quot;, &quot;switch&quot;)
     container_s = PowerState
     container_m = PowerMode
     flow_ee_15 = EE
@@ -870,7 +859,7 @@ Before proceeding, it can be helpful to look through their respective documentat
     flow_ee_12 = EE
     flow_switch = Switch
 
-    def static_behavior(self, time):
+    def static_behavior(self):
         &quot;&quot;&quot;Determine power use based on mode.&quot;&quot;&quot;
         if self.m.in_mode(&quot;off&quot;):
             self.off_power()
@@ -888,7 +877,7 @@ Before proceeding, it can be helpful to look through their respective documentat
             if self.m.in_mode(&quot;short&quot;):
                 self.short_power_usage()
 
-    def dynamic_behavior(self, time):
+    def dynamic_behavior(self):
         &quot;&quot;&quot;Charge increment over time.&quot;&quot;&quot;
         self.s.inc(charge=-self.s.power / 100)
         self.s.limit(charge=(0, 100))
@@ -1117,9 +1106,9 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(2,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=1.0, name=&#39;rover_fxns_power_depleted_t2&#39;, time=2, phase=&#39;&#39;),
- SingleFaultScenario(sequence={5.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(5,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=1.0, name=&#39;rover_fxns_power_depleted_t5&#39;, time=5, phase=&#39;&#39;),
- SingleFaultScenario(sequence={10.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(10,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=1.0, name=&#39;rover_fxns_power_depleted_t10&#39;, time=10, phase=&#39;&#39;),
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(2,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=np.float64(1.0), name=&#39;rover_fxns_power_depleted_t2&#39;, time=2, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={5.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(5,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=np.float64(1.0), name=&#39;rover_fxns_power_depleted_t5&#39;, time=5, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={10.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(10,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=np.float64(1.0), name=&#39;rover_fxns_power_depleted_t10&#39;, time=10, phase=&#39;&#39;),
  SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(2,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t2&#39;, time=2, phase=&#39;&#39;),
  SingleFaultScenario(sequence={5.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(5,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t5&#39;, time=5, phase=&#39;&#39;),
  SingleFaultScenario(sequence={10.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(10,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t10&#39;, time=10, phase=&#39;&#39;),
@@ -1149,10 +1138,10 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;power&#39;: PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}}),
- &#39;perception&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;feed&#39;: [2.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;feed&#39;: {&#39;feed&#39;}}),
- &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 112.0]}, {&#39;standby&#39;: {&#39;standby&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
- &#39;override&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;standby&#39;: [2.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;standby&#39;: {&#39;standby&#39;}})}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;power&#39;: PhaseMap({np.str_(&#39;off&#39;): [np.float64(0.0), np.float64(0.0)], np.str_(&#39;supply&#39;): [np.float64(1.0), np.float64(112.0)]}, {np.str_(&#39;off&#39;): {np.str_(&#39;off&#39;)}, np.str_(&#39;supply&#39;): {np.str_(&#39;supply&#39;)}}),
+ &#39;perception&#39;: PhaseMap({np.str_(&#39;off&#39;): [np.float64(0.0), np.float64(1.0)], np.str_(&#39;feed&#39;): [np.float64(2.0), np.float64(112.0)]}, {np.str_(&#39;off&#39;): {np.str_(&#39;off&#39;)}, np.str_(&#39;feed&#39;): {np.str_(&#39;feed&#39;)}}),
+ &#39;plan_path&#39;: PhaseMap({np.str_(&#39;standby&#39;): [np.float64(0.0), np.float64(4.0)], np.str_(&#39;drive&#39;): [np.float64(5.0), np.float64(112.0)]}, {np.str_(&#39;standby&#39;): {np.str_(&#39;standby&#39;)}, np.str_(&#39;drive&#39;): {np.str_(&#39;drive&#39;)}}),
+ &#39;override&#39;: PhaseMap({np.str_(&#39;off&#39;): [np.float64(0.0), np.float64(1.0)], np.str_(&#39;standby&#39;): [np.float64(2.0), np.float64(112.0)]}, {np.str_(&#39;off&#39;): {np.str_(&#39;off&#39;)}, np.str_(&#39;standby&#39;): {np.str_(&#39;standby&#39;)}})}
 </pre></div>
 </div>
 </div>
@@ -1165,7 +1154,7 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/3fef45821b6ea63758a80e90b7d93506c5cc187010e2b4f47d378243e751cdb1.png" src="../../_images/3fef45821b6ea63758a80e90b7d93506c5cc187010e2b4f47d378243e751cdb1.png" />
+<img alt="../../_images/92f568d5738c26eae480414d357031dd028cf7a174f3afbf42d242a209339d5a.png" src="../../_images/92f568d5738c26eae480414d357031dd028cf7a174f3afbf42d242a209339d5a.png" />
 </div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">PhaseMap</span></code> for <code class="docutils literal notranslate"><span class="pre">Power</span></code> is here in <code class="docutils literal notranslate"><span class="pre">power</span></code>:</p>
@@ -1176,7 +1165,7 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}})
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PhaseMap({np.str_(&#39;off&#39;): [np.float64(0.0), np.float64(0.0)], np.str_(&#39;supply&#39;): [np.float64(1.0), np.float64(112.0)]}, {np.str_(&#39;off&#39;): {np.str_(&#39;off&#39;)}, np.str_(&#39;supply&#39;): {np.str_(&#39;supply&#39;)}})
 </pre></div>
 </div>
 </div>
@@ -1210,12 +1199,12 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=1.0, name=&#39;rover_fxns_power_depleted_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=0.0, name=&#39;rover_fxns_power_short_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=1.0, name=&#39;rover_fxns_power_depleted_t56p0&#39;, time=56.0, phase=&#39;supply&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=0.0, name=&#39;rover_fxns_power_no_charge_t56p0&#39;, time=56.0, phase=&#39;supply&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(np.float64(0.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=np.float64(1.0), name=&#39;rover_fxns_power_depleted_t0p0&#39;, time=np.float64(0.0), phase=np.str_(&#39;off&#39;)),
+ SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(np.float64(0.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t0p0&#39;, time=np.float64(0.0), phase=np.str_(&#39;off&#39;)),
+ SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(np.float64(0.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=0.0, name=&#39;rover_fxns_power_short_t0p0&#39;, time=np.float64(0.0), phase=np.str_(&#39;off&#39;)),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(np.float64(56.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=np.float64(1.0), name=&#39;rover_fxns_power_depleted_t56p0&#39;, time=np.float64(56.0), phase=np.str_(&#39;supply&#39;)),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(np.float64(56.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=0.0, name=&#39;rover_fxns_power_no_charge_t56p0&#39;, time=np.float64(56.0), phase=np.str_(&#39;supply&#39;)),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(np.float64(56.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t56p0&#39;, time=np.float64(56.0), phase=np.str_(&#39;supply&#39;))]
 </pre></div>
 </div>
 </div>
@@ -1246,10 +1235,10 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=1.0, name=&#39;rover_fxns_power_depleted_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=1.0, name=&#39;rover_fxns_power_depleted_t56p0&#39;, time=56.0, phase=&#39;supply&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(np.float64(0.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=np.float64(1.0), name=&#39;rover_fxns_power_depleted_t0p0&#39;, time=np.float64(0.0), phase=np.str_(&#39;off&#39;)),
+ SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(np.float64(0.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t0p0&#39;, time=np.float64(0.0), phase=np.str_(&#39;off&#39;)),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(np.float64(56.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=np.float64(1.0), name=&#39;rover_fxns_power_depleted_t56p0&#39;, time=np.float64(56.0), phase=np.str_(&#39;supply&#39;)),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(np.float64(56.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t56p0&#39;, time=np.float64(56.0), phase=np.str_(&#39;supply&#39;))]
 </pre></div>
 </div>
 </div>
@@ -1270,10 +1259,10 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;power&#39;: PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}}),
- &#39;perception&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;feed&#39;: [2.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;feed&#39;: {&#39;feed&#39;}}),
- &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 112.0]}, {&#39;standby&#39;: {&#39;standby&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
- &#39;override&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;standby&#39;: [2.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;standby&#39;: {&#39;standby&#39;}})}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;power&#39;: PhaseMap({np.str_(&#39;off&#39;): [np.float64(0.0), np.float64(0.0)], np.str_(&#39;supply&#39;): [np.float64(1.0), np.float64(112.0)]}, {np.str_(&#39;off&#39;): {np.str_(&#39;off&#39;)}, np.str_(&#39;supply&#39;): {np.str_(&#39;supply&#39;)}}),
+ &#39;perception&#39;: PhaseMap({np.str_(&#39;off&#39;): [np.float64(0.0), np.float64(1.0)], np.str_(&#39;feed&#39;): [np.float64(2.0), np.float64(112.0)]}, {np.str_(&#39;off&#39;): {np.str_(&#39;off&#39;)}, np.str_(&#39;feed&#39;): {np.str_(&#39;feed&#39;)}}),
+ &#39;plan_path&#39;: PhaseMap({np.str_(&#39;standby&#39;): [np.float64(0.0), np.float64(4.0)], np.str_(&#39;drive&#39;): [np.float64(5.0), np.float64(112.0)]}, {np.str_(&#39;standby&#39;): {np.str_(&#39;standby&#39;)}, np.str_(&#39;drive&#39;): {np.str_(&#39;drive&#39;)}}),
+ &#39;override&#39;: PhaseMap({np.str_(&#39;off&#39;): [np.float64(0.0), np.float64(1.0)], np.str_(&#39;standby&#39;): [np.float64(2.0), np.float64(112.0)]}, {np.str_(&#39;off&#39;): {np.str_(&#39;off&#39;)}, np.str_(&#39;standby&#39;): {np.str_(&#39;standby&#39;)}})}
 </pre></div>
 </div>
 </div>
@@ -1314,15 +1303,15 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[SingleFaultScenario(sequence={58.0: Injection(faults={&#39;drive&#39;: [&#39;custom&#39;]}, disturbances={})}, times=(58.0,), function=&#39;drive&#39;, fault=&#39;custom&#39;, rate=1.0, name=&#39;drive_custom_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
- SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(2.0,), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_crash_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
- SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(2.0,), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_no_con_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
- SingleFaultScenario(sequence={58.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(58.0,), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_crash_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
- SingleFaultScenario(sequence={58.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(58.0,), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_no_con_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
- SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=1.0, name=&#39;rover_fxns_power_depleted_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=1.0, name=&#39;rover_fxns_power_depleted_t56p0&#39;, time=56.0, phase=&#39;supply&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[SingleFaultScenario(sequence={58.0: Injection(faults={&#39;drive&#39;: [&#39;custom&#39;]}, disturbances={})}, times=(np.float64(58.0),), function=&#39;drive&#39;, fault=&#39;custom&#39;, rate=np.float64(1.0), name=&#39;drive_custom_t58p0&#39;, time=np.float64(58.0), phase=np.str_(&#39;drive&#39;)),
+ SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(np.float64(2.0),), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_crash_t2p0&#39;, time=np.float64(2.0), phase=np.str_(&#39;standby&#39;)),
+ SingleFaultScenario(sequence={2.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(np.float64(2.0),), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_no_con_t2p0&#39;, time=np.float64(2.0), phase=np.str_(&#39;standby&#39;)),
+ SingleFaultScenario(sequence={58.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(np.float64(58.0),), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_crash_t58p0&#39;, time=np.float64(58.0), phase=np.str_(&#39;drive&#39;)),
+ SingleFaultScenario(sequence={58.0: Injection(faults={&#39;rover.fxns.plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(np.float64(58.0),), function=&#39;rover.fxns.plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;rover_fxns_plan_path_no_con_t58p0&#39;, time=np.float64(58.0), phase=np.str_(&#39;drive&#39;)),
+ SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(np.float64(0.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=np.float64(1.0), name=&#39;rover_fxns_power_depleted_t0p0&#39;, time=np.float64(0.0), phase=np.str_(&#39;off&#39;)),
+ SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(np.float64(0.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t0p0&#39;, time=np.float64(0.0), phase=np.str_(&#39;off&#39;)),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(np.float64(56.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=np.float64(1.0), name=&#39;rover_fxns_power_depleted_t56p0&#39;, time=np.float64(56.0), phase=np.str_(&#39;supply&#39;)),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(np.float64(56.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t56p0&#39;, time=np.float64(56.0), phase=np.str_(&#39;supply&#39;))]
 </pre></div>
 </div>
 </div>
@@ -1339,7 +1328,7 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 4/4 [00:00&lt;00:00, 10.00it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 4/4 [00:00&lt;00:00,  6.30it/s]
 </pre></div>
 </div>
 </div>
@@ -1351,17 +1340,17 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=1.0, name=&#39;rover_fxns_power_depleted_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=1.0, name=&#39;rover_fxns_power_depleted_t56p0&#39;, time=56.0, phase=&#39;supply&#39;),
- SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(np.float64(0.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=np.float64(1.0), name=&#39;rover_fxns_power_depleted_t0p0&#39;, time=np.float64(0.0), phase=np.str_(&#39;off&#39;)),
+ SingleFaultScenario(sequence={0.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(np.float64(0.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;rover_fxns_power_no_charge_t0p0&#39;, time=np.float64(0.0), phase=np.str_(&#39;off&#39;)),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;depleted&#39;]}, disturbances={})}, times=(np.float64(56.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;depleted&#39;, rate=np.float64(1.0), name=&#39;rover_fxns_power_depleted_t56p0&#39;, time=np.float64(56.0), phase=np.str_(&#39;supply&#39;)),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;rover.fxns.power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(np.float64(56.0),), function=&#39;rover.fxns.power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;rover_fxns_power_short_t56p0&#39;, time=np.float64(56.0), phase=np.str_(&#39;supply&#39;))]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist</span><span class="o">.</span><span class="n">navigating_rover_fxns_power_short_t56p0</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist</span><span class="o">.</span><span class="n">rover_fxns_power_short_t56p0</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span>
 </pre></div>
 </div>
 </div>
@@ -1393,7 +1382,7 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist</span><span class="o">.</span><span class="n">navigating_rover_fxns_power_short_t56p0</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">power</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">charge</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist</span><span class="o">.</span><span class="n">rover_fxns_power_short_t56p0</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">power</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">charge</span>
 </pre></div>
 </div>
 </div>
@@ -1419,7 +1408,7 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist</span><span class="o">.</span><span class="n">navigating_rover_fxns_power_short_t56p0</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">power</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">charge</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist</span><span class="o">.</span><span class="n">rover_fxns_power_short_t56p0</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">power</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">charge</span>
 </pre></div>
 </div>
 </div>
@@ -1450,7 +1439,22 @@ The phase dictionary is important because it specifies that this mode is to occu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>rover_fxns_power_dep                 1.0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nominal.tend.classify.rate:          1.0
+nominal.tend.classify.cost:            0
+nominal.tend.classify.prob:          1.0
+nominal.tend.classify.expected_cost:   0
+nominal.tend.classify.in_bound:     True
+nominal.tend.classify.at_finish:    True
+nominal.tend.classify.line_dist:       1
+nominal.tend.classify.num_modes:       0
+nominal.tend.classify.end_dist:      0.0
+nominal.tend.classify.tot_deviation: 0.11859644458085598
+nominal.tend.classify.faults:   array(0)
+nominal.tend.classify.classification: nominal mission
+nominal.tend.classify.end_x: 29.254775331608617
+nominal.tend.classify.end_y: -0.7827640334587979
+nominal.tend.classify.endpt:    array(2)
+rover_fxns_power_dep                 1.0
 rover_fxns_power_dep                   0
 rover_fxns_power_dep                 1.0
 rover_fxns_power_dep                   0
@@ -1510,21 +1514,6 @@ rover_fxns_power_shoincomplete mission faulty
 rover_fxns_power_sho  25.995783679666012
 rover_fxns_power_sho  0.7019136572504056
 rover_fxns_power_sho            array(2)
-nominal.endclass.rate:               1.0
-nominal.endclass.cost:                 0
-nominal.endclass.prob:               1.0
-nominal.endclass.expected_cost:        0
-nominal.endclass.in_bound:          True
-nominal.endclass.at_finish:         True
-nominal.endclass.line_dist:            1
-nominal.endclass.num_modes:            0
-nominal.endclass.end_dist:           0.0
-nominal.endclass.tot_deviation: 0.11859644458085598
-nominal.endclass.faults:        array(0)
-nominal.endclass.classification: nominal mission
-nominal.endclass.end_x: 29.254775331608617
-nominal.endclass.end_y: -0.7827640334587979
-nominal.endclass.endpt:         array(2)
 </pre></div>
 </div>
 </div>
@@ -1571,13 +1560,13 @@ nominal.endclass.endpt:         array(2)
       <td>0.0</td>
     </tr>
     <tr>
-      <th>short</th>
+      <th>no_charge</th>
       <td>0.00001</td>
       <td>0</td>
       <td>0.0</td>
     </tr>
     <tr>
-      <th>no_charge</th>
+      <th>short</th>
       <td>0.00001</td>
       <td>0</td>
       <td>0.0</td>
@@ -1600,7 +1589,7 @@ nominal.endclass.endpt:         array(2)
         &lt;Axes: &gt;], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/f48a8fc0a270464de5370264ba447c7f9f0bacebe64aab0d8dc24aee8f7310ba.png" src="../../_images/f48a8fc0a270464de5370264ba447c7f9f0bacebe64aab0d8dc24aee8f7310ba.png" />
+<img alt="../../_images/e34e3dc3491cd0acab6d3b100584c798eb24d476af9e132581d988845355a398.png" src="../../_images/e34e3dc3491cd0acab6d3b100584c798eb24d476af9e132581d988845355a398.png" />
 </div>
 </div>
 <p>Or over time/any other variable:</p>
@@ -1666,7 +1655,7 @@ nominal.endclass.endpt:         array(2)
        dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/b42b7a262f9a15ed2b57eca311d4e3bfb89bea9cc7fb11b056434574afb1b540.png" src="../../_images/b42b7a262f9a15ed2b57eca311d4e3bfb89bea9cc7fb11b056434574afb1b540.png" />
+<img alt="../../_images/9902404be5b93b67ca52e100f00592c41dba24a1ad16a590ef9d6ab6002c54da.png" src="../../_images/9902404be5b93b67ca52e100f00592c41dba24a1ad16a590ef9d6ab6002c54da.png" />
 </div>
 </div>
 </section>
@@ -1735,8 +1724,13 @@ nominal.endclass.endpt:         array(2)
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>power Power
-- PowerState(charge=100.0, power=0.0)
-- PowerMode(mode=off, faults=set())
+- t=Time(time=-0.1, timers={})
+- s=PowerState(charge=100.0, power=0.0)
+- m=PowerMode(mode=&#39;off&#39;, faults=set(), sub_faults=False)
+- ee_15=EE(s=(v=0.0, a=0.0))
+- ee_5=EE(s=(v=0.0, a=0.0))
+- ee_12=EE(s=(v=0.0, a=0.0))
+- switch=Switch(s=(power=False))
 </pre></div>
 </div>
 </div>
@@ -1801,7 +1795,7 @@ nominal.endclass.endpt:         array(2)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 6/6 [00:00&lt;00:00, 17.33it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 6/6 [00:00&lt;00:00,  9.29it/s]
 </pre></div>
 </div>
 </div>
@@ -1822,7 +1816,7 @@ nominal.endclass.endpt:         array(2)
        dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/9d340fcc5110ebfd2c3427d1f3b21312e84ad906bdf7a26d06d363a58bbfa60e.png" src="../../_images/9d340fcc5110ebfd2c3427d1f3b21312e84ad906bdf7a26d06d363a58bbfa60e.png" />
+<img alt="../../_images/ddd5a93ad4cb249bc0d37bdac531a85f12066470092f4df2ab8110c12816e69c.png" src="../../_images/ddd5a93ad4cb249bc0d37bdac531a85f12066470092f4df2ab8110c12816e69c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1835,7 +1829,7 @@ nominal.endclass.endpt:         array(2)
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/33cb445f7c64a77c506aeab80e5a39aaae84e12e2ed6db342a5b2dfc6795b3a7.png" src="../../_images/33cb445f7c64a77c506aeab80e5a39aaae84e12e2ed6db342a5b2dfc6795b3a7.png" />
+<img alt="../../_images/b936d628684ec8e44ab6e310dc8c474b748f9e6389c4722d215403904429a596.png" src="../../_images/b936d628684ec8e44ab6e310dc8c474b748f9e6389c4722d215403904429a596.png" />
 </div>
 </div>
 </section>

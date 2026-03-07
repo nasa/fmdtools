@@ -1271,7 +1271,7 @@ wheels = [
 
 [[package]]
 name = "fmdtools"
-version = "2.3.1"
+version = "2.3.2"
 source = { editable = "." }
 dependencies = [
     { name = "dill" },
@@ -1293,6 +1293,7 @@ dependencies = [
 all = [
     { name = "adjusttext" },
     { name = "deap" },
+    { name = "jinja2" },
     { name = "multiprocess" },
     { name = "pathos" },
     { name = "pymoo" },
@@ -1301,6 +1302,7 @@ all = [
 examples = [
     { name = "adjusttext" },
     { name = "deap" },
+    { name = "jinja2" },
     { name = "multiprocess" },
     { name = "pathos" },
     { name = "pymoo" },
@@ -1312,6 +1314,7 @@ dev = [
     { name = "coverage" },
     { name = "genbadge", extra = ["all"] },
     { name = "myst-nb" },
+    { name = "myst-sphinx-gallery" },
     { name = "nbmake" },
     { name = "nbsphinx" },
     { name = "pytest-cov" },
@@ -1322,6 +1325,7 @@ dev = [
 ]
 docs = [
     { name = "myst-nb" },
+    { name = "myst-sphinx-gallery" },
     { name = "nbsphinx" },
     { name = "sphinx", version = "9.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "sphinx", version = "9.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
@@ -1342,6 +1346,7 @@ requires-dist = [
     { name = "dill" },
     { name = "fmdtools", extras = ["examples"], marker = "extra == 'all'" },
     { name = "graphviz" },
+    { name = "jinja2", marker = "extra == 'examples'" },
     { name = "matplotlib", specifier = ">=3.7.0" },
     { name = "multiprocess", marker = "extra == 'examples'" },
     { name = "networkx" },
@@ -1364,6 +1369,7 @@ dev = [
     { name = "coverage" },
     { name = "genbadge", extras = ["all"] },
     { name = "myst-nb" },
+    { name = "myst-sphinx-gallery" },
     { name = "nbmake" },
     { name = "nbsphinx" },
     { name = "pytest-cov" },
@@ -1373,6 +1379,7 @@ dev = [
 ]
 docs = [
     { name = "myst-nb" },
+    { name = "myst-sphinx-gallery" },
     { name = "nbsphinx" },
     { name = "sphinx" },
     { name = "sphinx-rtd-theme" },
@@ -2923,6 +2930,20 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/33/fa/7b45eef11b7971f0beb29d27b7bfe0d747d063aa29e170d9edd004733c8a/myst_parser-5.0.0.tar.gz", hash = "sha256:f6f231452c56e8baa662cc352c548158f6a16fcbd6e3800fc594978002b94f3a", size = 98535, upload-time = "2026-01-15T09:08:18.036Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d3/ac/686789b9145413f1a61878c407210e41bfdb097976864e0913078b24098c/myst_parser-5.0.0-py3-none-any.whl", hash = "sha256:ab31e516024918296e169139072b81592336f2fef55b8986aa31c9f04b5f7211", size = 84533, upload-time = "2026-01-15T09:08:16.788Z" },
+]
+
+[[package]]
+name = "myst-sphinx-gallery"
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "myst-nb" },
+    { name = "pillow" },
+    { name = "sphinx-design" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cc/3a/8136546c8265f998aaf8b6914249e0655c1232aa1d7f22b20b4bbd1ddebe/myst_sphinx_gallery-0.3.0.tar.gz", hash = "sha256:bc22d6ad4e486f8a11233f1a78bb4790220cb62725674acb7c978cf9144f175c", size = 45384, upload-time = "2024-09-06T08:29:38.965Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b4/41/29933c950e353ec15f8dd65ca3ac08b14939f616dca8ad054b8cf58273d6/myst_sphinx_gallery-0.3.0-py3-none-any.whl", hash = "sha256:6ebac1d4fec8f20ac0c59d75e63db62445b2613a01722c62d1e54bb61a709b3c", size = 37264, upload-time = "2024-09-06T08:29:37.367Z" },
 ]
 
 [[package]]
@@ -5231,6 +5252,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/cd/bd/f08eb0f4eed5c83f1ba2a3bd18f7745a2b1525fad70660a1c00224ec468a/sphinx-9.1.0.tar.gz", hash = "sha256:7741722357dd75f8190766926071fed3bdc211c74dd2d7d4df5404da95930ddb", size = 8718324, upload-time = "2025-12-31T15:09:27.646Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/73/f7/b1884cb3188ab181fc81fa00c266699dab600f927a964df02ec3d5d1916a/sphinx-9.1.0-py3-none-any.whl", hash = "sha256:c84fdd4e782504495fe4f2c0b3413d6c2bf388589bb352d439b2a3bb99991978", size = 3921742, upload-time = "2025-12-31T15:09:25.561Z" },
+]
+
+[[package]]
+name = "sphinx-design"
+version = "0.7.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "sphinx", version = "9.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "sphinx", version = "9.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/13/7b/804f311da4663a4aecc6cf7abd83443f3d4ded970826d0c958edc77d4527/sphinx_design-0.7.0.tar.gz", hash = "sha256:d2a3f5b19c24b916adb52f97c5f00efab4009ca337812001109084a740ec9b7a", size = 2203582, upload-time = "2026-01-19T13:12:53.297Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/30/cf/45dd359f6ca0c3762ce0490f681da242f0530c49c81050c035c016bfdd3a/sphinx_design-0.7.0-py3-none-any.whl", hash = "sha256:f82bf179951d58f55dca78ab3706aeafa496b741a91b1911d371441127d64282", size = 2220350, upload-time = "2026-01-19T13:12:51.077Z" },
 ]
 
 [[package]]

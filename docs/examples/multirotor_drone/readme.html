@@ -6,10 +6,10 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multirotor Drone &mdash; fmdtools 2.3.1 documentation</title>
+  <title>Multirotor Drone &mdash; fmdtools 2.3.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/myst_sphinx_gallery.css?v=92de7a9e" />
 
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=67b02a41"></script>
+      <script src="../../_static/documentation_options.js?v=5048a02b"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Overview: Multirotor Drone Model" href="demo_overview.html" />
-    <link rel="prev" title="Tutorial: ActionArchitecture" href="../human_hazard_mitigation/tutorial_actionarchitecture.html" /> 
+    <link rel="prev" title="Human Hazard Mitigation" href="../human_hazard_mitigation/readme.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -230,12 +230,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../human_hazard_mitigation/readme.html">Human Hazard Mitigation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../human_hazard_mitigation/tutorial_actionarchitecture.html">Tutorial: ActionArchitecture</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../human_hazard_mitigation/tutorial_actionarchitecture.html#function-level-simulation">Function-level Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../human_hazard_mitigation/tutorial_actionarchitecture.html#model-simulation">Model Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../human_hazard_mitigation/tutorial_actionarchitecture.html#fault-simulation">Fault Simulation</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="../human_hazard_mitigation/readme.html#package-structure">Package Structure:</a></li>
 </ul>
 </li>
@@ -386,10 +380,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../state_communication/readme.html">State Communications</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../state_communication/tutorial_MultiFlow_and_CommsFlow.html">Tutorial: MultiFlow and CommsFlow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../state_communication/tutorial_MultiFlow_and_CommsFlow.html#building-flows">Building Flows</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="../state_communication/readme.html#package-structure">Package Structure:</a></li>
 </ul>
 </li>
@@ -810,28 +800,28 @@
 <p>Further description and use of the model is given in the provided notebooks:</p>
 <div class="sd-container-fluid sd-sphinx-override msg-sd-container sd-mb-4 docutils">
 <div class="sd-row msg-sd-row docutils">
-<div class="sd-col msg-sd-col sd-d-flex-row msg-tooltip msg-sd-card-hover" tooltip="::: .content-hidden  Copyright  2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved."><div class="sd-card msg-sd-card sd-sphinx-override sd-text-center sd-w-100 sd-shadow-md sd-card-hover msg-sd-card-hover center sd-rounded-2 sd-border-0 docutils">
+<div class="sd-col msg-sd-col sd-d-flex-row msg-sd-card-hover msg-tooltip" tooltip="::: .content-hidden  Copyright  2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved."><div class="sd-card msg-sd-card sd-sphinx-override sd-text-center sd-w-100 sd-shadow-md sd-card-hover msg-sd-card-hover center sd-rounded-2 sd-border-0 docutils">
 <img alt="" class="sd-card-img-top msg-sd-card-img-top" loading="lazy" src="../../_images/tutorial_fmdtools_basics.webp" />
 <div class="sd-card-body msg-sd-card-body docutils">
 <div class="sd-card-title msg-sd-card-title sd-font-weight-bold docutils">
 <a class="reference internal external" href="#">Tutorial: fmdtools basics</a></div>
 </div>
 <a class="sd-stretched-link msg-sd-stretched-link sd-hide-link-text msg-sd-hide-link-text reference external" href="tutorial_fmdtools_basics.html"><span>tutorial_fmdtools_basics.html</span></a></div>
-</div><div class="sd-col msg-sd-col sd-d-flex-row msg-tooltip msg-sd-card-hover" tooltip="This notebook uses a high-level model of a multirotor drone to illustrate the different levels of model fidelity that can be defined and analyzed in fmdtools. The intent of the fmdtools model representation is to be able to iteratively make a model more detailed to support the design process. Specifically, wed like to be able to: - Start with a Network representation of the system to see the network properties of the high-level system structure Network Model - Be able to simulate the system prior to understanding the full system dynamics Static Propagation Model - Be able to add system dynamics Dynamic Propagation Model - Be able to add component architectures as needed Hierarchical Model"><div class="sd-card msg-sd-card sd-sphinx-override sd-text-center sd-w-100 sd-shadow-md sd-card-hover msg-sd-card-hover center sd-rounded-2 sd-border-0 docutils">
+</div><div class="sd-col msg-sd-col sd-d-flex-row msg-sd-card-hover msg-tooltip" tooltip="This notebook uses a high-level model of a multirotor drone to illustrate the different levels of model fidelity that can be defined and analyzed in fmdtools. The intent of the fmdtools model representation is to be able to iteratively make a model more detailed to support the design process. Specifically, wed like to be able to: - Start with a Network representation of the system to see the network properties of the high-level system structure Network Model - Be able to simulate the system prior to understanding the full system dynamics Static Propagation Model - Be able to add system dynamics Dynamic Propagation Model - Be able to add component architectures as needed Hierarchical Model"><div class="sd-card msg-sd-card sd-sphinx-override sd-text-center sd-w-100 sd-shadow-md sd-card-hover msg-sd-card-hover center sd-rounded-2 sd-border-0 docutils">
 <img alt="" class="sd-card-img-top msg-sd-card-img-top" loading="lazy" src="../../_images/paper_ijphm_fmdtools.webp" />
 <div class="sd-card-body msg-sd-card-body docutils">
 <div class="sd-card-title msg-sd-card-title sd-font-weight-bold docutils">
 <a class="reference internal external" href="#">fmdtools Paper Demonstration</a></div>
 </div>
 <a class="sd-stretched-link msg-sd-stretched-link sd-hide-link-text msg-sd-hide-link-text reference external" href="paper_ijphm_fmdtools.html"><span>paper_ijphm_fmdtools.html</span></a></div>
-</div><div class="sd-col msg-sd-col sd-d-flex-row msg-tooltip msg-sd-card-hover" tooltip=" Copyright  2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved."><div class="sd-card msg-sd-card sd-sphinx-override sd-text-center sd-w-100 sd-shadow-md sd-card-hover msg-sd-card-hover center sd-rounded-2 sd-border-0 docutils">
+</div><div class="sd-col msg-sd-col sd-d-flex-row msg-sd-card-hover msg-tooltip" tooltip=" Copyright  2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved."><div class="sd-card msg-sd-card sd-sphinx-override sd-text-center sd-w-100 sd-shadow-md sd-card-hover msg-sd-card-hover center sd-rounded-2 sd-border-0 docutils">
 <img alt="" class="sd-card-img-top msg-sd-card-img-top" loading="lazy" src="../../_images/demo_urban_flight.webp" />
 <div class="sd-card-body msg-sd-card-body docutils">
 <div class="sd-card-title msg-sd-card-title sd-font-weight-bold docutils">
 <a class="reference internal external" href="#">Demonstration: Urban Flight</a></div>
 </div>
 <a class="sd-stretched-link msg-sd-stretched-link sd-hide-link-text msg-sd-hide-link-text reference external" href="demo_urban_flight.html"><span>demo_urban_flight.html</span></a></div>
-</div><div class="sd-col msg-sd-col sd-d-flex-row msg-tooltip msg-sd-card-hover" tooltip="In this notebook, we use the drone model defined in drone_mdl_opt.py to illustrate the use of py:classfmdtools.sim.search.SimpleProblem, py:classfmdtools.sim.search.ParameterSimProblem, and py:classfmdtools.sim.search.ProblemArchitecture classes to set up optimization architectures."><div class="sd-card msg-sd-card sd-sphinx-override sd-text-center sd-w-100 sd-shadow-md sd-card-hover msg-sd-card-hover center sd-rounded-2 sd-border-0 docutils">
+</div><div class="sd-col msg-sd-col sd-d-flex-row msg-sd-card-hover msg-tooltip" tooltip="In this notebook, we use the drone model defined in drone_mdl_opt.py to illustrate the use of py:classfmdtools.sim.search.SimpleProblem, py:classfmdtools.sim.search.ParameterSimProblem, and py:classfmdtools.sim.search.ProblemArchitecture classes to set up optimization architectures."><div class="sd-card msg-sd-card sd-sphinx-override sd-text-center sd-w-100 sd-shadow-md sd-card-hover msg-sd-card-hover center sd-rounded-2 sd-border-0 docutils">
 <img alt="" class="sd-card-img-top msg-sd-card-img-top" loading="lazy" src="../../_images/demo_optimization_architectures.webp" />
 <div class="sd-card-body msg-sd-card-body docutils">
 <div class="sd-card-title msg-sd-card-title sd-font-weight-bold docutils">
@@ -878,7 +868,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../human_hazard_mitigation/tutorial_actionarchitecture.html" class="btn btn-neutral float-left" title="Tutorial: ActionArchitecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../human_hazard_mitigation/readme.html" class="btn btn-neutral float-left" title="Human Hazard Mitigation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="demo_overview.html" class="btn btn-neutral float-right" title="Overview: Multirotor Drone Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
