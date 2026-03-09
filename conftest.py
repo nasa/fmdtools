@@ -173,7 +173,7 @@ def pytest_configure(config):
 
     testtype = config.getoption("--testtype")
     pyver = "py"+str(sys.version_info.major)+str(sys.version_info.minor)
-    reportdir = ".tests/reports/"+testtype+"-"+pyver
+    reportdir = "tests/reports/"+testtype+"-"+pyver
     if config.getoption("--auto_build_reports") and 'cov_report' in config.option:
         if not config.option.cov_source:
             raise Exception("Coverage report will not build without --cov option.")
