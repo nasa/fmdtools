@@ -61,8 +61,8 @@ required-environments = ["sys_platform == 'win32' and platform_machine == 'AMD64
 
 
 [tool.pytest.ini_options]
-addopts = "--cache-clear --import-mode=importlib --doctest-modules --nbmake --cov"
-pythonpath = ["src/fmdtools", "tests", "examples"]
+addopts = "--cache-clear --import-mode=importlib --doctest-modules --nbmake --cov='src', --cov='examples'"
+pythonpath = ["src", "tests", "examples"]
 norecursedirs = ["docs", "_build", "build", "tmp*", "jupyter_execute", "venv", ".venv"]
 
 [tool.setuptools.package-dir]
@@ -88,6 +88,7 @@ omit = [
     "*/tmp/*",
     # omit overall test
     "run_all_tests.py",
+    "conftest.py",
     "*/__init__.py",
     "*/ipykernel*",
     "*/Temp/*"
