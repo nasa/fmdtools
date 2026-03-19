@@ -7,6 +7,7 @@ Created on Mon Mar 18 11:05:24 2024
 """
 import sys
 import os
+import heapq
 
 # Add the parent directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -188,6 +189,7 @@ class EnvironmentGrid(Coords):
     state_danger_zone: tuple = (bool, False)
     state_curr_obstacles: tuple = (bool, False)
     state_curr_visibility: tuple = (bool, False)
+    state_waypoints: tuple = (bool, False)
     feature_occupied: tuple = (bool, False)
     feature_end_zone: tuple = (bool, False)
     point_base: tuple = (5.1, 5.1)
@@ -879,7 +881,7 @@ class Sense(Function):
                 if self.ee.s.power_draw == False:
                     self.ee.s.a = 0
                 else:
-                    self.ee.s.a += 0
+                    self.ee.s.a += 1
             else:
                 self.ee.s.power_draw = True
                 self.ee.s.a += 1
@@ -953,7 +955,7 @@ class Navigate(Function):
                 self.p.ground_control.destination[1],
             ):
                 raise Exception(
-                    "Desitination is out of bounds or the defined map. Maximun x value is "
+                    "Desitination is out of bounds of the defined map. Maximun x value is "
                     + str(self.p.environment.x_size * self.p.environment.blocksize)
                     + "Maximum y value is "
                     + str(self.p.environment.y_size * self.p.environment.blocksize)
@@ -980,21 +982,39 @@ class Navigate(Function):
             else:
                 # path planning
                 ##identify dangerzones
+                final_danger_zone = set()
                 obstacles = self.environment.c.find_all_prop("curr_obstacles", True)
                 visible_map = self.environment.c.find_all_prop("curr_visibility", True)
                 for i in obstacles:
                     danger_zone = Point(i[0], i[1]).buffer(self.p.mission.safety_buffer)
                     for j in visible_map:
                         if danger_zone.contains(Point(j[0], j[1])):
+                            new_j = tuple(j.tolist())
+                            final_danger_zone.add(new_j)
                             self.environment.c.set(j[0], j[1], "danger_zone", True)
-                # self.est_cur_locdir()
+                obstacles = set(map(tuple, obstacles))
+                obstacles.update(final_danger_zone)
+                if len(obstacles) > 0:
+                    new_waypoints = self.get_path_waypoints(
+                        (self.location_pose.s.curr_x, self.location_pose.s.curr_y),
+                        self.p.ground_control.destination,
+                        obstacles,
+                        self.environment.c.find_all_prop("end_zone", True),
+                    )
+                    old_waypoints = self.environment.c.find_all_prop("waypoints", True)
+                    self.environment.c.set_pts(old_waypoints, "waypoints", False)
+                    self.environment.c.set_pts(new_waypoints, "waypoints", True)
+
                 delta_i = (
                     self.p.ground_control.destination[0] - self.location_pose.s.curr_x
                 )
                 delta_j = (
                     self.p.ground_control.destination[1] - self.location_pose.s.curr_y
                 )
-                magnitude = np.sqrt(delta_i**2 + delta_j**2)
+                magnitude = self.get_dist(
+                    self.p.ground_control.destination,
+                    [self.location_pose.s.curr_x, self.location_pose.s.curr_y],
+                )
                 unit_i = delta_i / magnitude
                 unit_j = delta_j / magnitude
                 dist_x = unit_i * self.p.ground_control.speed * self.t.dt
@@ -1007,9 +1027,71 @@ class Navigate(Function):
         )
         return
 
-    # def find_shortest_distance (self, pts):
-    #     for i in pts:
-    #         if
+    # The following functions are utilities for the Path Planning. We use A*
+
+    def get_dist(self, a, b):
+        return np.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
+
+    def get_path_waypoints(self, start, goal, obstacles, endzone):
+
+        close_set = set()
+        came_from = {}
+        gscore = {start: 0}
+        fscore = {start: self.get_dist(start, goal)}
+        oheap = [(fscore[start], start)]
+        p = 1 / 1000
+
+        while oheap:
+            current = heapq.heappop(oheap)[1]
+
+            if current in endzone:
+                # Reconstruct path
+                path = []
+                while current in came_from:
+                    path.append(current)
+                    current = came_from[current]
+                path.append(start)
+                path = path[::-1]
+
+                # Extract waypoints (turns only)
+                if len(path) < 3:
+                    return path
+                waypoints = [path[0]]
+                for i in range(1, len(path) - 1):
+                    # Calculate movement vectors
+                    v1 = (
+                        round(path[i][0] - path[i - 1][0], 2),
+                        round(path[i][1] - path[i - 1][1], 2),
+                    )
+                    v2 = (
+                        round(path[i + 1][0] - path[i][0], 2),
+                        round(path[i + 1][1] - path[i][1], 2),
+                    )
+                    if v1 != v2:
+                        waypoints.append(path[i])
+                waypoints.append(path[-1])
+                return waypoints
+
+            close_set.add(current)
+            neighbors = self.environment.c.get_neighbors(current[0], current[1])
+            for neighbor in neighbors:
+                neighbor = tuple(neighbor.tolist())
+                # Boundary and obstacle checks
+                if not self.environment.c.in_range(neighbor[0], neighbor[1]):
+                    continue
+                if neighbor in obstacles or neighbor in close_set:
+                    continue
+
+                tentative_g_score = gscore[current] + self.get_dist(current, neighbor)
+
+                if tentative_g_score < gscore.get(neighbor, float("inf")):
+                    came_from[neighbor] = current
+                    gscore[neighbor] = tentative_g_score
+                    h = self.get_dist(neighbor, goal)
+                    fscore[neighbor] = tentative_g_score + (h * (1 + p))
+                    heapq.heappush(oheap, (fscore[neighbor], neighbor))
+        return None
+
     def est_cur_locdir(self):
         if self.sense_data.s.location == False:
             self.s.location_error = self.get_error_rate(
@@ -1203,7 +1285,7 @@ if __name__ == "__main__":
     # mdl.flows['environment'].c.assign_from(hist.flows.environment.c, len(hist.time)-1, 'perceived_objects')
 
     ex2, hist2 = prop.one_fault(
-        mdl, "map", "no_obstacle_detection", time=50, run_stochastic=True, seed=50
+        mdl, "map", "ghost_obstacle_detection", time=50, run_stochastic=True, seed=50
     )
     mdl.flows["environment"].c.assign_from(
         hist2.faulty.flows.environment.c, len(hist2.faulty.time) - 1, "explored"
@@ -1234,10 +1316,11 @@ if __name__ == "__main__":
         {
             "explored": {"color": "blue", "alpha": 0.1},
             "perceived_objects": {"color": "yellow", "alpha": 0.5},
-            "rover_path": {"color": "black", "alpha": 0.6},
+            "rover_path": {"color": "black", "alpha": 0.3},
             "curr_visibility": {"color": "green", "alpha": 0.6},
             "curr_obstacles": {"color": "purple", "alpha": 0.6},
             "danger_zone": {"color": "red", "alpha": 0.3},
+            "waypoints": {"color": "black", "alpha": 1.0},
         },
         collections={
             "all_occupied": {"label": False, "color": "red"},
@@ -1256,6 +1339,7 @@ if __name__ == "__main__":
             "curr_visibility": {"color": "green", "alpha": 0.6},
             "curr_obstacles": {"color": "purple", "alpha": 0.6},
             "danger_zone": {"color": "red", "alpha": 0.3},
+            "waypoints": {"color": "black", "alpha": 1.0},
         },
         collections={
             "all_occupied": {"label": False, "color": "red"},
