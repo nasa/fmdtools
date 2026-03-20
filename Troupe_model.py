@@ -916,6 +916,8 @@ class NavigateState(State):
     perceived_dir: list = [0.0, 0.0]
     sense_malfunc_error_loc: list = [0.0, 0.0]
     sense_malfunc_error_dir: list = [0.0, 0.0]
+    next_waypoint: tuple = (0, 0)
+    visited_waypoints: list = []
 
 
 class NavigateMode(Mode):
@@ -947,6 +949,7 @@ class Navigate(Function):
     def init_block(self, **kwargs):
         self.s.perceived_loc[0] = self.environment.c.point_base[0]
         self.s.perceived_loc[1] = self.environment.c.point_base[1]
+        self.s.next_waypoint = self.p.ground_control.destination
 
     def dynamic_behavior(self):
         if self.ee.s.v == 12:
@@ -993,7 +996,10 @@ class Navigate(Function):
                             final_danger_zone.add(new_j)
                             self.environment.c.set(j[0], j[1], "danger_zone", True)
                 obstacles = set(map(tuple, obstacles))
+                # add danger zones into obstacles so rover can avoid them
                 obstacles.update(final_danger_zone)
+
+                # run A# only when new obstacles are detected
                 if len(obstacles) > 0:
                     new_waypoints = self.get_path_waypoints(
                         (self.location_pose.s.curr_x, self.location_pose.s.curr_y),
@@ -1001,33 +1007,79 @@ class Navigate(Function):
                         obstacles,
                         self.environment.c.find_all_prop("end_zone", True),
                     )
+
+                    # reset waypoints
                     old_waypoints = self.environment.c.find_all_prop("waypoints", True)
                     self.environment.c.set_pts(old_waypoints, "waypoints", False)
                     self.environment.c.set_pts(new_waypoints, "waypoints", True)
 
-                delta_i = (
-                    self.p.ground_control.destination[0] - self.location_pose.s.curr_x
-                )
-                delta_j = (
-                    self.p.ground_control.destination[1] - self.location_pose.s.curr_y
-                )
-                magnitude = self.get_dist(
-                    self.p.ground_control.destination,
+                # Navigation
+                if new_waypoints:
+                    self.s.next_waypoint = new_waypoints[1]
+
+                dist_to_waypoint = self.get_dist(
+                    self.s.next_waypoint,
                     [self.location_pose.s.curr_x, self.location_pose.s.curr_y],
                 )
-                unit_i = delta_i / magnitude
-                unit_j = delta_j / magnitude
-                dist_x = unit_i * self.p.ground_control.speed * self.t.dt
-                dist_y = unit_j * self.p.ground_control.speed * self.t.dt
-                self.location_pose.s.curr_x = self.location_pose.s.curr_x + dist_x
-                self.location_pose.s.curr_y = self.location_pose.s.curr_y + dist_y
+
+                travel_distance = self.p.ground_control.speed * self.t.dt
+
+                if dist_to_waypoint > travel_distance:
+                    self.location_pose.s.curr_x, self.location_pose.s.curr_y = (
+                        self.calc_navigation_location(
+                            travel_distance,
+                            dist_to_waypoint,
+                            self.s.next_waypoint,
+                            self.location_pose.s.curr_x,
+                            self.location_pose.s.curr_y,
+                        )
+                    )
+
+                else:
+                    i = 1
+                    while travel_distance > dist_to_waypoint and i < len(new_waypoints):
+                        self.s.visited_waypoints.append(self.s.next_waypoint)
+                        travel_distance = travel_distance - dist_to_waypoint
+                        i += 1
+                        self.s.next_waypoint = new_waypoints[i]
+                        dist_to_waypoint = self.get_dist(
+                            self.s.next_waypoint, new_waypoints[i - 1]
+                        )
+
+                    if i == len(new_waypoints):
+                        self.location_pose.s.curr_x = new_waypoints[-1][0]
+                        self.location_pose.s.curr_y = new_waypoints[-1][1]
+                    else:
+                        self.location_pose.s.curr_x, self.location_pose.s.curr_y = (
+                            self.calc_navigation_location(
+                                travel_distance,
+                                dist_to_waypoint,
+                                self.s.next_waypoint,
+                                new_waypoints[i - 1][0],
+                                new_waypoints[i - 1][1],
+                            )
+                        )
 
         self.environment.c.set(
             self.location_pose.s.curr_x, self.location_pose.s.curr_y, "rover_path", True
         )
+        self.environment.c.set_pts(self.s.visited_waypoints, "waypoints", True)
         return
 
-    # The following functions are utilities for the Path Planning. We use A*
+    def calc_navigation_location(self, distance, waypoint_distance, waypoint, x, y):
+        delta_i = waypoint[0] - x
+        delta_j = waypoint[1] - y
+
+        unit_i = delta_i / waypoint_distance
+        unit_j = delta_j / waypoint_distance
+        dist_x = unit_i * distance
+        dist_y = unit_j * distance
+
+        new_x = x + dist_x
+        new_y = y + dist_y
+        return new_x, new_y
+
+    # The following 2 functions arer the Path Planning. We use A*
 
     def get_dist(self, a, b):
         return np.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
@@ -1058,7 +1110,7 @@ class Navigate(Function):
                     return path
                 waypoints = [path[0]]
                 for i in range(1, len(path) - 1):
-                    # Calculate movement vectors
+                    # Figure out if the rover is making a turn to identify waypoints
                     v1 = (
                         round(path[i][0] - path[i - 1][0], 2),
                         round(path[i][1] - path[i - 1][1], 2),
@@ -1092,6 +1144,15 @@ class Navigate(Function):
                     heapq.heappush(oheap, (fscore[neighbor], neighbor))
         return None
 
+    # The functions that follow are not integrated into the Nav Function.
+    # They were created to pick an error rate when there is a delay in localization.
+    # The full implmentaion would like what follows:
+    # An error rate will be picked when for location and pose if no localization is rescieved. when sense_data = False
+    # And this will be applied to the relavant variable.
+    # For each time step where there is no localization, the error will aggragate
+    # When a localization data is received (i.e., sense_data = True), the delay variables should be checked.
+    # The simulation should go back the number of delayed steps and update the location/pose value to the true value.
+    # Then calculate the error based on the error rate using the new true value as the base.
     def est_cur_locdir(self):
         if self.sense_data.s.location == False:
             self.s.location_error = self.get_error_rate(
@@ -1200,7 +1261,7 @@ class Rover(FunctionArchitecture):
 
         return end
 
-    def find_classification(self, scen, mdlhists):
+    def classify(self, **kwargs):
         """
                 calculates metrics that need to be tracked for the simulation
 
@@ -1218,6 +1279,8 @@ class Rover(FunctionArchitecture):
                         number of ghost obstacles detected
                     num_false_negetive_objects: int
                         number of actual obstacles not detected
+                    time_between_obstacles: list
+                        amount of timesteps inbteween obstacle detections
         --------------------------------------------------------------
                     safety breaches - safety margin is 20 cm.
                     Safety Dangerzone - margin
@@ -1226,6 +1289,7 @@ class Rover(FunctionArchitecture):
         modes, modeproperties = self.return_faultmodes()
         classification = str()
         at_finish = True
+        time_between_obstacles = list()
 
         # mission is incomplete if the rovr is not at the end point
         if not self.flows["environment"].at_finish(
@@ -1259,6 +1323,14 @@ class Rover(FunctionArchitecture):
             perceived_objects=(True, np.equal), occupied=(False, np.equal)
         )
 
+        count = 0
+        for i in self.flows["environment"].h["c.curr_obstacles"]:
+            if len(i) == 0:
+                count += 1
+            else:
+                time_between_obstacles.append(count)
+                count = 0
+
         return {
             "classification": classification,
             "at_finish": at_finish,
@@ -1266,6 +1338,7 @@ class Rover(FunctionArchitecture):
             "num_false_positive_obstacles": len(false_positive_objects),
             "num_false_negetive_obstacles": len(false_negetive_objects),
             "num_perceived_obstacles": len(perceived_objects),
+            "time_between_obstacles": time_between_obstacles,
         }
 
 
@@ -1287,6 +1360,8 @@ if __name__ == "__main__":
     ex2, hist2 = prop.one_fault(
         mdl, "map", "ghost_obstacle_detection", time=50, run_stochastic=True, seed=50
     )
+
+    print(ex2)
     mdl.flows["environment"].c.assign_from(
         hist2.faulty.flows.environment.c, len(hist2.faulty.time) - 1, "explored"
     )
