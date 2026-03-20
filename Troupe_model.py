@@ -918,6 +918,7 @@ class NavigateState(State):
     sense_malfunc_error_dir: list = [0.0, 0.0]
     next_waypoint: tuple = (0, 0)
     visited_waypoints: list = []
+    old_waypoints: list = []
 
 
 class NavigateMode(Mode):
@@ -950,6 +951,7 @@ class Navigate(Function):
         self.s.perceived_loc[0] = self.environment.c.point_base[0]
         self.s.perceived_loc[1] = self.environment.c.point_base[1]
         self.s.next_waypoint = self.p.ground_control.destination
+        self.s.old_waypoints = []
 
     def dynamic_behavior(self):
         if self.ee.s.v == 12:
@@ -1000,6 +1002,7 @@ class Navigate(Function):
                 obstacles.update(final_danger_zone)
 
                 # run A# only when new obstacles are detected
+                new_waypoints = None
                 if len(obstacles) > 0:
                     new_waypoints = self.get_path_waypoints(
                         (self.location_pose.s.curr_x, self.location_pose.s.curr_y),
@@ -1009,14 +1012,14 @@ class Navigate(Function):
                     )
 
                     # reset waypoints
-                    old_waypoints = self.environment.c.find_all_prop("waypoints", True)
-                    self.environment.c.set_pts(old_waypoints, "waypoints", False)
+                    self.environment.c.set_pts(self.s.old_waypoints, "waypoints", False)
                     self.environment.c.set_pts(new_waypoints, "waypoints", True)
 
                 # Navigation
-                if new_waypoints:
-                    self.s.next_waypoint = new_waypoints[1]
+                if new_waypoints is None:
+                    new_waypoints = self.s.old_waypoints
 
+                self.s.next_waypoint = new_waypoints[1]
                 dist_to_waypoint = self.get_dist(
                     self.s.next_waypoint,
                     [self.location_pose.s.curr_x, self.location_pose.s.curr_y],
@@ -1059,7 +1062,12 @@ class Navigate(Function):
                                 new_waypoints[i - 1][1],
                             )
                         )
-
+                new_waypoints = [
+                    item
+                    for item in new_waypoints
+                    if item not in self.s.visited_waypoints
+                ]
+                self.s.old_waypoints = new_waypoints
         self.environment.c.set(
             self.location_pose.s.curr_x, self.location_pose.s.curr_y, "rover_path", True
         )
@@ -1286,7 +1294,7 @@ class Rover(FunctionArchitecture):
                     Safety Dangerzone - margin
         """
 
-        modes, modeproperties = self.return_faultmodes()
+        modes = self.return_faultmodes()
         classification = str()
         at_finish = True
         time_between_obstacles = list()
@@ -1324,12 +1332,19 @@ class Rover(FunctionArchitecture):
         )
 
         count = 0
-        for i in self.flows["environment"].h["c.curr_obstacles"]:
-            if len(i) == 0:
+
+        for i in range(1, len(self.flows["environment"].h["c.curr_obstacles"])):
+            obs_count = 0
+            for j in self.flows["environment"].h["c.curr_obstacles"][i]:
+                for k in j:
+                    if k == True:
+                        obs_count += 1
+            if obs_count == 0:
                 count += 1
             else:
                 time_between_obstacles.append(count)
                 count = 0
+        time_between_obstacles = [i for i in time_between_obstacles if i != 0]
 
         return {
             "classification": classification,
@@ -1358,10 +1373,11 @@ if __name__ == "__main__":
     # mdl.flows['environment'].c.assign_from(hist.flows.environment.c, len(hist.time)-1, 'perceived_objects')
 
     ex2, hist2 = prop.one_fault(
-        mdl, "map", "ghost_obstacle_detection", time=50, run_stochastic=True, seed=50
+        mdl, "map", "no_obstacle_detection", time=50, run_stochastic=True, seed=50
     )
 
-    print(ex2)
+    print(ex2.map_no_obstacle_detection_t50.tend.classify.time_between_obstacles)
+
     mdl.flows["environment"].c.assign_from(
         hist2.faulty.flows.environment.c, len(hist2.faulty.time) - 1, "explored"
     )
