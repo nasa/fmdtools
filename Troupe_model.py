@@ -42,9 +42,7 @@ from shapely.ops import split
 import matplotlib.pyplot as plt
 from shapely.plotting import plot_line, plot_points
 
-plt.rcParams["animation.ffmpeg_path"] = (
-    "C:\\Users\mmohame2\\ffmpeg\\ffmpeg\\bin\\ffmpeg.exe"
-)
+# plt.rcParams["animation.ffmpeg_path"] = "C:\\Users\mmohame2\\ffmpeg\\ffmpeg\\bin\\ffmpeg.exe"
 
 # DEFINE PARAMETERS
 
@@ -152,7 +150,7 @@ class EnvironmentParams(CoordsParam):
     mission_params: MissionParams = MissionParams()
 
     num_occupied: int = 50
-    num_obstacle_clusters: int = 10
+    num_obstacle_clusters: int = 1
     cluster_size: int = 10
     max_obstacle_length: int = 3
     max_obstacle_width: int = 3
@@ -1297,7 +1295,6 @@ class Rover(FunctionArchitecture):
         modes = self.return_faultmodes()
         classification = str()
         at_finish = True
-        time_between_obstacles = list()
 
         # mission is incomplete if the rovr is not at the end point
         if not self.flows["environment"].at_finish(
@@ -1331,20 +1328,16 @@ class Rover(FunctionArchitecture):
             perceived_objects=(True, np.equal), occupied=(False, np.equal)
         )
 
+        time_between_obstacles = list()
         count = 0
-
-        for i in range(1, len(self.flows["environment"].h["c.curr_obstacles"])):
-            obs_count = 0
-            for j in self.flows["environment"].h["c.curr_obstacles"][i]:
-                for k in j:
-                    if k == True:
-                        obs_count += 1
-            if obs_count == 0:
+        for i in range(len(self.h.time)-1):
+            oldhist = self.h.flows.environment.c.curr_obstacles[i-1]
+            newhist = self.h.flows.environment.c.curr_obstacles[i]
+            if np.all(oldhist == newhist):
                 count += 1
             else:
                 time_between_obstacles.append(count)
                 count = 0
-        time_between_obstacles = [i for i in time_between_obstacles if i != 0]
 
         return {
             "classification": classification,
@@ -1421,27 +1414,28 @@ if __name__ == "__main__":
         linewidth=0.0,
     )
 
-    animation = mdl.flows["environment"].c.animate(
-        hist2.faulty.flows.environment.c,
-        properties={
-            "explored": {"color": "blue", "alpha": 0.1},
-            "perceived_objects": {"color": "yellow", "alpha": 0.5},
-            "rover_path": {"color": "black", "alpha": 0.6},
-            "curr_visibility": {"color": "green", "alpha": 0.6},
-            "curr_obstacles": {"color": "purple", "alpha": 0.6},
-            "danger_zone": {"color": "red", "alpha": 0.3},
-            "waypoints": {"color": "black", "alpha": 1.0},
-        },
-        collections={
-            "all_occupied": {"label": False, "color": "red"},
-            "all_endzone": {"label": False, "color": "green"},
-        },
-        coll_overlay=False,
-        linewidth=0.0,
-    )
+    # animation = mdl.flows["environment"].c.animate(
+    #     hist2.faulty.flows.environment.c,
+    #     properties={
+    #         "explored": {"color": "blue", "alpha": 0.1},
+    #         "perceived_objects": {"color": "yellow", "alpha": 0.5},
+    #         "rover_path": {"color": "black", "alpha": 0.6},
+    #         "curr_visibility": {"color": "green", "alpha": 0.6},
+    #         "curr_obstacles": {"color": "purple", "alpha": 0.6},
+    #         "danger_zone": {"color": "red", "alpha": 0.3},
+    #         "waypoints": {"color": "black", "alpha": 1.0},
+    #     },
+    #     collections={
+    #         "all_occupied": {"label": False, "color": "red"},
+    #         "all_endzone": {"label": False, "color": "green"},
+    #     },
+    #     coll_overlay=False,
+    #     linewidth=0.0,
+    # )
 
-    progress_callback = lambda i, n: print(f"Saving frame {i}/{n}")
-    animation.save("Troupe_test.mp4", progress_callback=progress_callback)
+    # progress_callback = lambda i, n: print(f"Saving frame {i}/{n}")
+    # animation.save("Troupe_test.gif", progress_callback=progress_callback)
+
     # animation.save('Troupe_faulty_no_self_map.mp4', progress_callback=progress_callback)
 
     # animation = mdl.flows["environment"].c.animate(
