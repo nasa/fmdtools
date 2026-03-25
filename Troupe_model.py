@@ -150,7 +150,7 @@ class EnvironmentParams(CoordsParam):
     mission_params: MissionParams = MissionParams()
 
     num_occupied: int = 50
-    num_obstacle_clusters: int = 1
+    num_obstacle_clusters: int = 0
     cluster_size: int = 10
     max_obstacle_length: int = 3
     max_obstacle_width: int = 3
@@ -287,7 +287,7 @@ class EnvironmentState(State):
 class RoverEnvironment(Environment):
     """Rover environment with occupiable and unoccupiable spaces."""
 
-    container_p = RoverParams
+    container_p = EnvironmentParams
     coords_c = EnvironmentGrid
     container_s = EnvironmentState
 
@@ -958,7 +958,7 @@ class Navigate(Function):
                 self.p.ground_control.destination[1],
             ):
                 raise Exception(
-                    "Desitination is out of bounds of the defined map. Maximun x value is "
+                    "Destination is out of bounds of the defined map. Maximun x value is "
                     + str(self.p.environment.x_size * self.p.environment.blocksize)
                     + "Maximum y value is "
                     + str(self.p.environment.y_size * self.p.environment.blocksize)
@@ -1001,7 +1001,7 @@ class Navigate(Function):
 
                 # run A# only when new obstacles are detected
                 new_waypoints = None
-                if len(obstacles) > 0:
+                if len(obstacles) > 0 or not self.s.old_waypoints:
                     new_waypoints = self.get_path_waypoints(
                         (self.location_pose.s.curr_x, self.location_pose.s.curr_y),
                         self.p.ground_control.destination,
@@ -1017,7 +1017,10 @@ class Navigate(Function):
                 if new_waypoints is None:
                     new_waypoints = self.s.old_waypoints
 
-                self.s.next_waypoint = new_waypoints[1]
+                try:
+                    self.s.next_waypoint = new_waypoints[1]
+                except:
+                    pass
                 dist_to_waypoint = self.get_dist(
                     self.s.next_waypoint,
                     [self.location_pose.s.curr_x, self.location_pose.s.curr_y],
@@ -1219,6 +1222,7 @@ class Navigate(Function):
 class Rover(FunctionArchitecture):
     __slots__ = ()
     container_p = RoverParams
+    container_r = Rand
     default_sp = dict(
         end_time=300,
         phases=(("start", 0, 30), ("end", 31, 150)),
@@ -1229,7 +1233,7 @@ class Rover(FunctionArchitecture):
     def init_architecture(self, **kwargs):
         # Flows
         self.add_flow("location_pose", LocationPose)
-        self.add_flow("environment", RoverEnvironment, p=self.p)
+        self.add_flow("environment", RoverEnvironment, p=self.p.environment)
         self.add_flow("sense_data", SenseData)
         self.add_flow("ee", EE)
         # self.add_flow("comms", Comms)
@@ -1330,7 +1334,7 @@ class Rover(FunctionArchitecture):
 
         time_between_obstacles = list()
         count = 0
-        for i in range(len(self.h.time)-1):
+        for i in range(2, len(self.h.time)-1):
             oldhist = self.h.flows.environment.c.curr_obstacles[i-1]
             newhist = self.h.flows.environment.c.curr_obstacles[i]
             if np.all(oldhist == newhist):
@@ -1352,6 +1356,11 @@ class Rover(FunctionArchitecture):
 
 if __name__ == "__main__":
     function = SupplyPower()
+
+
+    mdl_low = Rover(p={'environment': {'num_occupied': 10}}, r={'seed': 10})
+    res, hist = prop.nominal(mdl_low)
+    
 
     mdl = Rover()
     # mdl.flows['environment'].c.show_collection('all_occupied', label = False)
