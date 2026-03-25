@@ -23,8 +23,6 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.flow.base import Flow
-from fmdtools.define.flow.multiflow import MultiFlow
-from fmdtools.define.flow.commsflow import CommsFlow
 
 # from fmdtools.analyze.graph.architecture import (
 #     FunctionArchitectureGraph,
@@ -40,7 +38,7 @@ import numpy as np
 from shapely import Point, LineString, MultiLineString, Polygon
 from shapely.ops import split
 import matplotlib.pyplot as plt
-from shapely.plotting import plot_line, plot_points
+from shapely.plotting import plot_points
 
 # plt.rcParams["animation.ffmpeg_path"] = "C:\\Users\mmohame2\\ffmpeg\\ffmpeg\\bin\\ffmpeg.exe"
 
