@@ -865,8 +865,7 @@ class MultiSimulation(BaseSimulation):
                         history_filename=self.history_filename,
                         indiv_id=True,
                         overwrite=self.overwrite,
-                        to_return=self.to_return,
-                        protect=not bool(self.pool))
+                        to_return=self.to_return)
         def_kwar = {**def_kwar, **kwargs}
         def_kwar = filter_kwargs(Simulation, **def_kwar)
         return def_kwar
@@ -1054,7 +1053,7 @@ class MultiEventSimulation(MultiSimulation):
             return [({**sim_kwar, 'scen': scen, 'mdl': self.mdls[scen.time].copy()},
                      call_kwar) for scen in scenlist]
         else:
-            sim_kwar = self.gen_sim_kwargs(**kwargs)
+            sim_kwar = self.gen_sim_kwargs(**kwargs, protect = not self.pool)
             return [({**sim_kwar, 'scen': scen}, call_kwar) for scen in scenlist]
 
 

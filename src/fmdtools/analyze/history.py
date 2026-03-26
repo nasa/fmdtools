@@ -1066,8 +1066,8 @@ class History(Result):
             Limits on the y-axis. The default is ().
         zlim : tuple, optional
             Limits on the z-axis. The default is ().
-        legend : bool, optional
-            Whether to show a legend. The default is True.
+        legend : bool, kwargs, optional
+            Whether to show a legend/ kwargs to legend. The default is True.
         title : str, optional
             Title to add. Default is '' (no title).
         fig : matplotlib.figure, optional
@@ -1108,7 +1108,9 @@ class History(Result):
             elif len(plot_values) == 3:
                 hists.plot_trajectory3(*plot_values, **local_kwargs)
         if legend:
-            consolidate_legend(ax, **kwargs)
+            if isinstance(legend, bool):
+                legend={}
+            consolidate_legend(ax, **legend)
         add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, title=title,
                          xlim=xlim, ylim=ylim, zlim=zlim)
         return fig, ax
