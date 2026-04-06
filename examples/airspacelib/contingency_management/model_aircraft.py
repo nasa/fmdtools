@@ -197,6 +197,15 @@ class ContingencyControlFlight(ControlFlight):
 class ContingencyAviate(Aviate):
     """Movement of the drone. Updates encironment point."""
 
+    def static_behavior(self):
+        dists = self.environment.ga.calc_dist_to_threats("envelope", "envelope")
+        for name, dist in dists.items():
+            if dist <= 0.1:
+                self.m.add_fault('crash')
+                self.m.set_mode('falling')
+                self.environment.ga.points[name].s.buffer_speed = 0.0
+        super().static_behavior()
+
     def dynamic_behavior(self):
         super().dynamic_behavior()
         self.environment.ga.points['self'].s.assign(self.trajectories.s, 'x', 'y', 'z')

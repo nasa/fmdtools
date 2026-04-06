@@ -177,7 +177,7 @@ class ContingencyThreats(GeomArchitecture):
         """Initialize drone and intruders given 'intruders' options."""
         self.add_point('self', Threat)
         if self.p.intruders == "across":
-            s = {'buffer_speed': 3.5, 'x': 100, 'y': 0.0, 'z': 25.0,
+            s = {'buffer_speed': 3.3, 'x': 100, 'y': 0.0, 'z': 25.0,
                  'goal_x': 0.0, 'goal_y': 100.0, 'goal_z': 25.0}
             self.add_point("uav", Threat, s=s)
         elif self.p.intruders == "middle":
@@ -266,7 +266,7 @@ if __name__ == "__main__":
     he.ga.update_positions()
     he.show()
 
-    hc = ContingencyConditions(track=['environment'])
+    cc = ContingencyConditions(track=['environment'])
     from fmdtools.sim import propagate
     res, hist = propagate.nominal(hc)
 

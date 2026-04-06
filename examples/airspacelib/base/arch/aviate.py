@@ -67,7 +67,7 @@ class Aviate(Function):
         if self.trajectories.s.z > 0.0:
             if self.electricity.s.voltage_high <= 0.0:
                 self.m.set_mode('falling')
-            else:
+            elif not self.m.in_mode('falling'):
                 self.m.set_mode('flight')
         else:
             if self.electricity.s.voltage_high > 0.0:
