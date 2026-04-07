@@ -268,7 +268,7 @@ if __name__ == "__main__":
 
     cc = ContingencyConditions(track=['environment'])
     from fmdtools.sim import propagate
-    res, hist = propagate.nominal(hc)
+    res, hist = propagate.nominal(cc)
 
     hist.plot_trajectories('environment.ga.points.uav.s.x',
                            'environment.ga.points.uav.s.y')

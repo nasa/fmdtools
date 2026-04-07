@@ -94,7 +94,7 @@ class ContingencyControlParameter(Parameter):
     fuel_rate: float = 20.0
     disallowed_cost: float = 10.0
     occupied_cost: float = 20.0
-    restricted_cost: float = 1000000.0
+    restricted_cost: float = 100.0
     max_distance: int = 5
     blocksize: float = 2.5
     
@@ -134,6 +134,8 @@ class ContingencyControlFlight(ControlFlight):
             else:
                 if self.m.in_mode('pause'):
                     self.m.set_mode('flight')
+                    self.replan_mission()
+                    self.s.pt = 1
                 self.s.reconfigured_proxthreat = False
                 
     def static_behavior(self):
@@ -173,10 +175,6 @@ class ContingencyControlFlight(ControlFlight):
         # if UAV within distance 10, require A* consideration for UAV safety
         obstacle = self.s.closest_dist <= 10
         # if battery low, bump fuel cost proportionally to current battery level
-        if 0.0 < self.electricity.s.charge <= 25.0:
-            fuel_rate = self.p.fuel_rate * 25000.0 / self.electricity.s.charge
-        else:
-            fuel_rate = self.p.fuel_rate
         curr_pt = self.trajectories.perc_traj.s.gett('x', 'y')
         new_path = grid.a_star_worldcoords(
             start_xy = curr_pt, 
@@ -185,7 +183,7 @@ class ContingencyControlFlight(ControlFlight):
             disallowed_cost = self.p.disallowed_cost,
             occupied_cost = self.p.occupied_cost,
             restricted_cost = self.p.restricted_cost,
-            fuel_rate = fuel_rate, 
+            fuel_rate = self.p.fuel_rate, 
             obstacle = obstacle
             )
 
@@ -203,6 +201,7 @@ class ContingencyAviate(Aviate):
             if dist <= 0.1:
                 self.m.add_fault('crash')
                 self.m.set_mode('falling')
+                self.environment.ga.points['self'].s.buffer_speed = 0.0
                 self.environment.ga.points[name].s.buffer_speed = 0.0
         super().static_behavior()
 

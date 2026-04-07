@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-03-06T14:14:43.411844</dc:date>
+    <dc:date>2026-04-06T17:33:36.010125</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -740,7 +740,7 @@ L 203.033732 162.087094
 L 203.033732 162.087094 
 L 203.033732 162.087094 
 L 203.033732 162.087094 
-" clip-path="url(#pbee3c9e696)" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #0000ff; stroke-width: 1.5"/>
+" clip-path="url(#pf368073753)" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #0000ff; stroke-width: 1.5"/>
    </g>
    <g id="line2d_21">
     <path d="M 36.433958 185.811995 
@@ -773,11 +773,11 @@ L 112.44788 78.63159
 L 117.722679 74.449036 
 L 117.722679 74.449036 
 L 121.201105 71.690883 
-L 109.575045 75.204681 
-L 108.19426 75.622002 
-L 108.19426 75.622002 
-L 107.651853 79.225265 
-L 107.651853 79.225265 
+L 119.465669 73.066964 
+L 119.465669 73.066964 
+L 112.44788 78.63159 
+L 110.674171 80.038021 
+L 110.674171 80.038021 
 L 118.506734 80.256148 
 L 118.506734 80.256148 
 L 118.55068 116.612151 
@@ -844,7 +844,7 @@ L 118.613851 168.873211
 L 118.613851 168.873211 
 L 118.613851 168.873211 
 L 118.613851 168.873211 
-" clip-path="url(#pbee3c9e696)" style="fill: none; stroke: #ff0000; stroke-width: 1.5; stroke-linecap: square"/>
+" clip-path="url(#pf368073753)" style="fill: none; stroke: #ff0000; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
    <g id="text_20">
     <!-- t=0.0 -->
@@ -1122,7 +1122,7 @@ z
    </g>
    <g id="text_34">
     <!-- t=30.0 -->
-    <g transform="translate(109.575045 75.204681) scale(0.08 -0.08)">
+    <g transform="translate(119.465669 73.066964) scale(0.08 -0.08)">
      <use xlink:href="#DejaVuSans-74"/>
      <use xlink:href="#DejaVuSans-3d" transform="translate(39.208984 0)"/>
      <use xlink:href="#DejaVuSans-33" transform="translate(122.998047 0)"/>
@@ -1648,7 +1648,7 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="pbee3c9e696">
+  <clipPath id="pf368073753">
    <rect x="7.2" y="22.318125" width="221.76" height="221.76"/>
   </clipPath>
  </defs>

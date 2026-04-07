@@ -217,7 +217,7 @@ class DroneFlightGrid(Coords):
                                 restricted_cost * restricted
                             )
                 if (i, j) in unsafe_points:
-                    total += restricted_cost
+                    total +=100*restricted_cost
                 self.set(i, j, 'grid_costs', total)
 
     def neighbor_gen(self, j, i, max_distance):
@@ -446,5 +446,18 @@ class DroneFlightGrid(Coords):
         return path_xy
     
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod(verbose=True)
+    from fmdtools_examples.airspacelib.contingency_management.model_flightplanner import DroneFlightGrid, DroneFlightGridParam
+    from fmdtools_examples.airspacelib.contingency_management.model_environment import ContingencyEnvironment
+    import numpy as np
+    env = ContingencyEnvironment()
+    param = DroneFlightGridParam(x_size=120/2.5, y_size=120/2.5, blocksize=2.5, max_cost=np.inf)
+    grid = DroneFlightGrid(env, p=param)
+    start = (45.0, 72.5)
+    goal = (50.0, 60.0)
+    path = grid.a_star_worldcoords(start_xy=start, goal_xy=goal, max_distance=5,
+                                   disallowed_cost=10.0, occupied_cost=20.0,
+                                   restricted_cost=100.0, fuel_rate= 20, obstacle=True) # *25000.0/25
+    print(path)
+
+    # import doctest
+    # doctest.testmod(verbose=True)
