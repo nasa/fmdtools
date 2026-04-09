@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Mar 18 11:05:24 2024
+Model developed for Troupe project.
 
-@author: smbaye
+Authors: Lukman Irshad, Daniel Hulse, Seydou Mbaye
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The "Fault Model Design tools - fmdtools version 2" software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE/2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
-import sys
-import os
-import heapq
-
-# Add the parent directory to sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.block.function import Function
 from fmdtools.define.environment import Environment
@@ -24,25 +29,13 @@ from fmdtools.define.container.time import Time
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.flow.base import Flow
 
-# from fmdtools.analyze.graph.architecture import (
-#     FunctionArchitectureGraph,
-#     FunctionArchitectureFlowGraph,
-# )
-# from fmdtools.analyze.graph.architecture import (
-#     FunctionArchitectureFxnGraph,
-#     FunctionArchitectureTypeGraph,
-# )
 import fmdtools.sim.propagate as prop
+
+import heapq
 import numpy as np
-
-from shapely import Point, LineString, MultiLineString, Polygon
+from shapely import Point, LineString
 from shapely.ops import split
-import matplotlib.pyplot as plt
-from shapely.plotting import plot_points
 
-# plt.rcParams["animation.ffmpeg_path"] = "C:\\Users\mmohame2\\ffmpeg\\ffmpeg\\bin\\ffmpeg.exe"
-
-# DEFINE PARAMETERS
 
 
 class GroundControlParams(Parameter):
@@ -57,8 +50,6 @@ class GroundControlParams(Parameter):
         accaptable buffer for the end point
     speed: float
         maximum speed of the rover
-
-
     """
 
     destination: tuple = (25, 25)
@@ -104,41 +95,42 @@ class MissionParams(Parameter):
 
 class EnvironmentParams(CoordsParam):
     """
-     Define the map parameters (default is 1000mX1000m grid where each point
-    is 0.1m).
+    Define the map parameters.
 
-     Fields
-     -------
-     x_size: int
-         number of blocks in x direction
-     y_size: int
-         number of blocks in y direction
-     blocksize: float
-         size of each block
-     operator_params: GroundControlParams
-         takes in the destination point from ground control
-     num_occupied: int
-         number of occupied grid points to initiate the map with
-     explored: state
-         areas of the map where the rover has exploed
-     perecieved_objects: state
-         objects that are percieved and mapped
-     rover_path: state
-         areas in the map the rover has travelled
-     occupied: feature
-         places in the map that are occupied and the rover can't reach
-     end_zone: feature
-         acceptable end zone corresponding to the desitination point
-     danger_zone: feature
-         area surrounding obstacles the rover should not go to
-     point: base
-         base location
-     all_occupied: collection
-         all points that are occupied
-     all_endzone: collection
-         all points that are in th end zone
-     all_dangerzone: collection
-         all points that the rover should not travel to
+    Default is 1000mX1000m grid where each point is 0.1m.
+
+    Fields
+    -------
+    x_size: int
+        number of blocks in x direction
+    y_size: int
+        number of blocks in y direction
+    blocksize: float
+        size of each block
+    operator_params: GroundControlParams
+        takes in the destination point from ground control
+    num_occupied: int
+        number of occupied grid points to initiate the map with
+    explored: state
+        areas of the map where the rover has exploed
+    perecieved_objects: state
+        objects that are percieved and mapped
+    rover_path: state
+        areas in the map the rover has travelled
+    occupied: feature
+        places in the map that are occupied and the rover can't reach
+    end_zone: feature
+        acceptable end zone corresponding to the desitination point
+    danger_zone: feature
+        area surrounding obstacles the rover should not go to
+    point: base
+        base location
+    all_occupied: collection
+        all points that are occupied
+    all_endzone: collection
+        all points that are in th end zone
+    all_dangerzone: collection
+        all points that the rover should not travel to
     """
 
     x_size: int = 100
@@ -156,7 +148,7 @@ class EnvironmentParams(CoordsParam):
 
 class RoverParams(Parameter):
     """
-    Overall Rover Parameters
+    Overall Rover Parameters.
 
     Fields
     -------
@@ -171,9 +163,6 @@ class RoverParams(Parameter):
     environment: EnvironmentParams = EnvironmentParams()
     ground_control: GroundControlParams = GroundControlParams()
     mission: MissionParams = MissionParams()
-
-
-# DEFINE FLOWS
 
 
 class EnvironmentGrid(Coords):
@@ -194,8 +183,11 @@ class EnvironmentGrid(Coords):
     container_p = EnvironmentParams
 
     def init_properties(self, *args, **kwargs):
-        """Randomly allocate the occupied points and create an end zone based
-        on the desination point
+        """
+        Create map distributions.
+
+        Randomly allocates the occupied points and create an end zone based
+        on the desination point.
         """
         self.set_rand_pts("occupied", True, self.p.num_occupied, pts=self.pts[1:-1])
         obstacles = self.find_all_prop("occupied", True)
@@ -209,7 +201,7 @@ class EnvironmentGrid(Coords):
         obstacles = self.find_all_prop("occupied", True)
 
     def create_obstacle_clusters(self, obstacles):
-        """creates obstacle clusters based on input parameters"""
+        """Create obstacle clusters based on input parameters."""
         cluster_index = self.r.rng.choice(
             self.p.num_occupied, size=self.p.num_obstacle_clusters, replace=False
         )
@@ -290,18 +282,18 @@ class RoverEnvironment(Environment):
     container_s = EnvironmentState
 
     def at_finish(self, curr_x, curr_y):
-        """determine if the rover is at the end zone"""
+        """Determine if the rover is at the end zone."""
         return self.c.in_area(curr_x, curr_y, "all_endzone")
 
     def check_collision(self, curr_x, curr_y):
-        """determine if the rover has hit an obstacle"""
+        """Determine if the rover has hit an obstacle."""
         return self.c.get(curr_x, curr_y, "occupied")
 
 
 class EEState(State):
     """States relating to the power supply.
 
-    Feilds
+    Fields
     -------
     v: float
         voltage
@@ -350,9 +342,10 @@ class EE(Flow):
 
 
 class LocationPoseState(State):
-    """Rover location and Pose
+    """
+    Rover location and Pose.
 
-    Feilds
+    Fields
     ------
     curr_x: float
         x coordinate of the current location
@@ -362,7 +355,6 @@ class LocationPoseState(State):
         current pose measured from the positive x-axis
     velocity: list
         velocity vector with i and j compoenents
-
     """
 
     curr_x: float = 5.1
@@ -372,7 +364,7 @@ class LocationPoseState(State):
 
 
 class LocationPose(Flow):
-    """Flow for the Locationa and Pose of the Rover"""
+    """Flow for the Location and Pose of the Rover."""
 
     __slots__ = ()
     container_s = LocationPoseState
@@ -385,6 +377,10 @@ class LocationPose(Flow):
 
 class SenseDataState(State):
     """
+    Sensed data.
+
+    Fields
+    ------
     location: bool
         indicates if the Sense function has sensed the location
     pose: bool
@@ -405,7 +401,7 @@ class SenseDataState(State):
 
 
 class SenseData(Flow):
-    """flow that passes sensing related information"""
+    """Flow that passes sensing related information."""
 
     __slots__ = ()
     container_s = SenseDataState
@@ -415,7 +411,7 @@ class SenseData(Flow):
 
 class SupplyPowerState(State):
     """
-    State of power.
+    State of power supply.
 
     Fields
     ------
@@ -475,7 +471,7 @@ class SupplyPower(Function):
             self.short_power_usage()
 
     def dynamic_behavior(self):
-        """power usage over time."""
+        """Power usage over time."""
         self.s.inc(charge=-self.s.power / 100)
         self.s.limit(charge=(0, 100))
 
@@ -488,7 +484,7 @@ class SupplyPower(Function):
         self.ee.s.v = 0
 
     def standby_power(self):
-        """during standby the supplied current is reduced."""
+        """During standby, the supplied current is reduced."""
         self.ee.s.put(v=12, a=0.1)
         if self.ee.s.power_draw == True:
             self.m.set_mode("supply")
@@ -533,17 +529,23 @@ class SupplyPower(Function):
 
 
 class MapState(State):
-    """state for the map function. Tracks the obstacles that are within the
-    vision cone, second state tracks if the map is reset for no_self_map fault"""
+    """
+    Mapping states.
+
+    Tracks the obstacles that are within the vision cone, second state tracks if the map
+    is reset for no_self_map fault.
+    """
 
     obstacles_inrange: list = []
     map_reset: bool = False
 
 
 class MapMode(Mode):
-    """Modes for the mapping functions
+    """
+    Modes for the mapping functions.
 
-    -------------------
+    Fields
+    ------
     on: mode
         mapping function is on
     off: mode
@@ -568,9 +570,10 @@ class MapMode(Mode):
 
 
 class Map(Function):
-    """Mapping Function
+    """
+    Mapping Function.
 
-    percieves the environment based on the visible region
+    Percieves the environment based on the visible region.
     """
 
     __slots__ = ("ee", "location_pose", "environment")
@@ -583,7 +586,7 @@ class Map(Function):
     flow_location_pose = LocationPose
 
     def dynamic_behavior(self):
-        """all nominal and faulty perceptions behaviors"""
+        """All nominal and faulty perceptions behaviors."""
         if self.ee.s.v == 12:
             self.m.set_mode("on")
             self.ee.s.a = 0.1
@@ -699,8 +702,10 @@ class Map(Function):
         return
 
     def check_in_cone(self, pts, cone, buffer=0):
-        """checks if given points are within the cone (including the buffer)
-        and returns the points that are within the cone. Boundaries exluded
+        """
+        Check if given points are within the cone (including the buffer).
+
+        Returns the points that are within the cone (boundaries exluded).
         """
         cone_pts = list()
         if buffer != 0:
@@ -711,8 +716,11 @@ class Map(Function):
         return cone_pts
 
     def find_blind_spots(self, vision_cone, perceived_obstacles):
-        """removes blind spots that are caused by obstacles from the vision cone
-        and returns the new cone."""
+        """
+        Remove blind spots that are caused by obstacles from the vision cone.
+
+        Returns the new cone.
+        """
         for i in perceived_obstacles:
             if vision_cone.contains(Point(i[0], i[1])):
                 inside_pt = Point(
@@ -751,14 +759,13 @@ class Map(Function):
         return vision_cone
 
     def calc_splitter(self, point1, point2):
-        """determines the splitter for the vision cone, when it needs to
-        be split"""
+        """Determine the splitter for the vision cone, when split by an object."""
         point3 = self.calc_blind_coords(point1)
         point4 = self.calc_blind_coords(point2)
         return LineString([point3, point1, point2, point4])
 
     def split_cone(self, vision_cone, splitter, inside_pt):
-        """splits the vision cone and returns the chunk that is of interest"""
+        """Split the vision cone and return the chunk of interest."""
         split_cone = split(vision_cone, splitter)
         geoms = [*split_cone.geoms]
         for geom in geoms:
@@ -767,8 +774,7 @@ class Map(Function):
         return vision_cone
 
     def calc_blind_coords(self, Point):
-        """given a point, calculates the entexsion of that point that is at
-        the endge of the vision cone"""
+        """Calculate the extension of a point at the end of its vision cone."""
         norm_coords = np.array(
             [
                 Point[0] - self.location_pose.s.curr_x,
@@ -787,8 +793,7 @@ class Map(Function):
         return new_point
 
     def find_rand_points(self, grid_pts, max_pts=None):
-        """given grib points and maximum numbers of points to select,
-        randomly picks indexes from the grid pts"""
+        """Randomly pick indeces from provided grid points."""
         if max_pts == None or len(grid_pts) <= max_pts:
             if len(grid_pts) > 0:
                 max_pts = self.r.rng.integers(1, len(grid_pts), endpoint=True)
@@ -803,10 +808,13 @@ class Map(Function):
 
 
 class SenseTime(Time):
+    """Timers for sensing."""
+
     timernames = ("nominal", "too_late")
 
 
 class SenseMode(Mode):
+    """Sensing fault modes."""
 
     fault_too_late = (1e-4, 200)
     fault_position_est_malfunc = (1e-4, 200)
@@ -816,6 +824,8 @@ class SenseMode(Mode):
 
 
 class Sense(Function):
+    """Sensing function."""
+
     __slots__ = ("ee", "sense_data", "environment", "location_pose")
     container_p = MissionParams
     container_m = SenseMode
@@ -883,15 +893,17 @@ class Sense(Function):
                 self.ee.s.a += 1
 
     def update_sensed(self, variable, value):
+        """Update sensed variables."""
         if variable == "both":
             self.sense_data.s.location = value
             self.sense_data.s.pose = value
         elif variable == "location":
-            self.sense_data.s.location = variable
+            self.sense_data.s.location = value
         else:
-            self.sense_data.s.pose = variable
+            self.sense_data.s.pose = value
 
     def assign_sense_data(self):
+        """Assign sensed data based on faults."""
         self.update_sensed("both", True)
         self.sense_data.s.malfunc_location = False
         self.sense_data.s.malfunc_pose = False
@@ -906,6 +918,8 @@ class Sense(Function):
 
 
 class NavigateState(State):
+    """Navigation states."""
+
     location_error: list = [0.0, 0.0]
     pose_error: list = [0.0, 0.0]
     perceived_loc: list = [0.0, 0.0]
@@ -918,6 +932,7 @@ class NavigateState(State):
 
 
 class NavigateMode(Mode):
+    """Navigation faulty and operational modes."""
 
     fault_steering_stuck = (1e-4, 200)
     fault_poor_wheel_alignment_right = (1e-4, 200)
@@ -933,6 +948,8 @@ class NavigateMode(Mode):
 
 
 class Navigate(Function):
+    """Rover navigation function."""
+
     __slots__ = ("ee", "environment", "location_pose", "sense_data")
     container_m = NavigateMode
     container_p = RoverParams
@@ -1043,10 +1060,11 @@ class Navigate(Function):
                         self.s.visited_waypoints.append(self.s.next_waypoint)
                         travel_distance = travel_distance - dist_to_waypoint
                         i += 1
-                        self.s.next_waypoint = new_waypoints[i]
-                        dist_to_waypoint = self.get_dist(
-                            self.s.next_waypoint, new_waypoints[i - 1]
-                        )
+                        if i < len(new_waypoints):
+                            self.s.next_waypoint = new_waypoints[i]
+                            dist_to_waypoint = self.get_dist(
+                                self.s.next_waypoint, new_waypoints[i - 1]
+                            )
 
                     if i == len(new_waypoints):
                         self.location_pose.s.curr_x = new_waypoints[-1][0]
@@ -1086,13 +1104,12 @@ class Navigate(Function):
         new_y = y + dist_y
         return new_x, new_y
 
-    # The following 2 functions arer the Path Planning. We use A*
-
     def get_dist(self, a, b):
+        """Get distance between two points."""
         return np.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
 
     def get_path_waypoints(self, start, goal, obstacles, endzone):
-
+        """Get path between start and goal around obstacles to the endzone."""
         close_set = set()
         came_from = {}
         gscore = {start: 0}
@@ -1218,18 +1235,16 @@ class Navigate(Function):
 
 
 class Rover(FunctionArchitecture):
+    """Overall Rover architecture."""
+
     __slots__ = ()
     container_p = RoverParams
     container_r = Rand
-    default_sp = dict(
-        end_time=300,
-        phases=(("start", 0, 30), ("end", 31, 150)),
-        end_condition="indicate_finished",
-        dt=1.0,
-    )
+    default_sp = dict(end_time=300, phases=(("start", 0, 30), ("end", 31, 150)),
+                      end_condition="indicate_finished", dt=1.0)
 
     def init_architecture(self, **kwargs):
-        # Flows
+        """Initialize rover architecture."""
         self.add_flow("location_pose", LocationPose)
         self.add_flow("environment", RoverEnvironment, p=self.p.environment)
         self.add_flow("sense_data", SenseData)
@@ -1251,7 +1266,7 @@ class Rover(FunctionArchitecture):
         )
 
     def indicate_finished(self):
-        """indicates if the mission has ended"""
+        """Indicate if the mission has ended."""
         end = False
         if (
             self.flows["environment"].at_finish(
@@ -1271,29 +1286,25 @@ class Rover(FunctionArchitecture):
 
     def classify(self, **kwargs):
         """
-                calculates metrics that need to be tracked for the simulation
+        Calculate output metrics for the simulation.
 
-                Returns
-                ----------
-                    at_finish: bool
-                        is true if the rover has reached the end point
-                    classification: str
-                        mission status (nominal, faulty, or incomplete)
-                    num_explored_obstacles: int
-                        number of obstacles in the explored area,
-                    num_perceived_obstacles: int
-                        number of perceived obstacles in the explored area
-                    num_false_positive_objects: int
-                        number of ghost obstacles detected
-                    num_false_negetive_objects: int
-                        number of actual obstacles not detected
-                    time_between_obstacles: list
-                        amount of timesteps inbteween obstacle detections
-        --------------------------------------------------------------
-                    safety breaches - safety margin is 20 cm.
-                    Safety Dangerzone - margin
+        Returns
+        -------
+        at_finish: bool
+            is true if the rover has reached the end point
+        classification: str
+            mission status (nominal, faulty, or incomplete)
+        num_explored_obstacles: int
+            number of obstacles in the explored area,
+        num_perceived_obstacles: int
+            number of perceived obstacles in the explored area
+        num_false_positive_objects: int
+            number of ghost obstacles detected
+        num_false_negetive_objects: int
+            number of actual obstacles not detected
+        time_between_obstacles: list
+            amount of timesteps inbteween obstacle detections
         """
-
         modes = self.return_faultmodes()
         classification = str()
         at_finish = True
@@ -1441,9 +1452,9 @@ if __name__ == "__main__":
     # )
 
     # progress_callback = lambda i, n: print(f"Saving frame {i}/{n}")
-    # animation.save("Troupe_test.gif", progress_callback=progress_callback)
+    # animation.save("outputs_model_troupe/Troupe_test.gif", progress_callback=progress_callback)
 
-    # animation.save('Troupe_faulty_no_self_map.mp4', progress_callback=progress_callback)
+    # animation.save('outputs_model_troupe/Troupe_faulty_no_self_map.mp4', progress_callback=progress_callback)
 
     # animation = mdl.flows["environment"].c.animate(
     #     hist2.nominal.flows.environment.c, properties ={"explored": {"color": "blue", "alpha": 0.3},
@@ -1452,4 +1463,4 @@ if __name__ == "__main__":
     # collections={
     # "all_occupied": {"label": False, "color": "red"},
     # "all_endzone": {"label": False, "color": "green"}}, coll_overlay=False, linewidth =0.0)
-    # animation.save('Troupe_nominal.mp4', progress_callback=progress_callback)
+    # animation.save('outputs_model_troupe/Troupe_nominal.mp4', progress_callback=progress_callback)
