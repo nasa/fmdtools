@@ -22,12 +22,12 @@
 
 See: [Examples](https://nasa.github.io/fmdtools/examples/Examples.html)
 
-<img src="/docs/_images/tutorial_fmdtools_basics.webp" width="15%"></img>
-<img src="/docs/_images/demo_proxthreat.webp" width="15%"></img>
-<img src="/docs/_images/demo_wildfire.webp" width="15%"></img>
-<img src="/docs/_images/paper_jcise_dsa.webp" width="15%"></img>
-<img src="/docs/_images/demo_urban_flight.webp" width="15%"></img> 
-<img src="/docs/_images/demo_degradation.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/tutorial_fmdtools_basics.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/demo_proxthreat.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/demo_wildfire.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/paper_jcise_dsa.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/demo_urban_flight.webp" width="15%"></img> 
+<img src="https://nasa.github.io/fmdtools/_images/demo_degradation.webp" width="15%"></img>
 
 ## About
 
