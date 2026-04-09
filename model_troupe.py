@@ -311,34 +311,7 @@ class EEState(State):
 class EE(Flow):
     """Electricity flow."""
 
-    __slots__ = ()
     container_s = EEState
-
-
-# class CommsState(State):
-#     '''Communication variables between the rover and ground control
-
-#     Feilds
-#     ------
-#     end_point: tuple
-#         destination point
-#     new_desitnation: bool
-#         if a new destination is possible
-#     power: bool
-#         turn on rover
-#     map: RoverEnvironment
-#         areas mapped by the rover
-#     comms_to_ground: str
-#         communication from the rover to ground control
-#     '''
-#     end_point: tuple = (0,0)
-#     power: bool = False
-#     map: RoverEnvironment = {}
-
-# class Comms(Flow):
-#     '''Communications flow'''
-#     __slots__ = ()
-#     container_s = CommsState
 
 
 class LocationPoseState(State):
@@ -366,7 +339,6 @@ class LocationPoseState(State):
 class LocationPose(Flow):
     """Flow for the Location and Pose of the Rover."""
 
-    __slots__ = ()
     container_s = LocationPoseState
     container_p = EnvironmentParams
 
@@ -403,10 +375,7 @@ class SenseDataState(State):
 class SenseData(Flow):
     """Flow that passes sensing related information."""
 
-    __slots__ = ()
     container_s = SenseDataState
-
-    # DEFINE FUNCTIONS
 
 
 class SupplyPowerState(State):
@@ -450,7 +419,6 @@ class SupplyPowerMode(Mode):
 class SupplyPower(Function):
     """Rover power supply."""
 
-    __slots__ = "ee"
     container_s = SupplyPowerState
     container_m = SupplyPowerMode
     flow_ee = EE
@@ -511,23 +479,6 @@ class SupplyPower(Function):
             self.m.set_mode("standby")
 
 
-# class CommunicateMode(Mode):
-#     fm_args = ("loss_of_communication")
-
-# class Communicate(Function):
-#     __slots__ = ("ee_comms", "comms")
-#     container_m = CommunicateMode
-#     container_p = GroundControlParams
-#     flow_comms = Comms
-#     flow_ee_comms = EE
-
-#     def dynamic_behavior (self, time):
-#         if self.ee_comms.s.v > 0:
-#             self.ee.comms.s.a = 1
-#             if self.m.any_faults() is False:
-#                 self.comms.s.end_point = self.p.destination
-
-
 class MapState(State):
     """
     Mapping states.
@@ -576,7 +527,6 @@ class Map(Function):
     Percieves the environment based on the visible region.
     """
 
-    __slots__ = ("ee", "location_pose", "environment")
     container_m = MapMode
     container_p = MissionParams
     container_r = Rand
@@ -826,7 +776,6 @@ class SenseMode(Mode):
 class Sense(Function):
     """Sensing function."""
 
-    __slots__ = ("ee", "sense_data", "environment", "location_pose")
     container_p = MissionParams
     container_m = SenseMode
     container_t = SenseTime
@@ -950,7 +899,6 @@ class NavigateMode(Mode):
 class Navigate(Function):
     """Rover navigation function."""
 
-    __slots__ = ("ee", "environment", "location_pose", "sense_data")
     container_m = NavigateMode
     container_p = RoverParams
     container_s = NavigateState
@@ -1168,76 +1116,10 @@ class Navigate(Function):
                     heapq.heappush(oheap, (fscore[neighbor], neighbor))
         return None
 
-    # The functions that follow are not integrated into the Nav Function.
-    # They were created to pick an error rate when there is a delay in localization.
-    # The full implmentaion would like what follows:
-    # An error rate will be picked when for location and pose if no localization is rescieved. when sense_data = False
-    # And this will be applied to the relavant variable.
-    # For each time step where there is no localization, the error will aggragate
-    # When a localization data is received (i.e., sense_data = True), the delay variables should be checked.
-    # The simulation should go back the number of delayed steps and update the location/pose value to the true value.
-    # Then calculate the error based on the error rate using the new true value as the base.
-    def est_cur_locdir(self):
-        if self.sense_data.s.location == False:
-            self.s.location_error = self.get_error_rate(
-                self.p.mission.sense_error_mean, self.p.mission.sense_error_std
-            )
-            self.s.perceived_loc = self.assign_error(
-                self.s.perceived_loc, self.s.location_error
-            )
-        else:
-            if self.sense_data.s.malfunc_location == True:
-                self.s.sense_malfunc_error_loc = self.get_error_rate(
-                    self.p.mission.sense_malfunc_mean, self.p.mission.sense_malfunc_std
-                )
-            first_x = (
-                self.location_pose.h.s.curr_x[
-                    int(self.t.time) - self.sense_data.s.delay
-                ]
-                + self.location_pose.h.s.curr_x[
-                    int(self.t.time) - self.sense_data.s.delay
-                ]
-                * self.s.sense_malfunc_error_loc[0]
-            )
-            first_y = (
-                self.location_pose.h.s.curr_y[
-                    int(self.t.time) - self.sense_data.s.delay
-                ]
-                + self.location_pose.h.s.curr_y[
-                    int(self.t.time) - self.sense_data.s.delay
-                ]
-                * self.s.sense_malfunc_error_loc[1]
-            )
-            print(self.sense_data.s.delay)
-
-        # for i in range (self.sense_data.s.delay):
-
-        if self.sense_data.s.pose == False:
-            self.s.pose_error = self.get_error_rate(
-                self.p.mission.sense_error_mean, self.p.mission.sense_error_std
-            )
-            self.s.perceived_dir = self.assign_error(
-                self.s.perceived_dir, self.s.pose_error
-            )
-        else:
-            if self.sense_data.s.malfunc_pose == True:
-                self.s.sense_malfunc_error_dir = self.get_error_rate(
-                    self.p.mission.sense_malfunc_mean, self.p.params.sense_malfunc_std
-                )
-
-    def get_error_rate(self, mean_error, std_error):
-        return self.r.rng.normal(mean_error, std_error, size=2)
-
-    def assign_error(self, value, error_rate):
-        for ind, rate in enumerate(error_rate):
-            value[ind] += value[ind] * rate
-        return value
-
 
 class Rover(FunctionArchitecture):
     """Overall Rover architecture."""
 
-    __slots__ = ()
     container_p = RoverParams
     container_r = Rand
     default_sp = dict(end_time=300, phases=(("start", 0, 30), ("end", 31, 150)),
@@ -1249,21 +1131,12 @@ class Rover(FunctionArchitecture):
         self.add_flow("environment", RoverEnvironment, p=self.p.environment)
         self.add_flow("sense_data", SenseData)
         self.add_flow("ee", EE)
-        # self.add_flow("comms", Comms)
-        # Functions
+
         self.add_fxn("supply_power", SupplyPower, "ee")
-        # self.add_fxn("communicate", Communicate, "ee_comms", "comms")
         self.add_fxn("map", Map, "environment", "ee", "location_pose", p=self.p.mission)
         self.add_fxn("sense", Sense, "sense_data", "location_pose", "ee", "environment")
-        self.add_fxn(
-            "navigate",
-            Navigate,
-            "location_pose",
-            "ee",
-            "environment",
-            "sense_data",
-            p=self.p,
-        )
+        self.add_fxn("navigate", Navigate, "location_pose", "ee", "environment",
+                     "sense_data", p=self.p)
 
     def indicate_finished(self):
         """Indicate if the mission has ended."""
