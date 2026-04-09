@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cooling Tank &mdash; fmdtools 2.3.2 documentation</title>
+  <title>Cooling Tank &mdash; fmdtools 2.3.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=5048a02b"></script>
+      <script src="../../_static/documentation_options.js?v=f4302432"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -230,6 +230,12 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../human_hazard_mitigation/readme.html">Human Hazard Mitigation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../human_hazard_mitigation/tutorial_actionarchitecture.html">Tutorial: ActionArchitecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../human_hazard_mitigation/tutorial_actionarchitecture.html#function-level-simulation">Function-level Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../human_hazard_mitigation/tutorial_actionarchitecture.html#model-simulation">Model Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../human_hazard_mitigation/tutorial_actionarchitecture.html#fault-simulation">Fault Simulation</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../human_hazard_mitigation/readme.html#package-structure">Package Structure:</a></li>
 </ul>
 </li>
@@ -373,6 +379,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../navigating_rover/paper_aiaa_coevolution.html#performance-comparison">Performance Comparison</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../navigating_rover/paper_aiaa_coevolution.html#comparing-solutions-over-weights-fault-space-formulation">Comparing Solutions over weights - Fault-Space Formulation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../navigating_rover/paper_aiaa_coevolution.html#comparing-solutions-over-weights-result-space-formulation">Comparing Solutions over weights - Result-Space Formulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../navigating_rover/paper_rsa_troupe.html">Paper [RSA]: TROUPE Rover Overview and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../navigating_rover/paper_rsa_troupe.html#model-overview">Model Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../navigating_rover/paper_rsa_troupe.html#analysis">Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../navigating_rover/paper_rsa_troupe.html#overall-plot-s">Overall Plot(s)</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../navigating_rover/readme.html#package-structure">Package Structure:</a></li>
@@ -799,14 +811,14 @@
 <p>Further description and use of the model is given in the provided notebooks:</p>
 <div class="sd-container-fluid sd-sphinx-override msg-sd-container sd-mb-4 docutils">
 <div class="sd-row msg-sd-row docutils">
-<div class="sd-col msg-sd-col sd-d-flex-row msg-sd-card-hover msg-tooltip" tooltip="This notebook will show the basics of using fmdtools to simulate hazards in a system with human-component interactions, including:"><div class="sd-card msg-sd-card sd-sphinx-override sd-text-center sd-w-100 sd-shadow-md sd-card-hover msg-sd-card-hover center sd-rounded-2 sd-border-0 docutils">
+<div class="sd-col msg-sd-col sd-d-flex-row msg-tooltip msg-sd-card-hover" tooltip="This notebook will show the basics of using fmdtools to simulate hazards in a system with human-component interactions, including:"><div class="sd-card msg-sd-card sd-sphinx-override sd-text-center sd-w-100 sd-shadow-md sd-card-hover msg-sd-card-hover center sd-border-0 sd-rounded-2 docutils">
 <img alt="" class="sd-card-img-top msg-sd-card-img-top" loading="lazy" src="../../_images/demo_tank_model.webp" />
 <div class="sd-card-body msg-sd-card-body docutils">
 <div class="sd-card-title msg-sd-card-title sd-font-weight-bold docutils">
 <a class="reference internal external" href="#">Demo: Cooling Tank Model</a></div>
 </div>
 <a class="sd-stretched-link msg-sd-stretched-link sd-hide-link-text msg-sd-hide-link-text reference external" href="demo_tank_model.html"><span>demo_tank_model.html</span></a></div>
-</div><div class="sd-col msg-sd-col sd-d-flex-row msg-sd-card-hover msg-tooltip" tooltip="This notebook demonstrates the optimization of the tank model described in model_optimization.py using the ProblemInterface class in the fmdtools.search module."><div class="sd-card msg-sd-card sd-sphinx-override sd-text-center sd-w-100 sd-shadow-md sd-card-hover msg-sd-card-hover center sd-rounded-2 sd-border-0 docutils">
+</div><div class="sd-col msg-sd-col sd-d-flex-row msg-tooltip msg-sd-card-hover" tooltip="This notebook demonstrates the optimization of the tank model described in model_optimization.py using the ProblemInterface class in the fmdtools.search module."><div class="sd-card msg-sd-card sd-sphinx-override sd-text-center sd-w-100 sd-shadow-md sd-card-hover msg-sd-card-hover center sd-border-0 sd-rounded-2 docutils">
 <img alt="" class="sd-card-img-top msg-sd-card-img-top" loading="lazy" src="../../_images/paper_jmd_optimization.webp" />
 <div class="sd-card-body msg-sd-card-body docutils">
 <div class="sd-card-title msg-sd-card-title sd-font-weight-bold docutils">

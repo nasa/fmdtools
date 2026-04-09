@@ -37,7 +37,7 @@ name = "adbc-driver-manager"
 version = "1.10.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "typing-extensions" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/9e/77/b6ffd112a67d133810d0027e9de4408a6e63e0e1c438f5866cc28eb3c213/adbc_driver_manager-1.10.0.tar.gz", hash = "sha256:f04407cf2f99bfde13dea0e136d87219c8a16678d43e322744dbd84cdd8eaac2", size = 208204, upload-time = "2026-01-09T07:13:45.803Z" }
 wheels = [
@@ -77,8 +77,8 @@ name = "adbc-driver-postgresql"
 version = "1.10.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "adbc-driver-manager", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "importlib-resources", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "adbc-driver-manager" },
+    { name = "importlib-resources" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/14/15/bb1d0458fb79bec75d6392d695f3dd58e3100789e6605a69e2b0e30ba1b5/adbc_driver_postgresql-1.10.0.tar.gz", hash = "sha256:4687d41180a31f6e6081dfb85cbe4b1611498d6b5c462f34ed3b7e68d20ed90d", size = 20747, upload-time = "2026-01-09T07:13:47.118Z" }
 wheels = [
@@ -94,8 +94,8 @@ name = "adbc-driver-sqlite"
 version = "1.10.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "adbc-driver-manager", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "importlib-resources", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "adbc-driver-manager" },
+    { name = "importlib-resources" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/72/34/f4924d98a340835988f135303c7e562f7a388308a3fbb949f357bcb94b04/adbc_driver_sqlite-1.10.0.tar.gz", hash = "sha256:064ed5f1372578d2063cd920514cd2597c6a6db3b0163c2116e373faeedffec6", size = 18298, upload-time = "2026-01-09T07:13:49.001Z" }
 wheels = [
@@ -487,18 +487,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/74/f6/cb228f5949553a5c01d1d5a3c933f0216d78540d9e0bf8dd4343bb449681/bottleneck-1.6.0-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:4dd7ac619570865fcb7a0e8925df418005f076286ad2c702dd0f447231d7a055", size = 386909, upload-time = "2025-09-08T16:30:34.973Z" },
     { url = "https://files.pythonhosted.org/packages/09/9a/425065c37a67a9120bf53290371579b83d05bf46f3212cce65d8c01d470a/bottleneck-1.6.0-cp314-cp314t-win32.whl", hash = "sha256:7fb694165df95d428fe00b98b9ea7d126ef786c4a4b7d43ae2530248396cadcb", size = 111636, upload-time = "2025-09-08T16:30:36.044Z" },
     { url = "https://files.pythonhosted.org/packages/ad/23/c41006e42909ec5114a8961818412310aa54646d1eae0495dbff3598a095/bottleneck-1.6.0-cp314-cp314t-win_amd64.whl", hash = "sha256:174b80930ce82bd8456c67f1abb28a5975c68db49d254783ce2cb6983b4fea40", size = 117611, upload-time = "2025-09-08T16:30:37.055Z" },
-]
-
-[[package]]
-name = "brotlipy"
-version = "0.7.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "cffi", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d9/91/bc79b88590e4f662bd40a55a2b6beb0f15da4726732efec5aa5a3763d856/brotlipy-0.7.0.tar.gz", hash = "sha256:36def0b859beaf21910157b4c33eb3b06d8ce459c942102f16988cca6ea164df", size = 413338, upload-time = "2017-05-30T08:20:34.637Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/03/53/41f17238db696c4c95019174ca5bfd2396ef379c7918ae4f6ff82529ee92/brotlipy-0.7.0-cp35-abi3-win_amd64.whl", hash = "sha256:ac1d66c9774ee62e762750e399a0c95e93b180e96179b645f28b162b55ae8adc", size = 376301, upload-time = "2021-09-02T17:51:51.987Z" },
 ]
 
 [[package]]
@@ -1039,21 +1027,6 @@ wheels = [
 ]
 
 [[package]]
-name = "db-dtypes"
-version = "1.5.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "numpy", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "packaging", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pandas", version = "2.0.3", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pyarrow", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/27/3d/8c021df7796bde3bc4a9f8129865676a45d95ba8c5fd14b1de82997ff0b4/db_dtypes-1.5.0.tar.gz", hash = "sha256:ad9e94243f53e104bc77dbf9ae44b580d83a770d3694483aba59c9767966daa5", size = 34800, upload-time = "2025-12-15T21:47:21.874Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/01/80/171c7c5b78e60ab25d6f11e3d38675fe7ef843ddc79a7fd26916d3a6ca05/db_dtypes-1.5.0-py3-none-any.whl", hash = "sha256:abdbb2e4eb965800ed6f98af0c5c1cafff9063ace09114be2d26a7f046be2c8a", size = 18267, upload-time = "2025-12-15T21:47:21.026Z" },
-]
-
-[[package]]
 name = "deap"
 version = "1.4.3"
 source = { registry = "https://pypi.org/simple" }
@@ -1194,8 +1167,7 @@ dependencies = [
     { name = "fsspec" },
     { name = "numpy" },
     { name = "packaging" },
-    { name = "pandas", version = "2.0.3", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pandas", version = "3.0.0", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "pandas" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/1e/ad/87f7f5750685e8e0a359d732c85332481ba9b5723af579f8755f81154d0b/fastparquet-2025.12.0.tar.gz", hash = "sha256:85f807d3846c7691855a68ed7ff6ee40654b72b997f5b1199e6310a1e19d1cd5", size = 480045, upload-time = "2025-12-18T16:22:22.016Z" }
 wheels = [
@@ -1271,7 +1243,7 @@ wheels = [
 
 [[package]]
 name = "fmdtools"
-version = "2.3.2"
+version = "2.3.3"
 source = { editable = "." }
 dependencies = [
     { name = "dill" },
@@ -1280,8 +1252,7 @@ dependencies = [
     { name = "networkx" },
     { name = "numpy" },
     { name = "ordered-set" },
-    { name = "pandas", version = "2.0.3", source = { registry = "https://pypi.org/simple" }, extra = ["all"], marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pandas", version = "3.0.0", source = { registry = "https://pypi.org/simple" }, extra = ["all"], marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "pandas", extra = ["all"] },
     { name = "pytest" },
     { name = "recordclass" },
     { name = "scipy" },
@@ -1352,7 +1323,7 @@ requires-dist = [
     { name = "networkx" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "ordered-set" },
-    { name = "pandas", extras = ["all"] },
+    { name = "pandas", extras = ["all"], specifier = ">=2.2.0" },
     { name = "pathos", marker = "extra == 'examples'" },
     { name = "pymoo", marker = "extra == 'examples'" },
     { name = "pytest" },
@@ -1642,24 +1613,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/90/dd/211f27c1e927e2292c2a71d5df1a2aaf261ce50ba7d50848c6ee24e20970/google_auth_oauthlib-1.2.4.tar.gz", hash = "sha256:3ca93859c6cc9003c8e12b2a0868915209d7953f05a70f4880ab57d57e56ee3e", size = 21185, upload-time = "2026-01-15T22:03:10.027Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/84/21/fb96db432d187b07756e62971c4d89bdef70259e4cfa76ee32bcc0ac97d1/google_auth_oauthlib-1.2.4-py3-none-any.whl", hash = "sha256:0e922eea5f2baacaf8867febb782e46e7b153236c21592ed76ab3ddb77ffd772", size = 19193, upload-time = "2026-01-15T22:03:09.046Z" },
-]
-
-[[package]]
-name = "google-cloud-bigquery"
-version = "3.40.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "google-api-core", extra = ["grpc"], marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "google-auth", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "google-cloud-core", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "google-resumable-media", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "packaging", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "python-dateutil", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "requests", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/94/0a/62438ca138a095945468968696d9cca75a4cfd059e810402e70b0236d8ba/google_cloud_bigquery-3.40.0.tar.gz", hash = "sha256:b3ccb11caf0029f15b29569518f667553fe08f6f1459b959020c83fbbd8f2e68", size = 509287, upload-time = "2026-01-08T01:07:26.065Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/90/6a/90a04270dd60cc70259b73744f6e610ae9a158b21ab50fb695cca0056a3d/google_cloud_bigquery-3.40.0-py3-none-any.whl", hash = "sha256:0469bcf9e3dad3cab65b67cce98180c8c0aacf3253d47f0f8e976f299b49b5ab", size = 261335, upload-time = "2026-01-08T01:07:23.761Z" },
 ]
 
 [[package]]
@@ -3336,87 +3289,12 @@ wheels = [
 
 [[package]]
 name = "pandas"
-version = "2.0.3"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.14' and platform_machine == 'AMD64' and sys_platform == 'win32'",
-    "python_full_version == '3.13.*' and platform_machine == 'AMD64' and sys_platform == 'win32'",
-    "python_full_version == '3.12.*' and platform_machine == 'AMD64' and sys_platform == 'win32'",
-    "python_full_version < '3.12' and platform_machine == 'AMD64' and sys_platform == 'win32'",
-]
-dependencies = [
-    { name = "numpy", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "python-dateutil", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pytz", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "tzdata", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/b1/a7/824332581e258b5aa4f3763ecb2a797e5f9a54269044ba2e50ac19936b32/pandas-2.0.3.tar.gz", hash = "sha256:c02f372a88e0d17f36d3093a644c73cfc1788e876a7c4bcb4020a77512e2043c", size = 5284455, upload-time = "2023-06-28T23:19:33.371Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9e/71/756a1be6bee0209d8c0d8c5e3b9fc72c00373f384a4017095ec404aec3ad/pandas-2.0.3-cp311-cp311-win_amd64.whl", hash = "sha256:6a21ab5c89dcbd57f78d0ae16630b090eec626360085a4148693def5452d8a6b", size = 10607692, upload-time = "2023-06-28T23:17:28.824Z" },
-]
-
-[package.optional-dependencies]
-all = [
-    { name = "beautifulsoup4", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "bottleneck", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "brotlipy", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "fastparquet", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "fsspec", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "gcsfs", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "html5lib", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "hypothesis", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "jinja2", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "lxml", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "matplotlib", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "numba", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "numexpr", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "odfpy", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "openpyxl", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pandas-gbq", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "psycopg2", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pyarrow", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pymysql", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pyqt5", version = "5.15.2", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pyreadstat", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pytest", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pytest-asyncio", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pytest-xdist", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "python-snappy", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pyxlsb", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "qtpy", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "s3fs", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "scipy", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "sqlalchemy", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "tables", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "tabulate", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "xarray", version = "2024.7.0", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "xlrd", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "xlsxwriter", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "zstandard", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-]
-
-[[package]]
-name = "pandas"
 version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.14' and platform_machine != 'AMD64' and sys_platform == 'win32'",
-    "python_full_version >= '3.14' and sys_platform == 'emscripten'",
-    "python_full_version >= '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version == '3.13.*' and platform_machine != 'AMD64' and sys_platform == 'win32'",
-    "python_full_version == '3.12.*' and platform_machine != 'AMD64' and sys_platform == 'win32'",
-    "python_full_version < '3.12' and platform_machine != 'AMD64' and sys_platform == 'win32'",
-    "python_full_version == '3.13.*' and sys_platform == 'emscripten'",
-    "python_full_version == '3.12.*' and sys_platform == 'emscripten'",
-    "python_full_version < '3.12' and sys_platform == 'emscripten'",
-    "python_full_version == '3.13.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version == '3.12.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version < '3.12' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-]
 dependencies = [
-    { name = "numpy", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "python-dateutil", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "tzdata", marker = "(platform_machine != 'AMD64' and sys_platform == 'win32') or sys_platform == 'emscripten'" },
+    { name = "numpy" },
+    { name = "python-dateutil" },
+    { name = "tzdata", marker = "sys_platform == 'emscripten' or sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/de/da/b1dc0481ab8d55d0f46e343cfe67d4551a0e14fcee52bd38ca1bd73258d8/pandas-3.0.0.tar.gz", hash = "sha256:0facf7e87d38f721f0af46fe70d97373a37701b1c09f7ed7aeeb292ade5c050f", size = 4633005, upload-time = "2026-01-21T15:52:04.726Z" }
 wheels = [
@@ -3471,66 +3349,43 @@ wheels = [
 
 [package.optional-dependencies]
 all = [
-    { name = "adbc-driver-postgresql", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "adbc-driver-sqlite", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "beautifulsoup4", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "bottleneck", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "fastparquet", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "fsspec", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "gcsfs", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "html5lib", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "hypothesis", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "jinja2", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "lxml", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "matplotlib", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "numba", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "numexpr", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "odfpy", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "openpyxl", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "psycopg2", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pyarrow", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pyiceberg", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pymysql", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pyqt5", version = "5.15.11", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pyreadstat", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pytest", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pytest-xdist", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "python-calamine", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pytz", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pyxlsb", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "qtpy", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "s3fs", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "scipy", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "sqlalchemy", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "tables", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "tabulate", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "xarray", version = "2025.12.0", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "xlrd", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "xlsxwriter", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "zstandard", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-]
-
-[[package]]
-name = "pandas-gbq"
-version = "0.33.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "db-dtypes", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "google-api-core", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "google-auth", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "google-auth-oauthlib", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "google-cloud-bigquery", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "numpy", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "packaging", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pandas", version = "2.0.3", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "psutil", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pyarrow", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pydata-google-auth", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "setuptools", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/10/8b/4e899f662b09c245193e90e729b7a25c255c7e3bebeb580f97489aca2e13/pandas_gbq-0.33.0.tar.gz", hash = "sha256:61357e11d73e0ae57cbff31e71fc3ed83da3d16b58b653f715b32ad760527e34", size = 76000, upload-time = "2026-01-05T21:47:09.195Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/26/b7/e805de93e3aa78813912b19edc9c8b037d6cd1c302ab339b895f305cf9a5/pandas_gbq-0.33.0-py3-none-any.whl", hash = "sha256:499ad18a7b1917e2cc04bbd763ec37c11ecc49030348c45cebb9cbbdb7f909af", size = 48097, upload-time = "2026-01-05T21:47:07.933Z" },
+    { name = "adbc-driver-postgresql" },
+    { name = "adbc-driver-sqlite" },
+    { name = "beautifulsoup4" },
+    { name = "bottleneck" },
+    { name = "fastparquet" },
+    { name = "fsspec" },
+    { name = "gcsfs" },
+    { name = "html5lib" },
+    { name = "hypothesis" },
+    { name = "jinja2" },
+    { name = "lxml" },
+    { name = "matplotlib" },
+    { name = "numba" },
+    { name = "numexpr" },
+    { name = "odfpy" },
+    { name = "openpyxl" },
+    { name = "psycopg2" },
+    { name = "pyarrow" },
+    { name = "pyiceberg" },
+    { name = "pymysql" },
+    { name = "pyqt5" },
+    { name = "pyreadstat" },
+    { name = "pytest" },
+    { name = "pytest-xdist" },
+    { name = "python-calamine" },
+    { name = "pytz" },
+    { name = "pyxlsb" },
+    { name = "qtpy" },
+    { name = "s3fs" },
+    { name = "scipy" },
+    { name = "sqlalchemy" },
+    { name = "tables" },
+    { name = "tabulate" },
+    { name = "xarray" },
+    { name = "xlrd" },
+    { name = "xlsxwriter" },
+    { name = "zstandard" },
 ]
 
 [[package]]
@@ -4000,10 +3855,10 @@ name = "pydantic"
 version = "2.12.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "annotated-types", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pydantic-core", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "typing-extensions", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "typing-inspection", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "annotated-types" },
+    { name = "pydantic-core" },
+    { name = "typing-extensions" },
+    { name = "typing-inspection" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/69/44/36f1a6e523abc58ae5f928898e4aca2e0ea509b5aa6f6f392a5d882be928/pydantic-2.12.5.tar.gz", hash = "sha256:4d351024c75c0f085a9febbb665ce8c0c6ec5d30e903bdb6394b7ede26aebb49", size = 821591, upload-time = "2025-11-26T15:11:46.471Z" }
 wheels = [
@@ -4015,7 +3870,7 @@ name = "pydantic-core"
 version = "2.41.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "typing-extensions" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/71/70/23b021c950c2addd24ec408e9ab05d59b035b39d97cdc1130e1bce647bb6/pydantic_core-2.41.5.tar.gz", hash = "sha256:08daa51ea16ad373ffd5e7606252cc32f07bc72b28284b6bc9c6df804816476e", size = 460952, upload-time = "2025-11-04T13:43:49.098Z" }
 wheels = [
@@ -4108,20 +3963,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pydata-google-auth"
-version = "1.9.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "google-auth", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "google-auth-oauthlib", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "setuptools", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/3f/0d/455cb39f0d5a914412b57c55c6b16977c61a5ac74b615eea4fb0dc54e329/pydata-google-auth-1.9.1.tar.gz", hash = "sha256:0a51ce41c601ca0bc69b8795bf58bedff74b4a6a007c9106c7cbcdec00eaced2", size = 29814, upload-time = "2025-01-23T21:04:40.875Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/ca/cb/cdeaba62aa3c48f0d8834afb82b4a21463cd83df34fe01f9daa89a08ec6c/pydata_google_auth-1.9.1-py2.py3-none-any.whl", hash = "sha256:75ffce5d106e34b717b31844c1639ea505b7d9550dc23b96fb6c20d086b53fa3", size = 15552, upload-time = "2025-01-23T21:04:38.97Z" },
-]
-
-[[package]]
 name = "pyflakes"
 version = "3.4.0"
 source = { registry = "https://pypi.org/simple" }
@@ -4144,18 +3985,18 @@ name = "pyiceberg"
 version = "0.10.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "cachetools", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "click", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "fsspec", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "mmh3", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pydantic", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pyparsing", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pyroaring", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "requests", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "rich", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "sortedcontainers", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "strictyaml", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "tenacity", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "cachetools" },
+    { name = "click" },
+    { name = "fsspec" },
+    { name = "mmh3" },
+    { name = "pydantic" },
+    { name = "pyparsing" },
+    { name = "pyroaring" },
+    { name = "requests" },
+    { name = "rich" },
+    { name = "sortedcontainers" },
+    { name = "strictyaml" },
+    { name = "tenacity" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/a3/0e/90e61c38504f4fbd5ed79631f85da7d5ea5e5bf997bdeaa65b28ebf04cab/pyiceberg-0.10.0.tar.gz", hash = "sha256:2525afa5e7e5fc4e72b291f8e1cc219e982d2bda5ff17e62cd05b8d91c4139f5", size = 842633, upload-time = "2025-09-11T14:59:34.044Z" }
 wheels = [
@@ -4237,6 +4078,24 @@ wheels = [
 
 [[package]]
 name = "pyqt5"
+version = "5.15.11"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyqt5-qt5", version = "5.15.2", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
+    { name = "pyqt5-qt5", version = "5.15.18", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "pyqt5-sip" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0e/07/c9ed0bd428df6f87183fca565a79fee19fa7c88c7f00a7f011ab4379e77a/PyQt5-5.15.11.tar.gz", hash = "sha256:fda45743ebb4a27b4b1a51c6d8ef455c4c1b5d610c90d2934c7802b5c1557c52", size = 3216775, upload-time = "2024-07-19T08:39:57.756Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/11/64/42ec1b0bd72d87f87bde6ceb6869f444d91a2d601f2e67cd05febc0346a1/PyQt5-5.15.11-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:c8b03dd9380bb13c804f0bdb0f4956067f281785b5e12303d529f0462f9afdc2", size = 6579776, upload-time = "2024-07-19T08:39:19.775Z" },
+    { url = "https://files.pythonhosted.org/packages/49/f5/3fb696f4683ea45d68b7e77302eff173493ac81e43d63adb60fa760b9f91/PyQt5-5.15.11-cp38-abi3-macosx_11_0_x86_64.whl", hash = "sha256:6cd75628f6e732b1ffcfe709ab833a0716c0445d7aec8046a48d5843352becb6", size = 7016415, upload-time = "2024-07-19T08:39:32.977Z" },
+    { url = "https://files.pythonhosted.org/packages/b4/8c/4065950f9d013c4b2e588fe33cf04e564c2322842d84dbcbce5ba1dc28b0/PyQt5-5.15.11-cp38-abi3-manylinux_2_17_x86_64.whl", hash = "sha256:cd672a6738d1ae33ef7d9efa8e6cb0a1525ecf53ec86da80a9e1b6ec38c8d0f1", size = 8188103, upload-time = "2024-07-19T08:39:40.561Z" },
+    { url = "https://files.pythonhosted.org/packages/f3/f0/ae5a5b4f9b826b29ea4be841b2f2d951bcf5ae1d802f3732b145b57c5355/PyQt5-5.15.11-cp38-abi3-win32.whl", hash = "sha256:76be0322ceda5deecd1708a8d628e698089a1cea80d1a49d242a6d579a40babd", size = 5433308, upload-time = "2024-07-19T08:39:46.932Z" },
+    { url = "https://files.pythonhosted.org/packages/56/d5/68eb9f3d19ce65df01b6c7b7a577ad3bbc9ab3a5dd3491a4756e71838ec9/PyQt5-5.15.11-cp38-abi3-win_amd64.whl", hash = "sha256:bdde598a3bb95022131a5c9ea62e0a96bd6fb28932cc1619fd7ba211531b7517", size = 6865864, upload-time = "2024-07-19T08:39:53.572Z" },
+]
+
+[[package]]
+name = "pyqt5-qt5"
 version = "5.15.2"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
@@ -4245,14 +4104,13 @@ resolution-markers = [
     "python_full_version == '3.12.*' and platform_machine == 'AMD64' and sys_platform == 'win32'",
     "python_full_version < '3.12' and platform_machine == 'AMD64' and sys_platform == 'win32'",
 ]
-dependencies = [
-    { name = "pyqt5-sip", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/37/97/5d3b222b924fa2ed4c2488925155cd0b03fd5d09ee1cfcf7c553c11c9f66/PyQt5_Qt5-5.15.2-py3-none-win_amd64.whl", hash = "sha256:750b78e4dba6bdf1607febedc08738e318ea09e9b10aea9ff0d73073f11f6962", size = 50075158, upload-time = "2021-03-10T14:05:20.868Z" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/28/6c/640e3f5c734c296a7193079a86842a789edb7988dca39eab44579088a1d1/PyQt5-5.15.2.tar.gz", hash = "sha256:372b08dc9321d1201e4690182697c5e7ffb2e0770e6b4a45519025134b12e4fc", size = 3265445, upload-time = "2020-11-24T10:34:39.87Z" }
 
 [[package]]
-name = "pyqt5"
-version = "5.15.11"
+name = "pyqt5-qt5"
+version = "5.15.18"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version >= '3.14' and platform_machine != 'AMD64' and sys_platform == 'win32'",
@@ -4268,23 +4126,6 @@ resolution-markers = [
     "python_full_version == '3.12.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
     "python_full_version < '3.12' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
-dependencies = [
-    { name = "pyqt5-qt5", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pyqt5-sip", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/0e/07/c9ed0bd428df6f87183fca565a79fee19fa7c88c7f00a7f011ab4379e77a/PyQt5-5.15.11.tar.gz", hash = "sha256:fda45743ebb4a27b4b1a51c6d8ef455c4c1b5d610c90d2934c7802b5c1557c52", size = 3216775, upload-time = "2024-07-19T08:39:57.756Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/11/64/42ec1b0bd72d87f87bde6ceb6869f444d91a2d601f2e67cd05febc0346a1/PyQt5-5.15.11-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:c8b03dd9380bb13c804f0bdb0f4956067f281785b5e12303d529f0462f9afdc2", size = 6579776, upload-time = "2024-07-19T08:39:19.775Z" },
-    { url = "https://files.pythonhosted.org/packages/49/f5/3fb696f4683ea45d68b7e77302eff173493ac81e43d63adb60fa760b9f91/PyQt5-5.15.11-cp38-abi3-macosx_11_0_x86_64.whl", hash = "sha256:6cd75628f6e732b1ffcfe709ab833a0716c0445d7aec8046a48d5843352becb6", size = 7016415, upload-time = "2024-07-19T08:39:32.977Z" },
-    { url = "https://files.pythonhosted.org/packages/b4/8c/4065950f9d013c4b2e588fe33cf04e564c2322842d84dbcbce5ba1dc28b0/PyQt5-5.15.11-cp38-abi3-manylinux_2_17_x86_64.whl", hash = "sha256:cd672a6738d1ae33ef7d9efa8e6cb0a1525ecf53ec86da80a9e1b6ec38c8d0f1", size = 8188103, upload-time = "2024-07-19T08:39:40.561Z" },
-    { url = "https://files.pythonhosted.org/packages/f3/f0/ae5a5b4f9b826b29ea4be841b2f2d951bcf5ae1d802f3732b145b57c5355/PyQt5-5.15.11-cp38-abi3-win32.whl", hash = "sha256:76be0322ceda5deecd1708a8d628e698089a1cea80d1a49d242a6d579a40babd", size = 5433308, upload-time = "2024-07-19T08:39:46.932Z" },
-    { url = "https://files.pythonhosted.org/packages/56/d5/68eb9f3d19ce65df01b6c7b7a577ad3bbc9ab3a5dd3491a4756e71838ec9/PyQt5-5.15.11-cp38-abi3-win_amd64.whl", hash = "sha256:bdde598a3bb95022131a5c9ea62e0a96bd6fb28932cc1619fd7ba211531b7517", size = 6865864, upload-time = "2024-07-19T08:39:53.572Z" },
-]
-
-[[package]]
-name = "pyqt5-qt5"
-version = "5.15.18"
-source = { registry = "https://pypi.org/simple" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/46/90/bf01ac2132400997a3474051dd680a583381ebf98b2f5d64d4e54138dc42/pyqt5_qt5-5.15.18-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:8bb997eb903afa9da3221a0c9e6eaa00413bbeb4394d5706118ad05375684767", size = 39715743, upload-time = "2025-11-09T12:56:42.936Z" },
     { url = "https://files.pythonhosted.org/packages/24/8e/76366484d9f9dbe28e3bdfc688183433a7b82e314216e9b14c89e5fab690/pyqt5_qt5-5.15.18-py3-none-macosx_11_0_arm64.whl", hash = "sha256:c656af9c1e6aaa7f59bf3d8995f2fa09adbf6762b470ed284c31dca80d686a26", size = 36798484, upload-time = "2025-11-09T12:56:59.998Z" },
@@ -4415,19 +4256,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/d1/db/7ef3487e0fb0049ddb5ce41d3a49c235bf9ad299b6a25d5780a89f19230f/pytest-9.0.2.tar.gz", hash = "sha256:75186651a92bd89611d1d9fc20f0b4345fd827c41ccd5c299a868a05d70edf11", size = 1568901, upload-time = "2025-12-06T21:30:51.014Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/3b/ab/b3226f0bd7cdcf710fbede2b3548584366da3b19b5021e74f5bde2a8fa3f/pytest-9.0.2-py3-none-any.whl", hash = "sha256:711ffd45bf766d5264d487b917733b453d917afd2b0ad65223959f59089f875b", size = 374801, upload-time = "2025-12-06T21:30:49.154Z" },
-]
-
-[[package]]
-name = "pytest-asyncio"
-version = "1.3.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pytest", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "typing-extensions", marker = "python_full_version < '3.13' and platform_machine == 'AMD64' and sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/90/2c/8af215c0f776415f3590cac4f9086ccefd6fd463befeae41cd4d3f193e5a/pytest_asyncio-1.3.0.tar.gz", hash = "sha256:d7f52f36d231b80ee124cd216ffb19369aa168fc10095013c6b014a34d3ee9e5", size = 50087, upload-time = "2025-11-10T16:07:47.256Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e5/35/f8b19922b6a25bc0880171a2f1a003eaeb93657475193ab516fd87cac9da/pytest_asyncio-1.3.0-py3-none-any.whl", hash = "sha256:611e26147c7f77640e6d0a92a38ed17c3e9848063698d5c93d5aa7aa11cebff5", size = 15075, upload-time = "2025-11-10T16:07:45.537Z" },
 ]
 
 [[package]]
@@ -4592,18 +4420,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/66/c0/0c8b6ad9f17a802ee498c46e004a0eb49bc148f2fd230864601a86dcf6db/python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3", size = 342432, upload-time = "2024-03-01T18:36:20.211Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427", size = 229892, upload-time = "2024-03-01T18:36:18.57Z" },
-]
-
-[[package]]
-name = "python-snappy"
-version = "0.7.3"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "cramjam", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/39/66/9185fbb6605ba92716d9f77fbb13c97eb671cd13c3ad56bd154016fbf08b/python_snappy-0.7.3.tar.gz", hash = "sha256:40216c1badfb2d38ac781ecb162a1d0ec40f8ee9747e610bcfefdfa79486cee3", size = 9337, upload-time = "2024-08-29T13:16:05.705Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/86/c1/0ee413ddd639aebf22c85d6db39f136ccc10e6a4b4dd275a92b5c839de8d/python_snappy-0.7.3-py3-none-any.whl", hash = "sha256:074c0636cfcd97e7251330f428064050ac81a52c62ed884fc2ddebbb60ed7f50", size = 9155, upload-time = "2024-08-29T13:16:04.773Z" },
 ]
 
 [[package]]
@@ -4802,8 +4618,8 @@ name = "rich"
 version = "14.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "markdown-it-py", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pygments", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "markdown-it-py" },
+    { name = "pygments" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/a1/84/4831f881aa6ff3c976f6d6809b58cdfa350593ffc0dc3c58f5f6586780fb/rich-14.3.1.tar.gz", hash = "sha256:b8c5f568a3a749f9290ec6bddedf835cec33696bfc1e48bcfecb276c7386e4b8", size = 230125, upload-time = "2026-01-24T21:40:44.847Z" }
 wheels = [
@@ -5417,7 +5233,7 @@ name = "strictyaml"
 version = "1.7.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "python-dateutil", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "python-dateutil" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/b3/08/efd28d49162ce89c2ad61a88bd80e11fb77bc9f6c145402589112d38f8af/strictyaml-1.7.3.tar.gz", hash = "sha256:22f854a5fcab42b5ddba8030a0e4be51ca89af0267961c8d6cfa86395586c407", size = 115206, upload-time = "2023-03-10T12:50:27.062Z" }
 wheels = [
@@ -5602,7 +5418,7 @@ name = "typing-inspection"
 version = "0.4.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "typing-extensions" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/55/e3/70399cb7dd41c10ac53367ae42139cf4b1ca5f36bb3dc6c9d33acdb43655/typing_inspection-0.4.2.tar.gz", hash = "sha256:ba561c48a67c5958007083d386c3295464928b01faa735ab8547c5692e87f464", size = 75949, upload-time = "2025-10-01T02:14:41.687Z" }
 wheels = [
@@ -5728,46 +5544,12 @@ wheels = [
 
 [[package]]
 name = "xarray"
-version = "2024.7.0"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.14' and platform_machine == 'AMD64' and sys_platform == 'win32'",
-    "python_full_version == '3.13.*' and platform_machine == 'AMD64' and sys_platform == 'win32'",
-    "python_full_version == '3.12.*' and platform_machine == 'AMD64' and sys_platform == 'win32'",
-    "python_full_version < '3.12' and platform_machine == 'AMD64' and sys_platform == 'win32'",
-]
-dependencies = [
-    { name = "numpy", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "packaging", marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-    { name = "pandas", version = "2.0.3", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine == 'AMD64' and sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/84/e8/8ee12706df0d34ad04b3737621a73432458d47bc8abfbd6f049e51ca89c3/xarray-2024.7.0.tar.gz", hash = "sha256:4cae512d121a8522d41e66d942fb06c526bc1fd32c2c181d5fe62fe65b671638", size = 3728663, upload-time = "2024-07-30T08:31:45.48Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/45/95/233e1f9c939f5ba314297315df709e6a5e823bf3cade7211991b15aa65d2/xarray-2024.7.0-py3-none-any.whl", hash = "sha256:1b0fd51ec408474aa1f4a355d75c00cc1c02bd425d97b2c2e551fd21810e7f64", size = 1176466, upload-time = "2024-07-30T08:31:43.077Z" },
-]
-
-[[package]]
-name = "xarray"
 version = "2025.12.0"
 source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.14' and platform_machine != 'AMD64' and sys_platform == 'win32'",
-    "python_full_version >= '3.14' and sys_platform == 'emscripten'",
-    "python_full_version >= '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version == '3.13.*' and platform_machine != 'AMD64' and sys_platform == 'win32'",
-    "python_full_version == '3.12.*' and platform_machine != 'AMD64' and sys_platform == 'win32'",
-    "python_full_version < '3.12' and platform_machine != 'AMD64' and sys_platform == 'win32'",
-    "python_full_version == '3.13.*' and sys_platform == 'emscripten'",
-    "python_full_version == '3.12.*' and sys_platform == 'emscripten'",
-    "python_full_version < '3.12' and sys_platform == 'emscripten'",
-    "python_full_version == '3.13.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version == '3.12.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version < '3.12' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-]
 dependencies = [
-    { name = "numpy", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "packaging", marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
-    { name = "pandas", version = "3.0.0", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine != 'AMD64' or sys_platform != 'win32'" },
+    { name = "numpy" },
+    { name = "packaging" },
+    { name = "pandas" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/d3/af/7b945f331ba8911fdfff2fdfa092763156119f124be1ba4144615c540222/xarray-2025.12.0.tar.gz", hash = "sha256:73f6a6fadccc69c4d45bdd70821a47c72de078a8a0313ff8b1e97cd54ac59fed", size = 3082244, upload-time = "2025-12-05T21:51:22.432Z" }
 wheels = [

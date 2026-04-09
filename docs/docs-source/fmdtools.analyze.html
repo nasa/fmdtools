@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.analyze &mdash; fmdtools 2.3.2 documentation</title>
+  <title>fmdtools.analyze &mdash; fmdtools 2.3.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=5048a02b"></script>
+      <script src="../_static/documentation_options.js?v=f4302432"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -230,6 +230,12 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/human_hazard_mitigation/readme.html">Human Hazard Mitigation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/human_hazard_mitigation/tutorial_actionarchitecture.html">Tutorial: ActionArchitecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/human_hazard_mitigation/tutorial_actionarchitecture.html#function-level-simulation">Function-level Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/human_hazard_mitigation/tutorial_actionarchitecture.html#model-simulation">Model Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/human_hazard_mitigation/tutorial_actionarchitecture.html#fault-simulation">Fault Simulation</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/human_hazard_mitigation/readme.html#package-structure">Package Structure:</a></li>
 </ul>
 </li>
@@ -373,6 +379,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../examples/navigating_rover/paper_aiaa_coevolution.html#performance-comparison">Performance Comparison</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/navigating_rover/paper_aiaa_coevolution.html#comparing-solutions-over-weights-fault-space-formulation">Comparing Solutions over weights - Fault-Space Formulation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/navigating_rover/paper_aiaa_coevolution.html#comparing-solutions-over-weights-result-space-formulation">Comparing Solutions over weights - Result-Space Formulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/navigating_rover/paper_rsa_troupe.html">Paper [RSA]: TROUPE Rover Overview and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/navigating_rover/paper_rsa_troupe.html#model-overview">Model Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/navigating_rover/paper_rsa_troupe.html#analysis">Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/navigating_rover/paper_rsa_troupe.html#overall-plot-s">Overall Plot(s)</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/navigating_rover/readme.html#package-structure">Package Structure:</a></li>
@@ -2600,7 +2612,7 @@ at each point in the trajectory. The default is [].</p></li>
 <li><p><strong>xlim</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Limits on the x-axis. The default is ().</p></li>
 <li><p><strong>ylim</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Limits on the y-axis. The default is ().</p></li>
 <li><p><strong>zlim</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Limits on the z-axis. The default is ().</p></li>
-<li><p><strong>legend</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to show a legend. The default is True.</p></li>
+<li><p><strong>legend</strong> (<em>bool</em><em>, </em><em>kwargs</em><em>, </em><em>optional</em>) – Whether to show a legend/ kwargs to legend. The default is True.</p></li>
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Title to add. Default is ‘’ (no title).</p></li>
 <li><p><strong>fig</strong> (<em>matplotlib.figure</em><em>, </em><em>optional</em>) – Existing Figure. The default is None.</p></li>
 <li><p><strong>ax</strong> (<em>matplotlib.axis</em><em>, </em><em>optional</em>) – <p>Existing axis. The default is None.

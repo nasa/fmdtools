@@ -22,12 +22,12 @@
 
 See: [Examples](https://nasa.github.io/fmdtools/examples/Examples.html)
 
-<img src="/docs/_images/tutorial_fmdtools_basics.webp" width="15%"></img>
-<img src="/docs/_images/demo_proxthreat.webp" width="15%"></img>
-<img src="/docs/_images/demo_wildfire.webp" width="15%"></img>
-<img src="/docs/_images/paper_jcise_dsa.webp" width="15%"></img>
-<img src="/docs/_images/demo_urban_flight.webp" width="15%"></img> 
-<img src="/docs/_images/demo_degradation.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/tutorial_fmdtools_basics.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/demo_proxthreat.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/demo_wildfire.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/paper_jcise_dsa.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/demo_urban_flight.webp" width="15%"></img> 
+<img src="https://nasa.github.io/fmdtools/_images/demo_degradation.webp" width="15%"></img>
 
 ## About
 
@@ -121,7 +121,7 @@ More guidance on development installations is provided in [How to Contribute](ht
 Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` in the context of a development install you can checkout the tag corresponding to the version you want, e.g.:
 
 ```
-   git checkout v2.3.2
+   git checkout v2.3.3
 ```
 
 
@@ -258,8 +258,8 @@ To cite a particular version of the fmdtools, you may use:
   author = {{NASA}},
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
-  version = {2.3.2},
-  date = {2025-3-6},
+  version = {2.3.3},
+  date = {2025-4-10},
 }
 ```
 
