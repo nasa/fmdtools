@@ -655,9 +655,11 @@ class Architecture(Simulable):
         Examples
         --------
         >>> from fmdtools.define.architecture.function import ExFxnArch
+        >>> from fmdtools.analyze.graph.style import mod_prefix
+        >>> loc = mod_prefix()
         >>> arch = ExFxnArch()
         >>> xml_content = arch.as_drawio()  # Get XML content
-        >>> xml_content = arch.as_drawio("architecture.drawio")  # Save to file
+        >>> xml_content = arch.as_drawio(loc+"architecture.drawio")  # Save to file
         """
         graph = self.as_modelgraph(**kwargs)
         return graph.draw_drawio(saveas=saveas, **kwargs)

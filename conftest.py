@@ -125,6 +125,7 @@ too_slow_notebooks = ["examples/navigating_rover/paper_ifac_human.ipynb",
                       "examples/navigating_rover/paper_jmd_synthetic_modes.ipynb",  # extremely slow notebook
                       "examples/navigating_rover/paper_aiaa_coevolution.ipynb",  # extremely slow
                       "examples/navigating_rover/tutorial_ParameterSample.ipynb", # timeout fails (over 300s)
+                      "examples/navigating_rover/paper_rsa_troupe.ipynb", # timeout fails (over 300s)
                       "examples/cooling_tank/paper_jmd_optimization.ipynb",
                       "examples/airspacelib/wildfire_response/paper_aiaa_optimal_location.ipynb",
                       "conf.py"]

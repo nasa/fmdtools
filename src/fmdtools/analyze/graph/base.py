@@ -390,9 +390,11 @@ class Graph(object):
 
         Examples
         --------
+        >>> from fmdtools.analyze.graph.style import mod_prefix
+        >>> loc = mod_prefix()
         >>> graph = Graph(ex_nxgraph)
         >>> xml_content = graph.draw_drawio()  # Get XML content
-        >>> xml_content = graph.draw_drawio("graph.drawio")  # Save to file
+        >>> xml_content = graph.draw_drawio(loc+"graph.drawio")  # Save to file
         """
         if not hasattr(self, 'pos') or not self.pos:
             # Set default positions if none exist

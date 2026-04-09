@@ -22,6 +22,7 @@ Further description and use of the model is given in the provided notebooks:
    paper_idetc_human
    paper_jmd_synthetic_modes
    paper_aiaa_coevolution
+   paper_rsa_troupe
 
 
 **References:**
@@ -48,6 +49,8 @@ Models:
 - `model_degradation.py` extends the model to include degraded states.
 
 - `model_human.py` extends the model to include human faults and response.
+
+- `model_troupe.py` models a rover exploring an environment with obstacles.
 
 Scripts and tests:
 
