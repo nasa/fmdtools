@@ -59,7 +59,7 @@ class Timer(BaseObject):
     rolevars = ['time', 'mode']
     __slots__ = ('time', 'tstep', 'mode')
 
-    def __init__(self, name=''):
+    def __init__(self, name='', time=0.0, tstep=-1.0, mode='standby'):
         """
         Initialize the Timer.
 
@@ -69,13 +69,18 @@ class Timer(BaseObject):
             Name for the timer
         """
         BaseObject.__init__(self, name=name)
-        self.time = 0.0
-        self.tstep = -1.0
-        self.mode = 'standby'
+        self.time = time
+        self.tstep = tstep
+        self.mode = mode
 
     def __repr__(self):
         return ('Timer ' + self.name + ': mode= '
                 + self.mode + ', time= ' + str(self.time))
+
+    def asdict(self, **kwargs):
+        """Return dict for json serialization."""
+        return {'name': self.name, 'time': self.time, 'tstep': self.tstep,
+                'mode': self.mode}
 
     def t(self):
         """Return the time elapsed."""

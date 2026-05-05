@@ -202,6 +202,24 @@ def set_arg_as_type(true_type, new_arg):
     return new_arg
 
 
+def dict_to_json(dic, exclude=[]):
+    """Convert a dict to json."""
+    for key, value in [*dic.items()]:
+        if hasattr(value, 'asdict'):
+            dic[key] = value.asdict(jsonable=True)
+        elif isinstance(value, np.generic):
+            dic[key] = value.item()
+        elif isinstance(value, np.ndarray):
+            dic[key] = value.tolist()
+        elif isinstance(value, dict):
+            dic[key] = dict_to_json(value)
+        elif isinstance(value, set):
+            dic[key] = list(value)
+        elif key in exclude:
+            dic.pop(key)
+    return dic
+
+
 def map_obj_fields(obj, *fields, **mapping):
     """
     Create a dictionary mapping aspects of a given object obj to known fields.

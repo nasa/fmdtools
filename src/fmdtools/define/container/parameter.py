@@ -210,6 +210,31 @@ class ExampleParameter(Parameter, readonly=True):
     y_set = (1.0, 2.0, 3.0, 4.0)
 
 
+class ExNestedParam(Parameter):
+    """
+    Example nested parameter for testing json serialization.
+
+    Examples
+    --------
+    >>> exn = ExNestedParam(ex_param=dict(y=4.0))
+    >>> exn
+    ExNestedParam(ex_param=ExampleParameter(x=1.0, y=4.0, z=0.0), k=20.0)
+    >>> js = exn.tojson()
+    >>> js
+    '{"ex_param": {"x": 1.0, "y": 4.0, "z": 0.0}, "k": 20.0}'
+    >>> ExNestedParam.fromjson(js)
+    ExNestedParam(ex_param=ExampleParameter(x=1.0, y=4.0, z=0.0), k=20.0)
+    >>> exn.save("nest_param.json")
+    >>> ExNestedParam.load("nest_param.json")
+    ExNestedParam(ex_param=ExampleParameter(x=1.0, y=4.0, z=0.0), k=20.0)
+    >>> import os
+    >>> os.remove("nest_param.json")
+    """
+
+    ex_param: ExampleParameter = ExampleParameter()
+    k: float = 20.0
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)

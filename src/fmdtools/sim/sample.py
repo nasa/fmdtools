@@ -321,13 +321,6 @@ expd.add_constants(z=20)
 expd
 
 
-class ExNestedParam(Parameter):
-    """Example nested parameter for testing ParamDomain."""
-
-    ex_param: ExampleParameter = ExampleParameter()
-    k: float = 20.0
-
-
 def same_mode(modename1, modename2, exact=True):
     """Check if modename1 and modename2 are the same."""
     if exact:
@@ -454,7 +447,7 @@ class FaultDomain(object):
          -('ex_fxn', 'low', '15')
          -('ex_fxn', 'low')
         >>> [*exfd2.faults.values()]
-        [Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.x': 10.0}, units='sim'), Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.x': 15.0}, units='sim'), Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.x': 20.0}, units='sim')]
+        [Fault(prob=1.0, cost=0.0, phases=(), disturbances=(('s.x', 10.0),), units=sim), Fault(prob=1.0, cost=0.0, phases=(), disturbances=(('s.x', 15.0),), units=sim), Fault(prob=1.0, cost=0.0, phases=(), disturbances=(('s.x', 20.0),), units=sim)]
         """
         fault = self.mdl.get_fault(fxnname, faultmode, **kwargs)
         if not ind:
@@ -946,7 +939,7 @@ class FaultSample(BaseSample):
         >>> fs2 = FaultSample(exfd2)
         >>> fs2.add_single_fault_scenario(('ex_fxn', 'low', '15'), 5)
         >>> fs2.scenarios()
-        [SingleFaultScenario(sequence={5.0: Injection(faults={'ex_fxn': {'low': {'prob': np.float64(1.0), 'cost': np.float64(0.0), 'phases': (), 'disturbances': {'s.x': 15.0}, 'units': 'sim'}}}, disturbances={})}, times=(5,), function='ex_fxn', fault='low', rate=np.float64(1.0), name='ex_fxn_low_15_t5', time=5, phase='na')]
+        [SingleFaultScenario(sequence={5.0: Injection(faults={'ex_fxn': {'low': {'prob': np.float64(1.0), 'cost': np.float64(0.0), 'phases': (), 'disturbances': (('s.x', 15.0),), 'units': np.str_('sim')}}}, disturbances={})}, times=(5,), function='ex_fxn', fault='low', rate=np.float64(1.0), name='ex_fxn_low_15_t5', time=5, phase='na')]
         """
         self._times.add(time)
         if len(faulttup) > 2:

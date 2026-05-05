@@ -18,10 +18,12 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import set_arg_as_type, remove_para, get_repr, map_obj_fields
+from fmdtools.define.base import is_iter, dict_to_json
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 
 from recordclass import dataobject, astuple, asdict
+from ordered_set import OrderedSet
 
 import copy
 import pickle
@@ -46,7 +48,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     >>> ex
     ExContainer(x=1.0, y=2.0)
     >>> ex.x = 3.0
-    >>> values = ex.asjson()
+    >>> values = ex.tojson()
     >>> values
     '{"x": 3.0, "y": 2.0}'
     >>> ex_new = ExContainer.fromjson(values)
@@ -62,7 +64,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     >>> ex2 = ExContainer.load("ex_container.json", y="x", x="y")
     >>> ex2
     ExContainer(x=2.0, y=5.0)
-    >>> jstr = ex2.asjson()
+    >>> jstr = ex2.tojson()
     >>> jstr
     '{"x": 2.0, "y": 5.0}'
     >>> ex.assign(jstr)
@@ -93,20 +95,45 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
                             str(kwargs)+" in "+str(self.__class__)) from e
 
     def __repr__(self):
-        return self.create_repr(with_classname=True, fields="all")
+        return self.create_repr(with_classname=True, fields=["all"])
 
-    def create_repr(self, with_classname=True, fields="all", one_line=True,
+    def create_repr(self, with_classname=True, fields=["all"], one_line=True,
                     with_name=False):
         """Create repr-friendly string for container."""
         if with_classname:
             repr_str = self.__class__.__name__
         else:
             repr_str = ""
-        if fields == "all":
-            fields = self.__fields__
+        fields = self.get_fields(*fields)
         field_str = ", ".join(get_repr(self[f], f) for f in fields
                               if f in dir(self))
         return repr_str+"("+field_str+")"
+
+    def get_fields(self, *fields, default="all"):
+        """
+        Get set of fields from the container.
+
+        Parameters
+        ----------
+        *fields : str
+            Attributes to track. If 'all', gets all fields, if 'default', gets fields
+            defined in self.default (where default is the name of default field list)
+            if 'none', tracks none of the fields. if no fields provided, defaults to
+            the default parameter.
+        """
+        if (len(fields)==1 and (fields[0]=='default' or fields[0] is None)) or not fields:
+            fields = getattr(self, default, default)
+
+        if len(fields)==1 and (isinstance(fields[0], str) or is_iter(fields[0])):
+            fields = fields[0]
+
+        if fields == 'all':
+            fields = self.__fields__
+        elif fields == 'none':
+            fields = ()
+        elif isinstance(fields, str):
+            fields = (fields,)
+        return fields
 
     def get_typename(self):
         """Containers are typed as containers unless specified otherwise."""
@@ -140,8 +167,6 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
 
         Parameters
         ----------
-        obj : dataobject
-            State/Mode/Rand. Requires .default_track class variable.
         track : track
             str/tuple. Attributes to track.
             'all' tracks all fields
@@ -153,15 +178,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         track : tuple
             fields to track
         """
-        if not track or track == 'default':
-            track = self.default_track
-        if track == 'all':
-            track = self.__fields__
-        elif track == 'none':
-            track = ()
-        elif isinstance(track, str):
-            track = (track,)
-        return track
+        return self.get_fields(track, default="default_track")
 
     def get_true_fields(self, *args, force_kwargs=False, **kwargs):
         """
@@ -199,8 +216,6 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
 
         Parameters
         ----------
-        obj : dataobject (or class)
-            dataobject to get argument type for
         *args : *args
             args to dataobject
         **kwargs : **kwargs
@@ -268,11 +283,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         >>> ex.get_field_dict(ex)
         {'x': 1.0, 'y': 2.0}
         """
-        if fielddict and fields:
-            raise Exception("Provide positional states or keyword states, not both")
-        if len(fields) == 0 and not fielddict:
-            # if no states provided, assign all states
-            fields = self.__fields__
+        fields = self.get_fields(*OrderedSet([*fields, *fielddict]))
         if isinstance(obj, str):
             try:
                 obj = json.loads(obj)
@@ -483,13 +494,16 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         """Return mutable aspects of the container."""
         return astuple(self)
 
-    def asdict(self):
+    def asdict(self, *fields, jsonable=False, exclude=[]):
         """Return fields as a dictionary."""
-        return asdict(self)
+        dic = asdict(self)
+        if jsonable:
+            dic = dict_to_json(dic, exclude=exclude)
+        return dic
 
-    def asjson(self, **mapping):
+    def tojson(self, fields=(), **mapping):
         """Create json representation of current json values."""
-        return json.dumps(self.asdict())
+        return json.dumps(self.asdict(*fields, jsonable=True, **mapping))
 
     @classmethod
     def fromdict(cls, datadict, **mapping):
@@ -502,12 +516,12 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         datadict = json.loads(data)
         return cls.fromdict(datadict, **mapping)
 
-    def save(self, filename=''):
+    def save(self, filename='', fields=(), **mapping):
         """Save values as json file."""
         if not filename:
-            filename = self.__class__.__name__+"_values.json"
+            filename = self.__class__.__name__.lower()+".json"
         with open(filename, 'w') as f:
-            json.dump(self.asdict(), f)
+            json.dump(self.asdict(*fields, jsonable=True, **mapping), f)
 
     @classmethod
     def load(cls, filename, **mapping):

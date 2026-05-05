@@ -199,6 +199,11 @@ class Mode(BaseContainer, readonly=False):
     False
     >>> exm.get_faults()
     {'no_charge': Fault(prob=1e-05, cost=100.0, phases=(('standby', 1.0),), disturbances=(), units=sim), 'short': Fault(prob=1e-05, cost=100.0, phases=(('supply', 1.0),), disturbances=(), units=sim)}
+    >>> exm.to_fault("short")
+    >>> js = exm.tojson()
+    >>> exm2 = ExampleMode.fromjson(js)
+    >>> exm2.mode
+    'short'
     """
 
     rolename = "m"
