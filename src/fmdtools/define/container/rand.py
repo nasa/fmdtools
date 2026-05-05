@@ -113,7 +113,7 @@ class Rand(BaseContainer):
                                     seed=seed,
                                     rng=np.random.default_rng(seed),
                                     **kwargs)
-        super().__init__(*args)
+        super().__init__(*args, get_fields=False)
         if 's' in self.__fields__:
             self.s = self.s.__class__()
             self.s.set_atts(**s_kwargs)

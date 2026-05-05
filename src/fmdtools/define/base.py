@@ -46,6 +46,7 @@ specific language governing permissions and limitations under the License.
 from collections.abc import Iterable
 from recordclass import dataobject
 from ordered_set import OrderedSet
+from collections import UserDict
 import numpy as np
 import inspect
 import sys
@@ -199,6 +200,40 @@ def set_arg_as_type(true_type, new_arg):
         else:
             new_arg = true_type(new_arg)
     return new_arg
+
+
+def map_obj_fields(obj, *fields, **mapping):
+    """
+    Create a dictionary mapping aspects of a given object obj to known fields.
+
+    Parameters
+    ----------
+    obj : object
+        Object with parameters.
+    *fields : str
+        Names of parameters to get from object
+    **mapping : kwargs
+        Mapping of fields to another name, e.g. x='y' if 'y' should be the name of x in
+        the returned dict.
+
+    Returns
+    -------
+    fielddict : dict
+        Dictionary of fields with values gotten from the object.
+    """
+    if isinstance(obj, dict) or isinstance(obj, UserDict):
+        if not mapping:
+            fielddict = {s: obj[s] for s in fields if s in obj}
+        else:
+            fielddict = {k: obj[v] for k, v in mapping.items() if v in obj}
+    else:
+        if not mapping:
+            # if states provided, only assign those states
+            fielddict = {s: getattr(obj, s) for s in fields if hasattr(obj, s)}
+        else:
+            # if kwarg states provided, assign keys to values
+            fielddict = {k: getattr(obj, v) for k, v in mapping.items() if hasattr(obj, v)}
+    return fielddict
 
 
 def is_iter(data):
@@ -410,7 +445,7 @@ def get_repr(obj, name, with_classname=True, with_name=False, one_line=True):
         if hasattr(obj.__self__, 'name'):
             objrepr = obj.__self__.name+"."+objrepr
         objrepr = "<method "+objrepr
-    elif isinstance(obj, str):
+    elif isinstance(obj, str) and not isinstance(obj, np.str_):
         objrepr = repr(obj)
     else:
         objrepr = str(obj)

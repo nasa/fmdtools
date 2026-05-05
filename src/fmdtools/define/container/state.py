@@ -57,11 +57,6 @@ class State(BaseContainer):
 
     rolename = 's'
 
-    def __init__(self, *args, **kwargs):
-        args = self.get_true_fields(*args, **kwargs)
-        args, kwargs = self.set_arg_type(*args)
-        super().__init__(*args)
-
     def base_type(self):
         """Return fmdtools type of the model class."""
         return State

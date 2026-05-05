@@ -17,16 +17,17 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import set_arg_as_type, remove_para, get_repr
+from fmdtools.define.base import set_arg_as_type, remove_para, get_repr, map_obj_fields
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 
 from recordclass import dataobject, astuple, asdict
-from collections import UserDict
+
 import copy
 import pickle
 import numpy as np
 import sys
+import json
 
 
 class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
@@ -36,10 +37,60 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     A container is a dataobject (from the recordclass library) that fulfills a specific
     role in a block.  This class inherits from dataobject for low memory footprint and
     has a number of methods for making attribute assignment/copying/tracking easier.
+
+    Containers also have basic functionality for importing/exporting from json. e.g.,
+
+    Examples
+    --------
+    >>> ex = ExContainer()
+    >>> ex
+    ExContainer(x=1.0, y=2.0)
+    >>> ex.x = 3.0
+    >>> values = ex.asjson()
+    >>> values
+    '{"x": 3.0, "y": 2.0}'
+    >>> ex_new = ExContainer.fromjson(values)
+    >>> ex_new
+    ExContainer(x=3.0, y=2.0)
+    >>> ex_new = ExContainer.fromdict({'a':5, 'b': 7}, x="a")
+    >>> ex_new
+    ExContainer(x=5.0, y=2.0)
+    >>> ex_new.save(filename="ex_container.json")
+    >>> ex.assign("ex_container.json")
+    >>> ex
+    ExContainer(x=5.0, y=2.0)
+    >>> ex2 = ExContainer.load("ex_container.json", y="x", x="y")
+    >>> ex2
+    ExContainer(x=2.0, y=5.0)
+    >>> jstr = ex2.asjson()
+    >>> jstr
+    '{"x": 2.0, "y": 5.0}'
+    >>> ex.assign(jstr)
+    >>> ex
+    ExContainer(x=2.0, y=5.0)
+    >>> ExContainer.fromjson(jstr)
+    ExContainer(x=2.0, y=5.0)
+    >>> import os
+    >>> os.remove("ex_container.json")
     """
 
     default_track = 'all'
     rolename = 'x'
+
+    def __init__(self, *args, check_docs=False, get_fields=True, set_type=True, **kwargs):
+        if check_docs and not self.__doc__:
+            raise Exception("Please provide docstring")
+        if get_fields:
+            args = self.get_true_fields(*args, **kwargs)
+        if set_type:
+            args, kwargs = self.set_arg_type(*args, **kwargs)
+        if args and isinstance(args[0], self.__class__):
+            args = astuple(args[0])
+        try:
+            super().__init__(*args, **kwargs)
+        except TypeError as e:
+            raise Exception("Invalid args/kwargs: "+str(args)+" , " +
+                            str(kwargs)+" in "+str(self.__class__)) from e
 
     def __repr__(self):
         return self.create_repr(with_classname=True, fields="all")
@@ -189,7 +240,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
 
         Parameters
         ----------
-        obj : dataobject, list, tuple, or ndarray
+        obj : dataobject, list, tuple, str (json or json filename) or ndarray
             Object to get field dictionary from.
         *fields : str
             Names of corresponding fields (in self.__fields__)
@@ -222,26 +273,20 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         if len(fields) == 0 and not fielddict:
             # if no states provided, assign all states
             fields = self.__fields__
+        if isinstance(obj, str):
+            try:
+                obj = json.loads(obj)
+            except:
+                with open(obj, 'r') as f:
+                    obj = json.load(f)
 
         if type(obj) in [list, tuple] or isinstance(obj, np.ndarray):
             if fielddict:
                 raise Exception("Only provided *args for lists/tuples, not **kwargs")
             fielddict = {state: obj[i]
                          for i, state in enumerate(fields) if i < len(obj)}
-        elif isinstance(obj, dataobject):
-            if not fielddict:
-                # if states provided, only assign those states
-                fielddict = {s: getattr(obj, s) for s in fields}
-            else:
-                # if kwarg states provided, assign keys to values
-                fielddict = {k: getattr(obj, v) for k, v in fielddict.items()}
-        elif isinstance(obj, dict) or isinstance(obj, UserDict):
-            if not fielddict:
-                fielddict = {s: obj[s] for s in fields if s in obj}
-            else:
-                fielddict = {k: obj[v] for k, v in fielddict.items() if v in obj}
         else:
-            raise Exception("Invalid type to assign from: "+str(obj.__class__))
+            fielddict = map_obj_fields(obj, *fields, **fielddict)
         return fielddict
 
     def assign(self, obj, *fields, as_copy=True, **fielddict):
@@ -441,6 +486,35 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     def asdict(self):
         """Return fields as a dictionary."""
         return asdict(self)
+
+    def asjson(self, **mapping):
+        """Create json representation of current json values."""
+        return json.dumps(self.asdict())
+
+    @classmethod
+    def fromdict(cls, datadict, **mapping):
+        """Load from a dict."""
+        return cls(**map_obj_fields(datadict, *cls.__fields__, **mapping))
+
+    @classmethod
+    def fromjson(cls, data, **mapping):
+        """Load from json string."""
+        datadict = json.loads(data)
+        return cls.fromdict(datadict, **mapping)
+
+    def save(self, filename=''):
+        """Save values as json file."""
+        if not filename:
+            filename = self.__class__.__name__+"_values.json"
+        with open(filename, 'w') as f:
+            json.dump(self.asdict(), f)
+
+    @classmethod
+    def load(cls, filename, **mapping):
+        """Load values from file."""
+        with open(filename, 'r') as f:
+            datadict = json.load(f)
+        return cls.fromdict(datadict, **mapping)
 
     def get_code(self, source):
         """Get the code defining the Container."""

@@ -73,25 +73,12 @@ class Parameter(BaseContainer, readonly=True):
         **kwargs : kwargs
             Fields to set to non-default values.
         """
-        if not self.__doc__:
-            raise Exception("Please provide docstring")
-            # self.__doc__=Parameter.__doc__
-        args = self.get_true_fields(*args, **kwargs)
-        if set_type:
-            args, kwargs = self.set_arg_type(*args, **kwargs)
-        if args and isinstance(args[0], self.__class__):
-            args = astuple(args[0])
+        super().__init__(*args, set_type=set_type, **kwargs)
         if check_lim:
-            for i, k in enumerate(self.__fields__):
-                self.check_lim(k, args[i])
-        try:
-            super().__init__(*args, **kwargs)
-        except TypeError as e:
-            raise Exception("Invalid args/kwargs: "+str(args)+" , " +
-                            str(kwargs)+" in "+str(self.__class__)) from e
+            for k in self.__fields__:
+                self.check_lim(k, self[k])
         if strict_immutability:
             self.check_immutable()
-
         if check_type:
             self.check_type()
         if check_pickle:
