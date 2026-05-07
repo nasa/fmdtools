@@ -84,9 +84,11 @@ def gv_plot_ending(dot, disp=True, saveas=''):
 def mod_prefix():
     """Fix for doctest saving--changes save location."""
     import os
-    wd = os.getcwd()
-    if 'graph' in wd:
-        return '../../../docs-source/figures/frdl/primitives/'
+    tree = os.getcwd().split(os.sep)
+    tree.reverse()
+    if 'src' in tree:
+        bi = tree.index("src")+2
+        return '../'.join(['' for i in range(bi)])+'docs-source/figures/frdl/primitives/'
     else:
         return 'docs-source/figures/frdl/primitives/'
 

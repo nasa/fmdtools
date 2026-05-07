@@ -187,6 +187,7 @@ class Simulable(BaseObject):
     """
 
     __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'mut_kwargs', '_sims')
+    attrs = (*BaseObject.attrs, "h")
     container_t = Time
     default_track = ["all"]
     immutable_roles = BaseObject.immutable_roles + ['sp']

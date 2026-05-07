@@ -18,7 +18,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import set_arg_as_type, remove_para, get_repr, map_obj_fields
-from fmdtools.define.base import is_iter, dict_to_json
+from fmdtools.define.base import is_iter, dict_to_json, auto_filename, dict_from_file
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 
@@ -61,7 +61,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     >>> ex.assign("ex_container.json")
     >>> ex
     ExContainer(x=5.0, y=2.0)
-    >>> ex2 = ExContainer.load("ex_container.json", y="x", x="y")
+    >>> ex2 = ExContainer.load("ex_container.json", y="x", x="y", delete=True)
     >>> ex2
     ExContainer(x=2.0, y=5.0)
     >>> jstr = ex2.tojson()
@@ -72,8 +72,6 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     ExContainer(x=2.0, y=5.0)
     >>> ExContainer.fromjson(jstr)
     ExContainer(x=2.0, y=5.0)
-    >>> import os
-    >>> os.remove("ex_container.json")
     """
 
     default_track = 'all'
@@ -518,16 +516,14 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
 
     def save(self, filename='', fields=(), **mapping):
         """Save values as json file."""
-        if not filename:
-            filename = self.__class__.__name__.lower()+".json"
+        filename = auto_filename(self, filename=filename)
         with open(filename, 'w') as f:
             json.dump(self.asdict(*fields, jsonable=True, **mapping), f)
 
     @classmethod
-    def load(cls, filename, **mapping):
+    def load(cls, filename, delete=False, **mapping):
         """Load values from file."""
-        with open(filename, 'r') as f:
-            datadict = json.load(f)
+        datadict = dict_from_file(filename, delete=delete)
         return cls.fromdict(datadict, **mapping)
 
     def get_code(self, source):

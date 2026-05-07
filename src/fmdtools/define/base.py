@@ -50,6 +50,8 @@ from collections import UserDict
 import numpy as np
 import inspect
 import sys
+import os
+import json
 
 
 def get_var(obj, var):
@@ -206,18 +208,35 @@ def dict_to_json(dic, exclude=[]):
     """Convert a dict to json."""
     for key, value in [*dic.items()]:
         if hasattr(value, 'asdict'):
-            dic[key] = value.asdict(jsonable=True)
+            dic[key] = value.asdict(jsonable=True, exclude=exclude)
         elif isinstance(value, np.generic):
             dic[key] = value.item()
         elif isinstance(value, np.ndarray):
             dic[key] = value.tolist()
         elif isinstance(value, dict):
-            dic[key] = dict_to_json(value)
+            dic[key] = dict_to_json(value, exclude=exclude)
+        elif isinstance(value, UserDict):
+            dic[key] = dict_to_json(dict(value), exclude=exclude)
         elif isinstance(value, set):
             dic[key] = list(value)
         elif key in exclude:
             dic.pop(key)
     return dic
+
+def auto_filename(obj, filename='', suffix=".json"):
+    """Create filename for saving a class."""
+    if not filename:
+        filename = obj.__class__.__name__.lower()+suffix
+    return filename
+
+
+def dict_from_file(filename, delete=False):
+    """Load a json as a dictionary."""
+    with open(filename, 'r') as f:
+        datadict = json.load(f)
+    if delete:
+        os.remove(filename)
+    return datadict
 
 
 def map_obj_fields(obj, *fields, **mapping):

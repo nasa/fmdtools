@@ -28,7 +28,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import get_var, set_var, get_methods, get_obj_name, get_memory
-from fmdtools.define.base import get_repr, get_dict_repr
+from fmdtools.define.base import get_dict_repr, dict_to_json, auto_filename, dict_from_file
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 from fmdtools.analyze.graph.model import add_node, add_edge, remove_base, ModelGraph
@@ -40,6 +40,7 @@ import time
 import sys
 import numpy as np
 from inspect import signature, isclass, ismethod, isfunction
+import json
 
 
 class ObjectGraph(ModelGraph):
@@ -200,6 +201,17 @@ class BaseObject(metaclass=BaseType):
     i.y_over_x:                     array(2)
     s.x:                            array(2)
     s.y:                            array(2)
+
+
+    Objects are also jsonable and may be saved/loaded from a json format:
+    >>> js = ex2.tojson()
+    >>> ex3 = ExampleObject.fromjson(js)
+    >>> ex3.s
+    ExampleState(x=2.0, y=4.0)
+    >>> ex3.save("ex3.json")
+    >>> ex4 = ExampleObject.load("ex3.json", delete=True)
+    >>> ex4.s
+    ExampleState(x=2.0, y=4.0)
     """
 
     __slots__ = ('name', 'indicators', 'track', 'root', 'mutables', '_mutobjs')
@@ -207,6 +219,7 @@ class BaseObject(metaclass=BaseType):
     rolevars = []
     immutable_roles = ['p']
     flexible_roles = []
+    attrs = ('name', 'root', 'track')
     default_track = ['i']
     check_dict_creation = False
 
@@ -680,6 +693,125 @@ class BaseObject(metaclass=BaseType):
             return rolenames
         else:
             return [r for r in rolenames if r not in self.immutable_roles]
+
+    def get_obj_attrs(self, *attrs, exclude=[]):
+        """Get non-role attributes of the object."""
+        if not attrs:
+            attrs = self.attrs
+        return {at: getattr(self, at) for at in attrs
+                if at not in exclude and hasattr(self,at)}
+
+    def get_flex_dicts(self, *flex_roles, exclude=[]):
+        """Get flexible role dicts."""
+        dic = {}
+        if not flex_roles:
+            flex_roles = self.flexible_roles
+        for flex_role in flex_roles:
+            if (flex_role not in exclude and flex_role in self.flexible_roles):
+                dic[flex_role+"s"] = {**getattr(self, flex_role+"s")}
+        return dic
+
+    def asdict(self, *roletypes, jsonable=False, exclude=[], with_flex=True, **kwargs):
+        """
+        Return all aspects of the object in a dictionary.
+
+        Used to create jsonable representations of the object.
+
+        Parameters
+        ----------
+        *roletypes : str
+            Roletypes to get (will otherwise populate as default roletypes).
+        jsonable : bool, optional
+            Whether to convert to json-able types. The default is False.
+        **kwargs : kwargs
+            Keyword arguments to get_roles_as_dict
+
+        Returns
+        -------
+        dic : dict
+            Dictionary with all object attributes.
+        """
+        dic = {**self.get_obj_attrs(exclude=exclude),
+               **self.get_roles_as_dict(*roletypes, exclude=exclude, with_flex=False, **kwargs)}
+        if with_flex:
+            dic = {**dic, **self.get_flex_dicts(*roletypes, exclude=exclude)}
+        if jsonable:
+            dic = dict_to_json(dic, exclude=exclude)
+        return dic
+
+    def tojson(self, *roletypes, **kwargs):
+        """
+        Create a json representation of the object.
+
+        Parameters
+        ----------
+        *roletypes : str
+            Roletypes to convert.
+        **kwargs : kwargs
+            Arguments to asdict()
+
+        Returns
+        -------
+        json : str
+            Json string representing the object.
+        """
+        return json.dumps(self.asdict(*roletypes, jsonable=True, **kwargs))
+
+    def save(self, filename='', roletypes=[], **kwargs):
+        """
+        Save the object in a json format.
+
+        Parameters
+        ----------
+        filename : str
+            Name for the file. Will otherwise default to classname.json.
+        roletypes : iterable
+            Rolenames argument to self.asdict()
+        **kwargs : kwargs
+            Keyword arguments to self.asdict()
+        """
+        filename = auto_filename(self, filename)
+        with open(filename, "w") as f:
+            json.dump(self.asdict(*roletypes, jsonable=True, **kwargs), f)
+
+    @classmethod
+    def fromjson(cls, data, **kwargs):
+        """
+        Instantiate object from json.
+
+        Parameters
+        ----------
+        data : json
+            Json string.
+        **kwargs : keyword arguments.
+            Keyword arguments for instantiation.
+
+        Returns
+        -------
+        obj : BaseObject
+            Object of the given class with roles corresponding to the given json.
+        """
+        return cls(**{**json.loads(data), **kwargs})
+
+    @classmethod
+    def load(cls, filename, delete=False, **kwargs):
+        """
+        Load object from json.
+
+        Parameters
+        ----------
+        filename : str
+            File to load from.
+        **kwargs : kwargs
+            Keyword arguments for instantation
+
+        Returns
+        -------
+        obj: BaseObject
+            Object of the given class.
+        """
+        datadict = dict_from_file(filename, delete=delete)
+        return cls(**{**datadict, **kwargs})
 
     def get_vars(self, *variables, trunc_tuple=True):
         """

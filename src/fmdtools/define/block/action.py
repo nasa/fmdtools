@@ -80,6 +80,10 @@ class Action(Block):
     - exf=ExampleFlow(s=(x=2.0, y=1.0))
     >>> exa.indicate_done()
     True
+    >>> ExampleAction.fromjson(exa.tojson(), name="fromjson")
+    fromjson ExampleAction
+    - t=ActionTime(time=1.0, timers={})
+    - exf=ExampleFlow(s=(x=2.0, y=1.0))
     """
 
     __slots__ = ()

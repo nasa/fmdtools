@@ -47,9 +47,16 @@ class Flow(BaseObject):
     >>> exf2.s.x = 2.0
     >>> exf2.s == exf.s
     False
+
+    Flows are also json-able:
+
+    >>> ExampleFlow.fromjson(exf2.tojson())
+    exf ExampleFlow
+    - s=ExampleState(x=2.0, y=1.0)
     """
 
     __slots__ = ('p', 's', 'h')
+    attrs = (*BaseObject.attrs, "h")
     default_track = ('s', 'i')
     check_dict_creation = True
 

@@ -600,6 +600,10 @@ class Architecture(Simulable):
         cop.assign_roles('container', self)
         return cop
 
+    @classmethod
+    def fromdict(cls, *args, as_copy=True, **kwargs):
+        return super().fromdict(*args, **kwargs)
+
     def copy_flows(self, flows={}):
         """Copy flows, along with MultiFlow structures if present."""
         globs = {}
