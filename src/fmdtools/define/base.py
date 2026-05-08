@@ -206,7 +206,7 @@ def set_arg_as_type(true_type, new_arg):
 
 
 def dict_to_json(dic, exclude=[]):
-    """Convert a dict to json."""
+    """Convert a dict to json. Keep keys in exclude out of dict."""
     for key, value in [*dic.items()]:
         if key in exclude:
             dic.pop(key)
