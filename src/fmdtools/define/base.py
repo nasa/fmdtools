@@ -52,6 +52,7 @@ import inspect
 import sys
 import os
 import json
+import copy
 
 
 def get_var(obj, var):
@@ -207,20 +208,43 @@ def set_arg_as_type(true_type, new_arg):
 def dict_to_json(dic, exclude=[]):
     """Convert a dict to json."""
     for key, value in [*dic.items()]:
-        if hasattr(value, 'asdict'):
-            dic[key] = value.asdict(jsonable=True, exclude=exclude)
-        elif isinstance(value, np.generic):
-            dic[key] = value.item()
-        elif isinstance(value, np.ndarray):
-            dic[key] = value.tolist()
-        elif isinstance(value, dict):
-            dic[key] = dict_to_json(value, exclude=exclude)
-        elif isinstance(value, UserDict):
-            dic[key] = dict_to_json(dict(value), exclude=exclude)
-        elif isinstance(value, set):
-            dic[key] = list(value)
-        elif key in exclude:
+        if key in exclude:
             dic.pop(key)
+        else:
+            dic[key] = value_to_jsonable(value, exclude=exclude)
+    return dic
+
+def value_to_jsonable(value, exclude=[]):
+    """Make a given value json-able."""
+    if isinstance(value, np.generic):
+        jsonable = value.item()
+    elif isinstance(value, np.ndarray):
+        jsonable = value.tolist()
+        if value.dtype == 'O':
+            jsonable = [value_to_jsonable(i) for i in jsonable]
+    elif hasattr(value, 'asdict'):
+        jsonable = value.asdict(jsonable=True, exclude=exclude)
+    elif isinstance(value, dict):
+        jsonable = dict_to_json(value, exclude=exclude)
+    elif isinstance(value, UserDict):
+        jsonable = dict_to_json(dict(value), exclude=exclude)
+    elif isinstance(value, set):
+        jsonable = list(value)
+    else:
+        jsonable = value
+    return jsonable
+
+
+def copy_dict_objs(dic, **kwargs):
+    """Copy a dict and its objects."""
+    for key, value in dic.items():
+        if hasattr(value, 'copy'):
+            try:
+                dic[key] = value.copy(**kwargs.get(key, {}))
+            except:
+                dic[key] = value.copy()
+        else:
+            dic[key] = kwargs.get(key, copy.deepcopy(value))
     return dic
 
 def auto_filename(obj, filename='', suffix=".json"):

@@ -252,7 +252,7 @@ class Architecture(Simulable):
             else:
                 setattr(self, rname, dict())
 
-    def get_flex_role_kwargs(self, objclass, **kwargs):
+    def get_flex_role_kwargs(self, flex_role, objclass, name, use_copy, kwargs):
         """
         Get role keyword arguments for init_obj.
 
@@ -260,23 +260,35 @@ class Architecture(Simulable):
 
         Parameters
         ----------
+        flex_role : str
+            Name of flexible role
         objclass : class/obj
             Class or object being instantiated.
-        **kwargs : kwargs
-            Keyword arguments to self.add_sim.
+        name : str
+            Name of the object
+        use_copy : bool
+            Whether or not to use a copy.
+        kwargs : kwargs
+            Keyword arguments to init_obj.
 
         Returns
         -------
         **kwargs : kwargs
             Keyword arguments to self.add_flex_role_obj
         """
-        kwar = {}
+        kwar = {'name': name}
+        if use_copy:
+            kwar['as_copy'] = False
+        else:
+            kwar['as_copy'] = self.as_copy
         # ensure global seed
         if hasattr(self, 'r') and hasattr(objclass, "container_r"):
             kwar['r'] = {"seed": self.r.seed}
         # pass simparam from arch
         if hasattr(objclass, "container_sp"):
             kwar['sp'] = self.sp.get_sub_kwargs()
+        kwar['track'] = get_sub_include(name, get_sub_include(flex_role, self.track))
+        kwar['root'] = self.get_full_name()+"."+flex_role
         return {**kwar, **kwargs}
 
     def add_flex_role_obj(self, flex_role, name, objclass=BaseObject, use_copy=False,
@@ -303,18 +315,12 @@ class Architecture(Simulable):
         """
         roledict = getattr(self, flex_role)
         if name in roledict:
-            objclass = roledict[name]
-
-        if use_copy:
-            as_copy = False
-        else:
-            as_copy = self.as_copy
-
-        track = get_sub_include(name, get_sub_include(flex_role, self.track))
-        kwargs = self.get_flex_role_kwargs(objclass, **kwargs)
-        obj = init_obj(name=name, objclass=objclass, track=track,
-                       as_copy=as_copy, root=self.get_full_name()+"."+flex_role,
-                       **kwargs)
+            if isinstance(roledict[name], dict):
+                kwargs = {**kwargs, **roledict[name]}
+            else:
+                objclass = roledict[name]
+        kwargs = self.get_flex_role_kwargs(flex_role, objclass, name, use_copy, kwargs)
+        obj = init_obj(objclass=objclass, **kwargs)
 
         if hasattr(obj, 'h') and obj.h:
             hist = obj.h
@@ -580,44 +586,15 @@ class Architecture(Simulable):
         copy : Architecture
             Copy of the curent architecture.
         """
-        cargs = dict(root=self.root,
-                     p=getattr(self, 'p', {}),
-                     sp=getattr(self, 'sp', {}),
-                     track=getattr(self, 'track', {}),
-                     h=self.h.copy(),
-                     t=kwargs.get('t', self.t.copy()),
-                     as_copy=True)
+        cargs = self.asdict(withflex=False, as_copy=True)
         # send role dicts in to be copied via as_copy param.
         for flex_role in self.flexible_roles:
             cargs[flex_role+'s'] = getattr(self, flex_role+'s')
         # if flows provided from above, use those flows. Otherwise copy own.
         if hasattr(self, 'flows'):
             cargs['flows'] = self.copy_flows(flows=flows)
-
-        if hasattr(self, 'r'):
-            cargs['r'] = self.r.copy()
-        cop = self.__class__(**cargs)
-        cop.assign_roles('container', self)
-        return cop
-
-    @classmethod
-    def fromdict(cls, *args, as_copy=True, **kwargs):
-        return super().fromdict(*args, **kwargs)
-
-    def copy_flows(self, flows={}):
-        """Copy flows, along with MultiFlow structures if present."""
-        globs = {}
-        cflows = {}
-        for fn, flow in self.flows.items():
-            if fn in flows:
-                cflows[fn] = flows[fn]
-            elif not isinstance(flow, MultiFlow) or flow.glob.name == flow.name:
-                cflows[fn] = flow.copy()
-            else:
-                if flow.glob.name not in globs:
-                    globs[flow.glob.name] = flow.glob.copy()
-                cflows[fn] = globs[flow.glob.name].get_view(fn)
-        return cflows
+            cargs['flows'] = copy_flows(self.flows, flows=flows)
+        return self.__class__(**cargs)
 
     def get_all_possible_track(self):
         return super().get_all_possible_track() + self.flexible_roles
@@ -667,6 +644,37 @@ class Architecture(Simulable):
         """
         graph = self.as_modelgraph(**kwargs)
         return graph.draw_drawio(saveas=saveas, **kwargs)
+
+
+def copy_flows(flowdict, flows={}):
+    """
+    Copy flows, along with MultiFlow structures if present.
+
+    Parameters
+    ----------
+    flowdict : dict
+        Dict of flow objects.
+    flows : dict, optional
+        Dict of flow objects to overwrite existing flows (if provided). The default is {}.
+
+    Returns
+    -------
+    cflows : dict
+        Copied flow dictionary.
+    """
+    globs = {}
+    cflows = {}
+    for fn, flow in flowdict.items():
+        if fn in flows:
+            cflows[fn] = flows[fn]
+        elif not isinstance(flow, MultiFlow) or flow.glob.name == flow.name:
+            cflows[fn] = flow.copy()
+        else:
+            if flow.glob.name not in globs:
+                globs[flow.glob.name] = flow.glob.copy()
+            cflows[fn] = globs[flow.glob.name].get_view(fn)
+    return cflows
+
 
 
 def check_model_pickleability(model, try_pick=False):

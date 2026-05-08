@@ -28,7 +28,8 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import get_var, set_var, get_methods, get_obj_name, get_memory
-from fmdtools.define.base import get_dict_repr, dict_to_json, auto_filename, dict_from_file
+from fmdtools.define.base import get_dict_repr, dict_to_json, auto_filename
+from fmdtools.define.base import copy_dict_objs, dict_from_file
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 from fmdtools.analyze.graph.model import add_node, add_edge, remove_base, ModelGraph
@@ -707,11 +708,11 @@ class BaseObject(metaclass=BaseType):
         if not flex_roles:
             flex_roles = self.flexible_roles
         for flex_role in flex_roles:
-            if (flex_role not in exclude and flex_role in self.flexible_roles):
+            if (flex_role+"s" not in exclude and flex_role in self.flexible_roles):
                 dic[flex_role+"s"] = {**getattr(self, flex_role+"s")}
         return dic
 
-    def asdict(self, *roletypes, jsonable=False, exclude=[], with_flex=True, **kwargs):
+    def asdict(self, *roletypes, jsonable=False, exclude=[], with_flex=True, as_copy=False, **kwargs):
         """
         Return all aspects of the object in a dictionary.
 
@@ -737,6 +738,8 @@ class BaseObject(metaclass=BaseType):
             dic = {**dic, **self.get_flex_dicts(*roletypes, exclude=exclude)}
         if jsonable:
             dic = dict_to_json(dic, exclude=exclude)
+        if as_copy:
+            dic =  copy_dict_objs(dic, **kwargs)
         return dic
 
     def tojson(self, *roletypes, **kwargs):
@@ -775,6 +778,11 @@ class BaseObject(metaclass=BaseType):
             json.dump(self.asdict(*roletypes, jsonable=True, **kwargs), f)
 
     @classmethod
+    def fromdict(cls, data, **kwargs):
+        """Instantiate object from a dict overwritten by kwargs."""
+        return cls(**{**data, **kwargs})
+
+    @classmethod
     def fromjson(cls, data, **kwargs):
         """
         Instantiate object from json.
@@ -791,7 +799,7 @@ class BaseObject(metaclass=BaseType):
         obj : BaseObject
             Object of the given class with roles corresponding to the given json.
         """
-        return cls(**{**json.loads(data), **kwargs})
+        return cls.fromdict(json.loads(data), **kwargs)
 
     @classmethod
     def load(cls, filename, delete=False, **kwargs):
@@ -811,7 +819,7 @@ class BaseObject(metaclass=BaseType):
             Object of the given class.
         """
         datadict = dict_from_file(filename, delete=delete)
-        return cls(**{**datadict, **kwargs})
+        return cls.fromdict(datadict, **kwargs)
 
     def get_vars(self, *variables, trunc_tuple=True):
         """

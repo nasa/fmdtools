@@ -27,6 +27,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
+from fmdtools.define.base import is_iter
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.architecture.base import Architecture, ArchitectureGraph
 from fmdtools.define.block.action import ExampleAction
@@ -240,9 +241,21 @@ class ActionArchitecture(Architecture):
     - act_1_done=<method act_1.indicate_done()>
     >>> exaa.active_actions
     {'act_2'}
+    >>> ExampleActionArchitecture.fromjson(exaa.tojson(), name="fromjson")
+    fromjson ExampleActionArchitecture
+    - t=Time(time=2.0, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
+    FLOWS:
+    - exf=ExampleFlow(s=(x=4.0, y=1.0))
+    ACTS:
+    - act_1=ExampleAction()
+    - act_2=ExampleAction()
+    CONDS:
+    - act_1_done=<method act_1.indicate_done()>
     """
 
     __slots__ = ['acts', 'conds', 'action_graph', 'flow_graph', 'active_actions', 'm']
+    attrs = (*Architecture.attrs, "active_actions")
     initial_action = "auto"
     state_rep = "finite-state"
     max_action_prop = "until_false"
@@ -273,17 +286,14 @@ class ActionArchitecture(Architecture):
         any_dynamic_actions = any([obj.is_dynamic() for obj in self.acts.values()])
         return super().is_dynamic() or any_dynamic_actions
 
-    def copy(self, **kwargs):
-        cop = super().copy(**kwargs)
-        cop.active_actions = {*self.active_actions}
-        return cop
-
     def reset(self):
         super().reset()
         self.set_initial_active_action()
 
-    def set_initial_active_action(self):
-        if self.initial_action == 'auto':
+    def set_initial_active_action(self, *active_actions):
+        if active_actions:
+            initial_action = active_actions
+        elif self.initial_action == 'auto':
             initial_action = [act for act, in_degree in self.action_graph.in_degree
                               if in_degree == 0]
             if not initial_action:
@@ -292,10 +302,10 @@ class ActionArchitecture(Architecture):
             initial_action = [self.initial_action]
         self.set_active_actions(initial_action)
 
-    def build(self, construct_graph=False, **kwargs):
+    def build(self, construct_graph=False, active_actions=(), **kwargs):
         """Build the action graph."""
         super().build(construct_graph=construct_graph, **kwargs)
-        self.set_initial_active_action()
+        self.set_initial_active_action(*active_actions)
         if self.state_rep == 'finite-state' and len(self.active_actions) > 1:
             raise Exception("Cannot have more than one initial action with" +
                             " finite-state representation")
@@ -365,7 +375,7 @@ class ActionArchitecture(Architecture):
             else:
                 raise Exception("initial_action=" + actions +
                                 " not in self.acts: "+str(self.acts))
-        if isinstance(actions, list):
+        if is_iter(actions):
             self.active_actions = set(actions)
             if any(self.active_actions.difference(self.acts)):
                 raise Exception("Initial actions not associated with model: " +
@@ -453,6 +463,12 @@ class ActionArchitecture(Architecture):
         """Create and return the corresponding ModelGraph for the Object."""
         return gtype(self, **kwargs)
 
+    def asdict(self, *args, exclude=[], **kwargs):
+        """Present asdict (without bound conds methods)."""
+        if 'conds' not in exclude:
+            exclude = [*exclude, 'conds']
+        return super().asdict(*args, exclude=exclude, **kwargs)
+
 
 class ExampleActionArchitecture(ActionArchitecture):
     """Example ActionArchitecture for testing and documentation."""
@@ -466,6 +482,14 @@ class ExampleActionArchitecture(ActionArchitecture):
 
 if __name__ == "__main__":
     exaa = ExampleActionArchitecture()
+    exaa(2)
+    exaa.copy()
+    import json
+    for k, v in exaa.asdict(jsonable=True).items():
+        try:
+            json.dumps(v)
+        except:
+            raise Exception("Problem with key: "+k)
     aag = ActionArchitectureGraph(exaa)
     import doctest
     doctest.testmod(verbose=True)

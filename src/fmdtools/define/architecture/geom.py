@@ -42,7 +42,7 @@ class GeomArchitecture(Architecture):
     for an architecture with the geoms already defined:
 
     >>> class ExGeomArch(GeomArchitecture):
-    ...    def init_architecture(self):
+    ...    def init_architecture(self, **kwargs):
     ...        self.add_point("ex_point", ExPoint)
     ...        self.add_line("ex_line", ExLine)
     ...        self.add_poly("ex_poly", ExPoly)
@@ -85,6 +85,15 @@ class GeomArchitecture(Architecture):
     >>> ega(time=2.0)
     >>> ega
     exgeomarch ExGeomArch
+    - t=Time(time=2.0, timers={})
+    POINTS:
+    - ex_point=ExPoint(s=(occupied=False, buffer_around=2.0))
+    LINES:
+    - ex_line=ExLine(s=(occupied=False, buffer_around=2.0))
+    POLYS:
+    - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
+    >>> ExGeomArch.fromjson(ega.tojson(), name="fromjson")
+    fromjson ExGeomArch
     - t=Time(time=2.0, timers={})
     POINTS:
     - ex_point=ExPoint(s=(occupied=False, buffer_around=2.0))

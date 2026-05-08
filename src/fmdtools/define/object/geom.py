@@ -587,6 +587,8 @@ class ExPoly(GeomPoly):
 
 
 if __name__ == "__main__":
+    e=ExLine(p={'xys':((0,0),(1,1), (1,0))})
+    e.copy()
     import doctest
     doctest.testmod(verbose=True)
     exp = ExPoint()

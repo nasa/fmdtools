@@ -19,6 +19,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.base import set_arg_as_type, remove_para, get_repr, map_obj_fields
 from fmdtools.define.base import is_iter, dict_to_json, auto_filename, dict_from_file
+from fmdtools.define.base import copy_dict_objs
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 
@@ -403,7 +404,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
             fieldnames = tuple(self.__defaults__)
         self.assign(self.__default_vals__, *fieldnames, as_copy=True)
 
-    def copy(self):
+    def copy(self, **kwargs):
         """
         Create an independent copy of the container with the same attributes.
 
@@ -411,6 +412,8 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         -------
         cop : BaseContainer
             Copy of the container with the same attributes as self.
+        kwargs : kwargs
+            Attributes of the container to overwrite with keyword arguments
 
         Examples
         --------
@@ -420,11 +423,11 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         ExContainer(x=4.0, y=5.0)
 
         >>> ex_nest = ExNestContainer(ex2, 40.0)
-        >>> ex_nest.copy()
-        ExNestContainer(e1=ExContainer(x=4.0, y=5.0), z=40.0)
+        >>> ex_nest.copy(e1={'x': 6.0})
+        ExNestContainer(e1=ExContainer(x=6.0, y=5.0), z=40.0)
         """
-        cop = self.__class__()
-        cop.assign(self, as_copy=True)
+        field_dict = copy_dict_objs(self.get_field_dict(self), **kwargs)
+        cop = self.__class__(**field_dict)
         return cop
 
     def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
@@ -492,11 +495,13 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         """Return mutable aspects of the container."""
         return astuple(self)
 
-    def asdict(self, *fields, jsonable=False, exclude=[]):
+    def asdict(self, *fields, jsonable=False, exclude=[], as_copy=False, **kwargs):
         """Return fields as a dictionary."""
         dic = asdict(self)
         if jsonable:
             dic = dict_to_json(dic, exclude=exclude)
+        if as_copy:
+            dic = copy_dict_objs(dic, **kwargs)
         return dic
 
     def tojson(self, fields=(), **mapping):
@@ -578,6 +583,9 @@ class ExNestContainer(BaseContainer):
 
 
 if __name__ == "__main__":
+    ex2 = ExContainer()
+    ex_nest = ExNestContainer(ex2, 40.0)
+    ex_nest.copy(e1={'x': 6.0})
 
     import doctest
     doctest.testmod(verbose=True)

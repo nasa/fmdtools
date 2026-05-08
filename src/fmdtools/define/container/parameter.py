@@ -160,10 +160,6 @@ class Parameter(BaseContainer, readonly=True):
                                 " assigned incorrect type: " + str(attr_type) +
                                 " (should be "+str(true_type)+")")
 
-    def copy_with_vals(self, **kwargs):
-        """Creates a copy of itself with modified values given by kwargs"""
-        return self.__class__(**{**self.asdict(), **kwargs})
-
     def check_pickle(self):
         """Checks to make sure pickled object will get *args and **kwargs"""
         signature = str(inspect.signature(self.__init__))
@@ -188,10 +184,6 @@ class Parameter(BaseContainer, readonly=True):
         if var_set:
             return set(var_set)
         return ()
-
-    def copy(self):
-        field_dict = self.get_field_dict(self)
-        return self.__class__(**field_dict)
 
     def reset(self):
         """Do nothing since the parameter is immutable."""
