@@ -709,8 +709,35 @@ class BaseObject(metaclass=BaseType):
             flex_roles = self.flexible_roles
         for flex_role in flex_roles:
             if (flex_role+"s" not in exclude and flex_role in self.flexible_roles):
-                dic[flex_role+"s"] = {**getattr(self, flex_role+"s")}
+                try:
+                    dic[flex_role+"s"] = {**getattr(self, flex_role+"s")}
+                except:
+                    dic[flex_role+"s"] = {k: getattr(self, k)
+                                          for k in getattr(self, flex_role+"s")}
         return dic
+
+    def copy(self, *args, **kwargs):
+        """
+        Copy the architecture at the current state.
+
+        Parameters
+        ----------
+        flows : dict
+            Dict of flows to use in the copy.
+
+        Returns
+        -------
+        copy : Architecture
+            Copy of the curent architecture.
+        """
+        cargs = self.asdict(*args, as_copy=True, **kwargs)
+        try:
+            cop = self.__class__(**cargs)
+        except TypeError as e:
+            raise Exception("Poor specification of "+str(self.__class__)) from e
+        if hasattr(self, 'h'):
+            cop.h = self.h.copy()
+        return cop
 
     def asdict(self, *roletypes, jsonable=False, exclude=[], with_flex=True, as_copy=False, **kwargs):
         """

@@ -1,4 +1,6 @@
+# %%
 #!/usr/bin/env python
+
 # -*- coding: utf-8 -*-
 """
 Defines :class:`Coords` class for representing coordinate systems.
@@ -1043,7 +1045,7 @@ class Coords(BaseCoords):
     ...    collection_high_v = ("v", 5.0, np.greater)
     ...    collection_hi_v_not_a = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
     ...    default_p = {'blocksize': 10.0}
-    ...    def init_properties(self, *args, **kwargs):
+    ...    def init_properties(self, **kwargs):
     ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
 
     As shown, features are normal numpy arrays set to readonly:
@@ -1099,6 +1101,12 @@ class Coords(BaseCoords):
            [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
            [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
            [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])
+
+
+    Coords also save/load to json:
+
+    >>> ExampleCoords.fromjson(ex.tojson()).st[0, 0]
+    np.float64(100.0)
     """
 
     __slots__ = ("r", "properties", "_args", "_kwargs")
@@ -1108,13 +1116,13 @@ class Coords(BaseCoords):
         ['points', 'collections', 'features']
     default_track = ["r", "state"]
 
-    def __init__(self, *args, track='default', **kwargs):
+    def __init__(self, track='default', **kwargs):
         """Initialize class with properties in init_properties."""
-        self._args = args
         self._kwargs = kwargs
-        super().__init__(*args, roletypes=['container'], track=[], **kwargs)
+        super().__init__(roletypes=['container'], track=[], **kwargs)
         self.add_coords_roles()
-        self.init_properties(*args, **kwargs)
+        self.init_properties(**kwargs)
+        self.overwrite_properties(**kwargs)
         self.build()
         self.init_track(track)
 
@@ -1152,9 +1160,18 @@ class Coords(BaseCoords):
         self.init_roletypes("state", initializer=self.p.create_grid)
         self.properties = tuple([*self.features]+[*self.states])
 
-    def init_properties(self, *args, **kwargs):
+    def init_properties(self, **kwargs):
         """Initialize arrays with non-default values."""
         return 0
+
+    def overwrite_properties(self, **kwargs):
+        """Overwrite initialized properties with external copied/json inputs."""
+        for key, arg in kwargs.items():
+            if key in self.properties:
+                if isinstance(arg, np.ndarray):
+                    setattr(self, key, arg)
+                else:
+                    setattr(self, key, np.array(arg))
 
     def create_collection(self, *cargs):
         """Create a collection based on arguments to find_all_prob(s)."""
@@ -1406,7 +1423,7 @@ class Coords(BaseCoords):
         return tuple([*(tuple(map(tuple, replace_array_nan(getattr(self, state))))
                         for state in self.states)])
 
-    def copy(self):
+    def copy(self, **kwargs):
         """
         Copy the Coords object.
 
@@ -1422,9 +1439,9 @@ class Coords(BaseCoords):
         >>> id(ex.st) == id(cop.st)
         False
         """
-        cop = self.__class__(*self._args, **self._kwargs)
-        for state in self.states:
-            setattr(cop, state, np.copy(getattr(self, state)))
+        cop = super().copy(**{**self._kwargs, **kwargs})
+        # for state in self.states:
+        #     setattr(cop, state, np.copy(getattr(self, state)))
         return cop
 
     def get_all_possible_track(self):
@@ -1705,6 +1722,9 @@ class MetricCoords(BaseCoords):
 
 if __name__ == "__main__":
     ex = ExampleCoords()
+    ex.asdict(jsonable=True)
+    ex.tojson()
+    ExampleCoords.fromjson(ex.tojson())
 
     ex = ExampleCoords()
     ex.find_all_props(("v", 10.0, np.equal), "and", ("v", 10.0, np.equal))

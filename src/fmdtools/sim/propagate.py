@@ -321,6 +321,9 @@ def nested_sample(mdl, ps, **kwargs):
 class BaseSimContainer(BaseContainer):
     """Base Container class for SimEvent and BaseSimulation."""
 
+    def __init__(self, *args, **kwargs):
+        return super().__init__(*args, set_type=False, **kwargs)
+
     def __setattr__(self, field, value):
         """Revert to dataobject __setattr__."""
         super(BaseContainer, self).__setattr__(field, value)

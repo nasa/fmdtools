@@ -422,6 +422,8 @@ class Simulable(BaseObject):
                       **{k: getattr(self, k, {}) for k in self.immutable_roles}}
         if hasattr(self, 'r'):
             param_dict['r'] = {'seed': self.r.seed}
+        if 'mut_kwargs' in param_dict:
+            param_dict = {**param_dict.pop('mut_kwargs'), **param_dict}
         return copy_dict_objs(param_dict, **kwargs)
 
     def new(self, **kwargs):
@@ -430,7 +432,7 @@ class Simulable(BaseObject):
 
         Can initiate with with changes to mutable parameters (p, sp, track, rand etc.).
         """
-        return self.__class__(name=self.name, **self.new_params(**kwargs))
+        return self.__class__(**self.new_params(**kwargs))
 
     def get_fxns(self):
         """
@@ -975,36 +977,6 @@ class Block(Simulable):
             Set of flow type names in the model.
         """
         return {obj.__class__.__name__ for name, obj in self.get_flows().items()}
-
-    def copy(self, *args, flows={}, **kwargs):
-        """
-        Copy the block with its current attributes.
-
-        Parameters
-        ----------
-        args   : tuple
-            New arguments to use to instantiate the block, (e.g., flows, p, s)
-        kwargs :
-            New kwargs to use to instantiate the block.
-
-        Returns
-        -------
-        cop : Block
-            copy of the exising block
-        """
-        try:
-            paramdict = self.new_params(**kwargs)
-            if 'arch' in self.roletypes:
-                arch_dict = {role: getattr(self, role)
-                             for role in self.get_roles('arch')}
-                paramdict = {**paramdict, 'sp': self.sp, 'root': self.root, **arch_dict}
-            cop = self.__class__(*args, flows=flows, **paramdict)
-            cop.assign_roles('container', self)
-        except TypeError as e:
-            raise Exception("Poor specification of "+str(self.__class__)) from e
-        if hasattr(self, 'h'):
-            cop.h = self.h.copy()
-        return cop
 
 
 if __name__ == "__main__":

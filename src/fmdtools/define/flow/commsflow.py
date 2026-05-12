@@ -87,15 +87,30 @@ class CommsFlow(MultiFlow):
     - out(): t2_out(s=(x=1.0, y=1.0))
     - inbox(): {}
     - received(): {'t1': ('x',)}
+    >>> ExampleCommsFlow.fromjson(ecf.tojson()).t1
+    t1 ExampleCommsFlow
+    - s=ExampleState(x=10.0, y=10.0)
+    - out(): t1_out(s=(x=10.0, y=1.0))
+    - inbox(): {}
+    - received(): {}
+    >>> ExampleCommsFlow.fromjson(ecf.tojson()).t2  # note that recieved gets passed back as list rather than tuple:
+    t2 ExampleCommsFlow
+    - s=ExampleState(x=10.0, y=1.0)
+    - out(): t2_out(s=(x=1.0, y=1.0))
+    - inbox(): {}
+    - received(): {'t1': ['x']}
     """
 
     __slots__ = ['fxns']
+    attrs = [*MultiFlow.attrs, "fxns"]
     check_dict_creation = False
 
-    def __init__(self, name='', glob=[], track=['s'], **kwargs):
+    def __init__(self, name='', glob=[], track=['s'], fxns={}, **kwargs):
         """Initialize CommsFlow object."""
         self.fxns = {}
         super().__init__(name=name, glob=glob, track=track, **kwargs)
+        for name, fxn in fxns.items():
+            self.create_comms(**{'name': name, **fxn})
 
     def base_type(self):
         """Return fmdtools type of the model class."""
@@ -116,7 +131,7 @@ class CommsFlow(MultiFlow):
             rep_str += self.create_local_repr()
         return rep_str
 
-    def create_comms(self, name, ports=[], as_copy=False, **kwargs):
+    def create_comms(self, name='', ports=[], **kwargs):
         """
         Create an individual view of the CommsFlow (e.g., for a function).
 
@@ -135,11 +150,11 @@ class CommsFlow(MultiFlow):
             A local view of the CommsFlow for the function
         """
         if name not in self.fxns:
-            ins = self.create_local(name, as_copy=as_copy)
-            outs = self.create_local(name+"_out", as_copy=as_copy)
+            ins = self.create_local(name)
+            outs = self.create_local(name+"_out")
             for port in ports:
-                ins.create_local(port, as_copy=as_copy)
-                outs.create_local(port, as_copy=as_copy)
+                ins.create_local(port)
+                outs.create_local(port)
             self.fxns[name] = {"internal": ins,
                                "out": outs,
                                "in": kwargs.get("prev_in", {}),
@@ -260,9 +275,9 @@ class CommsFlow(MultiFlow):
             self.fxns[fxn]["in"] = {}
             self.fxns[fxn]["received"] = {}
 
-    def copy(self, name='', glob=[], p={}, s={}, track=['s']):
+    def copy(self, **kwargs):
         """Copy the CommsFlow (and all subflows)."""
-        cop = super().copy(name=name, glob=glob, p=p, s=s, track=track)
+        cop = super().copy(**kwargs)
         for fxn in self.fxns:
             cop.create_comms(fxn,
                              prev_in=copy.deepcopy(self.fxns[fxn]["in"]),
@@ -328,5 +343,10 @@ class ExampleCommsFlow(CommsFlow):
 
 
 if __name__ == "__main__":
+    ecf = ExampleCommsFlow()
+    t1 = ecf.create_comms("t1")
+    t2 = ecf.create_comms("t2")
+    ExampleCommsFlow.fromjson(ecf.tojson())
+
     import doctest
     doctest.testmod(verbose=True)

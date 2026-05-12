@@ -22,6 +22,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.object.base import check_pickleability, BaseObject, get_dict_repr
+from fmdtools.define.object.base import copy_dict_objs
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.flow.multiflow import MultiFlow
 from fmdtools.define.block.base import Simulable
@@ -572,7 +573,7 @@ class Architecture(Simulable):
             if hasattr(obj, 'reset'):
                 obj.reset()
 
-    def copy(self, flows={}, **kwargs):
+    def copy(self, flows={}, flex_to_copy=[], **kwargs):
         """
         Copy the architecture at the current state.
 
@@ -589,7 +590,11 @@ class Architecture(Simulable):
         cargs = self.asdict(withflex=False, as_copy=True)
         # send role dicts in to be copied via as_copy param.
         for flex_role in self.flexible_roles:
-            cargs[flex_role+'s'] = getattr(self, flex_role+'s')
+            flex = getattr(self, flex_role+'s')
+            if flex_role in flex_to_copy:
+                cargs[flex_role+'s'] = copy_dict_objs(flex)
+            else:
+                cargs[flex_role+'s'] = flex
         # if flows provided from above, use those flows. Otherwise copy own.
         if hasattr(self, 'flows'):
             cargs['flows'] = copy_flows(self.flows, flows=flows)

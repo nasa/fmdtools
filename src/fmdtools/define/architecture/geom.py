@@ -101,6 +101,31 @@ class GeomArchitecture(Architecture):
     - ex_line=ExLine(s=(occupied=False, buffer_around=2.0))
     POLYS:
     - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
+
+
+    They should also copy independently:
+    >>> ega2 = ega.copy()
+    >>> ega2
+    exgeomarch ExGeomArch
+    - t=Time(time=2.0, timers={})
+    POINTS:
+    - ex_point=ExPoint(s=(occupied=False, buffer_around=2.0))
+    LINES:
+    - ex_line=ExLine(s=(occupied=False, buffer_around=2.0))
+    POLYS:
+    - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
+    >>> ExGeomArch.fromjson(ega.tojson(), name="fromjson")
+    fromjson ExGeomArch
+    - t=Time(time=2.0, timers={})
+    POINTS:
+    - ex_point=ExPoint(s=(occupied=False, buffer_around=2.0))
+    LINES:
+    - ex_line=ExLine(s=(occupied=False, buffer_around=2.0))
+    POLYS:
+    - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
+    >>> ega2.points['ex_point'].s.buffer_around = 4.0
+    >>> ega.points['ex_point'].s.buffer_around
+    2.0
     """
 
     container_p = Parameter
@@ -282,6 +307,9 @@ class GeomArchitecture(Architecture):
         """Build the action graph."""
         super().build(construct_graph=construct_graph, **kwargs)
 
+    def copy(self, flex_to_copy=["point", "line", "poly"], **kwargs):
+        return super().copy(flex_to_copy=flex_to_copy, **kwargs)
+
 
 class ExGeomArch(GeomArchitecture):
     """Example Geometric Architecture for testing etc."""
@@ -302,6 +330,9 @@ class ExGeomArch(GeomArchitecture):
 
 
 if __name__ == "__main__":
+    ega = ExGeomArch()
+    ega2 = ega.copy()
+    ega2.points['ex_point'].s.buffer_around = 3.0
     import doctest
     doctest.testmod(verbose=True)
-    ega = ExGeomArch()
+    

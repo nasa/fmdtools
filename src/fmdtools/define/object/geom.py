@@ -156,12 +156,6 @@ class Geom(BaseObject):
                 all_at.append(bname)
         return all_at
 
-    def copy(self, *args, **kwargs):
-        """Copy the Geom with given *args and **kwargs."""
-        cop = self.__class__(*args, **kwargs)
-        cop.s.assign(self.s)
-        return cop
-
     def reset(self):
         """Reset the Geom to initial state."""
         self.s = self.container_s(**self._args_s)

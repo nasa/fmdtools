@@ -625,7 +625,7 @@ class ExFxnArch(FunctionArchitecture):
 if __name__ == "__main__":
     efa = ExFxnArch()
     efa(1.0)
-    ExFxnArch.fromjson(efa.tojson(exclude=["h"]), as_copy=False)
+    ExFxnArch.fromjson(efa.tojson(exclude=["h"]))
     efa.copy()
     effa = FunctionArchitectureFxnGraph(ExFxnArch())
     efla = FunctionArchitectureFlowGraph(ExFxnArch())

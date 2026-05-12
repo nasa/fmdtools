@@ -49,6 +49,8 @@ class Timer(BaseObject):
     >>> t.inc()
     >>> t
     Timer test_timer: mode= complete, time= 0.0
+    >>> t.copy(name='copied')
+    Timer copied: mode= complete, time= 0.0
     >>> t.reset()
     >>> t
     Timer test_timer: mode= standby, time= 0.0
@@ -57,9 +59,10 @@ class Timer(BaseObject):
     default_track = ('time', 'mode')
     roletypes = []
     rolevars = ['time', 'mode']
+    attrs = (*BaseObject.attrs, 'time', 'tstep', 'mode')
     __slots__ = ('time', 'tstep', 'mode')
 
-    def __init__(self, name='', time=0.0, tstep=-1.0, mode='standby'):
+    def __init__(self, name='', time=0.0, tstep=-1.0, mode='standby', **kwargs):
         """
         Initialize the Timer.
 
@@ -68,7 +71,7 @@ class Timer(BaseObject):
         name : str
             Name for the timer
         """
-        BaseObject.__init__(self, name=name)
+        BaseObject.__init__(self, name=name, **kwargs)
         self.time = time
         self.tstep = tstep
         self.mode = mode
@@ -76,11 +79,6 @@ class Timer(BaseObject):
     def __repr__(self):
         return ('Timer ' + self.name + ': mode= '
                 + self.mode + ', time= ' + str(self.time))
-
-    def asdict(self, **kwargs):
-        """Return dict for json serialization."""
-        return {'name': self.name, 'time': self.time, 'tstep': self.tstep,
-                'mode': self.mode}
 
     def t(self):
         """Return the time elapsed."""
@@ -150,14 +148,6 @@ class Timer(BaseObject):
     def indicate_set(self):
         """Indicate if the timer is set (before time increments)."""
         return self.mode == 'set'
-
-    def copy(self):
-        """Copy the Timer."""
-        cop = self.__class__(self.name)
-        cop.time = self.time
-        cop.mode = self.mode
-        cop.dt = self.dt
-        return cop
 
 
 if __name__ == "__main__":

@@ -62,6 +62,7 @@ class define_Tests(unittest.TestCase):
 
 if __name__ == '__main__':
     oa = OverFxn(fa={'p': {'x': 3.0}})
+    oa.copy()
 
     oa = OverFxn()
     res, hist = propagate.one_fault(oa, "overfxn.fa.fxns.ex_fxn", "no_charge", time=5.0)

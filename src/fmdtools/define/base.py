@@ -223,7 +223,7 @@ def value_to_jsonable(value, exclude=[]):
         if value.dtype == 'O':
             jsonable = [value_to_jsonable(i) for i in jsonable]
     elif hasattr(value, 'asdict'):
-        jsonable = value.asdict(jsonable=True, exclude=exclude)
+        jsonable = value.asdict(jsonable=True)
     elif isinstance(value, dict):
         jsonable = dict_to_json(value, exclude=exclude)
     elif isinstance(value, UserDict):
@@ -237,15 +237,18 @@ def value_to_jsonable(value, exclude=[]):
 
 def copy_dict_objs(dic, **kwargs):
     """Copy a dict and its objects."""
+    newdic = {}
     for key, value in dic.items():
-        if hasattr(value, 'copy'):
+        if isinstance(value, dict):
+            newdic[key] = copy_dict_objs(value, **kwargs.get(key, {}))
+        elif hasattr(value, 'copy'):
             try:
-                dic[key] = value.copy(**kwargs.get(key, {}))
+                newdic[key] = value.copy(**kwargs.get(key, {}))
             except:
-                dic[key] = value.copy()
+                newdic[key] = value.copy()
         else:
-            dic[key] = kwargs.get(key, copy.deepcopy(value))
-    return dic
+            newdic[key] = kwargs.get(key, copy.deepcopy(value))
+    return newdic
 
 def auto_filename(obj, filename='', suffix=".json"):
     """Create filename for saving a class."""
