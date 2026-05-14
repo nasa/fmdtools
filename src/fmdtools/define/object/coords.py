@@ -26,13 +26,16 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.rand import Rand
-from fmdtools.define.base import is_iter
+from fmdtools.define.base import is_iter, dict_from_file, value_to_jsonable
 from fmdtools.define.object.base import BaseObject
 from fmdtools.analyze.common import setup_plot, consolidate_legend, clear_prev_figure
 from fmdtools.analyze.common import prep_animation_title, add_title_xylabs
 from fmdtools.analyze.common import multiplot_helper, multiplot_legend_title
 
 import numpy as np
+import os
+import json
+import pandas as pd
 from typing import ClassVar
 
 from matplotlib import pyplot as plt
@@ -82,6 +85,10 @@ class CoordsParam(Parameter):
 
     def create_points(self, *points):
         return points
+
+    def shape(self):
+        """Return shape of grid."""
+        return (int(self.x_size), int(self.y_size))
 
     def create_grid_mesh(self):
         """Create array of grid indexes."""
@@ -1656,6 +1663,70 @@ class Coords(BaseCoords):
                                  **collections[coll], z=z)
         return fig, ax
 
+    def get_property_dtype(self, prop):
+        """Get defined data type of a given property."""
+        return getattr(self, self.get_att_roletype(prop)+"_"+prop)[0]
+
+    def load_property(self, prop, filename, delimiter=",", delete=False, **kwargs):
+        """
+        Load a property from a .csv or .json file.
+
+        Parameters
+        ----------
+        prop : str
+            Property name.
+        filename : str
+            Filename to load from.
+        delimiter : str, optional
+            File delimiter for json. The default is ",".
+        delete : bool, optional
+            Whether to delete the file after loading (for test). The default is False.
+        **kwargs : kwargs
+            Keyword arguments to pandas.read_csv.
+        """
+        #proparray = np.genfromtxt(filename, dtype=self.get_property_dtype(prop),
+        #                          delimiter=delimiter, **kwargs)
+        dtype = self.get_property_dtype(prop)
+        if ".csv" in filename:
+            proparray = pd.read_csv(filename, dtype=dtype, **kwargs).to_numpy()
+            # may need to add interpolation steps
+            if delete:
+                os.remove(filename)
+        elif ".json" in filename:
+            datadict = dict_from_file(filename, delete=delete)
+            propname = kwargs.get('propname', prop)
+            proparray = np.array(datadict[propname], dtype=dtype)
+        else:
+            raise Exception("invalid filename "+filename)
+        if proparray.shape == self.p.shape():
+            setattr(self, prop, proparray)
+        else:
+            raise Exception("Incorrect shape: "+str(proparray.shape)
+                            +" for grid with shape "+str(self.p.shape()))
+
+    def save_property(self, prop, filename, propname='', **kwargs):
+        """
+        Save a property to a .csv or .json file.
+
+        Parameters
+        ----------
+        prop : str
+            Property name.
+        filename : str
+            Filename to save to
+        **kwargs : kwargs
+            Keyword arguments to DataFrame.to_csv
+        """
+        if ".csv" in filename:
+            df = pd.DataFrame(getattr(self, prop))
+            df.to_csv(filename, index=False, **kwargs)
+        elif ".json" in filename:
+            datadict = {prop: value_to_jsonable(getattr(self, prop))}
+            with open(filename, "w") as f:
+                json.dump(datadict, f)
+        else:
+            raise Exception("Invalid filename "+filename)
+            
 
 def replace_array_nan(array):
     """Turn arrays with nans into arrays with infs."""
@@ -1667,6 +1738,7 @@ def replace_array_nan(array):
 
 class ExampleCoords(Coords):
     """Example of Coords class for use in documentation and testing."""
+
     feature_a = (bool, False)
     feature_v = (float, 1.0)
     state_st = (float, 0.0)
@@ -1675,9 +1747,43 @@ class ExampleCoords(Coords):
     collection_hi_v_not_a = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
     default_p = {'blocksize': 10.0}
 
-    def init_properties(self, *args, **kwargs):
+    def init_properties(self, **kwargs):
         """Initialize points where v=10.0."""
         self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
+
+class ExampleFileCoords(Coords):
+    """
+    Example Coords object to demonstrate and test save/load.
+
+    Examples
+    --------
+    >>> exfc = ExampleFileCoords()
+    >>> exfc.object
+    array([[False,  True],
+           [ True, False]])
+    >>> exfc.occupied
+    array([[ True, False],
+           [False,  True]])
+    >>> exfc = ExampleFileCoords(filetype=".json")
+    >>> exfc.object
+    array([[False,  True],
+           [ True, False]])
+    >>> exfc.occupied
+    array([[ True, False],
+           [False,  True]])
+    """
+
+    feature_object = (bool, False)
+    state_occupied = (bool, False)
+    default_p = {"x_size": 2, "y_size": 2}
+
+    def init_properties(self, filetype=".csv", **kwargs):
+        self.set_pts([(0,1),(1,0)], "object", True)
+        self.set_pts([(0,0),(1,1)], "occupied", True)
+        self.save_property("object", "object"+filetype)
+        self.save_property("occupied", "occupied"+filetype)
+        self.load_property("object", "object"+filetype, delete=True)
+        self.load_property("occupied", "occupied"+filetype, delete=True)
 
 
 class MetricCoords(BaseCoords):
@@ -1721,6 +1827,8 @@ class MetricCoords(BaseCoords):
 
 
 if __name__ == "__main__":
+    efc = ExampleFileCoords()
+
     ex = ExampleCoords()
     ex.asdict(jsonable=True)
     ex.tojson()

@@ -207,12 +207,11 @@ def set_arg_as_type(true_type, new_arg):
 
 def dict_to_json(dic, exclude=[]):
     """Convert a dict to json. Keep keys in exclude out of dict."""
+    newdict = {}
     for key, value in [*dic.items()]:
-        if key in exclude:
-            dic.pop(key)
-        else:
-            dic[key] = value_to_jsonable(value, exclude=exclude)
-    return dic
+        if key not in exclude:
+            newdict[key] = value_to_jsonable(value, exclude=exclude)
+    return newdict
 
 def value_to_jsonable(value, exclude=[]):
     """Make a given value json-able."""
