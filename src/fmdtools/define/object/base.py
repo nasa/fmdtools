@@ -414,6 +414,14 @@ class BaseObject(metaclass=BaseType):
                 raise Exception(str(obj_args.__class__) + " not a recognized" +
                                 " instance of " + str(initializer) +
                                 " (did you use relative instead of absolute imports?)")
+            elif isinstance(obj_args, str):
+                if hasattr(obj_initializer, "load") and obj_args.endswith(".json"):
+                    obj = obj_initializer.load(obj_args)
+                elif hasattr(obj_initializer, 'fromjson'):
+                    obj = obj_initializer.fromjson(obj_args)
+                else:
+                    raise Exception("Could not initialize "+str(obj_initializer)
+                                    +" from "+obj_args)
             else:
                 raise Exception(str(obj_args) + "not a dict or not a recognized "
                                 + "instance of " + str(obj_initializer))

@@ -80,6 +80,15 @@ class Function(Block):
     - s=ExampleState(x=1.0, y=3.0)
     - m=ExampleMode(mode='no_charge', faults={'no_charge'}, sub_faults=False)
     - exf=ExampleFlow(s=(x=3.0, y=1.0))
+
+    And can load constituent containers from both json and json files:
+    >>> ExampleFunction("exf", s='{"x": 2.0}').s
+    ExampleState(x=2.0, y=1.0)
+    >>> exf.s.save("exfs.json")
+    >>> ExampleFunction("exf", s="exfs.json").s
+    ExampleState(x=1.0, y=3.0)
+    >>> import os
+    >>> os.remove("exfs.json")
     """
 
     __slots__ = ["ca", "aa", "fa", "args_f"]

@@ -303,6 +303,18 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         """
         Set the same-named values of the current object to those of another.
 
+        Parameters
+        ----------
+        obj: Object/str/dict
+            Object to assign values from
+        *fields : fields to assign
+        as_copy: bool,
+            set to True for dicts/sets to be copied rather than referenced
+        **fielddict : kwargs
+            Mapping for arguments that don't match
+
+        Examples
+        --------
         Further arguments specify which values. e.g.,:
 
         >>> p1 = ExContainer(x=0.0, y=0.0)
@@ -329,8 +341,10 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         >>> p1.y
         10.0
 
-        as_copy: bool,
-            set to True for dicts/sets to be copied rather than referenced
+        Containers can also be assigned from json (including json files):
+        >>> p1.assign('{"x": 1.0, "y": 2.0}', "x", "y")
+        >>> p1
+        ExContainer(x=1.0, y=2.0)
         """
         fielddict = self.get_field_dict(obj, *fields, **fielddict)
         for field, value in fielddict.items():
