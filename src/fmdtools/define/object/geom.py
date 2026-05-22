@@ -66,7 +66,7 @@ class GeomParameter(Parameter):
     coordinates: ClassVar[tuple] = () 
 
 
-class Geom(BaseObject):
+class BaseGeom(BaseObject):
     """
     Base class for defining geometries.
 
@@ -81,66 +81,35 @@ class Geom(BaseObject):
         Parameter defining immutable properties (e.g., shapely inputs, buffer)
     """
 
-    __slots__ = ('p', 's', 'shapenames')
+    __slots__ = ('p', 's', 'shapes')
     container_s = State
     container_p = GeomParameter
     default_track = ['s']
     all_possible = ['s']
     immutable_roles = BaseObject.immutable_roles + ['buffer']
 
-    def __init__(self, *args, s={}, p={}, track='default', **kwargs):
-        super().__init__(s=s, p=p, track=[], **kwargs)
-        self.shapenames = ['shape',
-                           *self.p.get_pref_attrs('buffer'),
-                           *self.s.get_pref_attrs('buffer')]
-        self.init_track(track=track)
-
-    def get_shape(self, shapename='shape'):
-        """
-        Get the shapely object defining the class and buffers.
-
-        Parameters
-        ----------
-        shapename : str, optional
-            Name of the shape. The default is 'shape', which produces the base shape,
-            other names return the buffer shapes for that shape.
-
-        Returns
-        -------
-        shapely.geometry
-            Shapely object for the shape.
-        """
-        shape = self.shapely_class(*self.get_shapely_args())
-        if shapename == 'shape':
-            return shape
-        else:
-            argname = 'buffer_'+shapename
-            if hasattr(self.p, argname):
-                arg = self.p[argname]
-            elif hasattr(self.s, argname):
-                arg = self.s[argname]
-            else:
-                raise Exception(argname+" not in "+"Geom's "+str(self.s.__class__)
-                                + " or "+str(self.p.__class__))
-            return shape.buffer(arg)
 
     def get_paramstates(self):
         """Create dict of parameters and states."""
         return {**self.p.asdict(), **self.s.asdict()}
 
     def get_shapely_args(self):
-        """Get arguments for the given Shapely class."""
+        """
+        Get arguments for the given Shapely class.
+
+        Override to set shapely arguments from other states (e.g., not )
+        """
         return self.get_paramstates()['coordinates']
 
-    def at(self, pt, shapename='shape'):
+    def at(self, pt, shape='shape'):
         """
-        Determine whether the point x, y is within the buffer 'shapename'.
+        Determine whether the point x, y is within the buffer 'shape'.
 
         Parameters
         ----------
         *pt : tuple
             Locations of x, y, z coordinates.
-        shapename : str
+        shape : str
             Name of buffer property
 
         Returns
@@ -148,8 +117,8 @@ class Geom(BaseObject):
         at : bool
             Whether x,y is within the buffer.
         """
-        shape = self.get_shape(shapename)
-        return shape.covers(Point(*pt))
+        shap = self.get_shape(shape)
+        return shap.covers(Point(*pt))
 
     def all_at(self, *pt):
         """
@@ -176,7 +145,7 @@ class Geom(BaseObject):
         []
         """
         all_at = []
-        for bname in self.shapenames:
+        for bname in self.shapes:
             if self.at(pt, bname):
                 all_at.append(bname)
         return all_at
@@ -188,7 +157,7 @@ class Geom(BaseObject):
     def return_mutables(self):
         return astuple(self.s)
 
-    def vect_to_shape(self, pt, shapename='shape'):
+    def vect_to_shape(self, pt, shape='shape'):
         """
         Get the vector (x, y) to a given shape.
 
@@ -196,7 +165,7 @@ class Geom(BaseObject):
         ----------
         pt : tuple/list
             Point to get vector from
-        shapename : str
+        shape : str
             Name of shape/buffer. Default is 'shape'.
 
         Examples
@@ -212,13 +181,13 @@ class Geom(BaseObject):
         array([[0.],
                [0.]])
         """
-        shape = self.get_shape(shapename)
+        shap = self.get_shape(shape)
         geom_pt = Point(pt)
-        geom_c, close_pt = nearest_points(geom_pt, shape)
+        geom_c, close_pt = nearest_points(geom_pt, shap)
         vect_to_shape = np.array(close_pt.xy) - np.array(geom_pt.xy)
         return vect_to_shape
 
-    def vect_at_shape(self, pt, shapename='shape', dist_forward=0.1):
+    def vect_at_shape(self, pt, shape='shape', dist_forward=0.1):
         """
         Get the vector (x, y) at a given shape (e.g., direction of a line at pt).
 
@@ -226,7 +195,7 @@ class Geom(BaseObject):
         ----------
         pt : tuple/lost
             Point closest to shape
-        shapename : str
+        shape : str
             Name of shape/buffer. Default is 'shape'.
         dist_forward : float
             Distance forward along line segment to project. Give a negative number to
@@ -242,11 +211,11 @@ class Geom(BaseObject):
         array([[ 0. ],
                [-0.1]])
         """
-        shape = self.get_shape(shapename)
+        shap = self.get_shape(shape)
         geom_pt = Point(pt)
-        geom_c, close_pt = nearest_points(geom_pt, shape)
-        line_dist = shape.line_locate_point(geom_pt)
-        next_pt = shape.line_interpolate_point(line_dist + dist_forward)
+        geom_c, close_pt = nearest_points(geom_pt, shap)
+        line_dist = shap.line_locate_point(geom_pt)
+        next_pt = shap.line_interpolate_point(line_dist + dist_forward)
         vect_at_shape = np.array(next_pt.xy) - np.array(close_pt.xy)
         return vect_at_shape
 
@@ -285,7 +254,7 @@ class Geom(BaseObject):
         if not ax:
             fig, ax = setup_plot(z=z, figsize=figsize)
         if 'all' in shapes:
-            shapes = {s: {} for s in self.shapenames}
+            shapes = {s: {} for s in self.shapes}
         l_kw = filter_kwargs(consolidate_legend, **kwargs)
         t_kw = filter_kwargs(add_title_xylabs, **kwargs)
         plot_kwargs = {k: v for k, v in kwargs.items() if k not in {**l_kw, **t_kw}}
@@ -315,6 +284,47 @@ class Geom(BaseObject):
     def assign_from(self, hist, t, *states):
         """Update Geom state from a given history and time."""
         self.s.assign(hist.s.get_slice(t), *states)
+
+
+class Geom(BaseGeom):
+
+    def __init__(self, *args, s={}, p={}, track='default', **kwargs):
+        super().__init__(s=s, p=p, track=[], **kwargs)
+        self.shapes = ['shape',
+                       *self.p.get_pref_attrs('buffer'),
+                       *self.s.get_pref_attrs('buffer')]
+        self.init_track(track=track)
+
+    def get_shape(self, shape='shape'):
+        """
+        Get the shapely object defining the class and buffers.
+
+        Parameters
+        ----------
+        shape : str, optional
+            Name of the shape. The default is 'shape', which produces the base shape,
+            other names return the buffer shapes for that shape.
+
+        Returns
+        -------
+        shapely.geometry
+            Shapely object for the shape.
+        """
+        shap = self.shapely_class(*self.get_shapely_args())
+        if shape == 'shape':
+            return shap
+        else:
+            argname = 'buffer_'+shape
+            if hasattr(self.p, argname):
+                arg = self.p[argname]
+            elif hasattr(self.s, argname):
+                arg = self.s[argname]
+            else:
+                raise Exception(argname+" not in "+"Geom's "+str(self.s.__class__)
+                                + " or "+str(self.p.__class__))
+            return shap.buffer(arg)
+
+
 
 
 
