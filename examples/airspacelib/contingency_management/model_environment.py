@@ -21,7 +21,7 @@ from fmdtools_examples.airspacelib.base.state import AircraftPosition3
 
 from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.architecture.geom import GeomArchitecture
-from fmdtools.define.object.geom import GeomPoint, PointParam
+from fmdtools.define.object.geom import GeomPoint, GeomParameter
 from fmdtools.define.block.function import Function
 
 from shapely import distance
@@ -141,7 +141,7 @@ class ThreatState(AircraftPosition3):
         self.buffer_speed = self.get_vel()
 
 
-class ThreatParam(PointParam):
+class ThreatParam(GeomParameter):
     """
     Parameter defining the exteral threat shape.
 
@@ -166,6 +166,9 @@ class Threat(GeomPoint):
     def update_position(self):
         """Update position given known speed."""
         self.s.update_position(self.s.buffer_speed)
+
+    def get_shapely_args(self):
+        return (self.s.x, self.s.y)
 
 
 class ContingencyThreats(GeomArchitecture):

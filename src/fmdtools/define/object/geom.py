@@ -45,6 +45,27 @@ from recordclass import astuple
 import numpy as np
 
 
+class GeomParameter(Parameter):
+    """
+    Parameter defining Geoms.
+
+    Extend with 'buffer_att' to create buffer shapes.
+
+    Examples
+    --------
+    A point with ends at (0.0, 0.0) and (1.0, 1.0) and radius of 1.0 defining
+    whether something is on the line would be defined by the parameter:
+
+    >>> class ExLineParam(GeomParameter):
+    ...     coordinates: tuple = ((0.0, 0.0), (1.0, 1.0))
+    ...     buffer_on: float = 1.0
+    >>> ExLineParam()
+    ExLineParam(coordinates=((0.0, 0.0), (1.0, 1.0)), buffer_on=1.0)
+    """
+
+    coordinates: ClassVar[tuple] = () 
+
+
 class Geom(BaseObject):
     """
     Base class for defining geometries.
@@ -62,7 +83,7 @@ class Geom(BaseObject):
 
     __slots__ = ('p', 's', 'shapenames')
     container_s = State
-    container_p = Parameter
+    container_p = GeomParameter
     default_track = ['s']
     all_possible = ['s']
     immutable_roles = BaseObject.immutable_roles + ['buffer']
@@ -89,7 +110,7 @@ class Geom(BaseObject):
         shapely.geometry
             Shapely object for the shape.
         """
-        shape = self.shapely_class(*self.get_args())
+        shape = self.shapely_class(*self.get_shapely_args())
         if shapename == 'shape':
             return shape
         else:
@@ -106,6 +127,10 @@ class Geom(BaseObject):
     def get_paramstates(self):
         """Create dict of parameters and states."""
         return {**self.p.asdict(), **self.s.asdict()}
+
+    def get_shapely_args(self):
+        """Get arguments for the given Shapely class."""
+        return self.get_paramstates()['coordinates']
 
     def at(self, pt, shapename='shape'):
         """
@@ -209,7 +234,7 @@ class Geom(BaseObject):
 
         Examples
         --------
-        >>> e=ExLine(p={'xys':((0,0),(1,1), (1,0))})
+        >>> e=ExLine(p={'coordinates':(((0,0),(1,1), (1,0)),)})
         >>> e.vect_at_shape((0,0))
         array([[0.07071068],
                [0.07071068]])
@@ -292,35 +317,6 @@ class Geom(BaseObject):
         self.s.assign(hist.s.get_slice(t), *states)
 
 
-class PointParam(Parameter):
-    """
-    Parameter defining points. Extend with 'buffer_att' to create buffer shapes.
-
-    Fields
-    ------
-    x : float
-        x-location of point.
-    y : float
-        y-location of point.
-
-
-    Examples
-    --------
-    a point with center at 1.0, 1.0 and radius of 1.0 defining whether something
-    is on the point would be defined by the parameter:
-
-    >>> class ExPointParam(PointParam):
-    ...    x: float = 1.0
-    ...    y: float = 1.0
-    ...    buffer_on: float = 1.0
-
-    >>> ExPointParam()
-    ExPointParam(x=1.0, y=1.0, buffer_on=1.0)
-    """
-
-    x: ClassVar[float] = 0.0
-    y: ClassVar[float] = 0.0
-
 
 class GeomPoint(Geom):
     """
@@ -359,23 +355,13 @@ class GeomPoint(Geom):
     >>> exp.s.buffer_around = 2.0 # set to a larger radius to capture the point
     >>> exp.at((3.0, 1.0), 'around')
     True
+
+    >>> exp = ExPoint()
+    >>> exp.get_shapely_args()
+    (1.0, 1.0)
     """
 
-    container_p = PointParam
     shapely_class = Point
-
-    def get_args(self):
-        """
-        Get shape arguments from Point parameter/state.
-
-        Examples
-        --------
-        >>> exp = ExPoint()
-        >>> exp.get_args()
-        (1.0, 1.0)
-        """
-        combodict = self.get_paramstates()
-        return tuple([combodict[i] for i in ['x', 'y', 'z'] if i in combodict])
 
 
 class ExGeomState(State):
@@ -389,15 +375,14 @@ class ExGeomState(State):
     buffer_around: float = 1.0
 
 
-class ExPointParam(PointParam):
+class ExPointParam(GeomParameter):
     """
     Example point parameter for testing.
 
     Has a default center at (1.0, 1.0) and radius defining "on" of 1.0.
     """
 
-    x: float = 1.0
-    y: float = 1.0
+    coordinates: tuple = (1.0, 1.0)
     buffer_on: float = 1.0
 
 
@@ -408,36 +393,10 @@ class ExPoint(GeomPoint):
     container_s = ExGeomState
 
 
-class LineParam(Parameter):
-    """
-    Parameter defining lines. May be extended with buffers.
-
-    ...
-
-    Fields
-    ------
-    xys : tuple
-        tuple of points ((x1, y1), ...) defining shapely.LineString.
-
-    Examples
-    --------
-    A point with ends at (0.0, 0.0) and (1.0, 1.0) and radius of 1.0 defining
-    whether something is on the line would be defined by the parameter:
-
-    >>> class ExLineParam(LineParam):
-    ...     xys: tuple = ((0.0, 0.0), (1.0, 1.0))
-    ...     buffer_on: float = 1.0
-    >>> ExLineParam()
-    ExLineParam(xys=((0.0, 0.0), (1.0, 1.0)), buffer_on=1.0)
-    """
-
-    xys: ClassVar[tuple] = ()
-
-
-class ExLineParam(LineParam):
+class ExLineParam(GeomParameter):
     """Example parameter defining a line with a given buffer 'on'."""
 
-    xys: tuple = ((0.0, 0.0), (1.0, 1.0))
+    coordinates: tuple = (((0.0, 0.0), (1.0, 1.0)),)
     buffer_on: float = 1.0
 
 
@@ -472,23 +431,13 @@ class GeomLine(Geom):
 
     >>> type(exl.get_shape('on'))
     <class 'shapely.geometry.polygon.Polygon'>
+
+    >>> exl = ExLine()
+    >>> exl.get_shapely_args()
+    (((0.0, 0.0), (1.0, 1.0)),)
     """
 
-    container_p = LineParam
     shapely_class = LineString
-
-    def get_args(self):
-        """
-        Create arguments for shapely LineString class based on fields.
-
-        Examples
-        --------
-        >>> exl = ExLine()
-        >>> exl.get_args()
-        (((0.0, 0.0), (1.0, 1.0)),)
-        """
-        combodict = self.get_paramstates()
-        return (combodict['xys'], )
 
 
 class ExLine(GeomLine):
@@ -527,8 +476,7 @@ class PolyParam(Parameter):
 class ExPolyParam(PolyParam):
     """Example polygon parameter defining a basic triangle for use in testing."""
 
-    shell: tuple = ((0.0, 0.0), (1.0, 0.0), (1.0, 1.0))
-    holes: tuple = (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)), )
+    coordinates: tuple = (((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)), ))
 
 
 class GeomPoly(Geom):
@@ -556,21 +504,12 @@ class GeomPoly(Geom):
 
     >>> type(egp.get_shape())
     <class 'shapely.geometry.polygon.Polygon'>
+
+    >>> ExPoly().get_shapely_args()
+    (((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)),))
     """
 
-    container_p = PolyParam
     shapely_class = Polygon
-
-    def get_args(self):
-        """Create arguments for shapely Polygon class based on fields.
-
-        Examples
-        --------
-        >>> ExPoly().get_args()
-        (((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)),))
-        """
-        combodict = self.get_paramstates()
-        return combodict['shell'], combodict['holes']
 
 
 class ExPoly(GeomPoly):
