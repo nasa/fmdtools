@@ -451,7 +451,7 @@ if __name__ == "__main__":
     import numpy as np
     env = ContingencyEnvironment()
     param = DroneFlightGridParam(x_size=120/2.5, y_size=120/2.5, blocksize=2.5, max_cost=np.inf)
-    grid = DroneFlightGrid(env, p=param)
+    grid = DroneFlightGrid(env=env, p=param)
     start = (45.0, 72.5)
     goal = (50.0, 60.0)
     path = grid.a_star_worldcoords(start_xy=start, goal_xy=goal, max_distance=5,
