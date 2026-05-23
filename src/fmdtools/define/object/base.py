@@ -415,7 +415,7 @@ class BaseObject(metaclass=BaseType):
                                 " instance of " + str(initializer) +
                                 " (did you use relative instead of absolute imports?)")
             elif isinstance(obj_args, str):
-                if hasattr(obj_initializer, "load") and obj_args.endswith(".json"):
+                if hasattr(obj_initializer, "load") and obj_args.endswith("json"):
                     obj = obj_initializer.load(obj_args)
                 elif hasattr(obj_initializer, 'fromjson'):
                     obj = obj_initializer.fromjson(obj_args)

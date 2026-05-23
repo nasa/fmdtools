@@ -26,7 +26,7 @@ specific language governing permissions and limitations under the License.
 from fmdtools.define.architecture.base import Architecture
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.analyze.common import setup_plot
-from fmdtools.define.object.geom import GeomPoint, GeomLine, GeomPoly
+from fmdtools.define.object.geom import BaseGeom, GeomJSON
 from fmdtools.define.object.geom import ExPoint, ExLine, ExPoly
 from fmdtools.define.block.base import Block
 
@@ -43,14 +43,15 @@ class GeomArchitecture(Architecture):
 
     >>> class ExGeomArch(GeomArchitecture):
     ...    def init_architecture(self, **kwargs):
-    ...        self.add_point("ex_point", ExPoint)
-    ...        self.add_line("ex_line", ExLine)
-    ...        self.add_poly("ex_poly", ExPoly)
+    ...        self.add_geom("ex_point", ExPoint)
+    ...        self.add_geom("ex_line", ExLine)
+    ...        self.add_geom("ex_poly", ExPoly)
+    ...        self.add_geom("ex_geom", p={'geojson': '{"type": "Point","coordinates": [1, 2]}'})
     ...    def dynamic_behavior(self):
     ...        if self.t.time >= 1.0:
-    ...            self.points["ex_point"].s.buffer_around = self.t.time
+    ...            self.geoms["ex_point"].s.buffer_around = self.t.time
     ...    def static_behavior(self):
-    ...        self.lines["ex_line"].s.buffer_around = self.points["ex_point"].s.buffer_around
+    ...        self.geoms["ex_line"].s.buffer_around = self.geoms["ex_point"].s.buffer_around
 
     This can then be used in containing classes (e.g., environments) that need multiple
     geoms. We can then access the individual geoms in the geoms dict, e.g.,:
@@ -59,24 +60,23 @@ class GeomArchitecture(Architecture):
     >>> ega
     exgeomarch ExGeomArch
     - t=Time(time=-0.1, timers={})
-    POINTS:
+    GEOMS:
     - ex_point=ExPoint(s=(occupied=False, buffer_around=1.0))
-    LINES:
     - ex_line=ExLine(s=(occupied=False, buffer_around=1.0))
-    POLYS:
     - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
-    >>> ega.geoms()['ex_point'].s
+    - ex_geom=GeomJSON()
+    >>> ega.geoms['ex_point'].s
     ExGeomState(occupied=False, buffer_around=1.0)
     >>> ega.h
     time:                         array(101)
-    points.ex_point.s.occupied:   array(101)
-    points.ex_point.s.buffer_around: array(101)
-    lines.ex_line.s.occupied:     array(101)
-    lines.ex_line.s.buffer_around: array(101)
-    polys.ex_poly.s.occupied:     array(101)
-    polys.ex_poly.s.buffer_around: array(101)
+    geoms.ex_point.s.occupied:    array(101)
+    geoms.ex_point.s.buffer_around: array(101)
+    geoms.ex_line.s.occupied:     array(101)
+    geoms.ex_line.s.buffer_around: array(101)
+    geoms.ex_poly.s.occupied:     array(101)
+    geoms.ex_poly.s.buffer_around: array(101)
     >>> ega.return_mutables()
-    ((False, 1.0), (False, 1.0), (False, 1.0), (np.float64(-0.1), np.int32(0), np.False_, np.False_, np.False_))
+    ((), (False, 1.0), (False, 1.0), (False, 1.0), (np.float64(-0.1), np.int32(0), np.False_, np.False_, np.False_))
 
     GeomArchitectures are also simulable provided dynamic_behavior and static_behavior
     methods as shown below. Note that this behavior must be called externally,
@@ -86,53 +86,48 @@ class GeomArchitecture(Architecture):
     >>> ega
     exgeomarch ExGeomArch
     - t=Time(time=2.0, timers={})
-    POINTS:
+    GEOMS:
     - ex_point=ExPoint(s=(occupied=False, buffer_around=2.0))
-    LINES:
     - ex_line=ExLine(s=(occupied=False, buffer_around=2.0))
-    POLYS:
     - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
+    - ex_geom=GeomJSON()
     >>> ExGeomArch.fromjson(ega.tojson(), name="fromjson")
     fromjson ExGeomArch
     - t=Time(time=2.0, timers={})
-    POINTS:
+    GEOMS:
     - ex_point=ExPoint(s=(occupied=False, buffer_around=2.0))
-    LINES:
     - ex_line=ExLine(s=(occupied=False, buffer_around=2.0))
-    POLYS:
     - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
-
+    - ex_geom=GeomJSON()
 
     They should also copy independently:
     >>> ega2 = ega.copy()
     >>> ega2
     exgeomarch ExGeomArch
     - t=Time(time=2.0, timers={})
-    POINTS:
+    GEOMS:
     - ex_point=ExPoint(s=(occupied=False, buffer_around=2.0))
-    LINES:
     - ex_line=ExLine(s=(occupied=False, buffer_around=2.0))
-    POLYS:
     - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
+    - ex_geom=GeomJSON()
     >>> ExGeomArch.fromjson(ega.tojson(), name="fromjson")
     fromjson ExGeomArch
     - t=Time(time=2.0, timers={})
-    POINTS:
+    GEOMS:
     - ex_point=ExPoint(s=(occupied=False, buffer_around=2.0))
-    LINES:
     - ex_line=ExLine(s=(occupied=False, buffer_around=2.0))
-    POLYS:
     - ex_poly=ExPoly(s=(occupied=False, buffer_around=1.0))
-    >>> ega2.points['ex_point'].s.buffer_around = 4.0
-    >>> ega.points['ex_point'].s.buffer_around
+    - ex_geom=GeomJSON()
+    >>> ega2.geoms['ex_point'].s.buffer_around = 4.0
+    >>> ega.geoms['ex_point'].s.buffer_around
     2.0
     """
 
     container_p = Parameter
-    __slots__= ("points", "lines", "polys")
-    default_track = ['points', 'lines', 'polys']
-    all_possible = ['points', 'lines', 'polys']
-    flexible_roles = ['point', 'line', 'poly']
+    __slots__= ("geoms",)
+    default_track = ['geoms']
+    all_possible = ['geoms']
+    flexible_roles = ['geom']
     rolename = 'ga'
 
     def base_type(self):
@@ -143,10 +138,6 @@ class GeomArchitecture(Architecture):
         """Use this placeholder method to define custom architectures."""
         pass
 
-    def geoms(self):
-        """Return a dict of all points, lines, and polygons."""
-        return {**self.points, **self.lines, **self.polys}
-
     def check_geom_class(self, gclass, baseclass):
         """Check that geom class/object inherits from given base class."""
         try:
@@ -156,53 +147,24 @@ class GeomArchitecture(Architecture):
             if not isinstance(gclass, baseclass):
                 raise Exception("gclass "+gclass+" not a "+baseclass.__name__)
 
-    def add_point(self, name, pclass=GeomPoint, **kwargs):
+    def add_geom(self, name, pclass=GeomJSON, **kwargs):
         """
-        Add/instantiate an individual point to the overall architecture.
+        Add/instantiate an individual geom to the architecture.
+
+        By default the geom is a GeomJSON, which matches provided geomjson.
+        Can also use a custom class like GeomPoint/GeomLine/GeomPoly.
 
         Parameters
         ----------
         name : str
-            Name of the geom object to instantiate.
-        gclass : Geom
-            Class defining the geom.
+            Name for the geom.
+        pclass : BaseGeom, optional
+            Class to instantiate. The default is GeomJSON.
         **kwargs : kwargs
-            kwargs defining the object for gclass.
+            Keyword arguments to the class.
         """
-        self.check_geom_class(pclass, GeomPoint)
-        self.add_flex_role_obj('points', name, objclass=pclass, **kwargs)
-
-    def add_line(self, name, lclass=GeomLine, **kwargs):
-        """
-        Add/instantiate an individual line to the overall architecture.
-
-        Parameters
-        ----------
-        name : str
-            Name of the geom object to instantiate.
-        gclass : Geom
-            Class defining the geom.
-        **kwargs : kwargs
-            kwargs defining the object for gclass.
-        """
-        self.check_geom_class(lclass, GeomLine)
-        self.add_flex_role_obj('lines', name, objclass=lclass, **kwargs)
-
-    def add_poly(self, name, pclass=GeomPoly, **kwargs):
-        """
-        Add/instantiate an individual polygon to the overall architecture.
-
-        Parameters
-        ----------
-        name : str
-            Name of the geom object to instantiate.
-        gclass : Geom
-            Class defining the geom.
-        **kwargs : kwargs
-            kwargs defining the object for gclass.
-        """
-        self.check_geom_class(pclass, GeomPoly)
-        self.add_flex_role_obj('polys', name, objclass=pclass, **kwargs)
+        self.check_geom_class(pclass, BaseGeom)
+        self.add_flex_role_obj("geoms", name, objclass=pclass, **kwargs)
 
     def all_at(self, *pt):
         """
@@ -229,7 +191,7 @@ class GeomArchitecture(Architecture):
         {'ex_point': ['on', 'around'], 'ex_line': ['on', 'around'], 'ex_poly': ['around']}
         """
         all_at = {}
-        for geomname, geom in self.geoms().items():
+        for geomname, geom in self.geoms.items():
             at_geom = geom.all_at(*pt)
             if at_geom:
                 all_at[geomname] = at_geom
@@ -267,11 +229,11 @@ class GeomArchitecture(Architecture):
         if not ax:
             fig, ax = setup_plot(z=z, figsize=figsize)
         if 'all' in geoms:
-            geoms = {g: {'shapes': 'all'} for g in self.geoms()}
+            geoms = {g: {'shapes': 'all'} for g in self.geoms}
 
         for geomname, geom_kwargs in geoms.items():
             local_kwargs = {**kwargs, 'geomlabel': geomname, **geom_kwargs}
-            fig, ax = self.geoms()[geomname].show(ax=ax, fig=fig, z=z, **local_kwargs)
+            fig, ax = self.geoms[geomname].show(ax=ax, fig=fig, z=z, **local_kwargs)
         return fig, ax
 
     def show_from(self, hist, t, **kwargs):
@@ -307,7 +269,7 @@ class GeomArchitecture(Architecture):
         """Build the action graph."""
         super().build(construct_graph=construct_graph, **kwargs)
 
-    def copy(self, flex_to_copy=["point", "line", "poly"], **kwargs):
+    def copy(self, flex_to_copy=["geom"], **kwargs):
         return super().copy(flex_to_copy=flex_to_copy, **kwargs)
 
 
@@ -316,23 +278,24 @@ class ExGeomArch(GeomArchitecture):
 
     def init_architecture(self, **kwargs):
         """Initialize example geoms."""
-        self.add_point("ex_point", ExPoint)
-        self.add_line("ex_line", ExLine)
-        self.add_poly("ex_poly", ExPoly)
+        self.add_geom("ex_point", ExPoint)
+        self.add_geom("ex_line", ExLine)
+        self.add_geom("ex_poly", ExPoly)
+        self.add_geom("ex_geom", p={'geojson': '{"type": "Point","coordinates": [1, 2]}'})
 
     def dynamic_behavior(self):
         """Example dynamic behavior demonstrating dynamic buffers."""
         if self.t.time >= 0.0:
-            self.points["ex_point"].s.buffer_around = self.t.time
+            self.geoms["ex_point"].s.buffer_around = self.t.time
 
     def static_behavior(self):
-        self.lines["ex_line"].s.buffer_around = self.points["ex_point"].s.buffer_around
+        self.geoms["ex_line"].s.buffer_around = self.geoms["ex_point"].s.buffer_around
 
 
 if __name__ == "__main__":
     ega = ExGeomArch()
     ega2 = ega.copy()
-    ega2.points['ex_point'].s.buffer_around = 3.0
+    ega2.geoms['ex_point'].s.buffer_around = 3.0
     import doctest
     doctest.testmod(verbose=True)
     

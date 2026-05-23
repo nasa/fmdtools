@@ -57,23 +57,23 @@ class Environment(CommsFlow):
     >>> env.create_hist([1.0])
     c.r.probdens:                   array(1)
     c.st:                           array(1)
-    ga.points.ex_point.s.occupied:  array(1)
-    ga.points.ex_point.s.buffer_around: array(1)
-    ga.lines.ex_line.s.occupied:    array(1)
-    ga.lines.ex_line.s.buffer_around: array(1)
-    ga.polys.ex_poly.s.occupied:    array(1)
-    ga.polys.ex_poly.s.buffer_around: array(1)
+    ga.geoms.ex_point.s.occupied:   array(1)
+    ga.geoms.ex_point.s.buffer_around: array(1)
+    ga.geoms.ex_line.s.occupied:    array(1)
+    ga.geoms.ex_line.s.buffer_around: array(1)
+    ga.geoms.ex_poly.s.occupied:    array(1)
+    ga.geoms.ex_poly.s.buffer_around: array(1)
 
     Copies should be identical but independent after copying, e.g.:
 
     >>> e = ExampleEnvironment("env")
-    >>> e.ga.points['ex_point'].s.occupied = True
+    >>> e.ga.geoms['ex_point'].s.occupied = True
     >>> e.c.st[0, 0] = 1
 
     Given these changes, the copy should have the same states (and not default):
 
     >>> d = e.copy()
-    >>> d.ga.points['ex_point'].s.occupied
+    >>> d.ga.geoms['ex_point'].s.occupied
     True
     >>> d.c.st[0, 0]
     np.float64(1.0)
@@ -83,17 +83,17 @@ class Environment(CommsFlow):
     >>> d.c.st[0, 1] = 1.0
     >>> e.c.st[0, 1]
     np.float64(0.0)
-    >>> d.ga.lines['ex_line'].s.occupied = True
-    >>> e.ga.lines['ex_line'].s.occupied
+    >>> d.ga.geoms['ex_line'].s.occupied = True
+    >>> e.ga.geoms['ex_line'].s.occupied
     False
 
     This should also be the case for contained local versions:
 
     >>> e = ExampleEnvironment("env")
     >>> hi = e.create_local("hi")
-    >>> e.hi.ga.points['ex_point'].s.occupied=True
+    >>> e.hi.ga.geoms['ex_point'].s.occupied=True
     >>> d = e.copy()
-    >>> d.hi.ga.points['ex_point'].s.occupied
+    >>> d.hi.ga.geoms['ex_point'].s.occupied
     True
     """
 
@@ -156,9 +156,9 @@ class ExampleEnvironment(Environment):
 if __name__ == "__main__":
     e = ExampleEnvironment("env")
     e.create_local("hi")
-    e.hi.ga.points['ex_point'].s.occupied=True
+    e.hi.ga.geoms['ex_point'].s.occupied=True
     d = e.copy()
-    d.hi.ga.points['ex_point'].s.occupied
+    d.hi.ga.geoms['ex_point'].s.occupied
 
 
     c = ExampleEnvironment(track=None)
