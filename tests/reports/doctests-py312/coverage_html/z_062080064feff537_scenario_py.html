@@ -4,14 +4,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for src/fmdtools/sim/scenario.py: 84%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
-    <link rel="stylesheet" href="style_cb_9ff733b0.css" type="text/css">
+    <link rel="stylesheet" href="style_cb_4667309f.css" type="text/css">
     <script src="coverage_html_cb_dd2e7eb5.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
     <div class="content">
         <h1>
-            <span class="text">Coverage for </span><b>src&#8201;/&#8201;fmdtools&#8201;/&#8201;sim&#8201;/&#8201;scenario.py</b>:
+            <span class="text">Coverage for </span><b>src<span class="sep">/</span>fmdtools<span class="sep">/</span>sim<span class="sep">/</span>scenario.py</b>:
             <span class="pc_cov">84%</span>
         </h1>
         <aside id="help_panel_wrapper">
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_062080064feff537_search_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.5">coverage.py v7.13.5</a>,
-            created at 2026-04-09 14:54 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.14.1">coverage.py v7.14.1</a>,
+            created at 2026-05-27 12:14 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -90,9 +90,9 @@
     <p class="pln"><span class="n"><a id="t8" href="#t8">8</a></span><span class="t"><span class="str">- :class:`Injection`: Defines faults and disturbances to inject at a specific time.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t"><span class="str">- :class:`Scenario`: Defines a generic scenario to simulation.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t"><span class="str">- :class:`SingleFaultScenario`: Defines the scenario of a single fault injected in a</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t"><span class="str">  function.</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t"><span class="str">- :class:`JointFaultScenario`: Defines the scenario of multiple faults injected in a</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t"><span class="str">  function at the same time.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t"><span class="str">  object.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t"><span class="str">- :class:`JointFaultScenario`: Defines the scenario of multiple faults injected in</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t"><span class="str">  object(s) at the same time.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t14" href="#t14">14</a></span><span class="t"><span class="str">- :class:`ParameterScenario`: Defines the scenario of a model having parameter values.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t15" href="#t15">15</a></span><span class="t"><span class="str">- :class:`Sequence`: Creates an overall sequence of Injections from a given sequence of</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t16" href="#t16">16</a></span><span class="t"><span class="str">  faults and disturbances.</span>&nbsp;</span><span class="r"></span></p>
@@ -316,13 +316,13 @@
     <p class="pln"><span class="n"><a id="t234" href="#t234">234</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t235" href="#t235">235</a></span><span class="t"><span class="str">    Parameters</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t236" href="#t236">236</a></span><span class="t"><span class="str">    ----------</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t237" href="#t237">237</a></span><span class="t"><span class="str">    function : str</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t238" href="#t238">238</a></span><span class="t"><span class="str">        Function where the fault occurs</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t237" href="#t237">237</a></span><span class="t"><span class="str">    obj : str</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t238" href="#t238">238</a></span><span class="t"><span class="str">        Object in the model where the fault occurs</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t239" href="#t239">239</a></span><span class="t"><span class="str">    fault : str</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t240" href="#t240">240</a></span><span class="t"><span class="str">        Name of the fault</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t241" href="#t241">241</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t242" href="#t242">242</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t243" href="#t243">243</a></span><span class="t">    <span class="nam">function</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">''</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t243" href="#t243">243</a></span><span class="t">    <span class="nam">obj</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">''</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t244" href="#t244">244</a></span><span class="t">    <span class="nam">fault</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">''</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t245" href="#t245">245</a></span><span class="t">    <span class="nam">rate</span><span class="op">:</span> <span class="nam">float</span> <span class="op">=</span> <span class="num">1.0</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t246" href="#t246">246</a></span><span class="t">    <span class="nam">name</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">'faulty'</span>&nbsp;</span><span class="r"></span></p>
@@ -338,9 +338,9 @@
     <p class="pln"><span class="n"><a id="t256" href="#t256">256</a></span><span class="t"><span class="str">        Examples</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t257" href="#t257">257</a></span><span class="t"><span class="str">        --------</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t258" href="#t258">258</a></span><span class="t"><span class="str">        >>> SingleFaultScenario.from_fault(('fxn', 'fault'), 10)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t259" href="#t259">259</a></span><span class="t"><span class="str">        SingleFaultScenario(sequence={10.0: Injection(faults={'fxn': ['fault']}, disturbances={})}, times=(10,), function='fxn', fault='fault', rate=1.0, name='fxn_fault_t10', time=10, phase='')</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t259" href="#t259">259</a></span><span class="t"><span class="str">        SingleFaultScenario(sequence={10.0: Injection(faults={'fxn': ['fault']}, disturbances={})}, times=(10,), obj='fxn', fault='fault', rate=1.0, name='fxn_fault_t10', time=10, phase='')</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t260" href="#t260">260</a></span><span class="t"><span class="str">        >>> SingleFaultScenario.from_fault(('fxn', 'fault'), 10, prob=10)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t261" href="#t261">261</a></span><span class="t"><span class="str">        SingleFaultScenario(sequence={10.0: Injection(faults={'fxn': {'fault': {'prob': 10}}}, disturbances={})}, times=(10,), function='fxn', fault='fault', rate=1.0, name='fxn_fault_t10', time=10, phase='')</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t261" href="#t261">261</a></span><span class="t"><span class="str">        SingleFaultScenario(sequence={10.0: Injection(faults={'fxn': {'fault': {'prob': 10}}}, disturbances={})}, times=(10,), obj='fxn', fault='fault', rate=1.0, name='fxn_fault_t10', time=10, phase='')</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t262" href="#t262">262</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t263" href="#t263">263</a></span><span class="t">        <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">faulttup</span><span class="op">)</span> <span class="op">==</span> <span class="num">1</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t264" href="#t264">264</a></span><span class="t">            <span class="nam">faulttup</span> <span class="op">=</span> <span class="nam">faulttup</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
@@ -356,7 +356,7 @@
     <p class="run"><span class="n"><a id="t274" href="#t274">274</a></span><span class="t">        <span class="key">if</span> <span class="key">not</span> <span class="nam">starttime</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t275" href="#t275">275</a></span><span class="t">            <span class="nam">starttime</span> <span class="op">=</span> <span class="nam">time</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t276" href="#t276">276</a></span><span class="t">        <span class="nam">scen</span> <span class="op">=</span> <span class="nam">cls</span><span class="op">(</span><span class="nam">sequence</span><span class="op">=</span><span class="nam">Sequence</span><span class="op">.</span><span class="nam">from_fault</span><span class="op">(</span><span class="nam">faulttup</span><span class="op">,</span> <span class="nam">time</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">                   <span class="nam">function</span><span class="op">=</span><span class="nam">faulttup</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">                   <span class="nam">obj</span><span class="op">=</span><span class="nam">faulttup</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">                   <span class="nam">fault</span><span class="op">=</span><span class="nam">faulttup</span><span class="op">[</span><span class="num">1</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">                   <span class="nam">rate</span><span class="op">=</span><span class="nam">rate</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">                   <span class="nam">name</span><span class="op">=</span><span class="nam">create_scenname</span><span class="op">(</span><span class="op">(</span><span class="nam">faulttup</span><span class="op">,</span><span class="op">)</span><span class="op">,</span> <span class="nam">time</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -374,14 +374,14 @@
     <p class="pln"><span class="n"><a id="t292" href="#t292">292</a></span><span class="t"><span class="str">    ----------</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t293" href="#t293">293</a></span><span class="t"><span class="str">    joint_faults : int</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t294" href="#t294">294</a></span><span class="t"><span class="str">        Joint Faults in the scenario</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t295" href="#t295">295</a></span><span class="t"><span class="str">    functions : tuple</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t296" href="#t296">296</a></span><span class="t"><span class="str">        Functions where the faults are to occur</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t295" href="#t295">295</a></span><span class="t"><span class="str">    objects : tuple</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t296" href="#t296">296</a></span><span class="t"><span class="str">        Objects in the model where the faults are to occur</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t297" href="#t297">297</a></span><span class="t"><span class="str">    modes : tuple</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t298" href="#t298">298</a></span><span class="t"><span class="str">        Names of the fault modes</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t299" href="#t299">299</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t300" href="#t300">300</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t301" href="#t301">301</a></span><span class="t">    <span class="nam">joint_faults</span><span class="op">:</span> <span class="nam">int</span> <span class="op">=</span> <span class="num">1</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t302" href="#t302">302</a></span><span class="t">    <span class="nam">functions</span><span class="op">:</span> <span class="nam">tuple</span> <span class="op">=</span> <span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t302" href="#t302">302</a></span><span class="t">    <span class="nam">objects</span><span class="op">:</span> <span class="nam">tuple</span> <span class="op">=</span> <span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t303" href="#t303">303</a></span><span class="t">    <span class="nam">modes</span><span class="op">:</span> <span class="nam">tuple</span> <span class="op">=</span> <span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t304" href="#t304">304</a></span><span class="t">    <span class="nam">rate</span><span class="op">:</span> <span class="nam">float</span> <span class="op">=</span> <span class="num">1.0</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t305" href="#t305">305</a></span><span class="t">    <span class="nam">name</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">'faulty'</span>&nbsp;</span><span class="r"></span></p>
@@ -425,7 +425,7 @@
     <p class="pln"><span class="n"><a id="t343" href="#t343">343</a></span><span class="t">        <span class="com"># add fault scenario</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t344" href="#t344">344</a></span><span class="t">        <span class="nam">scen</span> <span class="op">=</span> <span class="nam">cls</span><span class="op">(</span><span class="nam">sequence</span><span class="op">=</span><span class="nam">sequence</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t345" href="#t345">345</a></span><span class="t">                   <span class="nam">joint_faults</span><span class="op">=</span><span class="nam">len</span><span class="op">(</span><span class="nam">faulttups</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t346" href="#t346">346</a></span><span class="t">                   <span class="nam">functions</span><span class="op">=</span><span class="nam">tuple</span><span class="op">(</span><span class="nam">set</span><span class="op">(</span><span class="op">[</span><span class="nam">f</span><span class="op">[</span><span class="num">0</span><span class="op">]</span> <span class="key">for</span> <span class="nam">f</span> <span class="key">in</span> <span class="nam">faulttups</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t346" href="#t346">346</a></span><span class="t">                   <span class="nam">objects</span><span class="op">=</span><span class="nam">tuple</span><span class="op">(</span><span class="nam">set</span><span class="op">(</span><span class="op">[</span><span class="nam">f</span><span class="op">[</span><span class="num">0</span><span class="op">]</span> <span class="key">for</span> <span class="nam">f</span> <span class="key">in</span> <span class="nam">faulttups</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t347" href="#t347">347</a></span><span class="t">                   <span class="nam">modes</span><span class="op">=</span><span class="nam">tuple</span><span class="op">(</span><span class="nam">set</span><span class="op">(</span><span class="op">[</span><span class="nam">f</span><span class="op">[</span><span class="num">1</span><span class="op">]</span> <span class="key">for</span> <span class="nam">f</span> <span class="key">in</span> <span class="nam">faulttups</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t348" href="#t348">348</a></span><span class="t">                   <span class="nam">rate</span><span class="op">=</span><span class="nam">rate</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t349" href="#t349">349</a></span><span class="t">                   <span class="nam">name</span><span class="op">=</span><span class="nam">create_scenname</span><span class="op">(</span><span class="nam">faulttups</span><span class="op">,</span> <span class="nam">time</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -531,8 +531,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_062080064feff537_search_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.5">coverage.py v7.13.5</a>,
-            created at 2026-04-09 14:54 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.14.1">coverage.py v7.14.1</a>,
+            created at 2026-05-27 12:14 -0700
         </p>
     </div>
 </footer>
