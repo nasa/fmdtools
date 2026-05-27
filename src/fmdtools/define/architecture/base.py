@@ -573,10 +573,17 @@ class Architecture(Simulable):
             cargs['flows'] = copy_flows(self.flows, flows=flows)
         # send role dicts in to be copied via as_copy param.
         other_roles = [i for i in self.flexible_roles if i != 'flow']
+        simflows = {}
+        for k, v in self._simflows:
+            if k not in simflows:
+                simflows[k] = [v]
+            else:
+                simflows[k].append(v)
         for flex_role in other_roles:
             flex = getattr(self, flex_role+'s')
             if flex_role in flex_to_copy:
-                flow_kwargs = {k[0]: {k[1]: cargs['flows'][k[1]]} for k in self._simflows}
+                flow_kwargs = {sim: {fl: cargs['flows'].get(fl, {}) for fl in flows}
+                               for sim, flows in simflows.items()}
                 cargs[flex_role+'s'] = copy_dict_objs(flex, **flow_kwargs)
             else:
                 cargs[flex_role+'s'] = flex

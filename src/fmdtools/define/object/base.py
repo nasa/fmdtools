@@ -724,7 +724,7 @@ class BaseObject(metaclass=BaseType):
                                           for k in getattr(self, flex_role+"s")}
         return dic
 
-    def copy(self, *args, exclude=["flows"], **kwargs):
+    def copy(self, *args, exclude=["flow"], **kwargs):
         """
         Copy the architecture at the current state.
 
