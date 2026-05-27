@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     results, mdlhists = prop.fault_sample(mdl, fs_2)
 
-    fmea = an.tabulate.FMEA(results, fs_2, group_by=('phase', 'functions', 'modes'))
+    fmea = an.tabulate.FMEA(results, fs_2, group_by=('phase', 'objects', 'modes'))
     fmea.sort_by_metric("expected_cost")
     fmea.as_plot("expected_cost", color_factor='phase', suppress_ticklabels=True)
 

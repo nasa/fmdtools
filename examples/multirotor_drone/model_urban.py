@@ -535,7 +535,7 @@ if __name__ == "__main__":
                                                mdl_kwargs = {'sp':{'dt':1.0}})
     plot_env_with_traj_z(hists, mdl)
     plot_env_with_traj(hists, mdl)
-    statsfmea = an.tabulate.FMEA(endresults, app, group_by=('function', 'fault'),
+    statsfmea = an.tabulate.FMEA(endresults, app, group_by=('obj', 'fault'),
                                  average_metric=['rate', 'unsafe_flight_time', 'cost',
                                                   'repcost', 'landcost', 'body_strikes',
                                               'head_strikes', 'property_restrictions'],

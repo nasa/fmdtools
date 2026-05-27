@@ -268,7 +268,7 @@ class CommonTests():
         """Test to ensure results from the fmea are the same over all options."""
         fmea = tabulate.FMEA(res, fs, mdl=mdl)
         none_exp_cost = fmea.as_table()[val].sum()
-        for group_by in ['phase', 'function', 'fault']:
+        for group_by in ['phase', 'obj', 'fault']:
             fmea = tabulate.FMEA(res, fs, group_by=[group_by], mdl=mdl)
             exp_cost = fmea.as_table()[val].sum()
             self.assertAlmostEqual(none_exp_cost, exp_cost)
