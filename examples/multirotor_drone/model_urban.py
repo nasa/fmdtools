@@ -544,7 +544,7 @@ if __name__ == "__main__":
     statsfmea.as_table()
     import matplotlib.colors as mcolors
     statsfmea.as_plots("average_repcost", "average_unsafe_flight_time", "average_cost", "average_rate",
-                       color_factor="function", suppress_ticklabels=True,
+                       color_factor="obj", suppress_ticklabels=True,
                        legend_loc=2, pallette=[*mcolors.XKCD_COLORS])
 
 

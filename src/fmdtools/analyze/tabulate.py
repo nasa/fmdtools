@@ -476,7 +476,7 @@ class FMEA(BaseTab):
     exfxnarch.fxns.ex_fxn  no_charge         3           0.5
     """
 
-    def __init__(self, res, fs, add_res={}, group_by=('function', 'fault'),
+    def __init__(self, res, fs, add_res={}, group_by=('obj', 'fault'),
                  prefix="tend.classify.", **kwargs):
         self.factors = group_by
         grouped_scens = fs.get_scen_groups(*group_by)

@@ -337,6 +337,9 @@ class Drone(DynDrone):
 
 
 if __name__ == "__main__":
+    hierarchical_model = Drone(p=DroneParam(arch='quad'))
+    hierarchical_model.asdict(withflex=False, as_copy=True)
+    hierarchical_model.copy()
     lap = LineArchParam()
     lap = LineArchParam(archtype='quad')
 

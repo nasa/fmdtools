@@ -8,9 +8,9 @@ Classes:
 - :class:`Injection`: Defines faults and disturbances to inject at a specific time.
 - :class:`Scenario`: Defines a generic scenario to simulation.
 - :class:`SingleFaultScenario`: Defines the scenario of a single fault injected in a
-  function.
-- :class:`JointFaultScenario`: Defines the scenario of multiple faults injected in a
-  function at the same time.
+  object.
+- :class:`JointFaultScenario`: Defines the scenario of multiple faults injected in
+  object(s) at the same time.
 - :class:`ParameterScenario`: Defines the scenario of a model having parameter values.
 - :class:`Sequence`: Creates an overall sequence of Injections from a given sequence of
   faults and disturbances.
@@ -234,13 +234,13 @@ class SingleFaultScenario(BaseScenario):
 
     Parameters
     ----------
-    function : str
-        Function where the fault occurs
+    obj : str
+        Object in the model where the fault occurs
     fault : str
         Name of the fault
     """
 
-    function: str = ''
+    obj: str = ''
     fault: str = ''
     rate: float = 1.0
     name: str = 'faulty'
@@ -256,9 +256,9 @@ class SingleFaultScenario(BaseScenario):
         Examples
         --------
         >>> SingleFaultScenario.from_fault(('fxn', 'fault'), 10)
-        SingleFaultScenario(sequence={10.0: Injection(faults={'fxn': ['fault']}, disturbances={})}, times=(10,), function='fxn', fault='fault', rate=1.0, name='fxn_fault_t10', time=10, phase='')
+        SingleFaultScenario(sequence={10.0: Injection(faults={'fxn': ['fault']}, disturbances={})}, times=(10,), obj='fxn', fault='fault', rate=1.0, name='fxn_fault_t10', time=10, phase='')
         >>> SingleFaultScenario.from_fault(('fxn', 'fault'), 10, prob=10)
-        SingleFaultScenario(sequence={10.0: Injection(faults={'fxn': {'fault': {'prob': 10}}}, disturbances={})}, times=(10,), function='fxn', fault='fault', rate=1.0, name='fxn_fault_t10', time=10, phase='')
+        SingleFaultScenario(sequence={10.0: Injection(faults={'fxn': {'fault': {'prob': 10}}}, disturbances={})}, times=(10,), obj='fxn', fault='fault', rate=1.0, name='fxn_fault_t10', time=10, phase='')
         """
         if len(faulttup) == 1:
             faulttup = faulttup[0]
@@ -274,7 +274,7 @@ class SingleFaultScenario(BaseScenario):
         if not starttime:
             starttime = time
         scen = cls(sequence=Sequence.from_fault(faulttup, time, **kwargs),
-                   function=faulttup[0],
+                   obj=faulttup[0],
                    fault=faulttup[1],
                    rate=rate,
                    name=create_scenname((faulttup,), time),
@@ -292,14 +292,14 @@ class JointFaultScenario(BaseScenario):
     ----------
     joint_faults : int
         Joint Faults in the scenario
-    functions : tuple
-        Functions where the faults are to occur
+    objects : tuple
+        Objects in the model where the faults are to occur
     modes : tuple
         Names of the fault modes
     """
 
     joint_faults: int = 1
-    functions: tuple = ()
+    objects: tuple = ()
     modes: tuple = ()
     rate: float = 1.0
     name: str = 'faulty'
@@ -343,7 +343,7 @@ class JointFaultScenario(BaseScenario):
         # add fault scenario
         scen = cls(sequence=sequence,
                    joint_faults=len(faulttups),
-                   functions=tuple(set([f[0] for f in faulttups])),
+                   objects=tuple(set([f[0] for f in faulttups])),
                    modes=tuple(set([f[1] for f in faulttups])),
                    rate=rate,
                    name=create_scenname(faulttups, time),

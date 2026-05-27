@@ -1430,9 +1430,9 @@ class Coords(BaseCoords):
         return tuple([*(tuple(map(tuple, replace_array_nan(getattr(self, state))))
                         for state in self.states)])
 
-    def copy(self, **kwargs):
+    def asdict(self, *args, **kwargs):
         """
-        Copy the Coords object.
+        Add stored kwargs to dict. Enables copying.
 
         Examples
         --------
@@ -1446,10 +1446,8 @@ class Coords(BaseCoords):
         >>> id(ex.st) == id(cop.st)
         False
         """
-        cop = super().copy(**{**self._kwargs, **kwargs})
-        # for state in self.states:
-        #     setattr(cop, state, np.copy(getattr(self, state)))
-        return cop
+        kwar = {**self._kwargs, **kwargs}
+        return super().asdict(*args, **kwar)
 
     def get_all_possible_track(self):
         """Extend BaseObject to include states in tracking."""

@@ -573,7 +573,7 @@ class Architecture(Simulable):
             if hasattr(obj, 'reset'):
                 obj.reset()
 
-    def copy(self, flows={}, flex_to_copy=[], **kwargs):
+    def copy(self, flows={}, flex_to_copy=["fxn", "act", "comp"], **kwargs):
         """
         Copy the architecture at the current state.
 
@@ -587,17 +587,19 @@ class Architecture(Simulable):
         copy : Architecture
             Copy of the curent architecture.
         """
-        cargs = self.asdict(withflex=False, as_copy=True)
-        # send role dicts in to be copied via as_copy param.
-        for flex_role in self.flexible_roles:
-            flex = getattr(self, flex_role+'s')
-            if flex_role in flex_to_copy:
-                cargs[flex_role+'s'] = copy_dict_objs(flex)
-            else:
-                cargs[flex_role+'s'] = flex
+        cargs = self.asdict(with_flex=False, as_copy=True)
         # if flows provided from above, use those flows. Otherwise copy own.
         if hasattr(self, 'flows'):
             cargs['flows'] = copy_flows(self.flows, flows=flows)
+        # send role dicts in to be copied via as_copy param.
+        other_roles = [i for i in self.flexible_roles if i != 'flow']
+        for flex_role in other_roles:
+            flex = getattr(self, flex_role+'s')
+            if flex_role in flex_to_copy:
+                flow_kwargs = {k[0]: {k[1]: cargs['flows'][k[1]]} for k in self._simflows}
+                cargs[flex_role+'s'] = copy_dict_objs(flex, **flow_kwargs)
+            else:
+                cargs[flex_role+'s'] = flex
         return self.__class__(**cargs)
 
     def get_all_possible_track(self):

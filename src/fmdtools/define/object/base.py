@@ -724,7 +724,7 @@ class BaseObject(metaclass=BaseType):
                                           for k in getattr(self, flex_role+"s")}
         return dic
 
-    def copy(self, *args, **kwargs):
+    def copy(self, *args, exclude=["flows"], **kwargs):
         """
         Copy the architecture at the current state.
 
@@ -738,7 +738,12 @@ class BaseObject(metaclass=BaseType):
         copy : Architecture
             Copy of the curent architecture.
         """
-        cargs = self.asdict(*args, as_copy=True, **kwargs)
+        cargs = self.asdict(*args, as_copy=True, exclude=exclude, **kwargs)
+        if hasattr(self, 'flows'):
+            flows = self.get_roles_as_dict("flow")
+            flows = {k: v.copy() if k not in kwargs else kwargs[k]
+                     for k, v in flows.items()}
+            cargs = {**cargs, **flows}
         try:
             cop = self.__class__(**cargs)
         except TypeError as e:

@@ -771,7 +771,7 @@ class BaseSample():
         Parameters
         ----------
         groupnames : list
-            List of scenario properties to group (e.g., 'function'', 'fault')
+            List of scenario properties to group (e.g., 'obj'', 'fault')
         groups : list
             Groups to get e.g, [ ('fxnname1', 'fault1')]
 
@@ -795,7 +795,7 @@ class BaseSample():
         Parameters
         ----------
         *groupnames : str
-            Fields of the scenarios to group. e.g., 'function' or 'fault'
+            Fields of the scenarios to group. e.g., 'obj' or 'fault'
 
         Returns
         -------
@@ -939,7 +939,7 @@ class FaultSample(BaseSample):
         >>> fs2 = FaultSample(exfd2)
         >>> fs2.add_single_fault_scenario(('ex_fxn', 'low', '15'), 5)
         >>> fs2.scenarios()
-        [SingleFaultScenario(sequence={5.0: Injection(faults={'ex_fxn': {'low': {'prob': np.float64(1.0), 'cost': np.float64(0.0), 'phases': (), 'disturbances': (('s.x', 15.0),), 'units': np.str_('sim')}}}, disturbances={})}, times=(5,), function='ex_fxn', fault='low', rate=np.float64(1.0), name='ex_fxn_low_15_t5', time=5, phase='na')]
+        [SingleFaultScenario(sequence={5.0: Injection(faults={'ex_fxn': {'low': {'prob': np.float64(1.0), 'cost': np.float64(0.0), 'phases': (), 'disturbances': (('s.x', 15.0),), 'units': np.str_('sim')}}}, disturbances={})}, times=(5,), obj='ex_fxn', fault='low', rate=np.float64(1.0), name='ex_fxn_low_15_t5', time=5, phase='na')]
         """
         self._times.add(time)
         if len(faulttup) > 2:
@@ -1140,7 +1140,7 @@ class SampleApproach(BaseSample):
     mdl : Simulable
         Model
     phasemaps : dict
-        Dict of phasemaps {'phasemapname': PhaseMap} which map to the various functions
+        Dict of phasemaps {'phasemapname': PhaseMap} which map to the various objects
         of the model.
     faultdomains : dict
         Dict of the faultdomains to sample {'domainname': FaultDomain}
@@ -2081,7 +2081,7 @@ if __name__ == "__main__":
     fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
     fs.add_single_fault_scenario(("affect_dof.ca.comps.rf", "propwarp"), 5)
     fs.add_fault_times([1,2,3])
-    fs.get_scen_groups("function")
+    fs.get_scen_groups("obj")
     fs.get_scen_groups("phase")
 
     s = SampleApproach(mdl)
