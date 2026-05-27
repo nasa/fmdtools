@@ -21,7 +21,7 @@ from fmdtools_examples.airspacelib.base.state import AircraftPosition3
 
 from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.architecture.geom import GeomArchitecture
-from fmdtools.define.object.geom import GeomPoint, PointParam
+from fmdtools.define.object.geom import GeomPoint, GeomParameter
 from fmdtools.define.block.function import Function
 
 from shapely import distance
@@ -141,7 +141,7 @@ class ThreatState(AircraftPosition3):
         self.buffer_speed = self.get_vel()
 
 
-class ThreatParam(PointParam):
+class ThreatParam(GeomParameter):
     """
     Parameter defining the exteral threat shape.
 
@@ -167,6 +167,9 @@ class Threat(GeomPoint):
         """Update position given known speed."""
         self.s.update_position(self.s.buffer_speed)
 
+    def get_shapely_args(self):
+        return (self.s.x, self.s.y)
+
 
 class ContingencyThreats(GeomArchitecture):
     """Overall environment-defining geometries of the drone and external threats."""
@@ -175,40 +178,40 @@ class ContingencyThreats(GeomArchitecture):
 
     def init_architecture(self, **kwargs):
         """Initialize drone and intruders given 'intruders' options."""
-        self.add_point('self', Threat)
+        self.add_geom('self', Threat)
         if self.p.intruders == "across":
             s = {'buffer_speed': 3.3, 'x': 100, 'y': 0.0, 'z': 25.0,
                  'goal_x': 0.0, 'goal_y': 100.0, 'goal_z': 25.0}
-            self.add_point("uav", Threat, s=s)
+            self.add_geom("uav", Threat, s=s)
         elif self.p.intruders == "middle":
             s = {'buffer_speed': 0.0, 'x': 60, 'y': 60, 'z': 25.0,
                  'goal_x': 60.0, 'goal_y': 60.0, 'goal_z': 25.0}
-            self.add_point("uav", Threat, s=s)
+            self.add_geom("uav", Threat, s=s)
         elif self.p.intruders == "down":
             s = {'buffer_speed': 2.5,
                  'x': 60, 'y': 120, 'z': 25.0,
                  'goal_x': 60.0, 'goal_y': 0.0, 'goal_z': 25.0}
-            self.add_point("uav", Threat, s=s)
+            self.add_geom("uav", Threat, s=s)
         elif self.p.intruders == "down-over":
             s = {'buffer_speed': 2.5,
                  'x': 40, 'y': 120, 'z': 25.0,
                  'goal_x': 40.0, 'goal_y': 0.0, 'goal_z': 25.0}
-            self.add_point("uav", Threat, s=s)
+            self.add_geom("uav", Threat, s=s)
         elif self.p.intruders:
             raise Exception("Invalid option for intruders: "+self.p.intruders)
             
 
     def update_positions(self):
         """Update positions of the threats."""
-        for threatname, threat in self.points.items():
+        for threatname, threat in self.geoms.items():
             if threatname != 'self':
                 threat.update_position()
 
     def calc_dist_to_threats(self, self_shape='envelope', threat_shape='safety'):
         """Calculate distancses b/t self_shape for self and threat_shape for threats."""
         dists = {}
-        self_envelope = self.points['self'].get_shape(self_shape)
-        for threatname, threat in self.points.items():
+        self_envelope = self.geoms['self'].get_shape(self_shape)
+        for threatname, threat in self.geoms.items():
             if threatname != 'self':
                 threat_envelope = threat.get_shape(threat_shape)
                 dists[threatname] = distance(self_envelope, threat_envelope)
@@ -270,5 +273,5 @@ if __name__ == "__main__":
     from fmdtools.sim import propagate
     res, hist = propagate.nominal(cc)
 
-    hist.plot_trajectories('environment.ga.points.uav.s.x',
-                           'environment.ga.points.uav.s.y')
+    hist.plot_trajectories('environment.ga.geoms.uav.s.x',
+                           'environment.ga.geoms.uav.s.y')

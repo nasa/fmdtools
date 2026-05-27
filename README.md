@@ -2,15 +2,15 @@
 
 # Overview
 
-![Python Version](https://img.shields.io/badge/Python-3.13-blue)
+![Python Version](https://img.shields.io/badge/Python-3.14-blue)
 [![PyPI](https://img.shields.io/pypi/v/fmdtools)](https://pypi.org/project/fmdtools/)
 [![Total Downloads](https://static.pepy.tech/badge/fmdtools)](https://pepy.tech/project/fmdtools)
 [![Downloads/Month](https://static.pepy.tech/badge/fmdtools/month)](https://pepy.tech/project/fmdtools)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/nasa/fmdtools?label=GitHub%20Release)](https://github.com/nasa/fmdtools/releases)
 [![GitHub Tag](https://img.shields.io/github/v/tag/nasa/fmdtools)](https://github.com/nasa/fmdtools/tags)
 [![CodeFactor](https://www.codefactor.io/repository/github/nasa/fmdtools/badge)](https://www.codefactor.io/repository/github/nasa/fmdtools)
-[![Tests Status](./tests/reports/full-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/full-py313/junit/report.html)
-[![Tests Coverage](./tests/reports/full-py313/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/full-py313/coverage_html/index.html)
+[![Tests Status](./tests/reports/full-py314/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/full-py314/junit/report.html)
+[![Tests Coverage](./tests/reports/full-py314/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/full-py314/coverage_html/index.html)
 [![GitHub License](https://img.shields.io/badge/License-Apache%202.0-green)](https://github.com/nasa/fmdtools/blob/main/LICENSE)
 [![NASA Software Classification](https://img.shields.io/badge/Software_Class-E-blue)](https://nodis3.gsfc.nasa.gov/displayDir.cfm?Internal_ID=N_PR_7150_002D_&page_name=AppendixD)
 
@@ -55,15 +55,16 @@ The fmdtools documentation repository is also home to the Functional Reasoning D
 
 ### Python version compatibility
 
-The fmdtools library is developed in Python 3.13 but is tested to maintain compatibility over three versions of Python. See current doctest reports below:
+The fmdtools library is developed in Python 3.14 but is tested to maintain compatibility over three versions of Python. See current doctest reports below:
 
 | Python Version    | Doctests |
 | -------- | ------- |
-| 3.11  | [![Python 3.11 Tests](./tests/reports/doctests-py311/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/doctests-py311/junit/report.html)   |
-| 3.12 | [![Python 3.12 Tests](./tests/reports/doctests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/doctests-py312/junit/report.html)    |
-| 3.13    | [![Python 3.13 Tests](./tests/reports/doctests-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/doctests-py313/junit/report.html)   |
+| 3.12 | [![Python 3.12 Tests](./tests/reports/doctests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/doctests-py312/junit/report.html)   |
+| 3.13 | [![Python 3.13 Tests](./tests/reports/doctests-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/doctests-py313/junit/report.html)    |
+| 3.14 | [![Python 3.14 Tests](./tests/reports/doctests-py314/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/doctests-py314/junit/report.html)   |
 
-Further (functional and integration) tests are performed in the Python 3.13 to ensure that examples run as desired. Thus, it is generally recommended to use Python 3.13 with this version to keep pace with development, especially when running examples.
+Further (functional and integration) tests are performed in the Python 3.14 to ensure that examples run as desired. Thus, it is generally recommended to use Python 3.14
+ with this version to keep pace with development, especially when running examples.
 
 ### Set up python tooling environment
 
@@ -71,11 +72,13 @@ The fmdtools library was developed to run in a python development environments.
 
 If you do not have an existing python environment, first [download and install anaconda](https://docs.anaconda.com/free/anaconda/install/index.html) or [uv](https://docs.astral.sh/uv/).
 
-After the base installation, set up a new `Python 3.13` environment for fmdtools and install these external external packages in it:
+From there, it can be helpful to install an IDE like [VSCode](https://code.visualstudio.com/) or [Spyder](https://www.spyder-ide.org/).
+
+After the base installation, set up a new `Python 3.14` environment for fmdtools and install these external external packages in it, making sure to configure them correctly with your IDE of choice:
 
 ```
 spyder-kernels
-# used for: working with external IDEs
+# used for: working with external IDEs - make sure to use the version Spyder asks for 
 # license: ()
 # install from: (comes with anaconda) or `uv pip install spyder-kernels`
 jupyter notebook
@@ -88,7 +91,6 @@ graphviz
 # install from: https://anaconda.org/anaconda/graphviz or https://graphviz.org/download/
 ```
 
-From there, it can be helpful to install an IDE like [VSCode](https://code.visualstudio.com/) or [Spyder](https://www.spyder-ide.org/).
 
 Note: On Windows, some versions `fmdtools` dependencies may require a compiler such as that provided with [Microsoft Studio Build tools](https://visualstudio.microsoft.com/downloads/?q=build+tools) to build, so it (while not required) may be helpful to install it also.
 
@@ -121,13 +123,13 @@ More guidance on development installations is provided in [How to Contribute](ht
 Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` in the context of a development install you can checkout the tag corresponding to the version you want, e.g.:
 
 ```
-   git checkout v2.3.3
+   git checkout v2.4.0
 ```
 
 
 #### Dependencies
 
-fmdtools requires `Python 3.13` and depends directly on the packages below (see requirements.txt). Note that the use of these dependencies is governed by their respective licenses, which may be obtained at the provided links.
+fmdtools requires `Python 3.14` and depends directly on the packages below (see pyproject.toml). Note that the use of these dependencies is governed by their respective licenses, which may be obtained at the provided links.
 
 ```
 scipy
@@ -258,8 +260,8 @@ To cite a particular version of the fmdtools, you may use:
   author = {{NASA}},
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
-  version = {2.3.3},
-  date = {2025-4-10},
+  version = {2.4.0},
+  date = {2026-5-29},
 }
 ```
 

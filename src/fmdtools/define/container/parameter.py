@@ -73,25 +73,12 @@ class Parameter(BaseContainer, readonly=True):
         **kwargs : kwargs
             Fields to set to non-default values.
         """
-        if not self.__doc__:
-            raise Exception("Please provide docstring")
-            # self.__doc__=Parameter.__doc__
-        args = self.get_true_fields(*args, **kwargs)
-        if set_type:
-            args, kwargs = self.set_arg_type(*args, **kwargs)
-        if args and isinstance(args[0], self.__class__):
-            args = astuple(args[0])
+        super().__init__(*args, set_type=set_type, **kwargs)
         if check_lim:
-            for i, k in enumerate(self.__fields__):
-                self.check_lim(k, args[i])
-        try:
-            super().__init__(*args, **kwargs)
-        except TypeError as e:
-            raise Exception("Invalid args/kwargs: "+str(args)+" , " +
-                            str(kwargs)+" in "+str(self.__class__)) from e
+            for k in self.__fields__:
+                self.check_lim(k, self[k])
         if strict_immutability:
             self.check_immutable()
-
         if check_type:
             self.check_type()
         if check_pickle:
@@ -173,10 +160,6 @@ class Parameter(BaseContainer, readonly=True):
                                 " assigned incorrect type: " + str(attr_type) +
                                 " (should be "+str(true_type)+")")
 
-    def copy_with_vals(self, **kwargs):
-        """Creates a copy of itself with modified values given by kwargs"""
-        return self.__class__(**{**self.asdict(), **kwargs})
-
     def check_pickle(self):
         """Checks to make sure pickled object will get *args and **kwargs"""
         signature = str(inspect.signature(self.__init__))
@@ -202,10 +185,6 @@ class Parameter(BaseContainer, readonly=True):
             return set(var_set)
         return ()
 
-    def copy(self):
-        field_dict = self.get_field_dict(self)
-        return self.__class__(**field_dict)
-
     def reset(self):
         """Do nothing since the parameter is immutable."""
 
@@ -221,6 +200,31 @@ class ExampleParameter(Parameter, readonly=True):
     z: float = 0.0
     x_lim = (0, 10)
     y_set = (1.0, 2.0, 3.0, 4.0)
+
+
+class ExNestedParam(Parameter):
+    """
+    Example nested parameter for testing json serialization.
+
+    Examples
+    --------
+    >>> exn = ExNestedParam(ex_param=dict(y=4.0))
+    >>> exn
+    ExNestedParam(ex_param=ExampleParameter(x=1.0, y=4.0, z=0.0), k=20.0)
+    >>> js = exn.tojson()
+    >>> js
+    '{"ex_param": {"x": 1.0, "y": 4.0, "z": 0.0}, "k": 20.0}'
+    >>> ExNestedParam.fromjson(js)
+    ExNestedParam(ex_param=ExampleParameter(x=1.0, y=4.0, z=0.0), k=20.0)
+    >>> exn.save("nest_param.json")
+    >>> ExNestedParam.load("nest_param.json")
+    ExNestedParam(ex_param=ExampleParameter(x=1.0, y=4.0, z=0.0), k=20.0)
+    >>> import os
+    >>> os.remove("nest_param.json")
+    """
+
+    ex_param: ExampleParameter = ExampleParameter()
+    k: float = 20.0
 
 
 if __name__ == "__main__":

@@ -17,16 +17,20 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import set_arg_as_type, remove_para, get_repr
+from fmdtools.define.base import set_arg_as_type, remove_para, get_repr, map_obj_fields
+from fmdtools.define.base import is_iter, dict_to_json, auto_filename, dict_from_file
+from fmdtools.define.base import copy_dict_objs
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 
 from recordclass import dataobject, astuple, asdict
-from collections import UserDict
+from ordered_set import OrderedSet
+
 import copy
 import pickle
 import numpy as np
 import sys
+import json
 
 
 class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
@@ -36,26 +40,99 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     A container is a dataobject (from the recordclass library) that fulfills a specific
     role in a block.  This class inherits from dataobject for low memory footprint and
     has a number of methods for making attribute assignment/copying/tracking easier.
+
+    Containers also have basic functionality for importing/exporting from json. e.g.,
+
+    Examples
+    --------
+    >>> ex = ExContainer()
+    >>> ex
+    ExContainer(x=1.0, y=2.0)
+    >>> ex.x = 3.0
+    >>> values = ex.tojson()
+    >>> values
+    '{"x": 3.0, "y": 2.0}'
+    >>> ex_new = ExContainer.fromjson(values)
+    >>> ex_new
+    ExContainer(x=3.0, y=2.0)
+    >>> ex_new = ExContainer.fromdict({'a':5, 'b': 7}, x="a")
+    >>> ex_new
+    ExContainer(x=5.0, y=2.0)
+    >>> ex_new.save(filename="ex_container.json")
+    >>> ex.assign("ex_container.json")
+    >>> ex
+    ExContainer(x=5.0, y=2.0)
+    >>> ex2 = ExContainer.load("ex_container.json", y="x", x="y", delete=True)
+    >>> ex2
+    ExContainer(x=2.0, y=5.0)
+    >>> jstr = ex2.tojson()
+    >>> jstr
+    '{"x": 2.0, "y": 5.0}'
+    >>> ex.assign(jstr)
+    >>> ex
+    ExContainer(x=2.0, y=5.0)
+    >>> ExContainer.fromjson(jstr)
+    ExContainer(x=2.0, y=5.0)
     """
 
     default_track = 'all'
     rolename = 'x'
 
-    def __repr__(self):
-        return self.create_repr(with_classname=True, fields="all")
+    def __init__(self, *args, check_docs=False, get_fields=True, set_type=True, **kwargs):
+        if check_docs and not self.__doc__:
+            raise Exception("Please provide docstring")
+        if get_fields:
+            args = self.get_true_fields(*args, **kwargs)
+        if set_type:
+            args, kwargs = self.set_arg_type(*args, **kwargs)
+        if args and isinstance(args[0], self.__class__):
+            args = astuple(args[0])
+        try:
+            super().__init__(*args, **kwargs)
+        except TypeError as e:
+            raise Exception("Invalid args/kwargs: "+str(args)+" , " +
+                            str(kwargs)+" in "+str(self.__class__)) from e
 
-    def create_repr(self, with_classname=True, fields="all", one_line=True,
+    def __repr__(self):
+        return self.create_repr(with_classname=True, fields=["all"])
+
+    def create_repr(self, with_classname=True, fields=["all"], one_line=True,
                     with_name=False):
         """Create repr-friendly string for container."""
         if with_classname:
             repr_str = self.__class__.__name__
         else:
             repr_str = ""
-        if fields == "all":
-            fields = self.__fields__
+        fields = self.get_fields(*fields)
         field_str = ", ".join(get_repr(self[f], f) for f in fields
                               if f in dir(self))
         return repr_str+"("+field_str+")"
+
+    def get_fields(self, *fields, default="all"):
+        """
+        Get set of fields from the container.
+
+        Parameters
+        ----------
+        *fields : str
+            Attributes to track. If 'all', gets all fields, if 'default', gets fields
+            defined in self.default (where default is the name of default field list)
+            if 'none', tracks none of the fields. if no fields provided, defaults to
+            the default parameter.
+        """
+        if (len(fields)==1 and (fields[0]=='default' or fields[0] is None)) or not fields:
+            fields = getattr(self, default, default)
+
+        if len(fields)==1 and (isinstance(fields[0], str) or is_iter(fields[0])):
+            fields = fields[0]
+
+        if fields == 'all':
+            fields = self.__fields__
+        elif fields == 'none':
+            fields = ()
+        elif isinstance(fields, str):
+            fields = (fields,)
+        return fields
 
     def get_typename(self):
         """Containers are typed as containers unless specified otherwise."""
@@ -89,8 +166,6 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
 
         Parameters
         ----------
-        obj : dataobject
-            State/Mode/Rand. Requires .default_track class variable.
         track : track
             str/tuple. Attributes to track.
             'all' tracks all fields
@@ -102,15 +177,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         track : tuple
             fields to track
         """
-        if not track or track == 'default':
-            track = self.default_track
-        if track == 'all':
-            track = self.__fields__
-        elif track == 'none':
-            track = ()
-        elif isinstance(track, str):
-            track = (track,)
-        return track
+        return self.get_fields(track, default="default_track")
 
     def get_true_fields(self, *args, force_kwargs=False, **kwargs):
         """
@@ -148,8 +215,6 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
 
         Parameters
         ----------
-        obj : dataobject (or class)
-            dataobject to get argument type for
         *args : *args
             args to dataobject
         **kwargs : **kwargs
@@ -189,7 +254,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
 
         Parameters
         ----------
-        obj : dataobject, list, tuple, or ndarray
+        obj : dataobject, list, tuple, str (json or json filename) or ndarray
             Object to get field dictionary from.
         *fields : str
             Names of corresponding fields (in self.__fields__)
@@ -217,37 +282,39 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         >>> ex.get_field_dict(ex)
         {'x': 1.0, 'y': 2.0}
         """
-        if fielddict and fields:
-            raise Exception("Provide positional states or keyword states, not both")
-        if len(fields) == 0 and not fielddict:
-            # if no states provided, assign all states
-            fields = self.__fields__
+        fields = self.get_fields(*OrderedSet([*fields, *fielddict]))
+        if isinstance(obj, str):
+            try:
+                obj = json.loads(obj)
+            except:
+                with open(obj, 'r') as f:
+                    obj = json.load(f)
 
         if type(obj) in [list, tuple] or isinstance(obj, np.ndarray):
             if fielddict:
                 raise Exception("Only provided *args for lists/tuples, not **kwargs")
             fielddict = {state: obj[i]
                          for i, state in enumerate(fields) if i < len(obj)}
-        elif isinstance(obj, dataobject):
-            if not fielddict:
-                # if states provided, only assign those states
-                fielddict = {s: getattr(obj, s) for s in fields}
-            else:
-                # if kwarg states provided, assign keys to values
-                fielddict = {k: getattr(obj, v) for k, v in fielddict.items()}
-        elif isinstance(obj, dict) or isinstance(obj, UserDict):
-            if not fielddict:
-                fielddict = {s: obj[s] for s in fields if s in obj}
-            else:
-                fielddict = {k: obj[v] for k, v in fielddict.items() if v in obj}
         else:
-            raise Exception("Invalid type to assign from: "+str(obj.__class__))
+            fielddict = map_obj_fields(obj, *fields, **fielddict)
         return fielddict
 
     def assign(self, obj, *fields, as_copy=True, **fielddict):
         """
         Set the same-named values of the current object to those of another.
 
+        Parameters
+        ----------
+        obj: Object/str/dict
+            Object to assign values from
+        *fields : fields to assign
+        as_copy: bool,
+            set to True for dicts/sets to be copied rather than referenced
+        **fielddict : kwargs
+            Mapping for arguments that don't match
+
+        Examples
+        --------
         Further arguments specify which values. e.g.,:
 
         >>> p1 = ExContainer(x=0.0, y=0.0)
@@ -274,8 +341,10 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         >>> p1.y
         10.0
 
-        as_copy: bool,
-            set to True for dicts/sets to be copied rather than referenced
+        Containers can also be assigned from json (including json files):
+        >>> p1.assign('{"x": 1.0, "y": 2.0}', "x", "y")
+        >>> p1
+        ExContainer(x=1.0, y=2.0)
         """
         fielddict = self.get_field_dict(obj, *fields, **fielddict)
         for field, value in fielddict.items():
@@ -349,7 +418,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
             fieldnames = tuple(self.__defaults__)
         self.assign(self.__default_vals__, *fieldnames, as_copy=True)
 
-    def copy(self):
+    def copy(self, **kwargs):
         """
         Create an independent copy of the container with the same attributes.
 
@@ -357,6 +426,8 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         -------
         cop : BaseContainer
             Copy of the container with the same attributes as self.
+        kwargs : kwargs
+            Attributes of the container to overwrite with keyword arguments
 
         Examples
         --------
@@ -366,11 +437,11 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         ExContainer(x=4.0, y=5.0)
 
         >>> ex_nest = ExNestContainer(ex2, 40.0)
-        >>> ex_nest.copy()
-        ExNestContainer(e1=ExContainer(x=4.0, y=5.0), z=40.0)
+        >>> ex_nest.copy(e1={'x': 6.0})
+        ExNestContainer(e1=ExContainer(x=6.0, y=5.0), z=40.0)
         """
-        cop = self.__class__()
-        cop.assign(self, as_copy=True)
+        field_dict = copy_dict_objs(self.get_field_dict(self), **kwargs)
+        cop = self.__class__(**field_dict)
         return cop
 
     def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
@@ -438,9 +509,41 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         """Return mutable aspects of the container."""
         return astuple(self)
 
-    def asdict(self):
+    def asdict(self, *fields, jsonable=False, exclude=[], as_copy=False, **kwargs):
         """Return fields as a dictionary."""
-        return asdict(self)
+        dic = asdict(self)
+        if jsonable:
+            dic = dict_to_json(dic, exclude=exclude)
+        if as_copy:
+            dic = copy_dict_objs(dic, **kwargs)
+        return dic
+
+    def tojson(self, fields=(), **mapping):
+        """Create json representation of current json values."""
+        return json.dumps(self.asdict(*fields, jsonable=True, **mapping))
+
+    @classmethod
+    def fromdict(cls, datadict, **mapping):
+        """Load from a dict."""
+        return cls(**map_obj_fields(datadict, *cls.__fields__, **mapping))
+
+    @classmethod
+    def fromjson(cls, data, **mapping):
+        """Load from json string."""
+        datadict = json.loads(data)
+        return cls.fromdict(datadict, **mapping)
+
+    def save(self, filename='', fields=(), **mapping):
+        """Save values as json file."""
+        filename = auto_filename(self, filename=filename)
+        with open(filename, 'w') as f:
+            json.dump(self.asdict(*fields, jsonable=True, **mapping), f)
+
+    @classmethod
+    def load(cls, filename, delete=False, **mapping):
+        """Load values from file."""
+        datadict = dict_from_file(filename, delete=delete)
+        return cls.fromdict(datadict, **mapping)
 
     def get_code(self, source):
         """Get the code defining the Container."""
@@ -494,6 +597,9 @@ class ExNestContainer(BaseContainer):
 
 
 if __name__ == "__main__":
+    ex2 = ExContainer()
+    ex_nest = ExNestContainer(ex2, 40.0)
+    ex_nest.copy(e1={'x': 6.0})
 
     import doctest
     doctest.testmod(verbose=True)

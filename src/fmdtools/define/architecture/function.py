@@ -473,6 +473,34 @@ class FunctionArchitecture(Architecture):
     FXNS:
     - ex_fxn=ExampleFunction(s=(x=2.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
     - ex_fxn2=ExampleFunction(s=(x=2.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
+    >>> ExFxnArch.fromjson(exfa.tojson(exclude=["h"]), name="fromjson")
+    fromjson ExFxnArch
+    - t=Time(time=2.0, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
+    FLOWS:
+    - exf=ExampleFlow(s=(x=6.0, y=0.0))
+    FXNS:
+    - ex_fxn=ExampleFunction(s=(x=2.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
+    - ex_fxn2=ExampleFunction(s=(x=2.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
+    >>> exfa.save("ex_fa.json")
+    >>> exfa.load("ex_fa.json", delete=True)
+    exfa ExFxnArch
+    - t=Time(time=2.0, timers={})
+    - m=Mode(mode='nominal', faults=set(), sub_faults=False)
+    FLOWS:
+    - exf=ExampleFlow(s=(x=6.0, y=0.0))
+    FXNS:
+    - ex_fxn=ExampleFunction(s=(x=2.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
+    - ex_fxn2=ExampleFunction(s=(x=2.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
+
+    Architectures also copy, which is important for staged execution:
+    >>> efa = ExFxnArch()
+    >>> efa2 = efa.copy()
+    >>> efa2.fxns['ex_fxn'].exf.s.x=2.0
+    >>> efa2.flows['exf'].s.x
+    np.float64(2.0)
+    >>> efa.flows['exf'].s.x
+    np.float64(0.0)
     """
 
     __slots__ = ['fxns']
@@ -605,7 +633,11 @@ class ExFxnArch(FunctionArchitecture):
 
 if __name__ == "__main__":
     efa = ExFxnArch()
+    efa2 = efa.copy()
+    efa2.fxns['ex_fxn'].exf.s.x=2
     efa(1.0)
+    ExFxnArch.fromjson(efa.tojson(exclude=["h"]))
+    efa.copy()
     effa = FunctionArchitectureFxnGraph(ExFxnArch())
     efla = FunctionArchitectureFlowGraph(ExFxnArch())
     FunctionArchitectureTypeGraph(ExFxnArch())

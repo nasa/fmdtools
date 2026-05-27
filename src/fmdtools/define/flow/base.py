@@ -47,9 +47,16 @@ class Flow(BaseObject):
     >>> exf2.s.x = 2.0
     >>> exf2.s == exf.s
     False
+
+    Flows are also json-able:
+
+    >>> ExampleFlow.fromjson(exf2.tojson())
+    exf ExampleFlow
+    - s=ExampleState(x=2.0, y=1.0)
     """
 
     __slots__ = ('p', 's', 'h')
+    attrs = (*BaseObject.attrs, "h")
     default_track = ('s', 'i')
     check_dict_creation = True
 
@@ -61,21 +68,6 @@ class Flow(BaseObject):
     def reset(self):
         """Reset the flow to the initial state."""
         self.s.reset()
-
-    def copy(self, **kwargs):
-        """Return a copy of the flow object (used when copying the model)."""
-        loc_kwargs = {}
-        if hasattr(self, 'p'):
-            loc_kwargs['p'] = self.p.copy()
-        loc_kwargs = {**loc_kwargs, **kwargs}
-        if hasattr(self, 's'):
-            loc_kwargs['s'] = self.s.copy()
-        loc_kwargs['name'] = self.name
-        loc_kwargs['root'] = self.root
-        cop = self.__class__(**loc_kwargs)
-        if hasattr(self, 'h'):
-            cop.h = self.h.copy()
-        return cop
 
     def base_type(self):
         """Return fmdtools type of the model class."""

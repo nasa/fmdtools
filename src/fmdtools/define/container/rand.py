@@ -96,29 +96,31 @@ class Rand(BaseContainer):
     np.float64(0.08847044068025682)
     >>> exr2.probs
     [np.float64(0.3808442490605113)]
+
+    Checking json import/export:
+    >>> exrj = exr.tojson()
+    >>> exr3 = ExampleRand.fromjson(exrj)
+    >>> exr3.rng.bit_generator.state['state']['state'] == exr.rng.bit_generator.state['state']['state']
+    True
     """
 
     rolename = "r"
-    rng: np.random._generator.Generator = np.random.default_rng()
+    rng: np.random._generator.Generator = np.random.default_rng(42)
+    seed: int = 42
+    state: int = 0
+    inc: int = 0
     probs: list = list()
     probdens: np.float64 = np.float64(1.0)
-    seed: np.int64 = np.int64(42)
     run_stochastic: np.bool_ = np.bool_(False)
     track_pdf: np.bool_ = np.bool_(False)
     default_track = ('s', 'probdens')
 
-    def __init__(self, *args, seed=42, s_kwargs={}, **kwargs):
-
-        args = self.get_true_fields(*args,
-                                    seed=seed,
-                                    rng=np.random.default_rng(seed),
-                                    **kwargs)
-        super().__init__(*args)
+    def __init__(self, *args, s_kwargs={}, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.rng = self.create_rng()
         if 's' in self.__fields__:
             self.s = self.s.__class__()
             self.s.set_atts(**s_kwargs)
-        if self.seed is None:
-            raise Exception("Invalid seed: None")
 
     def create_repr(self, fields=["seed", "s"], **kwargs):
         """Limit default repr to relevant fields."""
@@ -127,6 +129,30 @@ class Rand(BaseContainer):
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Rand
+
+    def store_rng_state(self, rng):
+        """Update state from the rng."""
+        st = rng.bit_generator.__getstate__()
+        self.assign(st[0]['state'])
+        self.seed = st[1].entropy
+
+    def is_set(self):
+        return not (self.state == 0 and self.inc == 0)
+
+    def create_rng(self):
+        """Update the state of another rng."""
+        rng = np.random.default_rng(self.seed)
+        if self.is_set():
+            rng.bit_generator.__setstate__(self.gen_state())
+        self.store_rng_state(rng)
+        return rng
+
+    def gen_state(self):
+        """Generate state for rng."""
+        return {'bit_generator': 'PCG64',
+                'state': {'state': self.state, 'inc': self.inc},
+                'has_uint32': 0,
+                'uinteger': 0}
 
     def get_rand_states(self, auto_update_only=False):
         """
@@ -180,6 +206,7 @@ class Rand(BaseContainer):
                                 " be a float/int--check args")
                 newvalue = newvalue[0]
             self.s.set_field(statename, newvalue)
+            self.store_rng_state(self.rng)
             if self.track_pdf:
                 value_pds = get_prob_for_rand(newvalue, methodname, *args)
                 self.probs.append(value_pds)
@@ -222,17 +249,12 @@ class Rand(BaseContainer):
         BitGen = type(self.rng.bit_generator)
         self.rng.bit_generator.state = BitGen(seed).state
 
-    def set_rng(self, other_rng):
-        """Set the state of the rng in the Rand to the same state as other_rng."""
-        self.rng = create_matching_rng(other_rng, init_seed=self.seed)
-
     def set_field(self, fieldname, value, as_copy=True):
         """Extend BaseContainer.assign to accomodate the rng."""
         if fieldname == 'rng':
-            value = create_matching_rng(value, init_seed=self.seed)
-            super(BaseContainer, self).__setattr__(fieldname, value)
-        else:
-            BaseContainer.set_field(self, fieldname, value, as_copy=as_copy)
+            self.store_rng_state(value)
+            value = self.create_rng()
+        BaseContainer.set_field(self, fieldname, value, as_copy=as_copy)
 
     def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
         """Add field 'att' to history. Accommodates track_pdf option."""
@@ -242,12 +264,11 @@ class Rand(BaseContainer):
         else:
             BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
 
+    def asdict(self, *fields, exclude=['rng'], **kwargs):
+        """Represent as a dict (exclude rng for json)."""
+        self.store_rng_state(self.rng)
+        return super().asdict(*fields, exclude=exclude, **kwargs)
 
-def create_matching_rng(other_rng, init_seed=42):
-    """Create an rng matching the state of other_rng."""
-    rng = np.random.default_rng(init_seed)
-    rng.bit_generator.__setstate__(other_rng.bit_generator.__getstate__())
-    return rng
 
 
 def calc_prob_for_integers(x, *args):

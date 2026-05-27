@@ -102,6 +102,11 @@ class MultiFlow(Flow):
     - s=ExampleState(x=10.0, y=10.0)
     LOCALS:
     - sub_flow=(s=(x=10.0, y=0.0))
+    >>> ExampleMultiFlow.fromjson(exf.tojson())
+    examplemultiflow ExampleMultiFlow
+    - s=ExampleState(x=10.0, y=10.0)
+    LOCALS:
+    - sub_flow=(s=(x=10.0, y=0.0))
     """
 
     __slots__ = ['glob', '__dict__']
@@ -109,7 +114,7 @@ class MultiFlow(Flow):
     flexible_roles = ['local']
     roletypes = ['container', 'local']
 
-    def __init__(self, name='', root='', glob=[], track=['s'], **kwargs):
+    def __init__(self, name='', root='', glob=[], track=['s'], locals={}, **kwargs):
         """Initialize MultiFlow (glob is global MultiFlow)."""
         if not glob:
             self.glob = self
@@ -118,7 +123,9 @@ class MultiFlow(Flow):
             if not root:
                 root = self.glob.get_full_name()
         super().__init__(name=name, root=root, track=track, **kwargs)
-        self.locals = []
+        self.locals = [*locals]
+        for name, local in locals.items():
+            self.create_local(**{'name': name, **local})
 
     def __repr__(self):
         """Print console string."""
@@ -137,8 +144,8 @@ class MultiFlow(Flow):
         """Return fmdtools type of the model class."""
         return MultiFlow
 
-    def create_local(self, name, attrs="all", p='global', s='global', track=['s'],
-                     as_copy=False, **kwargs):
+    def create_local(self, name='', attrs="all", p='global', s='global', track=['s'],
+                     **kwargs):
         """
         Create a local view of the Flow.
 
@@ -157,8 +164,6 @@ class MultiFlow(Flow):
         s : dict
             Initial values for the states. Default is 'global', which uses the
             same initial states as the multiflow
-        as_copy : bool
-            Whether to copy the local flow if it already exists.
 
         Returns
         -------
@@ -166,11 +171,7 @@ class MultiFlow(Flow):
             Local view of the MultiFlow with its own individual values
         """
         if hasattr(self, name):
-            oldflow = getattr(self, name)
-            if as_copy:
-                newflow = oldflow.copy(glob=self)
-            else:
-                newflow = oldflow
+            newflow = getattr(self, name)
         else:
             kwar = {}
             if p == 'global' and hasattr(self, 'p'):
@@ -281,21 +282,48 @@ class MultiFlow(Flow):
         for local in self.locals:
             getattr(self, local).reset()
 
-    def copy(self, name='', glob=[], p={}, s={}, track=['s']):
-        """Copy the flow and create new sub-flow copies for it."""
-        if not s and hasattr(self, 's'):
-            s = self.s.asdict()
+    def copy(self, glob=[], **kwargs):
+        """
+        Copy the flow and create new sub-flow copies for it.
+
+        Examples
+        --------
+        >>> exf = ExampleMultiFlow()
+        >>> exf1 = exf.create_local("exf1", s={'x': 5})
+        >>> exf2 = exf1.create_local("exf2", s={'x': 10})
+        >>> exf
+        examplemultiflow ExampleMultiFlow
+        - s=ExampleState(x=1.0, y=1.0)
+        LOCALS:
+        - exf1=(s=(x=5.0, y=1.0))
+        >>> exf1
+        exf1 ExampleMultiFlow
+        - s=ExampleState(x=5.0, y=1.0)
+        LOCALS:
+        - exf2=(s=(x=10.0, y=1.0))
+        >>> exf_c = exf.copy()
+        >>> exf_c
+        examplemultiflow ExampleMultiFlow
+        - s=ExampleState(x=1.0, y=1.0)
+        LOCALS:
+        - exf1=(s=(x=5.0, y=1.0))
+        >>> exf_c.exf1.s.x=4
+        >>> exf.exf1.s.x  # copy should be independent
+        np.float64(5.0)
+        >>> exf.exf1.exf2  #  copy should retain information through hierarchy
+        exf2 ExampleMultiFlow
+        - s=ExampleState(x=10.0, y=1.0)
+        """
         if not glob and self.glob.name != self.name:
             raise Exception("Unable to copy "+self.name+" without "+self.glob.name+".")
-        cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track, root=self.root)
-        if hasattr(self, 'h'):
-            cop.h = self.h.copy()
+        # cdict = self.asdict(with_flex=False, as_copy=True, **kwargs)
+        cop = super().copy(with_flex=False)
         for loc in self.locals:
-            local = getattr(self, loc)
-            mutes = local.copy_mutes(exclude=['local'])
-            cl = cop.create_local(local.name, **mutes, as_copy=True)
-            if hasattr(cl, 'h'):
-                cop.h[loc] = cl.h
+            sub_cop = getattr(self, loc).copy(glob=cop, **kwargs)
+            setattr(cop, loc, sub_cop)
+            cop.locals.append(loc)
+            if hasattr(sub_cop, 'h'):
+                cop.h[loc] = sub_cop.h
         return cop
 
     def create_hist(self, timerange, track=None):
@@ -350,6 +378,11 @@ class ExampleMultiFlow(MultiFlow):
 
 
 if __name__ == "__main__":
+    exf = ExampleMultiFlow()
+    exf1 = exf.create_local("exf1")
+    exf2 = exf1.create_local("exf2")
+    exf.copy()
+
     ex = ExampleMultiFlow()
     import doctest
     doctest.testmod(verbose=True)

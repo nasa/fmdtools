@@ -72,6 +72,23 @@ class Function(Block):
     - s=ExampleState(x=1.0, y=3.0)
     - m=ExampleMode(mode='no_charge', faults={'no_charge'}, sub_faults=False)
     - exf=ExampleFlow(s=(x=3.0, y=1.0))
+
+    Functions are also json-able:
+    >>> ExampleFunction.fromjson(exf.tojson(), name="fromjson")
+    fromjson ExampleFunction
+    - t=Time(time=2.0, timers={})
+    - s=ExampleState(x=1.0, y=3.0)
+    - m=ExampleMode(mode='no_charge', faults={'no_charge'}, sub_faults=False)
+    - exf=ExampleFlow(s=(x=3.0, y=1.0))
+
+    And can load constituent containers from both json and json files:
+    >>> ExampleFunction("exf", s='{"x": 2.0}').s
+    ExampleState(x=2.0, y=1.0)
+    >>> exf.s.save("exfs.json")
+    >>> ExampleFunction("exf", s="exfs.json").s
+    ExampleState(x=1.0, y=3.0)
+    >>> import os
+    >>> os.remove("exfs.json")
     """
 
     __slots__ = ["ca", "aa", "fa", "args_f"]
@@ -130,6 +147,7 @@ class GenericFxn(Function):
     For use when the user has not yet defined a class for the given (to be implemented)
     function block. Acts as a placeholder that enables simulation.
     """
+
     __slots__ = ['__dict__']
     check_dict_creation = False
 

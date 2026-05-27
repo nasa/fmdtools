@@ -23,6 +23,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import gen_timerange, is_iter, get_var, filter_kwargs
+from fmdtools.define.base import copy_dict_objs
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
@@ -32,7 +33,6 @@ from fmdtools.analyze.history import History
 from fmdtools.analyze.graph.base import Graph
 
 import itertools
-import copy
 import warnings
 import numpy as np
 
@@ -187,6 +187,7 @@ class Simulable(BaseObject):
     """
 
     __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'mut_kwargs', '_sims')
+    attrs = (*BaseObject.attrs, "h", "mut_kwargs")
     container_t = Time
     default_track = ["all"]
     immutable_roles = BaseObject.immutable_roles + ['sp']
@@ -397,7 +398,7 @@ class Simulable(BaseObject):
             result[var] = var_result[i]
         return result
 
-    def new_params(self, name='', p={}, sp={}, r={}, track={}, **kwargs):
+    def new_params(self, **kwargs):
         """
         Create a copy of the defining immutable parameters for use in a new Simulable.
 
@@ -417,19 +418,13 @@ class Simulable(BaseObject):
         param_dict: dict
             Dict with immutable parameters/options. (e.g., 'p', 'sp', 'track')
         """
-        param_dict = {**copy.deepcopy(getattr(self, 'mut_kwargs', {}))}
-
-        if hasattr(self, 'p'):
-            param_dict['p'] = self.p.copy_with_vals(**p)
-        if hasattr(self, 'sp'):
-            param_dict['sp'] = self.sp.copy_with_vals(**sp)
-        if not r and hasattr(self, 'r'):
+        param_dict = {**self.get_obj_attrs(exclude=["h"]),
+                      **{k: getattr(self, k, {}) for k in self.immutable_roles}}
+        if hasattr(self, 'r'):
             param_dict['r'] = {'seed': self.r.seed}
-        elif r:
-            param_dict['r'] = r
-        if not track:
-            param_dict['track'] = copy.deepcopy(self.track)
-        return {**param_dict, **kwargs}
+        if 'mut_kwargs' in param_dict:
+            param_dict = {**param_dict.pop('mut_kwargs'), **param_dict}
+        return copy_dict_objs(param_dict, **kwargs)
 
     def new(self, **kwargs):
         """
@@ -437,7 +432,7 @@ class Simulable(BaseObject):
 
         Can initiate with with changes to mutable parameters (p, sp, track, rand etc.).
         """
-        return self.__class__(name=self.name, **self.new_params(**kwargs))
+        return self.__class__(**self.new_params(**kwargs))
 
     def get_fxns(self):
         """
@@ -844,7 +839,7 @@ class Block(Simulable):
         flows = {**flows}
 
         Simulable.__init__(self, name=name, roletypes=['container', 'flow'],
-                           **flows, **kwargs)
+                           **{**kwargs,**flows})
         # send flows from block level to arch level
         if 'arch' in self.roletypes:
             self.init_roletypes('arch', **self.create_arch_kwargs(**kwargs))
@@ -982,36 +977,6 @@ class Block(Simulable):
             Set of flow type names in the model.
         """
         return {obj.__class__.__name__ for name, obj in self.get_flows().items()}
-
-    def copy(self, *args, flows={}, **kwargs):
-        """
-        Copy the block with its current attributes.
-
-        Parameters
-        ----------
-        args   : tuple
-            New arguments to use to instantiate the block, (e.g., flows, p, s)
-        kwargs :
-            New kwargs to use to instantiate the block.
-
-        Returns
-        -------
-        cop : Block
-            copy of the exising block
-        """
-        try:
-            paramdict = self.new_params(**kwargs)
-            if 'arch' in self.roletypes:
-                arch_dict = {role: getattr(self, role)
-                             for role in self.get_roles('arch')}
-                paramdict = {**paramdict, 'sp': self.sp, 'root': self.root, **arch_dict}
-            cop = self.__class__(self.name, *args, flows=flows, **paramdict)
-            cop.assign_roles('container', self)
-        except TypeError as e:
-            raise Exception("Poor specification of "+str(self.__class__)) from e
-        if hasattr(self, 'h'):
-            cop.h = self.h.copy()
-        return cop
 
 
 if __name__ == "__main__":

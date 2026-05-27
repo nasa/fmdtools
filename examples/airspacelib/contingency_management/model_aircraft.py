@@ -201,13 +201,13 @@ class ContingencyAviate(Aviate):
             if dist <= 0.1:
                 self.m.add_fault('crash')
                 self.m.set_mode('falling')
-                self.environment.ga.points['self'].s.buffer_speed = 0.0
-                self.environment.ga.points[name].s.buffer_speed = 0.0
+                self.environment.ga.geoms['self'].s.buffer_speed = 0.0
+                self.environment.ga.geoms[name].s.buffer_speed = 0.0
         super().static_behavior()
 
     def dynamic_behavior(self):
         super().dynamic_behavior()
-        self.environment.ga.points['self'].s.assign(self.trajectories.s, 'x', 'y', 'z')
+        self.environment.ga.geoms['self'].s.assign(self.trajectories.s, 'x', 'y', 'z')
 
 
 
@@ -479,7 +479,7 @@ def plot_flightpath(mdl={}, history={}, fig={}, ax={}, with_plans=True, with_loc
         else:
             bhist = history
         geoms = dict()
-        for pt in mdl.flows['environment'].ga.points:
+        for pt in mdl.flows['environment'].ga.geoms:
             if pt == 'self':
                 geoms[pt] = {'shapes': {'envelope': {'color': 'blue'}}}
             else:
@@ -625,9 +625,9 @@ if __name__ == "__main__":
     #                                  'trajectories.s.z',
     #                                  time_groups='nominal', time_ticks=2.0, fig=fig, ax=ax)
 
-    # fig, ax = hist.plot_trajectories('environment.ga.points.uav.s.x',
-    #                                  'environment.ga.points.uav.s.y',
-    #                                  'environment.ga.points.uav.s.z',
+    # fig, ax = hist.plot_trajectories('environment.ga.geoms.uav.s.x',
+    #                                  'environment.ga.geoms.uav.s.y',
+    #                                  'environment.ga.geoms.uav.s.z',
     #                                  time_groups='nominal', time_ticks=2.0, fig=fig, ax=ax)
 
 

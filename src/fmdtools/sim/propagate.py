@@ -321,6 +321,9 @@ def nested_sample(mdl, ps, **kwargs):
 class BaseSimContainer(BaseContainer):
     """Base Container class for SimEvent and BaseSimulation."""
 
+    def __init__(self, *args, **kwargs):
+        return super().__init__(*args, set_type=False, **kwargs)
+
     def __setattr__(self, field, value):
         """Revert to dataobject __setattr__."""
         super(BaseContainer, self).__setattr__(field, value)
@@ -363,7 +366,7 @@ class SimEvent(BaseSimContainer):
     - t=Time(time=4.0, timers={})
     - s=ExampleState(x=4.0, y=0.0)
     - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
-    - exf=ExampleFlow(s=(x=1.0, y=1.0))
+    - exf=ExampleFlow(s=(x=11.0, y=1.0))
     >>> se.result
     classify: 
     --xy:                                4.0
@@ -568,11 +571,11 @@ class Simulation(BaseSimulation):
     - t=Time(time=1.0, timers={})
     - s=ExampleState(x=1.0, y=0.0)
     - m=ExampleMode(mode='standby', faults=set(), sub_faults=False)
-    - exf=ExampleFlow(s=(x=1.0, y=1.0)), 4.0: examplefunction ExampleFunction
+    - exf=ExampleFlow(s=(x=2.0, y=1.0)), 4.0: examplefunction ExampleFunction
     - t=Time(time=3.0, timers={})
     - s=ExampleState(x=20.0, y=3.0)
     - m=ExampleMode(mode='low', faults={'low'}, sub_faults=False)
-    - exf=ExampleFlow(s=(x=1.0, y=1.0))}
+    - exf=ExampleFlow(s=(x=24.0, y=1.0))}
     """
 
     scen: Scenario = Scenario()

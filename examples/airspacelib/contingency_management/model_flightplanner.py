@@ -98,10 +98,14 @@ class DroneFlightGrid(Coords):
     state_grid_costs: tuple = (float, 0.0)
     state_fuel_costs: tuple = (dict, None)
     state_edge_weights: tuple = (dict, None)
+    attrs = Coords.attrs + ('env',)
 
     def init_properties(self, env={}, **kwargs):
-        self.env_coords = env.c
-        self.env = env
+        if env:
+            self.env_coords = env.c
+            self.env = env
+        else:
+            raise Exception("No env provided")
         for i in range(self.p.y_size):
             for j in range(self.p.x_size):
                 self.fuel_costs[i, j] = {}
@@ -171,10 +175,10 @@ class DroneFlightGrid(Coords):
         unsafe_points = set()
         if obstacle:
             try:
-                uav_geom = self.env.ga.geoms()['uav']
+                uav_geom = self.env.ga.geoms['uav']
             except (AttributeError, KeyError):
                 print("No such UAV geometry architecture exists")
-            uav_geom = self.env.ga.geoms()['uav']
+            uav_geom = self.env.ga.geoms['uav']
             coarse_block = self.env.c.p.blocksize
             fine_block = self.p.blocksize
             coarse_unsafe_pts = [pt for pt in self.env_coords.pts if uav_geom.at(pt, 'safety')]
@@ -451,7 +455,8 @@ if __name__ == "__main__":
     import numpy as np
     env = ContingencyEnvironment()
     param = DroneFlightGridParam(x_size=120/2.5, y_size=120/2.5, blocksize=2.5, max_cost=np.inf)
-    grid = DroneFlightGrid(env, p=param)
+    grid = DroneFlightGrid(env=env, p=param)
+    grid.copy()
     start = (45.0, 72.5)
     goal = (50.0, 60.0)
     path = grid.a_star_worldcoords(start_xy=start, goal_xy=goal, max_distance=5,

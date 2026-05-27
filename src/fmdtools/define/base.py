@@ -46,9 +46,13 @@ specific language governing permissions and limitations under the License.
 from collections.abc import Iterable
 from recordclass import dataobject
 from ordered_set import OrderedSet
+from collections import UserDict
 import numpy as np
 import inspect
 import sys
+import os
+import json
+import copy
 
 
 def get_var(obj, var):
@@ -199,6 +203,100 @@ def set_arg_as_type(true_type, new_arg):
         else:
             new_arg = true_type(new_arg)
     return new_arg
+
+
+def dict_to_json(dic, exclude=[]):
+    """Convert a dict to json. Keep keys in exclude out of dict."""
+    newdict = {}
+    for key, value in [*dic.items()]:
+        if key not in exclude:
+            newdict[key] = value_to_jsonable(value, exclude=exclude)
+    return newdict
+
+def value_to_jsonable(value, exclude=[]):
+    """Make a given value json-able."""
+    if isinstance(value, np.generic):
+        jsonable = value.item()
+    elif isinstance(value, np.ndarray):
+        jsonable = value.tolist()
+        if value.dtype == 'O':
+            jsonable = [value_to_jsonable(i) for i in jsonable]
+    elif hasattr(value, 'asdict'):
+        jsonable = value.asdict(jsonable=True)
+    elif isinstance(value, dict):
+        jsonable = dict_to_json(value, exclude=exclude)
+    elif isinstance(value, UserDict):
+        jsonable = dict_to_json(dict(value), exclude=exclude)
+    elif isinstance(value, set):
+        jsonable = list(value)
+    else:
+        jsonable = value
+    return jsonable
+
+
+def copy_dict_objs(dic, **kwargs):
+    """Copy a dict and its objects."""
+    newdic = {}
+    for key, value in dic.items():
+        if isinstance(value, dict):
+            newdic[key] = copy_dict_objs(value, **kwargs.get(key, {}))
+        elif hasattr(value, 'copy'):
+            try:
+                newdic[key] = value.copy(**kwargs.get(key, {}))
+            except:
+                newdic[key] = value.copy()
+        else:
+            newdic[key] = kwargs.get(key, copy.deepcopy(value))
+    return newdic
+
+def auto_filename(obj, filename='', suffix=".json"):
+    """Create filename for saving a class."""
+    if not filename:
+        filename = obj.__class__.__name__.lower()+suffix
+    return filename
+
+
+def dict_from_file(filename, delete=False):
+    """Load a json as a dictionary."""
+    with open(filename, 'r') as f:
+        datadict = json.load(f)
+    if delete:
+        os.remove(filename)
+    return datadict
+
+
+def map_obj_fields(obj, *fields, **mapping):
+    """
+    Create a dictionary mapping aspects of a given object obj to known fields.
+
+    Parameters
+    ----------
+    obj : object
+        Object with parameters.
+    *fields : str
+        Names of parameters to get from object
+    **mapping : kwargs
+        Mapping of fields to another name, e.g. x='y' if 'y' should be the name of x in
+        the returned dict.
+
+    Returns
+    -------
+    fielddict : dict
+        Dictionary of fields with values gotten from the object.
+    """
+    if isinstance(obj, dict) or isinstance(obj, UserDict):
+        if not mapping:
+            fielddict = {s: obj[s] for s in fields if s in obj}
+        else:
+            fielddict = {k: obj[v] for k, v in mapping.items() if v in obj}
+    else:
+        if not mapping:
+            # if states provided, only assign those states
+            fielddict = {s: getattr(obj, s) for s in fields if hasattr(obj, s)}
+        else:
+            # if kwarg states provided, assign keys to values
+            fielddict = {k: getattr(obj, v) for k, v in mapping.items() if hasattr(obj, v)}
+    return fielddict
 
 
 def is_iter(data):
@@ -410,7 +508,7 @@ def get_repr(obj, name, with_classname=True, with_name=False, one_line=True):
         if hasattr(obj.__self__, 'name'):
             objrepr = obj.__self__.name+"."+objrepr
         objrepr = "<method "+objrepr
-    elif isinstance(obj, str):
+    elif isinstance(obj, str) and not isinstance(obj, np.str_):
         objrepr = repr(obj)
     else:
         objrepr = str(obj)

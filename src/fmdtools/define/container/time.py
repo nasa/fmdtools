@@ -78,6 +78,12 @@ class Time(BaseContainer):
 
     >>> t2.timers['t1'].__hash__() == t.timers['t1'].__hash__()
     False
+
+    Check json:
+    >>> js = t.tojson()
+    >>> t3 = ExtendedTime.fromjson(js)
+    >>> t3.timers
+    {'t1': Timer t1: mode= ticking, time= 1.0, 't2': Timer t2: mode= standby, time= 0.0}
     """
 
     rolename = "t"
@@ -98,7 +104,11 @@ class Time(BaseContainer):
         if not self.timers:
             self.timers = {}
         for timername in self.timernames:
-            self.timers[timername] = Timer(timername)
+            if timername in self.timers:
+                if not isinstance(self.timers[timername], Timer):
+                    self.timers[timername] = Timer(**self.timers[timername])
+            else:
+                self.timers[timername] = Timer(timername)
         self.set_timestep()
 
     def create_repr(self, fields=['time', "timers"], **kwargs):

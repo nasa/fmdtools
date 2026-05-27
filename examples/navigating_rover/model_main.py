@@ -45,7 +45,7 @@ from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.function import Function
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.flow.base import Flow
-from fmdtools.define.object.geom import PointParam, GeomPoint, LineParam, GeomLine
+from fmdtools.define.object.geom import GeomParameter, GeomPoint, GeomLine
 from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.define.environment import Environment
 import fmdtools.sim.propagate as prop
@@ -165,7 +165,7 @@ class ResCorrection(Parameter):
     cor_t: np.float64 = 0.0
     cor_f: np.float64 = 0.0
 
-class DestParam(PointParam):
+class DestParam(GeomParameter):
     """
     Parameter defining start and end points.
 
@@ -173,8 +173,7 @@ class DestParam(PointParam):
     the location.
     """
 
-    x: np.float64 = 0.0
-    y: np.float64 = 0.0
+    coordinates: tuple = (0.0, 0.0)
     buffer_on: np.float64 = 1.0
     buffer_near: np.float64 = 2.0
 
@@ -184,10 +183,10 @@ def sin_func(x, amp, period):
     return amp * np.sin(x * 2 * np.pi / period)
 
 
-class PathParam(LineParam):
+class PathParam(GeomParameter):
     """Parameter defining the path."""
 
-    xys: tuple = tuple([[x, sin_func(x, 1, 1)] for x in np.arange(0, 100, 1)])
+    coordinates: tuple = tuple(([[x, sin_func(x, 1, 1)] for x in np.arange(0, 100, 1)]),)
     buffer_on: np.float64 = 0.2
     buffer_poor: np.float64 = 0.3
     buffer_near: np.float64 = 0.4
@@ -239,14 +238,14 @@ class GroundGeomArch(GeomArchitecture):
     def init_architecture(self, **kwargs):
         """Initialize geometry with line and start/end points."""
         ls = self.p.gen_ls()
-        self.add_line('line', PathLine, p={'xys': ls,
+        self.add_geom('line', PathLine, p={'coordinates': (ls,),
                                            'buffer_on': self.p.path_buffer_on,
                                            'buffer_poor': self.p.path_buffer_poor,
                                            'buffer_near': self.p.path_buffer_near})
-        self.add_point('start', Dest, p={'x': ls[0][0], 'y': ls[0][1],
+        self.add_geom('start', Dest, p={'coordinates': ls[0],
                                          'buffer_on': self.p.dest_buffer_on,
                                          'buffer_near': self.p.dest_buffer_near})
-        self.add_point('end', Dest, p={'x': ls[-1][0], 'y': ls[-1][1],
+        self.add_geom('end', Dest, p={'coordinates': ls[-1],
                                        'buffer_on': self.p.dest_buffer_on,
                                        'buffer_near': self.p.dest_buffer_near})
 
@@ -266,15 +265,15 @@ class Ground(Environment):
 
     def on_course(self, pos_state):
         """Check if the rover is on_course (i.e., within the 'on' buffer)."""
-        return self.ga.lines['line'].at(pos_state.get('x', 'y'), 'on')
+        return self.ga.geoms['line'].at(pos_state.get('x', 'y'), 'on')
 
     def at_end(self, pos_state):
         """Check if the rover is at the end point, accounting for the 'on' buffer)."""
-        return self.ga.points['end'].at(pos_state.get("x", "y"), 'on')
+        return self.ga.geoms['end'].at(pos_state.get("x", "y"), 'on')
 
     def end_dist(self, pos_state):
         """Calculate minimum distance between the end point and the rover."""
-        on_shape = self.ga.points['end'].get_shape('on')
+        on_shape = self.ga.geoms['end'].get_shape('on')
         return on_shape.distance(Point(pos_state.get("x", "y")))
 
     def max_line_dist(self, pos_hist):
@@ -283,7 +282,7 @@ class Ground(Environment):
         yhist = pos_hist.y
         max_dist = 0.0
         for i, x in enumerate(xhist):
-            dist = self.ga.lines['line'].get_shape().distance(Point(x, yhist[i]))
+            dist = self.ga.geoms['line'].get_shape().distance(Point(x, yhist[i]))
             if dist > max_dist:
                 max_dist = dist
         return max_dist
@@ -770,10 +769,10 @@ class Perception(Function):
         xy = self.pos.s.get('x', 'y')
         # calculate the unit vector to determine the direction of the line at
         # the nearest point in the line from the current location
-        ux, uy = self.ground.ga.lines['line'].vect_at_shape(xy)
+        ux, uy = self.ground.ga.geoms['line'].vect_at_shape(xy)
         # calculates the direction the rover needs to travel to reach the
         # nearest point in the line
-        dx, dy = self.ground.ga.lines['line'].vect_to_shape(xy)
+        dx, dy = self.ground.ga.geoms['line'].vect_to_shape(xy)
         self.video.s.put(lin_ux=ux[0], lin_uy=uy[0],
                          lin_dx=dx[0], lin_dy=dy[0], quality=1.0)
 

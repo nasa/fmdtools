@@ -63,7 +63,11 @@ class Fault(BaseContainer, readonly=True):
     def __init__(self, *args, failrate=1.0, **kwargs):
         args = self.get_true_fields(*args, force_kwargs=True, **kwargs)
         args[0] = failrate * args[0]
-        super().__init__(*args)
+        if isinstance(args[2], dict):
+            args[2] = tuple([a for a in args[2].items()])
+        if isinstance(args[3], dict):
+            args[3] = tuple([a for a in args[3].items()])
+        super().__init__(*args, get_fields=False)
 
     @classmethod
     def valid_fault(cls, fault):
@@ -106,16 +110,16 @@ class Fault(BaseContainer, readonly=True):
         >>> # Calculating the rate of a mode in the 'on phase':
         >>> from fmdtools.analyze.phases import PhaseMap
         >>> pm = PhaseMap({'on': [0, 5], 'off': [6, 10]})
-        >>> exfault = Fault(prob=0.5, phases = {'on': 0.9, 'off': 0.1}, units='hr')
+        >>> exfault = Fault(prob=0.5, phases = (('on', 0.9,), ('off', 0.1),), units='hr')
         >>> rate = exfault.calc_rate(4, pm, sim_time=10.0, sim_units='min')
         >>> # note that this rate is the same as what we would calculate:
         >>> manual_calc = 0.5 * 6 * 0.9 / 60
-        >>> manual_calc == rate
+        >>> bool(manual_calc == rate)
         True
         >>> rate_off = exfault.calc_rate(7, pm, sim_time=10.0, sim_units='min')
         >>> # note that the interval for off (6-10) is 5 while (0-5) is 6
         >>> manual_calc_off = 0.5 * 5 * 0.1 / 60
-        >>> manual_calc_off == rate_off
+        >>> bool(manual_calc_off == rate_off)
         True
         """
         if self.units == 'sim':
@@ -136,7 +140,7 @@ class Fault(BaseContainer, readonly=True):
                 t_factor = t_exposure/sim_exposure_time
             if self.phases:
                 phase = phasemap.find_base_phase(time)
-                opp_factor = dict(self.phases).get(phase, 0.0)
+                opp_factor = {f[0]: f[1] for f in self.phases}.get(phase, 0.0)
             else:
                 opp_factor = 1.0
             return baserate * opp_factor * t_factor * weight
@@ -194,7 +198,12 @@ class Mode(BaseContainer, readonly=False):
     >>> exm.any_faults()
     False
     >>> exm.get_faults()
-    {'no_charge': Fault(prob=1e-05, cost=100, phases=(('standby', 1.0),), disturbances=(), units='sim'), 'short': Fault(prob=1e-05, cost=100, phases=(('supply', 1.0),), disturbances=(), units='sim')}
+    {'no_charge': Fault(prob=1e-05, cost=100.0, phases=(('standby', 1.0),), disturbances=(), units=sim), 'short': Fault(prob=1e-05, cost=100.0, phases=(('supply', 1.0),), disturbances=(), units=sim)}
+    >>> exm.to_fault("short")
+    >>> js = exm.tojson()
+    >>> exm2 = ExampleMode.fromjson(js)
+    >>> exm2.mode
+    'short'
     """
 
     rolename = "m"
@@ -207,8 +216,7 @@ class Mode(BaseContainer, readonly=False):
     default_track = ('mode', 'faults', 'sub_faults')
 
     def __init__(self, *args, s_kwargs={}, **kwargs):
-        args = self.get_true_fields(*args, **kwargs)
-        super().__init__(*args)
+        super().__init__(*args, **kwargs)
         if not self.mode:
             self.mode = 'nominal'
         if not self.faults:
@@ -244,9 +252,9 @@ class Mode(BaseContainer, readonly=False):
         --------
         >>> exm = ExampleMode()
         >>> exm.get_fault('short')
-        Fault(prob=1e-05, cost=100, phases=(('supply', 1.0),), disturbances=(), units='sim')
+        Fault(prob=1e-05, cost=100.0, phases=(('supply', 1.0),), disturbances=(), units=sim)
         >>> exm.get_fault('short', prob=0.1)
-        Fault(prob=0.1, cost=100, phases=(('supply', 1.0),), disturbances=(), units='sim')
+        Fault(prob=0.1, cost=100.0, phases=(('supply', 1.0),), disturbances=(), units=sim)
         """
         if isinstance(faultname, str):
             fault = getattr(self, 'fault_'+faultname)
@@ -371,12 +379,12 @@ class Mode(BaseContainer, readonly=False):
         --------
         >>> exm = ExampleMode()
         >>> exm.get_fault('low')
-        Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.x': 20.0}, units='sim')
+        Fault(prob=1.0, cost=0.0, phases=(), disturbances=(('s.x', 20.0),), units=sim)
         >>> exm.add_fault(dict(low={'disturbances': {'s.x': 40.0}}))
         >>> exm
         ExampleMode(faults={'low'}, sub_faults=False, fault_low={'disturbances': {'s.x': 40.0}}, mode='low')
         >>> exm.get_fault('low')
-        Fault(prob=1.0, cost=0.0, phases=(), disturbances={'s.x': 40.0}, units='sim')
+        Fault(prob=1.0, cost=0.0, phases=(), disturbances=(('s.x', 40.0),), units=sim)
         """
         if len(faults) == 1 and (isinstance(faults[0], list) or isinstance(faults[0], dict)):
             faults = faults[0]
@@ -548,7 +556,7 @@ class ExampleMode(Mode):
 
     fault_no_charge = Fault(1e-5, 100, (('standby', 1.0),))
     fault_short = (1e-5, 100, (('supply', 1.0),))
-    fault_low: dict = {'disturbances': {'s.x': 20.0}}
+    fault_low: dict = {'disturbances': (('s.x', 20.0),)}
     opermodes = ("supply", "charge", "standby")
     exclusive = True
     mode: str = "standby"

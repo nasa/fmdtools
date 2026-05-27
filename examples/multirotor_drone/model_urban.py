@@ -535,7 +535,7 @@ if __name__ == "__main__":
                                                mdl_kwargs = {'sp':{'dt':1.0}})
     plot_env_with_traj_z(hists, mdl)
     plot_env_with_traj(hists, mdl)
-    statsfmea = an.tabulate.FMEA(endresults, app, group_by=('function', 'fault'),
+    statsfmea = an.tabulate.FMEA(endresults, app, group_by=('obj', 'fault'),
                                  average_metric=['rate', 'unsafe_flight_time', 'cost',
                                                   'repcost', 'landcost', 'body_strikes',
                                               'head_strikes', 'property_restrictions'],
@@ -544,7 +544,7 @@ if __name__ == "__main__":
     statsfmea.as_table()
     import matplotlib.colors as mcolors
     statsfmea.as_plots("average_repcost", "average_unsafe_flight_time", "average_cost", "average_rate",
-                       color_factor="function", suppress_ticklabels=True,
+                       color_factor="obj", suppress_ticklabels=True,
                        legend_loc=2, pallette=[*mcolors.XKCD_COLORS])
 
 

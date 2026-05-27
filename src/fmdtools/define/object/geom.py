@@ -38,49 +38,32 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.analyze.common import setup_plot, consolidate_legend, add_title_xylabs
 
-from shapely import LineString, Point, Polygon
+from shapely import LineString, Point, Polygon, from_geojson
 from shapely.ops import nearest_points
 from typing import ClassVar
 from recordclass import astuple
 import numpy as np
+import os
 
 
-class Geom(BaseObject):
+class BaseGeom(BaseObject):
     """
     Base class for defining geometries.
 
     Geometry objects are essentially interfaces for various shapely classes used to
     convey the spacial properties of a model.
-
-    Roles
-    -----
-    s : State
-        State defining mutable properties (e.g., allocations, shapely class inputs)
-    p : Param
-        Parameter defining immutable properties (e.g., shapely inputs, buffer)
     """
 
-    __slots__ = ('p', 's', 'shapenames')
-    container_s = State
-    container_p = Parameter
-    default_track = ['s']
-    all_possible = ['s']
+    __slots__ = ('shapes',)
     immutable_roles = BaseObject.immutable_roles + ['buffer']
 
-    def __init__(self, *args, s={}, p={}, track='default', **kwargs):
-        super().__init__(s=s, p=p, track=[], **kwargs)
-        self.shapenames = ['shape',
-                           *self.p.get_pref_attrs('buffer'),
-                           *self.s.get_pref_attrs('buffer')]
-        self.init_track(track=track)
-
-    def get_shape(self, shapename='shape'):
+    def create_shape(self, shape='shape', base_shape=None):
         """
-        Get the shapely object defining the class and buffers.
+        Create the shapely object defining the class and buffers.
 
         Parameters
         ----------
-        shapename : str, optional
+        shape : str, optional
             Name of the shape. The default is 'shape', which produces the base shape,
             other names return the buffer shapes for that shape.
 
@@ -89,11 +72,12 @@ class Geom(BaseObject):
         shapely.geometry
             Shapely object for the shape.
         """
-        shape = self.shapely_class(*self.get_args())
-        if shapename == 'shape':
-            return shape
+        if base_shape is None:
+            base_shape = self.shapely_class(*self.get_shapely_args())
+        if shape == 'shape':
+            return base_shape
         else:
-            argname = 'buffer_'+shapename
+            argname = 'buffer_'+shape
             if hasattr(self.p, argname):
                 arg = self.p[argname]
             elif hasattr(self.s, argname):
@@ -101,21 +85,17 @@ class Geom(BaseObject):
             else:
                 raise Exception(argname+" not in "+"Geom's "+str(self.s.__class__)
                                 + " or "+str(self.p.__class__))
-            return shape.buffer(arg)
+            return base_shape.buffer(arg)
 
-    def get_paramstates(self):
-        """Create dict of parameters and states."""
-        return {**self.p.asdict(), **self.s.asdict()}
-
-    def at(self, pt, shapename='shape'):
+    def at(self, pt, shape='shape'):
         """
-        Determine whether the point x, y is within the buffer 'shapename'.
+        Determine whether the point x, y is within the buffer 'shape'.
 
         Parameters
         ----------
         *pt : tuple
             Locations of x, y, z coordinates.
-        shapename : str
+        shape : str
             Name of buffer property
 
         Returns
@@ -123,8 +103,8 @@ class Geom(BaseObject):
         at : bool
             Whether x,y is within the buffer.
         """
-        shape = self.get_shape(shapename)
-        return shape.covers(Point(*pt))
+        shap = self.get_shape(shape)
+        return shap.covers(Point(*pt))
 
     def all_at(self, *pt):
         """
@@ -151,25 +131,22 @@ class Geom(BaseObject):
         []
         """
         all_at = []
-        for bname in self.shapenames:
+        for bname in self.shapes:
             if self.at(pt, bname):
                 all_at.append(bname)
         return all_at
-
-    def copy(self, *args, **kwargs):
-        """Copy the Geom with given *args and **kwargs."""
-        cop = self.__class__(*args, **kwargs)
-        cop.s.assign(self.s)
-        return cop
 
     def reset(self):
         """Reset the Geom to initial state."""
         self.s = self.container_s(**self._args_s)
 
     def return_mutables(self):
-        return astuple(self.s)
+        if hasattr(self, 's'):
+            return astuple(self.s)
+        else:
+            return ()
 
-    def vect_to_shape(self, pt, shapename='shape'):
+    def vect_to_shape(self, pt, shape='shape'):
         """
         Get the vector (x, y) to a given shape.
 
@@ -177,7 +154,7 @@ class Geom(BaseObject):
         ----------
         pt : tuple/list
             Point to get vector from
-        shapename : str
+        shape : str
             Name of shape/buffer. Default is 'shape'.
 
         Examples
@@ -193,13 +170,13 @@ class Geom(BaseObject):
         array([[0.],
                [0.]])
         """
-        shape = self.get_shape(shapename)
+        shap = self.get_shape(shape)
         geom_pt = Point(pt)
-        geom_c, close_pt = nearest_points(geom_pt, shape)
+        geom_c, close_pt = nearest_points(geom_pt, shap)
         vect_to_shape = np.array(close_pt.xy) - np.array(geom_pt.xy)
         return vect_to_shape
 
-    def vect_at_shape(self, pt, shapename='shape', dist_forward=0.1):
+    def vect_at_shape(self, pt, shape='shape', dist_forward=0.1):
         """
         Get the vector (x, y) at a given shape (e.g., direction of a line at pt).
 
@@ -207,7 +184,7 @@ class Geom(BaseObject):
         ----------
         pt : tuple/lost
             Point closest to shape
-        shapename : str
+        shape : str
             Name of shape/buffer. Default is 'shape'.
         dist_forward : float
             Distance forward along line segment to project. Give a negative number to
@@ -215,7 +192,7 @@ class Geom(BaseObject):
 
         Examples
         --------
-        >>> e=ExLine(p={'xys':((0,0),(1,1), (1,0))})
+        >>> e=ExLine(p={'coordinates':(((0,0),(1,1), (1,0)),)})
         >>> e.vect_at_shape((0,0))
         array([[0.07071068],
                [0.07071068]])
@@ -223,11 +200,11 @@ class Geom(BaseObject):
         array([[ 0. ],
                [-0.1]])
         """
-        shape = self.get_shape(shapename)
+        shap = self.get_shape(shape)
         geom_pt = Point(pt)
-        geom_c, close_pt = nearest_points(geom_pt, shape)
-        line_dist = shape.line_locate_point(geom_pt)
-        next_pt = shape.line_interpolate_point(line_dist + dist_forward)
+        geom_c, close_pt = nearest_points(geom_pt, shap)
+        line_dist = shap.line_locate_point(geom_pt)
+        next_pt = shap.line_interpolate_point(line_dist + dist_forward)
         vect_at_shape = np.array(next_pt.xy) - np.array(close_pt.xy)
         return vect_at_shape
 
@@ -266,7 +243,7 @@ class Geom(BaseObject):
         if not ax:
             fig, ax = setup_plot(z=z, figsize=figsize)
         if 'all' in shapes:
-            shapes = {s: {} for s in self.shapenames}
+            shapes = {s: {} for s in self.shapes}
         l_kw = filter_kwargs(consolidate_legend, **kwargs)
         t_kw = filter_kwargs(add_title_xylabs, **kwargs)
         plot_kwargs = {k: v for k, v in kwargs.items() if k not in {**l_kw, **t_kw}}
@@ -298,34 +275,144 @@ class Geom(BaseObject):
         self.s.assign(hist.s.get_slice(t), *states)
 
 
-class PointParam(Parameter):
+class GeomJSONParameter(Parameter):
     """
-    Parameter defining points. Extend with 'buffer_att' to create buffer shapes.
+    Parameter defining GeomJSON objects that use external information.
 
-    Fields
-    ------
-    x : float
-        x-location of point.
-    y : float
-        y-location of point.
+    Holds the json as a string so it can be instantiated from shapely.form_json.
+    """
 
+    geojson: str = ""
+
+    def save(self, filename, **kwargs):
+        """Save file as geojson."""
+        if filename.endswith(".geojson"):
+            with open(filename, 'w') as f:
+                f.write(self.geojson)
+        else:
+            super().save(filename, **kwargs)
+
+    @classmethod
+    def load(cls, filename, delete=False, **kwargs):
+        """Load from geojson."""
+        if filename.endswith(".geojson"):
+            with open(filename, 'r') as f:
+                loaded_geojson = f.read()
+            if delete:
+                os.remove(filename)
+            return cls(geojson=loaded_geojson)
+        else:
+            return super().load(filename, delete=delete, **kwargs)
+
+
+class GeomJSON(BaseGeom):
+    """
+    Geom object that is created from external geojson.
 
     Examples
     --------
-    a point with center at 1.0, 1.0 and radius of 1.0 defining whether something
-    is on the point would be defined by the parameter:
-
-    >>> class ExPointParam(PointParam):
-    ...    x: float = 1.0
-    ...    y: float = 1.0
-    ...    buffer_on: float = 1.0
-
-    >>> ExPointParam()
-    ExPointParam(x=1.0, y=1.0, buffer_on=1.0)
+    >>> gj = GeomJSON(p={'geojson': '{"type": "Point","coordinates": [1, 2]}'})
+    >>> gj.at([1,2])
+    True
+    >>> gj.at([1,3])
+    False
+    >>> gj.p.save("ex.geojson")
+    >>> gj = GeomJSON(p="ex.geojson")
+    >>> gj.at([1,2])
+    True
+    >>> gj.at([1,3])
+    False
+    >>> os.remove("ex.geojson")
     """
 
-    x: ClassVar[float] = 0.0
-    y: ClassVar[float] = 0.0
+    container_p = GeomJSONParameter
+
+    def __init__(self, *args, s={}, p={}, track='default', **kwargs):
+        super().__init__(s=s, p=p, track=[], **kwargs)
+        base_shape =  from_geojson(self.p.geojson)
+        shapes = {shape: self.create_shape(shape, base_shape=base_shape)
+                  for shape in self.p.get_pref_attrs('buffer')}
+        self.shapes = {'shape': base_shape, **shapes}
+        self.init_track(track=track)
+
+    def get_shape(self, shape="shape"):
+        """Get the shapely shape defining the class (and defined buffers)."""
+        return self.shapes[shape]
+
+
+class GeomParameter(Parameter):
+    """
+    Parameter defining dynamically simulable Geoms.
+
+    Give GeomParameter coordinates to define default coordinates for shapely' default
+    classes.
+    Otherwise, GeomParameter can hold geojson.
+
+    Extend with 'buffer_att' to create buffer shapes.
+
+    Examples
+    --------
+    A point with ends at (0.0, 0.0) and (1.0, 1.0) and radius of 1.0 defining
+    whether something is on the line would be defined by the parameter:
+
+    >>> class ExLineParam(GeomParameter):
+    ...     coordinates: tuple = ((0.0, 0.0), (1.0, 1.0))
+    ...     buffer_on: float = 1.0
+    >>> ExLineParam()
+    ExLineParam(coordinates=((0.0, 0.0), (1.0, 1.0)), buffer_on=1.0)
+    """
+
+    coordinates: ClassVar[tuple] = ()
+
+
+class Geom(BaseGeom):
+    """
+    Base Geom object for geometries that are capable of moving/changing.
+
+    Roles
+    -----
+    s : State
+        State defining mutable properties (e.g., allocations, shapely class inputs)
+    p : Param
+        Parameter defining immutable properties (e.g., shapely inputs, buffer)
+    """
+
+    default_track = ['s']
+    all_possible = ['s']
+    container_s = State
+    container_p = GeomParameter
+
+    def __init__(self, *args, s={}, p={}, track='default', **kwargs):
+        super().__init__(s=s, p=p, track=[], **kwargs)
+        self.shapes = ['shape',
+                       *self.p.get_pref_attrs('buffer'),
+                       *self.s.get_pref_attrs('buffer')]
+        self.init_track(track=track)
+
+    def get_shapely_args(self):
+        """
+        Get arguments for the given Shapely class.
+
+        Override to set shapely arguments from other states (e.g., not )
+        """
+        return {**self.p.asdict(), **self.s.asdict()}['coordinates']
+
+    def get_shape(self, shape='shape'):
+        """
+        Get the shapely object defining the class (and defined buffers).
+
+        Parameters
+        ----------
+        shape : str, optional
+            Name of the shape. The default is 'shape', which produces the base shape,
+            other names return the buffer shapes for that shape.
+
+        Returns
+        -------
+        shapely.geometry
+            Shapely object for the shape.
+        """
+        return self.create_shape(shape)
 
 
 class GeomPoint(Geom):
@@ -365,23 +452,13 @@ class GeomPoint(Geom):
     >>> exp.s.buffer_around = 2.0 # set to a larger radius to capture the point
     >>> exp.at((3.0, 1.0), 'around')
     True
+
+    >>> exp = ExPoint()
+    >>> exp.get_shapely_args()
+    (1.0, 1.0)
     """
 
-    container_p = PointParam
     shapely_class = Point
-
-    def get_args(self):
-        """
-        Get shape arguments from Point parameter/state.
-
-        Examples
-        --------
-        >>> exp = ExPoint()
-        >>> exp.get_args()
-        (1.0, 1.0)
-        """
-        combodict = self.get_paramstates()
-        return tuple([combodict[i] for i in ['x', 'y', 'z'] if i in combodict])
 
 
 class ExGeomState(State):
@@ -395,15 +472,14 @@ class ExGeomState(State):
     buffer_around: float = 1.0
 
 
-class ExPointParam(PointParam):
+class ExPointParam(GeomParameter):
     """
     Example point parameter for testing.
 
     Has a default center at (1.0, 1.0) and radius defining "on" of 1.0.
     """
 
-    x: float = 1.0
-    y: float = 1.0
+    coordinates: tuple = (1.0, 1.0)
     buffer_on: float = 1.0
 
 
@@ -414,36 +490,10 @@ class ExPoint(GeomPoint):
     container_s = ExGeomState
 
 
-class LineParam(Parameter):
-    """
-    Parameter defining lines. May be extended with buffers.
-
-    ...
-
-    Fields
-    ------
-    xys : tuple
-        tuple of points ((x1, y1), ...) defining shapely.LineString.
-
-    Examples
-    --------
-    A point with ends at (0.0, 0.0) and (1.0, 1.0) and radius of 1.0 defining
-    whether something is on the line would be defined by the parameter:
-
-    >>> class ExLineParam(LineParam):
-    ...     xys: tuple = ((0.0, 0.0), (1.0, 1.0))
-    ...     buffer_on: float = 1.0
-    >>> ExLineParam()
-    ExLineParam(xys=((0.0, 0.0), (1.0, 1.0)), buffer_on=1.0)
-    """
-
-    xys: ClassVar[tuple] = ()
-
-
-class ExLineParam(LineParam):
+class ExLineParam(GeomParameter):
     """Example parameter defining a line with a given buffer 'on'."""
 
-    xys: tuple = ((0.0, 0.0), (1.0, 1.0))
+    coordinates: tuple = (((0.0, 0.0), (1.0, 1.0)),)
     buffer_on: float = 1.0
 
 
@@ -478,23 +528,13 @@ class GeomLine(Geom):
 
     >>> type(exl.get_shape('on'))
     <class 'shapely.geometry.polygon.Polygon'>
+
+    >>> exl = ExLine()
+    >>> exl.get_shapely_args()
+    (((0.0, 0.0), (1.0, 1.0)),)
     """
 
-    container_p = LineParam
     shapely_class = LineString
-
-    def get_args(self):
-        """
-        Create arguments for shapely LineString class based on fields.
-
-        Examples
-        --------
-        >>> exl = ExLine()
-        >>> exl.get_args()
-        (((0.0, 0.0), (1.0, 1.0)),)
-        """
-        combodict = self.get_paramstates()
-        return (combodict['xys'], )
 
 
 class ExLine(GeomLine):
@@ -533,8 +573,7 @@ class PolyParam(Parameter):
 class ExPolyParam(PolyParam):
     """Example polygon parameter defining a basic triangle for use in testing."""
 
-    shell: tuple = ((0.0, 0.0), (1.0, 0.0), (1.0, 1.0))
-    holes: tuple = (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)), )
+    coordinates: tuple = (((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)), ))
 
 
 class GeomPoly(Geom):
@@ -562,21 +601,12 @@ class GeomPoly(Geom):
 
     >>> type(egp.get_shape())
     <class 'shapely.geometry.polygon.Polygon'>
+
+    >>> ExPoly().get_shapely_args()
+    (((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)),))
     """
 
-    container_p = PolyParam
     shapely_class = Polygon
-
-    def get_args(self):
-        """Create arguments for shapely Polygon class based on fields.
-
-        Examples
-        --------
-        >>> ExPoly().get_args()
-        (((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)),))
-        """
-        combodict = self.get_paramstates()
-        return combodict['shell'], combodict['holes']
 
 
 class ExPoly(GeomPoly):
@@ -587,7 +617,16 @@ class ExPoly(GeomPoly):
 
 
 if __name__ == "__main__":
+    gj = GeomJSON(p={'geojson': '{"type": "Point","coordinates": [1, 2]}'})
+
+    e=ExLine(p={'xys':((0,0),(1,1), (1,0))})
+    e.copy()
     import doctest
     doctest.testmod(verbose=True)
     exp = ExPoint()
     exp.show(title="hi")
+
+    import json
+    js = json.dumps({"type": "LineString", "coordinates": [[30.0, 10.0], [10.0, 30.0], [40.0, 40.0]]})
+
+
