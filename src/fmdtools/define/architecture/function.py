@@ -492,6 +492,15 @@ class FunctionArchitecture(Architecture):
     FXNS:
     - ex_fxn=ExampleFunction(s=(x=2.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
     - ex_fxn2=ExampleFunction(s=(x=2.0, y=0.0), m=(mode='standby', faults=set(), sub_faults=False))
+
+    Architectures also copy, which is important for staged execution:
+    >>> efa = ExFxnArch()
+    >>> efa2 = efa.copy()
+    >>> efa2.fxns['ex_fxn'].exf.s.x=2.0
+    >>> efa2.flows['exf'].s.x
+    np.float64(2.0)
+    >>> efa.flows['exf'].s.x
+    np.float64(0.0)
     """
 
     __slots__ = ['fxns']

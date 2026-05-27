@@ -738,7 +738,7 @@ class BaseObject(metaclass=BaseType):
         copy : Architecture
             Copy of the curent architecture.
         """
-        cargs = self.asdict(*args, as_copy=True, exclude=exclude, **kwargs)
+        cargs = self.asdict(*args, exclude=exclude, as_copy=True, **kwargs)
         if hasattr(self, 'flows'):
             flows = self.get_roles_as_dict("flow")
             flows = {k: v.copy() if k not in kwargs else kwargs[k]

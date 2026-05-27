@@ -77,9 +77,6 @@ class Architecture(Simulable):
     dictionaries that are populated using add_xxx methods in an overall user-defined
     init_architecture method.
 
-    This method is called for a copy using the as_copy option, which copies passed
-    flexible roles.
-
     Attributes
     ----------
     simorder : OrderedSet
@@ -94,16 +91,15 @@ class Architecture(Simulable):
         multigraph view of sims and flows
     """
 
-    __slots__ = ['flows', 'as_copy', 'h', '_init_flexroles', 'm', 'simorder',
+    __slots__ = ['flows', 'h', '_init_flexroles', 'm', 'simorder',
                  '_simflows', 'graph', 'staticsims', 'dynamicsims',
                  'staticflows']
     flexible_roles = ['flow']
     roletype = 'arch'
 
-    def __init__(self, *args, as_copy=False, h={}, **kwargs):
+    def __init__(self, *args, h={}, **kwargs):
         self.simorder = OrderedSet()
         self._simflows = []
-        self.as_copy = as_copy
         Simulable.__init__(self, *args, h=h, roletypes=['container'], **kwargs)
         self.init_hist(h=h)
         self._init_flexroles = []
@@ -244,16 +240,12 @@ class Architecture(Simulable):
         """
         for role in self.flexible_roles:
             rname = role+'s'
-            if self.as_copy and rname in kwargs:
-                setattr(self, rname, {**kwargs[rname]})
-            elif self.as_copy:
-                raise Exception("No role argument "+role+" to copy.")
-            elif rname in kwargs:
+            if rname in kwargs:
                 setattr(self, rname, {**kwargs[rname]})
             else:
                 setattr(self, rname, dict())
 
-    def get_flex_role_kwargs(self, flex_role, objclass, name, use_copy, kwargs):
+    def get_flex_role_kwargs(self, flex_role, objclass, name, kwargs):
         """
         Get role keyword arguments for init_obj.
 
@@ -267,8 +259,6 @@ class Architecture(Simulable):
             Class or object being instantiated.
         name : str
             Name of the object
-        use_copy : bool
-            Whether or not to use a copy.
         kwargs : kwargs
             Keyword arguments to init_obj.
 
@@ -278,10 +268,6 @@ class Architecture(Simulable):
             Keyword arguments to self.add_flex_role_obj
         """
         kwar = {'name': name}
-        if use_copy:
-            kwar['as_copy'] = False
-        else:
-            kwar['as_copy'] = self.as_copy
         # ensure global seed
         if hasattr(self, 'r') and hasattr(objclass, "container_r"):
             kwar['r'] = {"seed": self.r.seed}
@@ -292,8 +278,7 @@ class Architecture(Simulable):
         kwar['root'] = self.get_full_name()+"."+flex_role
         return {**kwar, **kwargs}
 
-    def add_flex_role_obj(self, flex_role, name, objclass=BaseObject, use_copy=False,
-                          **kwargs):
+    def add_flex_role_obj(self, flex_role, name, objclass=BaseObject, **kwargs):
         """
         Add a flexible role object to the architecture.
 
@@ -312,7 +297,7 @@ class Architecture(Simulable):
         use_copy : bool
             Whether to use existing copy in self.flows. The default is False.
         **kwargs : kwargs
-            Non-default kwargs to send to the object class.
+            Non-default kwargs to send to the object class or init_obj.
         """
         roledict = getattr(self, flex_role)
         if name in roledict:
@@ -320,7 +305,7 @@ class Architecture(Simulable):
                 kwargs = {**kwargs, **roledict[name]}
             else:
                 objclass = roledict[name]
-        kwargs = self.get_flex_role_kwargs(flex_role, objclass, name, use_copy, kwargs)
+        kwargs = self.get_flex_role_kwargs(flex_role, objclass, name, kwargs)
         obj = init_obj(objclass=objclass, **kwargs)
 
         if hasattr(obj, 'h') and obj.h:
@@ -350,12 +335,7 @@ class Architecture(Simulable):
         kwargs: kwargs
             Dicts for non-default values to p, s, etc
         """
-        if name in self.flows:
-            use_copy = True
-        else:
-            use_copy = False
-        self.add_flex_role_obj('flows', name, objclass=fclass, use_copy=use_copy,
-                               **kwargs)
+        self.add_flex_role_obj('flows', name, objclass=fclass, **kwargs)
 
     def add_flows(self, *names, fclass=Flow, **kwargs):
         """
@@ -438,7 +418,7 @@ class Architecture(Simulable):
             roledict = getattr(self, role+'s')
             roledict = {k: v for k, v in roledict.items() if k in self._init_flexroles}
 
-        if update_seed and not self.as_copy:
+        if update_seed:
             self.update_seed()
         if hasattr(self, 'h'):
             self.h = self.h.flatten()
