@@ -262,6 +262,7 @@ if __name__ == '__main__':
     # runner.run(suite)
 
     # suite = unittest.TestSuite()
+    # suite.addTest(TankTests("test_model_copy_same"))
     # suite.addTest(TankTests("test_approach_parallelism_notrack"))
     # suite.addTest(TankTests("test_approach_parallelism_0"))
     # suite.addTest(TankTests("test_approach_parallelism_1"))

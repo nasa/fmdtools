@@ -242,9 +242,12 @@ def copy_dict_objs(dic, **kwargs):
             newdic[key] = copy_dict_objs(value, **kwargs.get(key, {}))
         elif hasattr(value, 'copy'):
             try:
-                newdic[key] = value.copy(**kwargs.get(key, {}))
-            except:
-                newdic[key] = value.copy()
+                try:
+                    newdic[key] = value.copy(**kwargs.get(key, {}))
+                except:
+                    newdic[key] = value.copy()
+            except Exception as e:
+                raise Exception("Unable to copy: "+str(value)) from e
         else:
             newdic[key] = kwargs.get(key, copy.deepcopy(value))
     return newdic

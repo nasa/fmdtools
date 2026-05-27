@@ -726,7 +726,7 @@ class BaseObject(metaclass=BaseType):
 
     def copy(self, *args, exclude=["flow"], **kwargs):
         """
-        Copy the architecture at the current state.
+        Copy the object at the current state.
 
         Parameters
         ----------
@@ -741,9 +741,17 @@ class BaseObject(metaclass=BaseType):
         cargs = self.asdict(*args, exclude=exclude, as_copy=True, **kwargs)
         if hasattr(self, 'flows'):
             flows = self.get_roles_as_dict("flow")
-            flows = {k: v.copy() if k not in kwargs else kwargs[k]
-                     for k, v in flows.items()}
-            cargs = {**cargs, **flows}
+            if hasattr(self, 'flownames'):
+                ext_flows = {v:k for k,v in self.flownames.items()}
+                flows = {ext_flows.get(k, k): v.copy()
+                         if ext_flows.get(k,k) not in kwargs
+                         else kwargs[ext_flows.get(k,k)]
+                         for k, v in flows.items()}
+            else:
+                flows = {k: v.copy() if k not in kwargs else kwargs[k]
+                         for k, v in flows.items()}
+
+            cargs['flows'] = flows
         try:
             cop = self.__class__(**cargs)
         except TypeError as e:

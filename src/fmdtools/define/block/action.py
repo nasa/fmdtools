@@ -89,11 +89,6 @@ class Action(Block):
     __slots__ = ()
     container_t = ActionTime
 
-    def __init__(self, name=None, duration=0.0, out_delay=0.0, **kwargs):
-        kwargs['t'] = {'duration': duration, 'out_delay': out_delay,
-                       **kwargs.get('t', {})}
-        super().__init__(name=name, **kwargs)
-
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Action

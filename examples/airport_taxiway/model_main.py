@@ -131,6 +131,8 @@ if __name__ == "__main__":
     from fmdtools.define.flow.commsflow import CommsFlowGraph
 
     mdl = taxiway_model()
+    # mdl.flows['requests'].copy()
+    mdl.copy()
 
 
     endresults, mdlhist = prop.one_fault(mdl, "ma3", "lost_sight",

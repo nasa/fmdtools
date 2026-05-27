@@ -62,13 +62,23 @@ class CommonTests():
                         scen = {}
                     mdla(time=t, faults=scen)
                     mdlb(time=t, faults=scen)
-                    self.check_same_model(mdla, mdlb)
+                    try:
+                        self.check_same_model(mdla, mdlb)
+                    except AssertionError as e:
+                        raise AssertionError("Problem with copied-from models in "
+                                             +str(faultscen)) from e
                     if t == copy_time:
                         mdl_copy = mdla.copy()
-                        self.check_same_model(mdla, mdl_copy)
+                        try:
+                            self.check_same_model(mdla, mdl_copy)
+                        except AssertionError as e:
+                            raise AssertionError("Error at copy "+str(faultscen)) from e
                     if t > copy_time:
                         mdl_copy(time=t, faults=scen)
-                        self.check_same_model(mdla, mdl_copy)
+                        try:
+                            self.check_same_model(mdla, mdl_copy)
+                        except AssertionError as e:
+                            raise AssertionError("Error at t="+str(t)+" "+str(faultscen)) from e
 
     def check_fs_parallel(self, mdl, fs, track="all"):
         """

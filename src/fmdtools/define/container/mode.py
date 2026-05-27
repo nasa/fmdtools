@@ -215,7 +215,7 @@ class Mode(BaseContainer, readonly=False):
     exclusive = False
     default_track = ('mode', 'faults', 'sub_faults')
 
-    def __init__(self, *args, s_kwargs={}, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.mode:
             self.mode = 'nominal'

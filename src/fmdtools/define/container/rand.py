@@ -115,12 +115,9 @@ class Rand(BaseContainer):
     track_pdf: np.bool_ = np.bool_(False)
     default_track = ('s', 'probdens')
 
-    def __init__(self, *args, s_kwargs={}, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.rng = self.create_rng()
-        if 's' in self.__fields__:
-            self.s = self.s.__class__()
-            self.s.set_atts(**s_kwargs)
 
     def create_repr(self, fields=["seed", "s"], **kwargs):
         """Limit default repr to relevant fields."""

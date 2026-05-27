@@ -282,6 +282,13 @@ class MultiFlow(Flow):
         for local in self.locals:
             getattr(self, local).reset()
 
+    def asdict(self, *args, glob=[], **kwargs):
+        """Add glob as a part of dict for copying, if provided."""
+        dic = super().asdict(*args, **kwargs)
+        if glob:
+            dic['glob'] = glob
+        return dic
+
     def copy(self, glob=[], **kwargs):
         """
         Copy the flow and create new sub-flow copies for it.
@@ -313,11 +320,13 @@ class MultiFlow(Flow):
         >>> exf.exf1.exf2  #  copy should retain information through hierarchy
         exf2 ExampleMultiFlow
         - s=ExampleState(x=10.0, y=1.0)
+        >>> exf_c.exf1.glob.name
+        'examplemultiflow'
         """
         if not glob and self.glob.name != self.name:
             raise Exception("Unable to copy "+self.name+" without "+self.glob.name+".")
         # cdict = self.asdict(with_flex=False, as_copy=True, **kwargs)
-        cop = super().copy(with_flex=False)
+        cop = super().copy(with_flex=False, glob=glob, exclude=['fxns'])
         for loc in self.locals:
             sub_cop = getattr(self, loc).copy(glob=cop, **kwargs)
             setattr(cop, loc, sub_cop)

@@ -322,8 +322,6 @@ class ActionArchitecture(Architecture):
             Action class to instantiate
         *flownames : flow
             Flows (optional) which connect the actions
-        duration:
-            Duration of the action. Default is 0.0
         **kwargs : any
             kwargs to instantiate the Action with.
         """

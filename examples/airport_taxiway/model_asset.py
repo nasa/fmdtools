@@ -72,7 +72,10 @@ class Asset(Function):
             self.perc_requests.s.put(asset_req="land")
         atc_requests.s.assign(self.perc_requests.s, as_copy=True)
 
-        self.perc_requests.update("asset_req", to_update="atc", to_get="local",)
+        try:
+            self.perc_requests.update("asset_req", to_update="atc", to_get="local",)
+        except:
+            pass
 
         self.perc_location = self.location.create_local("percieved", s=self.location.s)
 
