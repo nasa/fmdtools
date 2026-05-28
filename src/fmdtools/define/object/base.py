@@ -753,7 +753,7 @@ class BaseObject(metaclass=BaseType):
 
             cargs['flows'] = flows
         try:
-            cop = self.__class__(**cargs)
+            cop = self.__class__(**cargs, update_rng=False)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
         if hasattr(self, 'h'):

@@ -277,7 +277,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
 if __name__ == '__main__':
     # suite = unittest.TestSuite()
-    # suite.addTest(StochasticPumpTests("test_rand_paramsample_plot"))
+    # suite.addTest(StochasticPumpTests("test_model_copy_same"))
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach_indiv"))
     # runner = unittest.TextTestRunner()
     # runner.run(suite)

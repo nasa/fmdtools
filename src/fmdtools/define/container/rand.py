@@ -109,6 +109,8 @@ class Rand(BaseContainer):
     seed: int = 42
     state: int = 0
     inc: int = 0
+    has_uint32: int = 0
+    uinteger: int = 0
     probs: list = list()
     probdens: np.float64 = np.float64(1.0)
     run_stochastic: np.bool_ = np.bool_(False)
@@ -131,6 +133,7 @@ class Rand(BaseContainer):
         """Update state from the rng."""
         st = rng.bit_generator.__getstate__()
         self.assign(st[0]['state'])
+        self.assign(st[0], 'has_uint32', 'uinteger')
         self.seed = st[1].entropy
 
     def is_set(self):
@@ -148,8 +151,8 @@ class Rand(BaseContainer):
         """Generate state for rng."""
         return {'bit_generator': 'PCG64',
                 'state': {'state': self.state, 'inc': self.inc},
-                'has_uint32': 0,
-                'uinteger': 0}
+                'has_uint32': self.has_uint32,
+                'uinteger': self.uinteger}
 
     def get_rand_states(self, auto_update_only=False):
         """
@@ -210,7 +213,8 @@ class Rand(BaseContainer):
 
     def return_mutables(self):
         """Get mutable rand states."""
-        rs = tuple([*self.rng.bit_generator.state['state'].values()])
+        self.store_rng_state(self.rng)
+        rs = (self.seed, self.state, self.inc)
         if 's' in self.__fields__:
             return rs + astuple(self.s)
         else:
@@ -240,11 +244,15 @@ class Rand(BaseContainer):
             self.s.reset()
         self.rng = np.random.default_rng(self.seed)
 
-    def update_seed(self, seed):
+    def update_seed(self, seed, state=[]):
         """Update the random seed to the given value."""
         self.seed = seed
         BitGen = type(self.rng.bit_generator)
-        self.rng.bit_generator.state = BitGen(seed).state
+        st = BitGen(seed).state
+        if state:
+            st['state'] = state
+        self.rng.bit_generator.__setstate__(st)
+        self.store_rng_state(self.rng)
 
     def set_field(self, fieldname, value, as_copy=True):
         """Extend BaseContainer.assign to accomodate the rng."""

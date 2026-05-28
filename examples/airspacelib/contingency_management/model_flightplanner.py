@@ -73,7 +73,7 @@ class DroneFlightGrid(Coords):
     >>> from fmdtools_examples.airspacelib.contingency_management.model_environment import ContingencyEnvironment
     >>> env = ContingencyEnvironment()
     >>> param = DroneFlightGridParam(x_size=120, y_size=120, blocksize=1.0)
-    >>> grid = DroneFlightGrid(env, p=param)
+    >>> grid = DroneFlightGrid(env=env, p=param)
     >>> start = (10.0, 10.0)
     >>> goal = (100.0, 100.0)
     >>> path = grid.a_star_worldcoords(start_xy=start, goal_xy=goal,
@@ -464,5 +464,5 @@ if __name__ == "__main__":
                                    restricted_cost=100.0, fuel_rate= 20, obstacle=True) # *25000.0/25
     print(path)
 
-    # import doctest
-    # doctest.testmod(verbose=True)
+    import doctest
+    doctest.testmod(verbose=True)

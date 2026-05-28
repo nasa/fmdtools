@@ -633,6 +633,7 @@ class ExFxnArch(FunctionArchitecture):
 
 if __name__ == "__main__":
     efa = ExFxnArch()
+    efa.new(**{'sp': {'end_time': 17}})
     efa2 = efa.copy()
     efa2.fxns['ex_fxn'].exf.s.x=2
     efa(1.0)

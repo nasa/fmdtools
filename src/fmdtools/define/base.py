@@ -240,7 +240,7 @@ def copy_dict_objs(dic, **kwargs):
     for key, value in dic.items():
         if isinstance(value, dict):
             newdic[key] = copy_dict_objs(value, **kwargs.get(key, {}))
-        elif hasattr(value, 'copy'):
+        elif hasattr(value, 'copy') and not is_numeric(value):
             try:
                 try:
                     newdic[key] = value.copy(**kwargs.get(key, {}))

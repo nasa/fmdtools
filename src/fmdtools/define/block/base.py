@@ -240,7 +240,7 @@ class Simulable(BaseObject):
             timerange = self.sp.get_histrange()
             self.h['time'] = timerange
 
-    def update_seed(self, seed=[]):
+    def update_seed(self, seed=[], state=[]):
         """
         Update seed and propogates update to contained actions/components.
 
@@ -254,11 +254,12 @@ class Simulable(BaseObject):
         if hasattr(self, 'r'):
             self.r.assign(self.sp, 'run_stochastic', 'track_pdf')
             if seed:
-                self.r.update_seed(seed)
+                self.r.update_seed(seed, state=state)
             else:
                 seed = self.r.seed
+            state = {'state': self.r.state, 'inc': self.r.inc}
         for simname, sim in self.get_sims().items():
-            sim.update_seed(seed)
+            sim.update_seed(seed, state=state)
 
     def classify(self, scen={}, **kwargs):
         """Classify the results of the simulation (placeholder)."""
@@ -820,7 +821,7 @@ class Block(Simulable):
     roletypes = ['container', 'flow']
     check_dict_creation = True
 
-    def __init__(self, name='', flows={}, h={}, **kwargs):
+    def __init__(self, name='', flows={}, h={}, update_rng=True, **kwargs):
         """
         Instance superclass. Called by Function and Component classes.
 
@@ -848,7 +849,8 @@ class Block(Simulable):
                                                       with_immutable=False)
                            if role in kwargs}
         self.check_flows(flows=flows)
-        self.update_seed()
+        if update_rng:
+            self.update_seed()
         # finally, allow for user-defined role/state changing
         self.init_block(**kwargs)
         self.init_hist(h=h)

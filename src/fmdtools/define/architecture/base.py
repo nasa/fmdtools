@@ -93,13 +93,14 @@ class Architecture(Simulable):
 
     __slots__ = ['flows', 'h', '_init_flexroles', 'm', 'simorder',
                  '_simflows', 'graph', 'staticsims', 'dynamicsims',
-                 'staticflows']
+                 'staticflows', 'update_rng']
     flexible_roles = ['flow']
     roletype = 'arch'
 
-    def __init__(self, *args, h={}, **kwargs):
+    def __init__(self, *args, h={}, update_rng=True, **kwargs):
         self.simorder = OrderedSet()
         self._simflows = []
+        self.update_rng = update_rng
         Simulable.__init__(self, *args, h=h, roletypes=['container'], **kwargs)
         self.init_hist(h=h)
         self._init_flexroles = []
@@ -395,7 +396,7 @@ class Architecture(Simulable):
         """Use to initialize architecture."""
         return 0
 
-    def build(self, update_seed=True, construct_graph=False, require_connections=False,
+    def build(self, construct_graph=False, require_connections=False,
               **kwargs):
         """
         Construct the overall model structure.
@@ -404,7 +405,7 @@ class Architecture(Simulable):
 
         Parameters
         ----------
-        update_seed : bool
+        update_rng : bool
             Whether to update the seed
         construct_graph : bool
             Whether to construct a graph at self.graph using construct_graph().
@@ -418,7 +419,7 @@ class Architecture(Simulable):
             roledict = getattr(self, role+'s')
             roledict = {k: v for k, v in roledict.items() if k in self._init_flexroles}
 
-        if update_seed:
+        if self.update_rng:
             self.update_seed()
         if hasattr(self, 'h'):
             self.h = self.h.flatten()
@@ -587,7 +588,7 @@ class Architecture(Simulable):
                 cargs[flex_role+'s'] = copy_dict_objs(flex, **flow_kwargs)
             else:
                 cargs[flex_role+'s'] = flex
-        return self.__class__(**cargs)
+        return self.__class__(**cargs, update_rng=False)
 
     def get_all_possible_track(self):
         return super().get_all_possible_track() + self.flexible_roles

@@ -56,6 +56,8 @@ class Parameter(BaseContainer, readonly=True):
 
     >>> p.copy()
     ExampleParameter(x=1.0, y=2.0, z=0.0)
+    >>> p.copy(x=3.0)
+    ExampleParameter(x=3.0, y=2.0, z=0.0)
     """
 
     rolename = "p"
