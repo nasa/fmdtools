@@ -358,11 +358,11 @@ class BatArch(ComponentArchitecture):
         elif self.p.archtype == 'series-split':
             ee_provided = np.max(list(ees.values()))
         elif self.p.archtype == 'parallel-split':
-            ee_provided = np.sum(list(ees.values()))
+            ee_provided = np.mean(list(ees.values()))
         elif self.p.archtype == 'split-both':
             e = list(ees.values())
             e.sort()
-            ee_provided = e[-1]+e[-2]
+            ee_provided = (e[-1]+e[-2])/2
         self.flows['ee_1'].s.effort = ee_provided
 
 

@@ -200,4 +200,7 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes='all'
 
 
 if __name__ == "__main__":
+    import multiprocessing as mp
+    # x_to_rcost([1, 1], [40], [2, 2])
+    x_to_rcost([2, 2], [40], [2, 2], pool=mp.Pool(5))
     pass
