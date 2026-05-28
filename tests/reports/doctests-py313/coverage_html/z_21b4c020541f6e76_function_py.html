@@ -57,7 +57,7 @@
             <span class="text">235 statements &nbsp;</span>
             <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">163<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">72<span class="text"> missing</span></button>
-            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">13<span class="text"> excluded</span></button>
+            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">14<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="z_21b4c020541f6e76_component_py.html">&#xab; prev</a> &nbsp; &nbsp;
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_21b4c020541f6e76_geom_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.14.1">coverage.py v7.14.1</a>,
-            created at 2026-05-27 12:14 -0700
+            created at 2026-05-27 20:02 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -715,16 +715,17 @@
     <p class="pln"><span class="n"><a id="t633" href="#t633">633</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t634" href="#t634">634</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">"__main__"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t635" href="#t635">635</a></span><span class="t">    <span class="nam">efa</span> <span class="op">=</span> <span class="nam">ExFxnArch</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t636" href="#t636">636</a></span><span class="t">    <span class="nam">efa2</span> <span class="op">=</span> <span class="nam">efa</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t637" href="#t637">637</a></span><span class="t">    <span class="nam">efa2</span><span class="op">.</span><span class="nam">fxns</span><span class="op">[</span><span class="str">'ex_fxn'</span><span class="op">]</span><span class="op">.</span><span class="nam">exf</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">x</span><span class="op">=</span><span class="num">2</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t638" href="#t638">638</a></span><span class="t">    <span class="nam">efa</span><span class="op">(</span><span class="num">1.0</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t639" href="#t639">639</a></span><span class="t">    <span class="nam">ExFxnArch</span><span class="op">.</span><span class="nam">fromjson</span><span class="op">(</span><span class="nam">efa</span><span class="op">.</span><span class="nam">tojson</span><span class="op">(</span><span class="nam">exclude</span><span class="op">=</span><span class="op">[</span><span class="str">"h"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t640" href="#t640">640</a></span><span class="t">    <span class="nam">efa</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t641" href="#t641">641</a></span><span class="t">    <span class="nam">effa</span> <span class="op">=</span> <span class="nam">FunctionArchitectureFxnGraph</span><span class="op">(</span><span class="nam">ExFxnArch</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t642" href="#t642">642</a></span><span class="t">    <span class="nam">efla</span> <span class="op">=</span> <span class="nam">FunctionArchitectureFlowGraph</span><span class="op">(</span><span class="nam">ExFxnArch</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t643" href="#t643">643</a></span><span class="t">    <span class="nam">FunctionArchitectureTypeGraph</span><span class="op">(</span><span class="nam">ExFxnArch</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t644" href="#t644">644</a></span><span class="t">    <span class="key">import</span> <span class="nam">doctest</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t645" href="#t645">645</a></span><span class="t">    <span class="nam">doctest</span><span class="op">.</span><span class="nam">testmod</span><span class="op">(</span><span class="nam">verbose</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t636" href="#t636">636</a></span><span class="t">    <span class="nam">efa</span><span class="op">.</span><span class="nam">new</span><span class="op">(</span><span class="op">**</span><span class="op">{</span><span class="str">'sp'</span><span class="op">:</span> <span class="op">{</span><span class="str">'end_time'</span><span class="op">:</span> <span class="num">17</span><span class="op">}</span><span class="op">}</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t637" href="#t637">637</a></span><span class="t">    <span class="nam">efa2</span> <span class="op">=</span> <span class="nam">efa</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t638" href="#t638">638</a></span><span class="t">    <span class="nam">efa2</span><span class="op">.</span><span class="nam">fxns</span><span class="op">[</span><span class="str">'ex_fxn'</span><span class="op">]</span><span class="op">.</span><span class="nam">exf</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">x</span><span class="op">=</span><span class="num">2</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t639" href="#t639">639</a></span><span class="t">    <span class="nam">efa</span><span class="op">(</span><span class="num">1.0</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t640" href="#t640">640</a></span><span class="t">    <span class="nam">ExFxnArch</span><span class="op">.</span><span class="nam">fromjson</span><span class="op">(</span><span class="nam">efa</span><span class="op">.</span><span class="nam">tojson</span><span class="op">(</span><span class="nam">exclude</span><span class="op">=</span><span class="op">[</span><span class="str">"h"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t641" href="#t641">641</a></span><span class="t">    <span class="nam">efa</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t642" href="#t642">642</a></span><span class="t">    <span class="nam">effa</span> <span class="op">=</span> <span class="nam">FunctionArchitectureFxnGraph</span><span class="op">(</span><span class="nam">ExFxnArch</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t643" href="#t643">643</a></span><span class="t">    <span class="nam">efla</span> <span class="op">=</span> <span class="nam">FunctionArchitectureFlowGraph</span><span class="op">(</span><span class="nam">ExFxnArch</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t644" href="#t644">644</a></span><span class="t">    <span class="nam">FunctionArchitectureTypeGraph</span><span class="op">(</span><span class="nam">ExFxnArch</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t645" href="#t645">645</a></span><span class="t">    <span class="key">import</span> <span class="nam">doctest</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t646" href="#t646">646</a></span><span class="t">    <span class="nam">doctest</span><span class="op">.</span><span class="nam">testmod</span><span class="op">(</span><span class="nam">verbose</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -734,7 +735,7 @@
             <a class="nav" href="z_21b4c020541f6e76_geom_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.14.1">coverage.py v7.14.1</a>,
-            created at 2026-05-27 12:14 -0700
+            created at 2026-05-27 20:02 -0700
         </p>
     </div>
 </footer>
