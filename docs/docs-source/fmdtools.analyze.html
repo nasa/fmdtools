@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.analyze &mdash; fmdtools 2.3.3 documentation</title>
+  <title>fmdtools.analyze &mdash; fmdtools 2.4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=f4302432"></script>
+      <script src="../_static/documentation_options.js?v=4d935f96"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -479,6 +479,10 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.auto_filename"><code class="docutils literal notranslate"><span class="pre">auto_filename()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.copy_dict_objs"><code class="docutils literal notranslate"><span class="pre">copy_dict_objs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.dict_from_file"><code class="docutils literal notranslate"><span class="pre">dict_from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.dict_to_json"><code class="docutils literal notranslate"><span class="pre">dict_to_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
@@ -495,6 +499,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.map_obj_fields"><code class="docutils literal notranslate"><span class="pre">map_obj_fields()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
@@ -503,6 +508,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.value_to_jsonable"><code class="docutils literal notranslate"><span class="pre">value_to_jsonable()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
@@ -549,7 +555,6 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.sample">fmdtools.sim.sample</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.BaseSample"><code class="docutils literal notranslate"><span class="pre">BaseSample</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ExNestedParam"><code class="docutils literal notranslate"><span class="pre">ExNestedParam</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.FaultDomain"><code class="docutils literal notranslate"><span class="pre">FaultDomain</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.FaultSample"><code class="docutils literal notranslate"><span class="pre">FaultSample</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.JointFaultSample"><code class="docutils literal notranslate"><span class="pre">JointFaultSample</span></code></a></li>
@@ -2065,7 +2070,7 @@ which does not reshape the array.</p></li>
 <li><p><strong>*attrs</strong> (<em>names</em><em> of </em><em>attributes</em>) – Names to check (e.g., <cite>flow_1</cite>, <cite>fxn_2</cite>)</p></li>
 <li><p><strong>nomhist</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a><em>, </em><em>optional</em>) – Nominal history to compare against
 (otherwise uses internal nomhist, if available)</p></li>
-<li><p><strong>operator</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.SingleFaultScenario.function" title="fmdtools.sim.scenario.SingleFaultScenario.function"><em>function</em></a>) – Method of combining multiple degraded values. The default is np.prod</p></li>
+<li><p><strong>operator</strong> (<em>function</em>) – Method of combining multiple degraded values. The default is np.prod</p></li>
 <li><p><strong>difftype</strong> (<em>'bool'/'diff'/float</em>) – <p>Way to calculate the difference:</p>
 <blockquote>
 <div><ul>
@@ -2188,7 +2193,7 @@ The default is “earliest”.</p>
 <li><p><strong>*attrs</strong> (<em>names</em><em> of </em><em>attributes</em>) – Names to check (e.g., <cite>fxn_1</cite>, <cite>fxn_2</cite>)</p></li>
 <li><p><strong>withtime</strong> (<em>bool</em>) – Whether to include time in the dict. Default is True.</p></li>
 <li><p><strong>withtotal</strong> (<em>bool</em>) – Whether to include a total in the dict. Default is True.</p></li>
-<li><p><strong>operator</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.SingleFaultScenario.function" title="fmdtools.sim.scenario.SingleFaultScenario.function"><em>function</em></a>) – Method of combining multiple degraded values. The default is np.any</p></li>
+<li><p><strong>operator</strong> (<em>function</em>) – Method of combining multiple degraded values. The default is np.any</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -3011,7 +3016,7 @@ set of scenarios for the given factor level.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.FMEA">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.tabulate.</span></span><span class="sig-name descname"><span class="pre">FMEA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('function',</span> <span class="pre">'fault')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tend.classify.'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.FMEA" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.tabulate.</span></span><span class="sig-name descname"><span class="pre">FMEA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('obj',</span> <span class="pre">'fault')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tend.classify.'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.FMEA" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.tabulate.BaseTab" title="fmdtools.analyze.tabulate.BaseTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTab</span></code></a></p>
 <p>Make a user-definable fmea of the classify metrics for a set of fault scenarios.</p>
 <dl class="field-list simple">

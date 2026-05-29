@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.object &mdash; fmdtools 2.3.3 documentation</title>
+  <title>fmdtools.define.object &mdash; fmdtools 2.4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=f4302432"></script>
+      <script src="../_static/documentation_options.js?v=4d935f96"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -479,6 +479,10 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.auto_filename"><code class="docutils literal notranslate"><span class="pre">auto_filename()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.copy_dict_objs"><code class="docutils literal notranslate"><span class="pre">copy_dict_objs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.dict_from_file"><code class="docutils literal notranslate"><span class="pre">dict_from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.dict_to_json"><code class="docutils literal notranslate"><span class="pre">dict_to_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
@@ -495,6 +499,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.map_obj_fields"><code class="docutils literal notranslate"><span class="pre">map_obj_fields()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
@@ -503,6 +508,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.value_to_jsonable"><code class="docutils literal notranslate"><span class="pre">value_to_jsonable()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
@@ -549,7 +555,6 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.sample">fmdtools.sim.sample</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.BaseSample"><code class="docutils literal notranslate"><span class="pre">BaseSample</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ExNestedParam"><code class="docutils literal notranslate"><span class="pre">ExNestedParam</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.FaultDomain"><code class="docutils literal notranslate"><span class="pre">FaultDomain</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.FaultSample"><code class="docutils literal notranslate"><span class="pre">FaultSample</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.JointFaultSample"><code class="docutils literal notranslate"><span class="pre">JointFaultSample</span></code></a></li>
@@ -911,6 +916,15 @@ Initializing all possible using the ‘all’ option:</p>
 <span class="go">s.y:                            array(2)</span>
 </pre></div>
 </div>
+<p>Objects are also jsonable and may be saved/loaded from a json format:
+&gt;&gt;&gt; js = ex2.tojson()
+&gt;&gt;&gt; ex3 = ExampleObject.fromjson(js)
+&gt;&gt;&gt; ex3.s
+ExampleState(x=2.0, y=4.0)
+&gt;&gt;&gt; ex3.save(“ex3.json”)
+&gt;&gt;&gt; ex4 = ExampleObject.load(“ex3.json”, delete=True)
+&gt;&gt;&gt; ex4.s
+ExampleState(x=2.0, y=4.0)</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.add_subgraph_edges">
 <span class="sig-name descname"><span class="pre">add_subgraph_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roles_to_connect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.add_subgraph_edges" title="Link to this definition"></a></dt>
@@ -921,6 +935,28 @@ Initializing all possible using the ‘all’ option:</p>
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.as_modelgraph">
 <span class="sig-name descname"><span class="pre">as_modelgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'fmdtools.define.object.base.ObjectGraph'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.as_modelgraph" title="Link to this definition"></a></dt>
 <dd><p>Create and return the corresponding ModelGraph for the Object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.asdict">
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">roletypes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jsonable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_flex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.asdict" title="Link to this definition"></a></dt>
+<dd><p>Return all aspects of the object in a dictionary.</p>
+<p>Used to create jsonable representations of the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*roletypes</strong> (<em>str</em>) – Roletypes to get (will otherwise populate as default roletypes).</p></li>
+<li><p><strong>jsonable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to convert to json-able types. The default is False.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to get_roles_as_dict</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>dic</strong> – Dictionary with all object attributes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -956,6 +992,11 @@ Initializing all possible using the ‘all’ option:</p>
 </div>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.attrs">
+<span class="sig-name descname"><span class="pre">attrs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('name',</span> <span class="pre">'root',</span> <span class="pre">'track')</span></span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.attrs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.base_type">
 <span class="sig-name descname"><span class="pre">base_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.base_type" title="Link to this definition"></a></dt>
@@ -977,6 +1018,23 @@ Initializing all possible using the ‘all’ option:</p>
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.containers">
 <span class="sig-name descname"><span class="pre">containers</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.containers" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['flow']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.copy" title="Link to this definition"></a></dt>
+<dd><p>Copy the object at the current state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>flows</strong> (<em>dict</em>) – Dict of flows to use in the copy.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>copy</strong> – Copy of the curent architecture.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture">Architecture</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.copy_mutes">
@@ -1110,6 +1168,32 @@ architecture graph.</p></li>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.fromdict">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.fromdict" title="Link to this definition"></a></dt>
+<dd><p>Instantiate object from a dict overwritten by kwargs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.fromjson">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">fromjson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.fromjson" title="Link to this definition"></a></dt>
+<dd><p>Instantiate object from json.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>json</em>) – Json string.</p></li>
+<li><p><strong>**kwargs</strong> (<em>keyword arguments.</em>) – Keyword arguments for instantiation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>obj</strong> – Object of the given class with roles corresponding to the given json.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject">BaseObject</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.get_all_possible_track">
 <span class="sig-name descname"><span class="pre">get_all_possible_track</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.get_all_possible_track" title="Link to this definition"></a></dt>
 <dd><p>Get all possible tracking options.</p>
@@ -1165,6 +1249,12 @@ The default is True.</p></li>
 <dd class="field-odd"><p>list</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.get_flex_dicts">
+<span class="sig-name descname"><span class="pre">get_flex_dicts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">flex_roles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.get_flex_dicts" title="Link to this definition"></a></dt>
+<dd><p>Get flexible role dicts.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1245,6 +1335,12 @@ default is False.</p></li>
 <span class="go">{&#39;indicators&#39;: [&#39;y_over_x&#39;]}</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.get_obj_attrs">
+<span class="sig-name descname"><span class="pre">get_obj_attrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">attrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.get_obj_attrs" title="Link to this definition"></a></dt>
+<dd><p>Get non-role attributes of the object.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1433,6 +1529,26 @@ attributes.</p></li>
 <dd><p>Add .track attribute based on default and input.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.load">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.load" title="Link to this definition"></a></dt>
+<dd><p>Load object from json.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – File to load from.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments for instantation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>obj</strong> – Object of the given class.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject">BaseObject</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.mutables">
 <span class="sig-name descname"><span class="pre">mutables</span></span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.mutables" title="Link to this definition"></a></dt>
@@ -1496,6 +1612,21 @@ attributes.</p></li>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roletypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.save" title="Link to this definition"></a></dt>
+<dd><p>Save the object in a json format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – Name for the file. Will otherwise default to classname.json.</p></li>
+<li><p><strong>roletypes</strong> (<em>iterable</em>) – Rolenames argument to self.asdict()</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to self.asdict()</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.set_mutables">
 <span class="sig-name descname"><span class="pre">set_mutables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.set_mutables" title="Link to this definition"></a></dt>
 <dd><p>Set the current mutables of the object (to check against later).</p>
@@ -1532,6 +1663,26 @@ attributes.</p></li>
 <li><p><strong>kwargs</strong> (<em>kwargs</em>) – attribute-value pairs. If provided, must be passed using ** syntax:
 mdl.set_vars(<a href="#id3"><span class="problematic" id="id4">**</span></a>{‘fxnname.varname’:value})</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.tojson">
+<span class="sig-name descname"><span class="pre">tojson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">roletypes</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.tojson" title="Link to this definition"></a></dt>
+<dd><p>Create a json representation of the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*roletypes</strong> (<em>str</em>) – Roletypes to convert.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Arguments to asdict()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>json</strong> – Json string representing the object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1602,7 +1753,7 @@ their classes.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.find_roletype_initiators">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.base.</span></span><span class="sig-name descname"><span class="pre">find_roletype_initiators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attrlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roletype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.find_roletype_initiators" title="Link to this definition"></a></dt>
-<dd><p>Find initiators from list that start with ‘<a href="#id14"><span class="problematic" id="id15">roletype_</span></a>’.</p>
+<dd><p>Find initiators from list that start with ‘<a href="#id8"><span class="problematic" id="id9">roletype_</span></a>’.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1651,7 +1802,7 @@ Default is False.</p></li>
 <p>Defines <a class="reference internal" href="#fmdtools.define.object.timer.Timer" title="fmdtools.define.object.timer.Timer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Timer</span></code></a> class for representing timers.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.object.timer.Timer">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.timer.</span></span><span class="sig-name descname"><span class="pre">Timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.timer.Timer" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.timer.</span></span><span class="sig-name descname"><span class="pre">Timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standby'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.timer.Timer" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a></p>
 <p>Class for model timers used in functions (e.g. for conditional faults).</p>
 <dl class="py attribute">
@@ -1711,16 +1862,17 @@ Default is False.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">inc</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
 <span class="go">Timer test_timer: mode= complete, time= 0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;copied&#39;</span><span class="p">)</span>
+<span class="go">Timer copied: mode= complete, time= 0.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
 <span class="go">Timer test_timer: mode= standby, time= 0.0</span>
 </pre></div>
 </div>
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.timer.Timer.copy">
-<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.timer.Timer.copy" title="Link to this definition"></a></dt>
-<dd><p>Copy the Timer.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.object.timer.Timer.attrs">
+<span class="sig-name descname"><span class="pre">attrs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('name',</span> <span class="pre">'root',</span> <span class="pre">'track',</span> <span class="pre">'time',</span> <span class="pre">'tstep',</span> <span class="pre">'mode')</span></span><a class="headerlink" href="#fmdtools.define.object.timer.Timer.attrs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.object.timer.Timer.default_track">
@@ -1852,19 +2004,17 @@ representing allocations.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.define.object.geom.Geom" title="fmdtools.define.object.geom.Geom"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geom</span></code></a>: Base geometry class</p></li>
 <li><p><a class="reference internal" href="#fmdtools.define.object.geom.GeomPoint" title="fmdtools.define.object.geom.GeomPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomPoint</span></code></a>: Class defining points.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.define.object.geom.PointParam" title="fmdtools.define.object.geom.PointParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointParam</span></code></a>: Class defining <a class="reference internal" href="#fmdtools.define.object.geom.GeomPoint" title="fmdtools.define.object.geom.GeomPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomPoint</span></code></a> attributes.</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PointParam</span></code>: Class defining <a class="reference internal" href="#fmdtools.define.object.geom.GeomPoint" title="fmdtools.define.object.geom.GeomPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomPoint</span></code></a> attributes.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.define.object.geom.GeomLine" title="fmdtools.define.object.geom.GeomLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomLine</span></code></a>: Class defining lines.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.define.object.geom.LineParam" title="fmdtools.define.object.geom.LineParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">LineParam</span></code></a>: Class defining <a class="reference internal" href="#fmdtools.define.object.geom.GeomLine" title="fmdtools.define.object.geom.GeomLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomLine</span></code></a> attributes.</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LineParam</span></code>: Class defining <a class="reference internal" href="#fmdtools.define.object.geom.GeomLine" title="fmdtools.define.object.geom.GeomLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomLine</span></code></a> attributes.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.define.object.geom.GeomPoly" title="fmdtools.define.object.geom.GeomPoly"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomPoly</span></code></a>: Class defining polygons.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.define.object.geom.PolyParam" title="fmdtools.define.object.geom.PolyParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolyParam</span></code></a>: Class defining <a class="reference internal" href="#fmdtools.define.object.geom.GeomPoly" title="fmdtools.define.object.geom.GeomPoly"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomPoly</span></code></a> attributes.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">Geom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a></p>
-<p>Base class for defining geometries.</p>
-<p>Geometry objects are essentially interfaces for various shapely classes used to
-convey the spacial properties of a model.</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseGeom</span></code></p>
+<p>Base Geom object for geometries that are capable of moving/changing.</p>
 <section id="roles">
 <h3>Roles<a class="headerlink" href="#roles" title="Link to this heading"></a></h3>
 <dl class="simple">
@@ -1873,63 +2023,10 @@ convey the spacial properties of a model.</p>
 <dt>p<span class="classifier">Param</span></dt><dd><p>Parameter defining immutable properties (e.g., shapely inputs, buffer)</p>
 </dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.all_at">
-<span class="sig-name descname"><span class="pre">all_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">pt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.all_at" title="Link to this definition"></a></dt>
-<dd><p>Find all geom attributes (shape, buffers, etc.) containing the point.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>*pt</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.action.ExampleAction.x" title="fmdtools.define.block.action.ExampleAction.x"><em>x</em></a><em>,</em><a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.base.ExContainer.y" title="fmdtools.define.container.base.ExContainer.y"><em>y</em></a><em>,</em><a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.base.ExNestContainer.z" title="fmdtools.define.container.base.ExNestContainer.z"><em>z</em></a>) – Locations of x, y, z coordinates.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>all_at</strong> – Buffer/shape containing the pt.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span> <span class="o">=</span> <span class="n">ExPoint</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="go">[&#39;shape&#39;, &#39;on&#39;, &#39;around&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
-<span class="go">[&#39;on&#39;, &#39;around&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-<span class="go">[]</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.assign_from">
-<span class="sig-name descname"><span class="pre">assign_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.assign_from" title="Link to this definition"></a></dt>
-<dd><p>Update Geom state from a given history and time.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.at">
-<span class="sig-name descname"><span class="pre">at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.at" title="Link to this definition"></a></dt>
-<dd><p>Determine whether the point x, y is within the buffer ‘shapename’.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>*pt</strong> (<em>tuple</em>) – Locations of x, y, z coordinates.</p></li>
-<li><p><strong>shapename</strong> (<em>str</em>) – Name of buffer property</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>at</strong> – Whether x,y is within the buffer.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.container_p">
 <span class="sig-name descname"><span class="pre">container_p</span></span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.container_p" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">GeomParameter</span></code></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1939,24 +2036,12 @@ convey the spacial properties of a model.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.copy">
-<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.copy" title="Link to this definition"></a></dt>
-<dd><p>Copy the Geom with given <a href="#id8"><span class="problematic" id="id9">*</span></a>args and <a href="#id10"><span class="problematic" id="id11">**</span></a>kwargs.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.get_paramstates">
-<span class="sig-name descname"><span class="pre">get_paramstates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.get_paramstates" title="Link to this definition"></a></dt>
-<dd><p>Create dict of parameters and states.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.get_shape">
-<span class="sig-name descname"><span class="pre">get_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shapename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.get_shape" title="Link to this definition"></a></dt>
-<dd><p>Get the shapely object defining the class and buffers.</p>
+<span class="sig-name descname"><span class="pre">get_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.get_shape" title="Link to this definition"></a></dt>
+<dd><p>Get the shapely object defining the class (and defined buffers).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>shapename</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the shape. The default is ‘shape’, which produces the base shape,
+<dd class="field-odd"><p><strong>shape</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the shape. The default is ‘shape’, which produces the base shape,
 other names return the buffer shapes for that shape.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1969,106 +2054,10 @@ other names return the buffer shapes for that shape.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.reset" title="Link to this definition"></a></dt>
-<dd><p>Reset the Geom to initial state.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.return_mutables">
-<span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.return_mutables" title="Link to this definition"></a></dt>
-<dd><p>Return all mutable values in the block.</p>
-<p>Used in static propagation steps to check if the block has changed.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mutables</strong> – tuple of all mutable roles for the object.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.show">
-<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shapes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'all':</span> <span class="pre">{}}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(4,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geomlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.show" title="Link to this definition"></a></dt>
-<dd><p>Show a Geom (shape and buffers) as lines on a plot.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>shapes</strong> (<em>dict</em><em>, </em><em>optional</em>) – Aspects of the Geom to plot and their corresponding plot kwargs.
-The default is {‘all’: {}}.</p></li>
-<li><p><strong>fig</strong> (<em>matplotlib.figure</em><em>, </em><em>optional</em>) – Existing Figure. The default is None.</p></li>
-<li><p><strong>ax</strong> (<em>matplotlib.axis</em><em>, </em><em>optional</em>) – Existing axis. The default is None.</p></li>
-<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Size for figure (if instantiating). The default is (4, 4).</p></li>
-<li><p><strong>z</strong> (<em>bool/number</em><em>, </em><em>optional</em>) – If plotting on a 3d axis, set z to a number which will be the z-level.
-The default is False.</p></li>
-<li><p><strong>geomlabel</strong> (<em>str</em><em>, </em><em>optional</em>) – Overall label for the geom (if desired). The default is ‘’.</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – overall kwargs for plt.plot (and/or consolidate_legend and add_title_xylabs)
-for all shapes.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>fig</strong> (<em>figure</em>) – Matplotlib figure object</p></li>
-<li><p><strong>ax</strong> (<em>axis</em>) – Corresponding matplotlib axis</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.vect_at_shape">
-<span class="sig-name descname"><span class="pre">vect_at_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_forward</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.vect_at_shape" title="Link to this definition"></a></dt>
-<dd><p>Get the vector (x, y) at a given shape (e.g., direction of a line at pt).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pt</strong> (<em>tuple/lost</em>) – Point closest to shape</p></li>
-<li><p><strong>shapename</strong> (<em>str</em>) – Name of shape/buffer. Default is ‘shape’.</p></li>
-<li><p><strong>dist_forward</strong> (<em>float</em>) – Distance forward along line segment to project. Give a negative number to
-reverse directions.</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">=</span><span class="n">ExLine</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;xys&#39;</span><span class="p">:((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">))})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">vect_at_shape</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
-<span class="go">array([[0.07071068],</span>
-<span class="go">       [0.07071068]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">vect_at_shape</span><span class="p">((</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span>
-<span class="go">array([[ 0. ],</span>
-<span class="go">       [-0.1]])</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.vect_to_shape">
-<span class="sig-name descname"><span class="pre">vect_to_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.vect_to_shape" title="Link to this definition"></a></dt>
-<dd><p>Get the vector (x, y) to a given shape.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pt</strong> (<em>tuple/list</em>) – Point to get vector from</p></li>
-<li><p><strong>shapename</strong> (<em>str</em>) – Name of shape/buffer. Default is ‘shape’.</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">ExPoint</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">vect_to_shape</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
-<span class="go">array([[1.],</span>
-<span class="go">       [1.]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">vect_to_shape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
-<span class="go">array([[-1.],</span>
-<span class="go">       [ 1.]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">vect_to_shape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-<span class="go">array([[0.],</span>
-<span class="go">       [0.]])</span>
-</pre></div>
-</div>
+<dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.get_shapely_args">
+<span class="sig-name descname"><span class="pre">get_shapely_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.get_shapely_args" title="Link to this definition"></a></dt>
+<dd><p>Get arguments for the given Shapely class.</p>
+<p>Override to set shapely arguments from other states (e.g., not )</p>
 </dd></dl>
 
 </section>
@@ -2107,24 +2096,11 @@ of point).</p>
 <span class="go">&lt;class &#39;shapely.geometry.polygon.Polygon&#39;&gt;</span>
 </pre></div>
 </div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomLine.container_p">
-<span class="sig-name descname"><span class="pre">container_p</span></span><a class="headerlink" href="#fmdtools.define.object.geom.GeomLine.container_p" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#fmdtools.define.object.geom.LineParam" title="fmdtools.define.object.geom.LineParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">LineParam</span></code></a></p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomLine.get_args">
-<span class="sig-name descname"><span class="pre">get_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.GeomLine.get_args" title="Link to this definition"></a></dt>
-<dd><p>Create arguments for shapely LineString class based on fields.</p>
-<p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exl</span> <span class="o">=</span> <span class="n">ExLine</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exl</span><span class="o">.</span><span class="n">get_args</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exl</span><span class="o">.</span><span class="n">get_shapely_args</span><span class="p">()</span>
 <span class="go">(((0.0, 0.0), (1.0, 1.0)),)</span>
 </pre></div>
 </div>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomLine.shapely_class">
 <span class="sig-name descname"><span class="pre">shapely_class</span></span><a class="headerlink" href="#fmdtools.define.object.geom.GeomLine.shapely_class" title="Link to this definition"></a></dt>
@@ -2171,24 +2147,11 @@ of point).</p>
 <span class="go">True</span>
 </pre></div>
 </div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomPoint.container_p">
-<span class="sig-name descname"><span class="pre">container_p</span></span><a class="headerlink" href="#fmdtools.define.object.geom.GeomPoint.container_p" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#fmdtools.define.object.geom.PointParam" title="fmdtools.define.object.geom.PointParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointParam</span></code></a></p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomPoint.get_args">
-<span class="sig-name descname"><span class="pre">get_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.GeomPoint.get_args" title="Link to this definition"></a></dt>
-<dd><p>Get shape arguments from Point parameter/state.</p>
-<p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span> <span class="o">=</span> <span class="n">ExPoint</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">get_args</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">get_shapely_args</span><span class="p">()</span>
 <span class="go">(1.0, 1.0)</span>
 </pre></div>
 </div>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomPoint.shapely_class">
 <span class="sig-name descname"><span class="pre">shapely_class</span></span><a class="headerlink" href="#fmdtools.define.object.geom.GeomPoint.shapely_class" title="Link to this definition"></a></dt>
@@ -2223,23 +2186,10 @@ contain a state for the given status (e.g., occupied, red/blue, etc.).</p>
 <span class="go">&lt;class &#39;shapely.geometry.polygon.Polygon&#39;&gt;</span>
 </pre></div>
 </div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomPoly.container_p">
-<span class="sig-name descname"><span class="pre">container_p</span></span><a class="headerlink" href="#fmdtools.define.object.geom.GeomPoly.container_p" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#fmdtools.define.object.geom.PolyParam" title="fmdtools.define.object.geom.PolyParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolyParam</span></code></a></p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomPoly.get_args">
-<span class="sig-name descname"><span class="pre">get_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.GeomPoly.get_args" title="Link to this definition"></a></dt>
-<dd><p>Create arguments for shapely Polygon class based on fields.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExPoly</span><span class="p">()</span><span class="o">.</span><span class="n">get_args</span><span class="p">()</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExPoly</span><span class="p">()</span><span class="o">.</span><span class="n">get_shapely_args</span><span class="p">()</span>
 <span class="go">(((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)),))</span>
 </pre></div>
 </div>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomPoly.shapely_class">
 <span class="sig-name descname"><span class="pre">shapely_class</span></span><a class="headerlink" href="#fmdtools.define.object.geom.GeomPoly.shapely_class" title="Link to this definition"></a></dt>
@@ -2249,66 +2199,12 @@ contain a state for the given status (e.g., occupied, red/blue, etc.).</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.LineParam">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">LineParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.LineParam" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
-<p>Parameter defining lines. May be extended with buffers.</p>
-<p>…</p>
-<section id="fields">
-<h3>Fields<a class="headerlink" href="#fields" title="Link to this heading"></a></h3>
-<dl class="simple">
-<dt>xys<span class="classifier">tuple</span></dt><dd><p>tuple of points ((x1, y1), …) defining shapely.LineString.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<p>A point with ends at (0.0, 0.0) and (1.0, 1.0) and radius of 1.0 defining
-whether something is on the line would be defined by the parameter:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">ExLineParam</span><span class="p">(</span><span class="n">LineParam</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">xys</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
-<span class="gp">... </span>    <span class="n">buffer_on</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ExLineParam</span><span class="p">()</span>
-<span class="go">ExLineParam(xys=((0.0, 0.0), (1.0, 1.0)), buffer_on=1.0)</span>
-</pre></div>
-</div>
-</section>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.object.geom.PointParam">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">PointParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.PointParam" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
-<p>Parameter defining points. Extend with ‘buffer_att’ to create buffer shapes.</p>
-<section id="id12">
-<h3>Fields<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
-<dl class="simple">
-<dt>x<span class="classifier">float</span></dt><dd><p>x-location of point.</p>
-</dd>
-<dt>y<span class="classifier">float</span></dt><dd><p>y-location of point.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<p>a point with center at 1.0, 1.0 and radius of 1.0 defining whether something
-is on the point would be defined by the parameter:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">ExPointParam</span><span class="p">(</span><span class="n">PointParam</span><span class="p">):</span>
-<span class="gp">... </span>   <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="gp">... </span>   <span class="n">y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="gp">... </span>   <span class="n">buffer_on</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExPointParam</span><span class="p">()</span>
-<span class="go">ExPointParam(x=1.0, y=1.0, buffer_on=1.0)</span>
-</pre></div>
-</div>
-</section>
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.PolyParam">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">PolyParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.PolyParam" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
 <p>Parameter defining polygons. May be extended with buffers.</p>
-<section id="id13">
-<h3>Fields<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<section id="fields">
+<h3>Fields<a class="headerlink" href="#fields" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>shell<span class="classifier">tuple</span></dt><dd><p>tuple of points ((x1, y1), …) defining outer shell.</p>
 </dd>
@@ -2338,7 +2234,7 @@ is on the point would be defined by the parameter:</p>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.coords.</span></span><span class="sig-name descname"><span class="pre">Coords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.coords.</span></span><span class="sig-name descname"><span class="pre">Coords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseCoords</span></code></p>
 <p>Class for generating, accessing, and setting gridworld properties.</p>
 <p>Creates arrays, points, and lists of points which may correspond to desired
@@ -2390,7 +2286,7 @@ h state, a point “start”, and a “high_v” collection:</p>
 <span class="gp">... </span>   <span class="n">collection_high_v</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">greater</span><span class="p">)</span>
 <span class="gp">... </span>   <span class="n">collection_hi_v_not_a</span> <span class="o">=</span> <span class="p">((</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">greater</span><span class="p">),</span> <span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">))</span>
 <span class="gp">... </span>   <span class="n">default_p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;blocksize&#39;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">}</span>
-<span class="gp">... </span>   <span class="k">def</span><span class="w"> </span><span class="nf">init_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="k">def</span><span class="w"> </span><span class="nf">init_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="gp">... </span>       <span class="bp">self</span><span class="o">.</span><span class="n">set_pts</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]],</span> <span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2448,10 +2344,33 @@ all points where v &gt; 5.0 should be a part of high_v, as shown:</p>
 <span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</span>
 </pre></div>
 </div>
+<p>Coords also save/load to json:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExampleCoords</span><span class="o">.</span><span class="n">fromjson</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">tojson</span><span class="p">())</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="go">np.float64(100.0)</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.add_coords_roles">
 <span class="sig-name descname"><span class="pre">add_coords_roles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.add_coords_roles" title="Link to this definition"></a></dt>
 <dd><p>Add points, collections, features, and states as roles to Coords.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.asdict">
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.asdict" title="Link to this definition"></a></dt>
+<dd><p>Add stored kwargs to dict. Enables copying.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;st&quot;</span><span class="p">,</span> <span class="mf">25.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cop</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;st&quot;</span><span class="p">)</span>
+<span class="go">np.float64(25.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">st</span> <span class="o">==</span> <span class="n">cop</span><span class="o">.</span><span class="n">st</span><span class="p">)</span>
+<span class="go">np.True_</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">st</span><span class="p">)</span> <span class="o">==</span> <span class="nb">id</span><span class="p">(</span><span class="n">cop</span><span class="o">.</span><span class="n">st</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -2476,24 +2395,6 @@ all points where v &gt; 5.0 should be a part of high_v, as shown:</p>
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.container_r">
 <span class="sig-name descname"><span class="pre">container_r</span></span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.container_r" title="Link to this definition"></a></dt>
 <dd><p>alias of <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.rand.Rand" title="fmdtools.define.container.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a></p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.copy">
-<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.copy" title="Link to this definition"></a></dt>
-<dd><p>Copy the Coords object.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;st&quot;</span><span class="p">,</span> <span class="mf">25.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cop</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;st&quot;</span><span class="p">)</span>
-<span class="go">np.float64(25.0)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">st</span> <span class="o">==</span> <span class="n">cop</span><span class="o">.</span><span class="n">st</span><span class="p">)</span>
-<span class="go">np.True_</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">st</span><span class="p">)</span> <span class="o">==</span> <span class="nb">id</span><span class="p">(</span><span class="n">cop</span><span class="o">.</span><span class="n">st</span><span class="p">)</span>
-<span class="go">False</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="py method">
@@ -2615,6 +2516,12 @@ e.g.,:</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.get_property_dtype">
+<span class="sig-name descname"><span class="pre">get_property_dtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.get_property_dtype" title="Link to this definition"></a></dt>
+<dd><p>Get defined data type of a given property.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.in_area">
 <span class="sig-name descname"><span class="pre">in_area</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coll</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.in_area" title="Link to this definition"></a></dt>
 <dd><p>Check to see if the point x, y is in a given collection or at a point.</p>
@@ -2653,14 +2560,52 @@ e.g.,:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.init_properties">
-<span class="sig-name descname"><span class="pre">init_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.init_properties" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">init_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.init_properties" title="Link to this definition"></a></dt>
 <dd><p>Initialize arrays with non-default values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.load_property">
+<span class="sig-name descname"><span class="pre">load_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.load_property" title="Link to this definition"></a></dt>
+<dd><p>Load a property from a .csv or .json file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prop</strong> (<em>str</em>) – Property name.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Filename to load from.</p></li>
+<li><p><strong>delimiter</strong> (<em>str</em><em>, </em><em>optional</em>) – File delimiter for json. The default is “,”.</p></li>
+<li><p><strong>delete</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to delete the file after loading (for test). The default is False.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to pandas.read_csv.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.overwrite_properties">
+<span class="sig-name descname"><span class="pre">overwrite_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.overwrite_properties" title="Link to this definition"></a></dt>
+<dd><p>Overwrite initialized properties with external copied/json inputs.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.return_mutables">
 <span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.return_mutables" title="Link to this definition"></a></dt>
 <dd><p>Check if grid properties have changed (used in propagation).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.save_property">
+<span class="sig-name descname"><span class="pre">save_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.save_property" title="Link to this definition"></a></dt>
+<dd><p>Save a property to a .csv or .json file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prop</strong> (<em>str</em>) – Property name.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Filename to save to</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to DataFrame.to_csv</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -2836,6 +2781,12 @@ overwritten.</p>
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.CoordsParam.create_repr">
 <span class="sig-name descname"><span class="pre">create_repr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x_size',</span> <span class="pre">'y_size',</span> <span class="pre">'blocksize',</span> <span class="pre">'gapwidth']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.CoordsParam.create_repr" title="Link to this definition"></a></dt>
 <dd><p>Create repr-friendly string for container.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.coords.CoordsParam.shape">
+<span class="sig-name descname"><span class="pre">shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.CoordsParam.shape" title="Link to this definition"></a></dt>
+<dd><p>Return shape of grid.</p>
 </dd></dl>
 
 </section>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define &mdash; fmdtools 2.3.3 documentation</title>
+  <title>fmdtools.define &mdash; fmdtools 2.4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=f4302432"></script>
+      <script src="../_static/documentation_options.js?v=4d935f96"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -479,6 +479,10 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.auto_filename"><code class="docutils literal notranslate"><span class="pre">auto_filename()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.copy_dict_objs"><code class="docutils literal notranslate"><span class="pre">copy_dict_objs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.dict_from_file"><code class="docutils literal notranslate"><span class="pre">dict_from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.dict_to_json"><code class="docutils literal notranslate"><span class="pre">dict_to_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
@@ -495,6 +499,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.map_obj_fields"><code class="docutils literal notranslate"><span class="pre">map_obj_fields()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.remove_para"><code class="docutils literal notranslate"><span class="pre">remove_para()</span></code></a></li>
@@ -503,6 +508,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.unpack_x"><code class="docutils literal notranslate"><span class="pre">unpack_x()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.base.value_to_jsonable"><code class="docutils literal notranslate"><span class="pre">value_to_jsonable()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
@@ -549,7 +555,6 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.sample">fmdtools.sim.sample</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.BaseSample"><code class="docutils literal notranslate"><span class="pre">BaseSample</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ExNestedParam"><code class="docutils literal notranslate"><span class="pre">ExNestedParam</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.FaultDomain"><code class="docutils literal notranslate"><span class="pre">FaultDomain</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.FaultSample"><code class="docutils literal notranslate"><span class="pre">FaultSample</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.JointFaultSample"><code class="docutils literal notranslate"><span class="pre">JointFaultSample</span></code></a></li>
@@ -881,6 +886,30 @@ otherwise returns the number</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.auto_filename">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">auto_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.json'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.auto_filename" title="Link to this definition"></a></dt>
+<dd><p>Create filename for saving a class.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.copy_dict_objs">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">copy_dict_objs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dic</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.copy_dict_objs" title="Link to this definition"></a></dt>
+<dd><p>Copy a dict and its objects.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.dict_from_file">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">dict_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.dict_from_file" title="Link to this definition"></a></dt>
+<dd><p>Load a json as a dictionary.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.dict_to_json">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">dict_to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.dict_to_json" title="Link to this definition"></a></dt>
+<dd><p>Convert a dict to json. Keep keys in exclude out of dict.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.base.eq_units">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">eq_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rateunit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeunit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.eq_units" title="Link to this definition"></a></dt>
 <dd><p>Find conversion factor from rateunit (str) to timeunit (str).</p>
@@ -1086,6 +1115,28 @@ one_line is False.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.map_obj_fields">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">map_obj_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">fields</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.map_obj_fields" title="Link to this definition"></a></dt>
+<dd><p>Create a dictionary mapping aspects of a given object obj to known fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>object</em>) – Object with parameters.</p></li>
+<li><p><strong>*fields</strong> (<em>str</em>) – Names of parameters to get from object</p></li>
+<li><p><strong>**mapping</strong> (<em>kwargs</em>) – Mapping of fields to another name, e.g. x=’y’ if ‘y’ should be the name of x in
+the returned dict.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fielddict</strong> – Dictionary of fields with values gotten from the object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.base.nan_to_x">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">nan_to_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.nan_to_x" title="Link to this definition"></a></dt>
 <dd><p>Return nan as zero if present, otherwise return the number.</p>
@@ -1185,13 +1236,19 @@ one_line is False.</p></li>
 <dd><p>Unpack arrays/lists sent from libraries into tuples.</p>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.value_to_jsonable">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">value_to_jsonable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.value_to_jsonable" title="Link to this definition"></a></dt>
+<dd><p>Make a given value json-able.</p>
+</dd></dl>
+
 </section>
 <section id="module-fmdtools.define.environment">
 <span id="fmdtools-define-environment"></span><h2>fmdtools.define.environment<a class="headerlink" href="#module-fmdtools.define.environment" title="Link to this heading"></a></h2>
 <p>Module for representing environments with the <a class="reference internal" href="#fmdtools.define.environment.Environment" title="fmdtools.define.environment.Environment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code></a> class.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.environment.Environment">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.environment.</span></span><span class="sig-name descname"><span class="pre">Environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ga</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.environment.</span></span><span class="sig-name descname"><span class="pre">Environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ga</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fmdtools.define.flow.html#fmdtools.define.flow.commsflow.CommsFlow" title="fmdtools.define.flow.commsflow.CommsFlow"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></p>
 <p>Class for representing environments (in development).</p>
 <p>Environments are CommsFlows in order to readily enable perception as well as
@@ -1221,12 +1278,44 @@ they also contain the roles:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">env</span><span class="o">.</span><span class="n">create_hist</span><span class="p">([</span><span class="mf">1.0</span><span class="p">])</span>
 <span class="go">c.r.probdens:                   array(1)</span>
 <span class="go">c.st:                           array(1)</span>
-<span class="go">ga.points.ex_point.s.occupied:  array(1)</span>
-<span class="go">ga.points.ex_point.s.buffer_around: array(1)</span>
-<span class="go">ga.lines.ex_line.s.occupied:    array(1)</span>
-<span class="go">ga.lines.ex_line.s.buffer_around: array(1)</span>
-<span class="go">ga.polys.ex_poly.s.occupied:    array(1)</span>
-<span class="go">ga.polys.ex_poly.s.buffer_around: array(1)</span>
+<span class="go">ga.geoms.ex_point.s.occupied:   array(1)</span>
+<span class="go">ga.geoms.ex_point.s.buffer_around: array(1)</span>
+<span class="go">ga.geoms.ex_line.s.occupied:    array(1)</span>
+<span class="go">ga.geoms.ex_line.s.buffer_around: array(1)</span>
+<span class="go">ga.geoms.ex_poly.s.occupied:    array(1)</span>
+<span class="go">ga.geoms.ex_poly.s.buffer_around: array(1)</span>
+</pre></div>
+</div>
+<p>Copies should be identical but independent after copying, e.g.:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">ExampleEnvironment</span><span class="p">(</span><span class="s2">&quot;env&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Given these changes, the copy should have the same states (and not default):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="go">np.float64(1.0)</span>
+</pre></div>
+</div>
+<p>It should also be independent, meaning changes don’t effect the original:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="go">np.float64(0.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="s1">&#39;ex_line&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="s1">&#39;ex_line&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>This should also be the case for contained local versions:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">ExampleEnvironment</span><span class="p">(</span><span class="s2">&quot;env&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hi</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">create_local</span><span class="p">(</span><span class="s2">&quot;hi&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">hi</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">hi</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span>
+<span class="go">True</span>
 </pre></div>
 </div>
 <dl class="py attribute">
@@ -1257,45 +1346,6 @@ they also contain the roles:</p>
 <dt class="sig sig-object py" id="fmdtools.define.environment.Environment.coords_c">
 <span class="sig-name descname"><span class="pre">coords_c</span></span><a class="headerlink" href="#fmdtools.define.environment.Environment.coords_c" title="Link to this definition"></a></dt>
 <dd><p>alias of <a class="reference internal" href="fmdtools.define.object.html#fmdtools.define.object.coords.Coords" title="fmdtools.define.object.coords.Coords"><code class="xref py py-class docutils literal notranslate"><span class="pre">Coords</span></code></a></p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.copy">
-<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment.copy" title="Link to this definition"></a></dt>
-<dd><p>Copy the Environment.</p>
-<p class="rubric">Examples</p>
-<p>Copies should be identical but independent after copying, e.g.:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">ExampleEnvironment</span><span class="p">(</span><span class="s2">&quot;env&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-</pre></div>
-</div>
-<p>Given these changes, the copy should have the same states (and not default):</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-<span class="go">np.float64(1.0)</span>
-</pre></div>
-</div>
-<p>It should also be independent, meaning changes don’t effect the original:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="go">np.float64(0.0)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="s1">&#39;ex_line&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="s1">&#39;ex_line&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span>
-<span class="go">False</span>
-</pre></div>
-</div>
-<p>This should also be the case for contained local versions:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">ExampleEnvironment</span><span class="p">(</span><span class="s2">&quot;env&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">hi</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">create_local</span><span class="p">(</span><span class="s2">&quot;hi&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">hi</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span><span class="o">=</span><span class="kc">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">hi</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span>
-<span class="go">True</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="py method">
