@@ -36,7 +36,7 @@ from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.container.state import State
 from fmdtools.define.flow.base import Flow
 import numpy as np
-
+import time
 
 class GenericState(State):
     rate: np.float64 = 1.0

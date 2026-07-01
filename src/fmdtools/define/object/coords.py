@@ -1046,14 +1046,14 @@ class Coords(BaseCoords):
 
     >>> class ExampleCoords(Coords):
     ...    feature_a = (bool, False)
-    ...    feature_v = (float, 1.0)
+    ...    feature_v = (float, 1.0) # creates an array of floats
     ...    state_st = (float, 0.0)
     ...    point_start = (0.0, 0.0)
-    ...    collection_high_v = ("v", 5.0, np.greater)
+    ...    collection_high_v = ("v", 5.0, np.greater) #collection of points with v > 5
     ...    collection_hi_v_not_a = (("v", 5.0, np.greater), "and", ("a", False, np.equal))
     ...    default_p = {'blocksize': 10.0}
     ...    def init_properties(self, **kwargs):
-    ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
+    ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0) # setting given points in v array to 10
 
     As shown, features are normal numpy arrays set to readonly:
 
