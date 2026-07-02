@@ -14,15 +14,23 @@ class ResponderState(State):
     location: tuple = (12,12)
     on_rescue: bool = False
 
+class ResponderMode(Mode):
+    opermodes = ("standby", "rescue")
+    mode: str = "standby"
+
 
 class Responder(Function):
     container_s = ResponderState
+    container_m = ResponderMode
     flow_environment = BeachEnvironment
     def dynamic_behavior(self):
+        t=10
         if(t == 10 and not self.m.mode == "rescue"):
             self.m.mode = "rescue"
+            return self.m.mode
         if(self.environment.c.check_vicinity(self.s.location) == (0,0)):
             self.m.mode = "standby"
+            return self.m.mode
 
     
 
