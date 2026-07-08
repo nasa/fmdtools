@@ -9,12 +9,15 @@ from fmdtools.define.container.parameter import Parameter
 from model_environment import BeachEnvironment
 import numpy as np
 
+# RESPONDER IS REACHING BEFORE DRONE HAS EVEN DROPPED BUOY FIX RESPONDER SPEED
 
 class ResponderState(State):
     location: tuple = (12,12)
     on_rescue: bool = False
     path_index: int = 0
     path: list = []
+    x: float = 0.0
+    y: float = 0.0
 
 class ResponderMode(Mode):
     opermodes = ("standby", "rescue")
@@ -33,11 +36,12 @@ class Responder(Function):
         dist = np.sqrt(dx**2 + dy**2)
 
         steps = int(dist / speed)    # number of 1-second steps at "speed" m/s
-        self.s.path_index = steps
 
-        # unit direction vector
-        ux = dx / dist
-        uy = dy / dist
+        if dist > 1e-9:
+            ux = dx / dist
+            uy = dy / dist
+        else:
+            ux, uy = 0.0, 0.0 
 
         path = []
         for i in range(steps):
@@ -52,15 +56,21 @@ class Responder(Function):
     def set_rescue_goal(self):
         """Determine path to follow to rescue person."""
         self.m.set_mode("rescue")
-        self.s.path = self.create_rescue_path()
+        self.s.path = self.create_rescue_path(4)
 
 
     def follow_rescue_path(self):
         if self.s.path_index < len(self.s.path):
             self.s.location = self.s.path[self.s.path_index]
+            self.s.x = self.s.location[0]
+            self.s.y = self.s.location[1]
             self.s.path_index += 1
         else:
+            victim = self.s.location
+            self.environment.c.set_pts([victim], "person_to_rescue", False)
             self.m.set_mode("standby")  # arrived, go back to standby
+            self.environment.c.set_pts([victim],"with_buoy",False)
+            self.environment.c.set_pts([victim],"rescued",True)
         
 
     def dynamic_behavior(self):

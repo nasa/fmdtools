@@ -5,7 +5,7 @@ from fmdtools.define.container.state import State
 import numpy as np
 
 class BeachMapParam(CoordsParam):
-    """goodness"""
+    """goodness gracious!"""
     x_size: int = 20 # width of grid
     y_size: int = 5 # length of grid
     blocksize: float = 100 #100 meters per tile
@@ -14,7 +14,7 @@ class BeachMapParam(CoordsParam):
     num_distress: int = 1
     time_to_reach: float = 10.0
     vicinity_radius: float = 200.0
-    distress_time: float = 30.0
+
 
 class BeachBehaviorState(State):
         time_to_reach: int = 30 
@@ -28,6 +28,8 @@ class BeachMap(Coords):
     state_person_to_rescue = (bool, False)
     point_person_location =(0,0)
     state_with_buoy = (bool, False)
+    state_rescued = (bool, False)
+    state_distress_timer = (float, 30.0)
 
     feature_beach = (bool, False)
     feature_water = (bool, False)
@@ -36,7 +38,7 @@ class BeachMap(Coords):
 
     def init_properties(self, *args, **kwargs):
         self.set_pts(self.p.base_locations, "base", True)
-        self.set_pts(self.p.rescue_locations, "rescue_location", True)
+        self.set_pts(self.p.rescue_locations, "person_to_rescue", False)
         b = self.p.blocksize
         self.set_range("beach", True, ymin=0, ymax=b)
         self.set_range("water", True, ymin=b*2)
@@ -70,9 +72,12 @@ class BeachBehavior(Function):
 
     def dynamic_behavior(self):
         env = self.environment.c
-        if self.t.time == env.p.distress_time:
-            env.set_pts(env.p.rescue_locations, "person_to_rescue", True)
-            
+        for pt in env.p.rescue_locations:
+            timer = env.get(pt[0], pt[1], "distress_timer")
+            if timer > 0:
+                env.set(pt[0], pt[1], "distress_timer", timer - self.t.dt)
+            elif not env.get(pt[0], pt[1], "person_to_rescue"):
+                env.set_pts([pt], "person_to_rescue", True)
 
 
 sim_properties = {
@@ -80,5 +85,7 @@ sim_properties = {
     'water':         {'color': 'steelblue'},
     'person_to_rescue': {'color': 'red'},
     'base':               {'color': 'black'},
-    'rescue_location': {'color':'pink'},
+    'with_buoy': {'color':'yellow'},
+    'rescued': {'color':'green'},
+    #,'rescue_location': {'color':'pink'},
 }

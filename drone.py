@@ -68,6 +68,7 @@ class BeachAircraft(BaseAircraft):
         self.s.assign(victim,"goal_x","goal_y")
 
     def fly_patrol(self):
+        """Fly the patrol path"""
         self.m.set_mode("patrol")
         waypoint = self.s.flight_path[self.s.patrol_idx]
         self.s.assign(waypoint, "goal_x", "goal_y")
@@ -85,6 +86,8 @@ class BeachAircraft(BaseAircraft):
 
         if self.indicate_at_goal():
             self.environment.c.set_pts([victim], "with_buoy", True)
+            current_timer = self.environment.c.get(victim[0], victim[1], "distress_timer")
+            self.environment.c.set_pts([victim], "distress_timer", current_timer + 120)
             self.environment.c.set_pts([victim], "person_to_rescue", False)
             self.m.set_mode("patrol")
     def send_rescue_alert(self):
