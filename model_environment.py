@@ -4,6 +4,8 @@ from fmdtools.define.block.function import Function
 from fmdtools.define.container.state import State
 import numpy as np
 
+# TODO: Figure out how to test out simulation using Parameter Sampling and what info to input and get out. For outputting information, think about what is useful for the LLM to make assessments
+
 class BeachMapParam(CoordsParam):
     """goodness gracious!"""
     x_size: int = 20 # width of grid
@@ -18,7 +20,6 @@ class BeachMapParam(CoordsParam):
 
 class BeachBehaviorState(State):
         time_to_reach: int = 30 
-        person_drowning: bool = False
         rescue: bool = False
         
 class BeachMap(Coords):
@@ -29,7 +30,9 @@ class BeachMap(Coords):
     point_person_location =(0,0)
     state_with_buoy = (bool, False)
     state_rescued = (bool, False)
-    state_distress_timer = (float, 30.0)
+    state_distress_timer = (float, 100.0) # when does the dirstressed swimmer show up
+    state_survival_timer = (float, 300.0) # how long until a distressed swimmer dies
+    state_dead = (bool, False) # dead?
 
     feature_beach = (bool, False)
     feature_water = (bool, False)
@@ -50,7 +53,6 @@ class BeachMap(Coords):
     def check_vicinity(self, point, radius=None):
         if radius is None: 
             radius = self.p.vicinity_radius
-        # i will edit this in a sec couks ethsi was a big change 
         active = []
         for pt in self.p.rescue_locations:
             if self.get(pt[0],pt[1], "person_to_rescue"):
@@ -73,11 +75,28 @@ class BeachBehavior(Function):
     def dynamic_behavior(self):
         env = self.environment.c
         for pt in env.p.rescue_locations:
+            rescued = env.get(pt[0], pt[1], "rescued")
+            if rescued:
+                continue  # skip already rescued victims
             timer = env.get(pt[0], pt[1], "distress_timer")
+            print(f"timer: {timer}, person_to_rescue: {env.get(pt[0], pt[1], 'person_to_rescue')}")
             if timer > 0:
                 env.set(pt[0], pt[1], "distress_timer", timer - self.t.dt)
-            elif not env.get(pt[0], pt[1], "person_to_rescue"):
+            elif not env.get(pt[0], pt[1], "with_buoy"):
                 env.set_pts([pt], "person_to_rescue", True)
+
+        victim = env.p.rescue_locations[0]
+        if env.get(victim[0], victim[1], "distress_timer") <= 0 and not env.get(victim[0], victim[1], "rescued") and not env.get(victim[0], victim[1], "dead"):
+            timer = env.get(victim[0], victim[1], "survival_timer")
+            if env.get(victim[0], victim[1], "with_buoy"):
+                timer -= self.t.dt * 0.1
+            else:
+                timer -= self.t.dt
+            if timer <= 0:
+                timer = 0.0
+                env.set_pts([victim], "dead", True)
+            env.set(victim[0], victim[1], "survival_timer", timer)
+
 
 
 sim_properties = {
@@ -87,5 +106,5 @@ sim_properties = {
     'base':               {'color': 'black'},
     'with_buoy': {'color':'yellow'},
     'rescued': {'color':'green'},
-    #,'rescue_location': {'color':'pink'},
+    'dead': {'color':'purple'}
 }

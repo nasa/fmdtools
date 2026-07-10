@@ -14,12 +14,12 @@ import numpy as np
 
 # assuming shoreline runs along x-axis (y=0 is shore)
 # 100ft ~ 30m, 200ft ~ 60m offshore
-near_shore = 80   # 100ft offshore in your units
-far_shore = 150    # 200ft offshore in your units
+near_shore = 100   # 100ft offshore in your units
+far_shore = 170    # 200ft offshore in your units
 
 # beach runs along x-axis
-x_min = 0
-x_max = 2000
+x_min = -30
+x_max = 1970
 
 # zigzag between near and far shore bands, moving along the beach
 zigzag_path = []
@@ -44,6 +44,7 @@ class BeachAircraftState(AircraftState):
     flight_path: list = zigzag_path#[(9000, 2750), (8696, 3420), (7828, 3987), (6531, 4367), (5000, 4500), (3469, 4367), (2172, 3987), (1304, 3420), (1000, 2750), (1304, 2080), (2172, 1513), (3469, 1133), (5000, 1000), (6531, 1133), (7828, 1513), (8696, 2080), (9000, 2750)]
     patrol_idx: int = 0
     rescue_idx: int = 0
+    time_arrived: float = -1.0
     location: tuple = (0,0)
 
 
@@ -85,9 +86,10 @@ class BeachAircraft(BaseAircraft):
         self.s.location = self.s.get_loc()
 
         if self.indicate_at_goal():
+            if self.s.time_arrived < 0:
+                self.s.time_arrived = self.t.time
+
             self.environment.c.set_pts([victim], "with_buoy", True)
-            current_timer = self.environment.c.get(victim[0], victim[1], "distress_timer")
-            self.environment.c.set_pts([victim], "distress_timer", current_timer + 120)
             self.environment.c.set_pts([victim], "person_to_rescue", False)
             self.m.set_mode("patrol")
     def send_rescue_alert(self):
