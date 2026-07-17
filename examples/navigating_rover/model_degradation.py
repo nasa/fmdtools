@@ -248,7 +248,7 @@ if __name__ == "__main__":
                              {'s': ['wear', 'corrosion', 'friction', 'drift']})
 
     from fmdtools.sim.sample import ParameterDomain, ParameterHistSample
-    from model_main import RoverParam, Rover
+    from Water_Rescue.model_main import RoverParam, Rover
     mdl = Rover()
     rpd = ParameterDomain(RoverParam)
     rpd.add_variables('degradation.friction', 'degradation.drift')
