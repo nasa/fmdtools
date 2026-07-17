@@ -1,3 +1,0 @@
-digraph {
-	0 -> 1 [label=ContainmentEdgeStyle arrowhead=none arrowtail=diamond color=black dir=both style=solid]
-}

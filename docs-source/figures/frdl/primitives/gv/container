@@ -1,3 +1,0 @@
-digraph {
-	0 [label=ContainerNodeStyle color=grey fillcolor=lightgrey penwidth=1 shape=tab style=filled]
-}

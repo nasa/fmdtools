@@ -1,3 +1,0 @@
-digraph {
-	0 [label=FlowNodeStyle color=grey fillcolor=lightgrey penwidth=0 shape=ellipse style=filled]
-}

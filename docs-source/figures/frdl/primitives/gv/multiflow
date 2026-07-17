@@ -1,3 +1,0 @@
-digraph {
-	0 [label=MultiFlowNodeStyle color=grey fillcolor=lightgrey penwidth=0 shape=pentagon style=filled]
-}
