@@ -20,13 +20,13 @@ near_shore = 150   # inner band, 150ft offshore
 far_shore = 270    # outer band, 270ft offshore
 
 # extent of the beach along the x-axis
-x_min = -30
-x_max = 1970
+x_min = -50
+x_max = 1900
 
 # Build a zigzag path: alternate between the near and far bands while
 # stepping 100 units along the beach each waypoint.
 zigzag_path = []
-x_positions = np.arange(x_min, x_max + 100, 100)
+x_positions = np.arange(x_min, x_max+100, 100)
 
 for i, x in enumerate(x_positions):
     if i % 2 == 0:
