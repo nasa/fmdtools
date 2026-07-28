@@ -24,3 +24,4 @@ import fmdtools.define.flow as flow
 import fmdtools.define.block as block
 import fmdtools.define.architecture as architecture
 from fmdtools.define import environment
+from fmdtools.define import pathplan
