@@ -20,6 +20,7 @@ specific language governing permissions and limitations under the License.
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.state import State
 from fmdtools.define.container.mode import Mode
+from fmdtools.define.pathplan import PathPlannerBase
 
 from fmdtools_examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
 from fmdtools_examples.airspacelib.base.arch.flows import AircraftEnvironment
@@ -120,6 +121,8 @@ class ControlFlight(Function):
         """Add the desired trajectory local flow to the Function."""
         self.perc_traj = self.trajectories.create_local("perc_traj")
         self.des_traj = self.trajectories.create_local("des_traj")
+        self.planner = PathPlannerBase()
+        self.planner.init_environment(self.environment)
 
     def static_behavior(self):
         """
@@ -196,6 +199,12 @@ class ControlFlight(Function):
         elif self.m.in_mode('idle', 'pause'):
             newgoal = self.des_traj.s.get_loc()
         self.des_traj.s.assign(newgoal, 'goal_x', 'goal_y', 'goal_z')
+
+    def run_planner(self, start, goal, algorithm, **kwargs):
+        path = self.planner.compute_path(start, goal, planner=algorithm, **kwargs)
+        self.s.flightplan = self.planner.s.flightplan
+        self.s.pt = self.planner.s.pt
+        return path
 
 
 if __name__ == "__main__":

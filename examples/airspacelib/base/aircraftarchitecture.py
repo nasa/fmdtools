@@ -32,7 +32,8 @@ from fmdtools_examples.airspacelib.base.arch.holdpayload import HoldPayload
 
 class AircraftArchParameter(Parameter):
     """Overall Parameter Defining the AircraftArchitecture."""
-
+    startpt: tuple = (0.0, 0.0)
+    endpt: tuple = (25.0, 25.0)
     flightplan: tuple = ((0.0, 0.0), (25.0, 25.0))
     height: float = 25.0
 
