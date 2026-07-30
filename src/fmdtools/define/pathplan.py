@@ -1,6 +1,8 @@
+from fmdtools.define.block.function import Function
 from fmdtools.define.container.state import State
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.object.coords import Coords
+from fmdtools.define.object.geom import Geom, GeomPoint, GeomLine, GeomPoly
 from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.analyze.common import calc_metric
 from fmdtools.define.object.base import BaseObject
@@ -257,8 +259,14 @@ class PathPlannerBase(BaseObject):
         # For Coords (grid) environments
         if self.is_coords() or self.is_hybrid():
             grid_env = self._env.grid if self.is_hybrid() else self._env
-            grid_x1, grid_y1 = grid_env.to_index(x1, y1)
-            grid_x2, grid_y2 = grid_env.to_index(x2, y2)
+            try:
+                grid_x1, grid_y1 = grid_env.to_index(x1, y1)
+                grid_x2, grid_y2 = grid_env.to_index(x2, y2)
+            except:
+                # Either endpoint is outside the grid's bounds -- treat as blocked/non-traversable
+                collision_points.append((x1, y1))
+                collision_points.append((x2, y2))
+                return False, collision_points
 
             cell_size = getattr(grid_env.p, 'block_size', 1.0)
             
@@ -626,7 +634,46 @@ class PathPlannerBase(BaseObject):
             except Exception as e:
                 print(f"Warning: Geometry collision check failed: {e}")
                 traceback.print_exc()
-        
+
+        # ===== GRID COLLISION CHECK =====
+        if self.is_coords() or self.is_hybrid():
+            grid_env = self._env.grid if self.is_hybrid() else self._env
+            blocksize = getattr(grid_env.p, 'block_size', 10.0)
+
+            minx, miny, maxx, maxy = query_shape.bounds
+
+            try:
+                min_gx, min_gy = grid_env.to_index(minx, miny)
+                max_gx, max_gy = grid_env.to_index(maxx, maxy)
+            except Exception as e:
+                print(f"Warning: Grid collision check failed (shape out of bounds): {e}")
+                # Fail closed: if we can't verify the region (e.g., outside the grid),
+                # treat it as blocked rather than silently assuming it's free.
+                collision_info["blocked_cells"].append("out_of_bounds")
+                return False, collision_info
+
+            # Ensure proper ordering (bounds min/max don't guarantee index min/max)
+            min_gx, max_gx = min(min_gx, max_gx), max(min_gx, max_gx)
+            min_gy, max_gy = min(min_gy, max_gy), max(min_gy, max_gy)
+
+            for gx in range(min_gx, max_gx + 1):
+                for gy in range(min_gy, max_gy + 1):
+                    grid_x = gx * blocksize
+                    grid_y = gy * blocksize
+
+                    cell_point = ShapelyPoint(grid_x, grid_y)
+                    distance = query_shape.distance(cell_point)
+
+                    if distance <= blocksize / 2:
+                        cell_result = self.query_point(grid_x, grid_y)
+
+                        if not cell_result["traversable"]:
+                            collision_info["blocked_cells"].append((gx, gy))
+                            return False, collision_info
+
+        return True, collision_info
+
+        '''
         # ===== GRID COLLISION CHECK =====
         if self.is_coords() or self.is_hybrid():
             try:
@@ -659,6 +706,7 @@ class PathPlannerBase(BaseObject):
                 traceback.print_exc()
         
         return True, collision_info
+        '''
 
 
     def check_segment_collision_shape(self, x1, y1, x2, y2, shape, resolution=None):
