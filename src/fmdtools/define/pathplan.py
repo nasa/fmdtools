@@ -25,6 +25,16 @@ class PathPlannerState(State):
     - pt: current index within plan
     - last_valid_path: stores last validated path for recovery
     - replanning_triggered: flag indicating if replanning was needed
+
+    Examples
+    --------
+    >>> s = PathPlannerState()
+    >>> s.flightplan
+    ()
+    >>> s.planned
+    False
+    >>> s.pt
+    0
     """
     flightplan: tuple = ()
     planned: bool = False
@@ -36,6 +46,16 @@ class PathPlannerState(State):
 class PathPlannerParameter(Parameter):
     """
     Static planner parameters (set at initialization).
+
+    Examples
+    --------
+    >>> p = PathPlannerParameter()
+    >>> p.max_distance
+    5.0
+    >>> p.block_size
+    2.5
+    >>> p.max_replan_attempts
+    3
     """
     max_distance: float = 5.0
     block_size: float = 2.5
@@ -101,13 +121,50 @@ class PathPlannerBase(BaseObject):
 
 # --- Environment type detection ---
     def is_coords(self):
+        """
+        Examples
+        --------
+        >>> class DummyCoords: pass
+        >>> pp = PathPlannerBase()
+        >>> pp._env = DummyCoords()
+        >>> pp.is_coords()
+        False
+        >>> pp._env = Coords()
+        >>> pp.is_coords()
+        True
+        """
         return isinstance(self._env, Coords)
 
     def is_geom_arch(self):
+        """
+        Examples
+        --------
+        >>> class DummyGeomArch: pass
+        >>> pp = PathPlannerBase()
+        >>> pp._env = DummyGeomArch()
+        >>> pp.is_geom_arch()
+        False
+        >>> pp._env = GeomArchitecture()
+        >>> pp.is_geom_arch()
+        True
+        """
         return isinstance(self._env, GeomArchitecture)
     
     def is_hybrid(self):
-        """Check if environment is hybrid (has both grid and geoms)."""
+        """
+        Check if environment is hybrid (has both grid and geoms).
+        
+        Examples
+        --------
+        >>> class DummyHybrid:
+        ...     def __init__(self):
+        ...         self.grid = Coords()
+        ...         self.geom_arch = GeomArchitecture()
+        >>> pp = PathPlannerBase()
+        >>> pp._env = DummyHybrid()
+        >>> pp.is_hybrid()
+        True
+        """
         return (hasattr(self._env, 'grid') and 
             hasattr(self._env, 'geom_arch') and 
             isinstance(self._env.grid, Coords) and 
@@ -121,6 +178,23 @@ class PathPlannerBase(BaseObject):
         -------
         GeomArchitecture or None
             The geometry architecture, or None if not available
+
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp._env = GeomArchitecture()
+        >>> isinstance(pp._get_geom_arch(), GeomArchitecture)
+        True
+        >>> class DummyHybrid:
+        ...     def __init__(self):
+        ...         self.grid = Coords()
+        ...         self.geom_arch = GeomArchitecture()
+        >>> pp._env = DummyHybrid()
+        >>> isinstance(pp._get_geom_arch(), GeomArchitecture)
+        True
+        >>> pp._env = object()
+        >>> pp._get_geom_arch() is None
+        True
         """
         if self.is_geom_arch():
             return self._env
@@ -136,6 +210,21 @@ class PathPlannerBase(BaseObject):
         Aggregate obstacle behavior from CoordsParam attributes.
         Each feature in coords.p.<name> must be a dict:
             {cost, traversable, goal_allowed}
+
+        Examples
+        --------
+        >>> class DummyCoords:
+        ...     def get(self, x, y, key, outside=None):
+        ...         if key == "traversable":
+        ...             return True
+        ...         if key == "cost":
+        ...             return 3.0
+        ...         if key == "goal_allowed":
+        ...             return False
+        >>> pp = PathPlannerBase()
+        >>> pp._env = DummyCoords()
+        >>> pp._query_coords_cell(1, 2)
+        {'cost': 3.0, 'traversable': True, 'goal_allowed': False}
         """
         grid_env = self._env.grid if self.is_hybrid() else self._env
         ## what if they didn't pass in the information
@@ -151,6 +240,21 @@ class PathPlannerBase(BaseObject):
     def _query_geom_point(self, x, y):
         """
         Query a point against all geometries using GeomArchitecture.all_at().
+
+        Examples
+        --------
+        >>> class DummyGeomState:
+        ...     cost = 5
+        ...     traversable = False
+        ...     goal_allowed = False
+        >>> class DummyGeomObj: s = DummyGeomState()
+        >>> class DummyGeomArch:
+        ...     geoms = {"test": DummyGeomObj()}
+        ...     def all_at(self, x, y): return ["test"]
+        >>> pp = PathPlannerBase()
+        >>> pp._env = DummyGeomArch()
+        >>> pp._query_geom_point(0, 0)
+        {'cost': 0.0, 'traversable': False, 'goal_allowed': True}
         """
         total_cost = 0.0
         traversable = True
@@ -191,6 +295,28 @@ class PathPlannerBase(BaseObject):
         """
         Unified hybrid environment point query.
         Supports: Coords only, Geom only, or BOTH simultaneously
+
+        Examples
+        --------
+        >>> class DummyCoords:
+        ...     def get(self, x, y, key, outside=None):
+        ...         if key == "traversable": return (x+y)%2==0
+        ...         if key == "cost": return x*y
+        ...         if key == "goal_allowed": return True
+        >>> class DummyGeomState:
+        ...     cost=5; traversable=False; goal_allowed=False
+        >>> class DummyGeomObj: s = DummyGeomState()
+        >>> class DummyGeomArch:
+        ...     geoms = {"test": DummyGeomObj()}
+        ...     def all_at(self, x, y): return ["test"]
+        >>> class HybridEnv:
+        ...     def __init__(self):
+        ...         self.grid = DummyCoords()
+        ...         self.geom_arch = DummyGeomArch()
+        >>> pp = PathPlannerBase()
+        >>> pp._env = HybridEnv()
+        >>> pp.query_point(1,1)
+        {'cost': 0.0, 'traversable': False, 'goal_allowed': True}
         """
         results = []
 
@@ -219,32 +345,41 @@ class PathPlannerBase(BaseObject):
     
 
     def check_point_collision(self, x, y):
-        """True if point is traversable."""
+        """
+        True if point is traversable.
+        
+        >>> class DummyCoords:
+        ...     def get(self, x, y, key, outside=None): return key != "traversable"
+        >>> pp = PathPlannerBase()
+        >>> pp._env = DummyCoords()
+        >>> pp.check_point_collision(5,5)
+        False
+        """
         return self.query_point(x, y)["traversable"]
 
 
     def check_goal_feasible(self, goal, shape=None):
-        """Check whether goal is feasible for a shaped agent."""
+        """
+        Check whether goal is feasible for a shaped agent.
+        
+        Examples
+        """
         x, y = goal
         
         if shape is not None:
             # Use shape-aware collision
             is_free, collision_info = self.check_shape_collision(x, y, shape)
             if not is_free:
-                return {
-                    "feasible": False,
-                    "reason": "Goal position causes agent to collide with obstacles.",
-                    "collision_info": collision_info
-                }
+                return {"feasible": False,
+                        "reason": "Goal position causes agent to collide with obstacles.",
+                        "collision_info": collision_info}
         else:
             # Fallback to point query
             info = self.query_point(x, y)
             if not info["traversable"] or not info["goal_allowed"]:
-                return {
-                    "feasible": False,
-                    "reason": "Goal point is not in traversable/goal-allowed region.",
-                    "point_info": info
-                }
+                return {"feasible": False,
+                        "reason": "Goal point is not in traversable/goal-allowed region.",
+                        "point_info": info}
         
         return {"feasible": True, "reason": "Goal point is valid."}
 
@@ -307,7 +442,13 @@ class PathPlannerBase(BaseObject):
                     shape = None
                     try:
                         if hasattr(geom_obj, 'create_shape'):
-                            shape = geom_obj.create_shape()
+                            buffer_attrs = geom_obj.p.get_pref_attrs('buffer')
+                            if buffer_attrs:
+                                buffer_name = list(buffer_attrs.keys())[0]
+                                shape = geom_obj.create_shape(buffer_name)
+                            else:
+                                shape = geom_obj.create_shape()
+                            # -----------------------------
                     except Exception:
                         pass
                     
@@ -328,6 +469,15 @@ class PathPlannerBase(BaseObject):
         """
         Extract a representative point from a shapely geometry intersection.
         Handles Point, LineString, Polygon, and MultiPart geometries.
+
+        Examples
+        --------
+        >>> from shapely.geometry import Point, LineString
+        >>> pp = PathPlannerBase()
+        >>> pp._extract_intersection_point(Point(1.0, 2.0))
+        (1.0, 2.0)
+        >>> pp._extract_intersection_point(LineString([(0, 0), (1, 1)]))
+        (0.0, 0.0)
         """
         # Try coords attribute (Point or LineString)
         try:
@@ -376,6 +526,16 @@ class PathPlannerBase(BaseObject):
         Returns
         -------
         list of (x, y) grid cell coordinates
+
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp._bresenham_line(0, 0, 3, 3)
+        [(0, 0), (1, 1), (2, 2), (3, 3)]
+        >>> pp._bresenham_line(0, 0, 0, 0)
+        [(0, 0)]
+        >>> pp._bresenham_line(0, 0, 4, 2)
+        [(0, 0), (1, 0), (2, 1), (3, 1), (4, 2)]
         """
         cells = []
         dx = abs(x1 - x0)
@@ -816,8 +976,14 @@ class PathPlannerBase(BaseObject):
                     if traversable:
                         continue
                     
+                    # Inside the commented-out check_segment_collision_shape
                     try:
-                        obstacle_shape = geom_obj.create_shape()
+                        buffer_attrs = geom_obj.p.get_pref_attrs('buffer')
+                        if buffer_attrs:
+                            buffer_name = list(buffer_attrs.keys())[0]
+                            obstacle_shape = geom_obj.create_shape(buffer_name)
+                        else:
+                            obstacle_shape = geom_obj.create_shape()
                     except Exception:
                         continue
                     
@@ -1232,6 +1398,22 @@ class PathPlannerBase(BaseObject):
 
 # --- Stepping / movement ---
     def next_position(self):
+        """
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp.s.flightplan = ((0, 0), (1, 1), (2, 2))
+        >>> pp.s.planned = True
+        >>> pp.s.pt = 0
+        >>> pp.next_position()
+        (0, 0)
+        >>> pp.next_position()
+        (1, 1)
+        >>> pp.next_position()
+        (2, 2)
+        >>> pp.next_position()  # past end of plan
+        """
+
         if not self.s.planned or not self.s.flightplan:
             return None
 
@@ -1243,32 +1425,52 @@ class PathPlannerBase(BaseObject):
         return wp
 
     def compute_path_length(self, path):
-            """
-            Compute the total length of a path.
-            
-            Parameters
-            ----------
-            path : sequence of (x, y) tuples
-                The path points
-            
-            Returns
-            -------
-            float
-                Total length of the path (sum of segment distances)
-            """
-            if len(path) < 2:
-                return 0.0
-            
-            total_length = 0.0
-            for i in range(len(path) - 1):
-                x1, y1 = path[i]
-                x2, y2 = path[i + 1]
-                dx = x2 - x1
-                dy = y2 - y1
-                total_length += math.hypot(dx, dy)
-            
-            return total_length
+        """
+        Compute the total length of a path.
+        
+        Parameters
+        ----------
+        path : sequence of (x, y) tuples
+            The path points
+        
+        Returns
+        -------
+        float
+            Total length of the path (sum of segment distances)
+
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp.compute_path_length([(0, 0), (3, 4)])
+        5.0
+        >>> pp.compute_path_length([(0, 0), (1, 0), (1, 1)])
+        2.0
+        >>> pp.compute_path_length([(0, 0)])
+        0.0
+        """
+        if len(path) < 2:
+            return 0.0
+        
+        total_length = 0.0
+        for i in range(len(path) - 1):
+            x1, y1 = path[i]
+            x2, y2 = path[i + 1]
+            dx = x2 - x1
+            dy = y2 - y1
+            total_length += math.hypot(dx, dy)
+        
+        return total_length
     
     def compute_number_path_steps(self, path):
-        """Computes the number of segments in a path."""
+        """
+        Computes the number of steps (waypoints) in a path.
+        
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp.compute_number_path_steps([(0, 0), (1, 1), (2, 2)])
+        3
+        >>> pp.compute_number_path_steps([])
+        0
+        """
         return len(path)
