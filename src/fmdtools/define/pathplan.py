@@ -64,7 +64,7 @@ class PathPlannerBase(BaseObject):
         fn(segment_costs)  -> float
     """
 
-    __slots__ = ('_env', 'cost_function',
+    __slots__ = ('env', 'cost_function',
                  'computation_history', 'rejected_paths', 'replan_reasons',)
 
     # Container references
@@ -74,7 +74,7 @@ class PathPlannerBase(BaseObject):
 
     def __init__(self, cost_function=None, **kwargs):
         super().__init__(**kwargs)
-        self._env = None
+        self.env = None
         self.cost_function = None #have the user set externally
 
         self.computation_history = []
@@ -90,13 +90,13 @@ class PathPlannerBase(BaseObject):
         if env is None:
             raise ValueError("Environment cannot be None.")
 
-        self._env = env
+        self.env = env
 
     @property
-    def env(self):
-        if self._env is None:
+    def get_env(self):
+        if self.env is None:
             raise RuntimeError("Environment not initialized. Call init_environment() first.")
-        return self._env
+        return self.env
 
 
 # --- Environment type detection ---
@@ -117,7 +117,7 @@ class PathPlannerBase(BaseObject):
         >>> pp.is_coords()
         False
         """
-        return isinstance(self._env, Coords)
+        return isinstance(self.env, Coords)
 
     def is_geom_arch(self):
         """
@@ -136,7 +136,7 @@ class PathPlannerBase(BaseObject):
         >>> pp.is_geom_arch()
         False
         """
-        return isinstance(self._env, GeomArchitecture)
+        return isinstance(self.env, GeomArchitecture)
     
     def is_hybrid(self):
         """
@@ -152,10 +152,10 @@ class PathPlannerBase(BaseObject):
         >>> pp.is_hybrid()
         False
         """
-        return (hasattr(self._env, 'grid') and 
-            hasattr(self._env, 'geom_arch') and 
-            isinstance(self._env.grid, Coords) and 
-            isinstance(self._env.geom_arch, GeomArchitecture))
+        return (hasattr(self.env, 'grid') and 
+            hasattr(self.env, 'geom_arch') and 
+            isinstance(self.env.grid, Coords) and 
+            isinstance(self.env.geom_arch, GeomArchitecture))
 
     def _get_geom_arch(self):
         """
@@ -170,7 +170,7 @@ class PathPlannerBase(BaseObject):
         --------
         >>> pp = PathPlannerBase()
         >>> pp.init_environment(ExampleGeomArch())
-        >>> pp._get_geom_arch() is pp._env
+        >>> pp._get_geom_arch() is pp.env
         True
         >>> pp.init_environment(ExampleHybrid())
         >>> isinstance(pp._get_geom_arch(), ExampleGeomArch)
@@ -180,9 +180,9 @@ class PathPlannerBase(BaseObject):
         True
         """
         if self.is_geom_arch():
-            return self._env
+            return self.env
         elif self.is_hybrid():
-            return self._env.geom_arch
+            return self.env.geom_arch
         return None
 
 
@@ -203,7 +203,7 @@ class PathPlannerBase(BaseObject):
         >>> pp._query_coords_cell(9,9)
         {'cost': 1.0, 'traversable': True, 'goal_allowed': True}
         """
-        grid_env = self._env.grid if self.is_hybrid() else self._env
+        grid_env = self.env.grid if self.is_hybrid() else self.env
         ## TODO: what if they didn't pass in the information
         traversable = grid_env.get(x, y, "traversable", outside=True)
         cost = grid_env.get(x, y, "cost", outside=1.0)
@@ -399,7 +399,7 @@ class PathPlannerBase(BaseObject):
 
         # For Coords (grid) environments
         if self.is_coords() or self.is_hybrid():
-            grid_env = self._env.grid if self.is_hybrid() else self._env
+            grid_env = self.env.grid if self.is_hybrid() else self.env
             try:
                 grid_x1, grid_y1 = grid_env.to_index(x1, y1)
                 grid_x2, grid_y2 = grid_env.to_index(x2, y2)
@@ -669,7 +669,7 @@ class PathPlannerBase(BaseObject):
 
         # For Coords (grid) environments
         if self.is_coords() or self.is_hybrid():
-            grid_env = self._env.grid if self.is_hybrid() else self._env
+            grid_env = self.env.grid if self.is_hybrid() else self.env
             
             # Get cells overlapping the shape's bounding box
             cells = self._get_grid_cells_in_bounds(shape.bounds, grid_env)
@@ -782,7 +782,7 @@ class PathPlannerBase(BaseObject):
 
         # ===== GRID COLLISION CHECK =====
         if self.is_coords() or self.is_hybrid():
-            grid_env = self._env.grid if self.is_hybrid() else self._env
+            grid_env = self.env.grid if self.is_hybrid() else self.env
             blocksize = getattr(grid_env.p, 'block_size', 10.0)
 
             minx, miny, maxx, maxy = query_shape.bounds
@@ -822,7 +822,7 @@ class PathPlannerBase(BaseObject):
         # ===== GRID COLLISION CHECK =====
         if self.is_coords() or self.is_hybrid():
             try:
-                grid_env = self._env.grid if self.is_hybrid() else self._env
+                grid_env = self.env.grid if self.is_hybrid() else self.env
                 blocksize = getattr(grid_env.p, 'block_size', 10.0)
                 
                 minx, miny, maxx, maxy = query_shape.bounds
@@ -934,7 +934,7 @@ class PathPlannerBase(BaseObject):
         
         # Get all cells that the swept volume overlaps using Bresenham/DDA
         if self.is_coords() or self.is_hybrid():
-            grid_env = self._env.grid if self.is_hybrid() else self._env
+            grid_env = self.env.grid if self.is_hybrid() else self.env
             cells = self._get_swept_cells(swept_volume, grid_env)
             
             # Get center point of each cell and check collision using check_shape_collision

@@ -96,11 +96,10 @@ class ObstacleGeomArch(GeomArchitecture):
 class GeomEnvironmentArchitecture(FunctionArchitecture):
     container_p = BasePlannerParameter
     default_sp = {'end_time': 15}
-    __slots__ = ('geom_arch', 'geoms', 'planner')
+    __slots__ = ('env', 'planner')
     def init_architecture(self, **kwargs):
-        self.geom_arch = ObstacleGeomArch()
-        self.geoms = self.geom_arch.geoms
-        setup_planner(self, self.geom_arch)
+        self.env = ObstacleGeomArch()
+        setup_planner(self, self.env)
         self.planner = self.fxns['planner']
 
 
@@ -109,7 +108,6 @@ class HybridEnvironment:
     def __init__(self, grid_env, geom_arch):
         self.grid = grid_env
         self.geom_arch = geom_arch
-        self.geoms = geom_arch.geoms
     def to_index(self, x, y):
         return self.grid.to_index(x, y)
     @property
@@ -118,13 +116,12 @@ class HybridEnvironment:
 class HybridArchitecture(FunctionArchitecture):
     container_p = BasePlannerParameter
     default_sp = {'end_time': 15}  
-    __slots__ = ('grid', 'geom_arch', 'geoms', 'env', 'planner')
+    __slots__ = ('grid', 'geom_arch', 'env', 'planner')
     def init_architecture(self, **kwargs):
         x_size = int(self.p.end_point[0] / self.p.block_size) + 1
         y_size = int(self.p.end_point[1] / self.p.block_size) + 1
         self.grid = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.block_size))
         self.geom_arch = ObstacleGeomArch()
-        self.geoms = self.geom_arch.geoms
         self.env = HybridEnvironment(self.grid, self.geom_arch)
         setup_planner(self, self.env)
         self.planner = self.fxns['planner']
@@ -163,17 +160,18 @@ class CircleAgentObstacleGeomArch(GeomArchitecture):
 class CircleAgentGeomEnvironmentArchitecture(FunctionArchitecture):
     container_p = BasePlannerParameter
     default_sp = {'end_time': 15}
-    __slots__ = ('geom_arch', 'geoms', 'planner')
+    __slots__ = ('env', 'planner', '_agent_geom', '_agent_shape')
     def init_architecture(self, **kwargs):
-        self.geom_arch = CircleAgentObstacleGeomArch()
-        self.geoms = self.geom_arch.geoms
-        setup_planner(self, self.geom_arch)
+        self.env = CircleAgentObstacleGeomArch()
+        setup_planner(self, self.env)
         self.planner = self.fxns['planner']
     ## idk what to do with these two
+    '''
     @property
     def agent_geom(self): return self._agent_geom
     @property
     def agent_shape(self): return self._agent_shape
+    '''
 
 from shapely import Point as ShapelyPoint
 class CircleGridArchitecture(FunctionArchitecture):
@@ -185,25 +183,28 @@ class CircleGridArchitecture(FunctionArchitecture):
         self.env = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.block_size))
         setup_planner(self, self.env)
         self.planner = self.fxns['planner']
-        self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
+        #self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
+    '''
     @property
     def agent_geom(self): return self._agent_geom
     @property
     def agent_shape(self): return self._agent_shape
+    '''
 
 class CircleGeomArchitecture(FunctionArchitecture):
     container_p = CircleAgentParameter
-    __slots__ = ('geom_arch', 'geoms', 'planner', '_agent_geom', '_agent_shape')
+    __slots__ = ('env', 'planner', '_agent_geom', '_agent_shape')
     def init_architecture(self, **kwargs):
-        self.geom_arch = CircleAgentObstacleGeomArch()
-        self.geoms = self.geom_arch.geoms
-        setup_planner(self, self.geom_arch)
+        self.env = CircleAgentObstacleGeomArch()
+        setup_planner(self, self.env)
         self.planner = self.fxns['planner']
-        self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
+        #self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
+    '''
     @property
     def agent_geom(self): return self._agent_geom
     @property
     def agent_shape(self): return self._agent_shape
+    '''
 
 class CircleHybridArchitecture(FunctionArchitecture):
     container_p = CircleAgentParameter
@@ -216,11 +217,13 @@ class CircleHybridArchitecture(FunctionArchitecture):
         self.env = HybridEnvironment(self.grid, self.geom_arch)
         setup_planner(self, self.env)
         self.planner = self.fxns['planner']
-        self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
+        #self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
+    '''
     @property
     def agent_geom(self):return self._agent_geom
     @property
     def agent_shape(self): return self._agent_shape
+    '''
 
 
 def create_grid_test_model(start=(10.0, 10.0), end=(100.0, 100.0), block_size=10.0):
