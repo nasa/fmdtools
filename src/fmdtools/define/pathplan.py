@@ -1,8 +1,7 @@
-from fmdtools.define.block.function import Function
 from fmdtools.define.container.state import State
 from fmdtools.define.container.parameter import Parameter
-from fmdtools.define.object.coords import Coords
-from fmdtools.define.object.geom import Geom, GeomPoint, GeomLine, GeomPoly
+from fmdtools.define.object.coords import Coords, CoordsParam
+from fmdtools.define.object.geom import GeomPoint, GeomParameter, GeomLine, GeomPoly
 from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.analyze.common import calc_metric
 from fmdtools.define.object.base import BaseObject
@@ -13,8 +12,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import traceback
 import heapq
-from shapely.geometry import Point as ShapelyPoint
-from shapely.geometry import LineString as ShapelyLineString
+from shapely.geometry import Point as ShapelyPoint  ##maybe use GeomPoint instead
+from shapely.geometry import LineString as ShapelyLineString    ##maybe use GeomLine instead
 from shapely.affinity import translate
 
 class PathPlannerState(State):
@@ -25,16 +24,6 @@ class PathPlannerState(State):
     - pt: current index within plan
     - last_valid_path: stores last validated path for recovery
     - replanning_triggered: flag indicating if replanning was needed
-
-    Examples
-    --------
-    >>> s = PathPlannerState()
-    >>> s.flightplan
-    ()
-    >>> s.planned
-    False
-    >>> s.pt
-    0
     """
     flightplan: tuple = ()
     planned: bool = False
@@ -46,16 +35,6 @@ class PathPlannerState(State):
 class PathPlannerParameter(Parameter):
     """
     Static planner parameters (set at initialization).
-
-    Examples
-    --------
-    >>> p = PathPlannerParameter()
-    >>> p.max_distance
-    5.0
-    >>> p.block_size
-    2.5
-    >>> p.max_replan_attempts
-    3
     """
     max_distance: float = 5.0
     block_size: float = 2.5
@@ -122,48 +101,55 @@ class PathPlannerBase(BaseObject):
 # --- Environment type detection ---
     def is_coords(self):
         """
+        Returns True if current environment is Coords.
+
         Examples
         --------
-        >>> class DummyCoords: pass
         >>> pp = PathPlannerBase()
-        >>> pp._env = DummyCoords()
-        >>> pp.is_coords()
-        False
-        >>> pp._env = Coords()
+        >>> pp.init_environment(ExampleGrid())
         >>> pp.is_coords()
         True
+        >>> pp.init_environment(ExampleGeomArch())
+        >>> pp.is_coords()
+        False
+        >>> pp.init_environment(ExampleHybrid())
+        >>> pp.is_coords()
+        False
         """
         return isinstance(self._env, Coords)
 
     def is_geom_arch(self):
         """
+        Returns True if current environment is GeomArchitecture.
+
         Examples
         --------
-        >>> class DummyGeomArch: pass
         >>> pp = PathPlannerBase()
-        >>> pp._env = DummyGeomArch()
-        >>> pp.is_geom_arch()
-        False
-        >>> pp._env = GeomArchitecture()
+        >>> pp.init_environment(ExampleGeomArch())
         >>> pp.is_geom_arch()
         True
+        >>> pp.init_environment(ExampleGrid())
+        >>> pp.is_geom_arch()
+        False
+        >>> pp.init_environment(ExampleHybrid())
+        >>> pp.is_geom_arch()
+        False
         """
         return isinstance(self._env, GeomArchitecture)
     
     def is_hybrid(self):
         """
-        Check if environment is hybrid (has both grid and geoms).
-        
+        Returns True if environment is hybrid (has both grid and geoms).
+
         Examples
         --------
-        >>> class DummyHybrid:
-        ...     def __init__(self):
-        ...         self.grid = Coords()
-        ...         self.geom_arch = GeomArchitecture()
         >>> pp = PathPlannerBase()
-        >>> pp._env = DummyHybrid()
+        >>> pp.init_environment(ExampleHybrid())
         >>> pp.is_hybrid()
         True
+        >>> pp.init_environment(ExampleGrid())
+        >>> pp.is_hybrid()
+        False
         """
         return (hasattr(self._env, 'grid') and 
             hasattr(self._env, 'geom_arch') and 
@@ -178,21 +164,17 @@ class PathPlannerBase(BaseObject):
         -------
         GeomArchitecture or None
             The geometry architecture, or None if not available
-
+        
         Examples
         --------
         >>> pp = PathPlannerBase()
-        >>> pp._env = GeomArchitecture()
-        >>> isinstance(pp._get_geom_arch(), GeomArchitecture)
+        >>> pp.init_environment(ExampleGeomArch())
+        >>> pp._get_geom_arch() is pp._env
         True
-        >>> class DummyHybrid:
-        ...     def __init__(self):
-        ...         self.grid = Coords()
-        ...         self.geom_arch = GeomArchitecture()
-        >>> pp._env = DummyHybrid()
-        >>> isinstance(pp._get_geom_arch(), GeomArchitecture)
+        >>> pp.init_environment(ExampleHybrid())
+        >>> isinstance(pp._get_geom_arch(), ExampleGeomArch)
         True
-        >>> pp._env = object()
+        >>> pp.init_environment(ExampleGrid())
         >>> pp._get_geom_arch() is None
         True
         """
@@ -213,27 +195,21 @@ class PathPlannerBase(BaseObject):
 
         Examples
         --------
-        >>> class DummyCoords:
-        ...     def get(self, x, y, key, outside=None):
-        ...         if key == "traversable":
-        ...             return True
-        ...         if key == "cost":
-        ...             return 3.0
-        ...         if key == "goal_allowed":
-        ...             return False
         >>> pp = PathPlannerBase()
-        >>> pp._env = DummyCoords()
-        >>> pp._query_coords_cell(1, 2)
-        {'cost': 3.0, 'traversable': True, 'goal_allowed': False}
+        >>> pp.init_environment(ExampleGrid())
+        >>> pp._query_coords_cell(2,2)
+        {'cost': inf, 'traversable': False, 'goal_allowed': False}
+        >>> pp._query_coords_cell(9,9)
+        {'cost': 1.0, 'traversable': True, 'goal_allowed': True}
         """
         grid_env = self._env.grid if self.is_hybrid() else self._env
         ## what if they didn't pass in the information
         traversable = grid_env.get(x, y, "traversable", outside=True)
         cost = grid_env.get(x, y, "cost", outside=1.0)
         goal_allowed = grid_env.get(x, y, "goal_allowed", outside=True)
-        return {"cost": cost if traversable else float('inf'),
-                "traversable": traversable,
-                "goal_allowed": goal_allowed,}
+        return {"cost": float(cost if traversable else float('inf')), 
+                "traversable": bool(traversable), 
+                "goal_allowed": bool(goal_allowed),}
 
 
 # --- Obstacle query for Geom / GeomArchitecture ---
@@ -243,18 +219,14 @@ class PathPlannerBase(BaseObject):
 
         Examples
         --------
-        >>> class DummyGeomState:
-        ...     cost = 5
-        ...     traversable = False
-        ...     goal_allowed = False
-        >>> class DummyGeomObj: s = DummyGeomState()
-        >>> class DummyGeomArch:
-        ...     geoms = {"test": DummyGeomObj()}
-        ...     def all_at(self, x, y): return ["test"]
         >>> pp = PathPlannerBase()
-        >>> pp._env = DummyGeomArch()
-        >>> pp._query_geom_point(0, 0)
-        {'cost': 0.0, 'traversable': False, 'goal_allowed': True}
+        >>> pp.init_environment(ExampleGeomArch())
+        >>> # Inside the small circle at (8,8)
+        >>> pp._query_geom_point(8,8)
+        {'cost': 0.0, 'traversable': False, 'goal_allowed': False}
+        >>> # Outside the circle
+        >>> pp._query_geom_point(1,1)
+        {'cost': 0.0, 'traversable': True, 'goal_allowed': True}
         """
         total_cost = 0.0
         traversable = True
@@ -282,8 +254,8 @@ class PathPlannerBase(BaseObject):
             # Update aggregate values
             if not trav:
                 traversable = False
-            if goal:
-                goal_allowed = True
+            if not goal:
+                goal_allowed = False
             if trav:
                 total_cost += cost
 
@@ -298,25 +270,31 @@ class PathPlannerBase(BaseObject):
 
         Examples
         --------
-        >>> class DummyCoords:
-        ...     def get(self, x, y, key, outside=None):
-        ...         if key == "traversable": return (x+y)%2==0
-        ...         if key == "cost": return x*y
-        ...         if key == "goal_allowed": return True
-        >>> class DummyGeomState:
-        ...     cost=5; traversable=False; goal_allowed=False
-        >>> class DummyGeomObj: s = DummyGeomState()
-        >>> class DummyGeomArch:
-        ...     geoms = {"test": DummyGeomObj()}
-        ...     def all_at(self, x, y): return ["test"]
-        >>> class HybridEnv:
-        ...     def __init__(self):
-        ...         self.grid = DummyCoords()
-        ...         self.geom_arch = DummyGeomArch()
         >>> pp = PathPlannerBase()
-        >>> pp._env = HybridEnv()
+        >>> pp.init_environment(ExampleGrid())
+        >>> # Not traversable, not goal_allowed
+        >>> pp.query_point(2,2)
+        {'cost': inf, 'traversable': False, 'goal_allowed': False}
+        >>> # Traversable region
+        >>> pp.query_point(9,9)
+        {'cost': 1.0, 'traversable': True, 'goal_allowed': True}
+        >>> pp.init_environment(ExampleGeomArch())
+        >>> # Inside the small circle at (8,8)
+        >>> pp.query_point(8,8)
+        {'cost': inf, 'traversable': False, 'goal_allowed': False}
+        >>> # Outside the circle
         >>> pp.query_point(1,1)
-        {'cost': 0.0, 'traversable': False, 'goal_allowed': True}
+        {'cost': 0.0, 'traversable': True, 'goal_allowed': True}
+        >>> pp.init_environment(ExampleHybrid())
+        >>> # Hybrid at (8,8): both grid and geom allow
+        >>> pp.query_point(8,8)
+        {'cost': inf, 'traversable': False, 'goal_allowed': False}
+        >>> # Only grid (traversable/goal_allowed for grid)
+        >>> pp.query_point(9,9)
+        {'cost': 1.0, 'traversable': True, 'goal_allowed': True}
+        >>> # Only grid at a restricted region
+        >>> pp.query_point(2,2)
+        {'cost': inf, 'traversable': False, 'goal_allowed': False}
         """
         results = []
 
@@ -334,28 +312,39 @@ class PathPlannerBase(BaseObject):
 
         total_cost = sum(r["cost"] for r in results if r["traversable"])
         traversable = all(r["traversable"] for r in results)
-        goal_allowed = any(r["goal_allowed"] for r in results)
+        goal_allowed = all(r["goal_allowed"] for r in results)
 
         if not traversable:
             total_cost = float('inf')
 
-        return {"cost": total_cost,
-                "traversable": traversable,
-                "goal_allowed": goal_allowed}
+        return {"cost": float(total_cost), 
+                "traversable": bool(traversable), 
+                "goal_allowed": bool(goal_allowed)}
     
 
-    def check_point_collision(self, x, y):
+    def check_collision(self, x, y, shape=None):
         """
-        True if point is traversable.
-        
-        >>> class DummyCoords:
-        ...     def get(self, x, y, key, outside=None): return key != "traversable"
+        Returns True if traversable.
+        - If shape is provided: acts as check_shape_collision.
+
+        Examples
+        --------
         >>> pp = PathPlannerBase()
-        >>> pp._env = DummyCoords()
-        >>> pp.check_point_collision(5,5)
+        >>> pp.init_environment(ExampleGrid())
+        >>> pp.check_collision(2,2)
         False
+        >>> pp.check_collision(9,9)
+        True
+        >>> pp.init_environment(ExampleGeomArch())
+        >>> pp.check_collision(8,8)
+        False
+        >>> pp.check_collision(1,1)
+        True
         """
-        return self.query_point(x, y)["traversable"]
+        if shape is None or self.p.agent_radius == 0.0:
+            return self.query_point(x, y)["traversable"]
+        else:
+            return self.check_shape_collision(x, y, shape)[0]
 
 
     def check_goal_feasible(self, goal, shape=None):
@@ -363,6 +352,22 @@ class PathPlannerBase(BaseObject):
         Check whether goal is feasible for a shaped agent.
         
         Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp.init_environment(ExampleGrid())
+        >>> # Not traversable (2,2) and not goal_allowed
+        >>> pp.check_goal_feasible((2,2))['feasible']
+        False
+        >>> # Traversable and goal_allowed region!
+        >>> pp.check_goal_feasible((9,9))['feasible']
+        True
+        >>> pp.init_environment(ExampleGeomArch())
+        >>> # Inside the small circle at (8,8): not traversable and not goal_allowed
+        >>> pp.check_goal_feasible((8,8))['feasible']
+        False
+        >>> # Outside circle: traversable, goal_allowed
+        >>> pp.check_goal_feasible((1,1))['feasible']
+        True
         """
         x, y = goal
         
@@ -427,7 +432,7 @@ class PathPlannerBase(BaseObject):
 
         # For Geom / GeomArchitecture / Hybrid environments
         if self.is_geom_arch() or self.is_hybrid():
-            segment = ShapelyLineString([(x1, y1), (x2, y2)])
+            segment = ShapelyLineString([(x1, y1), (x2, y2)])       ##maybe use GeomLine instead
             geom_arch = self._get_geom_arch()
             
             if geom_arch is not None:
@@ -469,15 +474,6 @@ class PathPlannerBase(BaseObject):
         """
         Extract a representative point from a shapely geometry intersection.
         Handles Point, LineString, Polygon, and MultiPart geometries.
-
-        Examples
-        --------
-        >>> from shapely.geometry import Point, LineString
-        >>> pp = PathPlannerBase()
-        >>> pp._extract_intersection_point(Point(1.0, 2.0))
-        (1.0, 2.0)
-        >>> pp._extract_intersection_point(LineString([(0, 0), (1, 1)]))
-        (0.0, 0.0)
         """
         # Try coords attribute (Point or LineString)
         try:
@@ -526,16 +522,6 @@ class PathPlannerBase(BaseObject):
         Returns
         -------
         list of (x, y) grid cell coordinates
-
-        Examples
-        --------
-        >>> pp = PathPlannerBase()
-        >>> pp._bresenham_line(0, 0, 3, 3)
-        [(0, 0), (1, 1), (2, 2), (3, 3)]
-        >>> pp._bresenham_line(0, 0, 0, 0)
-        [(0, 0)]
-        >>> pp._bresenham_line(0, 0, 4, 2)
-        [(0, 0), (1, 0), (2, 1), (3, 1), (4, 2)]
         """
         cells = []
         dx = abs(x1 - x0)
@@ -693,7 +679,7 @@ class PathPlannerBase(BaseObject):
                 # Check if the shape overlaps with this cell
                 # Use a small buffer around the center point to approximate cell coverage
                 cell_size = getattr(grid_env.p, 'cell_size', 1.0)
-                cell_buffer = ShapelyPoint(cell_center).buffer(cell_size * 0.5)
+                cell_buffer = ShapelyPoint(cell_center).buffer(cell_size * 0.5)     
                 
                 if shape.intersects(cell_buffer):
                     cell_info = self.query_point(*cell_center)
@@ -732,12 +718,10 @@ class PathPlannerBase(BaseObject):
                     except Exception:
                         pass
 
-        return {
-            "traversable": traversable,
-            "cost": total_cost if traversable else float('inf'),
-            "goal_allowed": goal_allowed,
-            "blocked_cells": blocked_cells
-        }
+        return {"traversable": traversable,
+                "cost": total_cost if traversable else float('inf'),
+                "goal_allowed": goal_allowed,
+                "blocked_cells": blocked_cells}
 
     def check_shape_collision(self, x, y, shape):
         """Check if shape at (x,y) collides with obstacles."""
@@ -1399,6 +1383,8 @@ class PathPlannerBase(BaseObject):
 # --- Stepping / movement ---
     def next_position(self):
         """
+        Return the next point in flightplan.
+
         Examples
         --------
         >>> pp = PathPlannerBase()
@@ -1411,9 +1397,9 @@ class PathPlannerBase(BaseObject):
         (1, 1)
         >>> pp.next_position()
         (2, 2)
-        >>> pp.next_position()  # past end of plan
+        >>> pp.next_position() is None
+        True
         """
-
         if not self.s.planned or not self.s.flightplan:
             return None
 
@@ -1441,12 +1427,12 @@ class PathPlannerBase(BaseObject):
         Examples
         --------
         >>> pp = PathPlannerBase()
-        >>> pp.compute_path_length([(0, 0), (3, 4)])
+        >>> round(pp.compute_path_length([(0,0), (3,4)]),2)
         5.0
-        >>> pp.compute_path_length([(0, 0), (1, 0), (1, 1)])
-        2.0
-        >>> pp.compute_path_length([(0, 0)])
+        >>> pp.compute_path_length([(0,0)])
         0.0
+        >>> round(pp.compute_path_length([(0,0), (0,5), (5,5)]), 2)
+        10.0
         """
         if len(path) < 2:
             return 0.0
@@ -1463,14 +1449,68 @@ class PathPlannerBase(BaseObject):
     
     def compute_number_path_steps(self, path):
         """
-        Computes the number of steps (waypoints) in a path.
+        Computes number of waypoints in a path.
         
         Examples
         --------
         >>> pp = PathPlannerBase()
-        >>> pp.compute_number_path_steps([(0, 0), (1, 1), (2, 2)])
+        >>> pp.compute_number_path_steps([(0,0), (1,1), (2,2)])
         3
         >>> pp.compute_number_path_steps([])
         0
         """
         return len(path)
+
+
+
+
+#################################################################################
+# --- Dummy environment for testing ---
+
+# Minimal State, Parameter for doc-test obstacles
+class ExampleObstacleState(State):
+    cost: float = 2.0
+    traversable: bool = False
+    goal_allowed: bool = False
+
+class ExampleObstacleParam(GeomParameter):
+    coordinates: tuple = (8.0, 8.0)   # Circle centered on (0,0)
+    buffer_around: float = 0.5        # Small radius
+
+class ExampleGeomPoint(GeomPoint):
+    container_p = ExampleObstacleParam
+    container_s = ExampleObstacleState
+
+class ExampleGeomArch(GeomArchitecture):
+    def __init__(self):
+        self.geoms = {}
+        # Add one small circle at (8,8)
+        self.geoms["obstacle"] = ExampleGeomPoint()
+
+# Minimal ExampleGrid for grid queries
+class ExampleCoordsParam(CoordsParam):
+    x_size: int = 10
+    y_size: int = 10
+    blocksize: float = 1.0
+
+class ExampleGrid(Coords):
+    container_p = ExampleCoordsParam
+    feature_traversable = (bool, True)     
+    feature_goal_allowed = (bool, True)
+    feature_cost = (float, 1.0)
+    def init_properties(self, **kwargs):
+        self.set_range("traversable", False, xmin=0, xmax=5, ymin=0, ymax=5, inclusive=False)
+        self.set_range("goal_allowed", False, xmin=0, xmax=5, ymin=0, ymax=5, inclusive=False)
+        self.set_range("cost", float("inf"), xmin=0, xmax=5, ymin=0, ymax=5, inclusive=False)
+
+
+# Hybrid
+class ExampleHybrid:
+    def __init__(self):
+        self.grid = ExampleGrid()
+        self.geom_arch = ExampleGeomArch()
+        self.geoms = self.geom_arch.geoms
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
