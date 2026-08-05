@@ -7,30 +7,9 @@ from fmdtools.define.object.geom import GeomParameter, GeomPoly, GeomPoint
 from fmdtools.define.pathplan import PathPlannerState, PathPlannerParameter, PathPlannerBase
 
 
-class PlannerState(PathPlannerState):
-    flightplan: tuple = ()
-    pt: int = 0
-    planned: bool = False
-    last_valid_path: tuple = ()
-    replanning_triggered: bool = False
-
 class BasePlannerParameter(PathPlannerParameter):
-    max_distance: float = 5.0
-    blocksize: float = 10.0
-    agent_radius: float = 0.0
-    planner = None
-
-    path_validation_enabled: bool = True
-    replanning_enabled: bool = True
-    max_replan_attempts: int = 3
-    collision_check_resolution: float = 0.5
-
     start_point: tuple = (10.0, 10.0)
     end_point: tuple = (100.0, 100.0)
-    
-    
-    
-    
 
 # --- Utility Function to Initialize Planner ---
 
@@ -70,9 +49,9 @@ class GridArchitecture(FunctionArchitecture):
     __slots__ = ('_grid',)
     
     def init_architecture(self, **kwargs):
-        x_size = int(self.p.end_point[0] / self.p.blocksize) + 1
-        y_size = int(self.p.end_point[1] / self.p.blocksize) + 1
-        self._grid = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.blocksize))
+        x_size = int(self.p.end_point[0] / self.p.block_size) + 1
+        y_size = int(self.p.end_point[1] / self.p.block_size) + 1
+        self._grid = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.block_size))
         setup_planner(self, self._grid)
     @property
     def planner(self):
@@ -171,9 +150,9 @@ class HybridArchitecture(FunctionArchitecture):
     __slots__ = ('_grid', '_geom_arch', '_hybrid_env')
     
     def init_architecture(self, **kwargs):
-        x_size = int(self.p.end_point[0] / self.p.blocksize) + 1
-        y_size = int(self.p.end_point[1] / self.p.blocksize) + 1
-        self._grid = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.blocksize))
+        x_size = int(self.p.end_point[0] / self.p.block_size) + 1
+        y_size = int(self.p.end_point[1] / self.p.block_size) + 1
+        self._grid = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.block_size))
         self._geom_arch = ObstacleGeomArch()
         self._hybrid_env = HybridEnvironment(self._grid, self._geom_arch)
         setup_planner(self, self._hybrid_env)
@@ -194,16 +173,15 @@ class HybridArchitecture(FunctionArchitecture):
 
 
 # --- Circular Agent ---
-class CircleAgentParameter(Parameter):
+class CircleAgentParameter(PathPlannerParameter):
     start_point: tuple = (10.0, 10.0)
     end_point: tuple = (90.0, 90.0)
-    block_size: float = 10.0
-    agent_radius: float = 2.5  # Circular footprint radius
-    max_distance: float = 5.0
-    path_validation_enabled: bool = True
-    replanning_enabled: bool = True
-    max_replan_attempts: int = 3
-    collision_check_resolution: float = 0.5
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        object.__setattr__(self, "block_size", 10.0)
+        object.__setattr__(self, "agent_radius", 2.5)
+
+
 
 class AgentState(State):
     cost: float = 0.0
@@ -263,9 +241,9 @@ class CircleGridArchitecture(FunctionArchitecture):
     container_p = CircleAgentParameter
     __slots__ = ('_grid', '_agent_geom', '_agent_shape',)
     def init_architecture(self, **kwargs):
-        x_size = int(self.p.end_point[0] / self.p.blocksize) + 1
-        y_size = int(self.p.end_point[1] / self.p.blocksize) + 1
-        self._grid = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.blocksize))
+        x_size = int(self.p.end_point[0] / self.p.block_size) + 1
+        y_size = int(self.p.end_point[1] / self.p.block_size) + 1
+        self._grid = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.block_size))
         setup_planner(self, self._grid)
         self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
     @property
@@ -320,9 +298,9 @@ class CircleGeomArchitecture(FunctionArchitecture):
 class CircleHybridArchitecture(FunctionArchitecture):
     container_p = CircleAgentParameter
     def init_architecture(self, **kwargs):
-        x_size = int(self.p.end_point[0] / self.p.blocksize) + 1
-        y_size = int(self.p.end_point[1] / self.p.blocksize) + 1
-        self._grid = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.blocksize))
+        x_size = int(self.p.end_point[0] / self.p.block_size) + 1
+        y_size = int(self.p.end_point[1] / self.p.block_size) + 1
+        self._grid = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.block_size))
         self._geom_arch = CircleAgentObstacleGeomArch()
         self._hybrid_env = HybridEnvironment(self._grid, self._geom_arch)
         setup_planner(self, self._hybrid_env)
@@ -358,12 +336,12 @@ class CircleHybridArchitecture(FunctionArchitecture):
         return self._agent_shape
 
 
-def create_grid_test_model(start=(10.0, 10.0), end=(100.0, 100.0), blocksize=10.0):
+def create_grid_test_model(start=(10.0, 10.0), end=(100.0, 100.0), block_size=10.0):
     """Create a standard grid-based test model."""
     return GridArchitecture(p={
         'start_point': start,
         'end_point': end,
-        'blocksize': blocksize,
+        'block_size': block_size,
         'path_validation_enabled': True,
         'replanning_enabled': True,
         'max_replan_attempts': 3,
@@ -381,24 +359,24 @@ def create_geom_test_model(start=(10.0, 10.0), end=(100.0, 100.0)):
         'max_distance': 5.0
     })
 
-def create_hybrid_test_model(start=(10.0, 10.0), end=(100.0, 100.0), blocksize=10.0):
+def create_hybrid_test_model(start=(10.0, 10.0), end=(100.0, 100.0), block_size=10.0):
     """Create a hybrid (grid + geometry) test model."""
     return HybridArchitecture(p={
         'start_point': start,
         'end_point': end,
-        'blocksize': blocksize,
+        'block_size': block_size,
         'path_validation_enabled': True,
         'replanning_enabled': True,
         'max_replan_attempts': 3,
         'max_distance': 5.0
     })
 
-def create_circle_grid_test_model(start=(10.0, 10.0), end=(90.0, 90.0), agent_radius=2.5, blocksize=10.0):
+def create_circle_grid_test_model(start=(10.0, 10.0), end=(90.0, 90.0), agent_radius=2.5, block_size=10.0):
     """Create a circular agent grid-based test model."""
     return CircleGridArchitecture(p={
         'start_point': start,
         'end_point': end,
-        'blocksize': blocksize,
+        'block_size': block_size,
         'agent_radius': agent_radius,
         'path_validation_enabled': True,
         'replanning_enabled': True,
@@ -418,12 +396,12 @@ def create_circle_geom_test_model(start=(10.0, 10.0), end=(90.0, 90.0), agent_ra
         'max_distance': 5.0
     })
 
-def create_circle_hybrid_test_model(start=(10.0, 10.0), end=(90.0, 90.0), agent_radius=2.5, blocksize=10.0):
+def create_circle_hybrid_test_model(start=(10.0, 10.0), end=(90.0, 90.0), agent_radius=2.5, block_size=10.0):
     """Create a circular agent hybrid (grid + geometry) test model."""
     return CircleHybridArchitecture(p={
         'start_point': start,
         'end_point': end,
-        'blocksize': blocksize,
+        'block_size': block_size,
         'agent_radius': agent_radius,
         'path_validation_enabled': True,
         'replanning_enabled': True,
@@ -437,7 +415,7 @@ import unittest
 
 # --- Import your environment creation functions here ---
 #from test_env import create_grid_test_model, create_geom_test_model, create_hybrid_test_model
-from integrate_env import create_grid_test_model, create_geom_test_model, create_hybrid_test_model
+#from integrate_env import create_grid_test_model, create_geom_test_model, create_hybrid_test_model
 
 class TestGridEnvironment(unittest.TestCase):
     @classmethod
