@@ -186,6 +186,42 @@ class PathPlannerBase(BaseObject):
         return None
 
 
+    def get_buffered_shape(self, geom_obj, buffer_name=None):
+        """
+        Returns a buffered (footprint) shape from a Geom object for collision checking.
+        Uses specified buffer_name, else first available buffer, else base shape.
+        
+        Parameters
+        ----------
+        geom_obj : Geom
+            The geometry object (agent, obstacle, etc.)
+        buffer_name : str, optional
+            The specific buffer name to use (e.g., "on", "around", etc).
+            If None, uses the first available buffer.
+        Returns
+        -------
+        shape : shapely.geometry
+            The shapely shape to use for collision checks.
+        """
+        try:
+            if hasattr(geom_obj, 'create_shape'):
+                buffer_attrs = getattr(geom_obj.p, 'get_pref_attrs', lambda x: {} )('buffer')
+                if buffer_name is not None:
+                    # Use specified buffer if present
+                    if buffer_name in buffer_attrs:
+                        return geom_obj.create_shape(buffer_name)
+                if buffer_attrs:
+                    # Use the first available buffer
+                    first_buffer = list(buffer_attrs.keys())[0]
+                    return geom_obj.create_shape(first_buffer)
+                else:
+                    # Fall back to base shape if no buffers defined
+                    return geom_obj.create_shape()
+        except Exception as e:
+            print(f"Warning: Couldn't create buffered shape: {e}")
+        return None
+
+
 # --- Obstacle query for Coords ---
     ## TODO: I want to generalize the feature dictionary so the user can put in names, colors, etc.
     def _query_coords_cell(self, x, y):
@@ -323,7 +359,7 @@ class PathPlannerBase(BaseObject):
                 "goal_allowed": bool(goal_allowed)}
     
 
-    def check_collision(self, x, y, shape=None):
+    def check_collision(self, x, y, geom=None):
         """
         Returns True if traversable.
         - If shape is provided: acts as check_shape_collision.
@@ -342,13 +378,13 @@ class PathPlannerBase(BaseObject):
         >>> pp.check_collision(1,1)
         True
         """
-        if shape is None or self.p.agent_radius == 0.0:
+        if geom is None or self.p.agent_radius == 0.0:
             return self.query_point(x, y)["traversable"]
         else:
-            return self.check_shape_collision(x, y, shape)[0]
+            return self.check_shape_collision(x, y, geom)[0]
 
 
-    def check_goal_feasible(self, goal, shape=None):
+    def check_goal_feasible(self, goal, geom=None):
         """
         Check whether goal is feasible for a shaped agent.
         
@@ -372,9 +408,9 @@ class PathPlannerBase(BaseObject):
         """
         x, y = goal
         
-        if shape is not None:
+        if geom is not None:
             # Use shape-aware collision
-            is_free, collision_info = self.check_shape_collision(x, y, shape)
+            is_free, collision_info = self.check_shape_collision(x, y, geom)
             if not is_free:
                 return {"feasible": False,
                         "reason": "Goal position causes agent to collide with obstacles.",
@@ -445,7 +481,8 @@ class PathPlannerBase(BaseObject):
                     if traversable:
                         continue
                     
-                    shape = None
+                    shape = self.get_buffered_shape(geom_obj=geom_obj)
+                    '''
                     try:
                         if hasattr(geom_obj, 'create_shape'):
                             buffer_attrs = geom_obj.p.get_pref_attrs('buffer')
@@ -457,10 +494,11 @@ class PathPlannerBase(BaseObject):
                             # -----------------------------
                     except Exception:
                         pass
+                    '''
                     
                     if shape is None:
                         continue
-                    
+
                     if segment.intersects(shape):
                         intersection = segment.intersection(shape)
                         collision_pt = self._extract_intersection_point(intersection)
@@ -709,37 +747,58 @@ class PathPlannerBase(BaseObject):
                     goal = getattr(geom_obj.s, "goal_allowed", True)
                     
                     # Check intersection using shapely
-                    try:
-                        if shape.intersects(geom_obj.geom.shapely):
+                    obstacle_shape = self.get_buffered_shape(geom_obj)
+                    if obstacle_shape is not None:
+                        if shape.intersects(obstacle_shape):
                             if not trav:
                                 traversable = False
                             total_cost += cost
                             if not goal:
                                 goal_allowed = False
-                    except Exception:
-                        pass
+                        
 
         return {"traversable": traversable,
                 "cost": total_cost if traversable else float('inf'),
                 "goal_allowed": goal_allowed,
                 "blocked_cells": blocked_cells}
 
-    def check_shape_collision(self, x, y, shape):
-        """Check if shape at (x,y) collides with obstacles."""
-        if shape is None or self.p.agent_radius == 0.0:
+
+    def check_shape_collision(self, x, y, geom, shape_name="shape"):
+        """
+        Check if shape at (x,y) collides with obstacles.
+        
+        Parameters
+        ----------
+        x, y : float
+            Position to check
+        geom : GeomPoint/GeomPoly/GeomLine
+            The agent shape (Geom object)
+        
+        Returns
+        -------
+        tuple (is_traversable, collision_info)
+        """
+        #print("check_shape_collision called")  # Already printing, so this works.
+        if geom is None or self.p.agent_radius == 0.0:
+            #print("Early return: no geom or zero radius")
             return self.query_point(x, y)["traversable"], {}
-        
+
+        shape = self.get_buffered_shape(geom, shape_name)
+        if shape is None or self.p.agent_radius == 0.0:
+            #print("Early return: failed to get buffered shape or zero radius")
+            return self.query_point(x, y)["traversable"], {}
+
         collision_info = {"blocked_cells": [], "blocked_geoms": []}
-        
-        # Translate shape to query position
+
         try:
             query_shape = translate(shape, xoff=x, yoff=y)
+            #print("Translated shape:", query_shape, query_shape.bounds)
         except Exception as e:
-            print(f"Warning: Could not translate shape: {e}")
+            #print(f"Warning: Could not translate shape: {e}")
             return self.query_point(x, y)["traversable"], {}
-        
-        # ===== GEOMETRY COLLISION CHECK (PRIORITY) =====
+
         if self.is_geom_arch() or self.is_hybrid():
+            #print("Entering geom collision check...")
             try:
                 geom_arch = self._get_geom_arch()
                 if geom_arch is not None:                    
@@ -755,7 +814,8 @@ class PathPlannerBase(BaseObject):
                         if traversable:
                             continue
                         
-                        # Create shape using create_shape()
+                        obstacle_shape = self.get_buffered_shape(geom_obj=geom_obj)
+                        '''reate shape using create_shape()
                         try:
                             # Get available buffers for this geometry
                             buffer_attrs = geom_obj.p.get_pref_attrs('buffer')
@@ -768,11 +828,15 @@ class PathPlannerBase(BaseObject):
                                 obstacle_shape = geom_obj.create_shape()
                         except Exception as e:
                             continue
+                        '''
                         
                         if obstacle_shape is None:
+                            #print("No obstacle :(")
                             continue
                         
                         # Check intersection
+                        #print("Agent shape:", query_shape, query_shape.bounds)
+                        #print("Obstacle shape:", obstacle_shape, obstacle_shape.bounds)
                         if query_shape.intersects(obstacle_shape):
                             collision_info["blocked_geoms"].append(geom_name)
                             return False, collision_info
@@ -818,43 +882,8 @@ class PathPlannerBase(BaseObject):
 
         return True, collision_info
 
-        '''
-        # ===== GRID COLLISION CHECK =====
-        if self.is_coords() or self.is_hybrid():
-            try:
-                grid_env = self.env.grid if self.is_hybrid() else self.env
-                blocksize = getattr(grid_env.p, 'block_size', 10.0)
-                
-                minx, miny, maxx, maxy = query_shape.bounds
-                
-                min_gx = int(minx / blocksize)
-                min_gy = int(miny / blocksize)
-                max_gx = int(maxx / blocksize) + 1
-                max_gy = int(maxy / blocksize) + 1
-                
-                for gx in range(min_gx, max_gx + 1):
-                    for gy in range(min_gy, max_gy + 1):
-                        grid_x = gx * blocksize
-                        grid_y = gy * blocksize
-                        
-                        cell_point = ShapelyPoint(grid_x, grid_y)
-                        distance = query_shape.distance(cell_point)
-                        
-                        if distance <= blocksize / 2:
-                            cell_result = self.query_point(grid_x, grid_y)
-                            
-                            if not cell_result["traversable"]:
-                                collision_info["blocked_cells"].append((gx, gy))
-                                return False, collision_info
-            except Exception as e:
-                print(f"Warning: Grid collision check failed: {e}")
-                traceback.print_exc()
-        
-        return True, collision_info
-        '''
 
-
-    def check_segment_collision_shape(self, x1, y1, x2, y2, shape, resolution=None):
+    def check_segment_collision_shape(self, x1, y1, x2, y2, geom, shape_name="shape", resolution=None):
         """
         Check if a moving shape along a segment collides with obstacles (swept volume).
         
@@ -865,8 +894,8 @@ class PathPlannerBase(BaseObject):
         ----------
         x1, y1, x2, y2 : float
             Segment endpoints
-        shape : shapely.geometry
-            The agent shape (e.g., Point.buffer(radius))
+        geom : GeomPoint/GeomPoly/GeomLine
+            The agent shape (Geom object)
         resolution : float, optional
             Distance between sample points. If None, uses collision_check_resolution
         
@@ -878,6 +907,12 @@ class PathPlannerBase(BaseObject):
         """
         if resolution is None:
             resolution = getattr(self.p, 'collision_check_resolution', 0.5)
+
+        if geom is None:
+            return self.check_segment_collision(x1, y1, x2, y2)
+        shape = self.get_buffered_shape(geom, shape_name)
+        if shape is None:
+            return self.check_segment_collision(x1, y1, x2, y2)
         
         # Calculate segment length
         distance = math.hypot(x2 - x1, y2 - y1)
@@ -893,7 +928,7 @@ class PathPlannerBase(BaseObject):
             y = y1 + t * (y2 - y1)
             
             # Check collision at this sample point
-            is_free, collision_info = self.check_shape_collision(x, y, shape)
+            is_free, collision_info = self.check_shape_collision(x, y, geom, shape_name=shape_name)
             
             if not is_free:
                 return False, collision_info
@@ -1192,7 +1227,7 @@ class PathPlannerBase(BaseObject):
     '''
 
 # --- Path validation ---
-    def validate_path_shape(self, path, shape, use_shape_collision=False):
+    def validate_path_shape(self, path, geom, use_shape_collision=False):
         """
         Validate path for a shape-based agent.
         
@@ -1216,7 +1251,7 @@ class PathPlannerBase(BaseObject):
         
         # Check start and end positions
         for i, (x, y) in enumerate(path):
-            free, info = self.check_shape_collision(x, y, shape)
+            free, info = self.check_shape_collision(x, y, geom)
             if not free:
                 return False, i, {"error": f"Shape collision at waypoint {i}", "info": info}
         
@@ -1225,7 +1260,7 @@ class PathPlannerBase(BaseObject):
             for i in range(len(path) - 1):
                 x1, y1 = path[i]
                 x2, y2 = path[i + 1]
-                free, info = self.check_segment_collision_shape(x1, y1, x2, y2, shape)
+                free, info = self.check_segment_collision_shape(x1, y1, x2, y2, geom)
                 if not free:
                     return False, i, {"error": f"Shape collision along segment {i}", "info": info}
         

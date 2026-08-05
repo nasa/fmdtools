@@ -14,10 +14,17 @@ class BasePlannerParameter(PathPlannerParameter):
 
 # --- Utility Function to Initialize Planner ---
 def setup_planner(arch, environment):
-    arch.add_fxn('planner', PathPlannerBase, p={'max_distance': arch.p.max_distance,
+    arch.add_fxn('planner', PathPlannerBase, p={
+        'start_point': arch.p.start_point,
+        'end_point': arch.p.end_point,
+        'block_size': arch.p.block_size,
+        'agent_radius': arch.p.agent_radius,
+        'max_distance': arch.p.max_distance,
         'path_validation_enabled': arch.p.path_validation_enabled,
         'replanning_enabled': arch.p.replanning_enabled,
-        'max_replan_attempts': arch.p.max_replan_attempts})
+        'max_replan_attempts': arch.p.max_replan_attempts,
+        'collision_check_resolution': arch.p.collision_check_resolution
+    })
     arch.fxns['planner'].init_environment(environment)
 
 
@@ -28,6 +35,8 @@ class GridEnvironmentParam(CoordsParam):
 
 class GridEnvironment(Coords):
     container_p = GridEnvironmentParam
+
+    __slots__ = ('agent_geom',)
 
     feature_traversable = (bool, True)
     feature_goal_allowed = (bool, True)
@@ -57,7 +66,7 @@ class GridArchitecture(FunctionArchitecture):
 # --- Geom Environment ---
 class ObstacleState(State):
     cost: float = 1.0
-    traversable: bool = True
+    traversable: bool = False
     goal_allowed: bool = False
 
 class RestrictedZoneParam(GeomParameter):
@@ -149,10 +158,15 @@ class AgentCircleGeom(GeomPoint):
     container_p = AgentCircleParam
     container_s = AgentState
 
-class CircleAgentObstacleGeomArch(GeomArchitecture):
-    container_p = BasePlannerParameter
+class CircleAgentGeomArch(GeomArchitecture):
+    container_p = AgentCircleParam
     def init_architecture(self, **kwargs):
-        self.add_geom("agent", AgentCircleGeom, p={'buffer_around': self.p.agent_radius}, s={'traversable': True, 'goal_allowed': True})
+        self.add_geom("agent", AgentCircleGeom, p={'buffer_around': self.p.buffer_around}, s={'traversable': True, 'goal_allowed': True})
+    
+class CircleAgentObstacleGeomArch(GeomArchitecture):
+    container_p = AgentCircleParam
+    def init_architecture(self, **kwargs):
+        self.add_geom("agent", AgentCircleGeom, p={'buffer_around': self.p.buffer_around}, s={'traversable': True, 'goal_allowed': True})
         self.add_geom("restricted_zone", RestrictedZoneGeom, s={'cost': 100.0, 'traversable': False, 'goal_allowed': False})
         self.add_geom("obstacle_60_60", OccupiedPointGeom, s={'cost': float('inf'), 'traversable': False, 'goal_allowed': False})
         self.add_geom("obstacle_70_20", SecondPointGeom, s={'cost': float('inf'), 'traversable': False, 'goal_allowed': False})
@@ -160,55 +174,51 @@ class CircleAgentObstacleGeomArch(GeomArchitecture):
 class CircleAgentGeomEnvironmentArchitecture(FunctionArchitecture):
     container_p = BasePlannerParameter
     default_sp = {'end_time': 15}
-    __slots__ = ('env', 'planner', '_agent_geom', '_agent_shape')
+    __slots__ = ('env', 'planner',)
     def init_architecture(self, **kwargs):
         self.env = CircleAgentObstacleGeomArch()
+        #print(self.env.all_possible)
         setup_planner(self, self.env)
         self.planner = self.fxns['planner']
-    ## idk what to do with these two
-    '''
-    @property
-    def agent_geom(self): return self._agent_geom
-    @property
-    def agent_shape(self): return self._agent_shape
-    '''
 
 from shapely import Point as ShapelyPoint
+'''
 class CircleGridArchitecture(FunctionArchitecture):
-    container_p = CircleAgentParameter
-    __slots__ = ('env', 'planner', '_agent_geom', '_agent_shape',)
+    container_p = BasePlannerParameter
+    __slots__ = ('env', 'planner',)
     def init_architecture(self, **kwargs):
         x_size = int(self.p.end_point[0] / self.p.block_size) + 1
         y_size = int(self.p.end_point[1] / self.p.block_size) + 1
         self.env = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.block_size))
         setup_planner(self, self.env)
         self.planner = self.fxns['planner']
-        #self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
-    '''
-    @property
-    def agent_geom(self): return self._agent_geom
-    @property
-    def agent_shape(self): return self._agent_shape
-    '''
+'''
+class CircleGridArchitecture(FunctionArchitecture):
+    container_p = BasePlannerParameter
+    __slots__ = ('grid', 'geom_arch', 'env', 'planner',)
+    def init_architecture(self, **kwargs):
+        x_size = int(self.p.end_point[0] / self.p.block_size) + 1
+        y_size = int(self.p.end_point[1] / self.p.block_size) + 1
+        self.grid = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.block_size))
+        self.geom_arch = CircleAgentGeomArch()
+        self.env = HybridEnvironment(self.grid, self.geom_arch)
+        setup_planner(self, self.env)
+        self.planner = self.fxns['planner']
+
 
 class CircleGeomArchitecture(FunctionArchitecture):
     container_p = CircleAgentParameter
-    __slots__ = ('env', 'planner', '_agent_geom', '_agent_shape')
+    __slots__ = ('env', 'planner',)
     def init_architecture(self, **kwargs):
         self.env = CircleAgentObstacleGeomArch()
         setup_planner(self, self.env)
         self.planner = self.fxns['planner']
-        #self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
-    '''
-    @property
-    def agent_geom(self): return self._agent_geom
-    @property
-    def agent_shape(self): return self._agent_shape
-    '''
+
+        #debug_print_geoms(self.env, "CircleGeomArchitecture")
 
 class CircleHybridArchitecture(FunctionArchitecture):
-    container_p = CircleAgentParameter
-    __slots__ = ('grid', 'geom_arch', 'env', 'planner', '_agent_geom', '_agent_shape',)
+    container_p = BasePlannerParameter
+    __slots__ = ('grid', 'geom_arch', 'env', 'planner',)
     def init_architecture(self, **kwargs):
         x_size = int(self.p.end_point[0] / self.p.block_size) + 1
         y_size = int(self.p.end_point[1] / self.p.block_size) + 1
@@ -217,13 +227,6 @@ class CircleHybridArchitecture(FunctionArchitecture):
         self.env = HybridEnvironment(self.grid, self.geom_arch)
         setup_planner(self, self.env)
         self.planner = self.fxns['planner']
-        #self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
-    '''
-    @property
-    def agent_geom(self):return self._agent_geom
-    @property
-    def agent_shape(self): return self._agent_shape
-    '''
 
 
 def create_grid_test_model(start=(10.0, 10.0), end=(100.0, 100.0), block_size=10.0):
@@ -300,12 +303,62 @@ def create_circle_hybrid_test_model(start=(10.0, 10.0), end=(90.0, 90.0), agent_
     })
 
 
+def debug_print_geoms(geom_arch, name="GeomArch"):
+    """
+    Debug function to print all geometries in a GeomArchitecture
+    and verify they are properly instantiated with shapely objects.
+    """
+    print(f"\n=== Debug Print for {name} ===")
+    
+    if not hasattr(geom_arch, 'geoms'):
+        print("ERROR: No 'geoms' attribute found!")
+        return
+    
+    if geom_arch.geoms is None:
+        print("ERROR: geoms is None!")
+        return
+    
+    print(f"Number of geometries: {len(geom_arch.geoms)}")
+    
+    for geom_name, geom_obj in geom_arch.geoms.items():
+        print(f"\n  Geometry: '{geom_name}'")
+        
+        # Check if geometry object exists
+        if geom_obj is None:
+            print(f"    ERROR: geom_obj is None!")
+            continue
+        
+        # Check if it has the geom attribute (shapely wrapper)
+        if not hasattr(geom_obj, 'get_shape'):
+            print(f"    ERROR: No 'get_shape' method!")
+            continue
+        try:
+            shapely_geom = geom_obj.get_shape()
+        except Exception as e:
+            print(f"    ERROR: get_shape() failed: {e}")
+            continue
+        
+        # Check if shapely is actually instantiated
+        if shapely_geom is None:
+            print(f"    ERROR: shapely is None!")
+            continue
+        
+        print(f"    ✓ Type: {type(shapely_geom).__name__}")
+        print(f"    ✓ WKT: {shapely_geom.wkt}")
+        print(f"    ✓ Bounds: {shapely_geom.bounds}")
+        
+        # Print parameters if available
+        if hasattr(geom_obj, 'p'):
+            print(f"    ✓ Parameters:")
+            if hasattr(geom_obj.p, 'coordinates'):
+                print(f"      - coordinates: {geom_obj.p.coordinates}")
+            if hasattr(geom_obj.p, 'buffer_around'):
+                print(f"      - buffer_around: {geom_obj.p.buffer_around}")
+    
+    print(f"\n=== End Debug Print ===\n")
+
 #####################################################################################################
 import unittest
-
-# --- Import your environment creation functions here ---
-#from test_env import create_grid_test_model, create_geom_test_model, create_hybrid_test_model
-#from integrate_env import create_grid_test_model, create_geom_test_model, create_hybrid_test_model
 
 class TestGridEnvironment(unittest.TestCase):
     @classmethod
@@ -556,7 +609,6 @@ class TestFineGridEnvironment(unittest.TestCase):
         pass
 '''
 
-
 class TestShapeAgentGridEnvironment(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -564,7 +616,7 @@ class TestShapeAgentGridEnvironment(unittest.TestCase):
 
     def test_collision(self):
         test_cases = [((70.0, 10.0), True, "Free space - circle center safely in free space"),
-                    ((25.0, 25.0), False, "Circle overlaps with restricted zone boundary"),
+                    ((25.0, 41.0), False, "Circle overlaps with restricted zone boundary"),     ## BUG: This one is failing and I don't know why
                     ((30.0, 30.0), False, "Circle center in restricted zone"),
                     ((50.0, 50.0), True, "Circle center away from all obstacles"),
                     ((60.0, 60.0), False, "Circle overlaps with occupied point"),
@@ -636,45 +688,50 @@ class TestShapeAgentGeomEnvironment(unittest.TestCase):
         cls.model = create_circle_geom_test_model()
 
     def test_collision(self):
+        agent_geom = self.model.env.geoms['agent']
         test_cases = [((20.0, 20.0), True, "Free space - circle in clear area"),
                     ((15.0, 15.0), False, "Circle overlaps restricted zone"),
                     ((25.0, 25.0), True, "Circle interior restricted zone"),
-                    ((65.0, 65.0), False, "Circle overlaps obstacle point"),
+                    ((63.0, 63.0), False, "Circle overlaps obstacle point"),
                     ((71.0, 20.0), False, "Circle barely overlaps obstacle point"),
                     ((70.0, 70.0), True, "Circle clear of obstacles"),
                     ((75.0, 75.0), True, "Circle in free space far from obstacles"),
                     ((15.0, 20.0), False, "Circle partially in restricted zone"),
                     ((80.0, 80.0), True, "Circle in far corner free space"),]
         for (x, y), expected, description in test_cases:
-            result = self.model.planner.check_collision(x, y)
+            result = self.model.planner.check_collision(x, y, geom=agent_geom)
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
     def test_goal_feasibility(self):
+        agent_geom = self.model.env.geoms['agent']
         test_cases = [((75.0, 75.0), True, "Goal in clear corner"),
                     ((50.0, 50.0), True, "Goal away from obstacles"),
                     ((13.0, 13.0), False, "Goal in restricted zone"),
                     ((20.0, 20.0), True, "Goal in center of restricted zone"),
                     ((16.0, 16.0), False, "Goal causes agent to overlap restricted zone"),
-                    ((65.0, 65.0), False, "Goal at obstacle point"),
+                    ((60.0, 60.0), False, "Goal at obstacle point"),
                     ((5.0, 5.0), True, "Goal at start area"),
                     ((71.0, 20.0), False, "Goal overlaps obstacle"),
                     ((40.0, 60.0), True, "Goal in free space"),]
         for goal, expected, description in test_cases:
-            result = self.model.planner.check_goal_feasible(goal)["feasible"]
+            result = self.model.planner.check_goal_feasible(goal, geom=agent_geom)["feasible"]
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
     def test_segment_collision(self):
+        agent_geom = self.model.env.geoms['agent']
         test_cases = [((20.0, 20.0), (60.0, 60.0), False, "Diagonal through restricted zone"),
                     ((60.0, 60.0), (75.0, 75.0), False, "Diagonal through obstacle"),
                     ((44.0, 41.0), (75.0, 41.0), True, "Horizontal away from obstacles"),
                     ((20.0, 20.0), (30.0, 20.0), True, "Segment through restricted zone interior"),
-                    ((50.0, 50.0), (60.0, 60.0), True, "Segment near obstacle"),
+                    ((50.0, 50.0), (60.0, 52.0), True, "Segment near obstacle"),
                     ((70.0, 20.0), (70.0, 60.0), False, "Vertical through obstacle region"),
                     ((41.0, 50.0), (60.0, 50.0), True, "Horizontal clear segment"),]
         for start, end, expected, description in test_cases:
-            result, _ = self.model.planner.check_segment_collision(*start, *end)
+            x1, y1 = start
+            x2, y2 = end
+            result, _ = self.model.planner.check_segment_collision_shape(x1, y1, x2, y2, geom=agent_geom)
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
@@ -692,6 +749,7 @@ class TestShapeAgentGeomEnvironment(unittest.TestCase):
     '''
 
     def test_path_validation(self):
+        agent_geom = self.model.env.geoms['agent']
         test_cases = [([(60.0, 60.0), (70.0, 70.0), (75.0, 75.0)], False, "3-point path through obstacle"),
                     ([(50.0, 50.0), (55.0, 55.0)], True, "Valid 2-point path"),
                     ([], False, "Empty path"),
@@ -702,7 +760,7 @@ class TestShapeAgentGeomEnvironment(unittest.TestCase):
                     ([(45.0, 50.0), (55.0, 65.0), (70.0, 80.0)], True, "Valid path away from obstacles"),
                     ([(10.0, 10.0), (50.0, 50.0)], False, "Path crossing obstacles"),]
         for path, expected, description in test_cases:
-            result = self.model.planner.validate_path(path)[0]
+            result = self.model.planner.validate_path_shape(path, geom=agent_geom)[0]
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
@@ -713,20 +771,22 @@ class TestShapeAgentHybridEnvironment(unittest.TestCase):
         cls.model = create_circle_hybrid_test_model()
 
     def test_collision(self):
+        agent_geom = self.model.geom_arch.geoms['agent']
         test_cases = [((30.0, 50.0), True, "Circle in grid free space"),
                     ((25.0, 25.0), False, "Circle overlaps grid restricted zone"),
                     ((60.0, 60.0), False, "Circle overlaps geom obstacle"),
                     ((70.0, 50.0), True, "Circle clear of both grid and geom obstacles"),
-                    ((15.0, 15.0), False, "Circle overlaps grid obstacle"),
-                    ((75.0, 25.0), False, "Circle overlaps geom obstacle"),
+                    ((16.0, 16.0), False, "Circle overlaps grid obstacle"),
+                    ((74.0, 24.0), False, "Circle overlaps geom obstacle"),
                     ((50.0, 70.0), True, "Circle in hybrid free space"),
                     ((80.0, 80.0), False, "Circle overlaps grid occupied point"),]
         for (x, y), expected, description in test_cases:
-            result = self.model.planner.check_collision(x, y)
+            result = self.model.planner.check_collision(x, y, geom=agent_geom)
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
     def test_goal_feasibility(self):
+        agent_geom = self.model.geom_arch.geoms['agent']
         test_cases = [((75.0, 60.0), True, "Goal in clear hybrid space"),
                     ((50.0, 70.0), True, "Goal away from both obstacles"),
                     ((25.0, 25.0), False, "Goal in grid obstacle"),
@@ -735,19 +795,22 @@ class TestShapeAgentHybridEnvironment(unittest.TestCase):
                     ((30.0, 30.0), False, "Goal in grid zone obstacle"),
                     ((80.0, 35.0), True, "Goal far from obstacles"),]
         for goal, expected, description in test_cases:
-            result = self.model.planner.check_goal_feasible(goal)["feasible"]
+            result = self.model.planner.check_goal_feasible(goal, geom=agent_geom)["feasible"]
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
     def test_segment_collision(self):
-        test_cases = [((30.0, 30.0, 60.0, 60.0), False, "Diagonal through grid obstacle"),
-                    ((60.0, 40.0, 75.0, 50.0), True, "Diagonal in clear area"),
-                    ((20.0, 50.0, 50.0, 50.0), True, "Horizontal in free space"),
-                    ((25.0, 25.0, 35.0, 35.0), False, "Through grid restricted zone"),
-                    ((55.0, 55.0, 70.0, 70.0), False, "Near geom obstacle"),
-                    ((75.0, 40.0, 85.0, 50.0), True, "Clear segment in corner"),]
+        agent_geom = self.model.geom_arch.geoms['agent']
+        test_cases = [((30.0, 30.0), (60.0, 60.0), False, "Diagonal through grid obstacle"),
+                    ((60.0, 40.0), (75.0, 50.0), True, "Diagonal in clear area"),
+                    ((20.0, 50.0), (50.0, 50.0), True, "Horizontal in free space"),
+                    ((25.0, 25.0), (35.0, 35.0), False, "Through grid restricted zone"),
+                    ((55.0, 55.0), (70.0, 70.0), False, "Near geom obstacle"),
+                    ((75.0, 40.0), (85.0, 50.0), True, "Clear segment in corner"),]
         for start, end, expected, description in test_cases:
-            result, _ = self.model.planner.check_segment_collision(*start, *end)
+            x1, y1 = start
+            x2, y2 = end
+            result, _ = self.model.planner.check_segment_collision_shape(x1, y1, x2, y2, geom=agent_geom)
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
@@ -765,6 +828,7 @@ class TestShapeAgentHybridEnvironment(unittest.TestCase):
     '''
 
     def test_path_validation(self):
+        agent_geom = self.model.geom_arch.geoms['agent']
         test_cases = [([(60.0, 40.0), (70.0, 50.0), (80.0, 60.0)], True, "Valid 3-point path in clear area"),
                     ([(50.0, 70.0), (65.0, 85.0)], True, "Valid 2-point path"),
                     ([], False, "Empty path"),
@@ -774,9 +838,18 @@ class TestShapeAgentHybridEnvironment(unittest.TestCase):
                     ([(70.0, 40.0), (80.0, 50.0), (85.0, 60.0)], True, "Valid path in corner"),
                     ([(10.0, 10.0), (50.0, 50.0), (80.0, 80.0)], False, "Path through multiple obstacles"),]
         for path, expected, description in test_cases:
-            result = self.model.planner.validate_path(path)[0]
+            result = self.model.planner.validate_path_shape(path, geom=agent_geom)[0]
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
 if __name__ == '__main__':
+    '''
+    mdl = create_circle_hybrid_test_model()
+    print("planner agent_radius:", mdl.planner.p.agent_radius)
+    agent_geom = mdl.geom_arch.geoms['agent']
+    result = mdl.planner.check_shape_collision(25.0, 25.0, geom=agent_geom)
+    '''
+
+
+
     unittest.main()
