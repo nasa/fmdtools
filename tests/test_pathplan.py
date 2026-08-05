@@ -6,6 +6,7 @@ from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.define.object.geom import GeomParameter, GeomPoly, GeomPoint
 from fmdtools.define.pathplan import PathPlannerParameter, PathPlannerBase
 
+## TODO: remove reliance on @property definitions
 
 class BasePlannerParameter(PathPlannerParameter):
     start_point: tuple = (10.0, 10.0)
@@ -20,7 +21,7 @@ def setup_planner(arch, environment):
     arch.fxns['planner'].init_environment(environment)
 
 
-#--- Grid Environment ---
+# --- Grid Environment ---
 class GridEnvironmentParam(CoordsParam):
     """Grid environment parameters."""
     blocksize: float = 10.0
@@ -45,22 +46,15 @@ class GridEnvironment(Coords):
 class GridArchitecture(FunctionArchitecture):
     container_p = BasePlannerParameter
     __slots__ = ('_grid',)
-    
     def init_architecture(self, **kwargs):
         x_size = int(self.p.end_point[0] / self.p.block_size) + 1
         y_size = int(self.p.end_point[1] / self.p.block_size) + 1
         self._grid = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.block_size))
         setup_planner(self, self._grid)
     @property
-    def planner(self):
-        """Get the planner function block."""
-        return self.fxns['planner']
-
+    def planner(self): return self.fxns['planner']
     @property
-    def env(self):
-        """Get the grid environment."""
-        return self._grid
-
+    def env(self): return self._grid
 
 
 # --- Geom Environment ---
@@ -97,7 +91,6 @@ class SecondPointGeom(GeomPoint):
 
 class ObstacleGeomArch(GeomArchitecture):
     container_p = BasePlannerParameter
-    
     def init_architecture(self, **kwargs):
         self.add_geom("restricted_zone", RestrictedZoneGeom, s={'cost': 100.0, 'traversable': False, 'goal_allowed': False})
         self.add_geom("obstacle_60_60", OccupiedPointGeom, s={'cost': float('inf'), 'traversable': False, 'goal_allowed': False})
@@ -107,30 +100,18 @@ class GeomEnvironmentArchitecture(FunctionArchitecture):
     container_p = BasePlannerParameter
     default_sp = {'end_time': 15}
     __slots__ = ('_geom_arch',)
-
     def init_architecture(self, **kwargs):
-        """Initialize architecture with flows and geometry obstacles."""
         self._geom_arch = ObstacleGeomArch()
         setup_planner(self, self._geom_arch)
-
     @property
-    def geom_arch(self):
-        """Get the geometry architecture containing all obstacles."""
-        return self._geom_arch
-
+    def geom_arch(self): return self._geom_arch
     @property
-    def geoms(self):
-        """Get all obstacle geometries from the GeomArchitecture."""
-        return self._geom_arch.geoms
-
+    def geoms(self): return self._geom_arch.geoms
     @property
-    def planner(self):
-        """Get the planner function block."""
-        return self.fxns['planner']
+    def planner(self): return self.fxns['planner']
 
 
 # --- Hybrid Environment ---
-
 class HybridEnvironment:
     def __init__(self, grid_env, geom_arch):
         self.grid = grid_env
@@ -139,14 +120,12 @@ class HybridEnvironment:
     def to_index(self, x, y):
         return self.grid.to_index(x, y)
     @property
-    def grid_property(self):
-        return self.grid.grid
+    def grid_property(self): return self.grid.grid
 
 class HybridArchitecture(FunctionArchitecture):
     container_p = BasePlannerParameter
     default_sp = {'end_time': 15}  
     __slots__ = ('_grid', '_geom_arch', '_hybrid_env')
-    
     def init_architecture(self, **kwargs):
         x_size = int(self.p.end_point[0] / self.p.block_size) + 1
         y_size = int(self.p.end_point[1] / self.p.block_size) + 1
@@ -155,19 +134,11 @@ class HybridArchitecture(FunctionArchitecture):
         self._hybrid_env = HybridEnvironment(self._grid, self._geom_arch)
         setup_planner(self, self._hybrid_env)
     @property
-    def planner(self):
-        """Get the planner function block."""
-        return self.fxns['planner']
-
+    def planner(self): return self.fxns['planner']
     @property
-    def env(self):
-        """Get the hybrid environment."""
-        return self._hybrid_env
-    
+    def env(self): return self._hybrid_env
     @property
-    def geoms(self):
-        """Get all obstacle geometries."""
-        return self.geom_arch.geoms
+    def geoms(self): return self.geom_arch.geoms
 
 
 # --- Circular Agent ---
@@ -178,8 +149,6 @@ class CircleAgentParameter(PathPlannerParameter):
         super().__init__(*args, **kwargs)
         object.__setattr__(self, "block_size", 10.0)
         object.__setattr__(self, "agent_radius", 2.5)
-
-
 
 class AgentState(State):
     cost: float = 0.0
@@ -211,28 +180,15 @@ class CircleAgentGeomEnvironmentArchitecture(FunctionArchitecture):
         setup_planner(self, self._geom_arch)
     @property
     def geom_arch(self):
-        """Get the geometry architecture containing all obstacles and agent."""
         return self._geom_arch
-    
     @property
-    def geoms(self):
-        """Get all geometries (including agent) from the GeomArchitecture."""
-        return self._geom_arch.geoms
-    
+    def geoms(self): return self._geom_arch.geoms
     @property
-    def planner(self):
-        """Get the planner function block."""
-        return self.fxns['planner']
-    
+    def planner(self): return self.fxns['planner']
     @property
-    def agent_geom(self):
-        """Get the circular agent geometry object."""
-        return self._agent_geom
-    
+    def agent_geom(self): return self._agent_geom
     @property
-    def agent_shape(self):
-        """Get the circular agent shape (shapely object)."""
-        return self._agent_shape
+    def agent_shape(self): return self._agent_shape
 
 from shapely import Point as ShapelyPoint
 class CircleGridArchitecture(FunctionArchitecture):
@@ -245,24 +201,13 @@ class CircleGridArchitecture(FunctionArchitecture):
         setup_planner(self, self._grid)
         self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
     @property
-    def planner(self):
-        """Get the planner function block."""
-        return self.fxns['planner']
-
+    def planner(self): return self.fxns['planner']
     @property
-    def env(self):
-        """Get the grid environment."""
-        return self._grid
-    
+    def env(self): return self._grid
     @property
-    def agent_geom(self):
-        """Get the circular agent geometry object."""
-        return self._agent_geom
-    
+    def agent_geom(self): return self._agent_geom
     @property
-    def agent_shape(self):
-        """Get the circular agent shape (shapely object)."""
-        return self._agent_shape
+    def agent_shape(self): return self._agent_shape
 
 class CircleGeomArchitecture(FunctionArchitecture):
     container_p = CircleAgentParameter
@@ -272,26 +217,14 @@ class CircleGeomArchitecture(FunctionArchitecture):
         self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
     @property
     def geom_arch(self): return self._geom_arch
-       
     @property
-    def geoms(self):
-        """Get all geometries (including agent) from the GeomArchitecture."""
-        return self._geom_arch.geoms
-    
+    def geoms(self): return self._geom_arch.geoms
     @property
-    def planner(self):
-        """Get the planner function block."""
-        return self.fxns['planner']
-    
+    def planner(self): return self.fxns['planner']
     @property
-    def agent_geom(self):
-        """Get the circular agent geometry object."""
-        return self._agent_geom
-    
+    def agent_geom(self): return self._agent_geom
     @property
-    def agent_shape(self):
-        """Get the circular agent shape (shapely object)."""
-        return self._agent_shape
+    def agent_shape(self): return self._agent_shape
 
 class CircleHybridArchitecture(FunctionArchitecture):
     container_p = CircleAgentParameter
@@ -304,34 +237,17 @@ class CircleHybridArchitecture(FunctionArchitecture):
         setup_planner(self, self._hybrid_env)
         self.agent_shape = ShapelyPoint(0, 0).buffer(self.p.agent_radius)
     @property
-    def planner(self):
-        """Get the planner function block."""
-        return self.fxns['planner']
-
+    def planner(self): return self.fxns['planner']
     @property
-    def env(self):
-        """Get the hybrid environment."""
-        return self._hybrid_env
-    
+    def env(self): return self._hybrid_env
     @property
-    def geom_arch(self):
-        """Get the geometry architecture."""
-        return self._geom_arch
-    
+    def geom_arch(self): return self._geom_arch
     @property
-    def geoms(self):
-        """Get all geometries (including agent) from the architecture."""
-        return self.geom_arch.geoms
-    
+    def geoms(self): return self.geom_arch.geoms
     @property
-    def agent_geom(self):
-        """Get the circular agent geometry object."""
-        return self._agent_geom
-    
+    def agent_geom(self):return self._agent_geom
     @property
-    def agent_shape(self):
-        """Get the circular agent shape (shapely object)."""
-        return self._agent_shape
+    def agent_shape(self): return self._agent_shape
 
 
 def create_grid_test_model(start=(10.0, 10.0), end=(100.0, 100.0), block_size=10.0):
