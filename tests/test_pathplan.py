@@ -760,7 +760,7 @@ class TestShapeAgentGeomEnvironment(unittest.TestCase):
                     ([(45.0, 50.0), (55.0, 65.0), (70.0, 80.0)], True, "Valid path away from obstacles"),
                     ([(10.0, 10.0), (50.0, 50.0)], False, "Path crossing obstacles"),]
         for path, expected, description in test_cases:
-            result = self.model.planner.validate_path_shape(path, geom=agent_geom)[0]
+            result = self.model.planner.validate_path(path, geom=agent_geom)[0]
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
@@ -838,7 +838,7 @@ class TestShapeAgentHybridEnvironment(unittest.TestCase):
                     ([(70.0, 40.0), (80.0, 50.0), (85.0, 60.0)], True, "Valid path in corner"),
                     ([(10.0, 10.0), (50.0, 50.0), (80.0, 80.0)], False, "Path through multiple obstacles"),]
         for path, expected, description in test_cases:
-            result = self.model.planner.validate_path_shape(path, geom=agent_geom)[0]
+            result = self.model.planner.validate_path(path, geom=agent_geom)[0]
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 

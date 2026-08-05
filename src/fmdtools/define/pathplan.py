@@ -1227,6 +1227,7 @@ class PathPlannerBase(BaseObject):
     '''
 
 # --- Path validation ---
+    '''
     def validate_path_shape(self, path, geom, use_shape_collision=False):
         """
         Validate path for a shape-based agent.
@@ -1265,21 +1266,41 @@ class PathPlannerBase(BaseObject):
                     return False, i, {"error": f"Shape collision along segment {i}", "info": info}
         
         return True, None, {}
+    '''
 
     
-    def validate_path(self, path):
+    def validate_path(self, path, geom=None, use_shape_collision=False):
         """
         Validate that all segments are free of collisions.
         """
         if len(path) < 2:
             return False, None, {"error": "Path too short"}
 
-        for i in range(len(path) - 1):
-            (x1, y1), (x2, y2) = path[i], path[i+1]
+        if geom is not None:
+            # Check shape collision at waypoints
+            for i, (x, y) in enumerate(path):
+                free, info = self.check_shape_collision(x, y, geom)
+                if not free:
+                    return False, i, {"error": f"Shape collision at waypoint {i}", "info": info}
 
-            free, coll = self.check_segment_collision(x1, y1, x2, y2)
-            if not free:
-                return False, i, {"invalid_segment": i, "collision_points": coll}
+            # If swept-collision requested, check shape along segments
+            if use_shape_collision:
+                for i in range(len(path) - 1):
+                    x1, y1 = path[i]
+                    x2, y2 = path[i + 1]
+                    free, info = self.check_segment_collision_shape(x1, y1, x2, y2, geom)
+                    if not free:
+                        return False, i, {"error": f"Shape collision along segment {i}", "info": info}
+
+            return True, None, {}
+
+        else:
+            for i in range(len(path) - 1):
+                (x1, y1), (x2, y2) = path[i], path[i+1]
+
+                free, coll = self.check_segment_collision(x1, y1, x2, y2)
+                if not free:
+                    return False, i, {"invalid_segment": i, "collision_points": coll}
 
         return True, None, {}
 
