@@ -12,8 +12,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import traceback
 import heapq
-from shapely.geometry import Point as ShapelyPoint  ##maybe use GeomPoint instead
-from shapely.geometry import LineString as ShapelyLineString    ##maybe use GeomLine instead
+from shapely.geometry import Point as ShapelyPoint  ##NOTE: maybe use GeomPoint instead
+from shapely.geometry import LineString as ShapelyLineString    ##NOTE: maybe use GeomLine instead
 from shapely.affinity import translate
 
 class PathPlannerState(State):
@@ -32,6 +32,7 @@ class PathPlannerState(State):
     replanning_triggered: bool = False
 
 
+## NOTE: block_size name may be confusing with CoordsParam blocksize
 class PathPlannerParameter(Parameter):
     """
     Static planner parameters (set at initialization).
@@ -186,7 +187,7 @@ class PathPlannerBase(BaseObject):
 
 
 # --- Obstacle query for Coords ---
-    ##I want to generalize the feature dictionary so the user can put in names, colors, etc.
+    ## TODO: I want to generalize the feature dictionary so the user can put in names, colors, etc.
     def _query_coords_cell(self, x, y):
         """
         Aggregate obstacle behavior from CoordsParam attributes.
@@ -203,7 +204,7 @@ class PathPlannerBase(BaseObject):
         {'cost': 1.0, 'traversable': True, 'goal_allowed': True}
         """
         grid_env = self._env.grid if self.is_hybrid() else self._env
-        ## what if they didn't pass in the information
+        ## TODO: what if they didn't pass in the information
         traversable = grid_env.get(x, y, "traversable", outside=True)
         cost = grid_env.get(x, y, "cost", outside=1.0)
         goal_allowed = grid_env.get(x, y, "goal_allowed", outside=True)
@@ -432,7 +433,7 @@ class PathPlannerBase(BaseObject):
 
         # For Geom / GeomArchitecture / Hybrid environments
         if self.is_geom_arch() or self.is_hybrid():
-            segment = ShapelyLineString([(x1, y1), (x2, y2)])       ##maybe use GeomLine instead
+            segment = ShapelyLineString([(x1, y1), (x2, y2)])
             geom_arch = self._get_geom_arch()
             
             if geom_arch is not None:
@@ -1249,7 +1250,7 @@ class PathPlannerBase(BaseObject):
 
 
 # --- Cost computation ---
-    ## need to fix this to use calc_metric
+    ## TODO: need to fix this to use calc_metric
     def compute_path_cost(self, path, cost_fn=None):
         """
         Compute path cost using either:

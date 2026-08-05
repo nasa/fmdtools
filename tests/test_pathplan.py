@@ -4,7 +4,7 @@ from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.define.object.geom import GeomParameter, GeomPoly, GeomPoint
-from fmdtools.define.pathplan import PathPlannerState, PathPlannerParameter, PathPlannerBase
+from fmdtools.define.pathplan import PathPlannerParameter, PathPlannerBase
 
 
 class BasePlannerParameter(PathPlannerParameter):
@@ -12,14 +12,12 @@ class BasePlannerParameter(PathPlannerParameter):
     end_point: tuple = (100.0, 100.0)
 
 # --- Utility Function to Initialize Planner ---
-
 def setup_planner(arch, environment):
     arch.add_fxn('planner', PathPlannerBase, p={'max_distance': arch.p.max_distance,
         'path_validation_enabled': arch.p.path_validation_enabled,
         'replanning_enabled': arch.p.replanning_enabled,
         'max_replan_attempts': arch.p.max_replan_attempts})
     arch.fxns['planner'].init_environment(environment)
-
 
 
 #--- Grid Environment ---
