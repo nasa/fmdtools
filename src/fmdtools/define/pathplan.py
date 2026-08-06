@@ -546,11 +546,15 @@ class PathPlannerBase(BaseObject):
                 return False, collision_points
 
             cell_size = getattr(grid_env.p, 'blocksize', 1.0)
+            #print(f"[SEG] world=({x1},{y1})->({x2},{y2})  blocksize={cell_size}")
+            #print(f"[SEG] idx=({grid_x1},{grid_y1})->({grid_x2},{grid_y2})")
 
             if cell_size < 1.0:
-                cells = self._dda_line(x1, y1, x2, y2, grid_env)
+                #cells = self._dda_line(x1, y1, x2, y2, grid_env)
+                cells = self._dda_line(x1/cell_size, y1/cell_size, x2/cell_size, y2/cell_size)
             else:
                 cells = self._bresenham_line(grid_x1, grid_y1, grid_x2, grid_y2)
+            #print(f"[SEG] cells={cells}")
 
             for cell_coords in cells:
                 if cell_size < 1.0:
@@ -982,7 +986,7 @@ class PathPlannerBase(BaseObject):
         Returns traversability, total accumulated cost, and collision info.
 
         This is the shared logic used by both:
-        - check_segment_collision_shape (collision check only)
+        - check_segment_collision (collision check only)
         - compute_path_cost (cost accumulation for shape agents)
 
         Parameters
@@ -1111,7 +1115,7 @@ class PathPlannerBase(BaseObject):
         return {"traversable": True, "cost": total_cost,
                 "collision_info": collision_info, "cells_visited": cells_visited}
 
-
+    '''
     def check_segment_collision_shape(self, x1, y1, x2, y2, geom, shape_name="shape", resolution=None):
         """
         Check if a moving shape along a segment collides with obstacles (swept volume).
@@ -1142,7 +1146,7 @@ class PathPlannerBase(BaseObject):
                                             resolution=resolution)
         return result["traversable"], result["collision_info"]
 
-        '''
+
         if resolution is None:
             resolution = getattr(self.p, 'collision_check_resolution', 0.5)
 
