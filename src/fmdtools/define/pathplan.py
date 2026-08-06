@@ -33,7 +33,6 @@ class PathPlannerState(State):
     replanning_triggered: bool = False
 
 
-## NOTE: blocksize name may be confusing with CoordsParam blocksize
 class PathPlannerParameter(Parameter):
     """
     Static planner parameters (set at initialization).
@@ -488,20 +487,6 @@ class PathPlannerBase(BaseObject):
                         continue
                     
                     shape = self.get_buffered_shape(geom_obj=geom_obj)
-                    '''
-                    try:
-                        if hasattr(geom_obj, 'create_shape'):
-                            buffer_attrs = geom_obj.p.get_pref_attrs('buffer')
-                            if buffer_attrs:
-                                buffer_name = list(buffer_attrs.keys())[0]
-                                shape = geom_obj.create_shape(buffer_name)
-                            else:
-                                shape = geom_obj.create_shape()
-                            # -----------------------------
-                    except Exception:
-                        pass
-                    '''
-                    
                     if shape is None:
                         continue
 
@@ -821,25 +806,12 @@ class PathPlannerBase(BaseObject):
                             continue
                         
                         obstacle_shape = self.get_buffered_shape(geom_obj=geom_obj)
-                        '''reate shape using create_shape()
-                        try:
-                            # Get available buffers for this geometry
-                            buffer_attrs = geom_obj.p.get_pref_attrs('buffer')
-                            if buffer_attrs:
-                                # Use the first available buffer
-                                buffer_name = list(buffer_attrs.keys())[0]
-                                obstacle_shape = geom_obj.create_shape(buffer_name)
-                            else:
-                                # Fall back to base shape if no buffers defined
-                                obstacle_shape = geom_obj.create_shape()
-                        except Exception as e:
-                            continue
-                        '''
-                        
                         if obstacle_shape is None:
-                            #print("No obstacle :(")
-                            continue
-                        
+                            #continue
+                            print(f"Warning: could not build shape for obstacle '{geom_name}'; "
+                              f"treating as collision (fail-closed).")
+                            collision_info["blocked_geoms"].append(geom_name)
+                            return False, collision_info
                         # Check intersection
                         #print("Agent shape:", query_shape, query_shape.bounds)
                         #print("Obstacle shape:", obstacle_shape, obstacle_shape.bounds)
@@ -891,7 +863,7 @@ class PathPlannerBase(BaseObject):
                         collision_info["blocked_cells"].append((grid_x, grid_y))
                         return False, collision_info
 
-                    # Accumulate cost / goal_allowed if you track them here
+                    # Accumulate cost / goal_allowed if you track them here     ## TODO: check these "errors"
                     collision_info.setdefault("cost", 0.0)
                     collision_info["cost"] += info.get("cost", 0.0)
                     if not info.get("goal_allowed", True):
@@ -1258,49 +1230,7 @@ class PathPlannerBase(BaseObject):
         return list(cells)
     '''
 
-# --- Path validation ---
-    '''
-    def validate_path_shape(self, path, geom, use_shape_collision=False):
-        """
-        Validate path for a shape-based agent.
-        
-        Parameters
-        ----------
-        path : list of (x, y) tuples
-            Path waypoints
-        shape : shapely.geometry.base.BaseGeometry
-            Agent shape (e.g., circle, polygon)
-        use_shape_collision : bool
-            If True, check swept collision along segments.
-            If False, only check shape at waypoints.
-        
-        Returns
-        -------
-        tuple
-            (is_valid: bool, bad_index: int or None, details: dict)
-        """
-        if len(path) < 2:
-            return False, None, {"error": "Path too short"}
-        
-        # Check start and end positions
-        for i, (x, y) in enumerate(path):
-            free, info = self.check_shape_collision(x, y, geom)
-            if not free:
-                return False, i, {"error": f"Shape collision at waypoint {i}", "info": info}
-        
-        # Check segments if requested
-        if use_shape_collision:
-            for i in range(len(path) - 1):
-                x1, y1 = path[i]
-                x2, y2 = path[i + 1]
-                free, info = self.check_segment_collision_shape(x1, y1, x2, y2, geom)
-                if not free:
-                    return False, i, {"error": f"Shape collision along segment {i}", "info": info}
-        
-        return True, None, {}
-    '''
-
-    
+# --- Path validation ---    
     def validate_path(self, path, geom=None, use_shape_collision=False):
         """
         Validate that all segments are free of collisions.
