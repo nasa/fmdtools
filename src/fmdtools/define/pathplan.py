@@ -379,10 +379,15 @@ class PathPlannerBase(BaseObject):
         >>> pp.check_collision(1,1)
         True
         """
+        '''
         if geom is None or self.p.agent_radius == 0.0:
             return self.query_point(x, y)["traversable"]
         else:
             return self.check_shape_collision(x, y, geom)[0]
+        '''
+        if geom is None:
+            return self.query_point(x, y)["traversable"]
+        return self.check_shape_collision(x, y, geom)[0]
 
 
     def check_goal_feasible(self, goal, geom=None):
@@ -780,12 +785,12 @@ class PathPlannerBase(BaseObject):
         tuple (is_traversable, collision_info)
         """
         #print("check_shape_collision called")  # Already printing, so this works.
-        if geom is None or self.p.agent_radius == 0.0:
+        if geom is None: # or self.p.agent_radius == 0.0:
             #print("Early return: no geom or zero radius")
             return self.query_point(x, y)["traversable"], {}
 
         shape = self.get_buffered_shape(geom, shape_name)
-        if shape is None or self.p.agent_radius == 0.0:
+        if shape is None: # or self.p.agent_radius == 0.0:
             #print("Early return: failed to get buffered shape or zero radius")
             return self.query_point(x, y)["traversable"], {}
 
