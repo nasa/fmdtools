@@ -8,8 +8,8 @@ from fmdtools.define.object.base import BaseObject
 
 import math
 import traceback
-from shapely.geometry import Point as ShapelyPoint  ##NOTE: maybe use GeomPoint instead
-from shapely.geometry import LineString as ShapelyLineString    ##NOTE: maybe use GeomLine instead
+from shapely.geometry import Point as ShapelyPoint              ## NOTE: maybe use GeomPoint instead
+from shapely.geometry import LineString as ShapelyLineString    ## NOTE: maybe use GeomLine instead
 from shapely.geometry import box as shapely_box
 from shapely.affinity import translate
 
@@ -572,7 +572,8 @@ class PathPlannerBase(BaseObject):
         return {"cost": float(total_cost), 
                 "traversable": bool(traversable), 
                 "goal_allowed": bool(goal_allowed)}
-    
+
+    ## NOTE: Currently True means no collision (space free), this may be confusing for users
     def check_collision(self, x, y, geom=None):
         """
         Returns True if traversable.

@@ -303,60 +303,6 @@ def create_circle_hybrid_test_model(start=(10.0, 10.0), end=(90.0, 90.0), agent_
     })
 
 
-def debug_print_geoms(geom_arch, name="GeomArch"):
-    """
-    Debug function to print all geometries in a GeomArchitecture
-    and verify they are properly instantiated with shapely objects.
-    """
-    print(f"\n=== Debug Print for {name} ===")
-    
-    if not hasattr(geom_arch, 'geoms'):
-        print("ERROR: No 'geoms' attribute found!")
-        return
-    
-    if geom_arch.geoms is None:
-        print("ERROR: geoms is None!")
-        return
-    
-    print(f"Number of geometries: {len(geom_arch.geoms)}")
-    
-    for geom_name, geom_obj in geom_arch.geoms.items():
-        print(f"\n  Geometry: '{geom_name}'")
-        
-        # Check if geometry object exists
-        if geom_obj is None:
-            print(f"    ERROR: geom_obj is None!")
-            continue
-        
-        # Check if it has the geom attribute (shapely wrapper)
-        if not hasattr(geom_obj, 'get_shape'):
-            print(f"    ERROR: No 'get_shape' method!")
-            continue
-        try:
-            shapely_geom = geom_obj.get_shape()
-        except Exception as e:
-            print(f"    ERROR: get_shape() failed: {e}")
-            continue
-        
-        # Check if shapely is actually instantiated
-        if shapely_geom is None:
-            print(f"    ERROR: shapely is None!")
-            continue
-        
-        print(f"    ✓ Type: {type(shapely_geom).__name__}")
-        print(f"    ✓ WKT: {shapely_geom.wkt}")
-        print(f"    ✓ Bounds: {shapely_geom.bounds}")
-        
-        # Print parameters if available
-        if hasattr(geom_obj, 'p'):
-            print(f"    ✓ Parameters:")
-            if hasattr(geom_obj.p, 'coordinates'):
-                print(f"      - coordinates: {geom_obj.p.coordinates}")
-            if hasattr(geom_obj.p, 'buffer_around'):
-                print(f"      - buffer_around: {geom_obj.p.buffer_around}")
-    
-    print(f"\n=== End Debug Print ===\n")
-
 #####################################################################################################
 import unittest
 
