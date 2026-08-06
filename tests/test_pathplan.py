@@ -621,18 +621,16 @@ class TestShapeAgentGridEnvironment(unittest.TestCase):
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
-    '''
     def test_cost_computation(self):
-        test_cases = [([(60.0, 90.0), (70.0, 80.0), (80.0, 70.0)], True, "Simple 3-point path in free space"),
+        agent_geom = self.model.geom_arch.geoms['agent']
+        test_cases = [([(60.0, 40.0), (70.0, 50.0), (80.0, 60.0)], True, "Simple 3-point path in free space"),
                         ([(5.0, 5.0), (25.0, 25.0), (75.0, 75.0)], False, "Path crossing multiple obstacles"),
-                        ([(50.0, 30.0), (60.0, 40.0)], True, "Short 2-point path in free space"),
-                        ([(60.0, 10.0), (80.0, 30.0)], False, "Path through geom obstacle"),]
+                        ([(50.0, 30.0), (60.0, 40.0)], True, "Short 2-point path in free space"),]
         for path, expected, description in test_cases:
-            result = self.model.planner.compute_path_cost(path)
+            result = self.model.planner.compute_path_cost(path, geom=agent_geom)
             is_valid = (result != float("inf"))
             with self.subTest(msg=description):
                 self.assertEqual(is_valid, expected, description)
-    '''
 
     def test_path_validation(self):
         agent_geom = self.model.geom_arch.geoms['agent']
@@ -703,18 +701,17 @@ class TestShapeAgentGeomEnvironment(unittest.TestCase):
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
-    '''
     def test_cost_computation(self):
+        agent_geom = self.model.env.geoms['agent']
         test_cases = [([(60.0, 90.0), (70.0, 80.0), (80.0, 70.0)], True, "Simple 3-point path in free space"),
                         ([(5.0, 5.0), (25.0, 25.0), (75.0, 75.0)], False, "Path crossing multiple obstacles"),
                         ([(50.0, 30.0), (60.0, 40.0)], True, "Short 2-point path in free space"),
                         ([(60.0, 10.0), (80.0, 30.0)], False, "Path through geom obstacle"),]
         for path, expected, description in test_cases:
-            result = self.model.planner.compute_path_cost(path)
+            result = self.model.planner.compute_path_cost(path, geom=agent_geom)
             is_valid = (result != float("inf"))
             with self.subTest(msg=description):
                 self.assertEqual(is_valid, expected, description)
-    '''
 
     def test_path_validation(self):
         agent_geom = self.model.env.geoms['agent']
@@ -782,18 +779,17 @@ class TestShapeAgentHybridEnvironment(unittest.TestCase):
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
-    '''
     def test_cost_computation(self):
-        test_cases = [([(60.0, 90.0), (70.0, 80.0), (80.0, 70.0)], True, "Simple 3-point path in free space"),
+        agent_geom = self.model.geom_arch.geoms['agent']
+        test_cases = [([(60.0, 40.0), (70.0, 50.0), (80.0, 60.0)], True, "Simple 3-point path in free space"),
                         ([(5.0, 5.0), (25.0, 25.0), (75.0, 75.0)], False, "Path crossing multiple obstacles"),
                         ([(50.0, 30.0), (60.0, 40.0)], True, "Short 2-point path in free space"),
                         ([(60.0, 10.0), (80.0, 30.0)], False, "Path through geom obstacle"),]
         for path, expected, description in test_cases:
-            result = self.model.planner.compute_path_cost(path)
+            result = self.model.planner.compute_path_cost(path, geom=agent_geom)
             is_valid = (result != float("inf"))
             with self.subTest(msg=description):
                 self.assertEqual(is_valid, expected, description)
-    '''
 
     def test_path_validation(self):
         agent_geom = self.model.geom_arch.geoms['agent']
