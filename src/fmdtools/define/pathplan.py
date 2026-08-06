@@ -432,6 +432,7 @@ class PathPlannerBase(BaseObject):
 
     
 # --- Segment collision checking ---
+    '''
     def check_segment_collision(self, x1, y1, x2, y2):
         """
         Check if a line segment from (x1, y1) to (x2, y2) is collision-free.
@@ -498,7 +499,98 @@ class PathPlannerBase(BaseObject):
                         return False, collision_points
         
         return True, collision_points
-    
+    '''
+    def check_segment_collision(self, x1, y1, x2, y2, geom=None, shape_name="shape", resolution=None):
+        """
+        Check if a line segment from (x1, y1) to (x2, y2) is collision-free.
+        
+        If geom is provided, performs a swept-volume check (shape along segment).
+        If geom is None, performs a point-based check.
+        
+        Parameters
+        ----------
+        x1, y1, x2, y2 : float
+            Segment endpoints
+        geom : GeomPoint/GeomPoly/GeomLine, optional
+            The agent shape. If None, treats agent as a point.
+        shape_name : str
+            Name for get_buffered_shape lookup (only used when geom is provided)
+        resolution : float, optional
+            Distance between sample points for shape checks.
+            If None, uses collision_check_resolution.
+        
+        Returns
+        -------
+        tuple (is_free, collision_info)
+            is_free : bool
+            collision_info : list of collision points (point mode) or dict (shape mode)
+        """
+        if geom is not None:
+            result = self._query_segment_shape(x1, y1, x2, y2, geom,
+                                            shape_name=shape_name,
+                                            resolution=resolution)
+            return result["traversable"], result["collision_info"]
+
+        # --- Point-based collision check ---
+        collision_points = []
+
+        # For Coords (grid) environments
+        if self.is_coords() or self.is_hybrid():
+            grid_env = self.env.grid if self.is_hybrid() else self.env
+            try:
+                grid_x1, grid_y1 = grid_env.to_index(x1, y1)
+                grid_x2, grid_y2 = grid_env.to_index(x2, y2)
+            except:
+                collision_points.append((x1, y1))
+                collision_points.append((x2, y2))
+                return False, collision_points
+
+            cell_size = getattr(grid_env.p, 'blocksize', 1.0)
+
+            if cell_size < 1.0:
+                cells = self._dda_line(x1, y1, x2, y2, grid_env)
+            else:
+                cells = self._bresenham_line(grid_x1, grid_y1, grid_x2, grid_y2)
+
+            for cell_coords in cells:
+                if cell_size < 1.0:
+                    gx, gy = grid_env.to_index(cell_coords[0], cell_coords[1])
+                    pt = grid_env.grid[gx, gy]
+                else:
+                    pt = grid_env.grid[cell_coords[0], cell_coords[1]]
+
+                pt_info = self.query_point(*pt)
+
+                if not pt_info["traversable"]:
+                    collision_points.append(tuple(pt))
+                    return False, collision_points
+
+        # For Geom / GeomArchitecture / Hybrid environments
+        if self.is_geom_arch() or self.is_hybrid():
+            segment = ShapelyLineString([(x1, y1), (x2, y2)])
+            geom_arch = self._get_geom_arch()
+
+            if geom_arch is not None:
+                for geom_name, geom_obj in geom_arch.geoms.items():
+                    if not hasattr(geom_obj, 's'):
+                        continue
+
+                    traversable = getattr(geom_obj.s, "traversable", True)
+                    if traversable:
+                        continue
+
+                    shape = self.get_buffered_shape(geom_obj=geom_obj)
+                    if shape is None:
+                        continue
+
+                    if segment.intersects(shape):
+                        intersection = segment.intersection(shape)
+                        collision_pt = self._extract_intersection_point(intersection)
+                        if collision_pt:
+                            collision_points.append(collision_pt)
+                        return False, collision_points
+
+        return True, collision_points
 
     def _extract_intersection_point(self, intersection):
         """
@@ -960,7 +1052,7 @@ class PathPlannerBase(BaseObject):
             if self.is_coords() or self.is_hybrid():
                 grid_env = self.env.grid if self.is_hybrid() else self.env
                 cells = self._get_grid_cells_in_bounds(query_shape.bounds, grid_env)
-                cell_size = getattr(grid_env.p, 'cell_size', 1.0)
+                cell_size = getattr(grid_env.p, 'blocksize', 10.0)
                 half = cell_size / 2.0
 
                 for grid_x, grid_y in cells:
@@ -973,7 +1065,7 @@ class PathPlannerBase(BaseObject):
                     if not query_shape.intersects(cell_square):
                         continue
 
-                    info = self._query_coords_cell(grid_x, grid_y)
+                    info = self._query_coords_cell(cx, cy)
 
                     if not info["traversable"]:
                         collision_info["blocked_cells"].append((grid_x, grid_y))
@@ -1393,7 +1485,7 @@ class PathPlannerBase(BaseObject):
                 for i in range(len(path) - 1):
                     x1, y1 = path[i]
                     x2, y2 = path[i + 1]
-                    free, info = self.check_segment_collision_shape(x1, y1, x2, y2, geom)
+                    free, info = self.check_segment_collision(x1, y1, x2, y2, geom=geom)
                     if not free:
                         return False, i, {"error": f"Shape collision along segment {i}", "info": info}
 

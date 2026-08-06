@@ -401,7 +401,9 @@ class TestGridEnvironment(unittest.TestCase):
                     ((19.0, 19.0), (41.0, 41.0), False, "Long segment crossing restricted zone"),
                     ((60.0, 50.0), (60.0, 60.0), False, "Vertical segment hitting occupied"),]
         for start, end, expected, description in test_cases:
-            result, _ = self.model.planner.check_segment_collision(*start, *end)
+            x1, y1 = start
+            x2, y2 = end
+            result, _ = self.model.planner.check_segment_collision(x1, y1, x2, y2)
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
@@ -471,7 +473,9 @@ class TestGeomEnvironment(unittest.TestCase):
                     ((5.0, 5.0), (75.0, 75.0), False, "Long segment crossing obstacles"),
                     ((65.0, 65.0), (75.0, 75.0), True, "Clear segment away from all obstacles"),]
         for start, end, expected, description in test_cases:
-            result, _ = self.model.planner.check_segment_collision(*start, *end)
+            x1, y1 = start
+            x2, y2 = end
+            result, _ = self.model.planner.check_segment_collision(x1, y1, x2, y2)
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
@@ -536,7 +540,9 @@ class TestHybridEnvironment(unittest.TestCase):
                     ((75.0, 75.0), (85.0, 85.0), False, "Segment through coords obstacles"),
                     ((5.0, 5.0), (85.0, 85.0), False, "Long segment crossing multiple obstacles"),]
         for start, end, expected, description in test_cases:
-            result, _ = self.model.planner.check_segment_collision(*start, *end)
+            x1, y1 = start
+            x2, y2 = end
+            result, _ = self.model.planner.check_segment_collision(x1, y1, x2, y2)
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
@@ -564,50 +570,6 @@ class TestHybridEnvironment(unittest.TestCase):
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
-'''
-from test_env_fine_grid import create_fine_grid_test_model
-
-class TestFineGridEnvironment(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.model = create_fine_grid_test_model()
-
-    def test_segment_collision(self):
-        test_cases = [((1.0, 1.0), (15.0, 15.0), False, "Long diagonal through obstacles"),
-                    ((1.0, 1.0), (5.0, 1.0), True, "Horizontal clear segment"),
-                    ((11.0, 1.0), (15.0, 1.0), True, "Horizontal in clear area"),
-                    ((6.0, 7.5), (6.0, 9.5), False, "Vertical through narrow corridor"),
-                    ((7.0, 7.5), (7.0, 9.5), False, "Vertical intersecting corridor"),
-                    ((10.5, 7.5), (10.5, 9.5), True, "Vertical outside corridor"),
-                    ((2.0, 2.0), (3.5, 3.5), False, "Diagonal through small obstacle"),
-                    ((4.0, 4.0), (6.0, 6.0), True, "Diagonal avoiding obstacles"),
-                    ((2.0, 12.0), (20.0, 2.0), False, "Long diagonal crossing obstacles"),
-                    ((10.0, 16.0), (18.0, 16.0), True, "Clear horizontal at distance"),
-                    ((0.5, 0.5), (2.0, 2.0), False, "Short segment near start through obstacle"),
-                    ((5.0, 15.0), (15.0, 19.5), True, "Short segment far corner clear"),]
-        for start, end, expected, description in test_cases:
-            result, _ = self.model.planner.check_segment_collision(*start, *end)
-            with self.subTest(msg=description):
-                self.assertEqual(result, expected, description)
-
-    def test_path_validation(self):
-        test_cases = [([(1.0, 1.0), (5.0, 1.0), (10.0, 10.0)], False, "Path crossing obstacles"),
-                    ([(1.0, 1.0), (1.0, 4.0), (4.0, 4.0)], True, "Short valid path in start area"),
-                    ([(15.0, 10.0), (18.0, 15.0), (19.0, 16.0)], True, "Valid path in far corner"),
-                    ([(10.5, 7.5), (10.5, 9.5)], True, "Valid 2-point path outside corridor"),
-                    ([(6.0, 7.5), (6.0, 9.5)], False, "Path through narrow corridor"),
-                    ([(1.0, 15.0), (15.0, 1.0)], False, "Long diagonal crossing obstacles"),
-                    ([(2.0, 2.0), (3.5, 3.5), (5.0, 5.0)], False, "Path through obstacle region"),
-                    ([], False, "Empty path"),
-                    ([(15.0, 15.0)], False, "Single point (too short)"),]
-        for path, expected, description in test_cases:
-            result = self.model.planner.validate_path(path)[0]
-            with self.subTest(msg=description):
-                self.assertEqual(result, expected, description)
-
-    def test_dda_use(self):
-        pass
-'''
 
 class TestShapeAgentGridEnvironment(unittest.TestCase):
     @classmethod
@@ -615,6 +577,7 @@ class TestShapeAgentGridEnvironment(unittest.TestCase):
         cls.model = create_circle_grid_test_model()
 
     def test_collision(self):
+        agent_geom = self.model.geom_arch.geoms['agent']
         test_cases = [((70.0, 10.0), True, "Free space - circle center safely in free space"),
                     ((25.0, 41.0), False, "Circle overlaps with restricted zone boundary"),     ## BUG: This one is failing and I don't know why
                     ((30.0, 30.0), False, "Circle center in restricted zone"),
@@ -624,11 +587,12 @@ class TestShapeAgentGridEnvironment(unittest.TestCase):
                     ((80.0, 80.0), False, "Circle at occupied point"),
                     ((10.0, 10.0), True, "Circle at start area"),]
         for (x, y), expected, description in test_cases:
-            result = self.model.planner.check_collision(x, y)
+            result = self.model.planner.check_collision(x, y, geom=agent_geom)
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
     def test_goal_feasibility(self):
+        agent_geom = self.model.geom_arch.geoms['agent']
         test_cases = [((70.0, 70.0), True, "Goal in free space away from obstacles"),
                     ((50.0, 50.0), True, "Goal at boundary of free space"),
                     ((30.0, 30.0), False, "Goal in restricted zone"),
@@ -637,11 +601,12 @@ class TestShapeAgentGridEnvironment(unittest.TestCase):
                     ((12.0, 12.0), True, "Goal at start area"),
                     ((25.0, 25.0), False, "Goal in obstacle region"),]
         for goal, expected, description in test_cases:
-            result = self.model.planner.check_goal_feasible(goal)["feasible"]
+            result = self.model.planner.check_goal_feasible(goal, geom=agent_geom)["feasible"]
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
     def test_segment_collision(self):
+        agent_geom = self.model.geom_arch.geoms['agent']
         test_cases = [((15.0, 15.0), (45.0, 45.0), False, "Diagonal through restricted zone"),
                     ((60.0, 30.0), (80.0, 50.0), True, "Diagonal in free space"),
                     ((10.0, 50.0), (70.0, 50.0), True, "Horizontal across free space"),
@@ -650,7 +615,9 @@ class TestShapeAgentGridEnvironment(unittest.TestCase):
                     ((70.0, 10.0), (70.0, 50.0), True, "Vertical in free space"),
                     ((25.0, 15.0), (25.0, 35.0), False, "Vertical through restricted zone"),]
         for start, end, expected, description in test_cases:
-            result, _ = self.model.planner.check_segment_collision(*start, *end)
+            x1, y1 = start
+            x2, y2 = end
+            result, _ = self.model.planner.check_segment_collision(x1, y1, x2, y2, geom=agent_geom)
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
@@ -668,6 +635,7 @@ class TestShapeAgentGridEnvironment(unittest.TestCase):
     '''
 
     def test_path_validation(self):
+        agent_geom = self.model.geom_arch.geoms['agent']
         test_cases = [([(60.0, 40.0), (70.0, 50.0), (80.0, 60.0)], True, "Valid 3-point path in free space"),
                     ([(15.0, 55.0), (20.0, 60.0)], True, "Valid 2-point path"),
                     ([], False, "Empty path"),
@@ -677,7 +645,7 @@ class TestShapeAgentGridEnvironment(unittest.TestCase):
                     ([(65.0, 20.0), (75.0, 30.0), (85.0, 40.0)], True, "Valid path in clear corner"),
                     ([(10.0, 10.0), (50.0, 50.0), (80.0, 80.0)], False, "Path crossing obstacles"),]
         for path, expected, description in test_cases:
-            result = self.model.planner.validate_path(path)[0]
+            result = self.model.planner.validate_path(path, geom=agent_geom)[0]
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
@@ -731,7 +699,7 @@ class TestShapeAgentGeomEnvironment(unittest.TestCase):
         for start, end, expected, description in test_cases:
             x1, y1 = start
             x2, y2 = end
-            result, _ = self.model.planner.check_segment_collision_shape(x1, y1, x2, y2, geom=agent_geom)
+            result, _ = self.model.planner.check_segment_collision(x1, y1, x2, y2, geom=agent_geom)
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
@@ -810,7 +778,7 @@ class TestShapeAgentHybridEnvironment(unittest.TestCase):
         for start, end, expected, description in test_cases:
             x1, y1 = start
             x2, y2 = end
-            result, _ = self.model.planner.check_segment_collision_shape(x1, y1, x2, y2, geom=agent_geom)
+            result, _ = self.model.planner.check_segment_collision(x1, y1, x2, y2, geom=agent_geom)
             with self.subTest(msg=description):
                 self.assertEqual(result, expected, description)
 
