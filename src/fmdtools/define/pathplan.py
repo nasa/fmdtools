@@ -33,13 +33,13 @@ class PathPlannerState(State):
     replanning_triggered: bool = False
 
 
-## NOTE: block_size name may be confusing with CoordsParam blocksize
+## NOTE: blocksize name may be confusing with CoordsParam blocksize
 class PathPlannerParameter(Parameter):
     """
     Static planner parameters (set at initialization).
     """
     max_distance: float = 5.0
-    block_size: float = 2.5
+    blocksize: float = 2.5
     agent_radius: float = 0.0 # Optional - agent's circular radius
     planner = None
     
@@ -446,7 +446,7 @@ class PathPlannerBase(BaseObject):
                 collision_points.append((x2, y2))
                 return False, collision_points
 
-            cell_size = getattr(grid_env.p, 'block_size', 1.0)
+            cell_size = getattr(grid_env.p, 'blocksize', 1.0)
             
             # Get all cells along the line using Bresenham
             if cell_size < 1.0:
@@ -848,7 +848,7 @@ class PathPlannerBase(BaseObject):
         # ===== GRID COLLISION CHECK =====
         if self.is_coords() or self.is_hybrid():
             grid_env = self.env.grid if self.is_hybrid() else self.env
-            blocksize = getattr(grid_env.p, 'block_size', 10.0)
+            blocksize = getattr(grid_env.p, 'blocksize', 10.0)
 
             minx, miny, maxx, maxy = query_shape.bounds
 
@@ -1055,7 +1055,7 @@ class PathPlannerBase(BaseObject):
         list of tuples
             Cell coordinates in world space (x, y)
         """
-        cell_size = getattr(grid_env.p, 'block_size', 1.0)
+        cell_size = getattr(grid_env.p, 'blocksize', 1.0)
         minx, miny, maxx, maxy = swept_volume.bounds
         
         if cell_size < 1.0:
@@ -1077,7 +1077,7 @@ class PathPlannerBase(BaseObject):
         min_gx, min_gy = grid_env.to_index(minx, miny)
         max_gx, max_gy = grid_env.to_index(maxx, maxy)
         
-        block_size = getattr(grid_env.p, 'block_size', 1.0)
+        blocksize = getattr(grid_env.p, 'blocksize', 1.0)
         
         # Get the exterior ring coordinates of swept volume
         if hasattr(swept_volume, 'exterior'):
@@ -1119,12 +1119,12 @@ class PathPlannerBase(BaseObject):
         """
         
         cells = set()
-        block_size = getattr(grid_env.p, 'block_size', 1.0)
+        blocksize = getattr(grid_env.p, 'blocksize', 1.0)
         
         # For each row (gy)
         for gy in range(min_gy, max_gy + 1):
             # Get world y-coordinate for this row
-            world_y = grid_env.grid[0, gy][1] if hasattr(grid_env.grid[0, gy], '__getitem__') else gy * block_size
+            world_y = grid_env.grid[0, gy][1] if hasattr(grid_env.grid[0, gy], '__getitem__') else gy * blocksize
             
             # Find horizontal intervals that intersect the swept volume
             intervals = self._find_horizontal_intervals(world_y, min_gx, max_gx, swept_volume, grid_env)
@@ -1146,11 +1146,11 @@ class PathPlannerBase(BaseObject):
         Returns grid indices, not world coordinates.
         """
         
-        block_size = getattr(grid_env.p, 'block_size', 1.0)
+        blocksize = getattr(grid_env.p, 'blocksize', 1.0)
         
         # Create a horizontal line at this y
         minx, _, maxx, _ = swept_volume.bounds
-        horizontal_line = ShapelyLineString([(minx - block_size, world_y), (maxx + block_size, world_y)])
+        horizontal_line = ShapelyLineString([(minx - blocksize, world_y), (maxx + blocksize, world_y)])
         
         # Get intersection points with swept volume
         if not swept_volume.intersects(horizontal_line):
@@ -1197,7 +1197,7 @@ class PathPlannerBase(BaseObject):
         """
         
         cells = set()
-        block_size = getattr(grid_env.p, 'block_size', 1.0)
+        blocksize = getattr(grid_env.p, 'blocksize', 1.0)
         
         for gy in range(min_gy, max_gy + 1):
             for gx in range(min_gx, max_gx + 1):
@@ -1206,7 +1206,7 @@ class PathPlannerBase(BaseObject):
                     cell_point = ShapelyPoint(pt[0], pt[1])
                     
                     # Check if cell center is in swept volume or close enough to boundary
-                    if swept_volume.contains(cell_point) or swept_volume.distance(cell_point) < block_size / 2:
+                    if swept_volume.contains(cell_point) or swept_volume.distance(cell_point) < blocksize / 2:
                         cells.add(tuple(pt))
         
         return cells
