@@ -1402,12 +1402,12 @@ class PathPlannerBase(BaseObject):
         return sum(segment_costs)
 
 # --- Planning ---
-    def compute_path(self, start, goal, planner=None, **kwargs):
+    def compute_path(self, start, goal, planner=None, geom=None, **kwargs):
         """
         Use external planner to compute a path.
         """
         
-        goal_check = self.check_goal_feasible(goal)
+        goal_check = self.check_goal_feasible(goal, geom=geom)
         if not goal_check["feasible"]:
             self.replan_reasons.append(goal_check["reason"])
             self.s.flightplan = ()
@@ -1431,22 +1431,23 @@ class PathPlannerBase(BaseObject):
 
         return self.s.flightplan
 
-    def plan_and_validate(self, start, goal, planner=None, **kwargs):
+    def plan_and_validate(self, start, goal, planner=None, geom=None, use_shape_collision=False, **kwargs):
         """
         Plan, validate, and if needed replan.
         """
         attempts = 0
         max_attempts = getattr(self.p, "max_replan_attempts", 3)
+        self.s.last_valid_path = ()
 
         while attempts < max_attempts:
-            path = self.compute_path(start, goal, planner, **kwargs)
+            path = self.compute_path(start, goal, planner, geom=geom, **kwargs)
 
             if not path:
                 attempts += 1
                 self.replan_reasons.append("Planner returned empty path.")
                 continue
 
-            valid, bad_idx, details = self.validate_path(path)
+            valid, bad_idx, details = self.validate_path(path, geom=geom, use_shape_collision=use_shape_collision)
             if valid:
                 self.s.last_valid_path = tuple(path)
                 self.s.replanning_triggered = False
@@ -1461,7 +1462,8 @@ class PathPlannerBase(BaseObject):
             attempts += 1
 
         self.s.replanning_triggered = True
-        return getattr(self.s, "last_valid_path", ()), attempts
+        return (), attempts
+        #return getattr(self.s, "last_valid_path", ()), attempts
 
 
 # --- Stepping / movement ---
