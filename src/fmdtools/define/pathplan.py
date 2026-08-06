@@ -7,11 +7,7 @@ from fmdtools.analyze.common import calc_metric
 from fmdtools.define.object.base import BaseObject
 
 import math
-import networkx as nx
-import numpy as np
-import matplotlib.pyplot as plt
 import traceback
-import heapq
 from shapely.geometry import Point as ShapelyPoint  ##NOTE: maybe use GeomPoint instead
 from shapely.geometry import LineString as ShapelyLineString    ##NOTE: maybe use GeomLine instead
 from shapely.geometry import box as shapely_box
@@ -86,6 +82,14 @@ class PathPlannerBase(BaseObject):
     def init_environment(self, env):
         """
         Initialize with either Coords, Geom, or GeomArchitecture.
+
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp.init_environment(None)
+        Traceback (most recent call last):
+            ...
+        ValueError: Environment cannot be None.
         """
         if env is None:
             raise ValueError("Environment cannot be None.")
@@ -94,6 +98,15 @@ class PathPlannerBase(BaseObject):
 
     @property
     def get_env(self):
+        """
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp.get_env
+        Traceback (most recent call last):
+            ...
+        RuntimeError: Environment not initialized. Call init_environment() first.
+        """
         if self.env is None:
             raise RuntimeError("Environment not initialized. Call init_environment() first.")
         return self.env
@@ -137,7 +150,7 @@ class PathPlannerBase(BaseObject):
         False
         """
         return isinstance(self.env, GeomArchitecture)
-    
+
     def is_hybrid(self):
         """
         Returns True if environment is hybrid (has both grid and geoms).
@@ -186,6 +199,212 @@ class PathPlannerBase(BaseObject):
         return None
 
 
+# --- Geometric helpers ---
+    def _bresenham_line(self, x0, y0, x1, y1):
+        """
+        Generate all grid cells that a line segment passes through using Bresenham's algorithm.
+        Works for integer grid coordinates only (faster).
+        
+        Returns
+        -------
+        list of (x, y) grid cell coordinates
+
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp._bresenham_line(0, 0, 3, 0)
+        [(0, 0), (1, 0), (2, 0), (3, 0)]
+        >>> pp._bresenham_line(0, 0, 3, 3)
+        [(0, 0), (1, 1), (2, 2), (3, 3)]
+        >>> pp._bresenham_line(2, 2, 2, 2)
+        [(2, 2)]
+        >>> pp._bresenham_line(0, 0, -2, 0)
+        [(0, 0), (-1, 0), (-2, 0)]
+        """
+        cells = []
+        dx = abs(x1 - x0)
+        dy = abs(y1 - y0)
+        sx = 1 if x0 < x1 else -1
+        sy = 1 if y0 < y1 else -1
+        err = dx - dy
+        
+        x, y = x0, y0
+        
+        while True:
+            cells.append((x, y))
+            
+            if x == x1 and y == y1:
+                break
+            
+            e2 = 2 * err
+            if e2 > -dy:
+                err -= dy
+                x += sx
+            if e2 < dx:
+                err += dx
+                y += sy
+        
+        return cells
+
+    def _dda_line(self, x0, y0, x1, y1):
+        """
+        Generate all grid cells that a line segment passes through using DDA.
+        Works for floating-point grid coordinates.
+        
+        Parameters
+        ----------
+        x0, y0, x1, y1 : float
+            Line endpoints as integer grid cell indices
+        
+        Returns
+        -------
+        list of unique (grid_x, grid_y) cell coordinates
+
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> sorted(pp._dda_line(0, 0, 0, 0))
+        [(0, 0)]
+        >>> sorted(pp._dda_line(0, 0, 3, 0))
+        [(0, 0), (1, 0), (2, 0), (3, 0)]
+        >>> sorted(pp._dda_line(0, 0, 0, 3))
+        [(0, 0), (0, 1), (0, 2), (0, 3)]
+        >>> sorted(pp._dda_line(0, 0, 2, 2))
+        [(0, 0), (0, 1), (1, 1), (1, 2), (2, 2)]
+        """
+        cells = set()
+        
+        dx = x1 - x0
+        dy = y1 - y0
+        
+        grid_x = int(x0)
+        grid_y = int(y0)
+        cells.add((grid_x, grid_y))
+        
+        if dx == 0 and dy == 0:
+            return list(cells)
+        
+        step_x = 1 if dx > 0 else -1 if dx < 0 else 0
+        step_y = 1 if dy > 0 else -1 if dy < 0 else 0
+        
+        # Distance to next grid line (in parameter t space, 0 to 1)
+        if dx != 0:
+            t_max_x = (grid_x + (1 if dx > 0 else 0) - x0) / dx
+            t_delta_x = 1.0 / abs(dx)
+        else:
+            t_max_x = float('inf')
+            t_delta_x = float('inf')
+        
+        if dy != 0:
+            t_max_y = (grid_y + (1 if dy > 0 else 0) - y0) / dy
+            t_delta_y = 1.0 / abs(dy)
+        else:
+            t_max_y = float('inf')
+            t_delta_y = float('inf')
+        
+        # Get the target cell (floor of endpoint)
+        target_x = int(x1)
+        target_y = int(y1)
+        
+        # Traverse grid cells until we reach the target cell
+        while grid_x != target_x or grid_y != target_y:
+            if t_max_x < t_max_y:
+                t_max_x += t_delta_x
+                grid_x += step_x
+            else:
+                t_max_y += t_delta_y
+                grid_y += step_y
+            
+            cells.add((grid_x, grid_y))
+        
+        return list(cells)
+
+    def _extract_intersection_point(self, intersection):
+        """
+        Extract a representative point from a shapely geometry intersection.
+        Handles Point, LineString, Polygon, and MultiPart geometries.
+
+        Examples
+        --------
+        >>> from shapely.geometry import Point, LineString
+        >>> pp = PathPlannerBase()
+        >>> pp._extract_intersection_point(Point(3, 4))
+        (3.0, 4.0)
+        >>> pp._extract_intersection_point(LineString([(0, 0), (2, 2)]))
+        (0.0, 0.0)
+        """
+        # Try coords attribute (Point or LineString)
+        try:
+            if hasattr(intersection, 'coords'):
+                coords = list(intersection.coords)
+                if coords:
+                    return coords[0]
+        except (NotImplementedError, AttributeError):
+            pass
+        
+        # Try exterior (Polygon)
+        try:
+            if hasattr(intersection, 'exterior'):
+                coords = list(intersection.exterior.coords)
+                if coords:
+                    return coords[0]
+        except (NotImplementedError, AttributeError):
+            pass
+        
+        # Try geoms (MultiPoint, MultiLineString, MultiPolygon)
+        try:
+            if hasattr(intersection, 'geoms'):
+                geoms = list(intersection.geoms)
+                if geoms:
+                    # Recursively extract from first sub-geometry
+                    return self._extract_intersection_point(geoms[0])
+        except (NotImplementedError, AttributeError):
+            pass
+        
+        # Fallback: use centroid
+        try:
+            if hasattr(intersection, 'centroid'):
+                centroid = intersection.centroid
+                return (centroid.x, centroid.y)
+        except Exception:
+            pass
+        
+        return (0.0, 0.0)
+
+    def _get_grid_cells_in_bounds(self, shape_bounds, grid_env):
+        """
+        Get all grid cells that overlap with a shape's bounding box.
+        This is efficient for determining which cells need to be checked.
+        
+        Parameters
+        ----------
+        shape_bounds : tuple
+            (minx, miny, maxx, maxy) from shapely geometry.bounds
+        grid_env : Coords
+            Grid environment
+        
+        Returns
+        -------
+        set of (grid_x, grid_y) tuples
+            All grid cells overlapping the bounding box
+        """
+        minx, miny, maxx, maxy = shape_bounds
+        
+        # Convert to grid indices
+        grid_x_min, grid_y_min = grid_env.to_index(minx, miny)
+        grid_x_max, grid_y_max = grid_env.to_index(maxx, maxy)
+        
+        # Ensure proper ordering
+        grid_x_min, grid_x_max = min(grid_x_min, grid_x_max), max(grid_x_min, grid_x_max)
+        grid_y_min, grid_y_max = min(grid_y_min, grid_y_max), max(grid_y_min, grid_y_max)
+        
+        cells = set()
+        for gx in range(grid_x_min, grid_x_max + 1):
+            for gy in range(grid_y_min, grid_y_max + 1):
+                cells.add((gx, gy))
+        
+        return cells
+
     def get_buffered_shape(self, geom_obj, buffer_name=None):
         """
         Returns a buffered (footprint) shape from a Geom object for collision checking.
@@ -222,7 +441,7 @@ class PathPlannerBase(BaseObject):
         return None
 
 
-# --- Obstacle query for Coords ---
+# --- Point-based queries ---
     ## TODO: I want to generalize the feature dictionary so the user can put in names, colors, etc.
     def _query_coords_cell(self, x, y):
         """
@@ -248,8 +467,6 @@ class PathPlannerBase(BaseObject):
                 "traversable": bool(traversable), 
                 "goal_allowed": bool(goal_allowed),}
 
-
-# --- Obstacle query for Geom / GeomArchitecture ---
     def _query_geom_point(self, x, y):
         """
         Query a point against all geometries using GeomArchitecture.all_at().
@@ -298,8 +515,6 @@ class PathPlannerBase(BaseObject):
 
         return {"cost": total_cost, "traversable": traversable, "goal_allowed": goal_allowed}
     
-
-# --- Unified point query ---
     def query_point(self, x, y):
         """
         Unified hybrid environment point query.
@@ -358,7 +573,6 @@ class PathPlannerBase(BaseObject):
                 "traversable": bool(traversable), 
                 "goal_allowed": bool(goal_allowed)}
     
-
     def check_collision(self, x, y, geom=None):
         """
         Returns True if traversable.
@@ -383,315 +597,7 @@ class PathPlannerBase(BaseObject):
         return self.check_shape_collision(x, y, geom)[0]
 
 
-    def check_goal_feasible(self, goal, geom=None):
-        """
-        Check whether goal is feasible for a shaped agent.
-        
-        Examples
-        --------
-        >>> pp = PathPlannerBase()
-        >>> pp.init_environment(ExampleGrid())
-        >>> # Not traversable (2,2) and not goal_allowed
-        >>> pp.check_goal_feasible((2,2))['feasible']
-        False
-        >>> # Traversable and goal_allowed region!
-        >>> pp.check_goal_feasible((9,9))['feasible']
-        True
-        >>> pp.init_environment(ExampleGeomArch())
-        >>> # Inside the small circle at (8,8): not traversable and not goal_allowed
-        >>> pp.check_goal_feasible((8,8))['feasible']
-        False
-        >>> # Outside circle: traversable, goal_allowed
-        >>> pp.check_goal_feasible((1,1))['feasible']
-        True
-        """
-        x, y = goal
-        
-        if geom is not None:
-            # Use shape-aware collision
-            is_free, collision_info = self.check_shape_collision(x, y, geom)
-            if not is_free:
-                return {"feasible": False,
-                        "reason": "Goal position causes agent to collide with obstacles.",
-                        "collision_info": collision_info}
-        else:
-            # Fallback to point query
-            info = self.query_point(x, y)
-            if not info["traversable"] or not info["goal_allowed"]:
-                return {"feasible": False,
-                        "reason": "Goal point is not in traversable/goal-allowed region.",
-                        "point_info": info}
-        
-        return {"feasible": True, "reason": "Goal point is valid."}
-
-    
-# --- Segment collision checking ---
-    def check_segment_collision(self, x1, y1, x2, y2, geom=None, shape_name="shape", resolution=None):
-        """
-        Check if a line segment from (x1, y1) to (x2, y2) is collision-free.
-        
-        If geom is provided, performs a swept-volume check (shape along segment).
-        If geom is None, performs a point-based check.
-        
-        Parameters
-        ----------
-        x1, y1, x2, y2 : float
-            Segment endpoints
-        geom : GeomPoint/GeomPoly/GeomLine, optional
-            The agent shape. If None, treats agent as a point.
-        shape_name : str
-            Name for get_buffered_shape lookup (only used when geom is provided)
-        resolution : float, optional
-            Distance between sample points for shape checks.
-            If None, uses collision_check_resolution.
-        
-        Returns
-        -------
-        tuple (is_free, collision_info)
-            is_free : bool
-            collision_info : list of collision points (point mode) or dict (shape mode)
-        """
-        if geom is not None:
-            result = self._query_segment_shape(x1, y1, x2, y2, geom,
-                                            shape_name=shape_name,
-                                            resolution=resolution)
-            return result["traversable"], result["collision_info"]
-
-        # --- Point-based collision check ---
-        collision_points = []
-
-        # For Coords (grid) environments
-        if self.is_coords() or self.is_hybrid():
-            grid_env = self.env.grid if self.is_hybrid() else self.env
-            try:
-                grid_x1, grid_y1 = grid_env.to_index(x1, y1)
-                grid_x2, grid_y2 = grid_env.to_index(x2, y2)
-            except:
-                collision_points.append((x1, y1))
-                collision_points.append((x2, y2))
-                return False, collision_points
-
-            
-            cell_size = getattr(grid_env.p, 'blocksize', 1.0)
-            if cell_size < 1.0:
-                cells = self._dda_line(grid_x1, grid_y1, grid_x2, grid_y2)
-            else:
-                cells = self._bresenham_line(grid_x1, grid_y1, grid_x2, grid_y2)
-
-            for gx, gy in cells:
-                # Convert cell index back to a world coordinate (cell center).
-                wx = gx * cell_size
-                wy = gy * cell_size
-
-                pt_info = self.query_point(wx, wy)
-
-                if not pt_info["traversable"]:
-                    collision_points.append((wx, wy))
-                    return False, collision_points
-
-        # For Geom / GeomArchitecture / Hybrid environments
-        if self.is_geom_arch() or self.is_hybrid():
-            segment = ShapelyLineString([(x1, y1), (x2, y2)])
-            geom_arch = self._get_geom_arch()
-
-            if geom_arch is not None:
-                for geom_name, geom_obj in geom_arch.geoms.items():
-                    if not hasattr(geom_obj, 's'):
-                        continue
-
-                    traversable = getattr(geom_obj.s, "traversable", True)
-                    if traversable:
-                        continue
-
-                    shape = self.get_buffered_shape(geom_obj=geom_obj)
-                    if shape is None:
-                        continue
-
-                    if segment.intersects(shape):
-                        intersection = segment.intersection(shape)
-                        collision_pt = self._extract_intersection_point(intersection)
-                        if collision_pt:
-                            collision_points.append(collision_pt)
-                        return False, collision_points
-
-        return True, collision_points
-
-    def _extract_intersection_point(self, intersection):
-        """
-        Extract a representative point from a shapely geometry intersection.
-        Handles Point, LineString, Polygon, and MultiPart geometries.
-        """
-        # Try coords attribute (Point or LineString)
-        try:
-            if hasattr(intersection, 'coords'):
-                coords = list(intersection.coords)
-                if coords:
-                    return coords[0]
-        except (NotImplementedError, AttributeError):
-            pass
-        
-        # Try exterior (Polygon)
-        try:
-            if hasattr(intersection, 'exterior'):
-                coords = list(intersection.exterior.coords)
-                if coords:
-                    return coords[0]
-        except (NotImplementedError, AttributeError):
-            pass
-        
-        # Try geoms (MultiPoint, MultiLineString, MultiPolygon)
-        try:
-            if hasattr(intersection, 'geoms'):
-                geoms = list(intersection.geoms)
-                if geoms:
-                    # Recursively extract from first sub-geometry
-                    return self._extract_intersection_point(geoms[0])
-        except (NotImplementedError, AttributeError):
-            pass
-        
-        # Fallback: use centroid
-        try:
-            if hasattr(intersection, 'centroid'):
-                centroid = intersection.centroid
-                return (centroid.x, centroid.y)
-        except Exception:
-            pass
-        
-        return (0.0, 0.0)
-
-
-    def _bresenham_line(self, x0, y0, x1, y1):
-        """
-        Generate all grid cells that a line segment passes through using Bresenham's algorithm.
-        Works for integer grid coordinates only (faster).
-        
-        Returns
-        -------
-        list of (x, y) grid cell coordinates
-        """
-        cells = []
-        dx = abs(x1 - x0)
-        dy = abs(y1 - y0)
-        sx = 1 if x0 < x1 else -1
-        sy = 1 if y0 < y1 else -1
-        err = dx - dy
-        
-        x, y = x0, y0
-        
-        while True:
-            cells.append((x, y))
-            
-            if x == x1 and y == y1:
-                break
-            
-            e2 = 2 * err
-            if e2 > -dy:
-                err -= dy
-                x += sx
-            if e2 < dx:
-                err += dx
-                y += sy
-        
-        return cells
-
-
-    def _dda_line(self, x0, y0, x1, y1):
-        """
-        Generate all grid cells that a line segment passes through using DDA.
-        Works for floating-point grid coordinates.
-        
-        Parameters
-        ----------
-        x0, y0, x1, y1 : float
-            Line endpoints as integer grid cell indices
-        
-        Returns
-        -------
-        list of unique (grid_x, grid_y) cell coordinates
-        """
-        cells = set()
-        
-        dx = x1 - x0
-        dy = y1 - y0
-        
-        grid_x = int(x0)
-        grid_y = int(y0)
-        cells.add((grid_x, grid_y))
-        
-        if dx == 0 and dy == 0:
-            return list(cells)
-        
-        step_x = 1 if dx > 0 else -1 if dx < 0 else 0
-        step_y = 1 if dy > 0 else -1 if dy < 0 else 0
-        
-        # Distance to next grid line (in parameter t space, 0 to 1)
-        if dx != 0:
-            t_max_x = (grid_x + (1 if dx > 0 else 0) - x0) / dx
-            t_delta_x = 1.0 / abs(dx)
-        else:
-            t_max_x = float('inf')
-            t_delta_x = float('inf')
-        
-        if dy != 0:
-            t_max_y = (grid_y + (1 if dy > 0 else 0) - y0) / dy
-            t_delta_y = 1.0 / abs(dy)
-        else:
-            t_max_y = float('inf')
-            t_delta_y = float('inf')
-        
-        # Get the target cell (floor of endpoint)
-        target_x = int(x1)
-        target_y = int(y1)
-        
-        # Traverse grid cells until we reach the target cell
-        while grid_x != target_x or grid_y != target_y:
-            if t_max_x < t_max_y:
-                t_max_x += t_delta_x
-                grid_x += step_x
-            else:
-                t_max_y += t_delta_y
-                grid_y += step_y
-            
-            cells.add((grid_x, grid_y))
-        
-        return list(cells)
-
-
-# --- Collision checking when agent is a shape ---
-    def _get_grid_cells_in_bounds(self, shape_bounds, grid_env):
-        """
-        Get all grid cells that overlap with a shape's bounding box.
-        This is efficient for determining which cells need to be checked.
-        
-        Parameters
-        ----------
-        shape_bounds : tuple
-            (minx, miny, maxx, maxy) from shapely geometry.bounds
-        grid_env : Coords
-            Grid environment
-        
-        Returns
-        -------
-        set of (grid_x, grid_y) tuples
-            All grid cells overlapping the bounding box
-        """
-        minx, miny, maxx, maxy = shape_bounds
-        
-        # Convert to grid indices
-        grid_x_min, grid_y_min = grid_env.to_index(minx, miny)
-        grid_x_max, grid_y_max = grid_env.to_index(maxx, maxy)
-        
-        # Ensure proper ordering
-        grid_x_min, grid_x_max = min(grid_x_min, grid_x_max), max(grid_x_min, grid_x_max)
-        grid_y_min, grid_y_max = min(grid_y_min, grid_y_max), max(grid_y_min, grid_y_max)
-        
-        cells = set()
-        for gx in range(grid_x_min, grid_x_max + 1):
-            for gy in range(grid_y_min, grid_y_max + 1):
-                cells.add((gx, gy))
-        
-        return cells
-
+# --- Shape/region queries ---
     def query_shape(self, shape):
         """
         Query properties of a region defined by a shapely geometry.
@@ -768,7 +674,6 @@ class PathPlannerBase(BaseObject):
                 "cost": total_cost if traversable else float('inf'),
                 "goal_allowed": goal_allowed,
                 "blocked_cells": blocked_cells}
-
 
     def check_shape_collision(self, x, y, geom, shape_name="shape"):
         """
@@ -882,6 +787,7 @@ class PathPlannerBase(BaseObject):
         return True, collision_info
 
 
+# --- Segment-level collision ---
     def _query_segment_shape(self, x1, y1, x2, y2, geom, shape_name="shape", resolution=None):
         """
         Sweep a shape along a segment, sampling at regular intervals.
@@ -1017,11 +923,149 @@ class PathPlannerBase(BaseObject):
         return {"traversable": True, "cost": total_cost,
                 "collision_info": collision_info, "cells_visited": cells_visited}
 
+    def check_segment_collision(self, x1, y1, x2, y2, geom=None, shape_name="shape", resolution=None):
+        """
+        Check if a line segment from (x1, y1) to (x2, y2) is collision-free.
+        
+        If geom is provided, performs a swept-volume check (shape along segment).
+        If geom is None, performs a point-based check.
+        
+        Parameters
+        ----------
+        x1, y1, x2, y2 : float
+            Segment endpoints
+        geom : GeomPoint/GeomPoly/GeomLine, optional
+            The agent shape. If None, treats agent as a point.
+        shape_name : str
+            Name for get_buffered_shape lookup (only used when geom is provided)
+        resolution : float, optional
+            Distance between sample points for shape checks.
+            If None, uses collision_check_resolution.
+        
+        Returns
+        -------
+        tuple (is_free, collision_info)
+            is_free : bool
+            collision_info : list of collision points (point mode) or dict (shape mode)
+        """
+        if geom is not None:
+            result = self._query_segment_shape(x1, y1, x2, y2, geom,
+                                            shape_name=shape_name,
+                                            resolution=resolution)
+            return result["traversable"], result["collision_info"]
 
-# --- Path validation ---    
+        # --- Point-based collision check ---
+        collision_points = []
+
+        # For Coords (grid) environments
+        if self.is_coords() or self.is_hybrid():
+            grid_env = self.env.grid if self.is_hybrid() else self.env
+            try:
+                grid_x1, grid_y1 = grid_env.to_index(x1, y1)
+                grid_x2, grid_y2 = grid_env.to_index(x2, y2)
+            except:
+                collision_points.append((x1, y1))
+                collision_points.append((x2, y2))
+                return False, collision_points
+
+            
+            cell_size = getattr(grid_env.p, 'blocksize', 1.0)
+            if cell_size < 1.0:
+                cells = self._dda_line(grid_x1, grid_y1, grid_x2, grid_y2)
+            else:
+                cells = self._bresenham_line(grid_x1, grid_y1, grid_x2, grid_y2)
+
+            for gx, gy in cells:
+                # Convert cell index back to a world coordinate (cell center).
+                wx = gx * cell_size
+                wy = gy * cell_size
+
+                pt_info = self.query_point(wx, wy)
+
+                if not pt_info["traversable"]:
+                    collision_points.append((wx, wy))
+                    return False, collision_points
+
+        # For Geom / GeomArchitecture / Hybrid environments
+        if self.is_geom_arch() or self.is_hybrid():
+            segment = ShapelyLineString([(x1, y1), (x2, y2)])
+            geom_arch = self._get_geom_arch()
+
+            if geom_arch is not None:
+                for geom_name, geom_obj in geom_arch.geoms.items():
+                    if not hasattr(geom_obj, 's'):
+                        continue
+
+                    traversable = getattr(geom_obj.s, "traversable", True)
+                    if traversable:
+                        continue
+
+                    shape = self.get_buffered_shape(geom_obj=geom_obj)
+                    if shape is None:
+                        continue
+
+                    if segment.intersects(shape):
+                        intersection = segment.intersection(shape)
+                        collision_pt = self._extract_intersection_point(intersection)
+                        if collision_pt:
+                            collision_points.append(collision_pt)
+                        return False, collision_points
+
+        return True, collision_points
+
+
+# --- Goal/path validation ---
+    def check_goal_feasible(self, goal, geom=None):
+        """
+        Check whether goal is feasible for a shaped agent.
+        
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp.init_environment(ExampleGrid())
+        >>> # Not traversable (2,2) and not goal_allowed
+        >>> pp.check_goal_feasible((2,2))['feasible']
+        False
+        >>> # Traversable and goal_allowed region!
+        >>> pp.check_goal_feasible((9,9))['feasible']
+        True
+        >>> pp.init_environment(ExampleGeomArch())
+        >>> # Inside the small circle at (8,8): not traversable and not goal_allowed
+        >>> pp.check_goal_feasible((8,8))['feasible']
+        False
+        >>> # Outside circle: traversable, goal_allowed
+        >>> pp.check_goal_feasible((1,1))['feasible']
+        True
+        """
+        x, y = goal
+        
+        if geom is not None:
+            # Use shape-aware collision
+            is_free, collision_info = self.check_shape_collision(x, y, geom)
+            if not is_free:
+                return {"feasible": False,
+                        "reason": "Goal position causes agent to collide with obstacles.",
+                        "collision_info": collision_info}
+        else:
+            # Fallback to point query
+            info = self.query_point(x, y)
+            if not info["traversable"] or not info["goal_allowed"]:
+                return {"feasible": False,
+                        "reason": "Goal point is not in traversable/goal-allowed region.",
+                        "point_info": info}
+        
+        return {"feasible": True, "reason": "Goal point is valid."}
+
     def validate_path(self, path, geom=None, use_shape_collision=False):
         """
         Validate that all segments are free of collisions.
+
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp.init_environment(ExampleGrid())
+        >>> pp.validate_path([(1, 1)])
+        (False, None, {'error': 'Path too short'})
         """
         if len(path) < 2:
             return False, None, {"error": "Path too short"}
@@ -1055,7 +1099,7 @@ class PathPlannerBase(BaseObject):
         return True, None, {}
 
 
-# --- Cost computation ---
+# --- Cost/metrics ---
     ## TODO: need to fix this to use calc_metric
     def compute_path_cost(self, path, geom=None, shape_name="shape", cost_fn=None):
         """
@@ -1082,6 +1126,13 @@ class PathPlannerBase(BaseObject):
         -------
         float
             Total path cost. Returns inf if path is infeasible.
+
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp.init_environment(ExampleGrid())
+        >>> pp.compute_path_cost([(1, 1)])
+        inf
         """
         if len(path) < 2:
             return float('inf')
@@ -1144,11 +1195,71 @@ class PathPlannerBase(BaseObject):
         # Default: sum of segment costs
         return sum(segment_costs)
 
-    
+    def compute_path_length(self, path):
+        """
+        Compute the total length of a path.
+        
+        Parameters
+        ----------
+        path : sequence of (x, y) tuples
+            The path points
+        
+        Returns
+        -------
+        float
+            Total length of the path (sum of segment distances)
+
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> round(pp.compute_path_length([(0,0), (3,4)]),2)
+        5.0
+        >>> pp.compute_path_length([(0,0)])
+        0.0
+        >>> round(pp.compute_path_length([(0,0), (0,5), (5,5)]), 2)
+        10.0
+        """
+        if len(path) < 2:
+            return 0.0
+        
+        total_length = 0.0
+        for i in range(len(path) - 1):
+            x1, y1 = path[i]
+            x2, y2 = path[i + 1]
+            dx = x2 - x1
+            dy = y2 - y1
+            total_length += math.hypot(dx, dy)
+        
+        return total_length
+
+    def compute_number_path_steps(self, path):
+        """
+        Computes number of waypoints in a path.
+        
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp.compute_number_path_steps([(0,0), (1,1), (2,2)])
+        3
+        >>> pp.compute_number_path_steps([])
+        0
+        """
+        return len(path)
+
+
 # --- Planning ---
     def compute_path(self, start, goal, planner=None, geom=None, **kwargs):
         """
         Use external planner to compute a path.
+
+        Examples
+        --------
+        >>> pp = PathPlannerBase()
+        >>> pp.init_environment(ExampleGrid())
+        >>> straight = lambda start, goal, planner, **kw: [start, goal]
+        >>> path = pp.compute_path((9, 9), (9, 9), planner=straight)
+        >>> pp.s.planned
+        True
         """
         
         goal_check = self.check_goal_feasible(goal, geom=geom)
@@ -1239,58 +1350,6 @@ class PathPlannerBase(BaseObject):
         wp = self.s.flightplan[self.s.pt]
         self.s.pt += 1
         return wp
-
-    def compute_path_length(self, path):
-        """
-        Compute the total length of a path.
-        
-        Parameters
-        ----------
-        path : sequence of (x, y) tuples
-            The path points
-        
-        Returns
-        -------
-        float
-            Total length of the path (sum of segment distances)
-
-        Examples
-        --------
-        >>> pp = PathPlannerBase()
-        >>> round(pp.compute_path_length([(0,0), (3,4)]),2)
-        5.0
-        >>> pp.compute_path_length([(0,0)])
-        0.0
-        >>> round(pp.compute_path_length([(0,0), (0,5), (5,5)]), 2)
-        10.0
-        """
-        if len(path) < 2:
-            return 0.0
-        
-        total_length = 0.0
-        for i in range(len(path) - 1):
-            x1, y1 = path[i]
-            x2, y2 = path[i + 1]
-            dx = x2 - x1
-            dy = y2 - y1
-            total_length += math.hypot(dx, dy)
-        
-        return total_length
-    
-    def compute_number_path_steps(self, path):
-        """
-        Computes number of waypoints in a path.
-        
-        Examples
-        --------
-        >>> pp = PathPlannerBase()
-        >>> pp.compute_number_path_steps([(0,0), (1,1), (2,2)])
-        3
-        >>> pp.compute_number_path_steps([])
-        0
-        """
-        return len(path)
-
 
 
 
