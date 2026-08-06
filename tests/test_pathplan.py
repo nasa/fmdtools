@@ -43,9 +43,9 @@ class GridEnvironment(Coords):
     feature_cost = (float, 1.0)
 
     def init_properties(self, **kwargs):
-        self.set_range("traversable", False, xmin=20, xmax=40, ymin=20, ymax=40, inclusive=False)
-        self.set_range("goal_allowed", False, xmin=20, xmax=40, ymin=20, ymax=40, inclusive=False)
-        self.set_range("cost", 100.0, xmin=20, xmax=40, ymin=20, ymax=40, inclusive=False)
+        self.set_range("traversable", False, xmin=20, xmax=40, ymin=20, ymax=40, inclusive=True)
+        self.set_range("goal_allowed", False, xmin=20, xmax=40, ymin=20, ymax=40, inclusive=True)
+        self.set_range("cost", 100.0, xmin=20, xmax=40, ymin=20, ymax=40, inclusive=True)
         
         occupied_cells = [(60, 60), (80, 80)]
         self.set_pts(occupied_cells, "traversable", False)

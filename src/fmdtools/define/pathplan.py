@@ -14,6 +14,7 @@ import traceback
 import heapq
 from shapely.geometry import Point as ShapelyPoint  ##NOTE: maybe use GeomPoint instead
 from shapely.geometry import LineString as ShapelyLineString    ##NOTE: maybe use GeomLine instead
+from shapely.geometry import box as shapely_box
 from shapely.affinity import translate
 
 class PathPlannerState(State):
@@ -865,13 +866,38 @@ class PathPlannerBase(BaseObject):
             min_gx, max_gx = min(min_gx, max_gx), max(min_gx, max_gx)
             min_gy, max_gy = min(min_gy, max_gy), max(min_gy, max_gy)
 
+            half = blocksize / 2
+
             for gx in range(min_gx, max_gx + 1):
                 for gy in range(min_gy, max_gy + 1):
                     grid_x = gx * blocksize
                     grid_y = gy * blocksize
 
-                    cell_point = ShapelyPoint(grid_x, grid_y)
+                    cell_square = shapely_box(grid_x - half, grid_y - half,
+                                      grid_x + half, grid_y + half)
+
+                    if not query_shape.intersects(cell_square):
+                        continue
+
+                    # This cell overlaps the agent -> check its properties.
+                    info = self._query_coords_cell(grid_x, grid_y)
+
+                    if not info["traversable"]:
+                        collision_info["blocked_cells"].append((grid_x, grid_y))
+                        return False, collision_info
+
+                    # Accumulate cost / goal_allowed if you track them here
+                    collision_info.setdefault("cost", 0.0)
+                    collision_info["cost"] += info.get("cost", 0.0)
+                    if not info.get("goal_allowed", True):
+                        collision_info["goal_allowed"] = False
+
+                    '''
+                    cell_point = ShapelyPoint(grid_x, grid_y)       ##POTATO
                     distance = query_shape.distance(cell_point)
+
+                    cell_square = shapely_box(grid_x - half, grid_y - half,
+                                      grid_x + half, grid_y + half)
 
                     if distance <= blocksize / 2:
                         cell_result = self.query_point(grid_x, grid_y)
@@ -879,6 +905,7 @@ class PathPlannerBase(BaseObject):
                         if not cell_result["traversable"]:
                             collision_info["blocked_cells"].append((gx, gy))
                             return False, collision_info
+                    '''
 
         return True, collision_info
 
