@@ -863,11 +863,7 @@ class PathPlannerBase(BaseObject):
                         collision_info["blocked_cells"].append((grid_x, grid_y))
                         return False, collision_info
 
-                    # Accumulate cost / goal_allowed if you track them here     ## TODO: check these "errors"
-                    collision_info.setdefault("cost", 0.0)
-                    collision_info["cost"] += info.get("cost", 0.0)
-                    if not info.get("goal_allowed", True):
-                        collision_info["goal_allowed"] = False
+                        
 
                     '''
                     cell_point = ShapelyPoint(grid_x, grid_y)       ##POTATO
@@ -885,6 +881,143 @@ class PathPlannerBase(BaseObject):
                     '''
 
         return True, collision_info
+
+    # --- New shared helper for swept-shape segment queries ---
+
+    def _query_segment_shape(self, x1, y1, x2, y2, geom, shape_name="shape", resolution=None):
+        """
+        Sweep a shape along a segment, sampling at regular intervals.
+        Returns traversability, total accumulated cost, and collision info.
+
+        This is the shared logic used by both:
+        - check_segment_collision_shape (collision check only)
+        - compute_path_cost (cost accumulation for shape agents)
+
+        Parameters
+        ----------
+        x1, y1, x2, y2 : float
+            Segment endpoints (center of the agent shape)
+        geom : GeomPoint/GeomPoly/GeomLine
+            The agent shape (Geom object)
+        shape_name : str
+            Name for get_buffered_shape lookup
+        resolution : float, optional
+            Distance between sample points. If None, uses collision_check_resolution.
+
+        Returns
+        -------
+        dict
+            {
+                "traversable": bool,
+                "cost": float,          # total weighted cost along the segment
+                "collision_info": dict,  # details if collision found
+                "cells_visited": set,   # all (grid_x, grid_y) cells the shape overlapped
+            }
+        """
+        if resolution is None:
+            resolution = getattr(self.p, 'collision_check_resolution', 0.5)
+
+        shape = self.get_buffered_shape(geom, shape_name)
+        if shape is None:
+            # Fallback to point-based check
+            is_free, collision_pts = self.check_segment_collision(x1, y1, x2, y2)
+            if not is_free:
+                return {"traversable": False, "cost": float('inf'),
+                        "collision_info": {"blocked_cells": [], "blocked_geoms": []},
+                        "cells_visited": set()}
+            # Point fallback cost
+            pt1 = self.query_point(x1, y1)
+            pt2 = self.query_point(x2, y2)
+            c1 = pt1["cost"] if pt1["cost"] > 0 else 1.0
+            c2 = pt2["cost"] if pt2["cost"] > 0 else 1.0
+            avg = 0.5 * (c1 + c2)
+            segdist = math.hypot(x2 - x1, y2 - y1)
+            return {"traversable": True, "cost": avg * segdist,
+                    "collision_info": {}, "cells_visited": set()}
+
+        distance = math.hypot(x2 - x1, y2 - y1)
+        num_samples = max(2, int(distance / resolution) + 1)
+        step_dist = distance / (num_samples - 1) if num_samples > 1 else 0.0
+
+        total_cost = 0.0
+        cells_visited = set()
+        collision_info = {"blocked_cells": [], "blocked_geoms": []}
+
+        for i in range(num_samples):
+            t = i / (num_samples - 1) if num_samples > 1 else 0.0
+            x = x1 + t * (x2 - x1)
+            y = y1 + t * (y2 - y1)
+
+            # Translate the agent shape to the sample position
+            try:
+                query_shape = translate(shape, xoff=x, yoff=y)
+            except Exception:
+                return {"traversable": False, "cost": float('inf'),
+                        "collision_info": collision_info, "cells_visited": cells_visited}
+
+            # --- Check grid cells (Coords / Hybrid) ---
+            sample_cost = 0.0
+            if self.is_coords() or self.is_hybrid():
+                grid_env = self.env.grid if self.is_hybrid() else self.env
+                cells = self._get_grid_cells_in_bounds(query_shape.bounds, grid_env)
+                cell_size = getattr(grid_env.p, 'cell_size', 1.0)
+                half = cell_size / 2.0
+
+                for grid_x, grid_y in cells:
+                    cell_center = grid_env.grid[grid_x, grid_y]
+                    cx, cy = cell_center
+
+                    cell_square = shapely_box(cx - half, cy - half,
+                                            cx + half, cy + half)
+
+                    if not query_shape.intersects(cell_square):
+                        continue
+
+                    info = self._query_coords_cell(grid_x, grid_y)
+
+                    if not info["traversable"]:
+                        collision_info["blocked_cells"].append((grid_x, grid_y))
+                        return {"traversable": False, "cost": float('inf'),
+                                "collision_info": collision_info,
+                                "cells_visited": cells_visited}
+
+                    cells_visited.add((grid_x, grid_y))
+                    cell_cost = info.get("cost", 0.0)
+                    if cell_cost > 0:
+                        sample_cost += cell_cost
+
+            # --- Check geom obstacles (GeomArchitecture / Hybrid) ---
+            if self.is_geom_arch() or self.is_hybrid():
+                geom_arch = self._get_geom_arch()
+                if geom_arch is not None:
+                    for geom_name, geom_obj in geom_arch.geoms.items():
+                        if not hasattr(geom_obj, 's'):
+                            continue
+                        traversable = getattr(geom_obj.s, 'traversable', True)
+                        if traversable:
+                            # Could still have a cost associated
+                            obs_shape = self.get_buffered_shape(geom_obj=geom_obj)
+                            if obs_shape is not None and query_shape.intersects(obs_shape):
+                                obs_cost = getattr(geom_obj.s, 'cost', 0.0)
+                                if obs_cost > 0:
+                                    sample_cost += obs_cost
+                            continue
+
+                        # Non-traversable obstacle
+                        obs_shape = self.get_buffered_shape(geom_obj=geom_obj)
+                        if obs_shape is not None and query_shape.intersects(obs_shape):
+                            collision_info["blocked_geoms"].append(geom_name)
+                            return {"traversable": False, "cost": float('inf'),
+                                    "collision_info": collision_info,
+                                    "cells_visited": cells_visited}
+
+            # Weight the sample cost by the step distance
+            # Use 1.0 as baseline if sample_cost is 0 (free space has unit cost)
+            effective_cost = sample_cost if sample_cost > 0 else 1.0
+            total_cost += effective_cost * step_dist
+
+        return {"traversable": True, "cost": total_cost,
+                "collision_info": collision_info, "cells_visited": cells_visited}
 
 
     def check_segment_collision_shape(self, x1, y1, x2, y2, geom, shape_name="shape", resolution=None):
@@ -909,6 +1042,15 @@ class PathPlannerBase(BaseObject):
             is_free : bool
             collision_info : dict with collision details
         """
+        if geom is None:
+            return self.check_segment_collision(x1, y1, x2, y2)
+
+        result = self._query_segment_shape(x1, y1, x2, y2, geom,
+                                            shape_name=shape_name,
+                                            resolution=resolution)
+        return result["traversable"], result["collision_info"]
+
+        '''
         if resolution is None:
             resolution = getattr(self.p, 'collision_check_resolution', 0.5)
 
@@ -938,6 +1080,7 @@ class PathPlannerBase(BaseObject):
                 return False, collision_info
         
         return True, {}
+        '''
 
     '''
     def check_segment_collision_shape(self, x1, y1, x2, y2, shape, resolution=None):
@@ -1269,52 +1412,75 @@ class PathPlannerBase(BaseObject):
 
 # --- Cost computation ---
     ## TODO: need to fix this to use calc_metric
-    def compute_path_cost(self, path, cost_fn=None):
+    def compute_path_cost(self, path, geom=None, shape_name="shape", cost_fn=None):
         """
-        Compute path cost using either:
-        - user-supplied cost_function
-        - default segment cost model
+        Compute path cost.
 
-        Returns float
+        If geom is None (point agent): uses the existing trapezoidal-average
+        point-query model (avg endpoint cost × segment length).
+
+        If geom is provided (shape agent): sweeps the shape along each segment,
+        accumulating the cost of all cells/obstacles the agent overlaps.
+
+        Parameters
+        ----------
+        path : list of (x, y) tuples
+            The path waypoints.
+        geom : GeomPoint/GeomPoly/GeomLine, optional
+            The agent shape. If None, treat agent as a point.
+        shape_name : str
+            Name for get_buffered_shape lookup.
+        cost_fn : callable, optional
+            User-supplied cost function override.
+
+        Returns
+        -------
+        float
+            Total path cost. Returns inf if path is infeasible.
         """
         if len(path) < 2:
             return float('inf')
 
         segment_costs = []
+
         for i in range(len(path) - 1):
             x1, y1 = path[i]
             x2, y2 = path[i + 1]
-            
-            # Check if the segment itself is collision-free (not just endpoints)
-            is_free, _ = self.check_segment_collision(x1, y1, x2, y2)
-            if not is_free:
-                return float('inf')
-            
-            # Query both points for cost
-            pt1 = self.query_point(x1, y1)
-            pt2 = self.query_point(x2, y2)
 
-            if not pt1["traversable"] or not pt2["traversable"]:
-                return float('inf')
+            if geom is None:
+                is_free, _ = self.check_segment_collision(x1, y1, x2, y2)
+                if not is_free:
+                    return float('inf')
 
-            c1 = pt1["cost"]
-            c2 = pt2["cost"]
-            
-            # Handle case where cost might be 0 or inf
-            if c1 == float('inf') or c2 == float('inf'):
-                return float('inf')
-            
-            # Use average cost, but default to 1.0 if cost is 0
-            avg = 0.5 * ((c1 if c1 > 0 else 1.0) + (c2 if c2 > 0 else 1.0))
+                pt1 = self.query_point(x1, y1)
+                pt2 = self.query_point(x2, y2)
 
-            dx = x2 - x1
-            dy = y2 - y1
-            segdist = math.hypot(dx, dy)
+                if not pt1["traversable"] or not pt2["traversable"]:
+                    return float('inf')
 
-            segment_costs.append(avg * segdist)
+                c1 = pt1["cost"]
+                c2 = pt2["cost"]
 
-        self.cost_function = cost_fn
-        # Use custom cost function if provided
+                if c1 == float('inf') or c2 == float('inf'):
+                    return float('inf')
+
+                # Use average cost; default to 1.0 if cost is 0 (free space baseline)
+                avg = 0.5 * ((c1 if c1 > 0 else 1.0) + (c2 if c2 > 0 else 1.0))
+                segdist = math.hypot(x2 - x1, y2 - y1)
+                segment_costs.append(avg * segdist)
+
+            else:
+                result = self._query_segment_shape(x1, y1, x2, y2, geom,
+                                                shape_name=shape_name)
+                if not result["traversable"]:
+                    return float('inf')
+
+                segment_costs.append(result["cost"])
+
+        # Apply custom cost function if provided
+        if cost_fn is not None:
+            self.cost_function = cost_fn
+
         if self.cost_function is not None:
             fn = self.cost_function
             try:
@@ -1330,12 +1496,10 @@ class PathPlannerBase(BaseObject):
             except Exception as e:
                 print(f"Warning: custom cost function failed: {e}")
 
-            # fallback
-            return sum(segment_costs)
-
-        # Default cost
+        # Default: sum of segment costs
         return sum(segment_costs)
 
+    
 # --- Planning ---
     def compute_path(self, start, goal, planner=None, geom=None, **kwargs):
         """
