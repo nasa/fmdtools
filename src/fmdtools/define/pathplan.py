@@ -471,28 +471,22 @@ class PathPlannerBase(BaseObject):
                 collision_points.append((x2, y2))
                 return False, collision_points
 
+            
             cell_size = getattr(grid_env.p, 'blocksize', 1.0)
-            #print(f"[SEG] world=({x1},{y1})->({x2},{y2})  blocksize={cell_size}")
-            #print(f"[SEG] idx=({grid_x1},{grid_y1})->({grid_x2},{grid_y2})")
-
             if cell_size < 1.0:
-                #cells = self._dda_line(x1, y1, x2, y2, grid_env)
-                cells = self._dda_line(x1/cell_size, y1/cell_size, x2/cell_size, y2/cell_size)
+                cells = self._dda_line(grid_x1, grid_y1, grid_x2, grid_y2)
             else:
                 cells = self._bresenham_line(grid_x1, grid_y1, grid_x2, grid_y2)
-            #print(f"[SEG] cells={cells}")
 
-            for cell_coords in cells:
-                if cell_size < 1.0:
-                    gx, gy = grid_env.to_index(cell_coords[0], cell_coords[1])
-                    pt = grid_env.grid[gx, gy]
-                else:
-                    pt = grid_env.grid[cell_coords[0], cell_coords[1]]
+            for gx, gy in cells:
+                # Convert cell index back to a world coordinate (cell center).
+                wx = gx * cell_size
+                wy = gy * cell_size
 
-                pt_info = self.query_point(*pt)
+                pt_info = self.query_point(wx, wy)
 
                 if not pt_info["traversable"]:
-                    collision_points.append(tuple(pt))
+                    collision_points.append((wx, wy))
                     return False, collision_points
 
         # For Geom / GeomArchitecture / Hybrid environments
@@ -609,7 +603,7 @@ class PathPlannerBase(BaseObject):
         Parameters
         ----------
         x0, y0, x1, y1 : float
-            Line endpoints in normalized grid coordinates (already scaled by cell size)
+            Line endpoints as integer grid cell indices
         
         Returns
         -------
