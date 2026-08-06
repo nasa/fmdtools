@@ -1,4 +1,6 @@
-from fmdtools.define.container.parameter import Parameter
+# ============================================================================
+# 1. IMPORTS
+# ============================================================================
 from fmdtools.define.container.state import State
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.object.coords import Coords, CoordsParam
@@ -8,11 +10,18 @@ from fmdtools.define.pathplan import PathPlannerParameter, PathPlannerBase
 
 ## TODO: remove reliance on @property definitions
 
+
+# ============================================================================
+# 2. SHARED PARAMETERS
+# ============================================================================
 class BasePlannerParameter(PathPlannerParameter):
     start_point: tuple = (10.0, 10.0)
     end_point: tuple = (100.0, 100.0)
 
-# --- Utility Function to Initialize Planner ---
+
+# ============================================================================
+# 3. SHARED PLANNER SETUP UTILITY
+# ============================================================================
 def setup_planner(arch, environment):
     arch.add_fxn('planner', PathPlannerBase, p={
         'start_point': arch.p.start_point,
@@ -28,47 +37,24 @@ def setup_planner(arch, environment):
     arch.fxns['planner'].init_environment(environment)
 
 
-# --- Grid Environment ---
-class GridEnvironmentParam(CoordsParam):
-    """Grid environment parameters."""
-    blocksize: float = 10.0
-
-class GridEnvironment(Coords):
-    container_p = GridEnvironmentParam
-
-    __slots__ = ('agent_geom',)
-
-    feature_traversable = (bool, True)
-    feature_goal_allowed = (bool, True)
-    feature_cost = (float, 1.0)
-
-    def init_properties(self, **kwargs):
-        self.set_range("traversable", False, xmin=20, xmax=40, ymin=20, ymax=40, inclusive=True)
-        self.set_range("goal_allowed", False, xmin=20, xmax=40, ymin=20, ymax=40, inclusive=True)
-        self.set_range("cost", 100.0, xmin=20, xmax=40, ymin=20, ymax=40, inclusive=True)
-        
-        occupied_cells = [(60, 60), (80, 80)]
-        self.set_pts(occupied_cells, "traversable", False)
-        self.set_pts(occupied_cells, "goal_allowed", False)
-        self.set_pts(occupied_cells, "cost", float('inf'))
-
-class GridArchitecture(FunctionArchitecture):
-    container_p = BasePlannerParameter
-    __slots__ = ('env', 'planner')
-    def init_architecture(self, **kwargs):
-        x_size = int(self.p.end_point[0] / self.p.blocksize) + 1
-        y_size = int(self.p.end_point[1] / self.p.blocksize) + 1
-        self.env = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.blocksize))
-        setup_planner(self, self.env)
-        self.planner = self.fxns['planner']
-
-
-# --- Geom Environment ---
+# ============================================================================
+# 4. SHARED STATES
+# ============================================================================
 class ObstacleState(State):
     cost: float = 1.0
     traversable: bool = False
     goal_allowed: bool = False
 
+class AgentState(State):
+    cost: float = 0.0
+    traversable: bool = True
+    goal_allowed: bool = True
+
+
+# ============================================================================
+# 5. GEOM DEFINITIONS (params + geoms)
+# ============================================================================
+# --- Obstacle geoms ---
 class RestrictedZoneParam(GeomParameter):
     shell: tuple = ((10.0, 10.0), (40.0, 10.0), (40.0, 40.0), (10.0, 40.0))
     holes: tuple = (((15.0, 15.0), (35.0, 15.0), (35.0, 35.0), (15.0, 35.0)),)
@@ -76,7 +62,7 @@ class RestrictedZoneParam(GeomParameter):
 class RestrictedZoneGeom(GeomPoly):
     container_p = RestrictedZoneParam
     container_s = ObstacleState
-    def get_shapely_args(self):     #override due to fmdtools bug
+    def get_shapely_args(self):     # override due to fmdtools bug
         return (self.p.shell, self.p.holes)
 
 class OccupiedPointParam(GeomParameter):
@@ -95,12 +81,105 @@ class SecondPointGeom(GeomPoint):
     container_p = SecondPointParam
     container_s = ObstacleState
 
+# --- Agent geom ---
+class AgentCircleParam(GeomParameter):
+    coordinates: tuple = (0.0, 0.0)
+    buffer_around: float = 2.5
+
+class AgentCircleGeom(GeomPoint):
+    container_p = AgentCircleParam
+    container_s = AgentState
+
+
+# ============================================================================
+# 6. GRID ENVIRONMENT
+# ============================================================================
+class GridEnvironmentParam(CoordsParam):
+    """Grid environment parameters."""
+    blocksize: float = 10.0
+
+class GridEnvironment(Coords):
+    container_p = GridEnvironmentParam
+    __slots__ = ('agent_geom',)
+
+    feature_traversable = (bool, True)
+    feature_goal_allowed = (bool, True)
+    feature_cost = (float, 1.0)
+
+    def init_properties(self, **kwargs):
+        self.set_range("traversable", False, xmin=20, xmax=40, ymin=20, ymax=40, inclusive=True)
+        self.set_range("goal_allowed", False, xmin=20, xmax=40, ymin=20, ymax=40, inclusive=True)
+        self.set_range("cost", 100.0, xmin=20, xmax=40, ymin=20, ymax=40, inclusive=True)
+
+        occupied_cells = [(60, 60), (80, 80)]
+        self.set_pts(occupied_cells, "traversable", False)
+        self.set_pts(occupied_cells, "goal_allowed", False)
+        self.set_pts(occupied_cells, "cost", float('inf'))
+
+
+# ============================================================================
+# 7. HYBRID ENVIRONMENT WRAPPER
+# ============================================================================
+class HybridEnvironment:
+    def __init__(self, grid_env, geom_arch):
+        self.grid = grid_env
+        self.geom_arch = geom_arch
+    def to_index(self, x, y):
+        return self.grid.to_index(x, y)
+    @property
+    def grid_property(self):
+        return self.grid.grid
+
+
+# ============================================================================
+# 8. GEOM ARCHITECTURES
+# ============================================================================
 class ObstacleGeomArch(GeomArchitecture):
     container_p = BasePlannerParameter
     def init_architecture(self, **kwargs):
         self.add_geom("restricted_zone", RestrictedZoneGeom, s={'cost': 100.0, 'traversable': False, 'goal_allowed': False})
         self.add_geom("obstacle_60_60", OccupiedPointGeom, s={'cost': float('inf'), 'traversable': False, 'goal_allowed': False})
         self.add_geom("obstacle_70_20", SecondPointGeom, s={'cost': float('inf'), 'traversable': False, 'goal_allowed': False})
+
+class CircleAgentGeomArch(GeomArchitecture):
+    container_p = AgentCircleParam
+    def init_architecture(self, **kwargs):
+        self.add_geom("agent", AgentCircleGeom, p={'buffer_around': self.p.buffer_around}, s={'traversable': True, 'goal_allowed': True})
+
+class CircleAgentObstacleGeomArch(GeomArchitecture):
+    container_p = AgentCircleParam
+    def init_architecture(self, **kwargs):
+        self.add_geom("agent", AgentCircleGeom, p={'buffer_around': self.p.buffer_around}, s={'traversable': True, 'goal_allowed': True})
+        self.add_geom("restricted_zone", RestrictedZoneGeom, s={'cost': 100.0, 'traversable': False, 'goal_allowed': False})
+        self.add_geom("obstacle_60_60", OccupiedPointGeom, s={'cost': float('inf'), 'traversable': False, 'goal_allowed': False})
+        self.add_geom("obstacle_70_20", SecondPointGeom, s={'cost': float('inf'), 'traversable': False, 'goal_allowed': False})
+
+
+# ============================================================================
+# 9. CIRCLE AGENT PARAMETER
+# ============================================================================
+class CircleAgentParameter(PathPlannerParameter):
+    start_point: tuple = (10.0, 10.0)
+    end_point: tuple = (90.0, 90.0)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        object.__setattr__(self, "blocksize", 10.0)
+        object.__setattr__(self, "agent_radius", 2.5)
+
+
+# ============================================================================
+# 10. FUNCTION ARCHITECTURES
+# ============================================================================
+# --- Point-agent architectures ---
+class GridArchitecture(FunctionArchitecture):
+    container_p = BasePlannerParameter
+    __slots__ = ('env', 'planner')
+    def init_architecture(self, **kwargs):
+        x_size = int(self.p.end_point[0] / self.p.blocksize) + 1
+        y_size = int(self.p.end_point[1] / self.p.blocksize) + 1
+        self.env = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.blocksize))
+        setup_planner(self, self.env)
+        self.planner = self.fxns['planner']
 
 class GeomEnvironmentArchitecture(FunctionArchitecture):
     container_p = BasePlannerParameter
@@ -111,20 +190,9 @@ class GeomEnvironmentArchitecture(FunctionArchitecture):
         setup_planner(self, self.env)
         self.planner = self.fxns['planner']
 
-
-# --- Hybrid Environment ---
-class HybridEnvironment:
-    def __init__(self, grid_env, geom_arch):
-        self.grid = grid_env
-        self.geom_arch = geom_arch
-    def to_index(self, x, y):
-        return self.grid.to_index(x, y)
-    @property
-    def grid_property(self): return self.grid.grid
-
 class HybridArchitecture(FunctionArchitecture):
     container_p = BasePlannerParameter
-    default_sp = {'end_time': 15}  
+    default_sp = {'end_time': 15}
     __slots__ = ('grid', 'geom_arch', 'env', 'planner')
     def init_architecture(self, **kwargs):
         x_size = int(self.p.end_point[0] / self.p.blocksize) + 1
@@ -135,64 +203,7 @@ class HybridArchitecture(FunctionArchitecture):
         setup_planner(self, self.env)
         self.planner = self.fxns['planner']
 
-
-# --- Circular Agent ---
-class CircleAgentParameter(PathPlannerParameter):
-    start_point: tuple = (10.0, 10.0)
-    end_point: tuple = (90.0, 90.0)
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        object.__setattr__(self, "blocksize", 10.0)
-        object.__setattr__(self, "agent_radius", 2.5)
-
-class AgentState(State):
-    cost: float = 0.0
-    traversable: bool = True
-    goal_allowed: bool = True
-
-class AgentCircleParam(GeomParameter):
-    coordinates: tuple = (0.0, 0.0) 
-    buffer_around: float = 2.5
-
-class AgentCircleGeom(GeomPoint):
-    container_p = AgentCircleParam
-    container_s = AgentState
-
-class CircleAgentGeomArch(GeomArchitecture):
-    container_p = AgentCircleParam
-    def init_architecture(self, **kwargs):
-        self.add_geom("agent", AgentCircleGeom, p={'buffer_around': self.p.buffer_around}, s={'traversable': True, 'goal_allowed': True})
-    
-class CircleAgentObstacleGeomArch(GeomArchitecture):
-    container_p = AgentCircleParam
-    def init_architecture(self, **kwargs):
-        self.add_geom("agent", AgentCircleGeom, p={'buffer_around': self.p.buffer_around}, s={'traversable': True, 'goal_allowed': True})
-        self.add_geom("restricted_zone", RestrictedZoneGeom, s={'cost': 100.0, 'traversable': False, 'goal_allowed': False})
-        self.add_geom("obstacle_60_60", OccupiedPointGeom, s={'cost': float('inf'), 'traversable': False, 'goal_allowed': False})
-        self.add_geom("obstacle_70_20", SecondPointGeom, s={'cost': float('inf'), 'traversable': False, 'goal_allowed': False})
-
-class CircleAgentGeomEnvironmentArchitecture(FunctionArchitecture):
-    container_p = BasePlannerParameter
-    default_sp = {'end_time': 15}
-    __slots__ = ('env', 'planner',)
-    def init_architecture(self, **kwargs):
-        self.env = CircleAgentObstacleGeomArch()
-        #print(self.env.all_possible)
-        setup_planner(self, self.env)
-        self.planner = self.fxns['planner']
-
-from shapely import Point as ShapelyPoint
-'''
-class CircleGridArchitecture(FunctionArchitecture):
-    container_p = BasePlannerParameter
-    __slots__ = ('env', 'planner',)
-    def init_architecture(self, **kwargs):
-        x_size = int(self.p.end_point[0] / self.p.blocksize) + 1
-        y_size = int(self.p.end_point[1] / self.p.blocksize) + 1
-        self.env = GridEnvironment(p=GridEnvironmentParam(x_size=x_size, y_size=y_size, blocksize=self.p.blocksize))
-        setup_planner(self, self.env)
-        self.planner = self.fxns['planner']
-'''
+# --- Circle-agent architectures ---
 class CircleGridArchitecture(FunctionArchitecture):
     container_p = BasePlannerParameter
     __slots__ = ('grid', 'geom_arch', 'env', 'planner',)
@@ -205,7 +216,6 @@ class CircleGridArchitecture(FunctionArchitecture):
         setup_planner(self, self.env)
         self.planner = self.fxns['planner']
 
-
 class CircleGeomArchitecture(FunctionArchitecture):
     container_p = CircleAgentParameter
     __slots__ = ('env', 'planner',)
@@ -213,8 +223,6 @@ class CircleGeomArchitecture(FunctionArchitecture):
         self.env = CircleAgentObstacleGeomArch()
         setup_planner(self, self.env)
         self.planner = self.fxns['planner']
-
-        #debug_print_geoms(self.env, "CircleGeomArchitecture")
 
 class CircleHybridArchitecture(FunctionArchitecture):
     container_p = BasePlannerParameter
@@ -229,6 +237,9 @@ class CircleHybridArchitecture(FunctionArchitecture):
         self.planner = self.fxns['planner']
 
 
+# ============================================================================
+# 11. TEST-MODEL FACTORY FUNCTIONS
+# ============================================================================
 def create_grid_test_model(start=(10.0, 10.0), end=(100.0, 100.0), blocksize=10.0):
     """Create a standard grid-based test model."""
     return GridArchitecture(p={
@@ -301,6 +312,7 @@ def create_circle_hybrid_test_model(start=(10.0, 10.0), end=(90.0, 90.0), agent_
         'max_replan_attempts': 3,
         'max_distance': 5.0
     })
+
 
 
 #####################################################################################################
@@ -753,13 +765,4 @@ class TestShapeAgentHybridEnvironment(unittest.TestCase):
                 self.assertEqual(result, expected, description)
 
 if __name__ == '__main__':
-    '''
-    mdl = create_circle_hybrid_test_model()
-    print("planner agent_radius:", mdl.planner.p.agent_radius)
-    agent_geom = mdl.geom_arch.geoms['agent']
-    result = mdl.planner.check_shape_collision(25.0, 25.0, geom=agent_geom)
-    '''
-
-
-
     unittest.main()
