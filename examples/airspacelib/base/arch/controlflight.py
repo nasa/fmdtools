@@ -121,8 +121,8 @@ class ControlFlight(Function):
         """Add the desired trajectory local flow to the Function."""
         self.perc_traj = self.trajectories.create_local("perc_traj")
         self.des_traj = self.trajectories.create_local("des_traj")
-        self.planner = PathPlannerBase()
-        self.planner.init_environment(self.environment)
+        # self.planner = PathPlannerBase()
+        # self.planner.init_environment(self.environment)
 
     def static_behavior(self):
         """
@@ -200,11 +200,11 @@ class ControlFlight(Function):
             newgoal = self.des_traj.s.get_loc()
         self.des_traj.s.assign(newgoal, 'goal_x', 'goal_y', 'goal_z')
 
-    def run_planner(self, start, goal, algorithm, **kwargs):
-        path = self.planner.compute_path(start, goal, planner=algorithm, **kwargs)
-        self.s.flightplan = self.planner.s.flightplan
-        self.s.pt = self.planner.s.pt
-        return path
+    # def run_planner(self, start, goal, algorithm, **kwargs):
+    #     path = self.planner.compute_path(start, goal, planner=algorithm, **kwargs)
+    #     self.s.flightplan = self.planner.s.flightplan
+    #     self.s.pt = self.planner.s.pt
+    #     return path
 
 
 if __name__ == "__main__":
