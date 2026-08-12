@@ -67,6 +67,7 @@ doctest_modules = ["src/fmdtools/define/container/base.py",
                    "src/fmdtools/define/block/action.py",
                    "src/fmdtools/define/block/component.py",
                    "src/fmdtools/define/environment.py",
+                   "src/fmdtools/define/pathplan.py",
                    "src/fmdtools/sim/scenario.py",
                    "src/fmdtools/sim/sample.py",
                    "src/fmdtools/sim/search.py",
@@ -128,6 +129,7 @@ too_slow_notebooks = ["examples/navigating_rover/paper_ifac_human.ipynb",
                       "examples/navigating_rover/paper_rsa_troupe.ipynb", # timeout fails (over 300s)
                       "examples/cooling_tank/paper_jmd_optimization.ipynb",
                       "examples/airspacelib/wildfire_response/paper_aiaa_optimal_location.ipynb",
+                      "examples/airspacelib/water_rescue/demo_overview.ipynb",
                       "conf.py"]
 
 # tells pytest to ignore build files as well as overly slow notebooks
