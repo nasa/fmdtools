@@ -10,13 +10,14 @@ In the future we hope to include Dynamic Geoms, with properties tied to states
 
 Has classes:
 
+- :class:`BaseGeom`: Base class for defining Geom subclasses
 - :class:`Geom`: Base geometry class
-- :class:`GeomPoint`: Class defining points.
-- :class:`PointParam`: Class defining :class:`GeomPoint` attributes.
+- :class: `GeomParameter`: Parameter for `Geom` and subclasses.
+- :class:`GeomPoint`: Class defining points..
 - :class:`GeomLine`: Class defining lines.
-- :class:`LineParam`: Class defining :class:`GeomLine` attributes.
 - :class:`GeomPoly`: Class defining polygons.
-- :class:`PolyParam`: Class defining :class:`GeomPoly` attributes.
+- :class:`GeomJSON`: Class defining geometries from JSON.
+- :class:`GeomJSONParameter`: Input parameter for GeomJSON.
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.

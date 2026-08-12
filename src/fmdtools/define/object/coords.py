@@ -8,7 +8,9 @@ Defines :class:`Coords` class for representing coordinate systems.
 Has classes:
 
 - :class:`CoordsParam`, which is used to define :class:`Coords` attributes.
-- :class:`Coords`, which is used to define coordinate systems.
+- :class:`BaseCoords`, which is used to define grids by subclasses.
+- :class:`Coords`, which is used to define coordinate systems in models.
+- :class:`MetricCoords`, which is used to analyze grid attributes.
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.

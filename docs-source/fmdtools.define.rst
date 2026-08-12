@@ -46,3 +46,10 @@ fmdtools.define.environment
 .. automodule:: fmdtools.define.environment
    :members: Environment
    :show-inheritance:
+
+fmdtools.define.pathplan
+--------------------------------
+
+.. automodule:: fmdtools.define.pathplan
+   :members:
+   :show-inheritance:
