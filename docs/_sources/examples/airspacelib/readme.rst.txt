@@ -7,7 +7,7 @@ The airspacelib package extends the fmdtools modeling and simulation library wit
 
 It also provides a number of worked examples of drone modelling in a range of use-cases, including drone in-flight contingency management and wildfire response.
 
-You can view a short overview of each in the :doc:`Wildfire Response Demo Presentation <wildfire_response/demo_overview>` and :doc:`Contingency Management Demo Presentation <contingency_management/demo_overview>`
+You can view a short overview of each in the :doc:`Wildfire Response Demo Presentation <wildfire_response/demo_overview>`, :doc:`Contingency Management Demo Presentation <contingency_management/demo_overview>`, and :doc:`Water Rescue Demo Presentation <water_rescue/demo_overview>`
 
 Further description and use of the model is given in the provided notebooks:
 
@@ -21,6 +21,7 @@ Further description and use of the model is given in the provided notebooks:
    contingency_management/demo_overview
    contingency_management/demo_contingency
    contingency_management/demo_proxthreat
+   water_rescue/demo_overview
 
 **References:**
 
@@ -35,6 +36,8 @@ The airspacelib package has the following structure:
 
 - airspacelib.base: base classes that can be adapted to new case studies
 
-- airspacelib.contingency_management: case study modelling a drone that must perform in-flight contingency management to respond to battery depletion and airspace intrusion scenarios, including:
+- airspacelib.contingency_management: case study modelling a drone that must perform in-flight contingency management to respond to battery depletion and airspace intrusion scenarios.
 
-- airspacelib.wildfire_response: case study modelling a set of drones in a wildfire response situation. The documentation for this module includes:
+- airspacelib.wildfire_response: case study modeling a set of drones in a wildfire response situation. 
+
+- airspacelib.water_rescue: case study of modeling water rescue supported by drones.

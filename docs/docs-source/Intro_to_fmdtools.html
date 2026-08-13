@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Overview {.smaller} &mdash; fmdtools 2.4.0 documentation</title>
+  <title>Overview {.smaller} &mdash; fmdtools 2.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=4d935f96"></script>
+      <script src="../_static/documentation_options.js?v=3c4615cf"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -79,13 +79,13 @@
 <li class="toctree-l1 current"><a class="reference internal" href="Development%20Guide.html">Development Guide</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#why-fmdtools">Why fmdtools?</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Overview  {.smaller}</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Overview {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enabling-a-proactive-design-process-especially-when-we-don-t-have-data">Enabling a proactive design process - especially when we don’t have data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#why-fmdtools-pros-smaller">Why fmdtools? Pros:  {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-fmdtools-pros-smaller">Why fmdtools? Pros: {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
@@ -94,29 +94,29 @@
 <li class="toctree-l3"><a class="reference internal" href="#defining-a-model-smaller">Defining a Model {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#concept-static-propagation">Concept: Static Propagation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#concept-propagation-over-time-smaller">Concept: Propagation over Time  {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concept-propagation-over-time-smaller">Concept: Propagation over Time {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#python-concept-classes-and-object-oriented-programming-smaller">Python Concept: Classes and Object-Oriented Programming {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#why-classes-and-objects-smaller">Why classes and objects? {.smaller}</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#python-dataclasses-and-similar-smaller">Python dataclasses (and similar)  {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-dataclasses-and-similar-smaller">Python dataclasses (and similar) {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#containers-the-building-blocks-of-simulations-smaller">Containers - The building blocks of simulations {.smaller}</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#class-aggregation-in-fmdtools-baseobject-smaller">Class aggregation in fmdtools BaseObject  {.smaller}</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#main-classes-in-fmdtools-smaller">Main classes in fmdtools  {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#class-aggregation-in-fmdtools-baseobject-smaller">Class aggregation in fmdtools BaseObject {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#main-classes-in-fmdtools-smaller">Main classes in fmdtools {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#flow-code-template">Flow Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#function-code-template">Function Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#function-architecture-code-template">Function Architecture Code Template</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#demo-model-activity-smaller">Demo Model Activity:  {.smaller}</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#why-do-we-structure-models-this-way-smaller">Why do we structure models this way?  {.smaller}</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#more-resources-for-model-definition-smaller">More Resources for Model Definition  {.smaller}</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#notebook-activity-smaller">Notebook Activity:  {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#demo-model-activity-smaller">Demo Model Activity: {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-do-we-structure-models-this-way-smaller">Why do we structure models this way? {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#more-resources-for-model-definition-smaller">More Resources for Model Definition {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notebook-activity-smaller">Notebook Activity: {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#simulation-concepts-types-of-simulations">Simulation Concepts: Types of Simulations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#simulation-concepts-sampling-approaches-smaller">Simulation Concepts: Sampling Approaches  {.smaller}</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#simulation-concepts-things-to-consider-smaller">Simulation Concepts: Things to Consider  {.smaller}</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#activity-simulate-the-model-smaller">Activity: Simulate the Model  {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simulation-concepts-sampling-approaches-smaller">Simulation Concepts: Sampling Approaches {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simulation-concepts-things-to-consider-smaller">Simulation Concepts: Things to Consider {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#activity-simulate-the-model-smaller">Activity: Simulate the Model {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-modules-see-docs-for-fmdtools-analyze">Analysis Modules - see docs for <code class="docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-activity-smaller">Analysis Activity  {.smaller}</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#starting-your-own-repo-project-smaller">Starting your own repo/project  {.smaller}</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#conclusions-summary-smaller">Conclusions/Summary  {.smaller}</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#further-reading-links-smaller">Further Reading/Links  {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-activity-smaller">Analysis Activity {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-your-own-repo-project-smaller">Starting your own repo/project {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conclusions-summary-smaller">Conclusions/Summary {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#further-reading-links-smaller">Further Reading/Links {.smaller}</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#glossary">Glossary</a></li>
@@ -205,6 +205,13 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/contingency_management/demo_proxthreat.html">Demo: Drone Proximity to Threat Evaluation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/water_rescue/demo_overview.html">Demo: Water Rescue</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/water_rescue/demo_overview.html#motivation">Motivation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/water_rescue/demo_overview.html#model-structure">Model Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/water_rescue/demo_overview.html#environment">Environment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/airspacelib/water_rescue/demo_overview.html#conclusions">Conclusions</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/airspacelib/readme.html#package-structure">Package Structure</a></li>
 </ul>
 </li>
@@ -515,6 +522,18 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.environment.Environment"><code class="docutils literal notranslate"><span class="pre">Environment</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.pathplan">fmdtools.define.pathplan</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.pathplan.ExampleCoordsParam"><code class="docutils literal notranslate"><span class="pre">ExampleCoordsParam</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.pathplan.ExampleGeomArch"><code class="docutils literal notranslate"><span class="pre">ExampleGeomArch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.pathplan.ExampleGeomPoint"><code class="docutils literal notranslate"><span class="pre">ExampleGeomPoint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.pathplan.ExampleGrid"><code class="docutils literal notranslate"><span class="pre">ExampleGrid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.pathplan.ExampleObstacleParam"><code class="docutils literal notranslate"><span class="pre">ExampleObstacleParam</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.pathplan.ExampleObstacleState"><code class="docutils literal notranslate"><span class="pre">ExampleObstacleState</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.pathplan.PathPlannerBase"><code class="docutils literal notranslate"><span class="pre">PathPlannerBase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.pathplan.PathPlannerParameter"><code class="docutils literal notranslate"><span class="pre">PathPlannerParameter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.pathplan.PathPlannerState"><code class="docutils literal notranslate"><span class="pre">PathPlannerState</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
@@ -694,8 +713,9 @@
 <li class="toctree-l1"><a class="reference internal" href="Contributions.html">Contributions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Contributions.html#contributors">Contributors</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Contributions.html#nasa-contributors">NASA Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#nasa-alumni">NASA Alumni</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Contributions.html#interns">Interns</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Contributions.html#external-contributors">External Contributors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Contributions.html#alumni-and-interns">Alumni and Interns</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Contributions.html#fmdtools-at-osu">fmdtools at OSU</a></li>
 </ul>
 </li>
@@ -800,7 +820,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="Development%20Guide.html">Development Guide</a></li>
-      <li class="breadcrumb-item active">Overview  {.smaller}</li>
+      <li class="breadcrumb-item active">Overview {.smaller}</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/nasa/fmdtools/blob/main/docs-source/Intro_to_fmdtools.md" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -811,7 +831,7 @@
            <div itemprop="articleBody">
              
   <section id="overview-smaller">
-<h1>Overview  {.smaller}<a class="headerlink" href="#overview-smaller" title="Link to this heading"></a></h1>
+<h1>Overview {.smaller}<a class="headerlink" href="#overview-smaller" title="Link to this heading"></a></h1>
 <ul class="simple">
 <li><p><strong>Overview of fmdtools</strong></p>
 <ul>
@@ -875,7 +895,7 @@
 <section id="why-fmdtools-possible-competitors">
 <h1>Why fmdtools? Possible Competitors:<a class="headerlink" href="#why-fmdtools-possible-competitors" title="Link to this heading"></a></h1>
 <ul class="simple">
-<li><p>Uncertainty Quantification tools:  (e.g. OpenCossan)</p>
+<li><p>Uncertainty Quantification tools: (e.g. OpenCossan)</p>
 <ul>
 <li><p>Does not incorporate fault modeling/propagation/visualization aspects</p></li>
 </ul>
@@ -894,7 +914,7 @@
 </ul>
 </section>
 <section id="why-fmdtools-pros-smaller">
-<h1>Why fmdtools? Pros:  {.smaller}<a class="headerlink" href="#why-fmdtools-pros-smaller" title="Link to this heading"></a></h1>
+<h1>Why fmdtools? Pros: {.smaller}<a class="headerlink" href="#why-fmdtools-pros-smaller" title="Link to this heading"></a></h1>
 <ul class="simple">
 <li><p>Highly Expressive, modular model representation.</p>
 <ul>
@@ -1024,9 +1044,9 @@
 <p>In a single timestep, functions with <code class="docutils literal notranslate"><span class="pre">static_behavior()</span></code> methods simulate until behaviors converge (i.e., no new state values)</p>
 </section>
 <section id="concept-propagation-over-time-smaller">
-<h1>Concept: Propagation over Time  {.smaller}<a class="headerlink" href="#concept-propagation-over-time-smaller" title="Link to this heading"></a></h1>
-<p>:::: {.columns}</p>
-<p>::: {.column width=”50%”}
+<h1>Concept: Propagation over Time {.smaller}<a class="headerlink" href="#concept-propagation-over-time-smaller" title="Link to this heading"></a></h1>
+<p>::::: columns
+::: {.column width=”50%”}
 <img alt="" src="../_images/propagationovertime.svg" />
 :::</p>
 <p>::: {.column width=”50%”}</p>
@@ -1034,7 +1054,7 @@
 <li><p>Model increments (simulated + history updated) over each time-step until a <strong>defined final time-step</strong> or <strong>specified indicator returns true</strong>.</p></li>
 <li><p>Functions with <code class="docutils literal notranslate"><span class="pre">dynamic_behavior()</span></code> run once in defined order
 :::
-::::</p></li>
+:::::</p></li>
 </ul>
 </section>
 <section id="python-concept-classes-and-object-oriented-programming-smaller">
@@ -1069,7 +1089,7 @@
 </ul>
 </section>
 <section id="python-dataclasses-and-similar-smaller">
-<h1>Python dataclasses (and similar)  {.smaller}<a class="headerlink" href="#python-dataclasses-and-similar-smaller" title="Link to this heading"></a></h1>
+<h1>Python dataclasses (and similar) {.smaller}<a class="headerlink" href="#python-dataclasses-and-similar-smaller" title="Link to this heading"></a></h1>
 <p>fmdtools uses the recordclass package to define dataclasses: https://github.com/intellimath/recordclass</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">recordclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataobject</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">(</span><span class="n">dataobject</span><span class="p">):</span>
@@ -1087,13 +1107,10 @@
 </section>
 <section id="containers-the-building-blocks-of-simulations-smaller">
 <h1>Containers - The building blocks of simulations {.smaller}<a class="headerlink" href="#containers-the-building-blocks-of-simulations-smaller" title="Link to this heading"></a></h1>
-<p><img alt="container example" src="../_images/container_structures.svg" /></p>
-<ul class="simple">
-<li><p>Containers are used to define various attributes of Functions and Flows</p></li>
-</ul>
+<p><img alt="container example" src="../_images/container_structures.svg" /> - Containers are used to define various attributes of Functions and Flows</p>
 </section>
 <section id="class-aggregation-in-fmdtools-baseobject-smaller">
-<h1>Class aggregation in fmdtools BaseObject  {.smaller}<a class="headerlink" href="#class-aggregation-in-fmdtools-baseobject-smaller" title="Link to this heading"></a></h1>
+<h1>Class aggregation in fmdtools BaseObject {.smaller}<a class="headerlink" href="#class-aggregation-in-fmdtools-baseobject-smaller" title="Link to this heading"></a></h1>
 <p>In fmdtools, <strong>BaseObject</strong> classes (Functions, Flows, etc.) aggregate Containers classes, allowing you to instantiate multiple at the same time, e.g., in the class:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ExampleObject</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
     <span class="n">container_s</span> <span class="o">=</span> <span class="n">StateName</span>
@@ -1110,7 +1127,7 @@
 </div>
 </section>
 <section id="main-classes-in-fmdtools-smaller">
-<h1>Main classes in fmdtools  {.smaller}<a class="headerlink" href="#main-classes-in-fmdtools-smaller" title="Link to this heading"></a></h1>
+<h1>Main classes in fmdtools {.smaller}<a class="headerlink" href="#main-classes-in-fmdtools-smaller" title="Link to this heading"></a></h1>
 <p><img alt="" src="../_images/class_diagram.svg" /></p>
 <p><strong>Containers</strong> are used to represent properties of <strong>Objects</strong> (all classes below)</p>
 <p><strong>Blocks</strong> are the main behaviors of the system (e.g., Functions or Components)</p>
@@ -1134,7 +1151,7 @@
 <p><img alt="" src="../_images/fxnarch_structure.svg" /></p>
 </section>
 <section id="demo-model-activity-smaller">
-<h1>Demo Model Activity:  {.smaller}<a class="headerlink" href="#demo-model-activity-smaller" title="Link to this heading"></a></h1>
+<h1>Demo Model Activity: {.smaller}<a class="headerlink" href="#demo-model-activity-smaller" title="Link to this heading"></a></h1>
 <p>Open file:</p>
 <ul class="simple">
 <li><p>For Pump example: <a class="reference download internal" download="" href="../_downloads/830c0c682cb73d46a39f46d7c7778c66/model_main.py"><span class="xref download myst">examples/water_pump/model_main.py</span></a></p></li>
@@ -1151,7 +1168,7 @@
 </ul>
 </section>
 <section id="why-do-we-structure-models-this-way-smaller">
-<h1>Why do we structure models this way?  {.smaller}<a class="headerlink" href="#why-do-we-structure-models-this-way-smaller" title="Link to this heading"></a></h1>
+<h1>Why do we structure models this way? {.smaller}<a class="headerlink" href="#why-do-we-structure-models-this-way-smaller" title="Link to this heading"></a></h1>
 <ul class="simple">
 <li><p><strong>Enabling undirected propagation:</strong> Behavior from any Block in an Architecture can propagate to anything else, which is important for capturing the full set of hazardous behavior</p></li>
 <li><p><strong>Composability and Parameterization:</strong> OOP gives us the ability to create a number of co-existing model variants by varying parameters as well as creating sub-classes with different containers</p></li>
@@ -1159,14 +1176,14 @@
 </ul>
 </section>
 <section id="more-resources-for-model-definition-smaller">
-<h1>More Resources for Model Definition  {.smaller}<a class="headerlink" href="#more-resources-for-model-definition-smaller" title="Link to this heading"></a></h1>
+<h1>More Resources for Model Definition {.smaller}<a class="headerlink" href="#more-resources-for-model-definition-smaller" title="Link to this heading"></a></h1>
 <ul class="simple">
 <li><p>Note the docs for model definition are in <a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.define.html">https://nasa.github.io/fmdtools/docs-source/fmdtools.define.html</a></p></li>
 <li><p>Other examples also can be helpful: <a class="reference external" href="https://nasa.github.io/fmdtools/examples/Examples.html">https://nasa.github.io/fmdtools/examples/Examples.html</a></p></li>
 </ul>
 </section>
 <section id="notebook-activity-smaller">
-<h1>Notebook Activity:  {.smaller}<a class="headerlink" href="#notebook-activity-smaller" title="Link to this heading"></a></h1>
+<h1>Notebook Activity: {.smaller}<a class="headerlink" href="#notebook-activity-smaller" title="Link to this heading"></a></h1>
 <p>Open <code class="docutils literal notranslate"><span class="pre">tutorial_fmdtools_basics.ipynb</span></code>:</p>
 <ul class="simple">
 <li><p>Instantiate the model</p>
@@ -1177,8 +1194,7 @@
 <li><p>Explore structure</p>
 <ul>
 <li><p>Try different parameters!</p></li>
-<li><p>Change things!
-What does the model directory look like?</p></li>
+<li><p>Change things! What does the model directory look like?</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dir(mdl)</span></code></p></li>
 </ul>
 </li>
@@ -1191,7 +1207,7 @@ What does the model directory look like?</p></li>
 <p>For more info on syntax/arguments, see documentation for <a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.sim.html#fmdtools-sim-propagate"><code class="docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a>.</p>
 </section>
 <section id="simulation-concepts-sampling-approaches-smaller">
-<h1>Simulation Concepts: Sampling Approaches  {.smaller}<a class="headerlink" href="#simulation-concepts-sampling-approaches-smaller" title="Link to this heading"></a></h1>
+<h1>Simulation Concepts: Sampling Approaches {.smaller}<a class="headerlink" href="#simulation-concepts-sampling-approaches-smaller" title="Link to this heading"></a></h1>
 <p>These classes define <strong>multi-run simulations</strong> which can be used to quantify uncertain performance/resiliences:</p>
 <ul class="simple">
 <li><p><strong>SampleApproach</strong>/<strong>FaultSample</strong>: Which faults to sample and when</p>
@@ -1210,72 +1226,36 @@ What does the model directory look like?</p></li>
 <p>See docs for: <a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.sim.html#module-fmdtools.sim.fault_sample"><code class="docutils literal notranslate"><span class="pre">fmdtools.sim.fault_sample</span></code></a></p>
 </section>
 <section id="simulation-concepts-things-to-consider-smaller">
-<h1>Simulation Concepts: Things to Consider  {.smaller}<a class="headerlink" href="#simulation-concepts-things-to-consider-smaller" title="Link to this heading"></a></h1>
+<h1>Simulation Concepts: Things to Consider {.smaller}<a class="headerlink" href="#simulation-concepts-things-to-consider-smaller" title="Link to this heading"></a></h1>
 <p><strong>Static/Dynamic propagation:</strong> How function states propagate to each other in a single time-step and multiple time-steps?</p>
-<p><strong>Stochastic Propagation:</strong> Whether and how stochastic states are instantiated over time</p>
-<ul class="simple">
-<li><p>e.g. do we run with the “default” values of parameters, or do we sample from a random number generator?</p></li>
-</ul>
-<p><strong>Breadth of Scenarios:</strong> How hazards are represented as discrete scenarios to simulate</p>
-<ul class="simple">
-<li><p>What set of joint faults do we use? How many times are sampled?</p></li>
-<li><p>Operational scenarios and joint operational/fault scenarios</p></li>
-</ul>
+<p><strong>Stochastic Propagation:</strong> Whether and how stochastic states are instantiated over time - e.g. do we run with the “default” values of parameters, or do we sample from a random number generator?</p>
+<p><strong>Breadth of Scenarios:</strong> How hazards are represented as discrete scenarios to simulate - What set of joint faults do we use? How many times are sampled? - Operational scenarios and joint operational/fault scenarios</p>
 </section>
 <section id="activity-simulate-the-model-smaller">
-<h1>Activity: Simulate the Model  {.smaller}<a class="headerlink" href="#activity-simulate-the-model-smaller" title="Link to this heading"></a></h1>
-<p>Run fault propagation methods:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">propagate.nominal()</span></code>,  <code class="docutils literal notranslate"><span class="pre">propagate.one_fault()</span></code>, <code class="docutils literal notranslate"><span class="pre">propagate.fault_sample()</span></code></p></li>
-</ul>
-<p>What do the results look like? Explore data structures:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">analyze.result.Result</span></code>, <code class="docutils literal notranslate"><span class="pre">analyze.result.History</span></code></p></li>
-</ul>
-<p>Explore:</p>
-<ul class="simple">
-<li><p>What happens when you change <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code> parameters?</p></li>
-<li><p>What happens when you change <code class="docutils literal notranslate"><span class="pre">Model</span></code> parameters?</p></li>
-<li><p>How do these methods compare in terms of computational time?</p></li>
-</ul>
+<h1>Activity: Simulate the Model {.smaller}<a class="headerlink" href="#activity-simulate-the-model-smaller" title="Link to this heading"></a></h1>
+<p>Run fault propagation methods: - <code class="docutils literal notranslate"><span class="pre">propagate.nominal()</span></code>, <code class="docutils literal notranslate"><span class="pre">propagate.one_fault()</span></code>, <code class="docutils literal notranslate"><span class="pre">propagate.fault_sample()</span></code></p>
+<p>What do the results look like? Explore data structures: - <code class="docutils literal notranslate"><span class="pre">analyze.result.Result</span></code>, <code class="docutils literal notranslate"><span class="pre">analyze.result.History</span></code></p>
+<p>Explore: - What happens when you change <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code> parameters? - What happens when you change <code class="docutils literal notranslate"><span class="pre">Model</span></code> parameters? - How do these methods compare in terms of computational time?</p>
 </section>
 <section id="analysis-modules-see-docs-for-fmdtools-analyze">
 <h1>Analysis Modules - see docs for <a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html"><code class="docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code></a><a class="headerlink" href="#analysis-modules-see-docs-for-fmdtools-analyze" title="Link to this heading"></a></h1>
 <p><img alt="" src="../_images/analyze_module_structure.svg" /></p>
 </section>
 <section id="analysis-activity-smaller">
-<h1>Analysis Activity  {.smaller}<a class="headerlink" href="#analysis-activity-smaller" title="Link to this heading"></a></h1>
-<p><strong>Visualize the results:</strong></p>
-<ul class="simple">
-<li><p>Show model graph</p></li>
-<li><p>Show nominal performances</p></li>
-<li><p>Show performances in a nominal scenario</p></li>
-<li><p>Make a scenario-based FMEA</p></li>
-</ul>
-<p><strong>Explore:</strong></p>
-<ul class="simple">
-<li><p>How can you show only the parameters you want? Or change the formatting?</p></li>
-<li><p>What does the behavior under other faults look like?</p></li>
-<li><p>What other analyses can you perform with these results?</p></li>
-</ul>
+<h1>Analysis Activity {.smaller}<a class="headerlink" href="#analysis-activity-smaller" title="Link to this heading"></a></h1>
+<p><strong>Visualize the results:</strong> - Show model graph - Show nominal performances - Show performances in a nominal scenario - Make a scenario-based FMEA</p>
+<p><strong>Explore:</strong> - How can you show only the parameters you want? Or change the formatting? - What does the behavior under other faults look like? - What other analyses can you perform with these results?</p>
 </section>
 <section id="starting-your-own-repo-project-smaller">
-<h1>Starting your own repo/project  {.smaller}<a class="headerlink" href="#starting-your-own-repo-project-smaller" title="Link to this heading"></a></h1>
-<p>1.) Use <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">init</span></code> to create a template project, with its own virtual environment at <code class="docutils literal notranslate"><span class="pre">.venv</span></code>, <code class="docutils literal notranslate"><span class="pre">README.md</span></code>, and <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> files.</p>
-<ul class="simple">
-<li><p>Fill in these files (e.g., fmdtools version, contributors, project description)</p></li>
-<li><p>see: https://docs.astral.sh/uv/guides/projects/</p></li>
-</ul>
-<p>2.) Install fmdtools into the venv:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">fmdtools</span></code> or <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">fmdtools</span> <span class="pre">&#64;</span> <span class="pre">&quot;./path/to/fmdtools&quot;</span></code></p></li>
-</ul>
+<h1>Starting your own repo/project {.smaller}<a class="headerlink" href="#starting-your-own-repo-project-smaller" title="Link to this heading"></a></h1>
+<p>1.) Use <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">init</span></code> to create a template project, with its own virtual environment at <code class="docutils literal notranslate"><span class="pre">.venv</span></code>, <code class="docutils literal notranslate"><span class="pre">README.md</span></code>, and <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> files. - Fill in these files (e.g., fmdtools version, contributors, project description) - see: https://docs.astral.sh/uv/guides/projects/</p>
+<p>2.) Install fmdtools into the venv: - <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">fmdtools</span></code> or <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">fmdtools</span> <span class="pre">&#64;</span> <span class="pre">&quot;./path/to/fmdtools&quot;</span></code></p>
 <p>3.) Set up the rest of the python tooling: https://github.com/nasa/fmdtools?tab=readme-ov-file#set-up-python-tooling-environment</p>
-<p>5.) See if it all works! Get a script to run fmdtools  from the <code class="docutils literal notranslate"><span class="pre">venv</span></code> kernel in your IDE.</p>
+<p>5.) See if it all works! Get a script to run fmdtools from the <code class="docutils literal notranslate"><span class="pre">venv</span></code> kernel in your IDE.</p>
 <p>6.) Commit and sync to remote</p>
 </section>
 <section id="conclusions-summary-smaller">
-<h1>Conclusions/Summary  {.smaller}<a class="headerlink" href="#conclusions-summary-smaller" title="Link to this heading"></a></h1>
+<h1>Conclusions/Summary {.smaller}<a class="headerlink" href="#conclusions-summary-smaller" title="Link to this heading"></a></h1>
 <ul class="simple">
 <li><p><strong>fmdtools</strong> is an environment for designing resilient systems</p>
 <ul>
@@ -1294,7 +1274,7 @@ What does the model directory look like?</p></li>
 </ul>
 </section>
 <section id="further-reading-links-smaller">
-<h1>Further Reading/Links  {.smaller}<a class="headerlink" href="#further-reading-links-smaller" title="Link to this heading"></a></h1>
+<h1>Further Reading/Links {.smaller}<a class="headerlink" href="#further-reading-links-smaller" title="Link to this heading"></a></h1>
 <ul class="simple">
 <li><p>More advanced topics (<a class="reference internal" href="../examples/Examples.html"><span class="std std-doc">see examples</span></a>), including Search and optimization, Human, Systems-of-Systems modeling, and Modeling Stochastic Behavior</p></li>
 <li><p><a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#model-development-best-practices">Model Development Guide</a>: Has best practices for developing models in a strategic way (especially helpful for complex models)</p></li>

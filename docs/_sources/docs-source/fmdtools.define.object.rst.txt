@@ -34,7 +34,7 @@ fmdtools.define.object.geom
 --------------------------------
 
 .. automodule:: fmdtools.define.object.geom
-   :members: Geom, GeomPoint, PointParam, GeomLine, LineParam, GeomPoly, PolyParam, GeomArch
+   :members:
    :show-inheritance:
 
 
@@ -42,5 +42,5 @@ fmdtools.define.object.coords
 --------------------------------
 
 .. automodule:: fmdtools.define.object.coords
-   :members: Coords, CoordsParam
+   :members:
    :show-inheritance:

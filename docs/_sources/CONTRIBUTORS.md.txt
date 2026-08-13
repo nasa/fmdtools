@@ -10,24 +10,32 @@ NASA Contributors
 ------------------
 
 * [Daniel Hulse](https://github.com/hulsed), team lead and point-of-contact
+* Seydou Mbaye, contributor
+* [Chris Teubert](https://github.com/teubert), contributor
+
+NASA Alumni
+-----------
+
 * [Lukman Irshad](https://www.researchgate.net/profile/Lukman-Irshad), contributor 
 * [Sequoia Andrade](https://github.com/sequoiarose), contributor 
 * [Hannah Walsh](https://github.com/walshh), contributor 
-* [Chris Teubert](https://github.com/teubert), contributor
-* [Seydou Mbaye], contributor
+
+Interns
+-------
+
+* Inga Girshfeld, contributed to examples/navigating_rover fault creation using coevolutionary algorithm
+* [Cole Jetton](https://github.com/ColeJetton), contributed to examples library
+* [Zain Khatri](https://github.com/zainkhatri), contributed to fmdtools graph functionality
+* [Cody Wang](https://github.com/ydoccr), contributor to examples/airspacelib/contingency_management path planning
+* [Dhruv Kothari](https://github.com/kotharidhruv, contributor to examples/airspacelib/water_rescue models
+* [Iris Chen](https://github.com/ir-s8), contributor to examples/airspacelib/water_rescue models
+* [Isabel Agostino](https://github.com/iagostino), contributor defone/pathplan path planning functionality (as well as associated tests and examples)
 
 External Contributors
-------------------
+---------------------
 
 * Johan Louwers
 
-Alumni and Interns
-------------------
-
-* Inga Girshfeld
-* [Cole Jetton](https://github.com/ColeJetton)
-* [Zain Khatri](https://github.com/zainkhatri)
-* [Cody Wang](https://github.com/ydoccr)
 
 fmdtools at OSU
 -------------------------

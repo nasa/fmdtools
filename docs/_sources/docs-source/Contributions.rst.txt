@@ -18,20 +18,19 @@ Development of fmdtools is coordinated by the :doc:`fmdtools team <../CONTRIBUTO
 Development Installation
 ------------------------
 
-To develop fmdtools, use an editable install with all optional dependencies. In the terminal:
+To develop fmdtools, use an editable install with all optional dependencies. In the terminal::
 
-``
-cd "/path/to/fmdtools_folder"
-git clone https://github.com/nasa/fmdtools.git  #replace with bitbucket url if developing internally
-uv venv --python 3.14       # Set up project virtual environment. Use the primarily-supported python version
-.venv/Scripts/activate      # Activate the virtual environment. On mac and linux: source .venv/bin/activate
-uv pip install -e .[all] --group dev  # Installs both examples and all testing/documentation/dev workflow dependencies
-``
+
+	cd "/path/to/fmdtools_folder"
+	git clone https://github.com/nasa/fmdtools.git  #replace with bitbucket url if developing internally
+	uv venv --python 3.14       # Set up project virtual environment. Use the primarily-supported python version
+	.venv/Scripts/activate      # Activate the virtual environment. On mac and linux: source .venv/bin/activate
+	uv pip install -e .[all] --group dev  # Installs both examples and all testing/documentation/dev workflow dependencies
 
 If developing with Spyder, you will want to set this Python venv as your default interpreter.
 
 You may do this by navigating to:
-Tools > Python interpreter > Selected interpreter
+``Tools > Python interpreter > Selected interpreter``
 
 And then selecting the interpreter from the file menu. The path should look something like:
 ``path/to/fmdtools/.venv/Scripts/python.exe``
