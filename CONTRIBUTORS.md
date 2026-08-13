@@ -10,19 +10,18 @@ NASA Contributors
 ------------------
 
 * [Daniel Hulse](https://github.com/hulsed), team lead and point-of-contact
+* Seydou Mbaye, contributor
+* [Chris Teubert](https://github.com/teubert), contributor
+
+NASA Alumni
+-----------
+
 * [Lukman Irshad](https://www.researchgate.net/profile/Lukman-Irshad), contributor 
 * [Sequoia Andrade](https://github.com/sequoiarose), contributor 
 * [Hannah Walsh](https://github.com/walshh), contributor 
-* [Chris Teubert](https://github.com/teubert), contributor
-* [Seydou Mbaye], contributor
 
-External Contributors
-------------------
-
-* Johan Louwers
-
-Alumni and Interns
-------------------
+Interns
+-------
 
 * Inga Girshfeld, contributed to examples/navigating_rover fault creation using coevolutionary algorithm
 * [Cole Jetton](https://github.com/ColeJetton), contributed to examples library
@@ -31,6 +30,12 @@ Alumni and Interns
 * [Dhruv Kothari](https://github.com/kotharidhruv, contributor to examples/airspacelib/water_rescue models
 * [Iris Chen](https://github.com/ir-s8), contributor to examples/airspacelib/water_rescue models
 * [Isabel Agostino](https://github.com/iagostino), contributor defone/pathplan path planning functionality (as well as associated tests and examples)
+
+External Contributors
+---------------------
+
+* Johan Louwers
+
 
 fmdtools at OSU
 -------------------------
