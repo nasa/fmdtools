@@ -88,16 +88,12 @@ class ResponderGeomArchitecture(GeomArchitecture):
         self.add_geom('peripheral', PeripheralZone)
         self.add_geom('paracentral', ParacentralZone)
 
-
-ga = ResponderGeomArchitecture()
-
-
 def check_vision_zones(ga, point):
     """Return {zone_name: bool} indicating which vision zones contain `point`."""
     return {name: geom.at(point) for name, geom in ga.geoms.items()}
 
 
-print(check_vision_zones(ga, (400, 10)))
+
 
 
 class ResponderState(State):
@@ -302,6 +298,9 @@ def plot_combined_response_from(time, history={}, mdl=None, fig=None, ax=None,
     return fig, ax
 
 
-responder = Responder()
-print(responder.environment.c.find_all_prop("person_to_rescue"))
-#print(responder.create_rescue_path(4))
+if __name__ == "__main__":
+    ga = ResponderGeomArchitecture()
+    print(check_vision_zones(ga, (400, 10)))
+    responder = Responder()
+    print(responder.environment.c.find_all_prop("person_to_rescue"))
+    #print(responder.create_rescue_path(4))
