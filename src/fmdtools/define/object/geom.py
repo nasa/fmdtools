@@ -394,7 +394,9 @@ class Geom(BaseGeom):
         """
         Get arguments for the given Shapely class.
 
-        Override to set shapely arguments from other states (e.g., not )
+        Return positional constructor arguments. Override when the geometry uses
+        named fields instead of the legacy ``coordinates`` argument tuple.
+        State values take precedence over parameter values.
         """
         return {**self.p.asdict(), **self.s.asdict()}['coordinates']
 
@@ -499,10 +501,10 @@ class ExLineParam(GeomParameter):
 
 
 class GeomLine(Geom):
-    """Point geometry representing a line and possible buffers.
+    """Line geometry representing a coordinate sequence and possible buffers.
 
-    Defined by parameter (xys and buffer(s)) as well as states (properties of
-    of point).
+    Coordinates may be a sequence of vertices or a legacy one-argument tuple
+    containing that sequence. State coordinates take precedence over parameters.
 
     Examples
     --------
@@ -536,6 +538,13 @@ class GeomLine(Geom):
     """
 
     shapely_class = LineString
+
+    def get_shapely_args(self):
+        """Pass line coordinates as one argument, preserving legacy wrapped tuples."""
+        coordinates = super().get_shapely_args()
+        if len(coordinates) == 1:
+            return coordinates
+        return (coordinates,)
 
 
 class ExLine(GeomLine):
@@ -581,8 +590,9 @@ class GeomPoly(Geom):
     """
     Polygon geometry defining shape and possible buffers.
 
-    Defined by PolyParam, which is used to instantiate the Polygon class. Also may
-    contain a state for the given status (e.g., occupied, red/blue, etc.).
+    Define ``shell`` and optional ``holes`` in parameters or states. State fields
+    take precedence over parameters. Legacy ``coordinates=(shell, holes)`` argument
+    tuples remain supported. Other states may describe status (e.g., occupied).
 
     Examples
     --------
@@ -608,6 +618,16 @@ class GeomPoly(Geom):
     """
 
     shapely_class = Polygon
+
+    def get_shapely_args(self):
+        """Read shell and optional holes, with states overriding parameters.
+
+        Legacy ``coordinates=(shell, holes)`` constructor arguments remain supported.
+        """
+        values = {**self.p.asdict(), **self.s.asdict()}
+        if 'shell' in values:
+            return (values['shell'], values.get('holes', ()))
+        return super().get_shapely_args()
 
 
 class ExPoly(GeomPoly):

@@ -82,8 +82,6 @@ class RestrictedZoneParam(GeomParameter):
 class RestrictedZoneGeom(GeomPoly):
     container_p = RestrictedZoneParam
     container_s = ObstacleState
-    def get_shapely_args(self):     # override due to fmdtools bug
-        return (self.p.shell, self.p.holes)
 
 class OccupiedPointParam(GeomParameter):
     coordinates: tuple = (60.0, 60.0)
