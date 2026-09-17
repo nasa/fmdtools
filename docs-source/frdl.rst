@@ -3,7 +3,7 @@
 FRDL 
 ====
 
-Functional Reasoning Design Language, Version 0.7.1
+Functional Reasoning Design Language, Version 0.7.2
 
 Overview
 ^^^^^^^^
@@ -797,5 +797,8 @@ Further Examples
 
 Further examples are provided in the fmdtools examples repository (see :ref:`fmdtools_examples_repo`). The fmdtools library uses an adaptation of FRDL to represent the structures of simulation classes (see :ref:`fmdtools_graph_style`). As such, architecture visualizations in the examples repository can be readily interpreted as (un-annotated) FRDL models. Additionally, one goal of the examples repository (in progress) is to provide fully-annotated FRDL diagrams to help describe each model. 
 
+We also provide:
 
+- :download:`Example Rover Diagram Files <../docs-source/figures/frdl/examples/rover/rover_models.drawio>`.
 
+- :download:`Example Drone Diagram Files <../docs-source/figures/frdl/examples/drone/drone_models.drawio>`.
