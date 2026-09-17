@@ -22,7 +22,7 @@ metadata:
 ### Function Architectures
 
 
-- Determine the type of model in the Structuring a Model section of the [Development Guide](../../../docs-source/Development Guide.rst). Apply this structure going forward.
+- Determine the type of model per [Structuring a Model Best Practices](../../../docs-source/best-practices.md#structuring-a-model). Apply this structure going forward.
 - See the relevant code template in [Intro_to_fmdtools.md](../../../docs-source/Intro_to_fmdtools.md#function-architecture-code-template)
 
 - Note that the goal of the functional architecture is to propagate behaviors **between different functions** using flows. If there are no interacting behaviors, there isn't a reason to use a FunctionArchitecture

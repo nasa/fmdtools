@@ -6,7 +6,7 @@ See: @README.md and @docs-source/Intro_to_fmdtools.md
 
 ## Best Practices
 
-See: @docs-source/Development Guide.rst
+See: @docs-source/best-practices.md
 
 ## Library Usage
 
@@ -58,7 +58,7 @@ Third, determine the correct file structure for to write the model to:
 	- Architecture Containers followed by the Architecture
 	- Short script initializing and verifying behavior from the various blocks and architectures using "if __name__ == "__main__":" protection statement.
 
-- Use the naming conventions for files specified in the "Structuring your Project Repository" section of the [Development Guide](/docs-source/Development Guide.rst)
+- Use the naming conventions for files specified in @docs-source/best_practices.md#Structuring-your-Project-Repository
 
 ### Simulation
 

@@ -465,7 +465,7 @@ Explore: - What happens when you change `FaultSample` parameters? - What happens
 
 -   More advanced topics ([see examples](../examples/Examples.rst)), including Search and optimization, Human, Systems-of-Systems modeling, and Modeling Stochastic Behavior
 
--   [Model Development Guide](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#model-development-best-practices): Has best practices for developing models in a strategic way (especially helpful for complex models)
+-   [Model Development Best Practices](best-practices.md): Has best practices for developing models in a strategic way (especially helpful for complex models)
 
 -   Overview Paper:
 
