@@ -171,8 +171,8 @@ Simple, small models are relatively easy to define in fmdtools with a few functi
 
 The next subsections give some advice to help avoid technical debt, based on lessons learned developing fmdtools models over the past few years.
 
-Make and FRDL Diagram First
----------------------------
+Make an FRDL Diagram First
+--------------------------
 
 The FRDL ontology (see: :ref:`frdl`) was designed to help define system functional architectures in a way that comports with simulation in fmdtools.
 

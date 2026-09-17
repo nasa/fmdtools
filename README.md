@@ -35,8 +35,8 @@ The fmdtools library provides the computational support needed to perform a simu
 
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/flexible.svg">
 
-### Flexible Modelling Paradigm
-Models in fmdtools use a consistent and composable representation of system structure and behavior. Whether you want to model a simple component, a complex system-of-systems, or both, fmdtools can help.
+### Flexible, AI-Ready Modelling Paradigm
+Models in fmdtools use a straightforward and composable code-based representation of system structure and behavior. Since fmdtools models are based on open-source Python, models can be readily generated from your AI of choice with the right prompting. Whether you want to model a simple component, a complex system-of-systems, or both, fmdtools can help.
 
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/powerful.svg">
 
@@ -222,6 +222,20 @@ Once fmdtools is installed, use the following to get acquainted with how to use 
 - Read about contributions and model development best practices by perusing the [Development Guide](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#).
 
 - Explore the searchable [module reference](https://nasa.github.io/fmdtools/docs-source/fmdtools.html) for syntax and usage documentation.
+
+### AI/LLM Tips
+
+Decent (but **very imperfect**) results can be achieved using LLMs for model development using the prompt:
+
+```prompt
+Make an fmdtools simulation of <system of choice> using the latest syntax from `www.github.com/nasa/fmdtools` version 2.5.0 for all modeling, simulation, and analysis classes.
+```
+
+The important aspects of this prompt are specifying the URL and version--otherwise the LLM is likely to hallucinate usage or recall an earlier version of fmdtools. Do not expect perfect output from this--you may have to spend some time identifying the problems so they can be fixed!
+
+For somewhat better results, we recommend using an on-machine coding "agent" such as OpenCode/Claude Code/Codex.
+
+More elaborate prompts can be found in our [AGENTS.md](AGENTS.md) and repository skills at `.agents/skills`.
 
 ## Contributions
 fmdtools is developed primarily by researchers at NASA Ames Research Center. External contributions are welcome under a Contributor License Agreement:
