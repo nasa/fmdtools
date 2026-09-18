@@ -1,37 +1,23 @@
 Development Guide
 =================
 
-Why fmdtools?
-^^^^^^^^^^^^^
-
-Use fmdtools to improve your understanding of the dynamics of hazardous behavior. The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. Resilience is the ability of a system to mitigate hazardous scenarios as they arise. As shown below, the key defining aspect of resilience is the **dynamics of failure events**, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome).
-
-.. figure:: figures/powerpoint/resilience_importance.svg
-   :width: 800
-   :alt: importance of considering resilience 
-   
-   Resilience is important to consider when dynamics of system behavior can lead to hazardous or unsafe outcomes.
-
-The impetus for developing fmdtools was a lack of existing open-source tools to model these dynamics at a high level (i.e., functions and flows) in the design process. Thus, researchers in this area had to re-implement modeling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools package resolved this problem by separating resilience modeling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. The goals of the fmdtools project have since shifted to the more general goal of **improving the hazard assessment process** by better representing systems resilience. Towards this end, fmdtools provides the following capabilities:
-
-- **Representing system dynamics** to enable the quantification of resilience properties. Typically, hazard assessment processes neglect the consideration of resilience because they focus on the immediate effects of faults on the function of the system, rather than an assessment of how these effects play out over time. The fmdtools library enables this consideration by providing a behavioral view of hazardous scenarios. This is important both for understanding hazardous behaviors, but also how they can be mitigated as they arise.
-
-- **Representing operational behaviors and actions** to enable the assessment the contributions of human operators and autonomous/AI-enabled systems to overall risk and resilience. Traditional hazard assessment approaches do not consider the feedback between operators, the system, and the environment, instead leaving them as "accidents" or "mistakes" to be blamed on the operator. With fmdtools, these hazards can be considered directly by modelling potential operator behaviors and how they support or degrade overall systems resilience. These approaches can also be used to better understand the risks posed by AI/autonomous systems.
-
-- **Enabling a Model/Simulation-based hazard analysis paradigm** by allowing the iterative, consistent analysis of resilience through the design, implementation, and V\&V processes. The traditional hazard assessment process is a manual, expert-driven approach that is inefficient to iterate on or change as a the design changes or assumptions are validated (or invalidated). In contrast, because all assumptions in fmdtools are represented as code, they can easily be modified as assumptions change while maintaining the overall integrity of the analysis. Furthermore, simulations in fmdtools can be efficiently and consistently be varied to analyze a system in more detail or in different configurations.
-
-While this library primarily provides code structures, a major objective of this library is further to enable these techniques to be used in a graphical simulation tool for hazard assessment.
+Introductory Tutorials
+^^^^^^^^^^^^^^^^^^^^^^
 
 
-Introductory Tutorial
-^^^^^^^^^^^^^^^^^^^^^
 
-**The best place to start** to getting acquainted with basic syntax and functionality is the :doc:`Intro to fmdtools <Intro_to_fmdtools>` workshop (:download:`download slides as pdf <Intro_to_fmdtools.pdf>`), which uses the `Pump` example to introduce the overall structure and use of fmdtools. Other models are further helpful to demonstrate the full variety of methods/approaches supported in fmdtools and their application for more advanced use-cases.
+**The best place to start** to getting acquainted with basic syntax and functionality is the :doc:`Intro to fmdtools <Intro_to_fmdtools>` workshop (:download:`download slides as pdf <Intro_to_fmdtools.pdf>`), which uses code examples to introduce the overall structure and use of fmdtools. Other models are further helpful to demonstrate the full variety of methods/approaches supported in fmdtools and their application for more advanced use-cases.
 
 .. toctree::
    :hidden:
    
    Intro_to_fmdtools.md
+
+Best Practices
+^^^^^^^^^^^^^^
+
+.. include:: best-practices.md
+   :parser: myst_parser.sphinx_
 
 Glossary
 ^^^^^^^^
@@ -149,10 +135,3 @@ You can use the glossary as a reference to understand basic simulation and analy
 
 	Functional Architecture
 		Composition of :term:`Function` and :term:`Flow` objects in an overall :term:`Architecture` that enables :term:`propagation` of behaviors between :term:`function` s.
-
-
-Best Practices
-^^^^^^^^^^^^^^
-
-.. include:: ../PUBLICATIONS.md
-   :parser: myst_parser.sphinx_
