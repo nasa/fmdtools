@@ -228,7 +228,7 @@ Once fmdtools is installed, use the following to get acquainted with how to use 
 Decent (but **very imperfect**) results can be achieved using LLMs for model development using the prompt:
 
 ```prompt
-Make an fmdtools simulation of <system of choice> using the latest syntax from `www.github.com/nasa/fmdtools` version 2.5.0 for all modeling, simulation, and analysis classes.
+You are an experienced software engineer learning a new Python library for the first time. Make an fmdtools simulation of racecar using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.0` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes. The output should be a bare bones but well-commented .py file with simple behaviors for each class and a small script at the bottom leveraging the built-in capabilities in the `fmdtools.analyze` package instead of directly using external libraries like matplotlib. As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools syntax.
 ```
 
 The important aspects of this prompt are specifying the URL and version--otherwise the LLM is likely to hallucinate usage or recall an earlier version of fmdtools. Do not expect perfect output from this--you may have to spend some time identifying the problems so they can be fixed!

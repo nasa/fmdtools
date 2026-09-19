@@ -4,9 +4,11 @@ Development Guide
 Introductory Tutorials
 ^^^^^^^^^^^^^^^^^^^^^^
 
+The following tutorials provide a basic overview of 
 
+- The :doc:`Resilience Simulation: What and Why? <why-resilience-simulation>` presentation (:download:`download slides as pdf <why-resilience-simulation.pdf>`) provides an overview of what resilience simulation is and how fmdtools helps you achieve it. Start here if you are interested in the methodology of resilience simulation before learning how to use fmdtools.
 
-**The best place to start** to getting acquainted with basic syntax and functionality is the :doc:`Intro to fmdtools <Intro_to_fmdtools>` workshop (:download:`download slides as pdf <Intro_to_fmdtools.pdf>`), which uses code examples to introduce the overall structure and use of fmdtools. Other models are further helpful to demonstrate the full variety of methods/approaches supported in fmdtools and their application for more advanced use-cases.
+- The :doc:`Intro to fmdtools <Intro_to_fmdtools>` workshop (:download:`download slides as pdf <Intro_to_fmdtools.pdf>`), provides an introductory tutorial (with code examples) on the structure and usage of fmdtools. Other models are further helpful to demonstrate the full variety of methods/approaches supported in fmdtools and their application for more advanced use-cases.
 
 .. toctree::
    :hidden:
