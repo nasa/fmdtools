@@ -31,7 +31,7 @@ from fmdtools.define.container.rand import Rand
 from fmdtools.define.base import is_iter, dict_from_file, value_to_jsonable
 from fmdtools.define.object.base import BaseObject
 from fmdtools.analyze.common import setup_plot, consolidate_legend, clear_prev_figure
-from fmdtools.analyze.common import prep_animation_title, add_title_xylabs
+from fmdtools.analyze.common import prep_animation_title, add_title_xylabs, calc_metric
 from fmdtools.analyze.common import multiplot_helper, multiplot_legend_title
 
 import numpy as np
@@ -1798,7 +1798,8 @@ class MetricCoords(BaseCoords):
     res : Result
         Result to get the result/histories from
     values : list
-        List of values to get. Default is [], which will not get any values.
+        Dict of values to get and their variable names to be used in MetricCoords.
+        Default is [], which will not get any values.
     metric : method
         Method to use to compute the metric.
 
@@ -1806,25 +1807,47 @@ class MetricCoords(BaseCoords):
     --------
     >>> from fmdtools.analyze.result import Result
     >>> r = Result({'b1.a': np.array([[0,1], [0,4]]), 'b2.a': np.array([[2,1], [2,6]])})
-    >>> mc = MetricCoords(r, values=['a'], metric=np.mean, p={'x_size':2, 'y_size': 2})
-    >>> mc.a
+    >>> mc = MetricCoords(r, values={'a': 'mean_a'}, method=np.mean, p={'x_size':2, 'y_size': 2})
+    >>> mc.mean_a
     array([[1., 1.],
            [1., 5.]])
-    >>> mc = MetricCoords(r, values=['a'], metric=np.min, p={'x_size':2, 'y_size': 2})
-    >>> mc.a
+    >>> mc = MetricCoords(r, values={'a': 'min_a'}, method=np.min, p={'x_size':2, 'y_size': 2})
+    >>> mc.min_a
     array([[0, 1],
            [0, 4]])
+    >>> mc.add_metric("double_min_a", mc.min_a, method=lambda x: 2*x, args=())
+    >>> mc.double_min_a
+    array([[0, 2],
+           [0, 8]])
     """
 
     __slots__ = ('__dict__', )
     roletypes = ['container', 'value']
 
-    def __init__(self, res, *args, values=[], metric=np.mean, **kwargs):
+    def __init__(self, res, *args, values={}, method=np.mean, **kwargs):
         super().__init__(*args, **kwargs)
-        self.values = values
-        for value in values:
-            setattr(self, value, metric([*res.get_values(value).values()], 0))
+        self.values = []
+        for value, name in values.items():
+            self.add_metric(name, [*res.get_values(value).values()], method=method)
 
+    def add_metric(self, name, arr, method=np.mean, args=(0,)):
+        """
+        Add new metric to the MetricCoords.
+
+        Parameters
+        ----------
+        name : str
+            Name of the metric
+        arr : array
+            List/array of arrays to take the metric over.
+        method : method, optional
+            Metric to call to generate the metric. The default is np.mean.
+        args : tuple
+            Args to method. Default is (0,), which calculates metric over existing grids
+            when using numpy methods. If passing a lambda function, set args=().
+        """
+        self.values.append(name)
+        setattr(self, name, calc_metric(arr, method=method, args=args))
 
 if __name__ == "__main__":
     efc = ExampleFileCoords()
