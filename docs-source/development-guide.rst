@@ -10,10 +10,16 @@ The following tutorials provide a basic overview of
 
 - The :doc:`Intro to fmdtools <Intro_to_fmdtools>` workshop (:download:`download slides as pdf <Intro_to_fmdtools.pdf>`), provides an introductory tutorial (with code examples) on the structure and usage of fmdtools. Other models are further helpful to demonstrate the full variety of methods/approaches supported in fmdtools and their application for more advanced use-cases.
 
+- The :doc:`Complex Systems Modeling in fmdtools <Complex_Systems_Modeling_in_fmdtools.md>` overview presentation (:download:`download slides as pdf <Complex_Systems_Modeling_in_fmdtools.pdf>`), provides an overview on how to develop models that capture complex systems interactions between operators, the technical system, and environment.
+
+
 .. toctree::
    :hidden:
    
+   why-resilience-simulation.md
    Intro_to_fmdtools.md
+   Complex_Systems_Modeling_in_fmdtools.md
+
 
 Best Practices
 ^^^^^^^^^^^^^^
