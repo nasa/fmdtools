@@ -186,9 +186,9 @@ Classes are instantiated to form objects, which we can then use to manipulate da
 
 ## Python dataclasses (and similar) {.smaller}
 
-The fmdtools library makes heavy use of the recordclass package to define dataclasses: https://github.com/intellimath/recordclass
+The fmdtools library extends the recordclass package to define dataclasses: https://github.com/intellimath/recordclass
 
-```         
+```python         
 from recordclass import dataobject
 class Point(dataobject):
     x: int = 1 # <- Field for variable x
@@ -283,7 +283,6 @@ class FlowName(Flow): # defining flow class
 def indicate_varname_too_high(self): # Optional conditional using `indicate_XX` syntax
     return self.s.varname1 > 1.0 # if the variable varname1 is greater than one, the indicator will return True
 ```
-
 </details>
 
 ## Function Code Template
@@ -352,6 +351,16 @@ def classify(self, scen={}, hists={}, **kwargs): # Method to classify results
 ```
 
 </details>
+
+## There's more to fmdtools than Functional Architectures {.smaller}
+
+Often, resilience is about the complex interactions between operators/software/agents, infrastructure/the environment, and the physical system itself.
+
+These systems-of-systems characteristics can also be modeled in fmdtools with the classes shown below:
+
+![](figures/drawio/sos_model_classes.svg)
+
+These sorts of models are covered in [Complex Systems Modeling in fmdtools](Complex_Systems_Modeling_in_fmdtools.md)
 
 ## Demo Model Activity: {.smaller}
 
