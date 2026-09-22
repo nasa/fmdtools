@@ -212,18 +212,21 @@ if __name__ == "__main__":
     # some test usages of pytest with local options
     import pytest
     # pytest.main(["--testtype=fast-notebooks"])
-    pytest.main([*fast_notebooks,
-                 "--testtype=custom",
-                 "--auto_build_reports=True",
-                 "--cov-report",
-                 "html:auto"])
+    pytest.main(["--doctest-modules",
+                 "tests/test_geom.py",
+                "--testtype=custom"])
+    # pytest.main([*fast_notebooks,
+    #              "--testtype=custom",
+    #              "--auto_build_reports=True",
+    #              "--cov-report",
+    #              "html:auto"])
 
-    pytest.main(["--doctest-modules", "src/fmdtools/define/container/base.py",
-                 "--testtype=doctests-custom",
-                 "--auto_build_reports=True",
-                 "--cov-report",
-                 "html:auto"])
+    # pytest.main(["--doctest-modules", "src/fmdtools/define/container/base.py",
+    #              "--testtype=doctests-custom",
+    #              "--auto_build_reports=True",
+    #              "--cov-report",
+    #              "html:auto"])
 
-    pytest.main(["--testtype=doctests"])
+    # pytest.main(["--testtype=doctests"])
 
 

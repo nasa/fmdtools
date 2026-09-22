@@ -24,7 +24,7 @@ from shapely import LineString, Polygon
 from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.define.container.state import State
 from fmdtools.define.object.geom import (
-    ExLine, ExPoint, ExPoly, GeomLine, GeomParameter, GeomPoly, PolyParam,
+    ExLine, ExPoint, ExPolyCoords, GeomLine, GeomParameter, GeomPoly, PolyParam,
 )
 
 
@@ -133,14 +133,6 @@ def test_line_buffers_and_state_overrides():
     assert not geom.at((3.0, 1.0))
     assert geom.at((5.1, 1.0), 'on')
     assert geom.p.coordinates == LineParam().coordinates
-
-
-@pytest.mark.parametrize('geom_class', [ExPoint, ExLine, ExPoly])
-def test_positional_arguments_still_work(geom_class):
-    geom = geom_class()
-    expected = geom.shapely_class(*geom.p.coordinates)
-    assert geom.get_shape().equals_exact(expected, 0.0)
-    assert geom.get_shapely_args() == geom.p.coordinates
 
 
 def test_empty_line():

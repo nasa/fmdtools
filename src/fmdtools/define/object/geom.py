@@ -652,6 +652,12 @@ class ExPoly(GeomPoly):
     container_p = ExPolyParam
     container_s = ExGeomState
 
+class ExPolyCoords(GeomPoly):
+    """Another example polygon for testing of coordinates parameter/argument."""
+
+    container_p = ExPolyParamCoords
+    container_s = ExGeomState
+
 
 if __name__ == "__main__":
     gj = GeomJSON(p={'geojson': '{"type": "Point","coordinates": [1, 2]}'})
