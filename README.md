@@ -123,7 +123,7 @@ More guidance on development installations is provided in [How to Contribute](ht
 Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` in the context of a development install you can checkout the tag corresponding to the version you want, e.g.:
 
 ```
-   git checkout v2.5.0
+   git checkout v2.5.1
 ```
 
 
@@ -228,7 +228,7 @@ Once fmdtools is installed, use the following to get acquainted with how to use 
 Decent (but **very imperfect**) results can be achieved using LLMs for model development using the prompt:
 
 ```prompt
-You are an experienced software engineer learning a new Python library for the first time. Make an fmdtools simulation of racecar using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.0` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes. The output should be a bare bones but well-commented .py file with simple behaviors for each class and a small script at the bottom leveraging the built-in capabilities in the `fmdtools.analyze` package instead of directly using external libraries like matplotlib. As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.0 syntax.
+You are an experienced software engineer learning a new Python library for the first time. Make an fmdtools simulation of racecar using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.1` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes. The output should be a bare bones but well-commented .py file with simple behaviors for each class and a small script at the bottom leveraging the built-in capabilities in the `fmdtools.analyze` package instead of directly using external libraries like matplotlib. As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.1 syntax.
 ```
 
 The important aspects of this prompt are specifying the URL and version--otherwise the LLM is likely to hallucinate usage or recall an earlier version of fmdtools. Do not expect perfect output from this--you may have to spend some time identifying the problems so they can be fixed!
@@ -270,12 +270,12 @@ To cite fmdtools in general, you may cite our explanatory publication:
 To cite a particular version of the fmdtools, you may use:
 
 ```
-@software{nasa2025fmdtools,
+@software{nasa2026fmdtools,
   author = {{NASA}},
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
-  version = {2.5.0},
-  date = {2026-8-13},
+  version = {2.5.1},
+  date = {2026-9-22},
 }
 ```
 
