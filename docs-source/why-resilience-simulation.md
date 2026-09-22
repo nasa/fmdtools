@@ -7,7 +7,7 @@ theme: default
 author: Daniel Hulse
 scrollable: true
 ---
-
+# Resilience Simulation: What and Why
 ## Why Resilience? {.smaller}
 
 ::::: columns
