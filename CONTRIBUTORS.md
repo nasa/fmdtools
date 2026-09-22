@@ -35,7 +35,7 @@ External Contributors
 ---------------------
 
 * Johan Louwers
-
+* Sylvester Kaczmarek
 
 fmdtools at OSU
 -------------------------
