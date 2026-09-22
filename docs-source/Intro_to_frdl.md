@@ -64,12 +64,30 @@ FRDL: Functional Reasoning Design Language
 FRDL helps with hazard analysis by giving you a *model* of the system to base the assessment of causes and effects on
 
 - Instead of just brain-storming possible causes/effects, you can use the model to see what parts of the system will be effected and how, giving you a more **complete** and **detailed** analysis
+- Formal and rigorous way to represent behavioral interactions--instead of a flow chart, which misses multi-directional interactions, FRDL's bipartite graph representation explicitly enables the representation of all possible propagation paths.
 
 ## What does an FRDL diagram look like? 
 
-(see [FRDL spec](https://nasa.github.io/fmdtools/docs-source/frdl.html#specification))
 
 ![](./figures/frdl/diagrams/frdl_fad_singleprop_explanation.svg)
+
+An FRDL diagram is often called an [Architecture](https://nasa.github.io/fmdtools/docs-source/frdl.html#architectures) and is composed of:
+ - [Blocks](https://nasa.github.io/fmdtools/docs-source/frdl.html#blocks) (Functions, Actions, or Components), which represent the behavioral elements of the system
+ - [Flows](https://nasa.github.io/fmdtools/docs-source/frdl.html#flows) (including MultiFlow and CommsFlow sub-types), which represent the shared variables (e.g., energy, material, and/or signal) that cause the behavioral elements to interact
+ - [Relationships](https://nasa.github.io/fmdtools/docs-source/frdl.html#relationships) that connect the model elements. Propagation relatinoships are shown
+ - [Annotations](https://nasa.github.io/fmdtools/docs-source/frdl.html#annotations) are the symbols and text that appears on blocks. These annotations are optionally used to clarify dynamic behavior (Dynamics tag in upper left corner), point to other potential potential diagrams (architecture tag in lower left corner) and define the scope and role of the object (ontology in the lower right corner).
+
+The figure above is a [Functional Architecture](https://nasa.github.io/fmdtools/docs-source/frdl.html#functional-architectures) because it represents Functions interacting via flows.
+
+## What does an FRDL diagram look like? - Rover Example {.smaller}
+
+![](./figures/frdl/examples/rover/rover_fad.svg)
+
+This is a model of an autonomous rover that autonomously navigates and maps its environment based on its own senses, which it then communicates with an operator. 
+
+Note the use of CommsFlow for "Commands" (meaning the flow is to be communicated) and the use of MultiFlow for "Environment", "Map" and "Location and Orientation" (meaning there are multiple copies due to perception or data flow).
+
+
 
 ## How do you analyze hazards with an FRDL diagram? {.smaller}
 
@@ -85,23 +103,41 @@ For causes, run through this process in reverse. See [FRDL/Specification/Usage/A
 
 ## Example - Step 1
 
-![](./figures/frdl/diagrams/frdl_fad_singleprop_prop1.svg)
+![](./figures/frdl/examples/rover/rover_wheel_stuck_0.svg)
 
+In this scenario we look at what could happen if one of the rover's electrically-powered wheels gets stuck. Note that this is just one way it could play out, the point of this process is to identify potential hazardous propagations so they can be mitigated. 
 
 ## Example - Step 2
 
-![](./figures/frdl/diagrams/frdl_fad_singleprop_prop2.svg)
+![](./figures/frdl/examples/rover/rover_wheel_stuck_1.svg)
 
+The wheel being stuck propagates to the connected flows: there is now adverse current draw from the electric motor (if it continues to provide power) and the rover now has a modified trajectory, yawing in the direction of the stuck wheel.
 
 ## Example - Step 1 (again)
 
-![](./figures/frdl/diagrams/frdl_fad_singleprop_prop3.svg)
+![](./figures/frdl/examples/rover/rover_wheel_stuck_2.svg)
+
+These flow effects propagate to their connected functions: the rover identifies and communicates a faulty status. However, there is also a potential for short or early energy depletion from the battery.
 
 ## Example - Step 2 (again)
 
-![](./figures/frdl/diagrams/frdl_fad_singleprop_prop4.svg)
+![](./figures/frdl/examples/rover/rover_wheel_stuck_3.svg)
 
-## Some Takeaways {.smaller}
+Given a short from the battery, there is now a power loss even though the operator attempts correction.
+
+Given that these are all *potential effects*, this is where it can be helpful to branch the scenario into different possibilities:
+- If the correction happens before power loss, the rover may be able to continue its mission in a corrected state
+- If power loss happens before the correction, the rover will be unable to continue its mission
+
+## Example - Finally
+
+![](./figures/frdl/examples/rover/rover_wheel_stuck_4.svg)
+
+In the worst-case, the power loss happens before correction. As mentioned previously, this is just one way a scenario could play out, and there are several assumptions that result in this outcome which could be modified for a different analysis. For example, a wheel being stuck could trigger a disengagement of the motor to prevent jamming.
+
+We expect hazard mitigating features like this in a real system, but getting there requires us to go through a systematic process to add those mitigations. That is what this analysis is for!
+
+## Further Takeaways {.smaller}
 
 - Analyzing behavior in FRDL means working **directly with the diagram** to determine hazard effects, as opposed to just coming up with the effects out of your head
 
@@ -111,7 +147,8 @@ For causes, run through this process in reverse. See [FRDL/Specification/Usage/A
 
 - One also has to make analysis decisions such as:
     - How to represent the system in FRDL
-    - What assumptions to use when propagating behavior
+    - What assumptions to use when propagating behavior (and what scenarios to consider)
+    - When to branch a scenario based on the potential ways individual interactions could play out
     - When to stop the analysis
 
 ## More Examples

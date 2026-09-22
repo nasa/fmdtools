@@ -10,7 +10,7 @@ TABLE OF CONTENTS
  :glob:
  
  README
- docs-source/Development Guide
+ docs-source/development-guide
  examples/Examples
  docs-source/fmdtools
  docs-source/Contributions

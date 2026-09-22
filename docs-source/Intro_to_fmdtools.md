@@ -186,16 +186,16 @@ Classes are instantiated to form objects, which we can then use to manipulate da
 
 ## Python dataclasses (and similar) {.smaller}
 
-fmdtools uses the recordclass package to define dataclasses: https://github.com/intellimath/recordclass
+The fmdtools library extends the recordclass package to define dataclasses: https://github.com/intellimath/recordclass
 
-```         
+```python         
 from recordclass import dataobject
 class Point(dataobject):
     x: int = 1 # <- Field for variable x
     y: int = 2 # <- Field for variable y
 ```
 
-Dataclasses let you define the data as **fields** and then lets you directly instantiate the class based on the data, e.g.:
+Dataclasses let one define the data as **fields** and then lets you directly instantiate the class based on the data, e.g.:
 
 ```         
 >>> p = Point(2, 3)
@@ -203,11 +203,35 @@ Dataclasses let you define the data as **fields** and then lets you directly ins
 2
 ```
 
-Dataclasses are used in fmdtools for **Containers**
+Dataclasses are used in the fmdtools library for its **Container** classes which you as a developer then use!
 
 ## Containers - The building blocks of simulations {.smaller}
 
 ![container example](./figures/powerpoint/container_structures.svg) - Containers are used to define various attributes of Functions and Flows
+
+<details>
+
+<summary>Click for full code template</summary>
+
+``` python
+class StateName(State): # defining state class
+    varname1: float = 1.0 # defining a float variable that defaults to 1.0
+    varname2: str = “default_value” # defining a string variable that defaults to "default_value"
+
+class ParameterName(Parameter): # defining parameter class
+    varname1: float = 1.0 # defining a float varname1 that defaults to 1.0
+    varname1_range = (0.0, 10.0) # defining an allowable range for varname1 (optional to bound model validity)
+    varname2 : str = “default_value”
+    varname2_set = (“default_value”, “other_possible_value”) # defining a set of allowable values for varname2
+
+class ModeName(Mode): # defining mode class
+    fault_faultname1 = (0.001, 200.0) # defining the fault mode faultname1 and its rate and cost
+    fault_faultname2 = (0.00001, 100.0, {‘on’: 1.0}) # defining the fault mode faultname2 and its rate, cost, and applicable phases of operation (all in the "on" operational mode)
+    opermodes = (“off”, "on") # defining the allowable operational modes ("off" and "on")
+    mode: str = "off" # Declaring a default or initial mode. Otherwise the mode will be "nominal" unless there is a fault.
+```
+
+</details>
 
 ## Class aggregation in fmdtools BaseObject {.smaller}
 
@@ -246,13 +270,97 @@ class ExampleObject(BaseObject):
 -   Flows represent connections or shared variables between different functions. Think of them as Function inputs/outputs.
 -   Flows are build from container classes like states, along with their own methods/variables.
 
+<details>
+
+<summary>Click for full code template</summary>
+
+``` python
+class FlowName(Flow): # defining flow class
+    container_s = StateName # Will initialize the state StateName at self.s
+    container_p = ParameterName # Will initialize the parameter ParameterName at self.p
+    default_track = ['s’, 'i'] # Optional arguments to define that the state "s" and indicators "i" will be tracked (otherwise everything will be tracked)
+
+def indicate_varname_too_high(self): # Optional conditional using `indicate_XX` syntax
+    return self.s.varname1 > 1.0 # if the variable varname1 is greater than one, the indicator will return True
+```
+</details>
+
 ## Function Code Template
 
 ![](./figures/powerpoint/fxnblock_structure.svg)
 
+<details>
+
+<summary>Click for full code template</summary>
+
+``` python
+class FunctionName(Function):
+    container_s = StateName # Will initialize the state StateName at self.s
+    container_m = ModeName  # Will initialize the mode ModeName at self.m
+    container_t = FunctionTime  # Will initialize the time container FunctionTime at self.t
+    flow_connection = FlowName # Will initialize or attach the flow FlowName at self.connection. 
+    flownames = {'outsideflowname': 'connection'} # Optionally redefines a flow with an external name with a local internal name
+    default_sp = {'end_time': 100} # Defines and end time if simulating this function individually
+    default_track = ['s','m'] # Optionally defines which attributes to track (the state and mode)
+
+def init_block(self, **kwargs): # Optional method for initializing variables values. May be helpful local instantiation when using MultiFlow and CommsFlow classes.
+    self.s.varname1 = 2.0 # This would be useful if there were multiple usages to the StateName class and this one needed to be 2.0 at the start of the sim
+
+def static_behavior(self): # Defines top-level behavior to be simulated during a timestep until behavior converges (useful for propagation)
+    if self.m.has_fault("faultname"): # Often used for failure logic
+        self.s.varname1 = 10.0 # Best practice is to change variables to a set value. Do not increment values in static_behavior or behavior will not converge.
+    self.connection.s.varname1 = self.s.varname1 # Always access/modify flows from their defined names on instantiation, not their class variables.
+
+
+def dynamic_behavior(self): # Defines top-level behavior to be simulated once during a timestep.
+    self.s.varname2 += self.connection.s.varname1 # Useful for incrementing behavior over time.
+    self.connection.s.varname2 += 10.0 # Updating the varname2 variable in the state of the attached flow "name1"
+
+def indicate_over_one_hundred(self): # Optional conditional statement (tracked at self.h.i)
+    return self.s.varname2 > 100 # These are often used for hazardous conditions we want to indicate occuring
+
+def classify(self, scen={}, hists={}, **kwargs): # Optionally used to calculate metrics when the function is simulated individually
+    return {"combined_states": self.s.varname1*self.s.varname2} # Returns a dictionary of metrics to the analysis, in this case two variables multiplied.
+```
+
+</details>
+
 ## Function Architecture Code Template
 
 ![](./figures/powerpoint/fxnarch_structure.svg)
+
+<details>
+
+<summary>Click for full code template</summary>
+
+``` python
+class ArchitectureName(FunctionArchitecture): # Defining the class
+    container_p = ParameterName # Attaching the parameter ParameterName to initialize at self.p
+    default_sp = {‘end_time’: 100} # Set default values for the SimParam, in this case an end_time of 100 timesteps.
+    default_track = [“fxns”, “flows] # Optionally we what to track, in this case "fxns" and "flows"
+
+def init_architecture(self, **kwargs): # Method used to initialize the architecture by stitching functions and flows together
+    self.add_flow(“outsideflowname”, FlowClass) # Always initialize the flows first.
+    self.add_fxn(“functionname”, FunctionClass, “outsideflowname”) # Flows added next with the names of flows used in the function passed as arguments
+
+def indicate_function_state_high(self): # optional conditional statement
+    return self.fxns[“functionname”].s.varname2>200.0 # Note that these may be used to end the simulation when true if desired
+
+def classify(self, scen={}, hists={}, **kwargs): # Method to classify results
+    return {"combined_states": self.fxns["functionname"].s.varname1*self.fxns["functionname"].s.varname2} # In this case, this sends the same Result as the function class
+```
+
+</details>
+
+## There's more to fmdtools than Functional Architectures {.smaller}
+
+Often, resilience is about the complex interactions between operators/software/agents, infrastructure/the environment, and the physical system itself.
+
+These systems-of-systems characteristics can also be modeled in fmdtools with the classes shown below:
+
+![](figures/drawio/sos_model_classes.svg)
+
+These sorts of models are covered in [Complex Systems Modeling in fmdtools](Complex_Systems_Modeling_in_fmdtools.md)
 
 ## Demo Model Activity: {.smaller}
 
@@ -366,7 +474,7 @@ Explore: - What happens when you change `FaultSample` parameters? - What happens
 
 -   More advanced topics ([see examples](../examples/Examples.rst)), including Search and optimization, Human, Systems-of-Systems modeling, and Modeling Stochastic Behavior
 
--   [Model Development Guide](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#model-development-best-practices): Has best practices for developing models in a strategic way (especially helpful for complex models)
+-   [Model Development Best Practices](best-practices.md): Has best practices for developing models in a strategic way (especially helpful for complex models)
 
 -   Overview Paper:
 

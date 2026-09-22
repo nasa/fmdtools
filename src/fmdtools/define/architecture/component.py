@@ -103,8 +103,6 @@ class ExampleComponentArchitecture(ComponentArchitecture):
     to enable the individual simulation of the ComponentArchitecture.
     """
 
-    __slots__ = ()
-
     def init_architecture(self, *args, **kwargs):
         self.add_comp("c1", ExampleComponent, s={'x': 5.0, 'y': 5.0})
         self.add_comp("c2", ExampleComponent, s={'x': 10.0, 'y': 10.0})
