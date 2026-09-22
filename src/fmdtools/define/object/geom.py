@@ -395,7 +395,7 @@ class Geom(BaseGeom):
         Get arguments for the given Shapely class.
 
         Return positional constructor arguments. Override when the geometry uses
-        named fields instead of the legacy ``coordinates`` argument tuple.
+        named fields instead of a single``coordinates`` argument tuple.
         State values take precedence over parameter values.
         """
         return {**self.p.asdict(), **self.s.asdict()}['coordinates']
@@ -496,15 +496,16 @@ class ExPoint(GeomPoint):
 class ExLineParam(GeomParameter):
     """Example parameter defining a line with a given buffer 'on'."""
 
-    coordinates: tuple = (((0.0, 0.0), (1.0, 1.0)),)
+    coordinates: tuple = ((0.0, 0.0), (1.0, 1.0))
     buffer_on: float = 1.0
 
 
 class GeomLine(Geom):
     """Line geometry representing a coordinate sequence and possible buffers.
 
-    Coordinates may be a sequence of vertices or a legacy one-argument tuple
-    containing that sequence. State coordinates take precedence over parameters.
+    GeomLine is a wrapper for the LineString class where the Coordinates parameter passed
+    to that class is defined in the underlying Parameter or State, with States taking
+    precedence.
 
     Examples
     --------
@@ -540,7 +541,7 @@ class GeomLine(Geom):
     shapely_class = LineString
 
     def get_shapely_args(self):
-        """Pass line coordinates as one argument, preserving legacy wrapped tuples."""
+        """Format coordinates to avoid LineString input errors."""
         coordinates = super().get_shapely_args()
         if len(coordinates) == 1:
             return coordinates
@@ -581,6 +582,10 @@ class PolyParam(Parameter):
 
 
 class ExPolyParam(PolyParam):
+    shell: tuple = ((0.0, 0.0), (1.0, 0.0), (1.0, 1.0))
+    holes: tuple = (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)), )
+
+class ExPolyParamCoords(PolyParam):
     """Example polygon parameter defining a basic triangle for use in testing."""
 
     coordinates: tuple = (((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)), ))
@@ -590,9 +595,10 @@ class GeomPoly(Geom):
     """
     Polygon geometry defining shape and possible buffers.
 
-    Define ``shell`` and optional ``holes`` in parameters or states. State fields
-    take precedence over parameters. Legacy ``coordinates=(shell, holes)`` argument
-    tuples remain supported. Other states may describe status (e.g., occupied).
+    Define ``shell`` and optional ``holes`` in parameters or states or an overall
+    coordinates parameter defining the inputs to the Polygon shapely class..
+    State fields take precedence over parameters. Other states may describe status
+    (e.g., occupied).
 
     Examples
     --------
@@ -615,19 +621,29 @@ class GeomPoly(Geom):
 
     >>> ExPoly().get_shapely_args()
     (((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)),))
+
+    which should be equivalent to the case where Coordinates arguments were defined
+    instead:
+
+    >>> class ExPolyCoords(GeomPoly):
+    ...    container_p = ExPolyParamCoords
+    ...    container_s = ExGeomState
+    >>> ExPolyCoords().get_shapely_args()
+    (((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)),))
     """
 
     shapely_class = Polygon
 
     def get_shapely_args(self):
-        """Read shell and optional holes, with states overriding parameters.
-
-        Legacy ``coordinates=(shell, holes)`` constructor arguments remain supported.
-        """
+        """Read shell and optional holes, with states overriding parameters."""
         values = {**self.p.asdict(), **self.s.asdict()}
-        if 'shell' in values:
-            return (values['shell'], values.get('holes', ()))
-        return super().get_shapely_args()
+        if "coordinates" in values and ("shell" in values or "holes" in values):
+            raise Exception("Invalid specification of "+self.__class__.__name__+": "+
+                            "Coordinates and shells/holes defined for class.")
+        elif "coordinates" in values:
+            return values['coordinates']
+        else:
+            return (values.get('shell', ()), values.get('holes', ()))
 
 
 class ExPoly(GeomPoly):

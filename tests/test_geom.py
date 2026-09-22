@@ -52,7 +52,7 @@ class MovingPolyState(State):
 
 
 class LineParam(GeomParameter):
-    """Natural line coordinate sequence, without an extra argument wrapper."""
+    """Line coordinate sequence with single-level tuple."""
     coordinates: tuple = ((0.0, 0.0), (2.0, 2.0))
     buffer_on: float = 0.25
 
@@ -136,12 +136,12 @@ def test_line_buffers_and_state_overrides():
 
 
 @pytest.mark.parametrize('geom_class', [ExPoint, ExLine, ExPoly])
-def test_legacy_positional_arguments_still_work(geom_class):
+def test_positional_arguments_still_work(geom_class):
     geom = geom_class()
     expected = geom.shapely_class(*geom.p.coordinates)
     assert geom.get_shape().equals_exact(expected, 0.0)
     assert geom.get_shapely_args() == geom.p.coordinates
 
 
-def test_legacy_empty_line():
+def test_empty_line():
     assert ExLine(p={'coordinates': ((),)}).get_shape().is_empty
