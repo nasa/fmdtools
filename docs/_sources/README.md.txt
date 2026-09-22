@@ -35,8 +35,8 @@ The fmdtools library provides the computational support needed to perform a simu
 
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/flexible.svg">
 
-### Flexible Modelling Paradigm
-Models in fmdtools use a consistent and composable representation of system structure and behavior. Whether you want to model a simple component, a complex system-of-systems, or both, fmdtools can help.
+### Flexible, AI-Ready Modelling Paradigm
+Models in fmdtools use a straightforward and composable code-based representation of system structure and behavior. Since fmdtools models are based on open-source Python, models can be readily generated from your AI of choice with the right prompting. Whether you want to model a simple component, a complex system-of-systems, or both, fmdtools can help.
 
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/powerful.svg">
 
@@ -123,7 +123,7 @@ More guidance on development installations is provided in [How to Contribute](ht
 Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` in the context of a development install you can checkout the tag corresponding to the version you want, e.g.:
 
 ```
-   git checkout v2.5.0
+   git checkout v2.5.1
 ```
 
 
@@ -219,9 +219,23 @@ Once fmdtools is installed, use the following to get acquainted with how to use 
 
 - Explore more [examples](https://nasa.github.io/fmdtools/examples/Examples.html) of particular use-cases by going through the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples)
 
-- Read about contributions and model development best practices by perusing the [Development Guide](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#).
+- Read about contributions and model development best practices by perusing the [Development Guide](https://nasa.github.io/fmdtools/docs-source/development-guide.html).
 
 - Explore the searchable [module reference](https://nasa.github.io/fmdtools/docs-source/fmdtools.html) for syntax and usage documentation.
+
+### AI/LLM Tips
+
+Decent (but **very imperfect**) results can be achieved using LLMs for model development using the prompt:
+
+```prompt
+You are an experienced software engineer learning a new Python library for the first time. Make an fmdtools simulation of racecar using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.1` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes. The output should be a bare bones but well-commented .py file with simple behaviors for each class and a small script at the bottom leveraging the built-in capabilities in the `fmdtools.analyze` package instead of directly using external libraries like matplotlib. As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.1 syntax.
+```
+
+The important aspects of this prompt are specifying the URL and version--otherwise the LLM is likely to hallucinate usage or recall an earlier version of fmdtools. Do not expect perfect output from this--you may have to spend some time identifying the problems so they can be fixed!
+
+For somewhat better results, we recommend using an on-machine coding "agent" such as OpenCode/Claude Code/Codex.
+
+More elaborate prompts can be found in our [AGENTS.md](AGENTS.md) and repository skills at `.agents/skills`.
 
 ## Contributions
 fmdtools is developed primarily by researchers at NASA Ames Research Center. External contributions are welcome under a Contributor License Agreement:
@@ -256,12 +270,12 @@ To cite fmdtools in general, you may cite our explanatory publication:
 To cite a particular version of the fmdtools, you may use:
 
 ```
-@software{nasa2025fmdtools,
+@software{nasa2026fmdtools,
   author = {{NASA}},
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
-  version = {2.5.0},
-  date = {2026-8-13},
+  version = {2.5.1},
+  date = {2026-9-22},
 }
 ```
 

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Development Guide &mdash; fmdtools 2.5.0 documentation</title>
+  <title>Agenda and Format &mdash; fmdtools 2.5.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,15 +17,15 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3c4615cf"></script>
+      <script src="../_static/documentation_options.js?v=983e91d6"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Overview {.smaller}" href="Intro_to_fmdtools.html" />
-    <link rel="prev" title="Overview" href="../README.html" /> 
+    <link rel="next" title="Examples" href="../examples/Examples.html" />
+    <link rel="prev" title="Overview {.smaller}" href="Intro_to_fmdtools.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,7 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#demo-portfolio">Demo Portfolio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#about">About</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-modelling-paradigm">Flexible Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-ai-ready-modelling-paradigm">Flexible, AI-Ready Modelling Paradigm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
 </ul>
@@ -66,6 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#ai-llm-tips">AI/LLM Tips</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
@@ -76,9 +77,21 @@
 <li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Development Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#why-fmdtools">Why fmdtools?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#introductory-tutorial">Introductory Tutorial</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="development-guide.html">Development Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="development-guide.html#introductory-tutorials">Introductory Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html">Why Resilience? {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#what-is-resilience-smaller">What is Resilience? {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#related-concepts-you-may-have-heard-of">Related Concepts You May Have Heard of</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#connection-of-resilience-to-resilience-to-risk-and-safety">Connection of Resilience to Resilience to Risk and Safety</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#what-s-different-about-resilience">What’s different about resilience?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#how-to-think-about-resilience-simulations">How to think about resilience simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#what-does-that-look-like-smaller">What does that look like? {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#how-does-fmdtools-help">How does fmdtools help?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#demonstrative-example-drone-proximity-to-threat-evaluation">Demonstrative Example: Drone Proximity to Threat Evaluation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#model-setup">Model Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#simulation-nominal">Simulation - Nominal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#simulation-hazards">Simulation - Hazards</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#conclusion-smaller">Conclusion {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Overview {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
@@ -104,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#flow-code-template">Flow Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#function-architecture-code-template">Function Architecture Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#there-s-more-to-fmdtools-than-functional-architectures-smaller">There’s more to fmdtools than Functional Architectures {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#demo-model-activity-smaller">Demo Model Activity: {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-do-we-structure-models-this-way-smaller">Why do we structure models this way? {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#more-resources-for-model-definition-smaller">More Resources for Model Definition {.smaller}</a></li>
@@ -117,25 +131,37 @@
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#starting-your-own-repo-project-smaller">Starting your own repo/project {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#conclusions-summary-smaller">Conclusions/Summary {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#further-reading-links-smaller">Further Reading/Links {.smaller}</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Agenda and Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-makes-a-system-complex-smaller">What makes a system complex? {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-fmdtools-can-represent-complexity">How fmdtools can represent complexity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#some-notes-on-architectures-smaller">Some Notes on Architectures {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-componentarchitecture">Example: ComponentArchitecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#human-actions-perceptions-and-communications">Human Actions, Perceptions, and Communications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#action-architectures-smaller">Action Architectures {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#perceptions-multiflow-smaller">Perceptions - MultiFlow {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#communications-commsflow-smaller">Communications - CommsFlow {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#characteristics-of-environments">Characteristics of Environments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#integrated-architecture-examples">Integrated Architecture Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conclusions-and-tips">Conclusions and Tips</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#glossary">Glossary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#model-development-best-practices">Model Development Best Practices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#make-and-frdl-diagram-first">Make and FRDL Diagram First</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#edit-your-code">Edit your code</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structuring-a-model">Structuring a model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structuring-your-project-repository">Structuring your Project Repository</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#style-advice">Style advice</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#see-also">See also</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development-guide.html#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#make-an-frdl-diagram-first">Make an FRDL Diagram First</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#structuring-your-project-repository">Structuring your Project Repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#see-also">See also</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="development-guide.html#glossary">Glossary</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/Examples.html">Examples</a><ul>
@@ -733,6 +759,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Contributions.html#testing">Testing</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="Contributions.html#why-was-fmdtools-developed">Why was fmdtools developed?</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="frdl.html">FRDL</a><ul>
@@ -747,12 +774,14 @@
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#constructing-a-hazard-table-at-its-most-basic-smaller">Constructing a hazard table (at its most basic) {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#what-is-frdl-and-why-use-it-for-hazard-analysis-smaller">What is FRDL (and why use it for hazard analysis)? {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#what-does-an-frdl-diagram-look-like">What does an FRDL diagram look like?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#what-does-an-frdl-diagram-look-like-rover-example-smaller">What does an FRDL diagram look like? - Rover Example {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#how-do-you-analyze-hazards-with-an-frdl-diagram-smaller">How do you analyze hazards with an FRDL diagram? {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-step-1">Example - Step 1</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-step-2">Example - Step 2</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-step-1-again">Example - Step 1 (again)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-step-2-again">Example - Step 2 (again)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#some-takeaways-smaller">Some Takeaways {.smaller}</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-finally">Example - Finally</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#further-takeaways-smaller">Further Takeaways {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#more-examples">More Examples</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#more-helpful-information-smaller">More Helpful Information {.smaller}</a></li>
 </ul>
@@ -819,9 +848,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Development Guide</li>
+          <li class="breadcrumb-item"><a href="development-guide.html">Development Guide</a></li>
+      <li class="breadcrumb-item active">Agenda and Format</li>
       <li class="wy-breadcrumbs-aside">
-              <a href="https://github.com/nasa/fmdtools/blob/main/docs-source/Development Guide.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/nasa/fmdtools/blob/main/docs-source/Complex_Systems_Modeling_in_fmdtools.md" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -829,384 +859,130 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="development-guide">
-<h1>Development Guide<a class="headerlink" href="#development-guide" title="Link to this heading"></a></h1>
-<section id="why-fmdtools">
-<h2>Why fmdtools?<a class="headerlink" href="#why-fmdtools" title="Link to this heading"></a></h2>
-<p>Use fmdtools to improve your understanding of the dynamics of hazardous behavior. The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. Resilience is the ability of a system to mitigate hazardous scenarios as they arise. As shown below, the key defining aspect of resilience is the <strong>dynamics of failure events</strong>, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome).</p>
-<figure class="align-default" id="id3">
-<a class="reference internal image-reference" href="../_images/resilience_importance.svg"><img alt="importance of considering resilience" src="../_images/resilience_importance.svg" width="800" />
-</a>
-<figcaption>
-<p><span class="caption-text">Resilience is important to consider when dynamics of system behavior can lead to hazardous or unsafe outcomes.</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
-</figcaption>
-</figure>
-<p>The impetus for developing fmdtools was a lack of existing open-source tools to model these dynamics at a high level (i.e., functions and flows) in the design process. Thus, researchers in this area had to re-implement modeling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools package resolved this problem by separating resilience modeling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. The goals of the fmdtools project have since shifted to the more general goal of <strong>improving the hazard assessment process</strong> by better representing systems resilience. Towards this end, fmdtools provides the following capabilities:</p>
+  <section id="agenda-and-format">
+<h1>Agenda and Format<a class="headerlink" href="#agenda-and-format" title="Link to this heading"></a></h1>
 <ul class="simple">
-<li><p><strong>Representing system dynamics</strong> to enable the quantification of resilience properties. Typically, hazard assessment processes neglect the consideration of resilience because they focus on the immediate effects of faults on the function of the system, rather than an assessment of how these effects play out over time. The fmdtools library enables this consideration by providing a behavioral view of hazardous scenarios. This is important both for understanding hazardous behaviors, but also how they can be mitigated as they arise.</p></li>
-<li><p><strong>Representing operational behaviors and actions</strong> to enable the assessment the contributions of human operators and autonomous/AI-enabled systems to overall risk and resilience. Traditional hazard assessment approaches do not consider the feedback between operators, the system, and the environment, instead leaving them as “accidents” or “mistakes” to be blamed on the operator. With fmdtools, these hazards can be considered directly by modelling potential operator behaviors and how they support or degrade overall systems resilience. These approaches can also be used to better understand the risks posed by AI/autonomous systems.</p></li>
-<li><p><strong>Enabling a Model/Simulation-based hazard analysis paradigm</strong> by allowing the iterative, consistent analysis of resilience through the design, implementation, and V&amp;V processes. The traditional hazard assessment process is a manual, expert-driven approach that is inefficient to iterate on or change as a the design changes or assumptions are validated (or invalidated). In contrast, because all assumptions in fmdtools are represented as code, they can easily be modified as assumptions change while maintaining the overall integrity of the analysis. Furthermore, simulations in fmdtools can be efficiently and consistently be varied to analyze a system in more detail or in different configurations.</p></li>
+<li><p>Introduce characteristics of more complex models</p></li>
+<li><p>Overview of how fmdtools modeling classes let us represent these characteristics</p>
+<ul>
+<li><p>Classes that represent this complexity</p></li>
+<li><p>Example usages</p></li>
 </ul>
-<p>While this library primarily provides code structures, a major objective of this library is further to enable these techniques to be used in a graphical simulation tool for hazard assessment.</p>
-</section>
-<section id="introductory-tutorial">
-<h2>Introductory Tutorial<a class="headerlink" href="#introductory-tutorial" title="Link to this heading"></a></h2>
-<p><strong>The best place to start</strong> to getting acquainted with basic syntax and functionality is the <a class="reference internal" href="Intro_to_fmdtools.html"><span class="doc">Intro to fmdtools</span></a> workshop (<a class="reference download internal" download="" href="../_downloads/198411033903a80d59a76d6da8f47b74/Intro_to_fmdtools.pdf"><code class="xref download docutils literal notranslate"><span class="pre">download</span> <span class="pre">slides</span> <span class="pre">as</span> <span class="pre">pdf</span></code></a>), which uses the <cite>Pump</cite> example to introduce the overall structure and use of fmdtools. Other models are further helpful to demonstrate the full variety of methods/approaches supported in fmdtools and their application for more advanced use-cases.</p>
-<div class="toctree-wrapper compound">
-</div>
-</section>
-<section id="glossary">
-<h2>Glossary<a class="headerlink" href="#glossary" title="Link to this heading"></a></h2>
-<p>You can use the glossary as a reference to understand basic simulation and analysis concepts in fmdtools.</p>
-<dl class="simple glossary">
-<dt id="term-Action">Action<a class="headerlink" href="#term-Action" title="Link to this term"></a></dt><dd><p>A specific task to be performed by an <a class="reference internal" href="#term-Agent"><span class="xref std std-term">agent</span></a> used to represent human/autonomous operations. May be specified by extending the <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.action.Action" title="fmdtools.define.block.action.Action"><code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code></a> class and added to a <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a> as a part of an Action Sequence Graph <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitecture" title="fmdtools.define.architecture.action.ActionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitecture</span></code></a>.</p>
-</dd>
-<dt id="term-Action-Sequence-Graph">Action Sequence Graph<a class="headerlink" href="#term-Action-Sequence-Graph" title="Link to this term"></a></dt><dd><p>An instance of the <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitecture" title="fmdtools.define.architecture.action.ActionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitecture</span></code></a> which embodies a (human or autonomous) <a class="reference internal" href="#term-Agent"><span class="xref std std-term">agent</span></a>’s sequence of tasks which it performs to accomplish a certain function.</p>
-</dd>
-<dt id="term-Agent">Agent<a class="headerlink" href="#term-Agent" title="Link to this term"></a></dt><dd><p>An actor which controls behaviors in a system. May be modeled as a <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a>.</p>
-</dd>
-<dt id="term-Architecture">Architecture<a class="headerlink" href="#term-Architecture" title="Link to this term"></a></dt><dd><p>Composition of blocks. Defined using <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">Architecture</span></code></a> and its sub-classes.</p>
-</dd>
-<dt id="term-Behavior">Behavior<a class="headerlink" href="#term-Behavior" title="Link to this term"></a></dt><dd><p>How the states of a system unfold over time, including in the various <a class="reference internal" href="#term-Mode"><span class="xref std std-term">mode</span></a> s it may encounter. Defined in <a class="reference internal" href="#term-Function"><span class="xref std std-term">Function</span></a> s, <a class="reference internal" href="#term-Component"><span class="xref std std-term">Component</span></a> s, and <a class="reference internal" href="#term-Action"><span class="xref std std-term">Action</span></a> s using <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.behavior()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.static_behavior()</span></code>, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.dynamic_behavior()</span></code>.</p>
-</dd>
-<dt id="term-Behavior-Over-Time">Behavior Over Time<a class="headerlink" href="#term-Behavior-Over-Time" title="Link to this term"></a></dt><dd><p>How a the states of a system unfold over time. Defined using <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a>.</p>
-</dd>
-<dt id="term-Component">Component<a class="headerlink" href="#term-Component" title="Link to this term"></a></dt><dd><p>A physical component that embodies specific behavior for a <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a>. May have <a class="reference internal" href="#term-Mode"><span class="xref std std-term">mode</span></a> s and <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> s of its own. Specified by extending the <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.component.Component" title="fmdtools.define.block.component.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a> class.</p>
-</dd>
-<dt id="term-Component-Architecture">Component Architecture<a class="headerlink" href="#term-Component-Architecture" title="Link to this term"></a></dt><dd><p>The physical embodiment of a <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a> that encompasses multiple <a class="reference internal" href="#term-Component"><span class="xref std std-term">Component</span></a> s. Represented via the <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.component.ComponentArchitecture" title="fmdtools.define.architecture.component.ComponentArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComponentArchitecture</span></code></a> class.</p>
-</dd>
-<dt id="term-Cost">Cost<a class="headerlink" href="#term-Cost" title="Link to this term"></a></dt><dd><p>A metric used to define severity of a scenario. While cost is defined in a monetary sense, it should often be defined holistically to account for indirect costs and externalities (e.g., safety, disruption, etc). One of the default outputs from <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable.classify" title="fmdtools.define.block.base.Simulable.classify"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.block.base.Simulable.classify()</span></code></a> for models or blocks.</p>
-</dd>
-<dt id="term-Disturbances">Disturbances<a class="headerlink" href="#term-Disturbances" title="Link to this term"></a></dt><dd><p>A specific sequence of variable values over time which may modify system behavior.</p>
-</dd>
-<dt id="term-Dynamic-Propagation">Dynamic Propagation<a class="headerlink" href="#term-Dynamic-Propagation" title="Link to this term"></a></dt><dd><p>The progression of model states over time. Defined for each function using <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.block.Function.dynamic_behavior()</span></code>, which runs once per timestep. The dynamic <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> s are propagated using the method <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.block.Function.static_behavior()</span></code>, which may run multiple times in a timestep until behavior has converged. The static <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> s are propagated through the graph using the method <code class="xref py py-meth docutils literal notranslate"><span class="pre">propagate()</span></code>.</p>
-</dd>
-<dt id="term-End-state">End-state<a class="headerlink" href="#term-End-state" title="Link to this term"></a></dt><dd><p>The state of a <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code></a> at the final time-step of a simulation.</p>
-</dd>
-<dt id="term-Endclass">Endclass<a class="headerlink" href="#term-Endclass" title="Link to this term"></a></dt><dd><p>The end-state classification given from <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable.classify" title="fmdtools.define.block.base.Simulable.classify"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.block.base.Simulable.classify()</span></code></a>.</p>
-</dd>
-<dt id="term-Environment">Environment<a class="headerlink" href="#term-Environment" title="Link to this term"></a></dt><dd><p>The uncontrolled aspect of a system which may effect system inputs and behaviors. May be modeled as a <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a>.</p>
-</dd>
-<dt id="term-Expected-Cost">Expected Cost<a class="headerlink" href="#term-Expected-Cost" title="Link to this term"></a></dt><dd><p>A metric used to define risk of a scenario, calculated my multiplying the <a class="reference internal" href="#term-Rate"><span class="xref std std-term">rate</span></a> and <a class="reference internal" href="#term-Cost"><span class="xref std std-term">cost</span></a>.</p>
-</dd>
-<dt id="term-Fault-Mode">Fault Mode<a class="headerlink" href="#term-Fault-Mode" title="Link to this term"></a></dt><dd><p>Undesired <a class="reference internal" href="#term-Mode"><span class="xref std std-term">mode</span></a>, which leads to hazardous behavior. For example, a lamp may have “burn-out” due to a “flicker” mode.</p>
-</dd>
-<dt id="term-Flow">Flow<a class="headerlink" href="#term-Flow" title="Link to this term"></a></dt><dd><p>A data structure which connects functions–traditionally energy, material, or signal. Defined using the <a class="reference internal" href="fmdtools.define.flow.html#fmdtools.define.flow.base.Flow" title="fmdtools.define.flow.base.Flow"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flow</span></code></a> class.</p>
-</dd>
-<dt id="term-FMEA">FMEA<a class="headerlink" href="#term-FMEA" title="Link to this term"></a></dt><dd><p>A table outlining the risks of hazardous <a class="reference internal" href="#term-Scenario"><span class="xref std std-term">scenario</span></a> s in terms of their rate, severity, and expected risk. By default, the <a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tabulate</span></code></a> module produces cost-based FMEAs, with the metrics of interest being <a class="reference internal" href="#term-Rate"><span class="xref std std-term">rate</span></a>, <a class="reference internal" href="#term-Cost"><span class="xref std std-term">cost</span></a>, and <a class="reference internal" href="#term-Expected-Cost"><span class="xref std std-term">expected cost</span></a>, however these functions can be tailored to the metrics of interest.</p>
-</dd>
-<dt id="term-FRDL">FRDL<a class="headerlink" href="#term-FRDL" title="Link to this term"></a></dt><dd><p>See: <a class="reference internal" href="#term-Functional-Reasoning-Design-Language"><span class="xref std std-term">Functional Reasoning Design Language</span></a>.</p>
-</dd>
-<dt id="term-Function">Function<a class="headerlink" href="#term-Function" title="Link to this term"></a></dt><dd><p>A piece of functionality in a system which has its own defined behavior, modes, and flow connections, and may be further instantiated by a <a class="reference internal" href="#term-Component-Architecture"><span class="xref std std-term">component architecture</span></a> or <a class="reference internal" href="#term-Action-Sequence-Graph"><span class="xref std std-term">action sequence graph</span></a>. In general, functions are the main building block of a model defining how the different pieces of the system behave. Functions in fmdtools are specified by extending the <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a> class.</p>
-</dd>
-<dt id="term-Functional-Architecture">Functional Architecture<a class="headerlink" href="#term-Functional-Architecture" title="Link to this term"></a></dt><dd><p>Composition of <a class="reference internal" href="#term-Function"><span class="xref std std-term">Function</span></a> and <a class="reference internal" href="#term-Flow"><span class="xref std std-term">Flow</span></a> objects in an overall <a class="reference internal" href="#term-Architecture"><span class="xref std std-term">Architecture</span></a> that enables <a class="reference internal" href="#term-Propagation"><span class="xref std std-term">propagation</span></a> of behaviors between <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a> s.</p>
-</dd>
-<dt id="term-Functional-Reasoning-Design-Language">Functional Reasoning Design Language<a class="headerlink" href="#term-Functional-Reasoning-Design-Language" title="Link to this term"></a></dt><dd><p>Language used to define/represent the network structure and behavioral propagation of an <a class="reference internal" href="#term-Architecture"><span class="xref std std-term">Architecture</span></a>.</p>
-</dd>
-<dt id="term-Graph">Graph<a class="headerlink" href="#term-Graph" title="Link to this term"></a></dt><dd><p>A view of simulation construct connections and/or relationships embodied by the <code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code> class and sub-classes (which uses networkx to represent the structure itself).</p>
-</dd>
-<dt id="term-Internal-Flow">Internal Flow<a class="headerlink" href="#term-Internal-Flow" title="Link to this term"></a></dt><dd><p>A flow object that is internal to a <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a> which is not present in the overall model definition.</p>
-</dd>
-<dt id="term-Mode">Mode<a class="headerlink" href="#term-Mode" title="Link to this term"></a></dt><dd><p>Discrete modifications of a <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> specified as entries in the <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Mode()</span></code></a> class. Often used to control if/else statements in a <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> method within a <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a>.</p>
-</dd>
-<dt id="term-Model">Model<a class="headerlink" href="#term-Model" title="Link to this term"></a></dt><dd><p>A simulation that defines system behavior. Models contain functions and flows, their graph connections, parameters related to the simulation configuration, as well as methods for classifying simulations.</p>
-</dd>
-<dt id="term-Model-History">Model History<a class="headerlink" href="#term-Model-History" title="Link to this term"></a></dt><dd><p>A history of model states over a set of time steps defined in <a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><code class="xref py py-class docutils literal notranslate"><span class="pre">History</span></code></a>. Returned in fmdtools as a nested dictionary from methods in <a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.propagate" title="fmdtools.sim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">propagate</span></code></a>.</p>
-</dd>
-<dt id="term-Nested-Approach">Nested Approach<a class="headerlink" href="#term-Nested-Approach" title="Link to this term"></a></dt><dd><p>The result of simulating a fault sampling <span class="xref std std-term">Approach</span> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.SampleApproach" title="fmdtools.sim.sample.SampleApproach"><code class="xref py py-class docutils literal notranslate"><span class="pre">SampleApproach</span></code></a>) within a nominal <span class="xref std std-term">Approach</span> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterSample</span></code></a>). Created in <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nested_sample" title="fmdtools.sim.propagate.nested_sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">nested_sample()</span></code></a>.</p>
-</dd>
-<dt id="term-Operational-Mode">Operational Mode<a class="headerlink" href="#term-Operational-Mode" title="Link to this term"></a></dt><dd><p>Defined <a class="reference internal" href="#term-Mode"><span class="xref std std-term">mode</span></a> that the system progresses through as a part of its desired functioning. For example, a light switch may be in “on” and “off” modes.</p>
-</dd>
-<dt id="term-Propagation">Propagation<a class="headerlink" href="#term-Propagation" title="Link to this term"></a></dt><dd><p>The simulation of <code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code> <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> s, including the passing of <a class="reference internal" href="#term-Flow"><span class="xref std std-term">flow</span></a> s between <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a> s and the progression of model states over time.</p>
-</dd>
-<dt id="term-Rate">Rate<a class="headerlink" href="#term-Rate" title="Link to this term"></a></dt><dd><p>The expected occurrence (frequency) of a given <a class="reference internal" href="#term-Mode"><span class="xref std std-term">mode</span></a>, which may be specified in a number of ways in the <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.container.mode.Mode</span></code></a> class.</p>
-</dd>
-<dt id="term-Resilience">Resilience<a class="headerlink" href="#term-Resilience" title="Link to this term"></a></dt><dd><p>The expectation of defined performance metrics over time over a set of hazardous <a class="reference internal" href="#term-Scenario"><span class="xref std std-term">scenario</span></a> s, often defined in terms of the deviation from their nominal values.</p>
-</dd>
-<dt id="term-Role">Role<a class="headerlink" href="#term-Role" title="Link to this term"></a></dt><dd><p>A defined attribute of an fmdtools class which refers to a user-defined (or default) subclass of a corresponding fmdtools data structure. For example, Blocks have the container <cite>Block.s</cite> (for state) which may be filled by a subclass of <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a>.</p>
-</dd>
-<dt id="term-Sample">Sample<a class="headerlink" href="#term-Sample" title="Link to this term"></a></dt><dd><p>A set of <a class="reference internal" href="#term-Scenario"><span class="xref std std-term">scenario</span></a> s to simulate a model over to represent certain hazards or parameters of interest. May be generated using <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.FaultSample" title="fmdtools.sim.sample.FaultSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">FaultSample</span></code></a> for fault modes or <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterSample</span></code></a> for nominal parameters.</p>
-</dd>
-<dt id="term-Scenario">Scenario<a class="headerlink" href="#term-Scenario" title="Link to this term"></a></dt><dd><p>A specific set of inputs to a simulation, including <span class="xref std std-term">parameters</span>, <a class="reference internal" href="#term-Fault-Mode"><span class="xref std std-term">Fault Mode</span></a> s, and <a class="reference internal" href="#term-Disturbances"><span class="xref std std-term">Disturbances</span></a>. Defined in <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.Scenario" title="fmdtools.sim.scenario.Scenario"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scenario</span></code></a>.</p>
-</dd>
-<dt id="term-Static-Propagation">Static Propagation<a class="headerlink" href="#term-Static-Propagation" title="Link to this term"></a></dt><dd><p>The undirected propagation of model behaviors within a timestep. Defined for each function using <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.block.Function.static_behavior()</span></code>, which may run multiple times in a timestep until behavior has converged. The static <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> s are propagated through the graph using the method <code class="xref py py-meth docutils literal notranslate"><span class="pre">prop_static()</span></code>.</p>
-</dd>
-</dl>
-</section>
-<section id="model-development-best-practices">
-<h2>Model Development Best Practices<a class="headerlink" href="#model-development-best-practices" title="Link to this heading"></a></h2>
-<section id="pay-attention-to-and-document-the-fmdtools-version">
-<h3>Pay attention to and document the fmdtools version<a class="headerlink" href="#pay-attention-to-and-document-the-fmdtools-version" title="Link to this heading"></a></h3>
-<p>As a research-oriented tool, much of the fmdtools interfaces can be considered to be “in development.” While we want to keep the repository stable, there have been many changes to syntax over the years to provide enhanced functionality and usages.</p>
-<p>As such, it can be helpful to document what fmdtools version you are running in a README.md for your project, so you can always have a working model and replicate results, even if something has changed on the toolkit-level.</p>
-<p>This also helps us (as developers) address bugs which affect specific versions of fmdtools, as well as identify bugs which were introduced in updates.</p>
-</section>
-<section id="plan-your-model-to-avoid-technical-debt">
-<h3>Plan your model to avoid technical debt<a class="headerlink" href="#plan-your-model-to-avoid-technical-debt" title="Link to this heading"></a></h3>
-<p>Simple, small models are relatively easy to define in fmdtools with a few functions, flows, and behaviors. As such, it can be easy to get in the habit of not planning or organizing development systematically, which leads to issues when developing larger models. Specifically, code that is <em>written into existence</em> instead of designed, planned, edited, tested, and documented. This leads to <a class="reference external" href="https://en.wikipedia.org/wiki/Technical_debt">Technical debt</a>, which is the inherent difficulty of modifying code that was written ad-hoc rather than designed. Unless this technical debt is resolved, the ability to modify a model (e.g., to add new behaviors, conduct analyses, etc) will be limited by the complicated and unwieldy existing code.</p>
-<p>The next subsections give some advice to help avoid technical debt, based on lessons learned developing fmdtools models over the past few years.</p>
-</section>
-<section id="make-and-frdl-diagram-first">
-<h3>Make and FRDL Diagram First<a class="headerlink" href="#make-and-frdl-diagram-first" title="Link to this heading"></a></h3>
-<p>The FRDL ontology (see: <a class="reference internal" href="frdl.html#frdl"><span class="std std-ref">FRDL</span></a>) was designed to help define system functional architectures in a way that comports with simulation in fmdtools.</p>
-<p>As such, as a part of planning what a model is supposed to represent, it can be helpful to define the system in FRDL first, to fully outline the scope, behaviors, and key interactions of the model will be. This diagram can help make key system architecture decisions as well, keep track of what the overall goal-state of the model is to be, and help keep track of certain interaction details that can be helpful when explaining and debugging simulations.</p>
-</section>
-<section id="use-model-constructs-to-simplify-your-code">
-<h3>Use model constructs to simplify your code<a class="headerlink" href="#use-model-constructs-to-simplify-your-code" title="Link to this heading"></a></h3>
-<p>The fmdtools codebase is quite large, and, as a result, it can be tempting to dive into modeling before learning about all of its capabilities. The problem with this is that many of these capabilities and interfaces are there to make your life easier, provided you understand and use them correctly. Below are some commonly-misunderstood constructs to integrate into your code:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a> has a number of very basic operations which can be used in all containers to reduce the length of lines dedicated solely to assignment and passing variables between constructs. Using these methods can furthermore enable one to more simply perform vector operations with reduced syntax.</p></li>
-<li><p><a class="reference internal" href="fmdtools.define.object.html#fmdtools.define.object.timer.Timer" title="fmdtools.define.object.timer.Timer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Timer</span></code></a> can be used very simply to represent timed behavior and state-transitions.</p></li>
-<li><p>While modes can be used to describe fault modes in a very general way, faulty behavior that can also be queried from the model using the concept of a <em>disturbance</em>, which is merely a change in a given variable value. While disturbances are less general, they require much less to be implemented in the model. Disturbances can be passed as an argument (as a dict or as a part of a Sequence class) to <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.sequence" title="fmdtools.sim.propagate.sequence"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sequence()</span></code></a></p></li>
-<li><p><a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> and parameter-generating functions are helpful for understanding the model operating envelope. In general, try to avoid having parameters that duplicate each other in some way.</p></li>
-<li><p>Randomness can be used throughout, but use the specified interfaces (<a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.rand.Rand" title="fmdtools.define.container.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a>, etc.) so that a single seed is used to generate all of the rngs in the model. Not using these interfaces can lead to not being able to replicate results consistently.</p></li>
-<li><p>A variety of custom attributes can be added to <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a> and <a class="reference internal" href="fmdtools.define.flow.html#fmdtools.define.flow.base.Flow" title="fmdtools.define.flow.base.Flow"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flow</span></code></a>, but not every custom attribute is going to work with staged execution and parallelism options. In general, use containers to represent things that change and parameters to represent things that don’t change. If you want to do something fancy with data structures, you may need to re-implement <a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.base" title="fmdtools.define.block.base"><code class="xref py py-class docutils literal notranslate"><span class="pre">base</span></code></a> methods for copying and returning states to <cite>propagate</cite>.</p></li>
-<li><p>If there’s something that you’d like to do in an fmdtools model that is difficult with existing model structures, consider filing a bug report before implementing an ad-hoc solution. Alternatively, try developing your solution as a <em>feature</em> rather than a hack to solve a single use-case. If the features is in our scope and well-developed, we may try to incorporate it in our next release.</p></li>
-</ul>
-</section>
-<section id="don-t-copy-inherit-and-functionalize">
-<h3>Don’t copy, inherit and functionalize<a class="headerlink" href="#don-t-copy-inherit-and-functionalize" title="Link to this heading"></a></h3>
-<p>Copy-and-paste can be a useful concept, but often gets over-relied upon by novice model developers who want to create several variants of the same programming structure. However, in the world of systems engineering (and software development), there are many cases where developers should be using <a class="reference external" href="https://www.w3schools.com/python/python_inheritance.asp">class inheritance</a> and <a class="reference external" href="https://ucsbcarpentry.github.io/2019-10-10-Python-UCSB/14-writing-functions/">writing functions</a> instead.</p>
-<p>The advantages of inheritance are:</p>
-<ol class="arabic simple">
-<li><p>It reduces the bulk amount of code required to represent functions, making code more comprehensible.</p></li>
-<li><p>It makes the distinction between similar classes easier to distinguish, since <em>there is no redundant code</em>.</p></li>
-<li><p>It makes it easier to edit code afterward, since the developer <em>only has to edit in one place</em> for it to apply to all the relevant types.</p></li>
-<li><p>It makes testing easier, since common methods only need to be tested once.</p></li>
-</ol>
-<p>In fmdtools, these patterns can be helpful:</p>
-<ul class="simple">
-<li><p>Instead of creating two very similar <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a> classes (e.g. Drone and PilotedAircraft) and copying code between each, create a single class (e.g. Aircraft) with common methods/structures (e.g., Fly, Taxi, Park, etc.) and then use sub-classes to extend and/or replace methods/structures in the common class as needed (e.g., Autonomous Navigation in the Drone vs. Piloted Navigation in the normal aircraft).</p></li>
-<li><p>Instead copying code for the same operations to several different places in a model, write a single function instead. This method can then be documented/tested and extended to a variety of different use-cases which require the same basic operation to be done.</p></li>
-</ul>
-<p>This is an incomplete list. In general, it can be a helpful limitation to <em>try to avoid using copy-and-paste as much as possible.</em> Instead if a piece of code needs to be run more than once in more than once place, write a function or method which will be used everywhere. The idea should be to <em>write the code once, and run it everywhere.</em></p>
-</section>
-<section id="document-your-code-sometimes-before-your-write-it">
-<h3>Document your code, sometimes <em>before</em> your write it<a class="headerlink" href="#document-your-code-sometimes-before-your-write-it" title="Link to this heading"></a></h3>
-<p>In general, Python coding style aspires to be <a class="reference external" href="https://en.wikipedia.org/wiki/Self-documenting_code">as self-documenting</a> as possible. However, this is not a replacement for documentation. In general, novice developers think of documentation as something which happens at the end of the software development process, as something to primarily assist users.</p>
-<p>This neglects the major benefits of documentation in the development process. Specifically:</p>
-<ol class="arabic simple">
-<li><p>it helps other people understand how to use and <em>contribute to</em> your code,</p></li>
-<li><p>it helps define what your code is supposed to do, its interfaces, and the desired behavior, and</p></li>
-<li><p>as a result, it helps you understand your code.</p></li>
-</ol>
-<p>For fmdtools models, documentation should at the very least take the following form:</p>
-<ul class="simple">
-<li><p>A README (in markdown or rst) that explains how to set up the model environment (e.g., requirements/dependencies), as well as explains the structure of the folder/repo (model file, tests, analyses, etc.)</p></li>
-<li><p>Documented examples of using the code. Usually you can use a jupyter notebook for this to show the different analyses you can run with your model.</p></li>
-<li><dl class="simple">
-<dt>Docstrings document the classes and functions which make up your model. These are most important for development and should include:</dt><dd><ul>
-<li><p>An overall module description (top of file)</p></li>
-<li><p>Docstrings for flows: What does the state represent? What are the states? What values may these take?</p></li>
-<li><p>Docstrings for <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a>: What are the states, parameters, behaviors, and modes?</p></li>
-<li><p>For any method/function, try to follow existing docstring conventions, with a summary of the purpose/behavior of the method, and a description of all input/output data types.</p></li>
-</ul>
-</dd>
-</dl>
 </li>
 </ul>
-<p>Documentation can best be thought of as a <em>contract that your code should fulfill</em>. As such, it can be very helpful to think of the documentation first, as a way of specifying your work. Tests (formal and informal) can then be defined based on the stated behavior of the function. It is thus recommended to <em>document your code as you write it</em>, instead of waiting until the end of the development process, to avoid technical debt.</p>
 </section>
-<section id="don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">
-<h3>Don’t get ahead of yourself–try to get a running simulation first<a class="headerlink" href="#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first" title="Link to this heading"></a></h3>
-<p>In the model development process, it can often be tempting to try to model every single mode or behavior in immense detail from the get-go. This is motivated by a desire to achieve realism, but can lead to issues from a project management and integration perspective. A model does not have much meaning outside a simulation or analysis, and, as such, development needs to be motivated <em>first</em> by getting a working simulation and <em>then</em> by adding detail. These simulations are the key feedback loop for determining whether model code is embodying desired behavior.</p>
-<p>A very basic model development process should thus proceed:</p>
-<ol class="arabic simple">
-<li><p>Create Architecture file and create place-holder major function/flow classes</p></li>
-<li><p>Connect classes in a Architecture file and visualize structure</p></li>
-<li><p>Create low-fidelity model behaviors and verify in nominal scenario</p></li>
-<li><p>Add hazard metrics in <cite>classify</cite></p></li>
-<li><p>Add more detailed behaviors (e.g., modes, actions, components, etc) as needed</p></li>
-<li><p>Perform more complex analyses…</p></li>
-</ol>
-<p>In general, it is bad to spend a lot of time developing a model without running any sort of simulation for verification purposes. This toolkit has been designed to enable the use of simulations early in the development process, and it is best to use these features earlier rather than later.</p>
-<p>Finally, <em>smaller, incremental iterations are better than large iterations.</em> Instead of spending time implementing large sections of code at once (with documentation and testing TBD), instead implement small sections of code that you can then document, test, and edit immediately after. Using these small iterative cycles can increase code quality by ensuring that large blocks of undocumented/untested (and ultimately unreliable) code don’t make it into your project, only for you to have to deal with it later.</p>
-</section>
-<section id="preserve-your-prototype-setup-by-formalizing-it-as-a-test">
-<h3>Preserve your prototype setup by formalizing it as a test<a class="headerlink" href="#preserve-your-prototype-setup-by-formalizing-it-as-a-test" title="Link to this heading"></a></h3>
-<p>Testing code is something which is often neglected in the development process, as something to do when the project is finished (i.e., as an assurance rather than development task). Simultaneously, developers often iterate over temporary scripts and code snippets during development to ensure that it works as expected in what is essentially an informal testing process. The major problem with this process is that these tests are easily lost and are only run one at a time, making it difficult to verify that code works after it has been modified.</p>
-<p>Instead, it is best to <em>formalize scripts into tests</em>. This can be done with Python’s <a class="reference external" href="https://docs.python.org/3/library/unittest.html">unittest</a> module, which integrates well with existing python IDEs and enables execution of several different tests in a sequence. Instead of losing prototype code, one can easily place this code into a <cite>test_X</cite> method and use it iteratively in the development process to ensure that the code still works as intended. This is true even for more “qualitative” prototype script, where the output that is being iterated over is a plot of results. Rather than abandoning a prototyping setup like this, (e.g., by commenting it out), a much better approach is to formalize the script as a test which can be run at the will of the user when desired. In this case, the plot should show the analysis and describe expected results so that it can be quickly verified. The testing of plots is enabled with the function <a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.suite_for_plots" title="fmdtools.analyze.common.suite_for_plots"><code class="xref py py-func docutils literal notranslate"><span class="pre">suite_for_plots()</span></code></a>, which enables you to filter plotting tests out of a model’s test suite (or specify only running specific tests/showing specific plots).</p>
-<p>While testing is an assurance activity, it should also be considered a development activity. Testing ensures that the changes made to code do not cause it to take on undesired behaviors, or be unable to operate with its interfacing functions. To enable tests to continue to be useful through the modelling process, they should be given meaningful names as well as descriptions describing what is being tested by the test (and why).</p>
-<p>Finally, do not create tests solely to create tests. Tests should have a specific purpose in mind, ideally single tests should cover as many considerations as possible, rather than creating new tests for each individual consideration. As in model development, try to avoid bloat as much as possible. If the desire is to cover every edge-case, try to parameterize tests over these cases instead of creating individual test methods.</p>
-</section>
-<section id="edit-your-code">
-<h3>Edit your code<a class="headerlink" href="#edit-your-code" title="Link to this heading"></a></h3>
-<p>The nature of writing code is a messy process–often we spend a considerable amount of time getting code to a place where it “works” (i.e., runs) and leave it as-is. The problem with doing this over and over is that it neglects the syntax, documentation, and structural aspects of coding and thus contributes to technical debt. One of the best ways to avoid this from impacting development too much is to edit code after writing it.</p>
-<p>Editing is the process of reviewing the code, recognizing potential (functional and stylistic) problems, and ultimately revising the code to resolve these problems. In this process, all of the following concerns should be considered:</p>
+<section id="what-makes-a-system-complex-smaller">
+<h1>What makes a system complex? {.smaller}<a class="headerlink" href="#what-makes-a-system-complex-smaller" title="Link to this heading"></a></h1>
+<p><img alt="" src="../_images/sos_model_characteristics.svg" /></p>
+<p>The broader socio-technical system:</p>
 <ul class="simple">
-<li><p>Do the data structures make logical sense? Are they used systematically throughout the project?</p></li>
-<li><p>Are operations organized with a logical structure? Is it easy to see what is performed in what sequence? Are lines too long?</p></li>
-<li><p>Are naming and stylistic conventions being followed? Do variables have self-explanatory names? Are names being spelled correctly?</p></li>
-<li><p>Are lines too long? Are there too many nested statements?</p></li>
-<li><p>Are the methods/classes fully documented?</p></li>
-<li><p>Will the functions work in every possible case implied by the documentation?</p></li>
-<li><p>Is inheritance being used correctly?</p></li>
-<li><p>Is the code re-inventing existing fmdtools structure or syntax or going against existing protocols?</p></li>
-<li><p>Does it pass all tests?</p></li>
-</ul>
-<p>This is an incomplete list. The point is to regularly review and improve code <em>after it is implemented to minimize future technical debt</em>. Waiting to edit will cause more hardship down the line.</p>
-</section>
-<section id="structuring-a-model">
-<h3>Structuring a model<a class="headerlink" href="#structuring-a-model" title="Link to this heading"></a></h3>
-<p>fmdtools was originally developed around a very simple use-case of modeling physical behaviors using a Function/Flow ontology, where Functions (referred to as “technical functions”) are supposed to be the high-level roles to be performed in the system, while flows are the data passed between these roles (energy, material, or signal).  Many of the models in the repository were developed to follow this form, or some variation of it, however, more complex modeling use-cases have led us to expand our conception of what can/should be modeled with a function or flow. More generally,</p>
-<ul class="simple">
-<li><p>Flows define <em>shared data structures</em>, meaning interacting variables and</p></li>
-<li><p>Functions define <em>behaviors</em>, meaning things to be done to flows.</p></li>
-</ul>
-<p>These functions and flows are connected via containment relationships in an undirected graph, meaning that functions can be run in any order within a time-step to enable faults to propagate throughout the model graph. This is a very general representation, but also leads to pit-falls if the model is too complex, since this behavior needs to be convergent within each timestep. The following gives some advice for conventions to follow in models based on their size/scope.</p>
-<p><strong>Small Models</strong></p>
-<p>Small models have a few functions with simple behaviors that are being loaded in simple ways. A good example of this is the <a class="reference internal" href="../examples/water_pump/demo_fault_analysis.html"><span class="doc">Pump Example</span></a> and <span class="xref std std-doc">EPS Example</span> , where the model is a simple translation of inputs (defined in input functions) to outputs (defined in output functions). These models have the most ability to follow the <a class="reference external" href="https://link.springer.com/article/10.1007/s00163-001-0008-3">Functional Basis modeling ontology</a> (with <cite>import_x</cite> being inputs and <cite>output_x</cite> being outputs of the system), as well as use static_behavior methods. It is also possible to model many different modes with full behavioral detail, since the system itself is not too complicated. Technical debt and development process is less of a consideration in these models, but should still not be ignored. A typical structure for a model would be:</p>
-<ul class="simple">
-<li><dl class="simple">
-<dt>Architecture</dt><dd><ul>
-<li><dl class="simple">
-<dt>flows</dt><dd><ul>
-<li><p>X</p></li>
-<li><p>Y</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>functions</dt><dd><ul>
-<li><p>Import_X</p></li>
-<li><p>Change_X_to_Y</p></li>
-<li><p>Export_Y</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-<p><strong>System Models</strong></p>
-<p>Moderate-size system models are models which have a control/planning system (e.g., something that tells it what to do at any given time). They also often interact with their environment in complex ways. A typical structure for a model would be:</p>
-<ul class="simple">
-<li><dl class="simple">
-<dt>Architecture</dt><dd><ul>
-<li><dl class="simple">
-<dt>flows</dt><dd><ul>
-<li><p>Environment, Location, etc            (place the system is located in and its place in it)</p></li>
-<li><p>Power, Actions, etc                           (internal power/other physical states)</p></li>
-<li><p>Commands,Communications, etc  (external commands/comms with an operator)</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>functions</dt><dd><ul>
-<li><p>Affect_Environment                            (Physical behaviors the system performs on the environment)</p></li>
-<li><p>Control_System                                        (Controls, Planning, Perception, etc)</p></li>
-<li><p>Distribute_Energy, Hold_X, etc        (Internal components, etc)</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-<p>A good example of this are the Drone and Rover models. Models like this are simply more complex and thus require more care and attention to avoid the accumulation of technical debt. It may be desirable for some of the more complex functions to be specified tested in isolation, and developed in their own files. Finally, flows such as <cite>Environment</cite> may require developing custom visualization methods (maps, etc) to show the how the system interacts with its environment.</p>
-<p><strong>System of Systems Models</strong></p>
-<p>Systems of Systems models involve the interaction of multiple systems in a single model. These models are much more complex and thus require very good development practices to develop to maturity. A typical structure for a model for this might be:</p>
-<ul class="simple">
-<li><dl class="simple">
-<dt>Architecture</dt><dd><ul>
-<li><dl class="simple">
-<dt>flows</dt><dd><ul>
-<li><p>Environment                                           (place the systems are located in)</p></li>
-<li><p>Location(s)                                           (individual states of the agents)</p></li>
-<li><p>Communication(s)                              (agent interactions with each other</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>functions</dt><dd><ul>
-<li><p>Asset/Agent(s)                                        (individual system models)</p></li>
-<li><p>AgentController(s)                            (coordinator which issues commands to each system)</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Note that, unlike other model types, System of Systems models very often will have multiple copies of functions and flows instantiated in the model. As a result, it is important to use dedicated model structures to the overall structure from being intractable. Specifically, multiple copies of flows can be handled using the <cite>MultiFlow</cite> class while Communications between agents can be handled using the <cite>CommsFlow</cite> class. The <cite>ModelTypeGraph</cite> graph representation can be used to represent the model as just the types involved (rather than all instantiations). In general, it can be helpful to create tests/analyses for individual agents in addition to the overall system.</p>
-</section>
-<section id="structuring-your-project-repository">
-<h3>Structuring your Project Repository<a class="headerlink" href="#structuring-your-project-repository" title="Link to this heading"></a></h3>
-<p>When you use fmdtools for your own project, this code will invariably end up in a folder.</p>
-<p>Best practice is to structure this folder using modern Python software development tools and standards (e.g., uv, git, pyproject.toml, pytest, etc). Meaning:
-1. Set up your folder as a git repository so you have version control.
-2. Use uv to manage your project, its dependencies, and set up a virtual environment for your project (ideally independent of others)
-3. Set up your repository using a git editable install (e.g., <cite>uv pip install -e .</cite>) to ensure consistency between your installation and builds
-4. Document project dependencies and usage in the README and pyproject.toml</p>
-<p>When it comes to structuring folders for various simulations, we have adopted the following conventions (see <cite>/examples</cite> in the repository):</p>
-<ul class="simple">
-<li><p>Models should be named <cite>model_variantname.py</cite>, where variantname is the variant in the file. If there is a main model, name it <cite>model_main.py</cite>.</p></li>
-<li><p>Tests should be named <cite>test_testname.py</cite> (standard python conventions).</p></li>
-<li><p>Scripts should be named <cite>script_scriptname.py</cite>.</p></li>
-<li><p>Notebooks should be named <cite>notebooktype_notebookname.ipynb</cite>, where <cite>notebooktype</cite> is the type of notebook (e.g., <cite>paper</cite> for generating figures for a paper or <cite>demo</cite> for showcasing a project)</p></li>
-<li><p>Any and all outputs from these files should be placed in folders with the name <cite>outputs_generating_file_name/</cite></p></li>
-</ul>
-<p>These conventions help keep repositories from getting too cluttered and ensure that you can quickly find the file you need and understand its need and purpose.</p>
-<p>If your project gets big, or you have multiple models with shared classes, you may consider building a library out of it. In this case <cite>examples/airspacelib</cite> or the fmdtools library itself may be a good example of how to structure the folder.</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">src/libraryname/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">folder</span> <span class="pre">for</span> <span class="pre">library</span> <span class="pre">packages</span>
-<span class="pre">examples/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">folder</span> <span class="pre">for</span> <span class="pre">examples</span> <span class="pre">or</span> <span class="pre">usages</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">libary</span>
-<span class="pre">tests/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">folder</span> <span class="pre">for</span> <span class="pre">tests</span> <span class="pre">and</span> <span class="pre">pytest</span> <span class="pre">configuration</span>
-<span class="pre">docs/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">folder</span> <span class="pre">for</span> <span class="pre">documentation</span>
-<span class="pre">pyproject.toml</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Overall</span> <span class="pre">library</span> <span class="pre">configuration</span> <span class="pre">for</span> <span class="pre">tools</span>
-<span class="pre">README.md</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Readme</span> <span class="pre">and</span> <span class="pre">overview</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">library</span>
-<span class="pre">`</span></code></p>
-<p>In this case, the contents of examples would apply the naming schema above, while the library itself would have shorter names (e.g., names of their contained class(es)).</p>
-</section>
-<section id="style-advice">
-<h3>Style advice<a class="headerlink" href="#style-advice" title="Link to this heading"></a></h3>
-<p>Development of fmdtools models should follow the <a class="reference external" href="https://peps.python.org/pep-0008/#introduction">PEP 8 Style Guide</a> as much as possible. While this won’t be entirely re-iterated here, the following applies:</p>
-<ul class="simple">
-<li><dl class="simple">
-<dt>Use CamelCase for classes like <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.function.FunctionArchitecture" title="fmdtools.define.architecture.function.FunctionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitecture</span></code></a>, <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a>, <a class="reference internal" href="fmdtools.define.flow.html#fmdtools.define.flow.base.Flow" title="fmdtools.define.flow.base.Flow"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flow</span></code></a>, etc. Use lowercase for object instantiations of these classes, and lower_case_with_underscores (e.g. do_this()) for methods/functions.</dt><dd><ul>
-<li><p>if a model class is named Model (e.g., Drone), the instance can be named model_X, where X is an identifying string for the model being used (e.g. drone_test).</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><p>Names should be descriptive, but keep the length down. Use abbreviations if needed.</p></li>
-<li><p>Try to use the code formatting structure to show what your code is doing as much as possible. Single-line if statements can be good for this, as long as they don’t go too long.</p></li>
-<li><p>Python one-liners can be fun, but try to keep them short enough to be able to read.</p></li>
-<li><p>If a file is &gt;1000 lines, you may want to split it into multiple files, for the model, complex classes, visualization, analysis, tests, etc.</p></li>
-<li><p>fmdtools lets you specify names for functions/flows. Keep these consistent with the class names but consider making them short to enable visualization on model graphs and throughout the code.</p></li>
-<li><p>It’s <cite>fmdtools</cite>. Not <cite>Fmdtools</cite> or <cite>fmd tool</cite>. Even when it starts the sentence.</p></li>
+<li><p>Interactions between Operators, the physical system, and the Environment</p></li>
+<li><p>Example: Pilot (operator) controls the aircraft (physical system) through the airspace (environment)</p></li>
+<li><p>Safety is a result of safe interactions!</p></li>
 </ul>
 </section>
-<section id="see-also">
-<h3>See also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h3>
+<section id="how-fmdtools-can-represent-complexity">
+<h1>How fmdtools can represent complexity<a class="headerlink" href="#how-fmdtools-can-represent-complexity" title="Link to this heading"></a></h1>
+<p><img alt="" src="../_images/sos_model_classes.svg" /></p>
+</section>
+<section id="some-notes-on-architectures-smaller">
+<h1>Some Notes on Architectures {.smaller}<a class="headerlink" href="#some-notes-on-architectures-smaller" title="Link to this heading"></a></h1>
 <ul class="simple">
-<li><p><a class="reference external" href="https://peps.python.org/pep-0008/#introduction">PEP 8 Style Guide</a></p></li>
-<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Technical_debt">Technical debt</a></p></li>
-<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Code_smell">Code smell</a></p></li>
-<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Anti-pattern">Anti-patterns</a></p></li>
-<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Iterative_and_incremental_development">Iterative development</a></p></li>
-<li><p><a class="reference external" href="https://en.wikibooks.org/wiki/Python_Programming/Idioms">Python Programming Idioms</a></p></li>
-<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Zen_of_Python">The Zen of Python</a></p></li>
+<li><p>Architectures are an extension of the <code class="docutils literal notranslate"><span class="pre">FunctionArchitecture</span></code> idea covered in <a class="reference internal" href="Intro_to_fmdtools.html"><span class="std std-doc">Intro_to_fmdtools.md</span></a></p></li>
+<li><p>Architectures are just agglomerations of Blocks (Functions, Flows, or Components) and can include:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">FunctionArchitecture</span></code>: Functional behaviors and their interactions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ComponentArchitecture</span></code>: Physical Components fulfilling function(s)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ActionArchitecture</span></code>: Logical sequence of operational tasks</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GeomArchitecture</span></code>: Physical geometries in a shared space</p></li>
+</ul>
+</li>
+</ul>
+<p>These all have different use-cases–not all work as top-level models.</p>
+</section>
+<section id="example-componentarchitecture">
+<h1>Example: ComponentArchitecture<a class="headerlink" href="#example-componentarchitecture" title="Link to this heading"></a></h1>
+<p>Can be used to represent different sets of components fulfilling a given function.</p>
+<p><strong>Code Templates</strong>: See <a class="reference download internal" download="" href="../_downloads/b083d0b93621aa4f4eef82b204752219/component.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">src/fmdtools/define/block/component.py</span></code></span></a> and <a class="reference download internal" download="" href="../_downloads/2c84b9477d258c95f9ba2012b1e8d895/component.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">src/fmdtools/define/architecture/component.py</span></code></span></a></p>
+<p>Example: Different Propulsion Architectures in a Drone, see: <a class="reference internal" href="#../examples/human_hazard_mitigation.model_main.py"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">examples/human_hazard_mitigation.model_main.py</span></code></span></a></p>
+</section>
+<section id="human-actions-perceptions-and-communications">
+<h1>Human Actions, Perceptions, and Communications<a class="headerlink" href="#human-actions-perceptions-and-communications" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>Important aspects of operator behavior</p></li>
+<li><p>Also relevant to Autonomous Systems</p></li>
 </ul>
 </section>
+<section id="action-architectures-smaller">
+<h1>Action Architectures {.smaller}<a class="headerlink" href="#action-architectures-smaller" title="Link to this heading"></a></h1>
+<p>Can be used to represent different sets of actions performed in sequence or under different conditions, creating a structure like:</p>
+<p><img alt="" src="../_images/action_arch.svg" /></p>
+<p><strong>Code Templates</strong>: See <a class="reference download internal" download="" href="../_downloads/3e64e4a2915fd652c8c399f3f081cf28/action.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">src/fmdtools/define/block/action.py</span></code></span></a> and <a class="reference download internal" download="" href="../_downloads/9814a59aee7a3c40e520315045e1a101/action.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">src/fmdtools/define/architecture/action.py</span></code></span></a></p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>Human operator choosing to mitigate hazards: <a class="reference download internal" download="" href="../_downloads/8275f6ba7da77f474f1e253eec8ab5a2/model_main.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">examples/human_hazard_mitigation/model_main.py</span></code></span></a></p></li>
+<li><p>Human-operated rover: <a class="reference download internal" download="" href="../_downloads/80ebfbce858fd4e43f44faf0b950e111/model_human.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">examples/navigating_rover/model_human.py</span></code></span></a></p></li>
+<li><p>Human-operated cooling tank: <a class="reference download internal" download="" href="../_downloads/3f42d38a12a4fa6f71e1b9a2339cd3a9/model_main.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">examples/cooling_tank/model_main.py</span></code></span></a></p></li>
+</ul>
 </section>
+<section id="perceptions-multiflow-smaller">
+<h1>Perceptions - MultiFlow {.smaller}<a class="headerlink" href="#perceptions-multiflow-smaller" title="Link to this heading"></a></h1>
+<p><img alt="" src="../_images/MultiFlowStructure.svg" /></p>
+<ul class="simple">
+<li><p>Extends concept of flow with <em>multiplicity</em> - meaning local copies of shared variables can be created to represent perceptions of these variables.</p></li>
+<li><p>See: <a class="reference download internal" download="" href="../_downloads/8b12c3e4143591bcb1d0802fb227caa7/multiflow.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">src/fmdtools/define/flow/multiflow.py</span></code></span></a></p></li>
+</ul>
+<p>Example: State communication demo model: <a class="reference internal" href="#../examples/state_communication.model_main.py"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">examples/state_communication.model_main.py</span></code></span></a></p>
+</section>
+<section id="communications-commsflow-smaller">
+<h1>Communications - CommsFlow {.smaller}<a class="headerlink" href="#communications-commsflow-smaller" title="Link to this heading"></a></h1>
+<p><img alt="" src="../_images/CommsFlowStructure.svg" /></p>
+<ul class="simple">
+<li><p>Provides communications “network” for passing information between agents</p></li>
+<li><p>See: <a class="reference download internal" download="" href="../_downloads/50bddd4badbb43db1f467afc621a054f/commsflow.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">src/fmdtools/define/flow/commsflow.py</span></code></span></a></p></li>
+</ul>
+<p>Example: State communication demo model: <a class="reference internal" href="#../examples/state_communication.model_main.py"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">examples/state_communication.model_main.py</span></code></span></a></p>
+</section>
+<section id="characteristics-of-environments">
+<h1>Characteristics of Environments<a class="headerlink" href="#characteristics-of-environments" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>Needs to be broadly shared and perceived/communicated (note that <code class="docutils literal notranslate"><span class="pre">Environment</span></code> class is descendent of <code class="docutils literal notranslate"><span class="pre">CommsFlow</span></code>)</p></li>
+<li><p>External dynamic conditions (can be represented with a <code class="docutils literal notranslate"><span class="pre">Function</span></code>)</p></li>
+<li><p>Geospatial static and dynamic properties such as:</p>
+<ul>
+<li><p>Terrain, temperature, pressure, etc. (See <code class="docutils literal notranslate"><span class="pre">Coords</span></code>). See code tempaltes at <a class="reference download internal" download="" href="../_downloads/a39a6b1ceeaac4b2abed832f584754c2/coords.py"><span class="xref download myst">src/fmdtools/define/object/coords.py</span></a></p></li>
+<li><p>Usable infrastructure like roads or runways and airports for airplanes (See <code class="docutils literal notranslate"><span class="pre">GeomArchitecture</span></code>). See code templates at <a class="reference internal" href="#src/fmdtools.define/object/geom.py"><span class="xref myst">src/fmdtools.define/object/geom.py</span></a> and <a class="reference internal" href="#src/fmdtools/define/architecture/geom.py"><span class="xref myst">src/fmdtools/define/architecture/geom.py</span></a></p></li>
+</ul>
+</li>
+</ul>
+<p>Put together into a single <code class="docutils literal notranslate"><span class="pre">Environment</span></code> class, see <a class="reference internal" href="#src/fmdtools/define/environment.py"><span class="xref myst">src/fmdtools/define/environment.py</span></a></p>
+</section>
+<section id="integrated-architecture-examples">
+<h1>Integrated Architecture Examples<a class="headerlink" href="#integrated-architecture-examples" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>airspacelib Contingency Management Model (Coords+GeomArchitecture): <a class="reference download internal" download="" href="../_downloads/92c30f9ba6db647188c8ce5b8737c012/model_environment.py"><span class="xref download myst">examples/airspacelib/contingency_management/model_environment.py</span></a></p></li>
+<li><p>Line-following rover (GeomArchitecture): <a class="reference internal" href="#../examples/airspacelib/navigating_rover/model_main.py"><span class="xref myst">examples/airspacelib/navigating_rover/model_main.py</span></a></p></li>
+<li><p>airspacelib Water Rescue Model (Coords): <a class="reference download internal" download="" href="../_downloads/cc99383cfa01f93e2c725fe3fd087cda/model_environment.py"><span class="xref download myst">examples/airspacelib/water_rescue/model_environment.py</span></a></p></li>
+<li><p>Multirotor Drone (Coords): <a class="reference download internal" download="" href="../_downloads/b64661f9ec19e5dd13a089ce51fdc99f/model_urban.py"><span class="xref download myst">examples/multirotor_drone/model_urban.py</span></a></p></li>
+<li><p>Rover representing exploration (Coords): - Line-following rover (GeomArchitecture): <a class="reference internal" href="#../examples/airspacelib/navigating_rover/model_troupe.py"><span class="xref myst">examples/airspacelib/navigating_rover/model_troupe.py</span></a></p></li>
+</ul>
+</section>
+<section id="conclusions-and-tips">
+<h1>Conclusions and Tips<a class="headerlink" href="#conclusions-and-tips" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>Not every “complex system” model needs every construct</p></li>
+<li><p>The goal of a simulation should always be representing what is needed for analysis, not every conceivable aspect</p></li>
+<li><p>The fmdtools library has many different modeling constructs for this!</p></li>
+</ul>
+<p>As models become more complex, it becomes more and more important to follow our <a class="reference internal" href="best-practices.html"><span class="std std-doc">Best Practices</span></a></p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../README.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Intro_to_fmdtools.html" class="btn btn-neutral float-right" title="Overview {.smaller}" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Intro_to_fmdtools.html" class="btn btn-neutral float-left" title="Overview {.smaller}" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../examples/Examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

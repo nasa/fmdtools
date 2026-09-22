@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contributions &mdash; fmdtools 2.5.0 documentation</title>
+  <title>Contributions &mdash; fmdtools 2.5.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3c4615cf"></script>
+      <script src="../_static/documentation_options.js?v=983e91d6"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -52,7 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#demo-portfolio">Demo Portfolio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#about">About</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-modelling-paradigm">Flexible Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-ai-ready-modelling-paradigm">Flexible, AI-Ready Modelling Paradigm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
 </ul>
@@ -66,6 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#ai-llm-tips">AI/LLM Tips</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
@@ -76,9 +77,21 @@
 <li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Development%20Guide.html">Development Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#why-fmdtools">Why fmdtools?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="development-guide.html">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development-guide.html#introductory-tutorials">Introductory Tutorials</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html">Why Resilience? {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#what-is-resilience-smaller">What is Resilience? {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#related-concepts-you-may-have-heard-of">Related Concepts You May Have Heard of</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#connection-of-resilience-to-resilience-to-risk-and-safety">Connection of Resilience to Resilience to Risk and Safety</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#what-s-different-about-resilience">What’s different about resilience?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#how-to-think-about-resilience-simulations">How to think about resilience simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#what-does-that-look-like-smaller">What does that look like? {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#how-does-fmdtools-help">How does fmdtools help?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#demonstrative-example-drone-proximity-to-threat-evaluation">Demonstrative Example: Drone Proximity to Threat Evaluation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#model-setup">Model Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#simulation-nominal">Simulation - Nominal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#simulation-hazards">Simulation - Hazards</a></li>
+<li class="toctree-l3"><a class="reference internal" href="why-resilience-simulation.html#conclusion-smaller">Conclusion {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Overview {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
@@ -104,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#flow-code-template">Flow Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#function-architecture-code-template">Function Architecture Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#there-s-more-to-fmdtools-than-functional-architectures-smaller">There’s more to fmdtools than Functional Architectures {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#demo-model-activity-smaller">Demo Model Activity: {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-do-we-structure-models-this-way-smaller">Why do we structure models this way? {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#more-resources-for-model-definition-smaller">More Resources for Model Definition {.smaller}</a></li>
@@ -117,25 +131,37 @@
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#starting-your-own-repo-project-smaller">Starting your own repo/project {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#conclusions-summary-smaller">Conclusions/Summary {.smaller}</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#further-reading-links-smaller">Further Reading/Links {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Complex_Systems_Modeling_in_fmdtools.html">Agenda and Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Complex_Systems_Modeling_in_fmdtools.html#what-makes-a-system-complex-smaller">What makes a system complex? {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Complex_Systems_Modeling_in_fmdtools.html#how-fmdtools-can-represent-complexity">How fmdtools can represent complexity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Complex_Systems_Modeling_in_fmdtools.html#some-notes-on-architectures-smaller">Some Notes on Architectures {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Complex_Systems_Modeling_in_fmdtools.html#example-componentarchitecture">Example: ComponentArchitecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Complex_Systems_Modeling_in_fmdtools.html#human-actions-perceptions-and-communications">Human Actions, Perceptions, and Communications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Complex_Systems_Modeling_in_fmdtools.html#action-architectures-smaller">Action Architectures {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Complex_Systems_Modeling_in_fmdtools.html#perceptions-multiflow-smaller">Perceptions - MultiFlow {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Complex_Systems_Modeling_in_fmdtools.html#communications-commsflow-smaller">Communications - CommsFlow {.smaller}</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Complex_Systems_Modeling_in_fmdtools.html#characteristics-of-environments">Characteristics of Environments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Complex_Systems_Modeling_in_fmdtools.html#integrated-architecture-examples">Integrated Architecture Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Complex_Systems_Modeling_in_fmdtools.html#conclusions-and-tips">Conclusions and Tips</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#glossary">Glossary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#make-and-frdl-diagram-first">Make and FRDL Diagram First</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#edit-your-code">Edit your code</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#structuring-a-model">Structuring a model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#structuring-your-project-repository">Structuring your Project Repository</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-advice">Style advice</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#see-also">See also</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development-guide.html#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#make-an-frdl-diagram-first">Make an FRDL Diagram First</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#structuring-your-project-repository">Structuring your Project Repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development-guide.html#see-also">See also</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="development-guide.html#glossary">Glossary</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/Examples.html">Examples</a><ul>
@@ -733,6 +759,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#why-was-fmdtools-developed">Why was fmdtools developed?</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="frdl.html">FRDL</a><ul>
@@ -747,12 +774,14 @@
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#constructing-a-hazard-table-at-its-most-basic-smaller">Constructing a hazard table (at its most basic) {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#what-is-frdl-and-why-use-it-for-hazard-analysis-smaller">What is FRDL (and why use it for hazard analysis)? {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#what-does-an-frdl-diagram-look-like">What does an FRDL diagram look like?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#what-does-an-frdl-diagram-look-like-rover-example-smaller">What does an FRDL diagram look like? - Rover Example {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#how-do-you-analyze-hazards-with-an-frdl-diagram-smaller">How do you analyze hazards with an FRDL diagram? {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-step-1">Example - Step 1</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-step-2">Example - Step 2</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-step-1-again">Example - Step 1 (again)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-step-2-again">Example - Step 2 (again)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#some-takeaways-smaller">Some Takeaways {.smaller}</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#example-finally">Example - Finally</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#further-takeaways-smaller">Further Takeaways {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#more-examples">More Examples</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_frdl.html#more-helpful-information-smaller">More Helpful Information {.smaller}</a></li>
 </ul>
@@ -1195,6 +1224,24 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <li><p>qualitative tests, which plots/figures that are to be verified by checking the outputs the example notebooks</p></li>
 </ul>
 </section>
+</section>
+<section id="why-was-fmdtools-developed">
+<h2>Why was fmdtools developed?<a class="headerlink" href="#why-was-fmdtools-developed" title="Link to this heading"></a></h2>
+<p>The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. Resilience is the ability of a system to mitigate hazardous scenarios as they arise. As shown below, the key defining aspect of resilience is the <strong>dynamics of failure events</strong>, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome).</p>
+<figure class="align-default" id="id4">
+<a class="reference internal image-reference" href="../_images/resilience_importance.svg"><img alt="importance of considering resilience" src="../_images/resilience_importance.svg" width="800" />
+</a>
+<figcaption>
+<p><span class="caption-text">Resilience is important to consider when dynamics of system behavior can lead to hazardous or unsafe outcomes.</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The impetus for developing fmdtools was a lack of existing open-source tools to model these dynamics at a high level (i.e., functions and flows) in the design process. Thus, researchers in this area had to re-implement modeling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools package resolved this problem by separating resilience modeling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. The goals of the fmdtools project have since shifted to the more general goal of <strong>improving the hazard assessment process</strong> by better representing systems resilience. Towards this end, fmdtools provides the following capabilities:</p>
+<ul class="simple">
+<li><p><strong>Representing system dynamics</strong> to enable the quantification of resilience properties. Typically, hazard assessment processes neglect the consideration of resilience because they focus on the immediate effects of faults on the function of the system, rather than an assessment of how these effects play out over time. The fmdtools library enables this consideration by providing a behavioral view of hazardous scenarios. This is important both for understanding hazardous behaviors, but also how they can be mitigated as they arise.</p></li>
+<li><p><strong>Representing operational behaviors and actions</strong> to enable the assessment the contributions of human operators and autonomous/AI-enabled systems to overall risk and resilience. Traditional hazard assessment approaches do not consider the feedback between operators, the system, and the environment, instead leaving them as “accidents” or “mistakes” to be blamed on the operator. With fmdtools, these hazards can be considered directly by modelling potential operator behaviors and how they support or degrade overall systems resilience. These approaches can also be used to better understand the risks posed by AI/autonomous systems.</p></li>
+<li><p><strong>Enabling a Model/Simulation-based hazard analysis paradigm</strong> by allowing the iterative, consistent analysis of resilience through the design, implementation, and V&amp;V processes. The traditional hazard assessment process is a manual, expert-driven approach that is inefficient to iterate on or change as a the design changes or assumptions are validated (or invalidated). In contrast, because all assumptions in fmdtools are represented as code, they can easily be modified as assumptions change while maintaining the overall integrity of the analysis. Furthermore, simulations in fmdtools can be efficiently and consistently be varied to analyze a system in more detail or in different configurations.</p></li>
+</ul>
+<p>While this library primarily provides code structures, a major objective of this library is further to enable these techniques to be used in a graphical simulation tool for hazard assessment.</p>
 </section>
 </section>
 
