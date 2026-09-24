@@ -808,9 +808,10 @@ class Result(UserDict):
         newhists = {k: hist for k, hist in mh.items()
                     if not ('nominal' in k and not (with_nominal))}
         if app:
-            weights = [w.rate for w in app.scenarios()]
+            scenario_rates = {scen.name: scen.rate for scen in app.scenarios()}
             if with_nominal:
-                weights.append(1)
+                scenario_rates['nominal'] = 1
+            weights = [scenario_rates[name] for name in newhists]
         else:
             weights = [1 for k in newhists]
 
