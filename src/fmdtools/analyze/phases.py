@@ -80,7 +80,7 @@ class PhaseMap(object):
     def __repr__(self):
         return 'PhaseMap(' + str(self.phases) + ', ' + str(self.modephases) + ')'
 
-    def find_phase(self, time, dt=1.0):
+    def find_phase(self, time, dt=None):
         """
         Find the phase that a time occurs in.
 
@@ -88,12 +88,17 @@ class PhaseMap(object):
         ----------
         time : float
             Occurence time.
+        dt : float, optional
+            Width of the final sample in each phase. Defaults to this map's dt.
+            An explicit value overrides the configured timestep for this lookup.
 
         Returns
         -------
         phase : str
             Name of the phase time occurs in.
         """
+        if dt is None:
+            dt = self.dt
         for phase, times in self.phases.items():
             if times[0] <= time < times[1]+dt:
                 return phase
