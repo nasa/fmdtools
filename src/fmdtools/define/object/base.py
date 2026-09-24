@@ -29,7 +29,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.base import get_var, set_var, get_methods, get_obj_name, get_memory
 from fmdtools.define.base import get_dict_repr, dict_to_json, auto_filename
-from fmdtools.define.base import copy_dict_objs, dict_from_file
+from fmdtools.define.base import copy_dict_objs, load_json
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 from fmdtools.analyze.graph.model import add_node, add_edge, remove_base, ModelGraph
@@ -866,7 +866,7 @@ class BaseObject(metaclass=BaseType):
         obj: BaseObject
             Object of the given class.
         """
-        datadict = dict_from_file(filename, delete=delete)
+        datadict = load_json(filename, delete=delete)
         return cls.fromdict(datadict, **kwargs)
 
     def get_vars(self, *variables, trunc_tuple=True):

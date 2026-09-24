@@ -18,7 +18,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import set_arg_as_type, remove_para, get_repr, map_obj_fields
-from fmdtools.define.base import is_iter, dict_to_json, auto_filename, dict_from_file
+from fmdtools.define.base import is_iter, dict_to_json, auto_filename, load_json
 from fmdtools.define.base import copy_dict_objs
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
@@ -542,7 +542,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     @classmethod
     def load(cls, filename, delete=False, **mapping):
         """Load values from file."""
-        datadict = dict_from_file(filename, delete=delete)
+        datadict = load_json(filename, delete=delete)
         return cls.fromdict(datadict, **mapping)
 
     def get_code(self, source):

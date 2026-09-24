@@ -259,10 +259,13 @@ def auto_filename(obj, filename='', suffix=".json"):
     return filename
 
 
-def dict_from_file(filename, delete=False):
+def load_json(filename, delete=False, load_dict=True):
     """Load a json as a dictionary."""
     with open(filename, 'r') as f:
-        datadict = json.load(f)
+        if load_dict:
+            datadict = json.load(f)
+        else:
+            datadict = f.read()
     if delete:
         os.remove(filename)
     return datadict

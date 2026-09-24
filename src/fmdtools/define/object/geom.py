@@ -33,18 +33,20 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import filter_kwargs
+from fmdtools.define.base import filter_kwargs, load_json
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.analyze.common import setup_plot, consolidate_legend, add_title_xylabs
 
-from shapely import LineString, Point, Polygon, from_geojson
+from shapely import LineString, Point, Polygon, from_geojson, centroid
 from shapely.ops import nearest_points
+from shapely.plotting import plot_polygon
 from typing import ClassVar
 from recordclass import astuple
 import numpy as np
 import os
+
 
 
 class BaseGeom(BaseObject):
@@ -86,7 +88,13 @@ class BaseGeom(BaseObject):
             else:
                 raise Exception(argname+" not in "+"Geom's "+str(self.s.__class__)
                                 + " or "+str(self.p.__class__))
-            return base_shape.buffer(arg)
+            if isinstance(arg, tuple):
+                if isinstance(arg[1], tuple):
+                    return base_shape.buffer(arg[0], **dict(arg[1]))
+                else:
+                    return base_shape.buffer(*arg)
+            else:
+                return base_shape.buffer(arg)
 
     def at(self, pt, shape='shape'):
         """
@@ -258,13 +266,7 @@ class BaseGeom(BaseObject):
                 shape_label = shapename
             local_kwargs = {**plot_kwargs, 'label': shape_label, **shape_kwargs}
             shape = self.get_shape(shapename)
-            if isinstance(shape, Point):
-                ax.scatter(shape.x, shape.y, **local_kwargs)
-            elif isinstance(shape, LineString):
-                linecoords = np.array([*shape.coords])
-                ax.plot(linecoords[:, 0], linecoords[:, 1], **local_kwargs)
-            elif isinstance(shape, Polygon):
-                ax.plot(*shape.exterior.xy, **local_kwargs)
+            add_shapes_to_plot(ax, shape, **local_kwargs)
         ax.axis('equal')
         if legend:
             consolidate_legend(ax, **l_kw)
@@ -276,6 +278,43 @@ class BaseGeom(BaseObject):
         self.s.assign(hist.s.get_slice(t), *states)
 
 
+def add_shapes_to_plot(ax, shape, **local_kwargs):
+    """Plot arbitrary shapely classes (including GeometryCollection)."""
+    if hasattr(shape, 'geoms'):
+        for geom in shape.geoms:
+            add_shape_to_plot(ax, geom, **local_kwargs)
+    else:
+        add_shape_to_plot(ax, shape, **local_kwargs)
+
+
+def add_shape_to_plot(ax, shape, fill=False, overlay_label={}, **local_kwargs):
+    """Add an individual shape plot to the axis ax."""
+    if 'label' in local_kwargs and (overlay_label=='label' 
+                                    or (isinstance(overlay_label, dict)
+                                        and overlay_label.get('label', '')=='label')):
+        overlay_label = {'label': local_kwargs.pop('label')}
+    if isinstance(shape, Point):
+        ax.scatter(shape.x, shape.y, **local_kwargs)
+    elif isinstance(shape, LineString):
+        linecoords = np.array([*shape.coords])
+        ax.plot(linecoords[:, 0], linecoords[:, 1], **local_kwargs)
+    elif isinstance(shape, Polygon):
+        if fill:
+            plot_polygon(shape, ax=ax, add_points=False, **local_kwargs)
+        else:
+            ax.plot(*shape.exterior.xy, **local_kwargs)
+    else:
+        raise TypeError("Invalid shape type: "+str(shape.__class__))
+    if overlay_label:
+        loc = centroid(shape)
+        kw = dict(horizontalalignment='center', verticalalignment='center')
+        if isinstance(overlay_label, str):
+            ax.text(loc.x, loc.y, overlay_label, **kw)
+        else:
+            ax.text(loc.x, loc.y, overlay_label['label'], **{**kw, **overlay_label})
+        
+
+
 class GeomJSONParameter(Parameter):
     """
     Parameter defining GeomJSON objects that use external information.
@@ -284,6 +323,10 @@ class GeomJSONParameter(Parameter):
     """
 
     geojson: str = ""
+
+    def create_shape(self):
+        """Create base shape from provided json (extensible)."""
+        return from_geojson(self.geojson)
 
     def save(self, filename, **kwargs):
         """Save file as geojson."""
@@ -297,11 +340,7 @@ class GeomJSONParameter(Parameter):
     def load(cls, filename, delete=False, **kwargs):
         """Load from geojson."""
         if filename.endswith(".geojson"):
-            with open(filename, 'r') as f:
-                loaded_geojson = f.read()
-            if delete:
-                os.remove(filename)
-            return cls(geojson=loaded_geojson)
+            return cls(geojson=load_json(filename, delete=delete, load_dict=False))
         else:
             return super().load(filename, delete=delete, **kwargs)
 
@@ -330,7 +369,7 @@ class GeomJSON(BaseGeom):
 
     def __init__(self, *args, s={}, p={}, track='default', **kwargs):
         super().__init__(s=s, p=p, track=[], **kwargs)
-        base_shape =  from_geojson(self.p.geojson)
+        base_shape =  self.p.create_shape()
         shapes = {shape: self.create_shape(shape, base_shape=base_shape)
                   for shape in self.p.get_pref_attrs('buffer')}
         self.shapes = {'shape': base_shape, **shapes}
@@ -349,7 +388,9 @@ class GeomParameter(Parameter):
     classes.
     Otherwise, GeomParameter can hold geojson.
 
-    Extend with 'buffer_att' to create buffer shapes.
+    Extend with 'buffer_att' to create buffer shapes. The field buffer_att may be
+    a float defining the buffer distance or a tuple of the form (distance, ((kw, arg),))
+    where kw is the name of a keyword argument to shapely.buffer
 
     Examples
     --------
@@ -400,7 +441,7 @@ class Geom(BaseGeom):
         """
         return {**self.p.asdict(), **self.s.asdict()}['coordinates']
 
-    def get_shape(self, shape='shape'):
+    def get_shape(self, shape='shape', **kwargs):
         """
         Get the shapely object defining the class (and defined buffers).
 
@@ -415,7 +456,7 @@ class Geom(BaseGeom):
         shapely.geometry
             Shapely object for the shape.
         """
-        return self.create_shape(shape)
+        return self.create_shape(shape, **kwargs)
 
 
 class GeomPoint(Geom):

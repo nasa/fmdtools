@@ -147,7 +147,7 @@ class GeomArchitecture(Architecture):
             if not isinstance(gclass, baseclass):
                 raise Exception("gclass "+gclass+" not a "+baseclass.__name__)
 
-    def add_geom(self, name, pclass=GeomJSON, **kwargs):
+    def add_geom(self, name, gclass=GeomJSON, **kwargs):
         """
         Add/instantiate an individual geom to the architecture.
 
@@ -158,13 +158,13 @@ class GeomArchitecture(Architecture):
         ----------
         name : str
             Name for the geom.
-        pclass : BaseGeom, optional
+        gclass : BaseGeom, optional
             Class to instantiate. The default is GeomJSON.
         **kwargs : kwargs
             Keyword arguments to the class.
         """
-        self.check_geom_class(pclass, BaseGeom)
-        self.add_flex_role_obj("geoms", name, objclass=pclass, **kwargs)
+        self.check_geom_class(gclass, BaseGeom)
+        self.add_flex_role_obj("geoms", name, objclass=gclass, **kwargs)
 
     def all_at(self, *pt):
         """
