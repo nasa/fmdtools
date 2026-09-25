@@ -1051,7 +1051,8 @@ class FaultSample(BaseSample):
                 if n_joint == 1:
                     self.add_single_fault_scenario(faulttups[0], time, weight=weight)
                 else:
-                    self.add_joint_fault_scenario(faulttups, time, **joint_kwargs)
+                    self.add_joint_fault_scenario(faulttups, time, weight=weight,
+                                                  **joint_kwargs)
 
     def add_fault_phases(self, *phases_to_sample, method='even', args=(1,),
                          phase_methods={}, phase_args={},
