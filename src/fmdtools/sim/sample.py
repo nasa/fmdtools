@@ -1559,7 +1559,9 @@ class ParameterSample(BaseSample):
             raise Exception("Invalid method: " + combmethod)
         if n_samp:
             rng = np.random.default_rng(self.seed)
-            x_combos = rng.choice(x_combos, n_samp)
+            # Sample row indices so mixed parameter types are not coerced.
+            indices = rng.choice(len(x_combos), n_samp)
+            x_combos = [x_combos[i] for i in indices]
 
         self.add_variable_replicates(x_combos, name=name, **rep_kwargs)
 
