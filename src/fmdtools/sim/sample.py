@@ -1051,7 +1051,8 @@ class FaultSample(BaseSample):
                 if n_joint == 1:
                     self.add_single_fault_scenario(faulttups[0], time, weight=weight)
                 else:
-                    self.add_joint_fault_scenario(faulttups, time, **joint_kwargs)
+                    self.add_joint_fault_scenario(faulttups, time, weight=weight,
+                                                  **joint_kwargs)
 
     def add_fault_phases(self, *phases_to_sample, method='even', args=(1,),
                          phase_methods={}, phase_args={},
@@ -1381,7 +1382,8 @@ class ParameterSample(BaseSample):
         *x : vars
             Values of the variables defined in the parameter domain.
         seed : int, optional
-            Seed to include in the ParameterScenario. The default is False.
+            Seed to include in the ParameterScenario, including zero. False
+            (the default) or None uses the sample seed when one is configured.
         sp : dict, optional
             SimParam arguments to the ParameterScenario. The default is {}.
         weight : float, optional
@@ -1406,9 +1408,9 @@ class ParameterSample(BaseSample):
         2
         """
         param_args = self.paramdomain.get_param_kwargs(*x)
-        if seed:
+        if seed is not False and seed is not None:
             r = {'seed': seed}
-        elif self.seed:
+        elif self.seed is not False and self.seed is not None:
             r = {'seed': self.seed}
         else:
             r = {}
