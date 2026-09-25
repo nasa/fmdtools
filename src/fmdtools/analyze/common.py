@@ -325,15 +325,13 @@ def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
         bs_kwar['confidence_level'] = interval*0.01
 
     vals = metric_preamble(data, **filter_kwargs(metric_preamble, **kwargs))
-    if len(np.shape(vals)) > 1:
-        val = vals[axis, 0]
-    else:
-        val = np.array(vals).flatten()[0]
+    val = np.take(vals, [0], axis=axis)
     if "weights" in kwargs and kwargs['weights'] is not None:
         raise Exception("Weights not able to be used w- bootstrap--use rates instead.")
     met_val = method(vals, axis=axis, **filter_kwargs(method, **kwargs))
     vals_vary = vals == val
-    if not np.all(vals_vary):
+    # Preserve the existing policy for globally identical data.
+    if not np.all(vals == vals.flat[0]):
         if np.any(np.all(vals_vary, axis=axis)):
             # use more robust/basic algorithm if some indices don't vary
             bs = bootstrap([vals], method, axis=axis, method="basic", **bs_kwar)
