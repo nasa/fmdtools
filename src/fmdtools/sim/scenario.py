@@ -402,7 +402,7 @@ class ParameterScenario(BaseScenario, readonly=True):
         if "." in param:
             p_index = param.split(".")
             p_field = p_index[0]
-            p_entry = ".".join(p_field[1:])
+            p_entry = ".".join(p_index[1:])
             pval = self.get(p_field, default).get(p_entry, default)
         elif param == 'prob':
             pval = self.prob

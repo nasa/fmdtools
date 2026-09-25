@@ -1122,13 +1122,12 @@ class JointFaultSample(FaultSample):
     """FaultSample for faults in multiple faultdomains and phasemaps."""
 
     def __init__(self, *faultdomains, phasemaps=[], def_mdl_phasemap=True):
-        self.faultdomain = FaultDomain(faultdomains[0].mdl)
+        joint_domain = FaultDomain(faultdomains[0].mdl)
         for faultdomain in faultdomains:
-            self.faultdomain.faults.update(faultdomain.faults)
-        if phasemaps:
-            self.phasemap = join_phasemaps(phasemaps)
-        elif def_mdl_phasemap:
-            self.phasemap = PhaseMap(faultdomains[0].mdl.sp.phases)
+            joint_domain.faults.update(faultdomain.faults)
+        phasemap = join_phasemaps(*phasemaps) if phasemaps else {}
+        super().__init__(joint_domain, phasemap=phasemap,
+                         def_mdl_phasemap=def_mdl_phasemap)
 
 
 class SampleApproach(BaseSample):
