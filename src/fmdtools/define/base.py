@@ -420,7 +420,7 @@ def t_key(time):
 
 def round_float(number, res=1.0, min_r=7):
     """Round floats to a given resolution (avoiding fp errors)."""
-    return np.round(round(number/res)*res, min_r)
+    return np.round(np.round(number/res)*res, min_r)
 
 
 def nan_to_x(metric, x=0.0):

@@ -632,14 +632,14 @@ def script_sample_faults(track='all', **kwargs):
 
     gh = mdlhists.get_comp_groups('flows.ee_1.s.current')
 
-    results, mdlhists_staged = propagate.fault_sample(mdl, faultapp,
-                                                      staged=True, track='all')
+    # results, mdlhists_staged = propagate.fault_sample(mdl, faultapp,
+    #                                                   staged=True, track='all')
 
-    tab = an.tabulate.result_summary_fmea(
-            results, mdlhists, *mdl.fxns, *mdl.flows)
+    # tab = an.tabulate.result_summary_fmea(
+    #         results, mdlhists, *mdl.fxns, *mdl.flows)
 
     h = mdlhists.get_expected(app=faultapp, with_nominal=True)
-    ec = results.get_expected()
+    # ec = results.get_expected()
 
     # degsumm = h.get_summary(*mdl.fxns, *mdl.flows)
 
@@ -658,7 +658,7 @@ def script_sample_faults(track='all', **kwargs):
     fmea = an.tabulate.FMEA(results, faultapp)
     fmea.as_table()
     fmea.sort_by_metric("expected_cost")
-    fmea.as_plot("expected_cost", color_factor="function")
+    fmea.as_plot("expected_cost", color_factor="obj")
 
     # test cases for multiplot legend/axis sharing
     mdlhists.plot_line("flows.ee_1.s.current", "flows.sig_1.s.power",
@@ -678,6 +678,8 @@ if __name__ == "__main__":
     # dt = time.time() - t
     mdl = Pump()
     res, hist = propagate.nominal(mdl, to_return = {'graph': FunctionArchitectureGraph})
+
+    # script_sample_faults()
 
     """
     endfaults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block',

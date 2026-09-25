@@ -909,9 +909,9 @@ class History(Result):
         >>> errhist.stat
         array([2.])
         >>> errhist.high
-        array([3])
+        array([3.])
         >>> errhist.low
-        array([1])
+        array([1.])
         """
         hist = History()
         hist[time] = self.get_metric(time, axis=0)

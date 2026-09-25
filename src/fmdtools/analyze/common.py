@@ -41,7 +41,7 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 import inspect
 from scipy.stats import bootstrap
-from fmdtools.define.base import filter_kwargs
+from fmdtools.define.base import filter_kwargs, round_float
 
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -229,7 +229,7 @@ def metric_preamble(data, dtype=None, rates=None, r_dtype=None, r_norm=False):
 
 
 def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
-                rates=None, r_dtype=None, r_norm=False, **kwargs):
+                rates=None, r_dtype=None, r_norm=False, res=1e-6, min_r=7, **kwargs):
     """
     Calculate a metric from data.
 
@@ -258,7 +258,7 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
 
     Returns
     -------
-    metric: float
+    metric: np.float64
         Metric calculated by method over data.
 
     Examples
@@ -266,21 +266,22 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
     >>> calc_metric([1,2,3]) # simple average
     np.float64(2.0)
     >>> calc_metric([1,2,3], rates=[0.1, 0.1, 0.0], method=np.sum) # weighted sum
-    np.float64(0.30000000000000004)
+    np.float64(0.3)
     >>> calc_metric([0, 20, 30], dtype=bool, rates=[0.1, 0.1, 0.1], method=np.sum) # rate of nonzero event
     np.float64(0.2)
     >>> calc_metric([0, 1, 2], "total")
-    np.int64(2)
+    np.float64(2.0)
     >>> calc_metric([0, 1, 2], "expected", rates=[1.0, 2.0, 1.0])
     np.float64(4.0)
     """
     if isinstance(method, str):
         method = eval("calc_"+method)
-        return method(data, args=args, axis=axis, dtype=dtype, rates=rates,
+        metric = method(data, args=args, axis=axis, dtype=dtype, rates=rates,
                       r_dtype=r_dtype, r_norm=r_norm, **kwargs)
     else:
         vals = metric_preamble(data, dtype, rates, r_dtype, r_norm)
-        return method(vals, *args, **filter_kwargs(method, **kwargs, axis=axis))
+        metric = method(vals, *args, **filter_kwargs(method, **kwargs, axis=axis))
+    return round_float(metric, res=res, min_r=min_r)
 
 
 def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
@@ -351,7 +352,7 @@ def calc_rate(data, rates=None, weights=None, **kwargs):
     Examples
     --------
     >>> calc_rate([0, 10, 0]) # defaults to equal rate
-    np.float64(0.3333333333333333)
+    np.float64(0.333333)
     >>> calc_rate([0, 10, 100], [0.1, 0.1, 0.1]) # provided rates
     np.float64(0.2)
     """
@@ -368,7 +369,7 @@ def calc_percent(data, weights=None, rates=None, **kwargs):
     Examples
     --------
     >>> calc_percent([0, 10, 0])
-    np.float64(0.3333333333333333)
+    np.float64(0.333333)
     """
     return calc_metric(data, **{**kwargs, 'dtype': bool})
 
@@ -384,7 +385,7 @@ def calc_total(data, weights=None, **kwargs):
     >>> calc_total([0, 10, 100])
     np.int64(2)
     """
-    return calc_metric(data, **{**kwargs, 'method': np.sum, 'dtype': bool})
+    return np.int64(calc_metric(data, **{**kwargs, 'method': np.sum, 'dtype': bool}))
 
 
 def calc_expected(data, rates=None, weights=None, **kwargs):

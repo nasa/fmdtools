@@ -41,6 +41,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import t_key, nest_dict, is_numeric, is_bool, is_iter
+from fmdtools.define.base import round_float
 from fmdtools.analyze.common import to_include_keys, create_indiv_filename
 from fmdtools.analyze.common import calc_metric, calc_metric_ci, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values
@@ -781,7 +782,8 @@ class Result(UserDict):
         else:
             return tab.loc[:, metrics]
 
-    def get_expected(self, app=[], with_nominal=False, difference_from_nominal=False):
+    def get_expected(self, app=[], with_nominal=False, difference_from_nominal=False,
+                     **kwargs):
         """
         Take the expectation of numeric metrics in the result over given scenarios.
 
@@ -795,6 +797,8 @@ class Result(UserDict):
         difference_from_nominal : bool, optional
             Whether to calculated the difference of the expectation from nominal.
             The default is False.
+        **kwargs
+            kwargs to round_float
 
         Returns
         -------
@@ -818,12 +822,12 @@ class Result(UserDict):
         expres = self.__class__()
         for k in nomhist.keys():
             if difference_from_nominal:
-                expres[k] = np.average([nomhist[k]-hist[k]
-                                        for hist in newhists.values()],
-                                       axis=0, weights=weights)
+                expres[k] = round_float(np.average([nomhist[k]-hist[k]
+                                                    for hist in newhists.values()],
+                                                   axis=0, weights=weights), **kwargs)
             else:
-                expres[k] = np.average([hist[k] for hist in newhists.values()],
-                                       axis=0, weights=weights)
+                expres[k] = round_float(np.average([hist[k] for hist in newhists.values()],
+                                        axis=0, weights=weights), **kwargs)
         return expres
 
     def get_metric(self, value, method=np.average, rates=None, weights=None, prefix="",
@@ -851,13 +855,13 @@ class Result(UserDict):
         >>> r.get_metric("a", method=np.average, rates="b")
         np.float64(0.0025)
         >>> r.get_metric("a", method="total")
-        np.int64(1)
+        np.float64(1.0)
         >>> r.get_metric("b", method="rate", rates="a")
         np.float64(0.5)
         >>> r.get_metric("b", method="expected", rates="a")
         np.float64(0.005)
         >>> r.get_metric("b", "expected", rates={"t1": 1, "t2": 2})
-        np.float64(0.21000000000000002)
+        np.float64(0.21)
         """
         vals, rates, weights = self.get_vals(value, prefix=prefix,
                                              rates=rates, weights=weights)
