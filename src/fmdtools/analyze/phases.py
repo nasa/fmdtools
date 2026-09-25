@@ -682,8 +682,7 @@ def join_phasemaps(*phasemaps):
     joint_phases = {}
     all_combos = [*itertools.product(*[phasemap.phases for phasemap in phasemaps])]
     for combo in all_combos:
-        phases = {c: phasemaps[i].phases[c] for i, c in enumerate(combo)}
-        intervals = [i for i in phases.values()]
+        intervals = [phasemaps[i].phases[c] for i, c in enumerate(combo)]
         joined_interval = find_interval_overlap(*intervals)
         if joined_interval:
             joint_phases[combo] = joined_interval
