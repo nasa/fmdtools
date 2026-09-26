@@ -851,7 +851,8 @@ class History(Result):
         ci : float
             Fraction for confidence interval. Default is 0.95.
         max_ind : str/int
-            Max index of time to clip to. Default is 'max'.
+            Exclusive slice endpoint for both timestamps and values. Default is
+            'max', which uses the shortest history length.
 
         Returns
         -------
@@ -874,6 +875,7 @@ class History(Result):
         hist[time] = self.get_metric(time, axis=0)
         if max_ind == 'max':
             max_ind = min([len(h) for h in self.values()])
+        hist[time] = hist[time][:max_ind]
         vals = np.array([*self.get_values(value).values()])[:, :max_ind]
         boot_stats = calc_metric_ci(vals, confidence_level=ci, axis=0, **kwargs)
         hist['stat'] = boot_stats[0]
