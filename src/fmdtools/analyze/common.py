@@ -517,8 +517,8 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
     fig : mpl figure
     ax :mpl, axis
     """
-    fig, ax = setup_plot(fig, ax, figsize)
-    ax.plot(err_hist['stat'], **kwargs)
+    fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
+    ax.plot(err_hist[time], err_hist['stat'], **kwargs)
     if boundtype == 'fill':
         col = ax.lines[-1].get_color()
         ax.fill_between(err_hist[time], err_hist['low'], err_hist['high'],
@@ -580,7 +580,7 @@ def plot_err_lines(times, lows, highs, ax=None, fig=None, figsize=(6, 4), **kwar
     **kwargs : kwargs
         kwargs for the line
     """
-    fig, ax = setup_plot(ax, fig, figsize)
+    fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
     ax.plot(times, highs, **kwargs)
     ax.plot(times, lows, **kwargs)
     return fig, ax
