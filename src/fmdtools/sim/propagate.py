@@ -934,7 +934,8 @@ class MultiEventSimulation(MultiSimulation):
         the nominal scenario
     include_nominal : bool
         Whether to include the nominal simulation. If False, the nominal simulation is
-        only run if necessary
+        only run if necessary. Non-staged runs that skip it do not supply nominal
+        comparison data to scenario classification.
     gen_samp : bool
         Whether to generate a SampleApproach from the nominal simulation. Used with
         NestedSimulations to generate the sample prior to simulation.
@@ -1048,8 +1049,11 @@ class MultiEventSimulation(MultiSimulation):
 
     def gen_inputs(self, scenlist, **kwargs):
         """Generate the inputs for exec_sim, including nominal history and result."""
-        call_kwar = {'nomresult': self.result['nominal'],
-                     'nomhist': self.history['nominal']}
+        call_kwar = {}
+        if 'nominal' in self.result:
+            call_kwar['nomresult'] = self.result['nominal']
+        if 'nominal' in self.history:
+            call_kwar['nomhist'] = self.history['nominal']
         if self.staged:
             sim_kwar = self.gen_sim_kwargs(**kwargs, protect=False,
                                            copy=not bool(self.pool))
