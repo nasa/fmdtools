@@ -809,6 +809,8 @@ class History(Result):
         """
         Get aggregated err_hist of means surrounded by std deviation.
 
+        Calculate the spread across histories separately at each time sample.
+
         Parameters
         ----------
         value : str
@@ -829,7 +831,7 @@ class History(Result):
         hist = History()
         hist[time] = self.get_metric(time, axis=0)
         hist['stat'] = self.get_metric(value, np.mean, axis=0)
-        std_dev = self.get_metric(value, np.std)
+        std_dev = self.get_metric(value, np.std, axis=0)
         hist['high'] = hist['stat']+std_dev/2
         hist['low'] = hist['stat']-std_dev/2
         return hist
