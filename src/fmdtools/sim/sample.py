@@ -888,7 +888,7 @@ class FaultSample(BaseSample):
 
     def prune_scenarios(self, scen_var='rate', comparator=np.greater, value=0.0):
         """
-        Prune scenarios from the FaultSample.
+        Prune scenarios and retain only their injection times.
 
         Parameters
         ----------
@@ -901,6 +901,7 @@ class FaultSample(BaseSample):
         """
         self._scenarios = [scen for scen in self._scenarios
                            if comparator(get_var(scen, scen_var), value)]
+        self._times = {time for scen in self._scenarios for time in scen.times}
 
     def get_times(self):
         """Get all sampled times."""
