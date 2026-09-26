@@ -857,7 +857,7 @@ class Result(UserDict):
         >>> r.get_metric("a", method=np.average, rates="b")
         np.float64(0.0025)
         >>> r.get_metric("a", method="total")
-        np.float64(1.0)
+        np.int64(1)
         >>> r.get_metric("b", method="rate", rates="a")
         np.float64(0.5)
         >>> r.get_metric("b", method="expected", rates="a")

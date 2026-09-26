@@ -258,7 +258,7 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
 
     Returns
     -------
-    metric: np.float64
+    metric: np.float64/np.int64
         Metric calculated by method over data.
 
     Examples
@@ -270,7 +270,7 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
     >>> calc_metric([0, 20, 30], dtype=bool, rates=[0.1, 0.1, 0.1], method=np.sum) # rate of nonzero event
     np.float64(0.2)
     >>> calc_metric([0, 1, 2], "total")
-    np.float64(2.0)
+    np.int64(2)
     >>> calc_metric([0, 1, 2], "expected", rates=[1.0, 2.0, 1.0])
     np.float64(4.0)
     """
