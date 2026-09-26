@@ -281,7 +281,10 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
     else:
         vals = metric_preamble(data, dtype, rates, r_dtype, r_norm)
         metric = method(vals, *args, **filter_kwargs(method, **kwargs, axis=axis))
-    return round_float(metric, res=res, min_r=min_r)
+    if isinstance(metric, np.floating) or isinstance(metric, float):
+        return round_float(metric, res=res, min_r=min_r)
+    else:
+        return metric
 
 
 def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
