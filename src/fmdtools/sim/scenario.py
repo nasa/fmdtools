@@ -43,8 +43,8 @@ def create_scenname(faulttup, time):
     return'_'.join(sn.split("."))
 
 
-class BaseScenObj(dataobject, readonly=True, mapping=True):
-    """Base class for Scenarios and injections."""
+class BaseScenObj(dataobject, readonly=True, mapping=True, copy_default=True):
+    """Base class for scenarios and injections with independent mutable defaults."""
 
     def get(self, entry, fallback):
         """

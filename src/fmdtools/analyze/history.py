@@ -809,6 +809,8 @@ class History(Result):
         """
         Get aggregated err_hist of means surrounded by std deviation.
 
+        Calculate the spread across histories separately at each time sample.
+
         Parameters
         ----------
         value : str
@@ -829,7 +831,7 @@ class History(Result):
         hist = History()
         hist[time] = self.get_metric(time, axis=0)
         hist['stat'] = self.get_metric(value, np.mean, axis=0)
-        std_dev = self.get_metric(value, np.std)
+        std_dev = self.get_metric(value, np.std, axis=0)
         hist['high'] = hist['stat']+std_dev/2
         hist['low'] = hist['stat']-std_dev/2
         return hist
@@ -851,7 +853,8 @@ class History(Result):
         ci : float
             Fraction for confidence interval. Default is 0.95.
         max_ind : str/int
-            Max index of time to clip to. Default is 'max'.
+            Exclusive slice endpoint for both timestamps and values. Default is
+            'max', which uses the shortest history length.
 
         Returns
         -------
@@ -874,6 +877,7 @@ class History(Result):
         hist[time] = self.get_metric(time, axis=0)
         if max_ind == 'max':
             max_ind = min([len(h) for h in self.values()])
+        hist[time] = hist[time][:max_ind]
         vals = np.array([*self.get_values(value).values()])[:, :max_ind]
         boot_stats = calc_metric_ci(vals, confidence_level=ci, axis=0, **kwargs)
         hist['stat'] = boot_stats[0]
