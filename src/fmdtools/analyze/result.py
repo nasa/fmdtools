@@ -789,7 +789,7 @@ class Result(UserDict):
             return tab.loc[:, metrics]
 
     def get_expected(self, app=[], with_nominal=False, difference_from_nominal=False,
-                     **kwargs):
+                     round_value=True, res=1e-6, **kwargs):
         """
         Take the expectation of numeric metrics in the result over given scenarios.
 
@@ -828,12 +828,15 @@ class Result(UserDict):
         expres = self.__class__()
         for k in nomhist.keys():
             if difference_from_nominal:
-                expres[k] = round_float(np.average([nomhist[k]-hist[k]
-                                                    for hist in newhists.values()],
-                                                   axis=0, weights=weights), **kwargs)
+                value = np.average([nomhist[k]-hist[k] for hist in newhists.values()],
+                                    axis=0, weights=weights)
             else:
-                expres[k] = round_float(np.average([hist[k] for hist in newhists.values()],
-                                        axis=0, weights=weights), **kwargs)
+                value = np.average([hist[k] for hist in newhists.values()],
+                                   axis=0, weights=weights)
+            if round_value:
+                expres[k] = round_float(value, res=res, **kwargs)
+            else:
+                expres[k] = value
         return expres
 
     def get_metric(self, value, method=np.average, rates=None, weights=None, prefix="",

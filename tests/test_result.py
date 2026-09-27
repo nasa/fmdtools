@@ -103,6 +103,7 @@ class TestResultExpected(unittest.TestCase):
                     actual = result.get_expected(
                         OrderedSample(("b", "a")),
                         with_nominal=with_nominal,
+                        round_value=False
                     )
                     np.testing.assert_allclose(
                         actual.metric,
@@ -122,7 +123,8 @@ class TestResultExpected(unittest.TestCase):
                         result_type, ("b", "nominal", "a")
                     )
                     expected = 112.0 / 3.0 if with_nominal else 55.0
-                    actual = result.get_expected(with_nominal=with_nominal)
+                    actual = result.get_expected(with_nominal=with_nominal,
+                                                 round_value=False)
                     np.testing.assert_allclose(
                         actual.metric,
                         expected * scale,

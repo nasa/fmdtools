@@ -229,7 +229,8 @@ def metric_preamble(data, dtype=None, rates=None, r_dtype=None, r_norm=False):
 
 
 def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
-                rates=None, r_dtype=None, r_norm=False, res=1e-6, min_r=7, **kwargs):
+                rates=None, r_dtype=None, r_norm=False, round_value=True,
+                res=1e-6, min_r=7, **kwargs):
     """
     Calculate a metric from data.
 
@@ -253,8 +254,14 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
         Datatype to preprocess the rates over. The default is None.
     r_norm : bool, optional
         Whether to normalize rates. The default is False.
+    round_value : bool, optional
+        Whether to round the value. Default is True.
+    res : float
+        Resolution to round to. Default is 1e-6.
+    min_r : int
+        Maximum number of digits to round to (see round_float).
     **kwargs : kwargs
-        Keyword arguments to method.
+        Keyword arguments to method (see round_float).
 
     Returns
     -------
@@ -281,7 +288,7 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
     else:
         vals = metric_preamble(data, dtype, rates, r_dtype, r_norm)
         metric = method(vals, *args, **filter_kwargs(method, **kwargs, axis=axis))
-    if isinstance(metric, np.floating) or isinstance(metric, float):
+    if round_value and (isinstance(metric, np.floating) or isinstance(metric, float)):
         return round_float(metric, res=res, min_r=min_r)
     else:
         return metric

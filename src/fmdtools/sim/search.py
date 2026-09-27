@@ -541,10 +541,10 @@ class ResultObjective(Objective):
         np.float64(22.0)
         """
         if not self.time:
-            val = res.get_metric(self.name, method=self.method)
+            val = res.get_metric(self.name, method=self.method, round_value=False)
         else:
             t = t_key(float(self.time))
-            val = res.get_metric(t+"."+self.name, method=self.method)
+            val = res.get_metric(t+"."+self.name, method=self.method, round_value=False)
         return val
 
     def update(self, res):
