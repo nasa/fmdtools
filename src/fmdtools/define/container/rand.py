@@ -188,6 +188,9 @@ class Rand(BaseContainer):
 
         (if in run_stochastic mode)
 
+        Array draws are accepted for list- or ndarray-valued states. Scalar states
+        still reject array results so an incorrect draw size is not hidden.
+
         Parameters
         ----------
         statename : str
@@ -200,7 +203,8 @@ class Rand(BaseContainer):
         if getattr(self, 'run_stochastic', True):
             gen_method = getattr(self.rng, methodname)
             newvalue = gen_method(*args)
-            if isinstance(newvalue, np.ndarray) and type(self.s[statename]) not in [list, np.array]:
+            if (isinstance(newvalue, np.ndarray)
+                    and not isinstance(self.s[statename], (list, np.ndarray))):
                 raise Exception("Random method for " + statename + " in " +
                                 str(self.__class__) + " returned array when it should" +
                                 " be a float/int--check args")

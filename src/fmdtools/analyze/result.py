@@ -590,22 +590,26 @@ class Result(UserDict):
 
     def get_default_comp_groups(self):
         """
-        Get a dict of nominal and faulty scenario keys from the Result.
+        Get nominal and faulty keys for single or nested scenario samples.
+
+        Nested samples retain their parent prefix (e.g., ``sample.nominal``).
+        Only a scenario named exactly ``nominal`` belongs to the nominal group.
 
         Returns
         -------
         comp_groups : dict
             Dict with structure {'nominal': [list of nominal scenarios], 'faulty': [list of faulty scenarios]}.
-            If no nominal or faulty, returns an empty dict {}.
+            If no nominal scenario is found, returns {'default': 'default'}.
         """
-        nest = self.nest(1)
-        nest2 = self.nest(2)
+        flat = self.flatten()
+        nest = flat.nest(1)
+        nest2 = flat.nest(1, skip=1)
         if 'nominal' in nest.keys():
             comp_groups = {'nominal': 'nominal',
                            'faulty': [f for f in nest.keys() if f != 'nominal']}
-        elif any(['nominal' in k for k in nest2.keys()]):
-            comp_groups = {'nominal': [f for f in nest2.keys() if 'nominal' not in f],
-                           'faulty': [f for f in nest2.keys() if 'nominal' not in f]}
+        elif any(k.endswith('.nominal') for k in nest2):
+            comp_groups = {'nominal': [f for f in nest2 if f.endswith('.nominal')],
+                           'faulty': [f for f in nest2 if not f.endswith('.nominal')]}
         else:
             comp_groups = {'default': 'default'}
         return comp_groups
