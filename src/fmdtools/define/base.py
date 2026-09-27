@@ -150,8 +150,8 @@ def nest_dict(dic, levels=float('inf'), separator=".", skip=0):
         Levels to nest over. The default is float('inf').
     separator : str
         Seperator to nest by. The default is "."
-    skip : str
-        Levels to skip. The default is 0.
+    skip : int
+        Leading separators to retain in each outer key. The default is 0.
 
     Returns
     -------
@@ -159,13 +159,13 @@ def nest_dict(dic, levels=float('inf'), separator=".", skip=0):
         Nested dictionary. e.g. {'a': {'b': 1.0}}
     """
     newhist = dic.__class__()
-    key_options = OrderedSet([".".join(h.split(separator)[:skip+1])
+    key_options = OrderedSet([separator.join(h.split(separator)[:skip+1])
                               for h in dic.keys()])
     for key in key_options:
         if key in dic:
             newhist[key] = dic[key]
         else:
-            subdict = {histkey[len(key)+1:]: val
+            subdict = {histkey[len(key)+len(separator):]: val
                        for histkey, val in dic.items()
                        if histkey.startswith(key+separator)}
             subhist = dic.__class__(**subdict)
