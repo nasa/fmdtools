@@ -179,13 +179,15 @@ class BaseTab(UserDict):
         Parameters
         ----------
         factor : str/int
-            Name or index of factor to sort by.
+            Factor name or zero-based tuple index to sort by. Negative indices
+            follow the usual Python indexing convention.
         reverse : bool, optional
             Whether to sort in descending order. The default is False.
         """
         metric = [*self.keys()][0]
         keys = [k for k in self[metric].keys()]
 
+        value = factor
         if hasattr(self, 'factors') and isinstance(factor, str):
             value = self.factors.index(factor)
 
