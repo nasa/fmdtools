@@ -708,7 +708,9 @@ class Result(UserDict):
         """
         Save a given result variable (result or history) to a file filename.
 
-        Files can be saved as npz, csv, or json.
+        Files can be saved as npz, csv, or json. JSON converts arrays to
+        nested lists of Python values (or a scalar for zero-dimensional arrays).
+        Array dtype and shape metadata are not stored in JSON.
 
         Parameters
         ----------
@@ -760,7 +762,7 @@ class Result(UserDict):
                 new_variable = {}
                 for key in variable:
                     if isinstance(variable[key], np.ndarray):
-                        new_variable[str(key)] = [var.item() for var in variable[key]]
+                        new_variable[str(key)] = variable[key].tolist()
                     else:
                         new_variable[str(key)] = variable[key]
                 if result_id:
