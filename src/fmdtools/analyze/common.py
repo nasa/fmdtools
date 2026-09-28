@@ -41,6 +41,7 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 import inspect
 from scipy.stats import bootstrap
+from functools import partial
 from fmdtools.define.base import filter_kwargs
 
 
@@ -298,7 +299,8 @@ def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
     axis : int
         Axis along which to calculate the confidence interval(s). The default is 0.
     **kwargs : kwargs
-        Keyword arguments to calc_metric or scipy.bootstrap.
+        Keyword arguments to the statistic, preprocessing, or scipy.bootstrap.
+        Statistic arguments are used for both the point estimate and resamples.
 
     Returns
     -------
@@ -328,15 +330,16 @@ def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
     val = np.take(vals, [0], axis=axis)
     if "weights" in kwargs and kwargs['weights'] is not None:
         raise Exception("Weights not able to be used w- bootstrap--use rates instead.")
-    met_val = method(vals, axis=axis, **filter_kwargs(method, **kwargs))
+    statistic = partial(method, **filter_kwargs(method, **kwargs))
+    met_val = statistic(vals, axis=axis)
     vals_vary = vals == val
     # Preserve the existing policy for globally identical data.
     if not np.all(vals == vals.flat[0]):
         if np.any(np.all(vals_vary, axis=axis)):
             # use more robust/basic algorithm if some indices don't vary
-            bs = bootstrap([vals], method, axis=axis, method="basic", **bs_kwar)
+            bs = bootstrap([vals], statistic, axis=axis, method="basic", **bs_kwar)
         else:
-            bs = bootstrap([vals], method, axis=axis, **bs_kwar)
+            bs = bootstrap([vals], statistic, axis=axis, **bs_kwar)
         return met_val, bs.confidence_interval.low, bs.confidence_interval.high
     elif return_anyway:
         return met_val, met_val, met_val
