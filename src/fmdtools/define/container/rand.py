@@ -499,18 +499,19 @@ def get_lognormal_pdf(*args):
     return get_scipy_pdf("lognorm", s, scale=scale)
 
 
-def get_standard_t_pdf(*args):
+def get_standard_t_pdf(df, size=None):
     """
-    Get callable for scipy multivariate_t dist for a numpy.random.standard_t call.
+    Get the joint density of independent numpy.random.standard_t draws.
 
-    Note: doesn't support len(x)>1.
+    Use univariate Student t factors, including broadcast degrees of freedom.
+    The optional draw size does not change the density of the supplied values.
 
     Examples
     --------
     >>> get_standard_t_pdf(1)([0.0])
     np.float64(0.31830988618379075)
     """
-    return get_scipy_pdf("multivariate_t", df=args[0])
+    return get_scipy_pdf("t", df=df)
 
 
 def get_triangular_pdf(*args):
