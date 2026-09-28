@@ -180,11 +180,11 @@ def create_indiv_filename(filename, indiv_id, splitchar='_'):
     --------
     >>> create_indiv_filename("hi.csv", "4")
     'hi_4.csv'
+    >>> create_indiv_filename("runs.v1/results.v2.csv", "4", splitchar="/")
+    'runs.v1/results.v2/4.csv'
     """
-    filename_parts = filename.split(".")
-    filename_parts.insert(1, '.')
-    filename_parts.insert(1, splitchar+indiv_id)
-    return "".join(filename_parts)
+    stem, extension = os.path.splitext(filename)
+    return stem + splitchar + indiv_id + extension
 
 
 def load_folder(folder, filetype):
