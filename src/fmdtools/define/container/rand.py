@@ -307,21 +307,23 @@ def calc_prob_for_integers(x, *args):
 
 def calc_prob_density_for_random(x):
     """
-    Get probability density for np.default_rng.random.
+    Get the joint density of independent unit-uniform draws from rng.random.
+
+    Each draw has density one on [0, 1), so their joint density is one when
+    every value is in that interval and zero otherwise. An empty draw has
+    the empty-product density of one.
 
     Examples
     --------
     >>> calc_prob_density_for_random([0.5])
     np.float64(1.0)
     >>> calc_prob_density_for_random([0.5, 0.1, 0.9, 0.5])
-    np.float64(0.25)
+    np.float64(1.0)
     >>> calc_prob_density_for_random([0.5, 0.1, 0.9, 0.5, 1.1])
     np.float64(0.0)
     """
-    if 0 <= np.min(x) and np.max(x) < 1.0:
-        return np.float64(1/len(x))
-    else:
-        return np.float64(0.0)
+    x = np.asarray(x)
+    return np.float64(np.all((0.0 <= x) & (x < 1.0)))
 
 
 def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
