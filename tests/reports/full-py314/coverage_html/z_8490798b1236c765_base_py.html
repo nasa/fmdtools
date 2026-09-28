@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_8490798b1236c765_mode_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.16.1">coverage.py v7.16.1</a>,
-            created at 2026-09-22 16:30 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
+            created at 2026-09-27 13:01 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -100,7 +100,7 @@
     <p class="pln"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t"><span class="str">&quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t19" href="#t19">19</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t20" href="#t20">20</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">set_arg_as_type</span><span class="op">,</span> <span class="nam">remove_para</span><span class="op">,</span> <span class="nam">get_repr</span><span class="op">,</span> <span class="nam">map_obj_fields</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t21" href="#t21">21</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">is_iter</span><span class="op">,</span> <span class="nam">dict_to_json</span><span class="op">,</span> <span class="nam">auto_filename</span><span class="op">,</span> <span class="nam">dict_from_file</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t21" href="#t21">21</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">is_iter</span><span class="op">,</span> <span class="nam">dict_to_json</span><span class="op">,</span> <span class="nam">auto_filename</span><span class="op">,</span> <span class="nam">load_json</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t22" href="#t22">22</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">copy_dict_objs</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t23" href="#t23">23</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">analyze</span><span class="op">.</span><span class="nam">common</span> <span class="key">import</span> <span class="nam">get_sub_include</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t24" href="#t24">24</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">analyze</span><span class="op">.</span><span class="nam">history</span> <span class="key">import</span> <span class="nam">History</span>&nbsp;</span><span class="r"></span></p>
@@ -624,7 +624,7 @@
     <p class="run"><span class="n"><a id="t542" href="#t542">542</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t543" href="#t543">543</a></span><span class="t">    <span class="key">def</span> <span class="nam">load</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">filename</span><span class="op">,</span> <span class="nam">delete</span><span class="op">=</span><span class="key">False</span><span class="op">,</span> <span class="op">**</span><span class="nam">mapping</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t544" href="#t544">544</a></span><span class="t">        <span class="str">&quot;&quot;&quot;Load values from file.&quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t545" href="#t545">545</a></span><span class="t">        <span class="nam">datadict</span> <span class="op">=</span> <span class="nam">dict_from_file</span><span class="op">(</span><span class="nam">filename</span><span class="op">,</span> <span class="nam">delete</span><span class="op">=</span><span class="nam">delete</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t545" href="#t545">545</a></span><span class="t">        <span class="nam">datadict</span> <span class="op">=</span> <span class="nam">load_json</span><span class="op">(</span><span class="nam">filename</span><span class="op">,</span> <span class="nam">delete</span><span class="op">=</span><span class="nam">delete</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t546" href="#t546">546</a></span><span class="t">        <span class="key">return</span> <span class="nam">cls</span><span class="op">.</span><span class="nam">fromdict</span><span class="op">(</span><span class="nam">datadict</span><span class="op">,</span> <span class="op">**</span><span class="nam">mapping</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t547" href="#t547">547</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t548" href="#t548">548</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_code</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">source</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -693,8 +693,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_8490798b1236c765_mode_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.16.1">coverage.py v7.16.1</a>,
-            created at 2026-09-22 16:30 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
+            created at 2026-09-27 13:01 -0700
         </p>
     </div>
 </footer>

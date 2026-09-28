@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; fmdtools 2.5.1 documentation</title>
+  <title>Index &mdash; fmdtools 2.5.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -16,7 +16,7 @@
     <link rel="shortcut icon" href="_static/fmdtools_ico.ico"/>
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=983e91d6"></script>
+      <script src="_static/documentation_options.js?v=afc61bbc"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/design-tabs.js?v=f930bc37"></script>
@@ -520,7 +520,6 @@
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.auto_filename"><code class="docutils literal notranslate"><span class="pre">auto_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.copy_dict_objs"><code class="docutils literal notranslate"><span class="pre">copy_dict_objs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.dict_from_file"><code class="docutils literal notranslate"><span class="pre">dict_from_file()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.dict_to_json"><code class="docutils literal notranslate"><span class="pre">dict_to_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
@@ -538,6 +537,7 @@
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.load_json"><code class="docutils literal notranslate"><span class="pre">load_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.map_obj_fields"><code class="docutils literal notranslate"><span class="pre">map_obj_fields()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
@@ -1063,6 +1063,10 @@
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.BaseSimProblem.add_result_constraint">add_result_constraint() (fmdtools.sim.search.BaseSimProblem method)</a>
 </li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.BaseSimProblem.add_result_objective">add_result_objective() (fmdtools.sim.search.BaseSimProblem method)</a>
+</li>
+      <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.add_shape_to_plot">add_shape_to_plot() (in module fmdtools.define.object.geom)</a>
+</li>
+      <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.add_shapes_to_plot">add_shapes_to_plot() (in module fmdtools.define.object.geom)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.base.Architecture.add_sim">add_sim() (fmdtools.define.architecture.base.Architecture method)</a>
 
@@ -1624,10 +1628,10 @@
 </li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.BaseProblem.constraints">constraints (fmdtools.sim.search.BaseProblem attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.base.Architecture.construct_graph">construct_graph() (fmdtools.define.architecture.base.Architecture method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitecture.container_m">container_m (fmdtools.define.architecture.action.ActionArchitecture attribute)</a>
 
       <ul>
@@ -1856,6 +1860,8 @@
       </ul></li>
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.Rand.create_rng">create_rng() (fmdtools.define.container.rand.Rand method)</a>
 </li>
+      <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.create_role">create_role() (fmdtools.define.object.base.BaseObject method)</a>
+</li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.create_role_con_edges">create_role_con_edges() (fmdtools.define.object.base.BaseObject method)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.create_role_subgraph">create_role_subgraph() (fmdtools.define.object.base.BaseObject method)</a>
@@ -1863,7 +1869,11 @@
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.scenario.create_scenname">create_scenname() (in module fmdtools.sim.scenario)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.BaseGeom.create_shape">create_shape() (fmdtools.define.object.geom.BaseGeom method)</a>
+
+      <ul>
+        <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.geom.GeomJSONParameter.create_shape">(fmdtools.define.object.geom.GeomJSONParameter method)</a>
 </li>
+      </ul></li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.propagate.Simulation.create_simevents">create_simevents() (fmdtools.sim.propagate.Simulation method)</a>
 </li>
       <li><a href="docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result.create_simple_fmea">create_simple_fmea() (fmdtools.analyze.result.Result method)</a>
@@ -1923,8 +1933,6 @@
 </li>
       </ul></li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.coords.DefaultCoordsParam">DefaultCoordsParam (class in fmdtools.define.object.coords)</a>
-</li>
-      <li><a href="docs-source/fmdtools.define.html#fmdtools.define.base.dict_from_file">dict_from_file() (in module fmdtools.define.base)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.html#fmdtools.define.base.dict_to_json">dict_to_json() (in module fmdtools.define.base)</a>
 </li>
@@ -1996,8 +2004,6 @@
         <li><a href="docs-source/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.FlowEdgeStyle.drawio_endarrow">(fmdtools.analyze.graph.style.FlowEdgeStyle attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.ActionNodeStyle.drawio_fillcolor">drawio_fillcolor (fmdtools.analyze.graph.style.ActionNodeStyle attribute)</a>
 
       <ul>
@@ -2012,6 +2018,8 @@
         <li><a href="docs-source/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.NodeStyle.drawio_fillcolor">(fmdtools.analyze.graph.style.NodeStyle attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.NodeStyle.drawio_fontsize">drawio_fontsize (fmdtools.analyze.graph.style.NodeStyle attribute)</a>
 </li>
       <li><a href="docs-source/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.NodeStyle.drawio_fontstyle">drawio_fontstyle (fmdtools.analyze.graph.style.NodeStyle attribute)</a>
@@ -3161,10 +3169,10 @@
 </li>
       <li><a href="docs-source/fmdtools.define.flow.html#fmdtools.define.flow.commsflow.CommsFlow.get_port">get_port() (fmdtools.define.flow.commsflow.CommsFlow method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.base.BaseContainer.get_pref_attrs">get_pref_attrs() (fmdtools.define.container.base.BaseContainer method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.get_prob_for_rand">get_prob_for_rand() (in module fmdtools.define.container.rand)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.coords.BaseCoords.get_properties">get_properties() (fmdtools.define.object.coords.BaseCoords method)</a>
@@ -3279,6 +3287,8 @@
         <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.get_typename">(fmdtools.define.object.base.BaseObject method)</a>
 </li>
       </ul></li>
+      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.get_uniform_pdf">get_uniform_pdf() (in module fmdtools.define.container.rand)</a>
+</li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.ProblemArchitecture.get_upstream_probs">get_upstream_probs() (fmdtools.sim.search.ProblemArchitecture method)</a>
 </li>
       <li><a href="docs-source/fmdtools.analyze.html#fmdtools.analyze.result.Result.get_vals">get_vals() (fmdtools.analyze.result.Result method)</a>
@@ -3894,7 +3904,11 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.analyze.html#fmdtools.analyze.result.load_json">load_json() (in module fmdtools.analyze.result)</a>
+
+      <ul>
+        <li><a href="docs-source/fmdtools.define.html#fmdtools.define.base.load_json">(in module fmdtools.define.base)</a>
 </li>
+      </ul></li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.coords.Coords.load_property">load_property() (fmdtools.define.object.coords.Coords method)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.local_dt">local_dt (fmdtools.define.container.time.Time attribute)</a>

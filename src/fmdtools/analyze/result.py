@@ -41,6 +41,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import t_key, nest_dict, is_numeric, is_bool, is_iter
+from fmdtools.define.base import round_float
 from fmdtools.analyze.common import to_include_keys, create_indiv_filename
 from fmdtools.analyze.common import calc_metric, calc_metric_ci, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values
@@ -551,7 +552,9 @@ class Result(UserDict):
         *values : str
             Values to get (e.g. `fxns.fxnname.s.val`)
         **groups : list
-            Sets of scenarios to group (e.g. set_1=['scen1', 'scen2'...])
+            Sets of scenarios to group (e.g. set_1=['scen1', 'scen2'...]).
+            Scenario names match at dot-separated path boundaries; selecting a
+            parent scenario also includes its nested scenarios.
 
         Returns
         -------
@@ -569,7 +572,7 @@ class Result(UserDict):
             elif isinstance(scens, str):
                 scens = [scens]
             k_vs = [k for k in self.keys() for scen in scens for v in values
-                    if k.startswith(scen) and k.endswith(v) and '.t.' not in k]
+                    if k.startswith(scen+'.') and k.endswith(v) and '.t.' not in k]
             if len(k_vs) > 0 and (group not in group_hist):
                 group_hist[group] = self.__class__()
             for k in k_vs:
@@ -587,22 +590,26 @@ class Result(UserDict):
 
     def get_default_comp_groups(self):
         """
-        Get a dict of nominal and faulty scenario keys from the Result.
+        Get nominal and faulty keys for single or nested scenario samples.
+
+        Nested samples retain their parent prefix (e.g., ``sample.nominal``).
+        Only a scenario named exactly ``nominal`` belongs to the nominal group.
 
         Returns
         -------
         comp_groups : dict
             Dict with structure {'nominal': [list of nominal scenarios], 'faulty': [list of faulty scenarios]}.
-            If no nominal or faulty, returns an empty dict {}.
+            If no nominal scenario is found, returns {'default': 'default'}.
         """
-        nest = self.nest(1)
-        nest2 = self.nest(2)
+        flat = self.flatten()
+        nest = flat.nest(1)
+        nest2 = flat.nest(1, skip=1)
         if 'nominal' in nest.keys():
             comp_groups = {'nominal': 'nominal',
                            'faulty': [f for f in nest.keys() if f != 'nominal']}
-        elif any(['nominal' in k for k in nest2.keys()]):
-            comp_groups = {'nominal': [f for f in nest2.keys() if 'nominal' not in f],
-                           'faulty': [f for f in nest2.keys() if 'nominal' not in f]}
+        elif any(k.endswith('.nominal') for k in nest2):
+            comp_groups = {'nominal': [f for f in nest2 if f.endswith('.nominal')],
+                           'faulty': [f for f in nest2 if not f.endswith('.nominal')]}
         else:
             comp_groups = {'default': 'default'}
         return comp_groups
@@ -781,7 +788,8 @@ class Result(UserDict):
         else:
             return tab.loc[:, metrics]
 
-    def get_expected(self, app=[], with_nominal=False, difference_from_nominal=False):
+    def get_expected(self, app=[], with_nominal=False, difference_from_nominal=False,
+                     round_value=True, res=1e-6, **kwargs):
         """
         Take the expectation of numeric metrics in the result over given scenarios.
 
@@ -795,6 +803,8 @@ class Result(UserDict):
         difference_from_nominal : bool, optional
             Whether to calculated the difference of the expectation from nominal.
             The default is False.
+        **kwargs
+            kwargs to round_float
 
         Returns
         -------
@@ -808,21 +818,25 @@ class Result(UserDict):
         newhists = {k: hist for k, hist in mh.items()
                     if not ('nominal' in k and not (with_nominal))}
         if app:
-            weights = [w.rate for w in app.scenarios()]
+            scenario_rates = {scen.name: scen.rate for scen in app.scenarios()}
             if with_nominal:
-                weights.append(1)
+                scenario_rates['nominal'] = 1
+            weights = [scenario_rates[name] for name in newhists]
         else:
             weights = [1 for k in newhists]
 
         expres = self.__class__()
         for k in nomhist.keys():
             if difference_from_nominal:
-                expres[k] = np.average([nomhist[k]-hist[k]
-                                        for hist in newhists.values()],
-                                       axis=0, weights=weights)
+                value = np.average([nomhist[k]-hist[k] for hist in newhists.values()],
+                                    axis=0, weights=weights)
             else:
-                expres[k] = np.average([hist[k] for hist in newhists.values()],
-                                       axis=0, weights=weights)
+                value = np.average([hist[k] for hist in newhists.values()],
+                                   axis=0, weights=weights)
+            if round_value:
+                expres[k] = round_float(value, res=res, **kwargs)
+            else:
+                expres[k] = value
         return expres
 
     def get_metric(self, value, method=np.average, rates=None, weights=None, prefix="",
@@ -856,7 +870,7 @@ class Result(UserDict):
         >>> r.get_metric("b", method="expected", rates="a")
         np.float64(0.005)
         >>> r.get_metric("b", "expected", rates={"t1": 1, "t2": 2})
-        np.float64(0.21000000000000002)
+        np.float64(0.21)
         """
         vals, rates, weights = self.get_vals(value, prefix=prefix,
                                              rates=rates, weights=weights)

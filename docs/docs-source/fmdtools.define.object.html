@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.object &mdash; fmdtools 2.5.1 documentation</title>
+  <title>fmdtools.define.object &mdash; fmdtools 2.5.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=983e91d6"></script>
+      <script src="../_static/documentation_options.js?v=afc61bbc"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -523,7 +523,6 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.auto_filename"><code class="docutils literal notranslate"><span class="pre">auto_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.copy_dict_objs"><code class="docutils literal notranslate"><span class="pre">copy_dict_objs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.dict_from_file"><code class="docutils literal notranslate"><span class="pre">dict_from_file()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.dict_to_json"><code class="docutils literal notranslate"><span class="pre">dict_to_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
@@ -541,6 +540,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.load_json"><code class="docutils literal notranslate"><span class="pre">load_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.map_obj_fields"><code class="docutils literal notranslate"><span class="pre">map_obj_fields()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
@@ -1169,6 +1169,26 @@ Default is None.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.create_role">
+<span class="sig-name descname"><span class="pre">create_role</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rolename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roletype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.create_role" title="Link to this definition"></a></dt>
+<dd><p>Create a given role object for the class.</p>
+<p>Enables roles to be created (and modified, etc.) prior to being added to a
+given class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rolename</strong> (<em>str</em>) – Name of the role (e.g., ‘p’, ‘s’).</p></li>
+<li><p><strong>roletype</strong> (<em>str</em>) – Roletype (e.g., ‘container’).</p></li>
+<li><p><strong>initializer</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.HistoryConstraint.method" title="fmdtools.sim.search.HistoryConstraint.method"><em>method</em></a><em>, </em><em>optional</em>) – Method to call to initialize the role. Otherwise uses whatever is at
+roletype_rolename</p></li>
+<li><p><strong>**obj_args</strong> (<em>dict</em>) – Dictionary arguments (or already instantiated objects) to use for the
+attributes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.create_role_con_edges">
 <span class="sig-name descname"><span class="pre">create_role_con_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roles_to_connect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'connection'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edgetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'connection'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.create_role_con_edges" title="Link to this definition"></a></dt>
 <dd><p>Connect roles at the same level of hierarchy.</p>
@@ -1551,7 +1571,7 @@ The default is None.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.init_roles">
 <span class="sig-name descname"><span class="pre">init_roles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">roletype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.init_roles" title="Link to this definition"></a></dt>
-<dd><p>Initialize the role ‘roletype’ for a given object.</p>
+<dd><p>Initialize the all roles of type ‘roletype’ for a given object.</p>
 <p>Roles defined using roletype_x in its class variables for the attribute x.</p>
 <p>Object is instantiated with the attribute x, y, z corresponding to output of the
 class variable roletype_x, roletype_y, roletype_z, etc.</p>
@@ -1560,7 +1580,7 @@ class variable roletype_x, roletype_y, roletype_z, etc.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>roletype</strong> (<em>str</em>) – Role to initialize (e.g., ‘container’). If none provided, initializes all.</p></li>
 <li><p><strong>**kwargs</strong> (<em>dict</em>) – Dictionary arguments (or already instantiated objects) to use for the
-attributes.</p></li>
+attributes of the roles.</p></li>
 </ul>
 </dd>
 </dl>
@@ -2417,7 +2437,7 @@ reverse directions.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom.get_shape">
-<span class="sig-name descname"><span class="pre">get_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.get_shape" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shape'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom.get_shape" title="Link to this definition"></a></dt>
 <dd><p>Get the shapely object defining the class (and defined buffers).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2485,6 +2505,12 @@ State values take precedence over parameter values.</p>
 <dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
 <p>Parameter defining GeomJSON objects that use external information.</p>
 <p>Holds the json as a string so it can be instantiated from shapely.form_json.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomJSONParameter.create_shape">
+<span class="sig-name descname"><span class="pre">create_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.GeomJSONParameter.create_shape" title="Link to this definition"></a></dt>
+<dd><p>Create base shape from provided json (extensible).</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomJSONParameter.load">
 <span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.GeomJSONParameter.load" title="Link to this definition"></a></dt>
@@ -2560,7 +2586,9 @@ precedence.</p>
 <p>Give GeomParameter coordinates to define default coordinates for shapely’ default
 classes.
 Otherwise, GeomParameter can hold geojson.</p>
-<p>Extend with ‘buffer_att’ to create buffer shapes.</p>
+<p>Extend with ‘buffer_att’ to create buffer shapes. The field buffer_att may be
+a float defining the buffer distance or a tuple of the form (distance, ((kw, arg),))
+where kw is the name of a keyword argument to shapely.buffer</p>
 <p class="rubric">Examples</p>
 <p>A point with ends at (0.0, 0.0) and (1.0, 1.0) and radius of 1.0 defining
 whether something is on the line would be defined by the parameter:</p>
@@ -2702,6 +2730,18 @@ instead:</p>
 </pre></div>
 </div>
 </section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.object.geom.add_shape_to_plot">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">add_shape_to_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">local_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.add_shape_to_plot" title="Link to this definition"></a></dt>
+<dd><p>Add an individual shape plot to the axis ax.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.object.geom.add_shapes_to_plot">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">add_shapes_to_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">local_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.add_shapes_to_plot" title="Link to this definition"></a></dt>
+<dd><p>Plot arbitrary shapely classes (including GeometryCollection).</p>
 </dd></dl>
 
 </section>

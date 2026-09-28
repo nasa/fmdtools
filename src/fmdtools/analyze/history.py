@@ -360,6 +360,9 @@ class History(Result):
         """
         Get the time a fault is present in the system.
 
+        Only recorded fault traces are considered. Without recorded faults,
+        returns zero for ``total`` and ``nan`` for the position metrics.
+
         Parameters
         ----------
         metric : 'earliest','latest','total', 'times', optional
@@ -373,6 +376,8 @@ class History(Result):
 
         Examples
         --------
+        >>> History(time=[0, 1, 2]).get_fault_time()
+        nan
         >>> History({'m.faults.fault1': [False, False, False]}).get_fault_time()
         nan
         >>> History({'m.faults.fault1': [False, False, True]}).get_fault_time()
@@ -383,7 +388,7 @@ class History(Result):
         if metric == 'total':
             return np.sum(all_faults_hist >= 1)
         else:
-            times = np.where(all_faults_hist >= 1)[0]
+            times = np.where(np.atleast_1d(all_faults_hist) >= 1)[0]
             if times.size == 0:
                 return np.nan
             elif metric == 'times':
@@ -809,6 +814,8 @@ class History(Result):
         """
         Get aggregated err_hist of means surrounded by std deviation.
 
+        Calculate the spread across histories separately at each time sample.
+
         Parameters
         ----------
         value : str
@@ -829,7 +836,7 @@ class History(Result):
         hist = History()
         hist[time] = self.get_metric(time, axis=0)
         hist['stat'] = self.get_metric(value, np.mean, axis=0)
-        std_dev = self.get_metric(value, np.std)
+        std_dev = self.get_metric(value, np.std, axis=0)
         hist['high'] = hist['stat']+std_dev/2
         hist['low'] = hist['stat']-std_dev/2
         return hist
@@ -851,7 +858,8 @@ class History(Result):
         ci : float
             Fraction for confidence interval. Default is 0.95.
         max_ind : str/int
-            Max index of time to clip to. Default is 'max'.
+            Exclusive slice endpoint for both timestamps and values. Default is
+            'max', which uses the shortest history length.
 
         Returns
         -------
@@ -874,6 +882,7 @@ class History(Result):
         hist[time] = self.get_metric(time, axis=0)
         if max_ind == 'max':
             max_ind = min([len(h) for h in self.values()])
+        hist[time] = hist[time][:max_ind]
         vals = np.array([*self.get_values(value).values()])[:, :max_ind]
         boot_stats = calc_metric_ci(vals, confidence_level=ci, axis=0, **kwargs)
         hist['stat'] = boot_stats[0]

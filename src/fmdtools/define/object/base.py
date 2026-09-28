@@ -29,7 +29,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.base import get_var, set_var, get_methods, get_obj_name, get_memory
 from fmdtools.define.base import get_dict_repr, dict_to_json, auto_filename
-from fmdtools.define.base import copy_dict_objs, dict_from_file
+from fmdtools.define.base import copy_dict_objs, load_json
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 from fmdtools.analyze.graph.model import add_node, add_edge, remove_base, ModelGraph
@@ -371,7 +371,7 @@ class BaseObject(metaclass=BaseType):
 
     def init_roles(self, roletype, initializer=None, **kwargs):
         """
-        Initialize the role 'roletype' for a given object.
+        Initialize the all roles of type 'roletype' for a given object.
 
         Roles defined using roletype_x in its class variables for the attribute x.
 
@@ -384,50 +384,74 @@ class BaseObject(metaclass=BaseType):
             Role to initialize (e.g., 'container'). If none provided, initializes all.
         **kwargs : dict
             Dictionary arguments (or already instantiated objects) to use for the
-            attributes.
+            attributes of the roles.
         """
         # initialize roles and add as attributes to the object
         for rolename in getattr(self, roletype+'s'):
-            if not initializer:
-                obj_initializer = getattr(self, roletype+'_'+rolename)
-                obj_args = kwargs.get(rolename, dict())
-            else:
-                obj_initializer = initializer
-                obj_args = getattr(self, roletype+'_'+rolename)
-
-            if ismethod(obj_initializer) or isfunction(obj_initializer):
-                obj = obj_initializer(*obj_args)
-            elif isinstance(obj_args, obj_initializer):
-                obj = obj_args
-            elif isinstance(obj_args, dict):
-                default_args = getattr(self, 'default_'+rolename, dict())
-                obj_args = {**default_args, **obj_args}
-                if issubclass(obj_initializer, BaseObject):
-                    obj_args['root'] = self.get_full_name()
-                    obj_args['track'] = get_sub_include(rolename, self.track)
-                try:
-                    obj = obj_initializer(**obj_args)
-                except AttributeError as ae:
-                    raise Exception("Problem initializing " + roletype + "_" + rolename
-                                    + ": " + str(initializer)) from ae
-            elif isinstance(obj_args, BaseObject):
-                raise Exception(str(obj_args.__class__) + " not a recognized" +
-                                " instance of " + str(initializer) +
-                                " (did you use relative instead of absolute imports?)")
-            elif isinstance(obj_args, str):
-                if hasattr(obj_initializer, "load") and obj_args.endswith("json"):
-                    obj = obj_initializer.load(obj_args)
-                elif hasattr(obj_initializer, 'fromjson'):
-                    obj = obj_initializer.fromjson(obj_args)
-                else:
-                    raise Exception("Could not initialize "+str(obj_initializer)
-                                    +" from "+obj_args)
-            else:
-                raise Exception(str(obj_args) + "not a dict or not a recognized "
-                                + "instance of " + str(obj_initializer))
-            if hasattr(obj, 'check_role'):
-                obj.check_role(roletype, rolename)
+            o_kw = kwargs.get(rolename, dict())
+            obj = self.create_role(rolename, roletype,
+                                   initializer=initializer, obj_args=o_kw)
             setattr(self, rolename, obj)
+
+    def create_role(self, rolename, roletype, initializer=None, obj_args={}):
+        """
+        Create a given role object for the class.
+
+        Enables roles to be created (and modified, etc.) prior to being added to a
+        given class.
+
+        Parameters
+        ----------
+        rolename : str
+            Name of the role (e.g., 'p', 's').
+        roletype : str
+            Roletype (e.g., 'container').
+        initializer : method, optional
+            Method to call to initialize the role. Otherwise uses whatever is at
+            roletype_rolename
+        **obj_args : dict
+            Dictionary arguments (or already instantiated objects) to use for the
+            attributes.
+        """
+        if not initializer:
+            obj_initializer = getattr(self, roletype+'_'+rolename)
+        else:
+            obj_initializer = initializer
+            obj_args = getattr(self, roletype+'_'+rolename)
+
+        if ismethod(obj_initializer) or isfunction(obj_initializer):
+            obj = obj_initializer(*obj_args)
+        elif isinstance(obj_args, obj_initializer):
+            obj = obj_args
+        elif isinstance(obj_args, dict):
+            default_args = getattr(self, 'default_'+rolename, dict())
+            obj_args = {**default_args, **obj_args}
+            if issubclass(obj_initializer, BaseObject):
+                obj_args['root'] = self.get_full_name()
+                obj_args['track'] = get_sub_include(rolename, self.track)
+            try:
+                obj = obj_initializer(**obj_args)
+            except AttributeError as ae:
+                raise Exception("Problem initializing " + roletype + "_" + rolename
+                                + ": " + str(initializer)) from ae
+        elif isinstance(obj_args, BaseObject):
+            raise Exception(str(obj_args.__class__) + " not a recognized" +
+                            " instance of " + str(initializer) +
+                            " (did you use relative instead of absolute imports?)")
+        elif isinstance(obj_args, str):
+            if hasattr(obj_initializer, "load") and obj_args.endswith("json"):
+                obj = obj_initializer.load(obj_args)
+            elif hasattr(obj_initializer, 'fromjson'):
+                obj = obj_initializer.fromjson(obj_args)
+            else:
+                raise Exception("Could not initialize "+str(obj_initializer)
+                                +" from "+obj_args)
+        else:
+            raise Exception(str(obj_args) + "not a dict or not a recognized "
+                            + "instance of " + str(obj_initializer))
+        if hasattr(obj, 'check_role'):
+            obj.check_role(roletype, rolename)
+        return obj
 
     def assign_roles(self, roletype, other_obj, **kwargs):
         """
@@ -866,7 +890,7 @@ class BaseObject(metaclass=BaseType):
         obj: BaseObject
             Object of the given class.
         """
-        datadict = dict_from_file(filename, delete=delete)
+        datadict = load_json(filename, delete=delete)
         return cls.fromdict(datadict, **kwargs)
 
     def get_vars(self, *variables, trunc_tuple=True):

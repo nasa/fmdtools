@@ -109,11 +109,9 @@ class Environment(CommsFlow):
 
     def __init__(self, name='', root='', glob=[], p={}, s={}, r={}, sp={}, c={}, ga={},
                  track='default', **kwargs):
-        super().__init__(name=name, root=root, glob=glob, p=p, s=s, sp=sp, track=track, **kwargs)
-        # NOTE: p and s also init here because if not, they are overritten
-        # may need to change in the future
-        self.init_roletypes('container', "coords", "arch", r=r, p=p, s=s, sp=sp)
-        r_kwargs = {'run_stochastic': self.r.run_stochastic, 'seed': self.r.seed}
+        r = self.create_role("r", "container", obj_args=r)
+        sp = self.create_role("sp", "container", obj_args=sp)
+        r_kwargs = {'run_stochastic': r.run_stochastic, 'seed': r.seed}
         if isinstance(c, dict):
             if 'p' not in c and getattr(self.coords_c, 'container_p', None) == getattr(self, 'container_p', None):
                 c = {**c, 'p': p}
@@ -121,9 +119,10 @@ class Environment(CommsFlow):
         if isinstance(ga, dict):
             if 'p' not in ga and getattr(self.arch_ga, 'container_p', None) == getattr(self, 'container_p', None):
                 ga = {**ga, 'p': p}
-            ga = {**{'r': r_kwargs, 'sp': self.sp.get_sub_kwargs()}, **ga}
+            ga = {**{'r': r_kwargs, 'sp': sp.get_sub_kwargs()}, **ga}
 
-        self.init_roletypes('coords', 'arch', c=c, ga=ga)
+        super().__init__(name=name, root=root, glob=glob, p=p, s=s, r=r, sp=sp,
+                         c=c, ga=ga, track=track, **kwargs)
 
     def base_type(self):
         """Return fmdtools type of the model class."""

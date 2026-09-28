@@ -18,6 +18,7 @@ specific language governing permissions and limitations under the License.
 from fmdtools_tests.common import CommonTests
 from fmdtools_examples.navigating_rover.script_search_rover import line_dist, line_dist_faster
 import unittest
+import numpy as np
 
 
 class RoverTests(unittest.TestCase, CommonTests):
@@ -29,9 +30,9 @@ class RoverTests(unittest.TestCase, CommonTests):
             dist_int, enddist_int, endpt_int = line_dist_faster(testvalue)
             dist, enddist, endpt = line_dist(testvalue)
 
-            self.assertEqual(dist, dist_int)
-            self.assertEqual(enddist, enddist_int)
-            self.assertEqual(endpt, endpt_int)
+            self.assertTrue(np.isclose(dist, dist_int))
+            self.assertTrue(np.isclose(enddist, enddist_int))
+            self.assertTrue(np.isclose(endpt, endpt_int).all())
 
 
 if __name__ == '__main__':

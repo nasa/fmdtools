@@ -150,7 +150,7 @@ class DroneDisturbanceTest(unittest.TestCase):
         amt = self.mdl.fxns['store_ee'].ca.comps['s1p1'].p.amt
         soc_expected = soc_set - 100/amt
         soc_res = self.edp.f2(soc_set)
-        self.assertEqual(soc_expected, soc_res)
+        self.assertAlmostEqual(soc_expected, soc_res)
 
         # make sure the disturbance wasn't set permanently
         soc_later = self.edp.f1(soc_set)

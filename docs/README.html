@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Overview &mdash; fmdtools 2.5.1 documentation</title>
+  <title>Overview &mdash; fmdtools 2.5.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="_static/fmdtools_ico.ico"/>
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=983e91d6"></script>
+      <script src="_static/documentation_options.js?v=afc61bbc"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/design-tabs.js?v=f930bc37"></script>
@@ -523,7 +523,6 @@
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.auto_filename"><code class="docutils literal notranslate"><span class="pre">auto_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.copy_dict_objs"><code class="docutils literal notranslate"><span class="pre">copy_dict_objs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.dict_from_file"><code class="docutils literal notranslate"><span class="pre">dict_from_file()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.dict_to_json"><code class="docutils literal notranslate"><span class="pre">dict_to_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
@@ -541,6 +540,7 @@
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.load_json"><code class="docutils literal notranslate"><span class="pre">load_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.map_obj_fields"><code class="docutils literal notranslate"><span class="pre">map_obj_fields()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
@@ -982,7 +982,7 @@ with this version to keep pace with development, especially when running example
 <p>Which will install both fmdtools as well as examples (<code class="docutils literal notranslate"><span class="pre">[all]</span></code> option) as well as testing and development dependencies (<code class="docutils literal notranslate"><span class="pre">--group</span> <span class="pre">dev</span></code> option)</p>
 <p>More guidance on development installations is provided in <a class="reference external" href="https://nasa.github.io/fmdtools/docs-source/Contributions.html#how-to-contribute">How to Contribute</a></p>
 <p>Note that this version reflects the latest version on the <code class="docutils literal notranslate"><span class="pre">main</span></code> git branch along with any local changes. To use a particular version of <code class="docutils literal notranslate"><span class="pre">fmdtools</span></code> in the context of a development install you can checkout the tag corresponding to the version you want, e.g.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="n">git</span> <span class="n">checkout</span> <span class="n">v2</span><span class="mf">.5.1</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="n">git</span> <span class="n">checkout</span> <span class="n">v2</span><span class="mf">.5.2</span>
 </pre></div>
 </div>
 </section>
@@ -1078,7 +1078,7 @@ with this version to keep pace with development, especially when running example
 <section id="ai-llm-tips">
 <h3>AI/LLM Tips<a class="headerlink" href="#ai-llm-tips" title="Link to this heading"></a></h3>
 <p>Decent (but <strong>very imperfect</strong>) results can be achieved using LLMs for model development using the prompt:</p>
-<div class="highlight-prompt notranslate"><div class="highlight"><pre><span></span>You are an experienced software engineer learning a new Python library for the first time. Make an fmdtools simulation of racecar using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.1` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes. The output should be a bare bones but well-commented .py file with simple behaviors for each class and a small script at the bottom leveraging the built-in capabilities in the `fmdtools.analyze` package instead of directly using external libraries like matplotlib. As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.1 syntax.
+<div class="highlight-prompt notranslate"><div class="highlight"><pre><span></span>You are an experienced software engineer learning a new Python library for the first time. Make an fmdtools simulation of racecar using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.2` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes. The output should be a bare bones but well-commented .py file with simple behaviors for each class and a small script at the bottom leveraging the built-in capabilities in the `fmdtools.analyze` package instead of directly using external libraries like matplotlib. As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.2 syntax.
 </pre></div>
 </div>
 <p>The important aspects of this prompt are specifying the URL and version–otherwise the LLM is likely to hallucinate usage or recall an earlier version of fmdtools. Do not expect perfect output from this–you may have to spend some time identifying the problems so they can be fixed!</p>
@@ -1119,8 +1119,8 @@ with this version to keep pace with development, especially when running example
   <span class="n">author</span> <span class="o">=</span> <span class="p">{{</span><span class="n">NASA</span><span class="p">}},</span>
   <span class="n">title</span> <span class="o">=</span> <span class="p">{</span><span class="n">fmdtools</span><span class="p">},</span>
   <span class="n">url</span> <span class="o">=</span> <span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nasa</span><span class="o">/</span><span class="n">fmdtools</span><span class="p">},</span>
-  <span class="n">version</span> <span class="o">=</span> <span class="p">{</span><span class="mf">2.5.1</span><span class="p">},</span>
-  <span class="n">date</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2026</span><span class="o">-</span><span class="mi">9</span><span class="o">-</span><span class="mi">22</span><span class="p">},</span>
+  <span class="n">version</span> <span class="o">=</span> <span class="p">{</span><span class="mf">2.5.2</span><span class="p">},</span>
+  <span class="n">date</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2026</span><span class="o">-</span><span class="mi">9</span><span class="o">-</span><span class="mi">28</span><span class="p">},</span>
 <span class="p">}</span>
 </pre></div>
 </div>

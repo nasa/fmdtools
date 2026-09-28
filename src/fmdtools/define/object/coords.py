@@ -28,7 +28,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.rand import Rand
-from fmdtools.define.base import is_iter, dict_from_file, value_to_jsonable
+from fmdtools.define.base import is_iter, load_json, value_to_jsonable
 from fmdtools.define.object.base import BaseObject
 from fmdtools.analyze.common import setup_plot, consolidate_legend, clear_prev_figure
 from fmdtools.analyze.common import prep_animation_title, add_title_xylabs, calc_metric
@@ -1693,7 +1693,7 @@ class Coords(BaseCoords):
             if delete:
                 os.remove(filename)
         elif ".json" in filename:
-            datadict = dict_from_file(filename, delete=delete)
+            datadict = load_json(filename, delete=delete)
             propname = kwargs.get('propname', prop)
             proparray = np.array(datadict[propname], dtype=dtype)
         else:

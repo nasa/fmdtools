@@ -41,7 +41,7 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 import inspect
 from scipy.stats import bootstrap
-from fmdtools.define.base import filter_kwargs
+from fmdtools.define.base import filter_kwargs, round_float
 
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -229,7 +229,8 @@ def metric_preamble(data, dtype=None, rates=None, r_dtype=None, r_norm=False):
 
 
 def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
-                rates=None, r_dtype=None, r_norm=False, **kwargs):
+                rates=None, r_dtype=None, r_norm=False, round_value=True,
+                res=1e-6, min_r=7, **kwargs):
     """
     Calculate a metric from data.
 
@@ -253,12 +254,18 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
         Datatype to preprocess the rates over. The default is None.
     r_norm : bool, optional
         Whether to normalize rates. The default is False.
+    round_value : bool, optional
+        Whether to round the value. Default is True.
+    res : float
+        Resolution to round to. Default is 1e-6.
+    min_r : int
+        Maximum number of digits to round to (see round_float).
     **kwargs : kwargs
-        Keyword arguments to method.
+        Keyword arguments to method (see round_float).
 
     Returns
     -------
-    metric: float
+    metric: np.float64/np.int64
         Metric calculated by method over data.
 
     Examples
@@ -266,7 +273,7 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
     >>> calc_metric([1,2,3]) # simple average
     np.float64(2.0)
     >>> calc_metric([1,2,3], rates=[0.1, 0.1, 0.0], method=np.sum) # weighted sum
-    np.float64(0.30000000000000004)
+    np.float64(0.3)
     >>> calc_metric([0, 20, 30], dtype=bool, rates=[0.1, 0.1, 0.1], method=np.sum) # rate of nonzero event
     np.float64(0.2)
     >>> calc_metric([0, 1, 2], "total")
@@ -276,11 +283,15 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
     """
     if isinstance(method, str):
         method = eval("calc_"+method)
-        return method(data, args=args, axis=axis, dtype=dtype, rates=rates,
+        metric = method(data, args=args, axis=axis, dtype=dtype, rates=rates,
                       r_dtype=r_dtype, r_norm=r_norm, **kwargs)
     else:
         vals = metric_preamble(data, dtype, rates, r_dtype, r_norm)
-        return method(vals, *args, **filter_kwargs(method, **kwargs, axis=axis))
+        metric = method(vals, *args, **filter_kwargs(method, **kwargs, axis=axis))
+    if round_value and (isinstance(metric, np.floating) or isinstance(metric, float)):
+        return round_float(metric, res=res, min_r=min_r)
+    else:
+        return metric
 
 
 def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
@@ -325,15 +336,13 @@ def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
         bs_kwar['confidence_level'] = interval*0.01
 
     vals = metric_preamble(data, **filter_kwargs(metric_preamble, **kwargs))
-    if len(np.shape(vals)) > 1:
-        val = vals[axis, 0]
-    else:
-        val = np.array(vals).flatten()[0]
+    val = np.take(vals, [0], axis=axis)
     if "weights" in kwargs and kwargs['weights'] is not None:
         raise Exception("Weights not able to be used w- bootstrap--use rates instead.")
     met_val = method(vals, axis=axis, **filter_kwargs(method, **kwargs))
     vals_vary = vals == val
-    if not np.all(vals_vary):
+    # Preserve the existing policy for globally identical data.
+    if not np.all(vals == vals.flat[0]):
         if np.any(np.all(vals_vary, axis=axis)):
             # use more robust/basic algorithm if some indices don't vary
             bs = bootstrap([vals], method, axis=axis, method="basic", **bs_kwar)
@@ -353,7 +362,7 @@ def calc_rate(data, rates=None, weights=None, **kwargs):
     Examples
     --------
     >>> calc_rate([0, 10, 0]) # defaults to equal rate
-    np.float64(0.3333333333333333)
+    np.float64(0.333333)
     >>> calc_rate([0, 10, 100], [0.1, 0.1, 0.1]) # provided rates
     np.float64(0.2)
     """
@@ -370,7 +379,7 @@ def calc_percent(data, weights=None, rates=None, **kwargs):
     Examples
     --------
     >>> calc_percent([0, 10, 0])
-    np.float64(0.3333333333333333)
+    np.float64(0.333333)
     """
     return calc_metric(data, **{**kwargs, 'dtype': bool})
 
@@ -386,7 +395,7 @@ def calc_total(data, weights=None, **kwargs):
     >>> calc_total([0, 10, 100])
     np.int64(2)
     """
-    return calc_metric(data, **{**kwargs, 'method': np.sum, 'dtype': bool})
+    return np.int64(calc_metric(data, **{**kwargs, 'method': np.sum, 'dtype': bool}))
 
 
 def calc_expected(data, rates=None, weights=None, **kwargs):
@@ -519,8 +528,8 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
     fig : mpl figure
     ax :mpl, axis
     """
-    fig, ax = setup_plot(fig, ax, figsize)
-    ax.plot(err_hist['stat'], **kwargs)
+    fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
+    ax.plot(err_hist[time], err_hist['stat'], **kwargs)
     if boundtype == 'fill':
         col = ax.lines[-1].get_color()
         ax.fill_between(err_hist[time], err_hist['low'], err_hist['high'],
@@ -582,7 +591,7 @@ def plot_err_lines(times, lows, highs, ax=None, fig=None, figsize=(6, 4), **kwar
     **kwargs : kwargs
         kwargs for the line
     """
-    fig, ax = setup_plot(ax, fig, figsize)
+    fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
     ax.plot(times, highs, **kwargs)
     ax.plot(times, lows, **kwargs)
     return fig, ax

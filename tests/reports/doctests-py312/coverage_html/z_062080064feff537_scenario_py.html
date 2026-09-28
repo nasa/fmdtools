@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_062080064feff537_search_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.16.1">coverage.py v7.16.1</a>,
-            created at 2026-09-22 15:32 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
+            created at 2026-09-27 12:08 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -125,8 +125,8 @@
     <p class="run"><span class="n"><a id="t43" href="#t43">43</a></span><span class="t">    <span class="key">return</span><span class="str">&#x27;_&#x27;</span><span class="op">.</span><span class="nam">join</span><span class="op">(</span><span class="nam">sn</span><span class="op">.</span><span class="nam">split</span><span class="op">(</span><span class="str">&quot;.&quot;</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t44" href="#t44">44</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t45" href="#t45">45</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t46" href="#t46">46</a></span><span class="t"><span class="key">class</span> <span class="nam">BaseScenObj</span><span class="op">(</span><span class="nam">dataobject</span><span class="op">,</span> <span class="nam">readonly</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">mapping</span><span class="op">=</span><span class="key">True</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t47" href="#t47">47</a></span><span class="t">    <span class="str">&quot;&quot;&quot;Base class for Scenarios and injections.&quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t46" href="#t46">46</a></span><span class="t"><span class="key">class</span> <span class="nam">BaseScenObj</span><span class="op">(</span><span class="nam">dataobject</span><span class="op">,</span> <span class="nam">readonly</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">mapping</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">copy_default</span><span class="op">=</span><span class="key">True</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t47" href="#t47">47</a></span><span class="t">    <span class="str">&quot;&quot;&quot;Base class for scenarios and injections with independent mutable defaults.&quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t48" href="#t48">48</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t49" href="#t49">49</a></span><span class="t">    <span class="key">def</span> <span class="nam">get</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">entry</span><span class="op">,</span> <span class="nam">fallback</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t50" href="#t50">50</a></span><span class="t">        <span class="str">&quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
@@ -484,7 +484,7 @@
     <p class="mis show_mis"><span class="n"><a id="t402" href="#t402">402</a></span><span class="t">        <span class="key">if</span> <span class="str">&quot;.&quot;</span> <span class="key">in</span> <span class="nam">param</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t403" href="#t403">403</a></span><span class="t">            <span class="nam">p_index</span> <span class="op">=</span> <span class="nam">param</span><span class="op">.</span><span class="nam">split</span><span class="op">(</span><span class="str">&quot;.&quot;</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t404" href="#t404">404</a></span><span class="t">            <span class="nam">p_field</span> <span class="op">=</span> <span class="nam">p_index</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t405" href="#t405">405</a></span><span class="t">            <span class="nam">p_entry</span> <span class="op">=</span> <span class="str">&quot;.&quot;</span><span class="op">.</span><span class="nam">join</span><span class="op">(</span><span class="nam">p_field</span><span class="op">[</span><span class="num">1</span><span class="op">:</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t405" href="#t405">405</a></span><span class="t">            <span class="nam">p_entry</span> <span class="op">=</span> <span class="str">&quot;.&quot;</span><span class="op">.</span><span class="nam">join</span><span class="op">(</span><span class="nam">p_index</span><span class="op">[</span><span class="num">1</span><span class="op">:</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t406" href="#t406">406</a></span><span class="t">            <span class="nam">pval</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="nam">p_field</span><span class="op">,</span> <span class="nam">default</span><span class="op">)</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="nam">p_entry</span><span class="op">,</span> <span class="nam">default</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t407" href="#t407">407</a></span><span class="t">        <span class="key">elif</span> <span class="nam">param</span> <span class="op">==</span> <span class="str">&#x27;prob&#x27;</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t408" href="#t408">408</a></span><span class="t">            <span class="nam">pval</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">prob</span>&nbsp;</span><span class="r"></span></p>
@@ -531,8 +531,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_062080064feff537_search_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.16.1">coverage.py v7.16.1</a>,
-            created at 2026-09-22 15:32 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
+            created at 2026-09-27 12:08 -0700
         </p>
     </div>
 </footer>

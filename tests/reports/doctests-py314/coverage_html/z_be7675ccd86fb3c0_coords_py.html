@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_be7675ccd86fb3c0_geom_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.16.1">coverage.py v7.16.1</a>,
-            created at 2026-09-22 15:32 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
+            created at 2026-09-27 12:07 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -110,7 +110,7 @@
     <p class="pln"><span class="n"><a id="t28" href="#t28">28</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t29" href="#t29">29</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">container</span><span class="op">.</span><span class="nam">parameter</span> <span class="key">import</span> <span class="nam">Parameter</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t30" href="#t30">30</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">container</span><span class="op">.</span><span class="nam">rand</span> <span class="key">import</span> <span class="nam">Rand</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t31" href="#t31">31</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">is_iter</span><span class="op">,</span> <span class="nam">dict_from_file</span><span class="op">,</span> <span class="nam">value_to_jsonable</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t31" href="#t31">31</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">is_iter</span><span class="op">,</span> <span class="nam">load_json</span><span class="op">,</span> <span class="nam">value_to_jsonable</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t32" href="#t32">32</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">object</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">BaseObject</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t33" href="#t33">33</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">analyze</span><span class="op">.</span><span class="nam">common</span> <span class="key">import</span> <span class="nam">setup_plot</span><span class="op">,</span> <span class="nam">consolidate_legend</span><span class="op">,</span> <span class="nam">clear_prev_figure</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">analyze</span><span class="op">.</span><span class="nam">common</span> <span class="key">import</span> <span class="nam">prep_animation_title</span><span class="op">,</span> <span class="nam">add_title_xylabs</span><span class="op">,</span> <span class="nam">calc_metric</span>&nbsp;</span><span class="r"></span></p>
@@ -1775,7 +1775,7 @@
     <p class="run"><span class="n"><a id="t1693" href="#t1693">1693</a></span><span class="t">            <span class="key">if</span> <span class="nam">delete</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1694" href="#t1694">1694</a></span><span class="t">                <span class="nam">os</span><span class="op">.</span><span class="nam">remove</span><span class="op">(</span><span class="nam">filename</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1695" href="#t1695">1695</a></span><span class="t">        <span class="key">elif</span> <span class="str">&quot;.json&quot;</span> <span class="key">in</span> <span class="nam">filename</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t1696" href="#t1696">1696</a></span><span class="t">            <span class="nam">datadict</span> <span class="op">=</span> <span class="nam">dict_from_file</span><span class="op">(</span><span class="nam">filename</span><span class="op">,</span> <span class="nam">delete</span><span class="op">=</span><span class="nam">delete</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1696" href="#t1696">1696</a></span><span class="t">            <span class="nam">datadict</span> <span class="op">=</span> <span class="nam">load_json</span><span class="op">(</span><span class="nam">filename</span><span class="op">,</span> <span class="nam">delete</span><span class="op">=</span><span class="nam">delete</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1697" href="#t1697">1697</a></span><span class="t">            <span class="nam">propname</span> <span class="op">=</span> <span class="nam">kwargs</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">&#x27;propname&#x27;</span><span class="op">,</span> <span class="nam">prop</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1698" href="#t1698">1698</a></span><span class="t">            <span class="nam">proparray</span> <span class="op">=</span> <span class="nam">np</span><span class="op">.</span><span class="nam">array</span><span class="op">(</span><span class="nam">datadict</span><span class="op">[</span><span class="nam">propname</span><span class="op">]</span><span class="op">,</span> <span class="nam">dtype</span><span class="op">=</span><span class="nam">dtype</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1699" href="#t1699">1699</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1972,8 +1972,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_be7675ccd86fb3c0_geom_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.16.1">coverage.py v7.16.1</a>,
-            created at 2026-09-22 15:32 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
+            created at 2026-09-27 12:07 -0700
         </p>
     </div>
 </footer>

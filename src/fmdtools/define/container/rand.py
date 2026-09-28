@@ -188,6 +188,9 @@ class Rand(BaseContainer):
 
         (if in run_stochastic mode)
 
+        Array draws are accepted for list- or ndarray-valued states. Scalar states
+        still reject array results so an incorrect draw size is not hidden.
+
         Parameters
         ----------
         statename : str
@@ -200,7 +203,8 @@ class Rand(BaseContainer):
         if getattr(self, 'run_stochastic', True):
             gen_method = getattr(self.rng, methodname)
             newvalue = gen_method(*args)
-            if isinstance(newvalue, np.ndarray) and type(self.s[statename]) not in [list, np.array]:
+            if (isinstance(newvalue, np.ndarray)
+                    and not isinstance(self.s[statename], (list, np.ndarray))):
                 raise Exception("Random method for " + statename + " in " +
                                 str(self.__class__) + " returned array when it should" +
                                 " be a float/int--check args")
@@ -462,6 +466,23 @@ def get_hypergeometric_pmf(*args):
     return get_scipy_pmf("hypergeom", n_pop, n_good, n_sample)
 
 
+def get_uniform_pdf(low=0.0, high=1.0, size=None):
+    """Get a uniform density using NumPy's lower and upper bounds.
+
+    NumPy specifies endpoints; SciPy specifies location and interval width.
+    The optional draw size does not change the density of the supplied values.
+
+    Examples
+    --------
+    >>> get_uniform_pdf(5.0, 6.0)(5.5)
+    np.float64(1.0)
+    >>> get_uniform_pdf(5.0, 6.0)(7.0)
+    np.float64(0.0)
+    """
+    return get_scipy_pdf("uniform", loc=low,
+                         scale=np.asarray(high) - np.asarray(low))
+
+
 def get_lognormal_pdf(*args):
     """
     Get callable for scipy lognormal pdf with numpy.random arguments.
@@ -537,7 +558,7 @@ def get_pfunc_for_dist(randname, *args):
         pdf/pmf for the draw.
     """
     same_funcs = ['beta', 'dirichlet', 'f', 'gamma', 'laplace',
-                  'logistic', 'multivariate_normal', 'pareto', 'uniform', 'wald']
+                  'logistic', 'multivariate_normal', 'pareto', 'wald']
     same_funcs_pmf = ['multinomial', 'poisson', 'zipf']
     different_funcs_pmf = {'binomial': 'binom',
                            'geometric': 'geom',
@@ -568,6 +589,8 @@ def get_pfunc_for_dist(randname, *args):
             return get_exp_ray_pdf(randname, *args)
         case 'hypergeometric':
             return get_hypergeometric_pmf(*args)
+        case 'uniform':
+            return get_uniform_pdf(*args)
         case 'lognormal':
             return get_lognormal_pdf(*args)
         case 'standard_t':

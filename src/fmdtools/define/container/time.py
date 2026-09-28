@@ -154,7 +154,7 @@ class Time(BaseContainer):
         """
         self.assign(kwargs)
         global_tstep = Decimal(str(self.dt))
-        local_tstep = Decimal(self.local_dt)
+        local_tstep = Decimal(str(self.local_dt))
         if self.use_local:
             dt = local_tstep
             if ((dt < global_tstep and global_tstep % dt)

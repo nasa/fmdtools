@@ -80,7 +80,7 @@ class PhaseMap(object):
     def __repr__(self):
         return 'PhaseMap(' + str(self.phases) + ', ' + str(self.modephases) + ')'
 
-    def find_phase(self, time, dt=1.0):
+    def find_phase(self, time, dt=None):
         """
         Find the phase that a time occurs in.
 
@@ -88,12 +88,17 @@ class PhaseMap(object):
         ----------
         time : float
             Occurence time.
+        dt : float, optional
+            Width of the final sample in each phase. Defaults to this map's dt.
+            An explicit value overrides the configured timestep for this lookup.
 
         Returns
         -------
         phase : str
             Name of the phase time occurs in.
         """
+        if dt is None:
+            dt = self.dt
         for phase, times in self.phases.items():
             if times[0] <= time < times[1]+dt:
                 return phase
@@ -677,8 +682,7 @@ def join_phasemaps(*phasemaps):
     joint_phases = {}
     all_combos = [*itertools.product(*[phasemap.phases for phasemap in phasemaps])]
     for combo in all_combos:
-        phases = {c: phasemaps[i].phases[c] for i, c in enumerate(combo)}
-        intervals = [i for i in phases.values()]
+        intervals = [phasemaps[i].phases[c] for i, c in enumerate(combo)]
         joined_interval = find_interval_overlap(*intervals)
         if joined_interval:
             joint_phases[combo] = joined_interval

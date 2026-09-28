@@ -888,7 +888,7 @@ class FaultSample(BaseSample):
 
     def prune_scenarios(self, scen_var='rate', comparator=np.greater, value=0.0):
         """
-        Prune scenarios from the FaultSample.
+        Prune scenarios and retain only their injection times.
 
         Parameters
         ----------
@@ -901,6 +901,7 @@ class FaultSample(BaseSample):
         """
         self._scenarios = [scen for scen in self._scenarios
                            if comparator(get_var(scen, scen_var), value)]
+        self._times = {time for scen in self._scenarios for time in scen.times}
 
     def get_times(self):
         """Get all sampled times."""
@@ -1051,7 +1052,8 @@ class FaultSample(BaseSample):
                 if n_joint == 1:
                     self.add_single_fault_scenario(faulttups[0], time, weight=weight)
                 else:
-                    self.add_joint_fault_scenario(faulttups, time, **joint_kwargs)
+                    self.add_joint_fault_scenario(faulttups, time, weight=weight,
+                                                  **joint_kwargs)
 
     def add_fault_phases(self, *phases_to_sample, method='even', args=(1,),
                          phase_methods={}, phase_args={},
@@ -1122,13 +1124,12 @@ class JointFaultSample(FaultSample):
     """FaultSample for faults in multiple faultdomains and phasemaps."""
 
     def __init__(self, *faultdomains, phasemaps=[], def_mdl_phasemap=True):
-        self.faultdomain = FaultDomain(faultdomains[0].mdl)
+        joint_domain = FaultDomain(faultdomains[0].mdl)
         for faultdomain in faultdomains:
-            self.faultdomain.faults.update(faultdomain.faults)
-        if phasemaps:
-            self.phasemap = join_phasemaps(phasemaps)
-        elif def_mdl_phasemap:
-            self.phasemap = PhaseMap(faultdomains[0].mdl.sp.phases)
+            joint_domain.faults.update(faultdomain.faults)
+        phasemap = join_phasemaps(*phasemaps) if phasemaps else {}
+        super().__init__(joint_domain, phasemap=phasemap,
+                         def_mdl_phasemap=def_mdl_phasemap)
 
 
 class SampleApproach(BaseSample):
@@ -1382,7 +1383,8 @@ class ParameterSample(BaseSample):
         *x : vars
             Values of the variables defined in the parameter domain.
         seed : int, optional
-            Seed to include in the ParameterScenario. The default is False.
+            Seed to include in the ParameterScenario, including zero. False
+            (the default) or None uses the sample seed when one is configured.
         sp : dict, optional
             SimParam arguments to the ParameterScenario. The default is {}.
         weight : float, optional
@@ -1407,9 +1409,9 @@ class ParameterSample(BaseSample):
         2
         """
         param_args = self.paramdomain.get_param_kwargs(*x)
-        if seed:
+        if seed is not False and seed is not None:
             r = {'seed': seed}
-        elif self.seed:
+        elif self.seed is not False and self.seed is not None:
             r = {'seed': self.seed}
         else:
             r = {}
@@ -1558,7 +1560,9 @@ class ParameterSample(BaseSample):
             raise Exception("Invalid method: " + combmethod)
         if n_samp:
             rng = np.random.default_rng(self.seed)
-            x_combos = rng.choice(x_combos, n_samp)
+            # Sample row indices so mixed parameter types are not coerced.
+            indices = rng.choice(len(x_combos), n_samp)
+            x_combos = [x_combos[i] for i in indices]
 
         self.add_variable_replicates(x_combos, name=name, **rep_kwargs)
 

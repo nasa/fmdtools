@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.analyze &mdash; fmdtools 2.5.1 documentation</title>
+  <title>fmdtools.analyze &mdash; fmdtools 2.5.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=983e91d6"></script>
+      <script src="../_static/documentation_options.js?v=afc61bbc"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -523,7 +523,6 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.auto_filename"><code class="docutils literal notranslate"><span class="pre">auto_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.copy_dict_objs"><code class="docutils literal notranslate"><span class="pre">copy_dict_objs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.dict_from_file"><code class="docutils literal notranslate"><span class="pre">dict_from_file()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.dict_to_json"><code class="docutils literal notranslate"><span class="pre">dict_to_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
@@ -541,6 +540,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.load_json"><code class="docutils literal notranslate"><span class="pre">load_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.map_obj_fields"><code class="docutils literal notranslate"><span class="pre">map_obj_fields()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
@@ -976,7 +976,7 @@ a file given the general filename and an individual id</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.common.calc_metric">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">calc_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">average&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.calc_metric" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">calc_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">average&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.calc_metric" title="Link to this definition"></a></dt>
 <dd><p>Calculate a metric from data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -991,21 +991,24 @@ data (e.g., preprocess as bool to calculate a rate). The default is None.</p></l
 the metric. The default is None.</p></li>
 <li><p><strong>r_dtype</strong> (<em>type</em><em>, </em><em>optional</em>) – Datatype to preprocess the rates over. The default is None.</p></li>
 <li><p><strong>r_norm</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to normalize rates. The default is False.</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to method.</p></li>
+<li><p><strong>round_value</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to round the value. Default is True.</p></li>
+<li><p><strong>res</strong> (<em>float</em>) – Resolution to round to. Default is 1e-6.</p></li>
+<li><p><strong>min_r</strong> (<em>int</em>) – Maximum number of digits to round to (see round_float).</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to method (see round_float).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>metric</strong> – Metric calculated by method over data.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
+<dd class="field-odd"><p>np.float64/np.int64</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_metric</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span> <span class="c1"># simple average</span>
 <span class="go">np.float64(2.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_metric</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">rates</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">)</span> <span class="c1"># weighted sum</span>
-<span class="go">np.float64(0.30000000000000004)</span>
+<span class="go">np.float64(0.3)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_metric</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">)</span> <span class="c1"># rate of nonzero event</span>
 <span class="go">np.float64(0.2)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_metric</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;total&quot;</span><span class="p">)</span>
@@ -1058,7 +1061,7 @@ The default is False.</p></li>
 <dd><p>Calculate a percent of a non-zero value in data using calc_metric.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_percent</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="go">np.float64(0.3333333333333333)</span>
+<span class="go">np.float64(0.333333)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1069,7 +1072,7 @@ The default is False.</p></li>
 <dd><p>Calculate a rate of a non-zero value in data using calc_metric.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_rate</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="c1"># defaults to equal rate</span>
-<span class="go">np.float64(0.3333333333333333)</span>
+<span class="go">np.float64(0.333333)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_rate</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span> <span class="c1"># provided rates</span>
 <span class="go">np.float64(0.2)</span>
 </pre></div>
@@ -1548,7 +1551,9 @@ default for all values to get. Default is {}.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>*values</strong> (<em>str</em>) – Values to get (e.g. <cite>fxns.fxnname.s.val</cite>)</p></li>
-<li><p><strong>**groups</strong> (<em>list</em>) – Sets of scenarios to group (e.g. set_1=[‘scen1’, ‘scen2’…])</p></li>
+<li><p><strong>**groups</strong> (<em>list</em>) – Sets of scenarios to group (e.g. set_1=[‘scen1’, ‘scen2’…]).
+Scenario names match at dot-separated path boundaries; selecting a
+parent scenario also includes its nested scenarios.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1563,11 +1568,13 @@ default for all values to get. Default is {}.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.get_default_comp_groups">
 <span class="sig-name descname"><span class="pre">get_default_comp_groups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.get_default_comp_groups" title="Link to this definition"></a></dt>
-<dd><p>Get a dict of nominal and faulty scenario keys from the Result.</p>
+<dd><p>Get nominal and faulty keys for single or nested scenario samples.</p>
+<p>Nested samples retain their parent prefix (e.g., <code class="docutils literal notranslate"><span class="pre">sample.nominal</span></code>).
+Only a scenario named exactly <code class="docutils literal notranslate"><span class="pre">nominal</span></code> belongs to the nominal group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>comp_groups</strong> – Dict with structure {‘nominal’: [list of nominal scenarios], ‘faulty’: [list of faulty scenarios]}.
-If no nominal or faulty, returns an empty dict {}.</p>
+If no nominal scenario is found, returns {‘default’: ‘default’}.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
@@ -1595,7 +1602,7 @@ Results.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.get_expected">
-<span class="sig-name descname"><span class="pre">get_expected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_nominal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difference_from_nominal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.get_expected" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_expected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_nominal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difference_from_nominal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.get_expected" title="Link to this definition"></a></dt>
 <dd><p>Take the expectation of numeric metrics in the result over given scenarios.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1605,6 +1612,7 @@ Results.</p>
 The default is False.</p></li>
 <li><p><strong>difference_from_nominal</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to calculated the difference of the expectation from nominal.
 The default is False.</p></li>
+<li><p><strong>**kwargs</strong> – kwargs to round_float</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1664,7 +1672,7 @@ its quantities over the contained scenarios.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">get_metric</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;expected&quot;</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
 <span class="go">np.float64(0.005)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">get_metric</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;expected&quot;</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;t1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;t2&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
-<span class="go">np.float64(0.21000000000000002)</span>
+<span class="go">np.float64(0.21)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2203,6 +2211,8 @@ histories.</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.get_fault_time">
 <span class="sig-name descname"><span class="pre">get_fault_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'earliest'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_fault_time" title="Link to this definition"></a></dt>
 <dd><p>Get the time a fault is present in the system.</p>
+<p>Only recorded fault traces are considered. Without recorded faults,
+returns zero for <code class="docutils literal notranslate"><span class="pre">total</span></code> and <code class="docutils literal notranslate"><span class="pre">nan</span></code> for the position metrics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>metric</strong> (<em>'earliest'</em><em>,</em><em>'latest'</em><em>,</em><em>'total'</em><em>, </em><em>'times'</em><em>, </em><em>optional</em>) – Earliest, latest, or total time fault(s) are present.
@@ -2216,7 +2226,9 @@ The default is “earliest”.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">History</span><span class="p">({</span><span class="s1">&#39;m.faults.fault1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]})</span><span class="o">.</span><span class="n">get_fault_time</span><span class="p">()</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">History</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">get_fault_time</span><span class="p">()</span>
+<span class="go">nan</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">History</span><span class="p">({</span><span class="s1">&#39;m.faults.fault1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]})</span><span class="o">.</span><span class="n">get_fault_time</span><span class="p">()</span>
 <span class="go">nan</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">History</span><span class="p">({</span><span class="s1">&#39;m.faults.fault1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]})</span><span class="o">.</span><span class="n">get_fault_time</span><span class="p">()</span>
 <span class="go">np.int64(2)</span>
@@ -2321,7 +2333,8 @@ The default is “earliest”.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>value</strong> (<em>str</em>) – Value to get mean and bounds of.</p></li>
 <li><p><strong>ci</strong> (<em>float</em>) – Fraction for confidence interval. Default is 0.95.</p></li>
-<li><p><strong>max_ind</strong> (<em>str/int</em>) – Max index of time to clip to. Default is ‘max’.</p></li>
+<li><p><strong>max_ind</strong> (<em>str/int</em>) – Exclusive slice endpoint for both timestamps and values. Default is
+‘max’, which uses the shortest history length.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -2353,6 +2366,7 @@ The default is “earliest”.</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.get_mean_std_errhist">
 <span class="sig-name descname"><span class="pre">get_mean_std_errhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_mean_std_errhist" title="Link to this definition"></a></dt>
 <dd><p>Get aggregated err_hist of means surrounded by std deviation.</p>
+<p>Calculate the spread across histories separately at each time sample.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – Value to get mean and bounds of.</p>
@@ -2932,7 +2946,8 @@ Default is [].</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>factor</strong> (<em>str/int</em>) – Name or index of factor to sort by.</p></li>
+<li><p><strong>factor</strong> (<em>str/int</em>) – Factor name or zero-based tuple index to sort by. Negative indices
+follow the usual Python indexing convention.</p></li>
 <li><p><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to sort in descending order. The default is False.</p></li>
 </ul>
 </dd>
@@ -3523,11 +3538,15 @@ Has structure::
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.phases.PhaseMap.find_phase">
-<span class="sig-name descname"><span class="pre">find_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.phases.PhaseMap.find_phase" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.phases.PhaseMap.find_phase" title="Link to this definition"></a></dt>
 <dd><p>Find the phase that a time occurs in.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>time</strong> (<em>float</em>) – Occurence time.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>) – Occurence time.</p></li>
+<li><p><strong>dt</strong> (<em>float</em><em>, </em><em>optional</em>) – Width of the final sample in each phase. Defaults to this map’s dt.
+An explicit value overrides the configured timestep for this lookup.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>phase</strong> – Name of the phase time occurs in.</p>
