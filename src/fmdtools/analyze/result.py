@@ -797,7 +797,8 @@ class Result(UserDict):
         app : SampleApproach, optional
             Approach to use for weights (via rates). The default is [].
         with_nominal : bool, optional
-            Whether to include the nominal scenario in the expectation.
+            Whether to include the scenario named exactly 'nominal' in the
+            expectation. Other names containing 'nominal' remain included.
             The default is False.
         difference_from_nominal : bool, optional
             Whether to calculated the difference of the expectation from nominal.
@@ -813,7 +814,7 @@ class Result(UserDict):
 
         nomhist = {k: v for k, v in mh.nominal.items() if is_numeric(v)}
         newhists = {k: hist for k, hist in mh.items()
-                    if not ('nominal' in k and not (with_nominal))}
+                    if with_nominal or k != 'nominal'}
         if app:
             scenario_rates = {scen.name: scen.rate for scen in app.scenarios()}
             if with_nominal:
