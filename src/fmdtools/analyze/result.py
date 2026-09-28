@@ -465,7 +465,7 @@ class Result(UserDict):
 
     def load(filename, filetype="", renest_dict=False, indiv=False):
         """Load as Result using :func:`load'."""
-        inputdict = load(filename, filetype="", renest_dict=renest_dict,
+        inputdict = load(filename, filetype=filetype, renest_dict=renest_dict,
                          indiv=indiv, Rclass=Result)
         return fromdict(Result, inputdict)
 
@@ -715,8 +715,9 @@ class Result(UserDict):
         filename : str
             File name for the file. Can be nested in a folder if desired.
         filetype : str, optional
-            Optional specifier of file type (if not included in filename).
-            The default is "".
+            Format to write, overriding the filename extension when supplied.
+            The default "" infers the format from the extension. The exact
+            filename is used for all formats; no extension is appended.
         overwrite : bool, optional
             Whether to overwrite existing files with this name.
             The default is False.
@@ -740,8 +741,8 @@ class Result(UserDict):
                 else:
                     res_to_save = self
                 res_to_save = res_to_save.flatten()
-                np.savez(filename, **res_to_save)
-        elif filename[-4:] == '.csv':
+                np.savez(file_handle, **res_to_save)
+        elif filetype == 'csv':
             # add support for nested dict mdlhist using flatten_hist?
             variable = variable.flatten()
             with open(filename, 'w', newline='') as file_handle:
@@ -753,7 +754,7 @@ class Result(UserDict):
                     writer.writerows(zip(*variable.values()))
                 else:
                     writer.writerow([*variable.values()])
-        elif filename[-5:] == '.json':
+        elif filetype == 'json':
             with open(filename, 'w', encoding='utf8') as file_handle:
                 variable = variable.flatten()
                 new_variable = {}
