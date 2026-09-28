@@ -324,6 +324,9 @@ class Result(UserDict):
         """
         Find the values of two results which are different.
 
+        Array-valued entries are retained when any element of their difference
+        is nonzero; the full difference array is returned.
+
         Parameters
         ----------
         other : Result
@@ -337,7 +340,7 @@ class Result(UserDict):
         """
         diff = self-other
         different = self.__class__()
-        different.data = {k: v for k, v in diff.items() if v}
+        different.data = {k: v for k, v in diff.items() if np.any(v)}
         return different
 
     def keys(self):
@@ -709,7 +712,9 @@ class Result(UserDict):
         """
         Save a given result variable (result or history) to a file filename.
 
-        Files can be saved as npz, csv, or json.
+        Files can be saved as npz, csv, or json. JSON converts arrays to
+        nested lists of Python values (or a scalar for zero-dimensional arrays).
+        Array dtype and shape metadata are not stored in JSON.
 
         Parameters
         ----------
@@ -761,7 +766,7 @@ class Result(UserDict):
                 new_variable = {}
                 for key in variable:
                     if isinstance(variable[key], np.ndarray):
-                        new_variable[str(key)] = [var.item() for var in variable[key]]
+                        new_variable[str(key)] = variable[key].tolist()
                     else:
                         new_variable[str(key)] = variable[key]
                 if result_id:

@@ -182,6 +182,9 @@ class History(Result):
         """
         Find the values of two histories which are different.
 
+        Array-valued entries are retained when any element of their difference
+        is nonzero; the full difference array is returned.
+
         Parameters
         ----------
         other : History
@@ -195,7 +198,7 @@ class History(Result):
         """
         diff = self-other
         different = self.__class__()
-        different.data = {k: v for k, v in diff.items() if any(v)}
+        different.data = {k: v for k, v in diff.items() if np.any(v)}
         return different
 
     def copy(self):
