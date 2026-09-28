@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Integrated Resilience Optimization Architectures &mdash; fmdtools 2.5.1 documentation</title>
+  <title>Integrated Resilience Optimization Architectures &mdash; fmdtools 2.5.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=983e91d6"></script>
+      <script src="../../_static/documentation_options.js?v=afc61bbc"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -523,7 +523,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.auto_filename"><code class="docutils literal notranslate"><span class="pre">auto_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.copy_dict_objs"><code class="docutils literal notranslate"><span class="pre">copy_dict_objs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.dict_from_file"><code class="docutils literal notranslate"><span class="pre">dict_from_file()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.dict_to_json"><code class="docutils literal notranslate"><span class="pre">dict_to_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
@@ -541,6 +540,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.load_json"><code class="docutils literal notranslate"><span class="pre">load_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.map_obj_fields"><code class="docutils literal notranslate"><span class="pre">map_obj_fields()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
@@ -917,7 +917,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/b54c4447d48cf0c797ad33b612246dec169b14d4ab6df00a4b5f170d16a9dbd5.png" src="../../_images/b54c4447d48cf0c797ad33b612246dec169b14d4ab6df00a4b5f170d16a9dbd5.png" />
+<img alt="../../_images/bb1cb19670359e834aa35157c5065d665380823b54ed38bcb945007a943322df.png" src="../../_images/bb1cb19670359e834aa35157c5065d665380823b54ed38bcb945007a943322df.png" />
 </div>
 </div>
 <p>This is what is called and <em>integrated resilience optimization</em> problem, the combined optimization of Design (cost of design architecture), Operations (cost/revenue of a single flight), and Resilience (cost of a set of hazardous scenarios).</p>
@@ -969,7 +969,7 @@ OBJECTIVES
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools_examples.multirotor_drone.script_opt_model_rural</span><span class="w"> </span><span class="kn">import</span> <span class="n">x_to_dcost</span>
-<span class="k">assert</span> <span class="n">des_prob</span><span class="o">.</span><span class="n">cd</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">x_to_dcost</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">des_prob</span><span class="o">.</span><span class="n">cd</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">x_to_dcost</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -1054,8 +1054,8 @@ OBJECTIVES
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;g_soc&#39;: ResultConstraint(name=&#39;store_ee.s.soc&#39;, value=np.float64(-15.403452941176447), negative=False, time=None, method=&lt;function sum at 0x000002A4EDCC9DF0&gt;, threshold=20, comparator=&#39;greater&#39;, or_equal=True, satisfied=np.True_),
- &#39;g_max_height&#39;: HistoryConstraint(name=&#39;dofs.s.z&#39;, value=np.float64(-72.0), negative=False, time=None, method=&lt;function max at 0x000002A4EDCCAC70&gt;, threshold=122, comparator=&#39;less&#39;, or_equal=True, satisfied=np.True_)}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;g_soc&#39;: ResultConstraint(name=&#39;store_ee.s.soc&#39;, value=np.float64(-15.403452999999999), negative=False, time=None, method=&lt;function sum at 0x0000029264B350B0&gt;, threshold=20, comparator=&#39;greater&#39;, or_equal=True, satisfied=np.True_),
+ &#39;g_max_height&#39;: HistoryConstraint(name=&#39;dofs.s.z&#39;, value=np.float64(-72.0), negative=False, time=None, method=&lt;function max at 0x0000029264B360F0&gt;, threshold=122, comparator=&#39;less&#39;, or_equal=True, satisfied=np.True_)}
 </pre></div>
 </div>
 </div>
@@ -1071,7 +1071,7 @@ OBJECTIVES
  [&lt;Axes: title={&#39;center&#39;: &#39;fxns.store_ee.s.soc&#39;}, xlabel=&#39;time&#39;&gt;])
 </pre></div>
 </div>
-<img alt="../../_images/8de9a98b7dd2f68a14467884ced27861e22310c978efd5d335487d6fb4c2261f.png" src="../../_images/8de9a98b7dd2f68a14467884ced27861e22310c978efd5d335487d6fb4c2261f.png" />
+<img alt="../../_images/47381dd45c44b2a73c19e7e67597f705354968551dcceb961eff154089c582b8.png" src="../../_images/47381dd45c44b2a73c19e7e67597f705354968551dcceb961eff154089c582b8.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1107,7 +1107,7 @@ tend.dofs.s.z:                       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/6a975e5445362528c2e76c9bb98cd1d83e942de95c434888a67e8d0b85b8673e.png" src="../../_images/6a975e5445362528c2e76c9bb98cd1d83e942de95c434888a67e8d0b85b8673e.png" />
+<img alt="../../_images/195763cc03dcd97da30c316a2318352d15966482a00544f7d444c269c7d73692.png" src="../../_images/195763cc03dcd97da30c316a2318352d15966482a00544f7d444c269c7d73692.png" />
 </div>
 </div>
 <p>Again, this should be the same as if we simulated manually (e.g., using <code class="docutils literal notranslate"><span class="pre">x_to_ocost</span></code>):</p>
@@ -1115,8 +1115,8 @@ tend.dofs.s.z:                       0.0
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools_examples.multirotor_drone.script_opt_model_rural</span><span class="w"> </span><span class="kn">import</span> <span class="n">x_to_ocost</span>
 <span class="n">co</span><span class="p">,</span> <span class="n">g_soc</span><span class="p">,</span> <span class="n">g_max_height</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">x_to_ocost</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span><span class="p">])</span>
-<span class="k">assert</span> <span class="n">oper_prob</span><span class="o">.</span><span class="n">co</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">==</span> <span class="n">co</span>
-<span class="k">assert</span> <span class="n">oper_prob</span><span class="o">.</span><span class="n">g_soc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">==</span> <span class="n">g_soc</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">oper_prob</span><span class="o">.</span><span class="n">co</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">co</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">oper_prob</span><span class="o">.</span><span class="n">g_soc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">g_soc</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1128,7 +1128,7 @@ tend.dofs.s.z:                       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(-24.932864705882338)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(-24.932865)
 </pre></div>
 </div>
 </div>
@@ -1144,7 +1144,7 @@ tend.dofs.s.z:                       0.0
  [&lt;Axes: title={&#39;center&#39;: &#39;fxns.store_ee.s.soc&#39;}, xlabel=&#39;time&#39;&gt;])
 </pre></div>
 </div>
-<img alt="../../_images/7ed6af35e5a5a420d83ae790e9232394a8d4addaeefbbfd7f82775fd979e2084.png" src="../../_images/7ed6af35e5a5a420d83ae790e9232394a8d4addaeefbbfd7f82775fd979e2084.png" />
+<img alt="../../_images/cae14ba02f1ff8b423757fb54c37e7eb598781870c8b1c6a348803299e2c8694.png" src="../../_images/cae14ba02f1ff8b423757fb54c37e7eb598781870c8b1c6a348803299e2c8694.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1173,7 +1173,7 @@ tend.dofs.s.z:                       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/b6e70543216dfbdbde1405bb1db78d6cfa0186015df0a21c65f0175425cb5695.png" src="../../_images/b6e70543216dfbdbde1405bb1db78d6cfa0186015df0a21c65f0175425cb5695.png" />
+<img alt="../../_images/475f90e355783ee51a8b7fe0ae21b8be1c67f721bf12be82072e31a27d373bcd.png" src="../../_images/475f90e355783ee51a8b7fe0ae21b8be1c67f721bf12be82072e31a27d373bcd.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1183,7 +1183,7 @@ tend.dofs.s.z:                       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/4285dc5a6b3938156a66dba0efa0cab708034907f60b9cf3e2a714291ab8f9a5.png" src="../../_images/4285dc5a6b3938156a66dba0efa0cab708034907f60b9cf3e2a714291ab8f9a5.png" />
+<img alt="../../_images/2d1ee0fd28fc7a5f1db7aaefc053441b7a0348a0d082c1682df94759cd3f69bd.png" src="../../_images/2d1ee0fd28fc7a5f1db7aaefc053441b7a0348a0d082c1682df94759cd3f69bd.png" />
 </div>
 </div>
 <p>Note also how the cost model changes depending on the design model (Due to weight/capacity):</p>
@@ -1252,7 +1252,7 @@ tend.dofs.s.z:                       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(131.32166666666666)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(131.321667)
 </pre></div>
 </div>
 </div>
@@ -1265,7 +1265,7 @@ tend.dofs.s.z:                       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.139131546020508
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.1993277072906494
 </pre></div>
 </div>
 </div>
@@ -1370,10 +1370,7 @@ tend.dofs.s.z:                       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE:   0%|          | 0/1 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 1/1 [00:05&lt;00:00,  5.32s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 1/1 [00:05&lt;00:00,  5.70s/it]
 </pre></div>
 </div>
 </div>
@@ -1401,7 +1398,7 @@ tend.dofs.s.z:                       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(246.23499999999999)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(246.235)
 </pre></div>
 </div>
 </div>
@@ -1413,7 +1410,7 @@ tend.dofs.s.z:                       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.6508059024810793
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.9123145580291747
 </pre></div>
 </div>
 </div>
@@ -1425,11 +1422,11 @@ tend.dofs.s.z:                       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;drone_fxns_store_ee_ca_comps_s1p1_break_t7p0.tend.classify.expected_cost&#39;: np.float64(63.19499999999999),
- &#39;drone_fxns_store_ee_ca_comps_s1p1_degr_t7p0.tend.classify.expected_cost&#39;: np.float64(63.19499999999999),
- &#39;drone_fxns_store_ee_ca_comps_s1p1_lowcharge_t7p0.tend.classify.expected_cost&#39;: np.float64(69.59333333333333),
- &#39;drone_fxns_store_ee_ca_comps_s1p1_nocharge_t7p0.tend.classify.expected_cost&#39;: np.float64(126.39000000000001),
- &#39;drone_fxns_store_ee_ca_comps_s1p1_short_t7p0.tend.classify.expected_cost&#39;: np.float64(63.19499999999999)}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;drone_fxns_store_ee_ca_comps_s1p1_break_t7p0.tend.classify.expected_cost&#39;: np.float64(41.19499999999999),
+ &#39;drone_fxns_store_ee_ca_comps_s1p1_degr_t7p0.tend.classify.expected_cost&#39;: np.float64(41.19499999999999),
+ &#39;drone_fxns_store_ee_ca_comps_s1p1_lowcharge_t7p0.tend.classify.expected_cost&#39;: np.float64(40.260000000000005),
+ &#39;drone_fxns_store_ee_ca_comps_s1p1_nocharge_t7p0.tend.classify.expected_cost&#39;: np.float64(82.39),
+ &#39;drone_fxns_store_ee_ca_comps_s1p1_short_t7p0.tend.classify.expected_cost&#39;: np.float64(41.19499999999999)}
 </pre></div>
 </div>
 </div>
@@ -1443,6 +1440,12 @@ tend.dofs.s.z:                       0.0
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\dhulse\Documents\GitHub\fmdtools\src\fmdtools\sim\propagate.py:691: UserWarning: Faults found during the nominal run {&#39;store_ee.lowcharge&#39;: Fault(prob=7e-05, cost=0.0, phases=((&#39;taxi&#39;, 0.6), (&#39;move&#39;, 0.2), (&#39;land&#39;, 0.2)), disturbances=(), units=sim), &#39;s1p1.lowcharge&#39;: Fault(prob=4e-05, cost=100.0, phases=((&#39;taxi&#39;, 0.5), (&#39;move&#39;, 0.2), (&#39;land&#39;, 0.3)), disturbances=(), units=hr), &#39;s1p2.lowcharge&#39;: Fault(prob=4e-05, cost=100.0, phases=((&#39;taxi&#39;, 0.5), (&#39;move&#39;, 0.2), (&#39;land&#39;, 0.3)), disturbances=(), units=hr)}
+  warnings.warn(&quot;Faults found during the nominal run &quot; + str(endfaults))
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1451,7 +1454,7 @@ tend.dofs.s.z:                       0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(246.23499999999999)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(246.235)
 </pre></div>
 </div>
 </div>
@@ -1470,7 +1473,7 @@ tend.dofs.s.z:                       0.0
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.00001</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1541,7 +1544,7 @@ CONSTRAINTS
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/cfc52eaac5babfdf9a3f2e07caf2c37dd621d36793eddedc382e99c4f08d1525.png" src="../../_images/cfc52eaac5babfdf9a3f2e07caf2c37dd621d36793eddedc382e99c4f08d1525.png" />
+<img alt="../../_images/977ef0b5fc959fb0611676c08700bdd5fb33cd696561f9c18f361937e12817f0.png" src="../../_images/977ef0b5fc959fb0611676c08700bdd5fb33cd696561f9c18f361937e12817f0.png" />
 </div>
 </div>
 <p>We can now interact with callables for each of the three objectives:</p>
@@ -1576,7 +1579,7 @@ CONSTRAINTS
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(127.83833333333334)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(127.838333)
 </pre></div>
 </div>
 </div>
@@ -1589,7 +1592,7 @@ CONSTRAINTS
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(127.83833333333334)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(127.838333)
 </pre></div>
 </div>
 </div>
@@ -1602,9 +1605,64 @@ CONSTRAINTS
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.93718581199646
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prob_arch</span><span class="o">.</span><span class="n">constraints</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;oper_g_soc&#39;: np.float64(-15.403452999999999),
+ &#39;oper_g_max_height&#39;: np.float64(-72.0)}
+</pre></div>
+</div>
+</div>
+</div>
+<section id="optimization">
+<h3>Optimization<a class="headerlink" href="#optimization" title="Link to this heading"></a></h3>
+<p>Below we show a very simple optimization of these variables using brute force search. Much more sophisticated architectures/methods can be used on this problem, this code is mainly to demonstrate how these disciplines can be used together as a single objective/problem.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">brute_search</span><span class="p">(</span><span class="n">prob_arch</span><span class="p">,</span> <span class="n">Xranges</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">130</span><span class="p">,</span> <span class="mi">10</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span> <span class="n">skip_iter</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="n">Xvals</span> <span class="o">=</span> <span class="p">[</span> <span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">Xranges</span><span class="p">))]</span>
+    <span class="n">opt_hist</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="nb">iter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">X</span> <span class="ow">in</span> <span class="n">Xvals</span><span class="p">:</span>
+        <span class="n">dcost</span> <span class="o">=</span> <span class="n">prob_arch</span><span class="o">.</span><span class="n">des_cd</span><span class="p">(</span><span class="o">*</span><span class="n">X</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">ocost</span> <span class="o">=</span> <span class="n">prob_arch</span><span class="o">.</span><span class="n">oper_co</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">rcost</span> <span class="o">=</span> <span class="n">prob_arch</span><span class="o">.</span><span class="n">res_rcost</span><span class="p">(</span><span class="o">*</span><span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
+        <span class="n">tot_cost</span> <span class="o">=</span> <span class="n">dcost</span> <span class="o">+</span> <span class="n">ocost</span> <span class="o">+</span> <span class="n">rcost</span>
+        <span class="n">is_feasible</span> <span class="o">=</span> <span class="nb">all</span><span class="p">([</span><span class="n">v</span><span class="o">&lt;=</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">prob_arch</span><span class="o">.</span><span class="n">constraints</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">opt_hist</span><span class="p">:</span>
+            <span class="n">opt_hist</span><span class="o">=</span> <span class="p">[[</span><span class="n">tot_cost</span><span class="p">,</span> <span class="n">X</span><span class="p">]]</span>
+        <span class="k">elif</span> <span class="n">tot_cost</span> <span class="o">&lt;</span> <span class="n">opt_hist</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">is_feasible</span><span class="p">:</span>
+            <span class="n">opt_hist</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">tot_cost</span><span class="p">,</span> <span class="n">X</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">skip_iter</span> <span class="o">&lt;=</span> <span class="nb">iter</span> <span class="ow">and</span> <span class="n">skip_iter</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">iter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">opt_hist</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">opt_hist</span> <span class="o">=</span> <span class="n">brute_search</span><span class="p">(</span><span class="n">prob_arch</span><span class="p">,</span> <span class="n">skip_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">IndexError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="nn">File ~\AppData\Roaming\uv\python\cpython-3.14.0b1-windows-x86_64-none\Lib\multiprocessing\pool.py:856,</span> in <span class="ni">IMapIterator.next</span><span class="nt">(self, timeout)</span>
+<span class="nn">File ~\AppData\Roaming\uv\python\cpython-3.13.4-windows-x86_64-none\Lib\multiprocessing\pool.py:856,</span> in <span class="ni">IMapIterator.next</span><span class="nt">(self, timeout)</span>
 <span class="g g-Whitespace">    </span><span class="mi">855</span> <span class="k">try</span><span class="p">:</span>
 <span class="ne">--&gt; </span><span class="mi">856</span>     <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
 <span class="g g-Whitespace">    </span><span class="mi">857</span> <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
@@ -1614,25 +1672,28 @@ CONSTRAINTS
 <span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
 
 <span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">48</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">prob_arch</span><span class="o">.</span><span class="n">time_execution</span><span class="p">(</span><span class="n">reps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">73</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">opt_hist</span> <span class="o">=</span> <span class="n">brute_search</span><span class="p">(</span><span class="n">prob_arch</span><span class="p">,</span> <span class="n">skip_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
-<span class="nn">File ~\Documents\GitHub\fmdtools\src\fmdtools\sim\search.py:416,</span> in <span class="ni">BaseProblem.time_execution</span><span class="nt">(self, reps, *x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="n">starttime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">415</span> <span class="k">for</span> <span class="n">rep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reps</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">416</span>     <span class="bp">self</span><span class="o">.</span><span class="n">update_objectives</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">417</span> <span class="n">t_ave</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">starttime</span><span class="p">)</span> <span class="o">/</span> <span class="n">reps</span>
-<span class="g g-Whitespace">    </span><span class="mi">418</span> <span class="k">return</span> <span class="n">t_ave</span>
+<span class="nn">Cell In[72], line 9,</span> in <span class="ni">brute_search</span><span class="nt">(prob_arch, Xranges, skip_iter)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="nb">iter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="k">for</span> <span class="n">X</span> <span class="ow">in</span> <span class="n">Xvals</span><span class="p">:</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>         <span class="n">dcost</span> <span class="o">=</span> <span class="n">prob_arch</span><span class="o">.</span><span class="n">des_cd</span><span class="p">(</span><span class="o">*</span><span class="n">X</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>         <span class="n">ocost</span> <span class="o">=</span> <span class="n">prob_arch</span><span class="o">.</span><span class="n">oper_co</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="ne">----&gt; </span><span class="mi">9</span>         <span class="n">rcost</span> <span class="o">=</span> <span class="n">prob_arch</span><span class="o">.</span><span class="n">res_rcost</span><span class="p">(</span><span class="o">*</span><span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span>         <span class="n">tot_cost</span> <span class="o">=</span> <span class="n">dcost</span> <span class="o">+</span> <span class="n">ocost</span> <span class="o">+</span> <span class="n">rcost</span>
+<span class="nn">     11         is_feasible = all([v&lt;=0.0 for v</span> in <span class="ni">prob_arch.constraints.values</span><span class="nt">()])</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span>         <span class="k">if</span> <span class="ow">not</span> <span class="n">opt_hist</span><span class="p">:</span>
 
-<span class="nn">File ~\Documents\GitHub\fmdtools\src\fmdtools\sim\search.py:1598,</span> in <span class="ni">ProblemArchitecture.update_objectives</span><span class="nt">(self, *x)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1596</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="p">):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1597</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Take place of update_objectives in base problem.&quot;&quot;&quot;</span>
-<span class="ne">-&gt; </span><span class="mi">1598</span>     <span class="bp">self</span><span class="o">.</span><span class="n">update_full_problem</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="n">force_update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nn">File ~\Documents\GitHub\fmdtools\src\fmdtools\sim\search.py:1466,</span> in <span class="ni">ProblemArchitecture.add_objective_callable.&lt;locals&gt;.newobj</span><span class="nt">(*x)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1465</span> <span class="k">def</span><span class="w"> </span><span class="nf">newobj</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1466</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_objective</span><span class="p">(</span><span class="n">probname</span><span class="p">,</span> <span class="n">objname</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span>
 
-<span class="nn">File ~\Documents\GitHub\fmdtools\src\fmdtools\sim\search.py:1591,</span> in <span class="ni">ProblemArchitecture.update_full_problem</span><span class="nt">(self, probname, force_update, *x_full)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1589</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1590</span>     <span class="n">x_loc</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="ne">-&gt; </span><span class="mi">1591</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_problem</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="o">*</span><span class="n">x_loc</span><span class="p">,</span> <span class="n">force_update</span><span class="o">=</span><span class="n">force_update</span><span class="p">)</span>
+<span class="nn">File ~\Documents\GitHub\fmdtools\src\fmdtools\sim\search.py:1531,</span> in <span class="ni">ProblemArchitecture.call_objective</span><span class="nt">(self, probname, objname, *x_loc)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1529</span> <span class="k">def</span><span class="w"> </span><span class="nf">call_objective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probname</span><span class="p">,</span> <span class="n">objname</span><span class="p">,</span> <span class="o">*</span><span class="n">x_loc</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1530</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Call objective of a problem over partial its local variables *x_loc.&quot;&quot;&quot;</span>
+<span class="ne">-&gt; </span><span class="mi">1531</span>     <span class="bp">self</span><span class="o">.</span><span class="n">update_problem</span><span class="p">(</span><span class="n">probname</span><span class="p">,</span> <span class="o">*</span><span class="n">x_loc</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1532</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">problems</span><span class="p">[</span><span class="n">probname</span><span class="p">]</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">objname</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
 
 <span class="nn">File ~\Documents\GitHub\fmdtools\src\fmdtools\sim\search.py:1646,</span> in <span class="ni">ProblemArchitecture.update_problem</span><span class="nt">(self, probname, force_update, *x)</span>
 <span class="g g-Whitespace">   </span><span class="mi">1644</span>     <span class="bp">self</span><span class="o">.</span><span class="n">update_problem</span><span class="p">(</span><span class="n">upstream_prob</span><span class="p">,</span> <span class="n">force_update</span><span class="o">=</span><span class="n">force_update</span><span class="p">)</span>
@@ -1702,7 +1763,7 @@ CONSTRAINTS
 <span class="g g-Whitespace">    </span><span class="mi">853</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">scen</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scenlist</span><span class="p">):</span>
 <span class="g g-Whitespace">    </span><span class="mi">854</span>     <span class="bp">self</span><span class="o">.</span><span class="n">get_output</span><span class="p">(</span><span class="n">res_list</span><span class="p">,</span> <span class="n">scen</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
 
-<span class="nn">File c:\Users\dhulse\Documents\GitHub\fmdtools\.venv\Lib\site-packages\tqdm\std.py:1169,</span> in <span class="ni">tqdm.__iter__</span><span class="nt">(self)</span>
+<span class="nn">File c:\Users\dhulse\Documents\GitHub\fmdtools\new_venv\Lib\site-packages\tqdm\std.py:1169,</span> in <span class="ni">tqdm.__iter__</span><span class="nt">(self)</span>
 <span class="g g-Whitespace">   </span><span class="mi">1166</span> <span class="c1"># If the bar is disabled, then just walk the iterable</span>
 <span class="g g-Whitespace">   </span><span class="mi">1167</span> <span class="c1"># (note: keep this check outside the loop for performance)</span>
 <span class="g g-Whitespace">   </span><span class="mi">1168</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable</span><span class="p">:</span>
@@ -1710,70 +1771,21 @@ CONSTRAINTS
 <span class="g g-Whitespace">   </span><span class="mi">1170</span>         <span class="k">yield</span> <span class="n">obj</span>
 <span class="g g-Whitespace">   </span><span class="mi">1171</span>     <span class="k">return</span>
 
-<span class="nn">File ~\AppData\Roaming\uv\python\cpython-3.14.0b1-windows-x86_64-none\Lib\multiprocessing\pool.py:861,</span> in <span class="ni">IMapIterator.next</span><span class="nt">(self, timeout)</span>
+<span class="nn">File ~\AppData\Roaming\uv\python\cpython-3.13.4-windows-x86_64-none\Lib\multiprocessing\pool.py:861,</span> in <span class="ni">IMapIterator.next</span><span class="nt">(self, timeout)</span>
 <span class="g g-Whitespace">    </span><span class="mi">859</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_pool</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="g g-Whitespace">    </span><span class="mi">860</span>     <span class="k">raise</span> <span class="ne">StopIteration</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
 <span class="ne">--&gt; </span><span class="mi">861</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">862</span> <span class="k">try</span><span class="p">:</span>
 <span class="g g-Whitespace">    </span><span class="mi">863</span>     <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
 
-<span class="nn">File ~\AppData\Roaming\uv\python\cpython-3.14.0b1-windows-x86_64-none\Lib\threading.py:369,</span> in <span class="ni">Condition.wait</span><span class="nt">(self, timeout)</span>
-<span class="g g-Whitespace">    </span><span class="mi">367</span> <span class="k">try</span><span class="p">:</span>    <span class="c1"># restore state no matter what (e.g., KeyboardInterrupt)</span>
-<span class="g g-Whitespace">    </span><span class="mi">368</span>     <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">369</span>         <span class="n">waiter</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">370</span>         <span class="n">gotit</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="g g-Whitespace">    </span><span class="mi">371</span>     <span class="k">else</span><span class="p">:</span>
+<span class="nn">File ~\AppData\Roaming\uv\python\cpython-3.13.4-windows-x86_64-none\Lib\threading.py:359,</span> in <span class="ni">Condition.wait</span><span class="nt">(self, timeout)</span>
+<span class="g g-Whitespace">    </span><span class="mi">357</span> <span class="k">try</span><span class="p">:</span>    <span class="c1"># restore state no matter what (e.g., KeyboardInterrupt)</span>
+<span class="g g-Whitespace">    </span><span class="mi">358</span>     <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">359</span>         <span class="n">waiter</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">360</span>         <span class="n">gotit</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="g g-Whitespace">    </span><span class="mi">361</span>     <span class="k">else</span><span class="p">:</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prob_arch</span><span class="o">.</span><span class="n">constraints</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;oper_g_soc&#39;: -25.403452941176432, &#39;oper_g_max_height&#39;: -72.0}
-</pre></div>
-</div>
-</div>
-</div>
-<section id="optimization">
-<h3>Optimization<a class="headerlink" href="#optimization" title="Link to this heading"></a></h3>
-<p>Below we show a very simple optimization of these variables using brute force search. Much more sophisticated architectures/methods can be used on this problem, this code is mainly to demonstrate how these disciplines can be used together as a single objective/problem.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">brute_search</span><span class="p">(</span><span class="n">prob_arch</span><span class="p">,</span> <span class="n">Xranges</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">130</span><span class="p">,</span> <span class="mi">10</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span> <span class="n">skip_iter</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-    <span class="n">Xvals</span> <span class="o">=</span> <span class="p">[</span> <span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">Xranges</span><span class="p">))]</span>
-    <span class="n">opt_hist</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="nb">iter</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">X</span> <span class="ow">in</span> <span class="n">Xvals</span><span class="p">:</span>
-        <span class="n">dcost</span> <span class="o">=</span> <span class="n">prob_arch</span><span class="o">.</span><span class="n">des_cd</span><span class="p">(</span><span class="o">*</span><span class="n">X</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
-        <span class="n">ocost</span> <span class="o">=</span> <span class="n">prob_arch</span><span class="o">.</span><span class="n">oper_co</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-        <span class="n">rcost</span> <span class="o">=</span> <span class="n">prob_arch</span><span class="o">.</span><span class="n">res_rcost</span><span class="p">(</span><span class="o">*</span><span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
-        <span class="n">tot_cost</span> <span class="o">=</span> <span class="n">dcost</span> <span class="o">+</span> <span class="n">ocost</span> <span class="o">+</span> <span class="n">rcost</span>
-        <span class="n">is_feasible</span> <span class="o">=</span> <span class="nb">all</span><span class="p">([</span><span class="n">v</span><span class="o">&lt;=</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">prob_arch</span><span class="o">.</span><span class="n">constraints</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">opt_hist</span><span class="p">:</span>
-            <span class="n">opt_hist</span><span class="o">=</span> <span class="p">[[</span><span class="n">tot_cost</span><span class="p">,</span> <span class="n">X</span><span class="p">]]</span>
-        <span class="k">elif</span> <span class="n">tot_cost</span> <span class="o">&lt;</span> <span class="n">opt_hist</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">is_feasible</span><span class="p">:</span>
-            <span class="n">opt_hist</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">tot_cost</span><span class="p">,</span> <span class="n">X</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">skip_iter</span> <span class="o">&lt;=</span> <span class="nb">iter</span> <span class="ow">and</span> <span class="n">skip_iter</span><span class="p">:</span>
-            <span class="k">break</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">iter</span> <span class="o">+=</span> <span class="mi">1</span>
-
-    <span class="k">return</span> <span class="n">opt_hist</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">opt_hist</span> <span class="o">=</span> <span class="n">brute_search</span><span class="p">(</span><span class="n">prob_arch</span><span class="p">,</span> <span class="n">skip_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

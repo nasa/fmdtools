@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.sim &mdash; fmdtools 2.5.1 documentation</title>
+  <title>fmdtools.sim &mdash; fmdtools 2.5.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=983e91d6"></script>
+      <script src="../_static/documentation_options.js?v=afc61bbc"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -523,7 +523,6 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.array_x"><code class="docutils literal notranslate"><span class="pre">array_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.auto_filename"><code class="docutils literal notranslate"><span class="pre">auto_filename()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.copy_dict_objs"><code class="docutils literal notranslate"><span class="pre">copy_dict_objs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.dict_from_file"><code class="docutils literal notranslate"><span class="pre">dict_from_file()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.dict_to_json"><code class="docutils literal notranslate"><span class="pre">dict_to_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.filter_kwargs"><code class="docutils literal notranslate"><span class="pre">filter_kwargs()</span></code></a></li>
@@ -541,6 +540,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.load_json"><code class="docutils literal notranslate"><span class="pre">load_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.map_obj_fields"><code class="docutils literal notranslate"><span class="pre">map_obj_fields()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.nest_dict"><code class="docutils literal notranslate"><span class="pre">nest_dict()</span></code></a></li>
@@ -1039,7 +1039,8 @@ the start time instead of being copied</p></li>
 <li><p><strong>mdls</strong> (<em>dict</em>) – dict of models at various times to simulate over. Returned by the simulation of
 the nominal scenario</p></li>
 <li><p><strong>include_nominal</strong> (<em>bool</em>) – Whether to include the nominal simulation. If False, the nominal simulation is
-only run if necessary</p></li>
+only run if necessary. Non-staged runs that skip it do not supply nominal
+comparison data to scenario classification.</p></li>
 <li><p><strong>gen_samp</strong> (<em>bool</em>) – Whether to generate a SampleApproach from the nominal simulation. Used with
 NestedSimulations to generate the sample prior to simulation.</p></li>
 </ul>
@@ -2222,7 +2223,7 @@ faults and disturbances.</p></li>
 <dt class="sig sig-object py" id="fmdtools.sim.scenario.BaseScenObj">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.scenario.</span></span><span class="sig-name descname"><span class="pre">BaseScenObj</span></span><a class="headerlink" href="#fmdtools.sim.scenario.BaseScenObj" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dataobject</span></code></p>
-<p>Base class for Scenarios and injections.</p>
+<p>Base class for scenarios and injections with independent mutable defaults.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.scenario.BaseScenObj.asdict">
 <span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.BaseScenObj.asdict" title="Link to this definition"></a></dt>
@@ -3300,7 +3301,7 @@ independent base rate assumptions to calculate. Default is 1.0.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.FaultSample.prune_scenarios">
 <span class="sig-name descname"><span class="pre">prune_scenarios</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scen_var</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rate'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comparator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;ufunc</span> <span class="pre">'greater'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultSample.prune_scenarios" title="Link to this definition"></a></dt>
-<dd><p>Prune scenarios from the FaultSample.</p>
+<dd><p>Prune scenarios and retain only their injection times.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -3878,7 +3879,8 @@ samples). The default is 1.0.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>*x</strong> (<em>vars</em>) – Values of the variables defined in the parameter domain.</p></li>
-<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Seed to include in the ParameterScenario. The default is False.</p></li>
+<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Seed to include in the ParameterScenario, including zero. False
+(the default) or None uses the sample seed when one is configured.</p></li>
 <li><p><strong>sp</strong> (<em>dict</em><em>, </em><em>optional</em>) – SimParam arguments to the ParameterScenario. The default is {}.</p></li>
 <li><p><strong>weight</strong> (<em>float</em><em>, </em><em>optional</em>) – Weight (probability) allocated to the scenario. The default is 1.0.</p></li>
 <li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name to assign the scenario. The default is ‘param’.</p></li>
