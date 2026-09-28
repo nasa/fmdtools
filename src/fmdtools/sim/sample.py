@@ -1444,7 +1444,8 @@ class ParameterSample(BaseSample):
         seed_comb : str, optional
             How to combine seeds ('shared' or 'independent'). 'shared' uses the same
             seed for each value while 'independent' uses different seeds over all
-            variable values. The default is 'shared'.
+            variable values, including one replicate per value. A single total
+            scenario retains the sample seed. The default is 'shared'.
         name : str, optional
             Name prefix for the set of replicates. The default is 'var'.
         weight : float, optional
@@ -1484,7 +1485,7 @@ class ParameterSample(BaseSample):
         weight = weight/n_scens
         if seed_comb == 'shared' and replicates > 1:
             seeds = self.seedsequence.generate_state(replicates)
-        elif seed_comb == 'independent' and replicates > 1:
+        elif seed_comb == 'independent' and n_scens > 1:
             seeds = self.seedsequence.generate_state(n_scens)
         else:
             seeds = []
@@ -1493,7 +1494,7 @@ class ParameterSample(BaseSample):
             for i in range(replicates):
                 if replicates > 1 and (seed_comb == 'shared'):
                     seed = seeds[i]
-                elif replicates > 1 and (seed_comb == 'independent'):
+                elif n_scens > 1 and (seed_comb == 'independent'):
                     seed = seeds[scen_num]
                 else:
                     seed = False
