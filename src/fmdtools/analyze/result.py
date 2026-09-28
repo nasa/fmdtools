@@ -323,6 +323,9 @@ class Result(UserDict):
         """
         Find the values of two results which are different.
 
+        Array-valued entries are retained when any element of their difference
+        is nonzero; the full difference array is returned.
+
         Parameters
         ----------
         other : Result
@@ -336,7 +339,7 @@ class Result(UserDict):
         """
         diff = self-other
         different = self.__class__()
-        different.data = {k: v for k, v in diff.items() if v}
+        different.data = {k: v for k, v in diff.items() if np.any(v)}
         return different
 
     def keys(self):
