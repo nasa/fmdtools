@@ -533,9 +533,18 @@ def get_triangular_pdf(*args):
     return get_scipy_pdf("triang", c, loc, scale)
 
 
-def get_vonmises_pdf(*args):
-    """Get callable for scipy.vonmises corresponding to numpy.random arguments."""
-    return get_scipy_pdf(args[1], args[0])
+def get_vonmises_pdf(mu, kappa, size=None):
+    """Get a von Mises density using NumPy's mean and concentration arguments.
+
+    SciPy uses kappa as a shape parameter and mu as its circular location.
+    The optional draw size does not change the density of the supplied values.
+
+    Examples
+    --------
+    >>> bool(np.isclose(get_vonmises_pdf(0.0, 0.0)(0.0), 1 / (2 * np.pi)))
+    True
+    """
+    return get_scipy_pdf("vonmises", kappa, loc=mu)
 
 
 def get_pfunc_for_dist(randname, *args):
