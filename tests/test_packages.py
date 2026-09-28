@@ -74,7 +74,7 @@ class define_Tests(unittest.TestCase):
                            'permuted': 1.0,
                            'choice': 1/3,
                            'normal': 0.398942,
-                           'pareto': 1.0,
+                           'pareto': 0.25,
                            'poisson': 0.368,
                            'power': 1.0,
                            'standard_normal': 0.241971}
