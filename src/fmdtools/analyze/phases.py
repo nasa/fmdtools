@@ -388,9 +388,9 @@ def from_hist(hist, fxn_modephases='all', dt=1.0):
         Dictionary of distict phases that the system functions pass through,
         of the form: {'fxn': PhaseMap} where each phase is defined by its
         corresponding mode in the modelhist.
-        Phases are numbered mode, mode1, mode2 for multiple modes and given a
-        corresponding phasemap {mode: {mode, mode1, mode2}} mapping modes to
-        phases for future sampling.
+        Repeated phases are numbered mode, mode1, mode2, skipping suffixes that
+        would collide with actual mode names or previously generated phase names.
+        The modephase mapping groups each mode's intervals for future sampling.
 
     Examples
     --------
@@ -411,6 +411,8 @@ def from_hist(hist, fxn_modephases='all', dt=1.0):
         fxn = k[k.index('m')-1]
         if len(modehist) != 0:
             modes = OrderedSet(modehist)
+            # Reserve actual mode names before generating repeated-phase suffixes.
+            used_phaseids = set(modes)
             modephases = dict.fromkeys(modes)
             phases_unsorted = dict()
             for mode in modes:
@@ -427,6 +429,10 @@ def from_hist(hist, fxn_modephases='all', dt=1.0):
                             startind = modeinds[i+1]
                             phasenum += 1
                             phaseid = mode+str(phasenum)
+                            while phaseid in used_phaseids:
+                                phasenum += 1
+                                phaseid = mode+str(phasenum)
+                            used_phaseids.add(phaseid)
             phases = dict(sorted(phases_unsorted.items(),
                                  key=lambda item: item[1][0]))
             if fxn_modephases == 'all' or fxn in fxn_modephases:
