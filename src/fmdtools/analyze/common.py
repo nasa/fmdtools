@@ -42,6 +42,7 @@ from matplotlib import rcParams
 import inspect
 from scipy.stats import bootstrap
 from fmdtools.define.base import filter_kwargs, round_float
+from functools import partial
 
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -198,20 +199,17 @@ def load_folder(folder, filetype):
     folder : str
         Name of the folder. Must be in the current directory
     filetype : str
-        Type of files in the folder ('pickle', 'csv', or 'json')
+        Type of files in the folder ('npz', 'csv', or 'json'). Other extensions
+        and subdirectories are ignored; matching files are not searched recursively.
 
     Returns
     -------
     files_to_read : list
         files to load for results/mdlhists.
     """
-    files = os.listdir(folder)
-    files_toread = []
-    for file in files:
-        read_filetype = auto_filetype(file)
-        if read_filetype == filetype:
-            files_toread.append(file)
-    return files_toread
+    return [file for file in os.listdir(folder)
+            if file.endswith('.' + filetype)
+            and os.path.isfile(os.path.join(folder, file))]
 
 
 def metric_preamble(data, dtype=None, rates=None, r_dtype=None, r_norm=False):
@@ -309,7 +307,8 @@ def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
     axis : int
         Axis along which to calculate the confidence interval(s). The default is 0.
     **kwargs : kwargs
-        Keyword arguments to calc_metric or scipy.bootstrap.
+        Keyword arguments to the statistic, preprocessing, or scipy.bootstrap.
+        Statistic arguments are used for both the point estimate and resamples.
 
     Returns
     -------
@@ -339,15 +338,16 @@ def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
     val = np.take(vals, [0], axis=axis)
     if "weights" in kwargs and kwargs['weights'] is not None:
         raise Exception("Weights not able to be used w- bootstrap--use rates instead.")
-    met_val = method(vals, axis=axis, **filter_kwargs(method, **kwargs))
+    statistic = partial(method, **filter_kwargs(method, **kwargs))
+    met_val = statistic(vals, axis=axis)
     vals_vary = vals == val
     # Preserve the existing policy for globally identical data.
     if not np.all(vals == vals.flat[0]):
         if np.any(np.all(vals_vary, axis=axis)):
             # use more robust/basic algorithm if some indices don't vary
-            bs = bootstrap([vals], method, axis=axis, method="basic", **bs_kwar)
+            bs = bootstrap([vals], statistic, axis=axis, method="basic", **bs_kwar)
         else:
-            bs = bootstrap([vals], method, axis=axis, **bs_kwar)
+            bs = bootstrap([vals], statistic, axis=axis, **bs_kwar)
         return met_val, bs.confidence_interval.low, bs.confidence_interval.high
     elif return_anyway:
         return met_val, met_val, met_val

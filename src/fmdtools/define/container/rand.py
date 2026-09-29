@@ -280,9 +280,13 @@ class Rand(BaseContainer):
 
 
 
-def calc_prob_for_integers(x, *args):
+def calc_prob_for_integers(x, low, high=None, size=None, dtype=np.int64,
+                           endpoint=False):
     """
-    Get probability for np.default_rng.integers.
+    Get the joint mass of independent np.default_rng.integers draws.
+
+    Bounds broadcast against the supplied values. Size and dtype describe
+    generation, not the mass of those values. Empty draws have joint mass one.
 
     Examples
     --------
@@ -293,16 +297,22 @@ def calc_prob_for_integers(x, *args):
     >>> calc_prob_for_integers([0, 1, 2], 0, 2)
     np.float64(0.0)
     """
-    if len(args) == 1:
-        xmin, xmax = 0, args[0]
-    elif len(args) == 2:
-        xmin, xmax = args
-    else:
-        raise Exception("Invalid args: "+str(args))
-    if xmin <= np.min(x) and np.max(x) < xmax:
-        return np.prod([1/(xmax-xmin) for x in x])
-    else:
+    del size, dtype
+    if high is None:
+        low, high = 0, low
+    # Python integer arithmetic preserves uint64 endpoints and interval widths.
+    low = np.asarray(low).astype(object)
+    high = np.asarray(high).astype(object) + int(endpoint)
+    if np.any(high <= low):
+        raise ValueError("Integer bounds must define a nonempty interval.")
+    x = np.asarray(x)
+    if np.issubdtype(x.dtype, np.floating):
+        if not np.all(np.isfinite(x) & (x == np.floor(x))):
+            return np.float64(0.0)
+    x, low, high = np.broadcast_arrays(x.astype(object), low, high)
+    if np.any((x < low) | (x >= high)):
         return np.float64(0.0)
+    return np.prod(np.asarray(1.0 / (high - low), dtype=np.float64))
 
 
 def calc_prob_density_for_random(x):
@@ -499,18 +509,19 @@ def get_lognormal_pdf(*args):
     return get_scipy_pdf("lognorm", s, scale=scale)
 
 
-def get_standard_t_pdf(*args):
+def get_standard_t_pdf(df, size=None):
     """
-    Get callable for scipy multivariate_t dist for a numpy.random.standard_t call.
+    Get the joint density of independent numpy.random.standard_t draws.
 
-    Note: doesn't support len(x)>1.
+    Use univariate Student t factors, including broadcast degrees of freedom.
+    The optional draw size does not change the density of the supplied values.
 
     Examples
     --------
     >>> get_standard_t_pdf(1)([0.0])
     np.float64(0.31830988618379075)
     """
-    return get_scipy_pdf("multivariate_t", df=args[0])
+    return get_scipy_pdf("t", df=df)
 
 
 def get_triangular_pdf(*args):
@@ -535,9 +546,18 @@ def get_triangular_pdf(*args):
     return get_scipy_pdf("triang", c, loc, scale)
 
 
-def get_vonmises_pdf(*args):
-    """Get callable for scipy.vonmises corresponding to numpy.random arguments."""
-    return get_scipy_pdf(args[1], args[0])
+def get_vonmises_pdf(mu, kappa, size=None):
+    """Get a von Mises density using NumPy's mean and concentration arguments.
+
+    SciPy uses kappa as a shape parameter and mu as its circular location.
+    The optional draw size does not change the density of the supplied values.
+
+    Examples
+    --------
+    >>> bool(np.isclose(get_vonmises_pdf(0.0, 0.0)(0.0), 1 / (2 * np.pi)))
+    True
+    """
+    return get_scipy_pdf("vonmises", kappa, loc=mu)
 
 
 def get_pfunc_for_dist(randname, *args):
