@@ -198,20 +198,17 @@ def load_folder(folder, filetype):
     folder : str
         Name of the folder. Must be in the current directory
     filetype : str
-        Type of files in the folder ('pickle', 'csv', or 'json')
+        Type of files in the folder ('npz', 'csv', or 'json'). Other extensions
+        and subdirectories are ignored; matching files are not searched recursively.
 
     Returns
     -------
     files_to_read : list
         files to load for results/mdlhists.
     """
-    files = os.listdir(folder)
-    files_toread = []
-    for file in files:
-        read_filetype = auto_filetype(file)
-        if read_filetype == filetype:
-            files_toread.append(file)
-    return files_toread
+    return [file for file in os.listdir(folder)
+            if file.endswith('.' + filetype)
+            and os.path.isfile(os.path.join(folder, file))]
 
 
 def metric_preamble(data, dtype=None, rates=None, r_dtype=None, r_norm=False):
