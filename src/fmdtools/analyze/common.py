@@ -253,7 +253,8 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
     r_norm : bool, optional
         Whether to normalize rates. The default is False.
     round_value : bool, optional
-        Whether to round the value. Default is True.
+        Whether to round the final value, including named metrics.
+        Applied once after evaluation. Default is True.
     res : float
         Resolution to round to. Default is 1e-6.
     min_r : int
@@ -281,8 +282,9 @@ def calc_metric(data, method=np.average, args=(), axis=None, dtype=None,
     """
     if isinstance(method, str):
         method = eval("calc_"+method)
+        # Named helpers call calc_metric again; round only the final result.
         metric = method(data, args=args, axis=axis, dtype=dtype, rates=rates,
-                      r_dtype=r_dtype, r_norm=r_norm, **kwargs)
+                      r_dtype=r_dtype, r_norm=r_norm, round_value=False, **kwargs)
     else:
         vals = metric_preamble(data, dtype, rates, r_dtype, r_norm)
         metric = method(vals, *args, **filter_kwargs(method, **kwargs, axis=axis))
