@@ -495,6 +495,23 @@ def get_uniform_pdf(low=0.0, high=1.0, size=None):
                          scale=np.asarray(high) - np.asarray(low))
 
 
+def get_pareto_pdf(a, size=None):
+    """
+    Get the Lomax density corresponding to NumPy's Pareto II draws.
+
+    NumPy's samples start at zero, unlike SciPy's Pareto I distribution.
+    The optional draw size does not change the density of the supplied values.
+
+    Examples
+    --------
+    >>> get_pareto_pdf(3.0)(0.0)
+    np.float64(3.0)
+    >>> get_pareto_pdf(3.0)(1.0)
+    np.float64(0.1875)
+    """
+    return get_scipy_pdf("lomax", a)
+
+
 def get_lognormal_pdf(*args):
     """
     Get callable for scipy lognormal pdf with numpy.random arguments.
@@ -580,7 +597,7 @@ def get_pfunc_for_dist(randname, *args):
         pdf/pmf for the draw.
     """
     same_funcs = ['beta', 'dirichlet', 'f', 'gamma', 'laplace',
-                  'logistic', 'multivariate_normal', 'pareto', 'wald']
+                  'logistic', 'multivariate_normal', 'wald']
     same_funcs_pmf = ['multinomial', 'poisson', 'zipf']
     different_funcs_pmf = {'binomial': 'binom',
                            'geometric': 'geom',
@@ -613,6 +630,8 @@ def get_pfunc_for_dist(randname, *args):
             return get_hypergeometric_pmf(*args)
         case 'uniform':
             return get_uniform_pdf(*args)
+        case 'pareto':
+            return get_pareto_pdf(*args)
         case 'lognormal':
             return get_lognormal_pdf(*args)
         case 'standard_t':
