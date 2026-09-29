@@ -436,31 +436,27 @@ def get_custom_pfunc(func_handle, *args, **kwargs):
     return custom_pfunc
 
 
-def get_exp_ray_pdf(randname, *args):
+def get_exp_ray_pdf(randname, scale=1.0, size=None):
     """
-    Get callable for scipy exponential and rayleigh pdf with numpy.random arguments.
+    Get exponential or Rayleigh density with NumPy's scale and sample size.
+
+    Both generators use a zero location. Size controls generation, not the
+    density of the supplied samples.
 
     Examples
     --------
     >>> get_exp_ray_pdf("rayleigh", 2)(2.0)
     np.float64(0.3032653298563167)
     >>> get_exp_ray_pdf("rayleigh", 2, 2)(2.0)
-    np.float64(0.0)
+    np.float64(0.3032653298563167)
     >>> get_exp_ray_pdf("exponential", 1)(0.0)
     np.float64(1.0)
-    >>> get_exp_ray_pdf("exponential", 1, -1.0)(0.0)
-    np.float64(0.36787944117144233)
+    >>> get_exp_ray_pdf("exponential", 1, (2, 3))(0.0)
+    np.float64(1.0)
     """
     if randname == 'exponential':
         randname = "expon"
-    if len(args) == 0:
-        return get_scipy_pdf(randname, *args)
-    elif len(args) == 1:
-        return get_scipy_pdf(randname, scale=args[0])
-    elif len(args) == 2:
-        return get_scipy_pdf(randname, loc=args[1], scale=args[0])
-    else:
-        raise Exception("Too many arguments for "+randname+" distribution")
+    return get_scipy_pdf(randname, scale=scale)
 
 
 def get_hypergeometric_pmf(*args):
