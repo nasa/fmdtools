@@ -526,6 +526,34 @@ def get_lognormal_pdf(*args):
     return get_scipy_pdf("lognorm", s, scale=scale)
 
 
+def get_gamma_pdf(shape, scale=1.0, size=None):
+    """
+    Get the joint Gamma density using NumPy's shape and scale parameters.
+
+    Size controls sample generation and is not a density parameter.
+
+    Examples
+    --------
+    >>> get_gamma_pdf(1.0, 2.0)(0.0)
+    np.float64(0.5)
+    """
+    return get_scipy_pdf("gamma", shape, scale=scale)
+
+
+def get_standard_gamma_pdf(shape, size=None, dtype=np.float64, out=None):
+    """
+    Get the joint density of NumPy standard Gamma draws (unit scale).
+
+    Size, dtype, and out control generation, not the density of supplied values.
+
+    Examples
+    --------
+    >>> get_standard_gamma_pdf(1.0, 3)([0.0, 0.0, 0.0])
+    np.float64(1.0)
+    """
+    return get_gamma_pdf(shape)
+
+
 def get_standard_t_pdf(df, size=None):
     """
     Get the joint density of independent numpy.random.standard_t draws.
@@ -596,7 +624,7 @@ def get_pfunc_for_dist(randname, *args):
     pfunc : callable
         pdf/pmf for the draw.
     """
-    same_funcs = ['beta', 'dirichlet', 'f', 'gamma', 'laplace',
+    same_funcs = ['beta', 'dirichlet', 'f', 'laplace',
                   'logistic', 'multivariate_normal', 'wald']
     same_funcs_pmf = ['multinomial', 'poisson', 'zipf']
     different_funcs_pmf = {'binomial': 'binom',
@@ -612,7 +640,6 @@ def get_pfunc_for_dist(randname, *args):
                        'normal': 'norm',
                        'power': 'powerlaw',
                        'standard_cauchy': 'cauchy',
-                       'standard_gamma': 'gamma',
                        'standard_normal': 'norm',
                        'weibull': 'weibull_min'}
     match randname:
@@ -634,6 +661,10 @@ def get_pfunc_for_dist(randname, *args):
             return get_pareto_pdf(*args)
         case 'lognormal':
             return get_lognormal_pdf(*args)
+        case 'gamma':
+            return get_gamma_pdf(*args)
+        case 'standard_gamma':
+            return get_standard_gamma_pdf(*args)
         case 'standard_t':
             return get_standard_t_pdf(*args)
         case 'triangular':
