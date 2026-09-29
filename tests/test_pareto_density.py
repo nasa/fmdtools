@@ -18,9 +18,9 @@ specific language governing permissions and limitations under the License.
 """
 
 import copy
+import unittest
 
 import numpy as np
-import pytest
 from scipy import integrate, stats
 
 from fmdtools.define.block.function import Function
@@ -58,109 +58,146 @@ class ParetoFunction(Function):
         return {"total": self.s.total}
 
 
-@pytest.mark.parametrize("a", [0.5, 1.0, 3.0, 10.0])
-@pytest.mark.parametrize("x", [0.0, 0.25, 1.0, 4.0])
-def test_density_matches_the_pareto_ii_formula(a, x):
-    expected = a / (1.0 + x) ** (a + 1.0)
-    assert get_prob_for_rand(x, "pareto", a) == pytest.approx(expected, rel=1e-13)
-    assert get_pfunc_for_dist("pareto", a)(x) == pytest.approx(expected, rel=1e-13)
+class TestParetoDensity(unittest.TestCase):
+    """Run the regression cases with standard unittest discovery."""
+
+    def test_density_matches_the_pareto_ii_formula(self):
+        for x in [0.0, 0.25, 1.0, 4.0]:
+            for a in [0.5, 1.0, 3.0, 10.0]:
+                with self.subTest(x=x, a=a):
+                    expected = a / (1.0 + x) ** (a + 1.0)
+                    np.testing.assert_allclose(
+                        get_prob_for_rand(x, "pareto", a),
+                        expected,
+                        rtol=1e-13,
+                        atol=1e-12,
+                    )
+                    np.testing.assert_allclose(
+                        get_pfunc_for_dist("pareto", a)(x),
+                        expected,
+                        rtol=1e-13,
+                        atol=1e-12,
+                    )
+
+    def test_density_has_the_correct_probability_mass_below_one(self):
+        for a in [0.5, 1.0, 3.0]:
+            with self.subTest(a=a):
+                # Both Pareto families integrate to one. This interval distinguishes them.
+                density = get_pfunc_for_dist("pareto", a)
+                partial, _ = integrate.quad(density, 0.0, 1.0)
+                total, _ = integrate.quad(density, 0.0, np.inf)
+                np.testing.assert_allclose(
+                    partial, 1.0 - 2.0 ** (-a), rtol=1e-10, atol=1e-12
+                )
+                np.testing.assert_allclose(total, 1.0, rtol=1e-09, atol=1e-12)
+
+    def test_optional_draw_size_does_not_become_a_location(self):
+        for shape in [None, (), 1, 3, (2, 3), 0]:
+            with self.subTest(shape=shape):
+                a = 2.5
+                sample = np.random.default_rng(19).pareto(a, size=shape)
+                before = np.copy(sample)
+                expected = np.prod(stats.lomax.pdf(sample, a))
+                np.testing.assert_allclose(
+                    get_prob_for_rand(sample, "pareto", a, shape),
+                    expected,
+                    rtol=1e-06,
+                    atol=1e-12,
+                )
+                np.testing.assert_array_equal(sample, before)
+
+    def test_array_parameters_and_variadic_inputs_use_independent_factors(self):
+        a = np.array([0.5, 1.0, 3.0])
+        values = np.array([0.0, 0.25, 2.0])
+        density = get_pfunc_for_dist("pareto", a)
+        expected = np.prod(a / np.power(1.0 + values, a + 1.0))
+        np.testing.assert_allclose(density(values), expected, rtol=1e-06, atol=1e-12)
+        np.testing.assert_allclose(density(*values), expected, rtol=1e-06, atol=1e-12)
+        np.testing.assert_allclose(
+            get_prob_for_rand(values, "pareto", a, 3), expected, rtol=1e-06, atol=1e-12
+        )
+        self.assertEqual(get_prob_for_rand([], "pareto", 2.0, 0), 1.0)
+
+    def test_out_of_support_values_have_zero_density(self):
+        for x in [-1.0, -1e-10, -np.inf, np.inf]:
+            with self.subTest(x=x):
+                self.assertEqual(get_prob_for_rand(x, "pareto", 3.0), 0.0)
+
+    def test_nan_propagates_without_becoming_a_valid_density(self):
+        self.assertTrue(np.isnan(get_prob_for_rand(np.nan, "pareto", 3.0)))
+
+    def test_tracking_preserves_samples_generator_state_and_copy_reset(self):
+        for vector in [False, True]:
+            with self.subTest(vector=vector):
+                cls = ParetoRand if vector else ExampleRand
+                size = 3 if vector else None
+                state = cls(seed=23, run_stochastic=True, track_pdf=True)
+                reference = np.random.default_rng(23)
+                expected_densities = []
+                for _ in range(3):
+                    state.set_rand_state("noise", "pareto", 3.0, size)
+                    expected = reference.pareto(3.0, size=size)
+                    np.testing.assert_array_equal(state.s.noise, expected)
+                    self.assertEqual(
+                        state.rng.bit_generator.state, reference.bit_generator.state
+                    )
+                    self.assertEqual(state.gen_state(), reference.bit_generator.state)
+                    expected_densities.append(
+                        float(np.prod(stats.lomax.pdf(expected, 3.0)))
+                    )
+                np.testing.assert_allclose(state.probs, expected_densities, rtol=1e-13)
+                np.testing.assert_allclose(
+                    state.return_probdens(),
+                    np.prod(expected_densities),
+                    rtol=1e-06,
+                    atol=1e-12,
+                )
+                clone = state.copy()
+                for instance in (state, clone):
+                    instance.set_rand_state("noise", "pareto", 3.0, size)
+                np.testing.assert_array_equal(clone.s.noise, state.s.noise)
+                np.testing.assert_allclose(clone.probs, state.probs)
+                state.reset()
+                state.set_rand_state("noise", "pareto", 3.0, size)
+                expected = np.random.default_rng(23).pareto(3.0, size=size)
+                np.testing.assert_array_equal(state.s.noise, expected)
+                np.testing.assert_allclose(
+                    state.probs, [np.prod(stats.lomax.pdf(expected, 3.0))]
+                )
+
+    def test_disabled_tracking_and_stochastic_updates_are_unchanged(self):
+        disabled = ParetoRand(seed=7, run_stochastic=False, track_pdf=True)
+        before = copy.deepcopy(disabled.rng.bit_generator.state)
+        disabled.set_rand_state("noise", "pareto", 3.0, 3)
+        self.assertEqual(disabled.rng.bit_generator.state, before)
+        np.testing.assert_array_equal(disabled.s.noise, np.zeros(3))
+        self.assertEqual(disabled.probs, [])
+        untracked = ParetoRand(seed=7, run_stochastic=True, track_pdf=False)
+        untracked.set_rand_state("noise", "pareto", 3.0, 3)
+        np.testing.assert_array_equal(
+            untracked.s.noise, np.random.default_rng(7).pareto(3.0, 3)
+        )
+        self.assertEqual(untracked.probs, [])
+
+    def test_real_stochastic_simulation_tracks_pareto_density_per_timestep(self):
+        model = ParetoFunction(
+            sp={"end_time": 3.0, "run_stochastic": True, "track_pdf": True},
+            r={"seed": 31},
+        )
+        result, history = Simulation(mdl=model)()
+        reference = np.random.default_rng(31)
+        expected = np.array([reference.pareto(3.0, 3) for _ in history.time])
+        np.testing.assert_array_equal(history["r.s.noise"], expected)
+        densities = np.prod(stats.lomax.pdf(expected, 3.0), axis=1)
+        np.testing.assert_allclose(history["r.probdens"], densities, rtol=1e-13)
+        totals = np.concatenate(([0.0], np.cumsum(expected[1:].sum(axis=1))))
+        np.testing.assert_allclose(history["s.total"], totals)
+        np.testing.assert_allclose(
+            result["tend.classify.total"], totals[-1], rtol=1e-06, atol=1e-12
+        )
+        np.testing.assert_array_equal(model.r.s.noise, np.zeros(3))
+        self.assertEqual(model.s.total, 0.0)
 
 
-@pytest.mark.parametrize("a", [0.5, 1.0, 3.0])
-def test_density_has_the_correct_probability_mass_below_one(a):
-    # Both Pareto families integrate to one. This interval distinguishes them.
-    density = get_pfunc_for_dist("pareto", a)
-    partial, _ = integrate.quad(density, 0.0, 1.0)
-    total, _ = integrate.quad(density, 0.0, np.inf)
-    assert partial == pytest.approx(1.0 - 2.0**-a, rel=1e-10)
-    assert total == pytest.approx(1.0, rel=1e-9)
-
-
-@pytest.mark.parametrize("shape", [None, (), 1, 3, (2, 3), 0])
-def test_optional_draw_size_does_not_become_a_location(shape):
-    a = 2.5
-    sample = np.random.default_rng(19).pareto(a, size=shape)
-    before = np.copy(sample)
-    expected = np.prod(stats.lomax.pdf(sample, a))
-    assert get_prob_for_rand(sample, "pareto", a, shape) == pytest.approx(expected)
-    np.testing.assert_array_equal(sample, before)
-
-
-def test_array_parameters_and_variadic_inputs_use_independent_factors():
-    a = np.array([0.5, 1.0, 3.0])
-    values = np.array([0.0, 0.25, 2.0])
-    density = get_pfunc_for_dist("pareto", a)
-    expected = np.prod(a / np.power(1.0 + values, a + 1.0))
-    assert density(values) == pytest.approx(expected)
-    assert density(*values) == pytest.approx(expected)
-    assert get_prob_for_rand(values, "pareto", a, 3) == pytest.approx(expected)
-    assert get_prob_for_rand([], "pareto", 2.0, 0) == 1.0
-
-
-@pytest.mark.parametrize("x", [-1.0, -1e-10, -np.inf, np.inf])
-def test_out_of_support_values_have_zero_density(x):
-    assert get_prob_for_rand(x, "pareto", 3.0) == 0.0
-
-
-def test_nan_propagates_without_becoming_a_valid_density():
-    assert np.isnan(get_prob_for_rand(np.nan, "pareto", 3.0))
-
-
-@pytest.mark.parametrize("vector", [False, True])
-def test_tracking_preserves_samples_generator_state_and_copy_reset(vector):
-    cls = ParetoRand if vector else ExampleRand
-    size = 3 if vector else None
-    state = cls(seed=23, run_stochastic=True, track_pdf=True)
-    reference = np.random.default_rng(23)
-    expected_densities = []
-    for _ in range(3):
-        state.set_rand_state("noise", "pareto", 3.0, size)
-        expected = reference.pareto(3.0, size=size)
-        np.testing.assert_array_equal(state.s.noise, expected)
-        assert state.rng.bit_generator.state == reference.bit_generator.state
-        assert state.gen_state() == reference.bit_generator.state
-        expected_densities.append(float(np.prod(stats.lomax.pdf(expected, 3.0))))
-    np.testing.assert_allclose(state.probs, expected_densities, rtol=1e-13)
-    assert state.return_probdens() == pytest.approx(np.prod(expected_densities))
-    clone = state.copy()
-    for instance in (state, clone):
-        instance.set_rand_state("noise", "pareto", 3.0, size)
-    np.testing.assert_array_equal(clone.s.noise, state.s.noise)
-    np.testing.assert_allclose(clone.probs, state.probs)
-    state.reset()
-    state.set_rand_state("noise", "pareto", 3.0, size)
-    expected = np.random.default_rng(23).pareto(3.0, size=size)
-    np.testing.assert_array_equal(state.s.noise, expected)
-    np.testing.assert_allclose(state.probs, [np.prod(stats.lomax.pdf(expected, 3.0))])
-
-
-def test_disabled_tracking_and_stochastic_updates_are_unchanged():
-    disabled = ParetoRand(seed=7, run_stochastic=False, track_pdf=True)
-    before = copy.deepcopy(disabled.rng.bit_generator.state)
-    disabled.set_rand_state("noise", "pareto", 3.0, 3)
-    assert disabled.rng.bit_generator.state == before
-    np.testing.assert_array_equal(disabled.s.noise, np.zeros(3))
-    assert disabled.probs == []
-    untracked = ParetoRand(seed=7, run_stochastic=True, track_pdf=False)
-    untracked.set_rand_state("noise", "pareto", 3.0, 3)
-    np.testing.assert_array_equal(
-        untracked.s.noise, np.random.default_rng(7).pareto(3.0, 3)
-    )
-    assert untracked.probs == []
-
-
-def test_real_stochastic_simulation_tracks_pareto_density_per_timestep():
-    model = ParetoFunction(
-        sp={"end_time": 3.0, "run_stochastic": True, "track_pdf": True}, r={"seed": 31}
-    )
-    result, history = Simulation(mdl=model)()
-    reference = np.random.default_rng(31)
-    expected = np.array([reference.pareto(3.0, 3) for _ in history.time])
-    np.testing.assert_array_equal(history["r.s.noise"], expected)
-    densities = np.prod(stats.lomax.pdf(expected, 3.0), axis=1)
-    np.testing.assert_allclose(history["r.probdens"], densities, rtol=1e-13)
-    totals = np.concatenate(([0.0], np.cumsum(expected[1:].sum(axis=1))))
-    np.testing.assert_allclose(history["s.total"], totals)
-    assert result["tend.classify.total"] == pytest.approx(totals[-1])
-    np.testing.assert_array_equal(model.r.s.noise, np.zeros(3))
-    assert model.s.total == 0.0
+if __name__ == "__main__":
+    unittest.main()
