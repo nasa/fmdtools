@@ -23,7 +23,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import gen_timerange, is_iter, get_var, filter_kwargs
-from fmdtools.define.base import copy_dict_objs
+from fmdtools.define.base import copy_dict_objs, round_float
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
@@ -35,6 +35,8 @@ from fmdtools.analyze.graph.base import Graph
 import itertools
 import warnings
 import numpy as np
+import math
+from decimal import Decimal
 
 
 class SimParam(Parameter, readonly=True):
@@ -162,8 +164,10 @@ class SimParam(Parameter, readonly=True):
         """
         log = True
         if local_dt is not None:
-            log = t_ind*local_dt % self.dt == 0.0
-            t_ind = int(-(t_ind * local_dt//-self.dt))
+            t_dec = Decimal(str(round_float(t_ind*local_dt, res=local_dt)))
+            dt = Decimal(str(self.dt))
+            log = t_dec % dt == 0.0
+            t_ind = math.ceil(t_dec/dt)
 
         if self.track_times[0] == 'all':
             t_ind_rec = t_ind
@@ -179,8 +183,6 @@ class SimParam(Parameter, readonly=True):
     def get_sub_kwargs(self):
         """Get keyword arguments for contained sim from larger sim."""
         kwargs = self.asdict()
-        if not self.use_local:
-            kwargs.pop("dt")
         kwargs['end_condition'] = ""
         return kwargs
 
@@ -293,8 +295,8 @@ class Simulable(BaseObject):
 
         Returns
         -------
-        result : TYPE
-            DESCRIPTION.
+        result : Result
+            Result to return given to_return input.
         """
         result = Result()
         self.get_endclass(to_return=to_return, result=result, nomresult=nomresult,

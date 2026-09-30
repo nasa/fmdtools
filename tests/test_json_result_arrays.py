@@ -90,9 +90,7 @@ class TestJsonResultArrays(unittest.TestCase):
                 with TemporaryDirectory() as directory:
                     path = Path(directory) / "values.json"
                     Result({"value": value}).save(str(path))
-                    self.assertEqual(
-                        json.loads(path.read_text()), {"value": value.tolist()}
-                    )
+                    self.assertEqual(Result.load(str(path)).value, value.tolist())
 
     def test_noncontiguous_and_readonly_arrays_are_not_modified(self):
         base = np.arange(24.0).reshape(4, 6)

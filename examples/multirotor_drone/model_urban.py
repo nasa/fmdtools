@@ -322,6 +322,7 @@ class Drone(DroneRural):
                               ('taxi', 12, 20)),
                       end_time=30,
                       units='min',
+                      use_local=False,
                       dt=0.1)
 
     def init_architecture(self, **kwargs):
@@ -499,6 +500,9 @@ if __name__ == "__main__":
     # UrbanDroneEnvironment("a")
     # PlanPath._init_environment("a")
     # p = PlanPath("test", {})
+    mdl = Drone(sp={'end_condition': 'scenario_finished', 'dt': 0.1}, t={'local_dt': 0.1})
+    results_fault, hist_fault = propagate.one_fault(mdl, "affect_dof.ca.comps.lr", "mechbreak", time=1.4)
+    fig, ax = plot_env_with_traj_z(hist_fault, mdl, title = "Urban Drone Trajectory")
 
     e = UrbanDroneEnvironment("env")
     e.c.show({"height": {}})

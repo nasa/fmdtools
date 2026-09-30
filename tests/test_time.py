@@ -23,7 +23,7 @@ import unittest
 import numpy as np
 
 from fmdtools.define.block.function import ExampleFunction
-from fmdtools.define.container.time import Time
+from fmdtools.define.container.time import BaseTime
 
 
 class TestTime(unittest.TestCase):
@@ -46,7 +46,7 @@ class TestTime(unittest.TestCase):
                     self.assertEqual(larger % smaller, 0)
                     step = cast(local_dt)
 
-                    class LocalTime(Time):
+                    class LocalTime(BaseTime):
                         local_dt = step
                         timernames = ("sample",)
 
@@ -66,7 +66,7 @@ class TestTime(unittest.TestCase):
             with self.subTest(global_dt=global_dt, local_dt=local_dt):
                 step = local_dt
 
-                class LocalTime(Time):
+                class LocalTime(BaseTime):
                     local_dt = step
 
                 with self.assertRaisesRegex(Exception, "doesn't line up"):
@@ -77,7 +77,7 @@ class TestTime(unittest.TestCase):
             with self.subTest(local_dt=local_dt):
                 step = local_dt
 
-                class LocalTime(Time):
+                class LocalTime(BaseTime):
                     local_dt = step
 
                 class LocalFunction(ExampleFunction):
