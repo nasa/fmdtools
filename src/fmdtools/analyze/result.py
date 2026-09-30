@@ -239,7 +239,8 @@ class Result(UserDict):
         Check that the two values of the dictionary are equal.
 
         Enables the syntax result1 == result2, which returns True/False depending on if
-        the keys/values are the same.
+        the keys/values are the same. Array values must have the same shape and
+        elements, without broadcasting or tolerances. NaN values remain unequal.
 
         Parameters
         ----------
@@ -274,10 +275,11 @@ class Result(UserDict):
         if self.keys() != other.keys():
             return False
         else:
-            return all([all(v == other.data.get(k, None))
-                        if isinstance(v, np.ndarray)
-                        else v == other.data.get(k, None)
-                        for k, v in self.data.items()])
+            return all(np.array_equal(v, other.data[k])
+                       if isinstance(v, np.ndarray) or
+                       isinstance(other.data[k], np.ndarray)
+                       else v == other.data[k]
+                       for k, v in self.data.items())
 
     def __sub__(self, other):
         """
