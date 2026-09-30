@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.container &mdash; fmdtools 2.5.2 documentation</title>
+  <title>fmdtools.define.container &mdash; fmdtools 2.5.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=afc61bbc"></script>
+      <script src="../_static/documentation_options.js?v=0bbe9fa5"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -2692,12 +2692,15 @@ still reject array results so an incorrect draw size is not hidden.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.calc_prob_density_for_random">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_density_for_random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_density_for_random" title="Link to this definition"></a></dt>
-<dd><p>Get probability density for np.default_rng.random.</p>
+<dd><p>Get the joint density of independent unit-uniform draws from rng.random.</p>
+<p>Each draw has density one on [0, 1), so their joint density is one when
+every value is in that interval and zero otherwise. An empty draw has
+the empty-product density of one.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_density_for_random</span><span class="p">([</span><span class="mf">0.5</span><span class="p">])</span>
 <span class="go">np.float64(1.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_density_for_random</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
-<span class="go">np.float64(0.25)</span>
+<span class="go">np.float64(1.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_density_for_random</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
 <span class="go">np.float64(0.0)</span>
 </pre></div>
@@ -2721,8 +2724,10 @@ still reject array results so an incorrect draw size is not hidden.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.calc_prob_for_integers">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_for_integers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_for_integers" title="Link to this definition"></a></dt>
-<dd><p>Get probability for np.default_rng.integers.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_for_integers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'numpy.int64'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_for_integers" title="Link to this definition"></a></dt>
+<dd><p>Get the joint mass of independent np.default_rng.integers draws.</p>
+<p>Bounds broadcast against the supplied values. Size and dtype describe
+generation, not the mass of those values. Empty draws have joint mass one.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_integers</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">np.float64(0.5)</span>
@@ -2770,17 +2775,31 @@ still reject array results so an incorrect draw size is not hidden.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.get_exp_ray_pdf">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_exp_ray_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_exp_ray_pdf" title="Link to this definition"></a></dt>
-<dd><p>Get callable for scipy exponential and rayleigh pdf with numpy.random arguments.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_exp_ray_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_exp_ray_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get exponential or Rayleigh density with NumPy’s scale and sample size.</p>
+<p>Both generators use a zero location. Size controls generation, not the
+density of the supplied samples.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;rayleigh&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mf">2.0</span><span class="p">)</span>
 <span class="go">np.float64(0.3032653298563167)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;rayleigh&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="go">np.float64(0.0)</span>
+<span class="go">np.float64(0.3032653298563167)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;exponential&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">)</span>
 <span class="go">np.float64(1.0)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;exponential&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">)</span>
-<span class="go">np.float64(0.36787944117144233)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_exp_ray_pdf</span><span class="p">(</span><span class="s2">&quot;exponential&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="go">np.float64(1.0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_gamma_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_gamma_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_gamma_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get the joint Gamma density using NumPy’s shape and scale parameters.</p>
+<p>Size controls sample generation and is not a density parameter.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_gamma_pdf</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="go">np.float64(0.5)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2803,6 +2822,21 @@ still reject array results so an incorrect draw size is not hidden.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_lognormal_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.25</span><span class="p">)(</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="go">np.float64(1.5957691216057308)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_pareto_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_pareto_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_pareto_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get the Lomax density corresponding to NumPy’s Pareto II draws.</p>
+<p>NumPy’s samples start at zero, unlike SciPy’s Pareto I distribution.
+The optional draw size does not change the density of the supplied values.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_pareto_pdf</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="go">np.float64(3.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_pareto_pdf</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="go">np.float64(0.1875)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2875,10 +2909,23 @@ to calculate the probabilities/probability densities.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_standard_gamma_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_standard_gamma_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_standard_gamma_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get the joint density of NumPy standard Gamma draws (unit scale).</p>
+<p>Size, dtype, and out control generation, not the density of supplied values.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_standard_gamma_pdf</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="go">np.float64(1.0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.get_standard_t_pdf">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_standard_t_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_standard_t_pdf" title="Link to this definition"></a></dt>
-<dd><p>Get callable for scipy multivariate_t dist for a numpy.random.standard_t call.</p>
-<p>Note: doesn’t support len(x)&gt;1.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_standard_t_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_standard_t_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get the joint density of independent numpy.random.standard_t draws.</p>
+<p>Use univariate Student t factors, including broadcast degrees of freedom.
+The optional draw size does not change the density of the supplied values.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_standard_t_pdf</span><span class="p">(</span><span class="mi">1</span><span class="p">)([</span><span class="mf">0.0</span><span class="p">])</span>
 <span class="go">np.float64(0.31830988618379075)</span>
@@ -2920,8 +2967,15 @@ The optional draw size does not change the density of the supplied values.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.get_vonmises_pdf">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_vonmises_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_vonmises_pdf" title="Link to this definition"></a></dt>
-<dd><p>Get callable for scipy.vonmises corresponding to numpy.random arguments.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_vonmises_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_vonmises_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get a von Mises density using NumPy’s mean and concentration arguments.</p>
+<p>SciPy uses kappa as a shape parameter and mu as its circular location.
+The optional draw size does not change the density of the supplied values.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">get_vonmises_pdf</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">),</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)))</span>
+<span class="go">True</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -2929,65 +2983,13 @@ The optional draw size does not change the density of the supplied values.</p>
 <span id="fmdtools-define-container-time"></span><h2>fmdtools.define.container.time<a class="headerlink" href="#module-fmdtools.define.container.time" title="Link to this heading"></a></h2>
 <p>Defines <a class="reference internal" href="#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a> class for containing timers and time-related constructs.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.time.</span></span><span class="sig-name descname"><span class="pre">ExtendedTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a></p>
-<p>Example extended time class for testing, etc.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.dt">
-<span class="sig-name descname"><span class="pre">dt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.dt" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.executed_dynamic">
-<span class="sig-name descname"><span class="pre">executed_dynamic</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executed_dynamic" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.executed_static">
-<span class="sig-name descname"><span class="pre">executed_static</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executed_static" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.executing">
-<span class="sig-name descname"><span class="pre">executing</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executing" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.t_ind">
-<span class="sig-name descname"><span class="pre">t_ind</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int32</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.t_ind" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.time">
-<span class="sig-name descname"><span class="pre">time</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.time" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.timernames">
-<span class="sig-name descname"><span class="pre">timernames</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('t1',</span> <span class="pre">'t2')</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.timernames" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.timers">
-<span class="sig-name descname"><span class="pre">timers</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.timers" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.use_local">
-<span class="sig-name descname"><span class="pre">use_local</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.use_local" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.time.</span></span><span class="sig-name descname"><span class="pre">Time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.time.</span></span><span class="sig-name descname"><span class="pre">BaseTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
 <p>Class for defining all time-based aspects of a Block (e.g., time, timestep, timers).</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.time">
-<span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.time" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.time">
+<span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.time" title="Link to this definition"></a></dt>
 <dd><p>real time for the model</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -2997,8 +2999,8 @@ The optional draw size does not change the density of the supplied values.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.dt">
-<span class="sig-name descname"><span class="pre">dt</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.dt" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.dt">
+<span class="sig-name descname"><span class="pre">dt</span></span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.dt" title="Link to this definition"></a></dt>
 <dd><p>timestep size</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -3008,8 +3010,8 @@ The optional draw size does not change the density of the supplied values.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.t_ind">
-<span class="sig-name descname"><span class="pre">t_ind</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.t_ind" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.t_ind">
+<span class="sig-name descname"><span class="pre">t_ind</span></span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.t_ind" title="Link to this definition"></a></dt>
 <dd><p>index of the given time in the history.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -3019,8 +3021,8 @@ The optional draw size does not change the density of the supplied values.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.executed_static">
-<span class="sig-name descname"><span class="pre">executed_static</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.executed_static" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.executed_static">
+<span class="sig-name descname"><span class="pre">executed_static</span></span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.executed_static" title="Link to this definition"></a></dt>
 <dd><p>Whether a sim’s static behavior has executed yet this timestep (or not).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -3030,8 +3032,8 @@ The optional draw size does not change the density of the supplied values.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.executed_dynamic">
-<span class="sig-name descname"><span class="pre">executed_dynamic</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.executed_dynamic" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.executed_dynamic">
+<span class="sig-name descname"><span class="pre">executed_dynamic</span></span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.executed_dynamic" title="Link to this definition"></a></dt>
 <dd><p>Whether a sim’s dynamic behavior has executed yet this timestep (or not).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -3041,8 +3043,8 @@ The optional draw size does not change the density of the supplied values.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.executing">
-<span class="sig-name descname"><span class="pre">executing</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.executing" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.executing">
+<span class="sig-name descname"><span class="pre">executing</span></span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.executing" title="Link to this definition"></a></dt>
 <dd><p>Whether the timestep of the sim is executing or has finished executing.
 Gets set as true when time is updated and false when the timestep is incremented</p>
 <dl class="field-list simple">
@@ -3053,8 +3055,8 @@ Gets set as true when time is updated and false when the timestep is incremented
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.timers">
-<span class="sig-name descname"><span class="pre">timers</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.timers" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.timers">
+<span class="sig-name descname"><span class="pre">timers</span></span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.timers" title="Link to this definition"></a></dt>
 <dd><p>dictionary of instantiated timers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -3064,8 +3066,8 @@ Gets set as true when time is updated and false when the timestep is incremented
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.use_local">
-<span class="sig-name descname"><span class="pre">use_local</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.use_local" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.use_local">
+<span class="sig-name descname"><span class="pre">use_local</span></span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.use_local" title="Link to this definition"></a></dt>
 <dd><p>Whether to use the local timetep (vs global timestep)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -3075,8 +3077,8 @@ Gets set as true when time is updated and false when the timestep is incremented
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.timernames">
-<span class="sig-name descname"><span class="pre">timernames</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.timernames" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.timernames">
+<span class="sig-name descname"><span class="pre">timernames</span></span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.timernames" title="Link to this definition"></a></dt>
 <dd><p>Names of timers to instantiate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -3119,20 +3121,20 @@ Gets set as true when time is updated and false when the timestep is incremented
 &gt;&gt;&gt; t3.timers
 {‘t1’: Timer t1: mode= ticking, time= 1.0, ‘t2’: Timer t2: mode= standby, time= 0.0}</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.base_type">
-<span class="sig-name descname"><span class="pre">base_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.base_type" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.base_type">
+<span class="sig-name descname"><span class="pre">base_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.base_type" title="Link to this definition"></a></dt>
 <dd><p>Return fmdtools type of the model class.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.create_repr">
-<span class="sig-name descname"><span class="pre">create_repr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['time',</span> <span class="pre">'timers']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.create_repr" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.create_repr">
+<span class="sig-name descname"><span class="pre">create_repr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['time',</span> <span class="pre">'timers']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.create_repr" title="Link to this definition"></a></dt>
 <dd><p>Limit model repr to relevant time/timers fields.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.default_track">
-<span class="sig-name descname"><span class="pre">default_track</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'timers'</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.default_track" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.default_track">
+<span class="sig-name descname"><span class="pre">default_track</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'timers'</span></span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.default_track" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -3156,8 +3158,8 @@ Gets set as true when time is updated and false when the timestep is incremented
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.get_sim_times">
-<span class="sig-name descname"><span class="pre">get_sim_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.get_sim_times" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.get_sim_times">
+<span class="sig-name descname"><span class="pre">get_sim_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.get_sim_times" title="Link to this definition"></a></dt>
 <dd><p>Get the start and end time for the end of the timestep (if not provided).</p>
 <p>If the current time is -0.1, sets start_time at 0.0 for static propagation.
 Otherwise gets the time at the next timestep.</p>
@@ -3173,42 +3175,42 @@ Otherwise gets the time at the next timestep.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.has_executed">
-<span class="sig-name descname"><span class="pre">has_executed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.has_executed" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.has_executed">
+<span class="sig-name descname"><span class="pre">has_executed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.has_executed" title="Link to this definition"></a></dt>
 <dd><p>Return whether the Simulabe has been called.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.init_hist_att">
-<span class="sig-name descname"><span class="pre">init_hist_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">att</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;U20'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.init_hist_att" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.init_hist_att">
+<span class="sig-name descname"><span class="pre">init_hist_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">att</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;U20'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.init_hist_att" title="Link to this definition"></a></dt>
 <dd><p>Add field ‘att’ to history. Accommodates time and timer tracking.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.local_dt">
-<span class="sig-name descname"><span class="pre">local_dt</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(1.0)</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.local_dt" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.local_dt">
+<span class="sig-name descname"><span class="pre">local_dt</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(1.0)</span></span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.local_dt" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.reset" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.reset" title="Link to this definition"></a></dt>
 <dd><p>Reset time to the initial state.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.return_mutables">
-<span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.return_mutables" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.return_mutables">
+<span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.return_mutables" title="Link to this definition"></a></dt>
 <dd><p>Return mutable aspects of the container.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.rolename">
-<span class="sig-name descname"><span class="pre">rolename</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'t'</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.rolename" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.rolename">
+<span class="sig-name descname"><span class="pre">rolename</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'t'</span></span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.rolename" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.set_timestep">
-<span class="sig-name descname"><span class="pre">set_timestep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.set_timestep" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.set_timestep">
+<span class="sig-name descname"><span class="pre">set_timestep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.set_timestep" title="Link to this definition"></a></dt>
 <dd><p>Set the timestep of the function given.</p>
 <p>If using the option use_local, local_timestep is used instead of
 global_timestep.</p>
@@ -3235,14 +3237,123 @@ global_timestep.</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.update_time">
-<span class="sig-name descname"><span class="pre">update_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.update_time" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.update_time">
+<span class="sig-name descname"><span class="pre">update_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.update_time" title="Link to this definition"></a></dt>
 <dd><p>Update the current time from the overall simulation.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id38">
 <span class="sig-name descname"><span class="pre">use_local</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#id38" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.time.</span></span><span class="sig-name descname"><span class="pre">ExtendedTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a></p>
+<p>Example extended time class for testing, etc.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.dt">
+<span class="sig-name descname"><span class="pre">dt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.dt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.executed_dynamic">
+<span class="sig-name descname"><span class="pre">executed_dynamic</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executed_dynamic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.executed_static">
+<span class="sig-name descname"><span class="pre">executed_static</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executed_static" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.executing">
+<span class="sig-name descname"><span class="pre">executing</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.executing" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.local_dt">
+<span class="sig-name descname"><span class="pre">local_dt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.local_dt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.t_ind">
+<span class="sig-name descname"><span class="pre">t_ind</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int32</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.t_ind" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.time">
+<span class="sig-name descname"><span class="pre">time</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.timernames">
+<span class="sig-name descname"><span class="pre">timernames</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('t1',</span> <span class="pre">'t2')</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.timernames" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.timers">
+<span class="sig-name descname"><span class="pre">timers</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.timers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime.use_local">
+<span class="sig-name descname"><span class="pre">use_local</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime.use_local" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.time.</span></span><span class="sig-name descname"><span class="pre">Time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.time.BaseTime" title="fmdtools.define.container.time.BaseTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTime</span></code></a></p>
+<p>Time with a defined local_dt field that can be overwritten by defaults.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.dt">
+<span class="sig-name descname"><span class="pre">dt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.dt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.executed_dynamic">
+<span class="sig-name descname"><span class="pre">executed_dynamic</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.executed_dynamic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.executed_static">
+<span class="sig-name descname"><span class="pre">executed_static</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.executed_static" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.executing">
+<span class="sig-name descname"><span class="pre">executing</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.executing" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.local_dt">
+<span class="sig-name descname"><span class="pre">local_dt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.local_dt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.t_ind">
+<span class="sig-name descname"><span class="pre">t_ind</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int32</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.t_ind" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.time">
+<span class="sig-name descname"><span class="pre">time</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.timers">
+<span class="sig-name descname"><span class="pre">timers</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.timers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.container.time.Time.use_local">
+<span class="sig-name descname"><span class="pre">use_local</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.use_local" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

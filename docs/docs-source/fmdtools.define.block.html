@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.block &mdash; fmdtools 2.5.2 documentation</title>
+  <title>fmdtools.define.block &mdash; fmdtools 2.5.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=afc61bbc"></script>
+      <script src="../_static/documentation_options.js?v=0bbe9fa5"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -1232,13 +1232,19 @@ densities of random states over time.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.SimParam.get_hist_ind">
-<span class="sig-name descname"><span class="pre">get_hist_ind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_ind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.SimParam.get_hist_ind" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_hist_ind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_ind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.SimParam.get_hist_ind" title="Link to this definition"></a></dt>
 <dd><p>Get the index of the history given the simulation time/index and shift.</p>
+<p>Returns log as true if the index of the history and simulation line up, otherwise
+the simulation is not to be logged.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SimParam</span><span class="p">()</span><span class="o">.</span><span class="n">get_hist_ind</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
-<span class="go">2</span>
+<span class="go">(True, 2)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">SimParam</span><span class="p">(</span><span class="n">track_times</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;interval&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">get_hist_ind</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
-<span class="go">2</span>
+<span class="go">(True, 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SimParam</span><span class="p">()</span><span class="o">.</span><span class="n">get_hist_ind</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="go">(False, 1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SimParam</span><span class="p">()</span><span class="o">.</span><span class="n">get_hist_ind</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="go">(True, 1)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1257,7 +1263,7 @@ densities of random states over time.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.SimParam.get_timerange">
-<span class="sig-name descname"><span class="pre">get_timerange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.SimParam.get_timerange" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_timerange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.SimParam.get_timerange" title="Link to this definition"></a></dt>
 <dd><p>Generate the timerange to simulate over.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SimParam</span><span class="p">(</span><span class="n">end_time</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span><span class="o">.</span><span class="n">get_timerange</span><span class="p">()</span>
@@ -1498,10 +1504,10 @@ attributes. The default is {}.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>result</strong> – DESCRIPTION.</p>
+<dd class="field-even"><p><strong>result</strong> – Result to return given to_return input.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>TYPE</p>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result">Result</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1999,6 +2005,11 @@ used when executing in architectures. Default is “static”</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.action.ActionTime.executing">
 <span class="sig-name descname"><span class="pre">executing</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.executing" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.block.action.ActionTime.local_dt">
+<span class="sig-name descname"><span class="pre">local_dt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.local_dt" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">

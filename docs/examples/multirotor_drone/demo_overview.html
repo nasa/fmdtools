@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Overview: Multirotor Drone Model &mdash; fmdtools 2.5.2 documentation</title>
+  <title>Overview: Multirotor Drone Model &mdash; fmdtools 2.5.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=afc61bbc"></script>
+      <script src="../../_static/documentation_options.js?v=0bbe9fa5"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -892,7 +892,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/987aeff7fb173e0ec5f40520f71e57a8bf59bd876e6109a06071e21c9136795b.png" src="../../_images/987aeff7fb173e0ec5f40520f71e57a8bf59bd876e6109a06071e21c9136795b.png" />
+<img alt="../../_images/537b6f6a13c156f5c30e8482ca40ab9756801e02a839cf6d3e303ebedaa42982.png" src="../../_images/537b6f6a13c156f5c30e8482ca40ab9756801e02a839cf6d3e303ebedaa42982.png" />
 </div>
 </div>
 </section>
@@ -948,7 +948,7 @@ The problem formulated involved the optimization of:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/571f422bba0e86b9de02c78f9bf1a8f4cf3890435e27b716359057c0df7a81bf.png" src="../../_images/571f422bba0e86b9de02c78f9bf1a8f4cf3890435e27b716359057c0df7a81bf.png" />
+<img alt="../../_images/3e2f72d90d1ef97623862607218367b59c9f53e01a0ee752d381bf00a93fdcf2.png" src="../../_images/3e2f72d90d1ef97623862607218367b59c9f53e01a0ee752d381bf00a93fdcf2.png" />
 </div>
 </div>
 <p>:::
@@ -962,14 +962,14 @@ The problem formulated involved the optimization of:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">model_urban</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drone</span><span class="p">,</span> <span class="n">plot_env_with_traj_z</span>
-<span class="n">mdl</span> <span class="o">=</span> <span class="n">Drone</span><span class="p">(</span><span class="n">sp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;end_condition&#39;</span><span class="p">:</span> <span class="s1">&#39;scenario_finished&#39;</span><span class="p">})</span>
+<span class="n">mdl</span> <span class="o">=</span> <span class="n">Drone</span><span class="p">(</span><span class="n">sp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;end_condition&#39;</span><span class="p">:</span> <span class="s1">&#39;scenario_finished&#39;</span><span class="p">,</span> <span class="s1">&#39;dt&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span> <span class="n">t</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;local_dt&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">})</span>
 <span class="n">results_fault</span><span class="p">,</span> <span class="n">hist_fault</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s2">&quot;affect_dof.ca.comps.lr&quot;</span><span class="p">,</span> <span class="s2">&quot;mechbreak&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.4</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_env_with_traj_z</span><span class="p">(</span><span class="n">hist_fault</span><span class="p">,</span> <span class="n">mdl</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Urban Drone Trajectory&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/795128aa260f6221c8bf613858587cd9f4df86061f1fcbbdfb0d9388a45143f0.png" src="../../_images/795128aa260f6221c8bf613858587cd9f4df86061f1fcbbdfb0d9388a45143f0.png" />
+<img alt="../../_images/e4a5480776c2b18d02c4ea3b0d48ae41453a88581f84e172e5b47d78b263785f.png" src="../../_images/e4a5480776c2b18d02c4ea3b0d48ae41453a88581f84e172e5b47d78b263785f.png" />
 </div>
 </div>
 </section>

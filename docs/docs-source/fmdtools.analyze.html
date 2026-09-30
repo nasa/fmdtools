@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.analyze &mdash; fmdtools 2.5.2 documentation</title>
+  <title>fmdtools.analyze &mdash; fmdtools 2.5.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=afc61bbc"></script>
+      <script src="../_static/documentation_options.js?v=0bbe9fa5"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -991,7 +991,8 @@ data (e.g., preprocess as bool to calculate a rate). The default is None.</p></l
 the metric. The default is None.</p></li>
 <li><p><strong>r_dtype</strong> (<em>type</em><em>, </em><em>optional</em>) – Datatype to preprocess the rates over. The default is None.</p></li>
 <li><p><strong>r_norm</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to normalize rates. The default is False.</p></li>
-<li><p><strong>round_value</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to round the value. Default is True.</p></li>
+<li><p><strong>round_value</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to round the final value, including named metrics.
+Applied once after evaluation. Default is True.</p></li>
 <li><p><strong>res</strong> (<em>float</em>) – Resolution to round to. Default is 1e-6.</p></li>
 <li><p><strong>min_r</strong> (<em>int</em>) – Maximum number of digits to round to (see round_float).</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to method (see round_float).</p></li>
@@ -1030,7 +1031,8 @@ the metric. The default is None.</p></li>
 <li><p><strong>return_anyway</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to return even if the bootstrap cannot be taken (e.g., for plotting).
 The default is False.</p></li>
 <li><p><strong>axis</strong> (<em>int</em>) – Axis along which to calculate the confidence interval(s). The default is 0.</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to calc_metric or scipy.bootstrap.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to the statistic, preprocessing, or scipy.bootstrap.
+Statistic arguments are used for both the point estimate and resamples.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1136,6 +1138,8 @@ legend. Default is False.</p></li>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_indiv_filename</span><span class="p">(</span><span class="s2">&quot;hi.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">)</span>
 <span class="go">&#39;hi_4.csv&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">create_indiv_filename</span><span class="p">(</span><span class="s2">&quot;runs.v1/results.v2.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="n">splitchar</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="go">&#39;runs.v1/results.v2/4.csv&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1191,7 +1195,8 @@ legend. Default is False.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>folder</strong> (<em>str</em>) – Name of the folder. Must be in the current directory</p></li>
-<li><p><strong>filetype</strong> (<em>str</em>) – Type of files in the folder (‘pickle’, ‘csv’, or ‘json’)</p></li>
+<li><p><strong>filetype</strong> (<em>str</em>) – Type of files in the folder (‘npz’, ‘csv’, or ‘json’). Other extensions
+and subdirectories are ignored; matching files are not searched recursively.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1586,6 +1591,8 @@ If no nominal scenario is found, returns {‘default’: ‘default’}.</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.get_different">
 <span class="sig-name descname"><span class="pre">get_different</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.get_different" title="Link to this definition"></a></dt>
 <dd><p>Find the values of two results which are different.</p>
+<p>Array-valued entries are retained when any element of their difference
+is nonzero; the full difference array is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result to compare against</p>
@@ -1608,7 +1615,8 @@ Results.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>app</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.SampleApproach" title="fmdtools.sim.sample.SampleApproach"><em>SampleApproach</em></a><em>, </em><em>optional</em>) – Approach to use for weights (via rates). The default is [].</p></li>
-<li><p><strong>with_nominal</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include the nominal scenario in the expectation.
+<li><p><strong>with_nominal</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include the scenario named exactly ‘nominal’ in the
+expectation. Other names containing ‘nominal’ remain included.
 The default is False.</p></li>
 <li><p><strong>difference_from_nominal</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to calculated the difference of the expectation from nominal.
 The default is False.</p></li>
@@ -1858,13 +1866,16 @@ the global kwargs (or default behavior).</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.save">
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.save" title="Link to this definition"></a></dt>
 <dd><p>Save a given result variable (result or history) to a file filename.</p>
-<p>Files can be saved as npz, csv, or json.</p>
+<p>Files can be saved as npz, csv, or json. JSON converts arrays to
+nested lists of Python values (or a scalar for zero-dimensional arrays).
+Array dtype and shape metadata are not stored in JSON.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – File name for the file. Can be nested in a folder if desired.</p></li>
-<li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional specifier of file type (if not included in filename).
-The default is “”.</p></li>
+<li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Format to write, overriding the filename extension when supplied.
+The default “” infers the format from the extension. The exact
+filename is used for all formats; no extension is appended.</p></li>
 <li><p><strong>overwrite</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to overwrite existing files with this name.
 The default is False.</p></li>
 <li><p><strong>result_id</strong> (<em>str</em><em>, </em><em>optional</em>) – For individual results saving. Places an identifier for the result in the
@@ -2172,6 +2183,8 @@ which does not reshape the array.</p></li>
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.get_different">
 <span class="sig-name descname"><span class="pre">get_different</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_different" title="Link to this definition"></a></dt>
 <dd><p>Find the values of two histories which are different.</p>
+<p>Array-valued entries are retained when any element of their difference
+is nonzero; the full difference array is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History to compare against</p>
@@ -3656,9 +3669,9 @@ is used.</p>
 <dd class="field-even"><p><strong>phasemaps</strong> – Dictionary of distict phases that the system functions pass through,
 of the form: {‘fxn’: PhaseMap} where each phase is defined by its
 corresponding mode in the modelhist.
-Phases are numbered mode, mode1, mode2 for multiple modes and given a
-corresponding phasemap {mode: {mode, mode1, mode2}} mapping modes to
-phases for future sampling.</p>
+Repeated phases are numbered mode, mode1, mode2, skipping suffixes that
+would collide with actual mode names or previously generated phase names.
+The modephase mapping groups each mode’s intervals for future sampling.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
