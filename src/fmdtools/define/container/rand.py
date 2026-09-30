@@ -608,6 +608,9 @@ def get_pfunc_for_dist(randname, *args):
     Uses a call to scipy.stats when available (with the correct arguments), otherwise
     uses a custom function provided in this module.
 
+    Univariate discrete sampling sizes are accepted without shifting the support.
+    Poisson's omitted rate uses NumPy's default of one.
+
     Parameters
     ----------
     randname : str
@@ -622,12 +625,11 @@ def get_pfunc_for_dist(randname, *args):
     """
     same_funcs = ['beta', 'dirichlet', 'f', 'laplace',
                   'logistic', 'multivariate_normal', 'wald']
-    same_funcs_pmf = ['multinomial', 'poisson', 'zipf']
-    different_funcs_pmf = {'binomial': 'binom',
-                           'geometric': 'geom',
-                           'logseries': 'logser',
-                           'multivariate_hypergeometric': 'multivariate_hypergeom',
-                           'negative_binomial': 'nbinom'}
+    discrete_funcs = {'poisson': ('poisson', 1), 'zipf': ('zipf', 1),
+                      'binomial': ('binom', 2), 'geometric': ('geom', 1),
+                      'logseries': ('logser', 1), 'negative_binomial': ('nbinom', 2)}
+    same_funcs_pmf = ['multinomial']
+    different_funcs_pmf = {'multivariate_hypergeometric': 'multivariate_hypergeom'}
 
     different_funcs = {'chisquare': 'chi2',
                        'gumbel': 'gumbel_r',
@@ -643,6 +645,15 @@ def get_pfunc_for_dist(randname, *args):
             return get_scipy_pdf(randname, *args)
         case str if randname in same_funcs_pmf:
             return get_scipy_pmf(randname, *args)
+        case str if randname in discrete_funcs:
+            scipy_name, num_params = discrete_funcs[randname]
+            if randname == 'poisson' and not args:
+                args = (1.0,)
+            if len(args) not in (num_params, num_params + 1):
+                raise TypeError(randname + " requires " + str(num_params) +
+                                " distribution parameter(s) and an optional size.")
+            # NumPy's optional size must not become SciPy's location parameter.
+            return get_scipy_pmf(scipy_name, *args[:num_params])
         case str if randname in different_funcs:
             return get_scipy_pdf(different_funcs[randname], *args)
         case str if randname in different_funcs_pmf:
@@ -713,6 +724,8 @@ def get_prob_for_rand(x, randname, *args):
     np.float64(0.15915494309189535)
     >>> get_prob_for_rand(2, "integers", 4)
     np.float64(0.25)
+    >>> bool(np.isclose(get_prob_for_rand([0, 0], "binomial", 1, 0.5, 2), 0.25))
+    True
     """
     pfunc = get_pfunc_for_dist(randname, *args)
     return pfunc(x)
