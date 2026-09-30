@@ -26,7 +26,7 @@ from fmdtools.define.base import gen_timerange, is_iter, get_var, filter_kwargs
 from fmdtools.define.base import copy_dict_objs
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
-from fmdtools.define.container.time import DefaultTime
+from fmdtools.define.container.time import Time
 from fmdtools.define.container.mode import Fault
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
@@ -203,7 +203,7 @@ class Simulable(BaseObject):
 
     __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'mut_kwargs', '_sims')
     attrs = (*BaseObject.attrs, "h", "mut_kwargs")
-    container_t = DefaultTime
+    container_t = Time
     default_track = ["all"]
     immutable_roles = BaseObject.immutable_roles + ['sp']
     default_sp = {}

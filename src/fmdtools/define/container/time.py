@@ -25,7 +25,7 @@ from decimal import Decimal
 import numpy as np
 
 
-class Time(BaseContainer):
+class BaseTime(BaseContainer):
     """
     Class for defining all time-based aspects of a Block (e.g., time, timestep, timers).
 
@@ -211,7 +211,7 @@ class Time(BaseContainer):
         return start_time, end_time
 
 
-class DefaultTime(Time):
+class Time(BaseTime):
     """Time with a defined local_dt field that can be overwritten by defaults."""
 
     local_dt: np.float64 = np.float64(1.0)
