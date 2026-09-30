@@ -211,6 +211,12 @@ class Time(BaseContainer):
         return start_time, end_time
 
 
+class DefaultTime(Time):
+    """Time with a defined local_dt field that can be overwritten by defaults."""
+
+    local_dt: np.float64 = np.float64(1.0)
+
+
 class ExtendedTime(Time):
     """Example extended time class for testing, etc."""
 

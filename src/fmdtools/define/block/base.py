@@ -26,7 +26,7 @@ from fmdtools.define.base import gen_timerange, is_iter, get_var, filter_kwargs
 from fmdtools.define.base import copy_dict_objs
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
-from fmdtools.define.container.time import Time
+from fmdtools.define.container.time import DefaultTime
 from fmdtools.define.container.mode import Fault
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
@@ -114,7 +114,7 @@ class SimParam(Parameter, readonly=True):
                                 ": " + str(self.phases) +
                                 " Ensure max of each phase < min of each other phase")
 
-    def get_timerange(self, start_time=None, end_time=None, min_r=7):
+    def get_timerange(self, start_time=None, end_time=None, dt=None, min_r=7):
         """
         Generate the timerange to simulate over.
 
@@ -127,7 +127,9 @@ class SimParam(Parameter, readonly=True):
             start_time = self.start_time
         if end_time is None:
             end_time = self.end_time
-        return gen_timerange(start_time, end_time, self.dt, min_r)
+        if dt is None:
+            dt = self.dt
+        return gen_timerange(start_time, end_time, dt, min_r)
 
     def get_histrange(self, start_time=0.0, end_time=None):
         """Get the history range associated with the SimParam."""
@@ -140,26 +142,39 @@ class SimParam(Parameter, readonly=True):
             histrange = self.track_times[1]
         return histrange
 
-    def get_hist_ind(self, t_ind, t):
+    def get_hist_ind(self, t_ind, t, local_dt=None):
         """
         Get the index of the history given the simulation time/index and shift.
+
+        Returns log as true if the index of the history and simulation line up, otherwise
+        the simulation is not to be logged.
 
         Examples
         --------
         >>> SimParam().get_hist_ind(2, 2.0)
-        2
+        (True, 2)
         >>> SimParam(track_times=('interval', 2)).get_hist_ind(4, 4.0)
-        2
+        (True, 2)
+        >>> SimParam().get_hist_ind(2, 2.0, 0.1)
+        (False, 1)
+        >>> SimParam().get_hist_ind(10, 2.0, 0.1)
+        (True, 1)
         """
+        log = True
+        if local_dt is not None:
+            log = t_ind*local_dt % self.dt == 0.0
+            t_ind = int(-(t_ind * local_dt//-self.dt))
+
         if self.track_times[0] == 'all':
             t_ind_rec = t_ind
         elif self.track_times[0] == 'interval':
+            log = t_ind % self.track_times[1] == 0
             t_ind_rec = t_ind//self.track_times[1]
         elif self.track_times[0] == 'times':
             t_ind_rec = self.track_times[1].index(t)
         else:
             raise Exception("Invalid argument, track_times=" + str(self.track_times))
-        return t_ind_rec
+        return bool(log), t_ind_rec
 
     def get_sub_kwargs(self):
         """Get keyword arguments for contained sim from larger sim."""
@@ -188,7 +203,7 @@ class Simulable(BaseObject):
 
     __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'mut_kwargs', '_sims')
     attrs = (*BaseObject.attrs, "h", "mut_kwargs")
-    container_t = Time
+    container_t = DefaultTime
     default_track = ["all"]
     immutable_roles = BaseObject.immutable_roles + ['sp']
     default_sp = {}
@@ -762,7 +777,7 @@ class Simulable(BaseObject):
             if time == 'end':
                 time = self.sp.end_time
             start_time, end_time = self.t.get_sim_times(time)
-            sim_times = self.sp.get_timerange(start_time, end_time)
+            sim_times = self.sp.get_timerange(start_time, end_time, dt=self.t.dt)
             for t in sim_times:
                 if t == end_time:
                     if copy:
@@ -778,8 +793,9 @@ class Simulable(BaseObject):
                     self.set_sub_faults()
                     if inc_at == "all" or (inc_at == "time" and t == time):
                         self.inc_sim_time()
-                        t_ind = self.sp.get_hist_ind(self.t.t_ind, self.t.time)
-                        self.h.log(self, t_ind, self.t.time)
+                        log, t_ind = self.sp.get_hist_ind(self.t.t_ind, self.t.time, self.t.dt)
+                        if log:
+                            self.h.log(self, t_ind, self.t.time)
                     if self.sp.end_condition and not copy:
                         if get_var(self, self.sp.end_condition)():
                             break
