@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for src/fmdtools/define/architecture/action.py: 82%</title>
+    <title>Coverage for src/fmdtools/define/architecture/action.py: 85%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
     <link rel="stylesheet" href="style_cb_4667309f.css" type="text/css">
     <script src="coverage_html_cb_15cffcd0.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>src<span class="sep">/</span>fmdtools<span class="sep">/</span>define<span class="sep">/</span>architecture<span class="sep">/</span>action.py</b>:
-            <span class="pc_cov">82%</span>
+            <span class="pc_cov">85%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">164 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">134<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">30<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">140<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">24<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">21<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_21b4c020541f6e76_base_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
-            created at 2026-09-30 08:57 -0700
+            created at 2026-09-30 09:05 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -374,7 +374,7 @@
     <p class="pln"><span class="n"><a id="t292" href="#t292">292</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t293" href="#t293">293</a></span><span class="t">    <span class="key">def</span> <span class="nam">set_initial_active_action</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">*</span><span class="nam">active_actions</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t294" href="#t294">294</a></span><span class="t">        <span class="key">if</span> <span class="nam">active_actions</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t295" href="#t295">295</a></span><span class="t">            <span class="nam">initial_action</span> <span class="op">=</span> <span class="nam">active_actions</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t295" href="#t295">295</a></span><span class="t">            <span class="nam">initial_action</span> <span class="op">=</span> <span class="nam">active_actions</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t296" href="#t296">296</a></span><span class="t">        <span class="key">elif</span> <span class="nam">self</span><span class="op">.</span><span class="nam">initial_action</span> <span class="op">==</span> <span class="str">&#x27;auto&#x27;</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t297" href="#t297">297</a></span><span class="t">            <span class="nam">initial_action</span> <span class="op">=</span> <span class="op">[</span><span class="nam">act</span> <span class="key">for</span> <span class="nam">act</span><span class="op">,</span> <span class="nam">in_degree</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">action_graph</span><span class="op">.</span><span class="nam">in_degree</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t298" href="#t298">298</a></span><span class="t">                              <span class="key">if</span> <span class="nam">in_degree</span> <span class="op">==</span> <span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
@@ -484,7 +484,7 @@
     <p class="pln"><span class="n"><a id="t402" href="#t402">402</a></span><span class="t"><span class="str">        time : float</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t403" href="#t403">403</a></span><span class="t"><span class="str">            Model time.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t404" href="#t404">404</a></span><span class="t"><span class="str">        &quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t405" href="#t405">405</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">prop_graph</span><span class="op">(</span><span class="str">&#x27;static&#x27;</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t405" href="#t405">405</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">prop_graph</span><span class="op">(</span><span class="str">&#x27;static&#x27;</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t406" href="#t406">406</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t407" href="#t407">407</a></span><span class="t">    <span class="key">def</span> <span class="nam">inc_sim_time</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t408" href="#t408">408</a></span><span class="t">        <span class="str">&quot;&quot;&quot;Increment action simulation times to current.&quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
@@ -525,7 +525,7 @@
     <p class="mis show_mis"><span class="n"><a id="t443" href="#t443">443</a></span><span class="t">                        <span class="key">elif</span> <span class="nam">proptype</span> <span class="key">in</span> <span class="op">[</span><span class="str">&#x27;dynamic&#x27;</span><span class="op">,</span> <span class="str">&#x27;both&#x27;</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t444" href="#t444">444</a></span><span class="t">                            <span class="nam">act</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">t_loc</span> <span class="op">+=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">acts</span><span class="op">[</span><span class="nam">action</span><span class="op">]</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">dt</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t445" href="#t445">445</a></span><span class="t">                    <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t446" href="#t446">446</a></span><span class="t">                        <span class="nam">act</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">t_loc</span> <span class="op">=</span> <span class="num">0.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t446" href="#t446">446</a></span><span class="t">                        <span class="nam">act</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">t_loc</span> <span class="op">=</span> <span class="num">0.0</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t447" href="#t447">447</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t448" href="#t448">448</a></span><span class="t">            <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">new_active_actions</span><span class="op">)</span> <span class="op">&gt;</span> <span class="num">1</span> <span class="key">and</span> <span class="nam">self</span><span class="op">.</span><span class="nam">state_rep</span> <span class="op">==</span> <span class="str">&#x27;finite-state&#x27;</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t449" href="#t449">449</a></span><span class="t">                <span class="key">raise</span> <span class="nam">Exception</span><span class="op">(</span><span class="str">&quot;Multiple active actions in a finite-state &quot;</span> <span class="op">+</span>&nbsp;</span><span class="r"></span></p>
@@ -545,9 +545,9 @@
     <p class="pln"><span class="n"><a id="t463" href="#t463">463</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t464" href="#t464">464</a></span><span class="t">    <span class="key">def</span> <span class="nam">asdict</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="nam">exclude</span><span class="op">=</span><span class="op">[</span><span class="op">]</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t465" href="#t465">465</a></span><span class="t">        <span class="str">&quot;&quot;&quot;Present asdict (without bound conds methods).&quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t466" href="#t466">466</a></span><span class="t">        <span class="key">if</span> <span class="str">&#x27;conds&#x27;</span> <span class="key">not</span> <span class="key">in</span> <span class="nam">exclude</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t467" href="#t467">467</a></span><span class="t">            <span class="nam">exclude</span> <span class="op">=</span> <span class="op">[</span><span class="op">*</span><span class="nam">exclude</span><span class="op">,</span> <span class="str">&#x27;conds&#x27;</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t468" href="#t468">468</a></span><span class="t">        <span class="key">return</span> <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">asdict</span><span class="op">(</span><span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="nam">exclude</span><span class="op">=</span><span class="nam">exclude</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t466" href="#t466">466</a></span><span class="t">        <span class="key">if</span> <span class="str">&#x27;conds&#x27;</span> <span class="key">not</span> <span class="key">in</span> <span class="nam">exclude</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t467" href="#t467">467</a></span><span class="t">            <span class="nam">exclude</span> <span class="op">=</span> <span class="op">[</span><span class="op">*</span><span class="nam">exclude</span><span class="op">,</span> <span class="str">&#x27;conds&#x27;</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t468" href="#t468">468</a></span><span class="t">        <span class="key">return</span> <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">asdict</span><span class="op">(</span><span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="nam">exclude</span><span class="op">=</span><span class="nam">exclude</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t469" href="#t469">469</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t470" href="#t470">470</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t471" href="#t471">471</a></span><span class="t"><span class="key">class</span> <span class="nam">ExampleActionArchitecture</span><span class="op">(</span><span class="nam">ActionArchitecture</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -582,7 +582,7 @@
             <a class="nav" href="z_21b4c020541f6e76_base_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
-            created at 2026-09-30 08:57 -0700
+            created at 2026-09-30 09:05 -0700
         </p>
     </div>
 </footer>
