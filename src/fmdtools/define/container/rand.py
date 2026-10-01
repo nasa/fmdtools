@@ -567,6 +567,20 @@ def get_standard_gamma_pdf(shape, size=None, dtype=np.float64, out=None):
     return get_gamma_pdf(shape)
 
 
+def get_standard_normal_pdf(size=None, dtype=np.float64, out=None):
+    """Get standard normal density, accepting generation-only size/dtype/out.
+
+    The density has zero location and unit scale for every requested draw shape.
+    The output buffer is not modified when evaluating the density.
+    """
+    return get_scipy_pdf("norm")
+
+
+def get_standard_cauchy_pdf(size=None):
+    """Get standard Cauchy density without using sample size as location."""
+    return get_scipy_pdf("cauchy")
+
+
 def get_standard_t_pdf(df, size=None):
     """
     Get the joint density of independent numpy.random.standard_t draws.
@@ -667,8 +681,6 @@ def get_pfunc_for_dist(randname, *args):
                        'noncentral_chisquare': 'ncx2',
                        'noncentral_f': 'ncf',
                        'power': 'powerlaw',
-                       'standard_cauchy': 'cauchy',
-                       'standard_normal': 'norm',
                        'weibull': 'weibull_min'}
     match randname:
         case str if randname in location_scale_funcs:
@@ -695,6 +707,10 @@ def get_pfunc_for_dist(randname, *args):
             return get_gamma_pdf(*args)
         case 'standard_gamma':
             return get_standard_gamma_pdf(*args)
+        case 'standard_normal':
+            return get_standard_normal_pdf(*args)
+        case 'standard_cauchy':
+            return get_standard_cauchy_pdf(*args)
         case 'standard_t':
             return get_standard_t_pdf(*args)
         case 'triangular':
