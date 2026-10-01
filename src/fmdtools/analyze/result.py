@@ -490,6 +490,10 @@ class Result(UserDict):
         """
         Get *values from the dict and return as tuples.
 
+        Named keyword values are paired with the first value by their shared path
+        prefix; missing counterparts raise KeyError. External mappings follow the
+        selected scenarios. Explicit arrays retain the caller's supplied order.
+
         Examples
         --------
         >>> r = Result({'a': 1, 'b': 3})
@@ -499,13 +503,24 @@ class Result(UserDict):
         >>> r.get_vals('a', c={'x': 4, 'y': 5})
         ([1, 3], [4, 5])
         """
-        get_vals = [[*self.get_values(val, prefix=prefix).values()]
-                    for val in values]
-        k_vals = [[*self.get_values(val, prefix=prefix).values()]
-                  if isinstance(val, str) else
-                  [*self.align_external_dict(val).values()] if isinstance(val, dict)
-                  else val
-                  for val in val_kwargs.values()]
+        selected = [self.get_values(val, prefix=prefix) for val in values]
+        get_vals = [list(value.values()) for value in selected]
+        reference = selected[0] if selected else self
+        k_vals = []
+        for val in val_kwargs.values():
+            if isinstance(val, str):
+                named = self.get_values(val, prefix=prefix)
+                if selected:
+                    # Pair named rates/weights by path, not insertion order.
+                    keys = [key.removesuffix(prefix + values[0]) + prefix + val
+                            for key in reference]
+                    k_vals.append([named[key] for key in keys])
+                else:
+                    k_vals.append(list(named.values()))
+            elif isinstance(val, dict):
+                k_vals.append(list(reference.align_external_dict(val).values()))
+            else:
+                k_vals.append(val)
         return tuple(get_vals+k_vals)
 
     def align_external_dict(self, ext_dict):
