@@ -137,13 +137,16 @@ class History(Result):
 
     def init_att(self, att, val,
                  timerange=None, track=None, dtype=None, str_size='<U20'):
-        """Add key/hist array for an attribute over a given timerange."""
+        """Add key/hist array for an attribute over a given timerange.
+
+        Without a timerange, start a list with an independent initial snapshot.
+        """
         sub_track = get_sub_include(att, track)
         if sub_track:
             if isinstance(val, dict) or (hasattr(val, 'keys') and hasattr(val, 'values')):
                 self[att] = init_dicthist(val, timerange, sub_track)
             elif timerange is None:
-                self[att] = [val]
+                self[att] = [copy.deepcopy(val)]
             elif isinstance(val, str):
                 self[att] = np.empty([len(timerange)], dtype=str_size)
             elif isinstance(val, np.ndarray) or dtype == np.ndarray:
@@ -215,6 +218,8 @@ class History(Result):
         """
         Update the history from obj at the time t_ind.
 
+        List-backed histories append independent snapshots of the logged values.
+
         Parameters
         ----------
         obj : Model/Function/State...
@@ -251,7 +256,7 @@ class History(Result):
             if isinstance(hist, History):
                 hist.log(val, t_ind)
             else:
-                if is_known_mutable(val):
+                if isinstance(hist, list) or is_known_mutable(val):
                     val = copy.deepcopy(val)
                 if isinstance(hist, list):
                     hist.append(val)
