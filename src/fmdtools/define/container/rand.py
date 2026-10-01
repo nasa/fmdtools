@@ -618,6 +618,22 @@ def get_vonmises_pdf(mu, kappa, size=None):
     return get_scipy_pdf("vonmises", kappa, loc=mu)
 
 
+def get_wald_pdf(mean, scale, size=None):
+    """
+    Get the inverse Gaussian density using NumPy's Wald parameters.
+
+    SciPy's inverse Gaussian uses mean/scale as its shape and scale as its
+    scale parameter, with zero location. Size only controls sample generation.
+
+    Examples
+    --------
+    >>> bool(np.isclose(get_wald_pdf(2.0, 3.0)(2.0), np.sqrt(3 / (16 * np.pi))))
+    True
+    """
+    return get_scipy_pdf("invgauss", np.asarray(mean) / np.asarray(scale),
+                         scale=scale)
+
+
 def get_pfunc_for_dist(randname, *args):
     """
     Get the probability mass/density function corresponding to a numpy random draw.
@@ -639,7 +655,7 @@ def get_pfunc_for_dist(randname, *args):
     """
     location_scale_funcs = {'normal': 'norm', 'laplace': 'laplace',
                             'logistic': 'logistic', 'gumbel': 'gumbel_r'}
-    same_funcs = ['beta', 'dirichlet', 'f', 'multivariate_normal', 'wald']
+    same_funcs = ['beta', 'dirichlet', 'f', 'multivariate_normal']
     same_funcs_pmf = ['multinomial', 'poisson', 'zipf']
     different_funcs_pmf = {'binomial': 'binom',
                            'geometric': 'geom',
@@ -685,6 +701,8 @@ def get_pfunc_for_dist(randname, *args):
             return get_triangular_pdf(*args)
         case 'vonmises':
             return get_vonmises_pdf(*args)
+        case 'wald':
+            return get_wald_pdf(*args)
         case 'integers':
             return get_custom_pfunc(calc_prob_for_integers, *args)
         case 'random':
