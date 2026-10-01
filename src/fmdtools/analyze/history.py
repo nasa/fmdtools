@@ -205,13 +205,18 @@ class History(Result):
         return different
 
     def copy(self):
-        """Create a new independent copy of the current history dict."""
+        """Create an independent copy, including mutable objects in array entries.
+
+        Non-History entries retain the existing conversion to NumPy arrays.
+        """
         newhist = History()
         for k, v in self.items():
             if isinstance(v, History):
                 newhist[k] = v.copy()
             else:
                 newhist[k] = np.copy(v)
+                if newhist[k].dtype.hasobject:
+                    newhist[k] = copy.deepcopy(newhist[k])
         return newhist
 
     def log(self, obj, t_ind, time=None):
