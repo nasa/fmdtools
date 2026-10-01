@@ -508,18 +508,20 @@ def get_pareto_pdf(a, size=None):
     return get_scipy_pdf("lomax", a)
 
 
-def get_lognormal_pdf(*args):
+def get_lognormal_pdf(mean=0.0, sigma=1.0, size=None):
     """
-    Get callable for scipy lognormal pdf with numpy.random arguments.
+    Get a lognormal density using NumPy's defaults for the underlying normal.
+
+    Size controls sample generation and does not change the density.
 
     Examples
     --------
     >>> get_lognormal_pdf(0, .25)(1.0)
     np.float64(1.5957691216057308)
+    >>> get_lognormal_pdf()(1.0)
+    np.float64(0.3989422804014327)
     """
-    s = args[1]
-    scale = np.exp(args[0])
-    return get_scipy_pdf("lognorm", s, scale=scale)
+    return get_scipy_pdf("lognorm", sigma, scale=np.exp(mean))
 
 
 def get_gamma_pdf(shape, scale=1.0, size=None):
