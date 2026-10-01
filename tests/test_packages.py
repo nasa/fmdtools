@@ -46,7 +46,7 @@ class define_Tests(unittest.TestCase):
                       'multivariate_normal': (0, 1),
                       'pareto': (1,),
                       'uniform': (0, 1),
-                      'wald': (0, 1)}
+                      'wald': (1, 1)}
         same_funcs_pmf = {'multinomial': (1, [1.0]),
                           'poisson': (1,),
                           'zipf': (2,)}
