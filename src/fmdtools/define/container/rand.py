@@ -436,6 +436,21 @@ def get_custom_pfunc(func_handle, *args, **kwargs):
     return custom_pfunc
 
 
+def get_location_scale_pdf(randname, loc=0.0, scale=1.0, size=None):
+    """
+    Get a location-scale density without passing NumPy's size to SciPy.
+
+    The sample size controls generation, not the density of supplied values.
+    Randname is the corresponding SciPy distribution name.
+
+    Examples
+    --------
+    >>> get_location_scale_pdf("laplace", 0.0, 2.0, (2, 3))(0.0)
+    np.float64(0.25)
+    """
+    return get_scipy_pdf(randname, loc=loc, scale=scale)
+
+
 def get_exp_ray_pdf(randname, scale=1.0, size=None):
     """
     Get exponential or Rayleigh density with NumPy's scale and sample size.
@@ -508,18 +523,20 @@ def get_pareto_pdf(a, size=None):
     return get_scipy_pdf("lomax", a)
 
 
-def get_lognormal_pdf(*args):
+def get_lognormal_pdf(mean=0.0, sigma=1.0, size=None):
     """
-    Get callable for scipy lognormal pdf with numpy.random arguments.
+    Get a lognormal density using NumPy's defaults for the underlying normal.
+
+    Size controls sample generation and does not change the density.
 
     Examples
     --------
     >>> get_lognormal_pdf(0, .25)(1.0)
     np.float64(1.5957691216057308)
+    >>> get_lognormal_pdf()(1.0)
+    np.float64(0.3989422804014327)
     """
-    s = args[1]
-    scale = np.exp(args[0])
-    return get_scipy_pdf("lognorm", s, scale=scale)
+    return get_scipy_pdf("lognorm", sigma, scale=np.exp(mean))
 
 
 def get_gamma_pdf(shape, scale=1.0, size=None):
@@ -620,8 +637,9 @@ def get_pfunc_for_dist(randname, *args):
     pfunc : callable
         pdf/pmf for the draw.
     """
-    same_funcs = ['beta', 'dirichlet', 'f', 'laplace',
-                  'logistic', 'multivariate_normal', 'wald']
+    location_scale_funcs = {'normal': 'norm', 'laplace': 'laplace',
+                            'logistic': 'logistic', 'gumbel': 'gumbel_r'}
+    same_funcs = ['beta', 'dirichlet', 'f', 'multivariate_normal', 'wald']
     same_funcs_pmf = ['multinomial', 'poisson', 'zipf']
     different_funcs_pmf = {'binomial': 'binom',
                            'geometric': 'geom',
@@ -630,15 +648,15 @@ def get_pfunc_for_dist(randname, *args):
                            'negative_binomial': 'nbinom'}
 
     different_funcs = {'chisquare': 'chi2',
-                       'gumbel': 'gumbel_r',
                        'noncentral_chisquare': 'ncx2',
                        'noncentral_f': 'ncf',
-                       'normal': 'norm',
                        'power': 'powerlaw',
                        'standard_cauchy': 'cauchy',
                        'standard_normal': 'norm',
                        'weibull': 'weibull_min'}
     match randname:
+        case str if randname in location_scale_funcs:
+            return get_location_scale_pdf(location_scale_funcs[randname], *args)
         case str if randname in same_funcs:
             return get_scipy_pdf(randname, *args)
         case str if randname in same_funcs_pmf:

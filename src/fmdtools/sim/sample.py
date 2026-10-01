@@ -1354,11 +1354,17 @@ class ParameterSample(BaseSample):
         Parameter domain object to sample
     """
 
-    def __init__(self, paramdomain=ParameterDomain(Parameter), seed=None, sp={}):
+    def __init__(self, paramdomain=None, seed=None, sp=None):
+        """Initialize a sample with independent defaults.
+
+        Omitted domains and simulation settings are created for this instance.
+        Explicitly supplied objects retain their existing shared-reference behavior.
+        """
         self.seed = seed
         self.seedsequence = np.random.SeedSequence(seed)
-        self.sp = sp
-        self.paramdomain = paramdomain
+        self.sp = {} if sp is None else sp
+        self.paramdomain = (ParameterDomain(Parameter) if paramdomain is None
+                            else paramdomain)
         self._scenarios = []
 
     def __repr__(self):

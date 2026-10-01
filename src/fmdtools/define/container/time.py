@@ -169,8 +169,8 @@ class BaseTime(BaseContainer):
             timer.tstep = -self.dt
 
     def reset(self):
-        """Reset time to the initial state."""
-        self.assign(dict(time=-0.1, t_ind=0,
+        """Reset time and all execution flags while preserving timestep settings."""
+        self.assign(dict(time=-0.1, t_ind=0, executing=False,
                          executed_static=False, executed_dynamic=False))
         for timer in self.timers.values():
             timer.reset()
