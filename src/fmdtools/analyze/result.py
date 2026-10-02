@@ -184,12 +184,13 @@ class Result(UserDict):
     """
 
     def __init__(self, mapping=None, **kwargs):
+        """Initialize a new mapping with overrides, leaving the input keys intact."""
         if isinstance(mapping, dict):
             mapping = self.fromdict({**mapping, **kwargs})
         elif mapping is None:
             mapping = dict(**kwargs)
         elif isinstance(mapping, Result):
-            mapping.update(**kwargs)
+            mapping = {**mapping, **kwargs}
         else:
             raise Exception("Invalid mapping: "+str(mapping))
         super().__init__(mapping)
