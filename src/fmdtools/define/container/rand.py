@@ -36,7 +36,7 @@ from fmdtools.define.container.base import BaseContainer
 from fmdtools.define.container.state import State
 from fmdtools.define.base import round_float, array_x, unpack_x, is_iter
 
-from scipy import stats, special
+from scipy import stats
 from recordclass import astuple
 import numpy as np
 import math
@@ -338,7 +338,12 @@ def calc_prob_density_for_random(x):
 
 def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
     """
-    Get probability corresponding to a call to np.choice.
+    Get the ordered joint mass of choices from one-dimensional options.
+
+    Scalars and arrays are evaluated using all supplied values. Sampling size
+    does not change their mass. Uniform sampling without replacement is
+    supported; weighted sampling without replacement remains unsupported.
+    The existing six-decimal probability rounding is retained.
 
     Examples
     --------
@@ -346,26 +351,44 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
     np.float64(0.5)
     >>> calc_prob_for_choice([1,2], [1,2], replace=False)
     np.float64(0.5)
-    >>> calc_prob_for_choice([1,2], [1,2,3], p=[0.1, 0.1, 0.9])
+    >>> calc_prob_for_choice([1,2], [1,2,3], p=[0.1, 0.1, 0.8])
     np.float64(0.01)
     """
-    if isinstance(options, int):
-        options = [*np.arange(options)]
-
-    if replace:
-        if p is None:
-            p = [1/len(options) for i in options]
-        return round_float(np.prod([p[options.index(i)] for i in x]), res=1e-6)
+    if isinstance(options, (int, np.integer)):
+        options = np.arange(options)
+    options = np.asarray(options)
+    if options.ndim != 1:
+        raise ValueError("Choice probability requires one-dimensional options.")
+    draws = np.asarray(x).ravel()
+    if not replace and p is not None:
+        raise Exception("Cannot calculate weighted probabilities without replacement.")
+    if not replace and draws.size > options.size:
+        raise ValueError("Too many draws from sample without replacement.")
+    if not draws.size:
+        return np.float64(1.0)
+    if not options.size:
+        raise ValueError("Choice options must not be empty for a nonempty draw.")
+    if p is None:
+        probabilities = np.full(options.size, 1.0 / options.size)
     else:
-        if p is not None:
-            raise Exception("Cannot calculate probabilities with replacement.")
-        for j in x:
-            if j not in options:
-                raise Exception(str(j)+" not in options: "+str(options))
-        perms = special.perm(len(options), len(x))
-        if perms == 0.0:
-            raise Exception("Too many draws from sample with replacement")
-        return round_float(1/perms, res=1e-6)
+        probabilities = np.asarray(p)
+        if probabilities.shape != options.shape:
+            raise ValueError("Choice probabilities must match the options.")
+
+    remaining = np.ones(options.size, dtype=bool)
+    mass = 1.0
+    for i, draw in enumerate(draws):
+        matches = np.flatnonzero(options == draw)
+        if replace:
+            # Repeated option values contribute all of their probability mass.
+            mass *= np.sum(probabilities[matches])
+        else:
+            available = matches[remaining[matches]]
+            if not available.size:
+                return np.float64(0.0)
+            mass *= available.size / (options.size - i)
+            remaining[available[0]] = False
+    return round_float(mass, res=1e-6)
 
 
 def calc_prob_for_shuffle_permutation(x, options, *args, check_valid=True):
