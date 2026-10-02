@@ -260,6 +260,10 @@ class ParameterDomain(object):
         """
         Get iterables for each variable (provided given resolution).
 
+        Numerical grids stay within the inclusive limits. An upper endpoint is
+        included only when it is on the requested grid, allowing for roundoff.
+        Numerical resolutions must be finite and positive.
+
         Parameters
         ----------
         resolution : float, optional
@@ -286,7 +290,16 @@ class ParameterDomain(object):
                     res = resolutions[variable]
                 else:
                     res = resolution
-                var_iters[variable] = np.arange(ran[0], ran[1]+res, res)
+                if not np.isfinite(res) or res <= 0:
+                    raise ValueError("Parameter resolution must be finite and positive.")
+                values = np.arange(ran[0], ran[1]+res, res)
+                tolerance = 0
+                if np.issubdtype(values.dtype, np.floating):
+                    tolerance = (4 * np.finfo(values.dtype).eps *
+                                 max(abs(ran[0]), abs(ran[1]), abs(res)))
+                # Keep an aligned endpoint despite roundoff, never an extra step.
+                values = values[values <= ran[1] + tolerance]
+                var_iters[variable] = np.minimum(values, ran[1])
             elif isinstance(self.variables[variable], set):
                 var_iters[variable] = np.array([*self.variables[variable]])
             else:
@@ -953,7 +966,10 @@ class FaultSample(BaseSample):
     def add_joint_fault_scenario(self, faulttups, time, weight=1.0, baserate='ind',
                                  p_cond=1.0):
         """
-        Add a single fault scenario to the list of scenarios.
+        Add a joint fault scenario using this sample's phase map.
+
+        Phase-dependent opportunities and exposure times follow the same map as
+        single-fault scenarios.
 
         Parameters
         ----------
@@ -992,7 +1008,7 @@ class FaultSample(BaseSample):
         self._times.add(time)
         scen = JointFaultScenario.from_faults(faulttups, time, mdl=self.faultdomain.mdl,
                                               weight=weight, baserate=baserate,
-                                              p_cond=p_cond)
+                                              p_cond=p_cond, phasemap=self.phasemap)
         self._scenarios.append(scen)
 
     def add_fault_times(self, times, weights=[], n_joint=1, **joint_kwargs):
