@@ -25,7 +25,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.architecture.base import Architecture
 from fmdtools.define.container.parameter import Parameter
-from fmdtools.analyze.common import setup_plot
+from fmdtools.analyze.common import setup_plot, consolidate_legend, filter_kwargs
 from fmdtools.define.object.geom import BaseGeom, GeomJSON
 from fmdtools.define.object.geom import ExPoint, ExLine, ExPoly
 from fmdtools.define.block.base import Block
@@ -234,6 +234,9 @@ class GeomArchitecture(Architecture):
         for geomname, geom_kwargs in geoms.items():
             local_kwargs = {**kwargs, 'geomlabel': geomname, **geom_kwargs}
             fig, ax = self.geoms[geomname].show(ax=ax, fig=fig, z=z, **local_kwargs)
+        if kwargs.get('legend', True):
+            l_kw = filter_kwargs(consolidate_legend, **kwargs)
+            consolidate_legend(ax, **l_kw)
         return fig, ax
 
     def show_from(self, hist, t, **kwargs):

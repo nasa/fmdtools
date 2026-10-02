@@ -41,19 +41,26 @@ class AircraftPosition(State):
     dy: float = 0.0
     dims = ('x', 'y')
 
-    def get_goal(self):
+    def get_dims(self, *dims):
+        """Get the dimensions to calculate over. Default is self.dims."""
+        if not dims:
+            return self.dims
+        else:
+            return dims
+
+    def get_goal(self, *dims):
         """Get the goal attributes (goal_x, goal_y) of the AircraftPosition."""
-        return self.get(*['goal_'+d for d in self.dims])
+        return self.get(*['goal_'+d for d in self.get_dims(*dims)])
 
-    def get_loc(self):
+    def get_loc(self, *dims):
         """Get the location (x, y) attributes of the AircraftPosition."""
-        return self.get(*self.dims)
+        return self.get(*self.get_dims(*dims))
 
-    def get_vel(self):
+    def get_vel(self, *dims):
         """Get the velocity attributes (dx, dy) of the AircraftPosition."""
-        return self.get(*['d'+d for d in self.dims])
+        return self.get(*['d'+d for d in self.get_dims(*dims)])
 
-    def find_direction(self):
+    def find_direction(self, *dims):
         """
         Find the (unit vector) direction from the x,y to goal_x, goal_y.
 
@@ -71,22 +78,22 @@ class AircraftPosition(State):
         >>> ap.find_direction()
         array([0., 1.])
         """
-        dist = self.calc_dist()
+        dist = self.calc_dist(*dims)
         if dist > 0.0:
             return self.calc_vector_dist()/self.calc_dist()
         else:
             return np.zeros(len(self.dims))
 
-    def calc_vector_dist(self):
+    def calc_vector_dist(self, *dims):
         """Calculate the vector distance from x,y to goal_x, goal_y."""
-        return self.get_goal() - self.get_loc()
+        return self.get_goal(*dims) - self.get_loc(*dims)
 
-    def calc_dist(self):
+    def calc_dist(self, *dims):
         """Calculate the scalar distance from x,y to goal_x, goal_y."""
-        vector_dist = self.calc_vector_dist()
+        vector_dist = self.calc_vector_dist(*dims)
         return np.sqrt(sum(vector_dist**2))
 
-    def at_goal(self):
+    def at_goal(self, *dims):
         """
         Determine if the aircraft is at its goal location.
 
@@ -99,17 +106,17 @@ class AircraftPosition(State):
         >>> ap.at_goal()
         True
         """
-        return all(self.get_goal() == self.get_loc())
+        return all(self.get_goal(*dims) == self.get_loc(*dims))
 
-    def in_range(self, dist_range=10.0):
+    def in_range(self, *dims, dist_range=10.0):
         """Determine if the aircraft is in the range of its goal location."""
-        return self.calc_dist() <= dist_range
+        return self.calc_dist(*dims) <= dist_range
 
-    def calc_dist_to_travel(self, dist_range=10.0):
+    def calc_dist_to_travel(self, *dims, dist_range=10.0):
         """Determine the distance to the goal location (under max dist dist_range)."""
-        return np.min([dist_range, self.calc_dist()])
+        return np.min([dist_range, self.calc_dist(*dims)])
 
-    def update_dist_to_travel(self, maxvel=10.0):
+    def update_dist_to_travel(self, *dims, maxvel=10.0):
         """
         Update dx, dy to reflect goal location (travelling at max velocity).
 
@@ -128,14 +135,14 @@ class AircraftPosition(State):
         >>> ap
         AircraftPosition(x=0.0, goal_x=10.0, dx=10.0, y=0.0, goal_y=0.0, dy=0.0)
         """
-        if self.in_range(dist_range=maxvel):
-            vel = self.calc_dist()
+        if self.in_range(*dims, dist_range=maxvel):
+            vel = self.calc_dist(*dims)
         else:
             vel = maxvel
-        vels = vel * self.find_direction()
-        self.put(**{'d'+dim: vels[i] for i, dim in enumerate(self.dims)})
+        vels = vel * self.find_direction(*dims)
+        self.put(**{'d'+dim: vels[i] for i, dim in enumerate(self.get_dims(*dims))})
 
-    def update_position(self, maxvel=10.0):
+    def update_position(self, *dims, maxvel=10.0):
         """
         Update x, y to reflect progress towards the goal location at maxvel.
 
@@ -157,12 +164,12 @@ class AircraftPosition(State):
         >>> ap
         AircraftPosition(x=10.0, goal_x=10.0, dx=0.0, y=10.0, goal_y=10.0, dy=0.0)
         """
-        self.update_dist_to_travel(maxvel=maxvel)
-        self.increment_position()
+        self.update_dist_to_travel(*dims, maxvel=maxvel)
+        self.increment_position(*dims)
 
-    def increment_position(self):
+    def increment_position(self, *dims):
         """Increment position (x,y) by (dx, dy)."""
-        self.inc(**{dim: getattr(self, 'd'+dim) for dim in self.dims})
+        self.inc(**{dim: getattr(self, 'd'+dim) for dim in self.get_dims(*dims)})
 
 
 class AircraftPosition3(AircraftPosition):
