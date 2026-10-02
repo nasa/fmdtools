@@ -236,10 +236,9 @@ class History(Result):
                     new_split_att = split_att[:i_ind] + ['indicate_'+split_att[-1]]
                     methname = '.'.join(new_split_att)
                     val = get_var(obj, methname)()
-                elif ('faults' in att.split('.')[:-1]
-                      and not att.endswith('m.sub_faults')):
+                elif att.split('.')[-3:-1] == ['m', 'faults']:
                     split_att = att.split('.')
-                    faultind = split_att.index('faults')
+                    faultind = len(split_att) - 2
                     modename = split_att[faultind+1]
                     fault_att = '.'.join(split_att[:faultind])
                     val = modename in get_var(obj, fault_att).faults
@@ -364,7 +363,7 @@ class History(Result):
         """
         Get the time a fault is present in the system.
 
-        Only fault-container paths and mode sub-fault flags are considered.
+        Only Mode fault-container paths and mode sub-fault flags are considered.
         Similar attribute names (such as ``defaults``) are ordinary state traces.
         Without recorded faults, returns zero for ``total`` and ``nan`` for the
         position metrics.
@@ -391,7 +390,7 @@ class History(Result):
         """
         flatdict = self.flatten()
         all_faults_hist = np.sum([v for k, v in flatdict.items()
-                                 if 'faults' in k.split('.')[:-1]
+                                 if k.split('.')[-3:-1] == ['m', 'faults']
                                  or k == 'sub_faults'
                                  or k.split('.')[-2:] == ['m', 'sub_faults']], 0)
         if metric == 'total':

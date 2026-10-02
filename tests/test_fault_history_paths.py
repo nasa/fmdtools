@@ -77,6 +77,15 @@ class TestFaultHistoryPaths(unittest.TestCase):
                     np.testing.assert_array_equal(history[key], [7.5, 9.5])
                     self.assert_positions(history, [])
 
+        state = SimpleNamespace(faults=SimpleNamespace(low=7.5))
+        obj = SimpleNamespace(s=state)
+        history = History({"s.faults.low": np.zeros(2)})
+        history.log(obj, 0)
+        state.faults.low = 9.5
+        history.log(obj, 1)
+        np.testing.assert_array_equal(history["s.faults.low"], [7.5, 9.5])
+        self.assert_positions(history, [])
+
     def test_unrelated_trace_names_do_not_create_faults_flat_or_nested(self):
         history = History(
             {
@@ -85,6 +94,7 @@ class TestFaultHistoryPaths(unittest.TestCase):
                 "plant.s.sub_faults": [3, 4, 5],
                 "faults_controller.s.x": [9, 9, 9],
                 "plant.s.faults_label": ["healthy", "healthy", "healthy"],
+                "plant.s.faults.low": [1, 2, 3],
                 "time": [10.0, 20.0, 30.0],
             }
         )
@@ -94,7 +104,6 @@ class TestFaultHistoryPaths(unittest.TestCase):
 
     def test_actual_fault_membership_and_mode_summary_traces_remain_supported(self):
         for key in (
-            "faults.low",
             "m.faults.low",
             "fxns.unit.m.faults.low",
             "sub_faults",
