@@ -293,9 +293,9 @@ class JointFaultScenario(BaseScenario):
     joint_faults : int
         Joint Faults in the scenario
     objects : tuple
-        Objects in the model where the faults are to occur
+        Unique object names in sorted order, independent of hash randomization.
     modes : tuple
-        Names of the fault modes
+        Unique fault mode names in sorted order. Injection order is unchanged.
     """
 
     joint_faults: int = 1
@@ -343,8 +343,8 @@ class JointFaultScenario(BaseScenario):
         # add fault scenario
         scen = cls(sequence=sequence,
                    joint_faults=len(faulttups),
-                   objects=tuple(set([f[0] for f in faulttups])),
-                   modes=tuple(set([f[1] for f in faulttups])),
+                   objects=tuple(sorted({f[0] for f in faulttups})),
+                   modes=tuple(sorted({f[1] for f in faulttups})),
                    rate=rate,
                    name=create_scenname(faulttups, time),
                    time=starttime,
