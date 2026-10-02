@@ -966,7 +966,10 @@ class FaultSample(BaseSample):
     def add_joint_fault_scenario(self, faulttups, time, weight=1.0, baserate='ind',
                                  p_cond=1.0):
         """
-        Add a single fault scenario to the list of scenarios.
+        Add a joint fault scenario using this sample's phase map.
+
+        Phase-dependent opportunities and exposure times follow the same map as
+        single-fault scenarios.
 
         Parameters
         ----------
@@ -1005,7 +1008,7 @@ class FaultSample(BaseSample):
         self._times.add(time)
         scen = JointFaultScenario.from_faults(faulttups, time, mdl=self.faultdomain.mdl,
                                               weight=weight, baserate=baserate,
-                                              p_cond=p_cond)
+                                              p_cond=p_cond, phasemap=self.phasemap)
         self._scenarios.append(scen)
 
     def add_fault_times(self, times, weights=[], n_joint=1, **joint_kwargs):
