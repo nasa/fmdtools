@@ -37,7 +37,8 @@ class TestJointFaultWeights(unittest.TestCase):
         return FaultSample(domain, phasemap=phasemap, def_mdl_phasemap=False)
 
     def assert_matches_direct(self, sample, times, weights, **joint_kwargs):
-        reference = FaultSample(sample.faultdomain, def_mdl_phasemap=False)
+        reference = FaultSample(sample.faultdomain, phasemap=sample.phasemap,
+                                def_mdl_phasemap=False)
         faults = tuple(sample.faultdomain.faults)
         for time, weight in zip(times, weights):
             reference.add_joint_fault_scenario(

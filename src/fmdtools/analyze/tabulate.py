@@ -163,18 +163,22 @@ class BaseTab(UserDict):
         ----------
         *factor : str/int
             Name of factor(s) to sort by, in order of sorting.
-            (non-included factors will be sorted last)
+            Non-included factors follow in their declared order. With no arguments,
+            all factors are used in their declared order, first factor primary.
         """
-        factors = list(factors)
-        factors.reverse()
+        factors = [self.factors[self.factors.index(factor)]
+                   if isinstance(factor, str) else self.factors[factor]
+                   for factor in factors]
         other_factors = [f for f in self.factors if f not in factors]
-        all_factors = other_factors + factors
-        for factor in all_factors:
+        # Stable sorts must apply lower-priority factors first.
+        for factor in reversed(factors + other_factors):
             self.sort_by_factor(factor)
 
     def sort_by_factor(self, factor, reverse=False):
         """
         Sort the table by the given factor.
+
+        Tuple-valued factors are compared lexicographically as complete values.
 
         Parameters
         ----------
@@ -191,7 +195,12 @@ class BaseTab(UserDict):
         if hasattr(self, 'factors') and isinstance(factor, str):
             value = self.factors.index(factor)
 
-        order = np.argsort([k[value] for k in keys], axis=0, kind='stable')
+        factor_values = [k[value] for k in keys]
+        if any(isinstance(v, tuple) for v in factor_values):
+            # A tuple-valued factor is one key, not a set of array axes.
+            order = sorted(range(len(keys)), key=lambda i: factor_values[i])
+        else:
+            order = np.argsort(factor_values, axis=0, kind='stable')
 
         if reverse:
             order = order[::-1]
@@ -433,7 +442,8 @@ class FMEA(BaseTab):
         FaultSample used for the underlying probability model of the set of scens.
     add_res : dict/Result, optional
         An additional set of metrics to include in the table. Should have similar
-        key structure to res. The default is {}.
+        key structure to res. Overrides apply only to this table; inputs are
+        not modified. The default is {}.
     group_by : tuple, optional
         Way of grouping fmea rows by scenario fields.
         The default is ('function', 'fault').
@@ -495,7 +505,7 @@ class FMEA(BaseTab):
             if isinstance(met_value, str) and met_value.startswith("scenario_"):
                 met_kwar[met] = fs.get_scen_values(met_value[9:])
 
-        res.update(add_res)
+        res = Result({**res, **add_res})
 
         fmeadict = {m+"_"+vi: dict.fromkeys(grouped_scens)
                     for m, v in all_metrics.items() for vi in v}
