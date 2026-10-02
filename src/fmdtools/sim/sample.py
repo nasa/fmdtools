@@ -260,14 +260,14 @@ class ParameterDomain(object):
         """
         Get iterables for each variable (provided given resolution).
 
-        Numerical grids stay within the inclusive limits. An upper endpoint is
-        included only when it is on the requested grid, allowing for roundoff.
-        Numerical resolutions must be finite and positive.
+        Creates iterable based on the provided set constraints or domain limits. If
+        a numerical resolution is provided that does not line up with the greater
+        end point, that point will be cut off (see example).
 
         Parameters
         ----------
         resolution : float, optional
-            Default resolution for the ranges. The default is 1.
+            Default (finite, positive) resolution for the ranges. The default is 1.
         resolutions : dict, optional
             Dict of resolutions for each variable e.g. {'var1': 0.1}.
             The default is {}.
@@ -281,6 +281,8 @@ class ParameterDomain(object):
         --------
         >>> expd.get_var_iters()
         {'y': array([1., 2., 3., 4.]), 'x': array([ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10.])}
+        >>> expd.get_var_iters(resolution=4.0)
+        {'y': array([1., 2., 3., 4.]), 'x': array([0., 4., 8.])}
         """
         var_iters = dict.fromkeys(self.variables)
         for variable in var_iters:

@@ -442,8 +442,7 @@ class FMEA(BaseTab):
         FaultSample used for the underlying probability model of the set of scens.
     add_res : dict/Result, optional
         An additional set of metrics to include in the table. Should have similar
-        key structure to res. Overrides apply only to this table; inputs are
-        not modified. The default is {}.
+        key structure to res. The default is {}.
     group_by : tuple, optional
         Way of grouping fmea rows by scenario fields.
         The default is ('function', 'fault').

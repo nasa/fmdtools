@@ -253,8 +253,8 @@ class SingleFaultScenario(BaseScenario):
         """
         Generate the fault scenario for faulttup at time.
 
-        None starts at the injection time; explicit start times, including zero,
-        are retained without changing when the fault is injected.
+        Simulation starts at `time` (the provided injection time) unless an alternative
+        `starttime` argument is provided.
 
         Examples
         --------
