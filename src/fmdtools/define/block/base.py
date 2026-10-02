@@ -482,6 +482,8 @@ class Simulable(BaseObject):
         """
         Get the scenario rate for the given single-fault scenario.
 
+        Time-based faults use the inclusive duration end_time - start_time + dt.
+
         Parameters
         ----------
         scope: str
@@ -505,7 +507,7 @@ class Simulable(BaseObject):
             Rate of the scenario
         """
         fm = self.get_fault(scope, faultmode, **kwargs)
-        sim_time = self.sp.start_time - self.sp.end_time + self.sp.dt
+        sim_time = self.sp.end_time - self.sp.start_time + self.sp.dt
         rate = fm.calc_rate(time, phasemap=phasemap, sim_time=sim_time,
                             sim_units=self.sp.units, weight=weight)
         return rate
