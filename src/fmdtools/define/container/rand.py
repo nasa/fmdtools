@@ -671,6 +671,27 @@ def get_wald_pdf(mean, scale, size=None):
                          scale=scale)
 
 
+def get_dirichlet_pdf(alpha, size=None):
+    """Get the joint density of complete Dirichlet vectors on the last axis.
+
+    NumPy places components last; SciPy's PDF expects them first. Leading axes
+    represent independent draws, and size is only a generation argument.
+    """
+    distribution = stats.dirichlet(alpha)
+    num_components = len(distribution.alpha)
+
+    def dirichlet_pdf(*x):
+        values = array_x(x)
+        if values.ndim == 0 or values.shape[-1] != num_components:
+            raise ValueError("Dirichlet samples must contain all components on "
+                             "their last axis.")
+        if not values.size:
+            return np.float64(1.0)
+        return as_prob(distribution.pdf(values.reshape(-1, num_components).T))
+
+    return dirichlet_pdf
+
+
 def get_pfunc_for_dist(randname, *args):
     """
     Get the probability mass/density function corresponding to a numpy random draw.
@@ -699,7 +720,7 @@ def get_pfunc_for_dist(randname, *args):
                    'noncentral_chisquare': ('ncx2', 2),
                    'noncentral_f': ('ncf', 3),
                    'power': ('powerlaw', 1), 'weibull': ('weibull_min', 1)}
-    same_funcs = ['dirichlet', 'multivariate_normal']
+    same_funcs = ['multivariate_normal']
     discrete_funcs = {'poisson': ('poisson', 1), 'zipf': ('zipf', 1),
                       'binomial': ('binom', 2), 'geometric': ('geom', 1),
                       'logseries': ('logser', 1), 'negative_binomial': ('nbinom', 2)}
@@ -758,6 +779,8 @@ def get_pfunc_for_dist(randname, *args):
             return get_vonmises_pdf(*args)
         case 'wald':
             return get_wald_pdf(*args)
+        case 'dirichlet':
+            return get_dirichlet_pdf(*args)
         case 'integers':
             return get_custom_pfunc(calc_prob_for_integers, *args)
         case 'random':
