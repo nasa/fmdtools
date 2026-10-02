@@ -253,6 +253,9 @@ class SingleFaultScenario(BaseScenario):
         """
         Generate the fault scenario for faulttup at time.
 
+        None starts at the injection time; explicit start times, including zero,
+        are retained without changing when the fault is injected.
+
         Examples
         --------
         >>> SingleFaultScenario.from_fault(('fxn', 'fault'), 10)
@@ -271,7 +274,7 @@ class SingleFaultScenario(BaseScenario):
                                      phasemap=phasemap, weight=weight, **kwargs)
         else:
             rate = weight
-        if not starttime:
+        if starttime is None:
             starttime = time
         scen = cls(sequence=Sequence.from_fault(faulttup, time, **kwargs),
                    obj=faulttup[0],
@@ -309,7 +312,10 @@ class JointFaultScenario(BaseScenario):
     @classmethod
     def from_faults(cls, faulttups, time, mdl=None, phasemap=None, weight=1.0,
                     baserate='ind', p_cond=1.0, starttime=None, **kwargs):
-        """Generate JointFaultScenario given fault names, time."""
+        """Generate JointFaultScenario given fault names and injection time.
+
+        None starts at injection; an explicit starttime of zero is retained.
+        """
         if phasemap:
             phase = phasemap.find_base_phase(time)
         else:
@@ -338,7 +344,7 @@ class JointFaultScenario(BaseScenario):
             else:
                 faults[faulttup[0]].append(faulttup[1])
         sequence = {time: Injection(faults=faults)}
-        if not starttime:
+        if starttime is None:
             starttime = time
         # add fault scenario
         scen = cls(sequence=sequence,
