@@ -176,6 +176,8 @@ class BaseTab(UserDict):
         """
         Sort the table by the given factor.
 
+        Tuple-valued factors are compared lexicographically as complete values.
+
         Parameters
         ----------
         factor : str/int
@@ -191,7 +193,12 @@ class BaseTab(UserDict):
         if hasattr(self, 'factors') and isinstance(factor, str):
             value = self.factors.index(factor)
 
-        order = np.argsort([k[value] for k in keys], axis=0, kind='stable')
+        factor_values = [k[value] for k in keys]
+        if any(isinstance(v, tuple) for v in factor_values):
+            # A tuple-valued factor is one key, not a set of array axes.
+            order = sorted(range(len(keys)), key=lambda i: factor_values[i])
+        else:
+            order = np.argsort(factor_values, axis=0, kind='stable')
 
         if reverse:
             order = order[::-1]
