@@ -163,13 +163,15 @@ class BaseTab(UserDict):
         ----------
         *factor : str/int
             Name of factor(s) to sort by, in order of sorting.
-            (non-included factors will be sorted last)
+            Non-included factors follow in their declared order. With no arguments,
+            all factors are used in their declared order, first factor primary.
         """
-        factors = list(factors)
-        factors.reverse()
+        factors = [self.factors[self.factors.index(factor)]
+                   if isinstance(factor, str) else self.factors[factor]
+                   for factor in factors]
         other_factors = [f for f in self.factors if f not in factors]
-        all_factors = other_factors + factors
-        for factor in all_factors:
+        # Stable sorts must apply lower-priority factors first.
+        for factor in reversed(factors + other_factors):
             self.sort_by_factor(factor)
 
     def sort_by_factor(self, factor, reverse=False):
