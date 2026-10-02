@@ -433,7 +433,8 @@ class FMEA(BaseTab):
         FaultSample used for the underlying probability model of the set of scens.
     add_res : dict/Result, optional
         An additional set of metrics to include in the table. Should have similar
-        key structure to res. The default is {}.
+        key structure to res. Overrides apply only to this table; inputs are
+        not modified. The default is {}.
     group_by : tuple, optional
         Way of grouping fmea rows by scenario fields.
         The default is ('function', 'fault').
@@ -495,7 +496,7 @@ class FMEA(BaseTab):
             if isinstance(met_value, str) and met_value.startswith("scenario_"):
                 met_kwar[met] = fs.get_scen_values(met_value[9:])
 
-        res.update(add_res)
+        res = Result({**res, **add_res})
 
         fmeadict = {m+"_"+vi: dict.fromkeys(grouped_scens)
                     for m, v in all_metrics.items() for vi in v}
