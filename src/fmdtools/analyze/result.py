@@ -370,6 +370,7 @@ class Result(UserDict):
                 obj = self.get_faulty()
                 if len(args) > 1:
                     args = args[1:]
+                    obj = obj.nest()
                 else:
                     return obj
             else:
@@ -605,9 +606,20 @@ class Result(UserDict):
         return group_hist
 
     def get_faulty(self):
-        """Get just the results related to fault scenarios from the Result."""
+        """Get fault scenarios without interpreting their names as access aliases.
+
+        A single scenario loses its prefix, while multiple scenarios retain
+        theirs. A scenario named 'faulty' is selected without recursive lookup.
+        """
         faulty = self.get_default_comp_groups()['faulty']
-        return self.get(*faulty).flatten()
+        flat = self.flatten()
+        selected = self.__class__()
+        for scenario in faulty:
+            prefix = scenario + '.'
+            for key, value in flat.items():
+                if key.startswith(prefix):
+                    selected[key[len(prefix):] if len(faulty) == 1 else key] = value
+        return selected
 
     def get_default_comp_groups(self):
         """
