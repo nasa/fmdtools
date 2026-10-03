@@ -674,7 +674,7 @@ def get_wald_pdf(mean, scale, size=None):
 def get_multinomial_pmf(n, pvals, size=None):
     """Get the joint mass of multinomial count vectors on the last axis.
 
-    NumPy's optional size controls generation and is not a PMF parameter.
+    Removes NumPy's optional size controls generation since it is not a PMF parameter.
     Leading axes are independent draws; n and pvals retain their broadcasting.
     """
     return get_scipy_pmf("multinomial", n, pvals)
