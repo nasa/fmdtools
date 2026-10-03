@@ -671,6 +671,23 @@ def get_wald_pdf(mean, scale, size=None):
                          scale=scale)
 
 
+def get_multivariate_hypergeometric_pmf(colors, nsample, size=None,
+                                      method='marginals'):
+    """Get joint finite-urn probabilities without forwarding sampling options.
+
+    Size and method select NumPy's sample layout and generation algorithm.
+    SciPy's PMF uses only the population counts and number of selected items.
+    Empty batches of complete count vectors have the empty-product mass one.
+    """
+    def multivariate_hypergeometric_pmf(*x):
+        values = array_x(x)
+        if not values.size and values.shape[-1] == len(colors):
+            return np.float64(1.0)
+        return as_prob(stats.multivariate_hypergeom.pmf(values, colors, nsample))
+
+    return multivariate_hypergeometric_pmf
+
+
 def get_multinomial_pmf(n, pvals, size=None):
     """Get the joint mass of multinomial count vectors on the last axis.
 
@@ -735,7 +752,6 @@ def get_pfunc_for_dist(randname, *args):
                       'logseries': ('logser', 1), 'negative_binomial': ('nbinom', 2)}
     location_scale_funcs = {'normal': 'norm', 'laplace': 'laplace',
                             'logistic': 'logistic', 'gumbel': 'gumbel_r'}
-    different_funcs_pmf = {'multivariate_hypergeometric': 'multivariate_hypergeom'}
 
     match randname:
         case str if randname in location_scale_funcs:
@@ -759,8 +775,8 @@ def get_pfunc_for_dist(randname, *args):
                 raise TypeError(randname + " requires " + str(num_params) +
                                 " shape parameter(s) and an optional size.")
             return get_scipy_pdf(scipy_name, *args[:num_params])
-        case str if randname in different_funcs_pmf:
-            return get_scipy_pmf(different_funcs_pmf[randname], *args)
+        case 'multivariate_hypergeometric':
+            return get_multivariate_hypergeometric_pmf(*args)
         case str if randname in ['exponential', 'rayleigh']:
             return get_exp_ray_pdf(randname, *args)
         case 'hypergeometric':
