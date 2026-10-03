@@ -378,6 +378,10 @@ def sample_times_quad(times, nodes, weights):
     """
     Get the sample times for the given quadrature defined by nodes and weights.
 
+    Nodes snapping to the same discrete time have their normalized weights
+    combined. Each time is returned once, in first-occurrence order, so named
+    fault scenarios do not discard duplicate nodes' probability mass.
+
     Parameters
     ----------
     times : list
@@ -407,7 +411,10 @@ def sample_times_quad(times, nodes, weights):
         exac_times = [np.quantile(times, q) for q in quantiles]
         sampletimes = [times[np.argmin(np.abs(np.array(times)-t))] for t in exac_times]
         weights = np.array(weights)/sum(weights)
-    return sampletimes, list(weights)
+    combined = {}
+    for i, time in enumerate(sampletimes):
+        combined[time] = combined.get(time, 0.0) + weights[i]
+    return list(combined), list(combined.values())
 
 
 class FaultDomain(object):
