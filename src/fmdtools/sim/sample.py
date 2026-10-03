@@ -858,7 +858,8 @@ class FaultSample(BaseSample):
     faultdomain: FaultDomain
         Domain of faults to sample from
     phasemap: PhaseMap, (optional)
-        Phases of operation to sample over.
+        Phases of operation to sample over. The default model map uses both the
+        model's phases and its timestep. Explicit maps retain their own timestep.
 
     Attributes
     ----------
@@ -886,7 +887,8 @@ class FaultSample(BaseSample):
     def __init__(self, faultdomain, phasemap={}, def_mdl_phasemap=True):
         self.faultdomain = faultdomain
         if not phasemap and def_mdl_phasemap:
-            phasemap = PhaseMap(faultdomain.mdl.sp.phases)
+            phasemap = PhaseMap(faultdomain.mdl.sp.phases,
+                                dt=faultdomain.mdl.sp.dt)
         self.phasemap = phasemap
         self._scenarios = []
         self._times = set()
