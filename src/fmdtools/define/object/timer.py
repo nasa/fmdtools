@@ -84,13 +84,16 @@ class Timer(BaseObject):
         """Return the time elapsed."""
         return self.time
 
-    def inc(self, tstep=[]):
-        """Increment the time elapsed by tstep."""
+    def inc(self, tstep=None):
+        """Increment time by tstep, including zero, or use the configured step.
+
+        None and the legacy empty-sequence sentinel use self.tstep. Explicit
+        increments do not change that configured step or the completion policy.
+        """
         if self.time >= 0.0:
-            if tstep:
-                self.time += tstep
-            else:
-                self.time += self.tstep
+            if tstep is None or (isinstance(tstep, (list, tuple)) and not tstep):
+                tstep = self.tstep
+            self.time += tstep
             self.mode = 'ticking'
         if self.time <= 0:
             self.time = 0.0
