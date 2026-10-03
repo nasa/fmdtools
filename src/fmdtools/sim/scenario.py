@@ -112,13 +112,12 @@ class Injection(BaseScenObj):
 
         Parameters
         ----------
-        inj : dict
-            Dict with structure {'faults': faults, 'disturbances': disturbances}
+        inj : dict or Injection
+            Updates with structure {'faults': faults, 'disturbances': disturbances}.
+            Omitted fields are unchanged; entries replace matching scopes or paths.
         """
-        if hasattr(inj, 'faults'):
-            self.faults.update(inj['faults'])
-        if hasattr(inj, 'disturbances'):
-            self.disturbances.update(inj['disturbances'])
+        self.faults.update(inj.get('faults', {}))
+        self.disturbances.update(inj.get('disturbances', {}))
 
 
 class Sequence(UserDict):
