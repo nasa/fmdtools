@@ -19,10 +19,16 @@ specific language governing permissions and limitations under the License.
 
 import copy
 import unittest
+from collections import UserDict
+from types import MappingProxyType
 
+import numpy as np
+
+from fmdtools.define.block.function import ExampleFunction
 from fmdtools.define.container.parameter import ExampleParameter
 from fmdtools.sim.sample import ParameterDomain, ParameterSample
-from fmdtools.sim.scenario import ParameterScenario
+from fmdtools.sim.propagate import Simulation
+from fmdtools.sim.scenario import Injection, ParameterScenario, Scenario, Sequence
 
 
 class TestParameterScenario(unittest.TestCase):
@@ -105,6 +111,100 @@ class TestParameterScenario(unittest.TestCase):
                 [4.0, 1.0, 456, 20.0, "move"],
             ],
         )
+
+
+class TestInjectionUpdates(unittest.TestCase):
+    """Dictionary updates must have the same effects as Injection updates."""
+
+    def test_mapping_and_injection_forms_apply_identical_updates(self):
+        payloads = (
+            {},
+            {"faults": {"pump": ["low"]}},
+            {"disturbances": {"s.x": 0.0}},
+            {
+                "faults": {"pump": ["low"], "valve": ["stuck"]},
+                "disturbances": {"s.x": 0.0, "s.enabled": False},
+            },
+        )
+        for payload in payloads:
+            for wrapper in (dict, UserDict, MappingProxyType):
+                with self.subTest(fields=tuple(payload), mapping=wrapper.__name__):
+                    raw = copy.deepcopy(payload)
+                    before = copy.deepcopy(raw)
+                    actual = Injection(
+                        faults={"pump": ["old"], "motor": ["off"]},
+                        disturbances={"s.x": 4.0, "s.y": 2.0},
+                    )
+                    expected = Injection(
+                        faults=copy.deepcopy(actual.faults),
+                        disturbances=copy.deepcopy(actual.disturbances),
+                    )
+                    expected.update(Injection(**copy.deepcopy(payload)))
+                    self.assertIsNone(actual.update(wrapper(raw)))
+                    self.assertEqual(actual.asdict(), expected.asdict())
+                    self.assertEqual(raw, before)
+
+    def test_repeated_updates_replace_same_scope_and_preserve_other_fields(self):
+        injection = Injection(faults={"pump": ["old"]}, disturbances={"s.y": 3.0})
+        injection.update({"faults": {"pump": {"low": {"prob": 0.2}}}})
+        injection.update({"faults": {"motor": ["off"]}, "disturbances": {"s.x": 0.0}})
+        injection.update({"faults": {}, "disturbances": {}})
+        self.assertEqual(
+            injection.faults, {"pump": {"low": {"prob": 0.2}}, "motor": ["off"]}
+        )
+        self.assertEqual(injection.disturbances, {"s.y": 3.0, "s.x": 0.0})
+        injection.update({"faults": {"pump": []}, "unused": {"ignored": True}})
+        self.assertEqual(injection.faults, {"pump": [], "motor": ["off"]})
+        self.assertEqual(injection.disturbances, {"s.y": 3.0, "s.x": 0.0})
+
+    def test_sequence_existing_time_updates_accept_dictionary_injections(self):
+        actual = Sequence({1.0: {"pump": ["old"]}}, {2.0: {"s.y": 1.0}})
+        reference = Sequence({1.0: {"pump": ["old"]}}, {2.0: {"s.y": 1.0}})
+        updates = {
+            1.0: {"faults": {"pump": ["low"]}, "disturbances": {"s.x": 5.0}},
+            2.0: {"disturbances": {"s.y": 0.0}},
+        }
+        before = copy.deepcopy(updates)
+        actual.update_sequence(updates)
+        reference.update_sequence(
+            {time: Injection(**payload) for time, payload in before.items()}
+        )
+        for time in actual:
+            self.assertEqual(actual[time].asdict(), reference[time].asdict())
+        self.assertEqual(updates, before)
+
+    def test_real_fault_and_disturbance_simulations_match_explicit_injections(self):
+        model = ExampleFunction(sp={"end_time": 3.0})
+        for faults, disturbances in (
+            ({model.name: ["no_charge"]}, {}),
+            ({}, {"s.x": 20.0}),
+            ({model.name: ["no_charge"]}, {"s.x": 20.0}),
+        ):
+            with self.subTest(faults=bool(faults), disturbances=bool(disturbances)):
+                actual = Sequence(disturbances={1.0: {}})
+                payload = {
+                    "faults": copy.deepcopy(faults),
+                    "disturbances": copy.deepcopy(disturbances),
+                }
+                actual[1.0].update(payload)
+                reference = Sequence({1.0: faults}, {1.0: disturbances})
+                result, history = Simulation(
+                    mdl=model,
+                    scen=Scenario(name="updated", sequence=actual, times=(1.0,)),
+                )()
+                expected_result, expected_history = Simulation(
+                    mdl=model,
+                    scen=Scenario(name="direct", sequence=reference, times=(1.0,)),
+                )()
+                self.assertEqual(result, expected_result)
+                self.assertEqual(history, expected_history)
+                _, nominal = Simulation(mdl=model)()
+                self.assertFalse(np.array_equal(history["s.x"], nominal["s.x"]))
+                self.assertEqual(
+                    payload, {"faults": faults, "disturbances": disturbances}
+                )
+                self.assertEqual(model.s.x, 0.0)
+                self.assertFalse(model.m.any_faults())
 
 
 if __name__ == "__main__":
