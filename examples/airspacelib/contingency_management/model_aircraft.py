@@ -148,9 +148,9 @@ class ContingencyControlFlight(ControlFlight):
         """Set new landing location in depletion scenario."""
         ts = self.trajectories.s.copy()
         ts.assign(self.environment.c.start, "goal_x", "goal_y")
-        dist_to_start = ts.calc_dist_to_travel(1000)
+        dist_to_start = ts.calc_dist_to_travel(dist_range=1000)
         ts.assign(self.environment.c.end, "goal_x", "goal_y")
-        dist_to_end = ts.calc_dist_to_travel(1000)
+        dist_to_end = ts.calc_dist_to_travel(dist_range=1000)
         if dist_to_end < self.electricity.s.charge:
             self.s.endpt = self.environment.c.end
         elif dist_to_start < self.electricity.s.charge:
