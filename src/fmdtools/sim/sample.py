@@ -1237,8 +1237,9 @@ class SampleApproach(BaseSample):
         add_method : str
             Method to add scenarios to the FaultSample with.
             (e.g., to call Faultdomain.add_fault_times, use "fault_times")
-        faultdomain : str or list
-            Name of faultdomain to sample from (must be in SampleApproach already).
+        faultdomains : str or list
+            Registered domain name or list of names. Multiple names construct a
+            JointFaultSample from those domains and the selected phase maps.
         *args : args
             args to add_method.
         phasemap : str/PhaseMap/dict/tuple, optional
@@ -1284,7 +1285,10 @@ class SampleApproach(BaseSample):
             raise Exception("Invalid arg for phasemap: "+str(phasemap))
         if type(faultdomains) is list:
             if len(faultdomains) > 1:
-                faultsample = JointFaultSample(faultdomains, phasemap)
+                domains = [self.faultdomains[name] for name in faultdomains]
+                maps = phasemap if isinstance(phasemap, list) else (
+                    [phasemap] if phasemap else [])
+                faultsample = JointFaultSample(*domains, phasemaps=maps)
             else:
                 faultsample = FaultSample(self.faultdomains[faultdomains[0]], phasemap)
         else:
