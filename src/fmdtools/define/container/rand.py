@@ -619,9 +619,12 @@ def get_standard_t_pdf(df, size=None):
     return get_scipy_pdf("t", df=df)
 
 
-def get_triangular_pdf(*args):
+def get_triangular_pdf(left, mode, right, size=None):
     """
-    Get callable for scipy.triang corresponding to a numpy.random.triangular call.
+    Get a triangular density from scalar or broadcastable array-like bounds.
+
+    Convert parameters to floating point before subtraction, as NumPy's generator
+    does. The optional size controls generation and is not a density parameter.
 
     Examples
     --------
@@ -634,7 +637,8 @@ def get_triangular_pdf(*args):
     >>> get_triangular_pdf(0,1,2)(0.5, 0.5)
     np.float64(0.25)
     """
-    left, mode, right = args[:3]
+    left, mode, right = (np.asarray(arg, dtype=float)
+                         for arg in (left, mode, right))
     loc = left
     scale = right-loc
     c = (mode-loc)/scale
