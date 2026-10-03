@@ -671,6 +671,15 @@ def get_wald_pdf(mean, scale, size=None):
                          scale=scale)
 
 
+def get_multinomial_pmf(n, pvals, size=None):
+    """Get the joint mass of multinomial count vectors on the last axis.
+
+    NumPy's optional size controls generation and is not a PMF parameter.
+    Leading axes are independent draws; n and pvals retain their broadcasting.
+    """
+    return get_scipy_pmf("multinomial", n, pvals)
+
+
 def get_dirichlet_pdf(alpha, size=None):
     """Get the joint density of complete Dirichlet vectors on the last axis.
 
@@ -726,7 +735,6 @@ def get_pfunc_for_dist(randname, *args):
                       'logseries': ('logser', 1), 'negative_binomial': ('nbinom', 2)}
     location_scale_funcs = {'normal': 'norm', 'laplace': 'laplace',
                             'logistic': 'logistic', 'gumbel': 'gumbel_r'}
-    same_funcs_pmf = ['multinomial']
     different_funcs_pmf = {'multivariate_hypergeometric': 'multivariate_hypergeom'}
 
     match randname:
@@ -734,8 +742,8 @@ def get_pfunc_for_dist(randname, *args):
             return get_location_scale_pdf(location_scale_funcs[randname], *args)
         case str if randname in same_funcs:
             return get_scipy_pdf(randname, *args)
-        case str if randname in same_funcs_pmf:
-            return get_scipy_pmf(randname, *args)
+        case 'multinomial':
+            return get_multinomial_pmf(*args)
         case str if randname in discrete_funcs:
             scipy_name, num_params = discrete_funcs[randname]
             if randname == 'poisson' and not args:

@@ -469,7 +469,9 @@ class History(Result):
         Parameters
         ----------
         *attrs : names of attributes
-            Names to check (e.g., `flow_1`, `fxn_2`)
+            Names or dot-separated paths to check (e.g., `flow_1`, `fxn_2`).
+            Matches complete path components and their descendants, so `pump`
+            does not select `pump2`.
         nomhist : History, optional
             Nominal history to compare against
             (otherwise uses internal nomhist, if available)
@@ -509,7 +511,7 @@ class History(Result):
             try:
                 att_diff = [diff(nomhist[k], v, difftype)
                             for k, v in faulthist.items()
-                            if att in k]
+                            if '.' + att + '.' in '.' + k + '.']
                 if att_diff:
                     try:
                         deghist[att] = operator(att_diff, 0)
