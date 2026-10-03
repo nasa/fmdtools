@@ -671,6 +671,15 @@ def get_wald_pdf(mean, scale, size=None):
                          scale=scale)
 
 
+def get_multivariate_normal_pdf(mean, cov, size=None, check_valid='warn', tol=1e-8):
+    """Get Gaussian vector densities without forwarding generation-only options.
+
+    Size, check_valid and tol configure NumPy sampling, not the density.
+    Positive-semidefinite covariances use SciPy's density on their support.
+    """
+    return get_scipy_pdf("multivariate_normal", mean, cov, allow_singular=True)
+
+
 def get_multinomial_pmf(n, pvals, size=None):
     """Get the joint mass of multinomial count vectors on the last axis.
 
@@ -729,7 +738,6 @@ def get_pfunc_for_dist(randname, *args):
                    'noncentral_chisquare': ('ncx2', 2),
                    'noncentral_f': ('ncf', 3),
                    'power': ('powerlaw', 1), 'weibull': ('weibull_min', 1)}
-    same_funcs = ['multivariate_normal']
     discrete_funcs = {'poisson': ('poisson', 1), 'zipf': ('zipf', 1),
                       'binomial': ('binom', 2), 'geometric': ('geom', 1),
                       'logseries': ('logser', 1), 'negative_binomial': ('nbinom', 2)}
@@ -740,8 +748,8 @@ def get_pfunc_for_dist(randname, *args):
     match randname:
         case str if randname in location_scale_funcs:
             return get_location_scale_pdf(location_scale_funcs[randname], *args)
-        case str if randname in same_funcs:
-            return get_scipy_pdf(randname, *args)
+        case 'multivariate_normal':
+            return get_multivariate_normal_pdf(*args)
         case 'multinomial':
             return get_multinomial_pmf(*args)
         case str if randname in discrete_funcs:
