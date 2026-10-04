@@ -17,10 +17,15 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
+import copy
+import itertools
 import unittest
+
+import numpy as np
 
 from fmdtools.analyze.phases import PhaseMap, join_phasemaps
 from fmdtools.define.architecture.function import ExFxnArch
+from fmdtools.define.block.function import ExampleFunction
 from fmdtools.sim import propagate
 from fmdtools.sim.sample import FaultDomain, FaultSample, JointFaultSample
 
@@ -159,6 +164,117 @@ class TestJointFaultSample(unittest.TestCase):
                 self.assertEqual(sample.scenarios(), [])
                 self.assertEqual(sample.get_times(), [])
                 self.assertEqual(bool(sample.phasemap), use_model_phases)
+
+
+class TestFaultSpaceSampleLimit(unittest.TestCase):
+    """Treat the requested number of disturbance combinations as a maximum."""
+
+    def make_domain(self, ranges, n="all", seed=42, **kwargs):
+        domain = FaultDomain(ExFxnArch())
+        domain.add_fault_space(
+            "ex_fxn",
+            "low",
+            copy.deepcopy(ranges),
+            n=n,
+            seed=seed,
+            prefix="space",
+            **kwargs,
+        )
+        return domain
+
+    def test_large_and_equal_limits_keep_the_complete_fault_space(self):
+        for ranges, population in (
+            ({"s.x": {7.0, 11.0}}, 3),
+            ({"s.x": (1.0, 3.0, 3)}, 4),
+            ({"s.x": {7.0, 11.0}, "s.y": {-1.0, 2.0}}, 9),
+            ({}, 1),
+        ):
+            complete = self.make_domain(ranges)
+            for cap in (population, population + 1, 100, "all"):
+                with self.subTest(ranges=ranges, cap=cap):
+                    actual = self.make_domain(ranges, n=cap)
+                    self.assertEqual(
+                        {key: fault.asdict() for key, fault in actual.faults.items()},
+                        {key: fault.asdict() for key, fault in complete.faults.items()},
+                    )
+                    self.assertEqual(len(actual.faults), population - 1)
+                    for key, fault in actual.faults.items():
+                        self.assertTrue(key[2].startswith("space"))
+                        self.assertAlmostEqual(fault.prob, 1.0 / population)
+
+    def test_smaller_limits_preserve_seeded_selection_and_probabilities(self):
+        ranges = {"s.x": {7.0, 11.0}, "s.y": {-1.0, 2.0}}
+        possible = {
+            tuple(
+                (state, value)
+                for state, value in zip(ranges, values)
+                if value is not None
+            )
+            for values in itertools.product((7.0, 11.0, None), (-1.0, 2.0, None))
+        } - {()}
+        for cap in (1, 2, 5):
+            for seed in (0, 42):
+                for kwargs in ({}, {"prob": 0.2, "cost": 17.0}):
+                    with self.subTest(cap=cap, seed=seed, kwargs=kwargs):
+                        first = self.make_domain(ranges, cap, seed, **kwargs)
+                        repeated = self.make_domain(ranges, cap, seed, **kwargs)
+                        self.assertEqual(
+                            {
+                                key: fault.asdict()
+                                for key, fault in first.faults.items()
+                            },
+                            {
+                                key: fault.asdict()
+                                for key, fault in repeated.faults.items()
+                            },
+                        )
+                        # The sampled all-nominal combination creates no fault.
+                        self.assertIn(len(first.faults), (cap - 1, cap))
+                        self.assertEqual(
+                            len(
+                                {fault.disturbances for fault in first.faults.values()}
+                            ),
+                            len(first.faults),
+                        )
+                        for fault in first.faults.values():
+                            self.assertIn(fault.disturbances, possible)
+                            self.assertAlmostEqual(
+                                fault.prob, kwargs.get("prob", 1 / cap)
+                            )
+                            self.assertEqual(fault.cost, kwargs.get("cost", 0.0))
+
+    def test_larger_limit_propagates_every_available_disturbance(self):
+        for staged in (False, True):
+            with self.subTest(staged=staged):
+                model = ExampleFunction(sp={"end_time": 4.0})
+                domain = FaultDomain(model)
+                domain.add_fault_space(
+                    "examplefunction", "low", {"s.x": {7.0, 11.0}}, n=20
+                )
+                sample = FaultSample(domain)
+                sample.add_fault_times([1.0, 3.0])
+                self.assertEqual(len(sample.named_scenarios()), 4)
+                result, history = propagate.fault_sample(
+                    model, sample, staged=staged, showprogress=False
+                )
+                weighted_total = 0.0
+                for scenario in sample.scenarios():
+                    time = scenario.times[0]
+                    injection = scenario.sequence[time].faults["examplefunction"]["low"]
+                    value = dict(injection["disturbances"])["s.x"]
+                    self.assertIn(value, (7.0, 11.0))
+                    self.assertAlmostEqual(scenario.rate, 1.0 / 6)
+                    expected_x = [float(i) if i < time else value for i in range(5)]
+                    actual = history.get(scenario.name)
+                    np.testing.assert_array_equal(actual.get("s.x"), expected_x)
+                    outcome = value + 3.0 * (5.0 - time)
+                    self.assertEqual(
+                        result.get(scenario.name).get("tend.classify.xy"), outcome
+                    )
+                    weighted_total += scenario.rate * outcome
+                self.assertAlmostEqual(weighted_total, 12.0)
+                self.assertEqual(model.s.x, 0.0)
+                self.assertEqual(model.m.faults, set())
 
 
 if __name__ == "__main__":

@@ -485,7 +485,8 @@ class FaultDomain(object):
             or {'s.x': {1,2,3}} for defined sets
         n : int, optional
             Max number of modes to generate. If more than this, the modes are sampled
-            randomply. The default is 'all'.
+            randomly. Limits at or above the number of combinations retain the full
+            space. The default is 'all'.
         seed : int, optional
             Seed for sampling the modes (if limited). The default is 42.
         prefix : str, optional
@@ -524,7 +525,7 @@ class FaultDomain(object):
         statecombos = [i for i in itertools.product(*dist_ranges.values())]
 
         # refine state combos given limited number to sample
-        if type(n) is int and len(statecombos) > 0:
+        if type(n) is int and len(statecombos) > n:
             rng = np.random.default_rng(seed)
             full_list = [i for i, _ in enumerate(statecombos)]
             sample = rng.choice(full_list, size=n, replace=False)
