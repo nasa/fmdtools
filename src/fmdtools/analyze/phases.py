@@ -666,7 +666,8 @@ def join_phasemaps(*phasemaps):
     """
     Join multiple PhaseMaps into a single PhaseMap.
 
-    Note that modephases are removed in this process.
+    Note that modephases are removed in this process. Source maps must share
+    a timestep, which is retained for intersections and the returned map.
 
     Parameters
     ----------
@@ -685,14 +686,17 @@ def join_phasemaps(*phasemaps):
     >>> join_phasemaps(a, b)
     PhaseMap({('a', 'c'): [np.float64(2.0), np.float64(3.0)], ('b', 'c'): [np.float64(4.0), np.float64(6.0)], ('b', 'd'): [np.float64(7.0), np.float64(9.0)]}, {})
     """
+    dt = phasemaps[0].dt if phasemaps else 1.0
+    if any(phasemap.dt != dt for phasemap in phasemaps):
+        raise ValueError("Phase maps must have the same timestep to be joined.")
     joint_phases = {}
     all_combos = [*itertools.product(*[phasemap.phases for phasemap in phasemaps])]
     for combo in all_combos:
         intervals = [phasemaps[i].phases[c] for i, c in enumerate(combo)]
-        joined_interval = find_interval_overlap(*intervals)
+        joined_interval = find_interval_overlap(*intervals, dt=dt)
         if joined_interval:
             joint_phases[combo] = joined_interval
-    return PhaseMap(joint_phases)
+    return PhaseMap(joint_phases, dt=dt)
 
 
 if __name__ == "__main__":
