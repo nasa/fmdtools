@@ -351,7 +351,7 @@ class State(BaseContainer):
             set_con = getattr(self, att+"_set", [])
             if set_con:
                 strlen = max([len(i) for i in set_con])
-                str_size = "<U"+str(max(strlen))
+                str_size = "<U"+str(strlen)
 
         BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
 
