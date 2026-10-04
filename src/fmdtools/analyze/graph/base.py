@@ -1228,6 +1228,9 @@ class Graph(object):
         Useful for comparing different model variants, design alternatives, or
         tracking how model structure evolves across versions.
 
+        When both graphs are undirected, edge endpoint order is ignored.
+        Added and removed edges retain the endpoint tuples from their source graph.
+
         Parameters
         ----------
         other_graph : Graph
@@ -1267,6 +1270,10 @@ class Graph(object):
         nodes_other = set(other_graph.g.nodes())
         edges_this = set(self.g.edges())
         edges_other = set(other_graph.g.edges())
+        if not (self.g.is_directed() or other_graph.g.is_directed()):
+            # Give shared undirected edges the same orientation for comparison.
+            edges_other = {edge[::-1] if edge[::-1] in edges_this else edge
+                           for edge in edges_other}
 
         nodes_added = nodes_other - nodes_this
         nodes_removed = nodes_this - nodes_other
