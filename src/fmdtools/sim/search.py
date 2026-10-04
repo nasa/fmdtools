@@ -103,6 +103,7 @@ class Constraint(Objective):
         Whether the constraint is 'greater', 'less', 'equal', or 'notequal'.
     or_equal : bool
         Whether comparator includes equality (e.g., greater or equalto) or not.
+        The 'notequal' comparator always excludes equality.
     satisfied : bool
         Whether the constraint is satisfied.
     """
@@ -137,8 +138,9 @@ class Constraint(Objective):
         elif self.comparator == 'equal':
             value = abs(value - self.threshold)
         elif self.comparator == 'notequal':
-            # 1 if true, else zero
-            value = 1*(value != self.threshold)
+            # Unequal values are feasible; equality is infeasible under either
+            # strict or inclusive residual comparisons.
+            value = 2 * (value == self.threshold) - 1
         else:
             raise Exception("Invalid comparator: "+self.comparator)
         return self.obj_from_value(value)
@@ -565,6 +567,7 @@ class ResultConstraint(ResultObjective):
         Whether the constraint is 'greater', 'less', 'equal', or 'notequal'.
     or_equal : bool
         Whether comparator includes equality (e.g., greater or equalto) or not.
+        The 'notequal' comparator always excludes equality.
     satisfied : bool
         Whether the constraint is satisfied.
     """
