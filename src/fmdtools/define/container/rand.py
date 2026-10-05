@@ -34,7 +34,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.base import BaseContainer
 from fmdtools.define.container.state import State
-from fmdtools.define.base import round_float, array_x, unpack_x, is_iter
+from fmdtools.define.base import round_float, array_x, is_iter
 
 from scipy import stats
 from recordclass import astuple
@@ -391,9 +391,13 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
     return round_float(mass, res=1e-6)
 
 
-def calc_prob_for_shuffle_permutation(x, options, *args, check_valid=True):
-    """
-    Get probability corresponding to rng.shuffle and rng.permutation.
+def calc_prob_for_shuffle_permutation(x, options, axis=None, *, check_valid=True):
+    """Get the mass of a shared-axis shuffle or permutation, including repeats.
+
+    An explicit axis moves whole slices together. With no axis, preserve the
+    helper's flattened-array convention used by calc_prob_for_permuted.
+    Repeated slices contribute every index ordering yielding the same output.
+    When check_valid is False, infer the mass from options without checking x.
 
     Examples
     --------
@@ -401,14 +405,43 @@ def calc_prob_for_shuffle_permutation(x, options, *args, check_valid=True):
     np.float64(0.5)
     >>> calc_prob_for_shuffle_permutation([2,1,3], [1,2,3])
     np.float64(0.16666666666666666)
+    >>> calc_prob_for_shuffle_permutation([1,2,1], [1,1,2])
+    np.float64(0.3333333333333333)
+    >>> calc_prob_for_shuffle_permutation([1,1,1], [1,2,3])
+    np.float64(0.0)
     """
-    if is_iter(options):
-        options = np.array(options)
-    else:
-        options = np.arange(options)
-    if check_valid and not set(unpack_x(options)).issuperset(set(unpack_x(x))):
+    options = np.asarray(options) if is_iter(options) else np.arange(options)
+    slices = options.ravel() if axis is None else np.moveaxis(options, axis, 0)
+    values = np.asarray(x)
+    if check_valid and values.shape != options.shape:
         return np.float64(0.0)
-    return np.float64(1/math.factorial(options.size))
+    if not options.size:
+        return np.float64(1.0)
+
+    num_slices = len(slices)
+    rows = slices.reshape(num_slices, -1)
+    rows = rows[np.lexsort(rows.T[::-1])]
+    equal_nan = np.issubdtype(options.dtype, np.inexact)
+    if check_valid:
+        value_slices = values.ravel() if axis is None else np.moveaxis(values, axis, 0)
+        value_rows = value_slices.reshape(num_slices, -1)
+        value_rows = value_rows[np.lexsort(value_rows.T[::-1])]
+        if not np.array_equal(rows, value_rows, equal_nan=equal_nan):
+            return np.float64(0.0)
+
+    equal_elements = rows[1:] == rows[:-1]
+    if equal_nan:
+        equal_elements |= np.isnan(rows[1:]) & np.isnan(rows[:-1])
+    boundaries = np.r_[0, np.flatnonzero(~np.all(equal_elements, axis=1)) + 1,
+                       num_slices]
+    repeats = math.prod(math.factorial(int(count))
+                        for count in np.diff(boundaries))
+    return np.float64(repeats / math.factorial(num_slices))
+
+
+def get_shuffle_permutation_pfunc(options, axis=0):
+    """Get shuffle/permutation mass using NumPy's default shared axis."""
+    return get_custom_pfunc(calc_prob_for_shuffle_permutation, options, axis)
 
 
 def calc_prob_for_permuted(x, axis=None):
@@ -487,7 +520,7 @@ def get_scipy_pmf(randname, *args, **kwargs):
 def get_custom_pfunc(func_handle, *args, **kwargs):
     """Get callable for calc_func pdf/pmf function with provided arguments."""
     def custom_pfunc(*x):
-        return as_prob(func_handle(array_x(x), *args, **kwargs))
+        return as_prob(func_handle(array_x(*x), *args, **kwargs))
     return custom_pfunc
 
 
@@ -861,7 +894,7 @@ def get_pfunc_for_dist(randname, *args):
         case 'choice':
             return get_custom_pfunc(calc_prob_for_choice, *args)
         case str if randname in ['shuffle', 'permutation']:
-            return get_custom_pfunc(calc_prob_for_shuffle_permutation, *args)
+            return get_shuffle_permutation_pfunc(*args)
         case 'permuted':
             return get_permuted_pfunc(*args)
         case _:
