@@ -529,19 +529,22 @@ def get_exp_ray_pdf(randname, scale=1.0, size=None):
     return get_scipy_pdf(randname, scale=scale)
 
 
-def get_hypergeometric_pmf(*args):
+def get_hypergeometric_pmf(ngood, nbad, nsample, size=None):
     """
-    Get callable for scipy hypergeomeric pmf with numpy.random arguments.
+    Get a hypergeometric mass from NumPy's scalar or array-like counts.
+
+    Add population counts elementwise without narrow-integer overflow. NumPy's
+    optional size controls generation and does not change the supplied mass.
 
     Examples
     --------
     >>> get_hypergeometric_pmf(50, 450, 100)(10)
     np.float64(0.14736784420411747)
     """
-    n_pop = args[0]+args[1]
-    n_good = args[0]
-    n_sample = args[2]
-    return get_scipy_pmf("hypergeom", n_pop, n_good, n_sample)
+    # Valid generator counts are exactly represented in float64.
+    ngood = np.asarray(ngood, dtype=float)
+    nbad = np.asarray(nbad, dtype=float)
+    return get_scipy_pmf("hypergeom", ngood + nbad, ngood, nsample)
 
 
 def get_uniform_pdf(low=0.0, high=1.0, size=None):
