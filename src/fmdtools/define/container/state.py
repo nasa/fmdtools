@@ -174,7 +174,8 @@ class State(BaseContainer):
         np.float64(3.0)
 
         Can additionally be provided with a second value denoting a limit on the
-        increments e.g.,:
+        increments. For arrays, increments and limits broadcast and the limit
+        is applied separately in each element's increment direction. For example:
 
         >>> p = ExampleState(x=1.0, y=1.0)
         >>> p.inc(x=(3, 5.0))
@@ -191,7 +192,10 @@ class State(BaseContainer):
                 current = getattr(self, name)
                 sign = np.sign(value[0])
                 newval = current + value[0]
-                if sign*newval <= sign*value[1]:
+                within_limit = sign*newval <= sign*value[1]
+                if np.ndim(within_limit) or isinstance(current, np.ndarray):
+                    setattr(self, name, np.where(within_limit, newval, value[1]))
+                elif within_limit:
                     setattr(self, name, newval)
                 else:
                     setattr(self, name, current.__class__(value[1]))
