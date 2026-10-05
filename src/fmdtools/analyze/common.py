@@ -393,14 +393,17 @@ def calc_rate(data, rates=None, weights=None, **kwargs):
 
 def calc_percent(data, weights=None, rates=None, **kwargs):
     """
-    Calculate a percent of a non-zero value in data using calc_metric.
+    Calculate a weighted fraction of non-zero values using calc_metric.
+
+    Weights are passed to the averaging method; omitted weights give each value
+    equal influence. Rates remain separate from percentage weights.
 
     Examples
     --------
     >>> calc_percent([0, 10, 0])
     np.float64(0.333333)
     """
-    return calc_metric(data, **{**kwargs, 'dtype': bool})
+    return calc_metric(data, **{**kwargs, 'dtype': bool, 'weights': weights})
 
 
 def calc_total(data, weights=None, **kwargs):
