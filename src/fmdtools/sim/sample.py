@@ -132,7 +132,8 @@ class ParameterDomain(object):
             var_domain = set(var_set)
         elif var_lim:
             var_domain = var_lim
-        elif issubclass(self.parameter_init, Parameter):
+        elif (inspect.isclass(self.parameter_init)
+              and issubclass(self.parameter_init, Parameter)):
             var_domain = self.parameter_init.get_set_const(variable)
         else:
             var_domain = ()
