@@ -344,7 +344,11 @@ def same_mode(modename1, modename2, exact=True):
 
 def sample_times_even(times, numpts, dt=1.0):
     """
-    Get sample time for the number of points from sampling evenly.
+    Get sample times by rounding evenly spaced quantiles to the timestep.
+
+    Rounded values outside the supplied support are snapped to its nearest
+    available time. This keeps disconnected mode phases and offset grids valid
+    while preserving existing rounding when its result is already available.
 
     Parameters
     ----------
@@ -370,6 +374,10 @@ def sample_times_even(times, numpts, dt=1.0):
     else:
         pts = [np.quantile(times, p/(numpts+1)) for p in range(numpts+2)][1:-1]
         sampletimes = [round(pt/dt)*dt for pt in pts]
+        available = np.asarray(times)
+        sampletimes = [time if np.any(available == time)
+                       else times[np.argmin(np.abs(available - time))]
+                       for time in sampletimes]
     weights = [1/len(sampletimes) for i in sampletimes]
     return sampletimes, weights
 
