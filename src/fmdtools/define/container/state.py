@@ -299,7 +299,9 @@ class State(BaseContainer):
 
     def same(self, *args, **kwargs):
         """
-        Test whether a given iterable values has the same value as each in the state.
+        Test whether the given values match the selected states.
+
+        Array-valued comparisons are reduced across every dimension.
 
         Examples
         --------
@@ -326,10 +328,7 @@ class State(BaseContainer):
         if is_iter(values) and len(values) == 1:
             values = values[0]
         test = values == self.get(*states)
-        if is_iter(test):
-            return all(test)
-        else:
-            return bool(test)
+        return bool(np.all(test))
 
     def warn(self, *messages, stacklevel=2):
         """
