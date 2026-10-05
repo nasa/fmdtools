@@ -216,7 +216,9 @@ class State(BaseContainer):
 
     def limit(self, **kwargs):
         """
-        Enforce limits on the value of a given property.
+        Enforce limits elementwise on scalar or array-valued properties.
+
+        Bounds broadcast against each state; state dimensions are not reduced.
 
         Mainly useful for reducing length/adding clarity to increment statements. e.g.,:
 
@@ -231,7 +233,7 @@ class State(BaseContainer):
             if name not in self.__fields__:
                 raise Exception(name+" not a property of "+str(self.__class__))
             try:
-                lim = np.min([value[1], np.max([value[0], getattr(self, name)])])
+                lim = np.minimum(value[1], np.maximum(value[0], getattr(self, name)))
                 setattr(self, name, lim)
             except ValueError as e:
                 raise Exception("Invalid state values for "+name +
