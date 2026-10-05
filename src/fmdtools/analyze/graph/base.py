@@ -850,14 +850,14 @@ class Graph(object):
             number of times to run robustness coefficient algorithm
             (result is averaged over all trials)
         seed : int
-            optional seed to instantiate test with
+            Optional integer seed, including zero. False or None leaves trials unseeded.
 
         Returns
         -------
         RC : robustness coefficient
         """
         g = self.g.to_undirected()
-        if seed:
+        if seed is not False and seed is not None:
             rng = np.random.default_rng(seed=seed)
         else:
             rng = np.random.default_rng()
