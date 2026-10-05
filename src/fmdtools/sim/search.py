@@ -1545,6 +1545,8 @@ class ProblemArchitecture(BaseProblem):
         """
         Update the variables for the entire problem (or, problems up to probname).
 
+        Accept expanded values or one packed vector, split across local variables.
+
         Parameters
         ----------
         *x_full : float
@@ -1586,7 +1588,7 @@ class ProblemArchitecture(BaseProblem):
         if not probname:
             probname = [*self.problems][-1]
         probs_to_call = [*self.get_upstream_probs(probname), probname]
-        x_to_split = [*x_full]
+        x_to_split = list(unpack_x(*x_full))
         for problem in probs_to_call:
             loc_var = problem + "_xloc"
             if loc_var in self.variables:
