@@ -1038,7 +1038,9 @@ class FaultSample(BaseSample):
         times : list
             List of times.
         weights : list, optional
-            Weight factors corresponding to the times The default is [].
+            Weight factors corresponding to the times. Lists, tuples and arrays
+            are supported, including explicit zero weights. An empty sequence
+            or None selects implicit phase weights. The default is [].
         n_joint : int
             Number of joint fault modes.
         **joint_kwargs : kwargs
@@ -1072,10 +1074,11 @@ class FaultSample(BaseSample):
          FaultSample of scenarios: 
           - affect_dof_ca_comps_rf_propwarp__affect_dof_ca_comps_lf_propwarp__affect_dof_ca_comps_rr_propwarp_t5
         """
+        has_weights = weights is not None and len(weights) > 0
         jointfaults = itertools.combinations(self.faultdomain.faults, n_joint)
         for faulttups in jointfaults:
             for i, time in enumerate(times):
-                if weights:
+                if has_weights:
                     weight = weights[i]
                 elif self.phasemap:
                     phase_samples = self.phasemap.calc_samples_in_phases(*times)
