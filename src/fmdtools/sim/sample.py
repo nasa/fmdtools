@@ -1165,11 +1165,12 @@ class SampleApproach(BaseSample):
         Dict of the FaultSamples making up the approach {'samplename': FaultSample}
     """
 
-    def __init__(self, mdl, phasemaps={}, def_mdl_phasemap=True):
+    def __init__(self, mdl, phasemaps=None, def_mdl_phasemap=True):
+        """Own the map registry while preserving supplied PhaseMap objects."""
         self.mdl = mdl
+        self.phasemaps = {} if phasemaps is None else dict(phasemaps)
         if def_mdl_phasemap:
-            phasemaps['mdl'] = PhaseMap(self.mdl.sp.phases)
-        self.phasemaps = phasemaps
+            self.phasemaps['mdl'] = PhaseMap(self.mdl.sp.phases)
         self.faultdomains = {}
         self.faultsamples = {}
 
