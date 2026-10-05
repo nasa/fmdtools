@@ -170,13 +170,14 @@ class Parameter(BaseContainer, readonly=True):
 
     @classmethod
     def get_set_const(cls, field):
+        """Get limits or allowed values through nested Parameter annotations."""
         if "." in field:
             field_split = field.split(".")
             true_field = field_split[0]
             subfield = ".".join(field_split[1:])
             subparam = cls.__annotations__[true_field]
-            if isinstance(subparam, Parameter):
-                return cls.__annotations__[true_field].get_set_const(subfield)
+            if inspect.isclass(subparam) and issubclass(subparam, Parameter):
+                return subparam.get_set_const(subfield)
             else:
                 return ()
         var_lims = getattr(cls, field+"_lim", False)
