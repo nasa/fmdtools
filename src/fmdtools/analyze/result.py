@@ -541,12 +541,20 @@ class Result(UserDict):
         return {k: ext_dict[k] for k in nest_self.keys()}
 
     def get_values(self, *values, prefix=""):
-        """Get a dict with all values corresponding to the strings in *values."""
+        """Select values by complete trailing attribute paths.
+
+        Prefix and value are combined before matching. A leading dot requires
+        a nested path; an empty selector retains all values. Partial component
+        suffixes do not match, so x does not select xx or cost select totalcost.
+        """
         h = self.__class__()
         flatself = self.flatten()
         k_vs = []
         for v in values:
-            ks = [k for k in flatself.keys() if k.endswith(prefix+v)]
+            suffix = prefix + v
+            boundary_suffix = suffix if suffix.startswith('.') else '.' + suffix
+            ks = [k for k in flatself.keys()
+                  if not suffix or k == suffix or k.endswith(boundary_suffix)]
             if not ks:
                 raise Exception("Value "+v+" not in Result keys.")
             k_vs.extend(ks)
