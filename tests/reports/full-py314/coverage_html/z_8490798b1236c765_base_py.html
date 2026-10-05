@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8490798b1236c765_mode_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
-            created at 2026-10-05 12:08 -0700
+            created at 2026-10-05 13:51 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -482,7 +482,7 @@
     <p class="pln"><span class="n"><a id="t400" href="#t400">400</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t401" href="#t401">401</a></span><span class="t">    <span class="key">def</span> <span class="nam">to_default</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">*</span><span class="nam">fieldnames</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t402" href="#t402">402</a></span><span class="t">        <span class="str">&quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t403" href="#t403">403</a></span><span class="t"><span class="str">        Reset given fields to their default values.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t403" href="#t403">403</a></span><span class="t"><span class="str">        Reset given fields to their own defaults, independent of request order.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t404" href="#t404">404</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t405" href="#t405">405</a></span><span class="t"><span class="str">        Examples</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t406" href="#t406">406</a></span><span class="t"><span class="str">        --------</span>&nbsp;</span><span class="r"></span></p>
@@ -498,7 +498,7 @@
     <p class="pln"><span class="n"><a id="t416" href="#t416">416</a></span><span class="t"><span class="str">        &quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t417" href="#t417">417</a></span><span class="t">        <span class="key">if</span> <span class="key">not</span> <span class="nam">fieldnames</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t418" href="#t418">418</a></span><span class="t">            <span class="nam">fieldnames</span> <span class="op">=</span> <span class="nam">tuple</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">__defaults__</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t419" href="#t419">419</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">assign</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">__default_vals__</span><span class="op">,</span> <span class="op">*</span><span class="nam">fieldnames</span><span class="op">,</span> <span class="nam">as_copy</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t419" href="#t419">419</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">assign</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">__defaults__</span><span class="op">,</span> <span class="op">*</span><span class="nam">fieldnames</span><span class="op">,</span> <span class="nam">as_copy</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t420" href="#t420">420</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t421" href="#t421">421</a></span><span class="t">    <span class="key">def</span> <span class="nam">copy</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t422" href="#t422">422</a></span><span class="t">        <span class="str">&quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
@@ -694,7 +694,7 @@
             <a class="nav" href="z_8490798b1236c765_mode_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
-            created at 2026-10-05 12:08 -0700
+            created at 2026-10-05 13:51 -0700
         </p>
     </div>
 </footer>

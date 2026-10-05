@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8490798b1236c765_state_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
-            created at 2026-10-05 10:53 -0700
+            created at 2026-10-05 12:49 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -116,7 +116,7 @@
     <p class="pln"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t35" href="#t35">35</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">container</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">BaseContainer</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t36" href="#t36">36</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">container</span><span class="op">.</span><span class="nam">state</span> <span class="key">import</span> <span class="nam">State</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t37" href="#t37">37</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">round_float</span><span class="op">,</span> <span class="nam">array_x</span><span class="op">,</span> <span class="nam">is_iter</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t37" href="#t37">37</a></span><span class="t"><span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">array_x</span><span class="op">,</span> <span class="nam">is_iter</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t38" href="#t38">38</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t39" href="#t39">39</a></span><span class="t"><span class="key">from</span> <span class="nam">scipy</span> <span class="key">import</span> <span class="nam">stats</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t40" href="#t40">40</a></span><span class="t"><span class="key">from</span> <span class="nam">recordclass</span> <span class="key">import</span> <span class="nam">astuple</span>&nbsp;</span><span class="r"></span></p>
@@ -425,7 +425,7 @@
     <p class="pln"><span class="n"><a id="t343" href="#t343">343</a></span><span class="t"><span class="str">    Scalars and arrays are evaluated using all supplied values. Sampling size</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t344" href="#t344">344</a></span><span class="t"><span class="str">    does not change their mass. Uniform sampling without replacement is</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t345" href="#t345">345</a></span><span class="t"><span class="str">    supported; weighted sampling without replacement remains unsupported.</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t346" href="#t346">346</a></span><span class="t"><span class="str">    The existing six-decimal probability rounding is retained.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t346" href="#t346">346</a></span><span class="t"><span class="str">    Retain floating-point precision so small, representable masses stay nonzero.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t347" href="#t347">347</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t348" href="#t348">348</a></span><span class="t"><span class="str">    Examples</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t349" href="#t349">349</a></span><span class="t"><span class="str">    --------</span>&nbsp;</span><span class="r"></span></p>
@@ -433,8 +433,8 @@
     <p class="pln"><span class="n"><a id="t351" href="#t351">351</a></span><span class="t"><span class="str">    np.float64(0.5)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t352" href="#t352">352</a></span><span class="t"><span class="str">    &gt;&gt;&gt; calc_prob_for_choice([1,2], [1,2], replace=False)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t353" href="#t353">353</a></span><span class="t"><span class="str">    np.float64(0.5)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t354" href="#t354">354</a></span><span class="t"><span class="str">    &gt;&gt;&gt; calc_prob_for_choice([1,2], [1,2,3], p=[0.1, 0.1, 0.8])</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t355" href="#t355">355</a></span><span class="t"><span class="str">    np.float64(0.01)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t354" href="#t354">354</a></span><span class="t"><span class="str">    &gt;&gt;&gt; bool(np.isclose(calc_prob_for_choice([1,2], [1,2,3], p=[0.1, 0.1, 0.8]), 0.01))</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t355" href="#t355">355</a></span><span class="t"><span class="str">    True</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t356" href="#t356">356</a></span><span class="t"><span class="str">    &quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t357" href="#t357">357</a></span><span class="t">    <span class="key">if</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">options</span><span class="op">,</span> <span class="op">(</span><span class="nam">int</span><span class="op">,</span> <span class="nam">np</span><span class="op">.</span><span class="nam">integer</span><span class="op">)</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t358" href="#t358">358</a></span><span class="t">        <span class="nam">options</span> <span class="op">=</span> <span class="nam">np</span><span class="op">.</span><span class="nam">arange</span><span class="op">(</span><span class="nam">options</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -470,7 +470,7 @@
     <p class="mis show_mis"><span class="n"><a id="t388" href="#t388">388</a></span><span class="t">                <span class="key">return</span> <span class="nam">np</span><span class="op">.</span><span class="nam">float64</span><span class="op">(</span><span class="num">0.0</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t389" href="#t389">389</a></span><span class="t">            <span class="nam">mass</span> <span class="op">*=</span> <span class="nam">available</span><span class="op">.</span><span class="nam">size</span> <span class="op">/</span> <span class="op">(</span><span class="nam">options</span><span class="op">.</span><span class="nam">size</span> <span class="op">-</span> <span class="nam">i</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t390" href="#t390">390</a></span><span class="t">            <span class="nam">remaining</span><span class="op">[</span><span class="nam">available</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t391" href="#t391">391</a></span><span class="t">    <span class="key">return</span> <span class="nam">round_float</span><span class="op">(</span><span class="nam">mass</span><span class="op">,</span> <span class="nam">res</span><span class="op">=</span><span class="num">1e-6</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t391" href="#t391">391</a></span><span class="t">    <span class="key">return</span> <span class="nam">np</span><span class="op">.</span><span class="nam">float64</span><span class="op">(</span><span class="nam">mass</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t392" href="#t392">392</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t393" href="#t393">393</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t394" href="#t394">394</a></span><span class="t"><span class="key">def</span> <span class="nam">calc_prob_for_shuffle_permutation</span><span class="op">(</span><span class="nam">x</span><span class="op">,</span> <span class="nam">options</span><span class="op">,</span> <span class="nam">axis</span><span class="op">=</span><span class="key">None</span><span class="op">,</span> <span class="op">*</span><span class="op">,</span> <span class="nam">check_valid</span><span class="op">=</span><span class="key">True</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1045,7 +1045,7 @@
             <a class="nav" href="z_8490798b1236c765_state_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
-            created at 2026-10-05 10:53 -0700
+            created at 2026-10-05 12:49 -0700
         </p>
     </div>
 </footer>
