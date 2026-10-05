@@ -1687,7 +1687,7 @@ class ParameterSample(BaseSample):
         --------
         >>> ex_ps = ParameterSample(expd, seed=1)
         >>> ex_ps.combine_random(1)
-        [[np.float64(2.0), 9.504636963259353]]
+        [[2.0, 9.504636963259353]]
         """
         ranges = self.paramdomain.variables.values()
         x_combos = combine_random(ranges, seed=self.seed, num_combos=num_combos)
@@ -1697,6 +1697,8 @@ class ParameterSample(BaseSample):
 def combine_random(ranges, seed=None, num_combos=1):
     """
     Create random lists from the given ranges.
+
+    Discrete choices retain their original values and types, including tuples.
 
     Parameters
     ----------
@@ -1726,7 +1728,9 @@ def combine_random(ranges, seed=None, num_combos=1):
         x = []
         for ran in ranges:
             if type(ran) is set:
-                x.append(rng.choice([*ran]))
+                # Choose an index so heterogeneous options are not coerced.
+                options = list(ran)
+                x.append(options[rng.choice(len(options))])
             elif type(ran) is tuple:
                 x.append(rng.uniform(ran[0], ran[-1]))
             else:
