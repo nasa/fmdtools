@@ -65,16 +65,17 @@ class PhaseMap(object):
         Has structure::
         {'on': {'on1', 'on2', 'on3'}}
 
-        The default is {}.
+        Omitted or None creates an independent empty mapping. Explicit mappings
+        retain their existing identity.
     dt: float
         Timestep defining phases.
     """
 
-    def __init__(self, phases, modephases={}, dt=1.0):
+    def __init__(self, phases, modephases=None, dt=1.0):
         if type(phases) == tuple:
             phases = {ph[0]: [ph[1], ph[2]] for ph in phases}
         self.phases = phases
-        self.modephases = modephases
+        self.modephases = {} if modephases is None else modephases
         self.dt = dt
 
     def __repr__(self):
