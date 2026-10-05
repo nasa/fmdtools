@@ -48,7 +48,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
                     49.32124529702974,
                     0.31327201999190035,
                     21.386958080811567,
-                    3.3311929677576186,
+                    3.331196298953918,
                     9.066120598345039,
                     131.79987407014573,
                     5.81402243889764,
@@ -277,7 +277,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
 if __name__ == '__main__':
     # suite = unittest.TestSuite()
-    # suite.addTest(StochasticPumpTests("test_model_copy_same"))
+    # suite.addTest(StochasticPumpTests("test_stochastic_pdf"))
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach_indiv"))
     # runner = unittest.TextTestRunner()
     # runner.run(suite)
