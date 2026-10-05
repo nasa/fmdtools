@@ -370,6 +370,7 @@ class Result(UserDict):
                 obj = self.get_faulty()
                 if len(args) > 1:
                     args = args[1:]
+                    obj = obj.nest()
                 else:
                     return obj
             else:
@@ -540,12 +541,20 @@ class Result(UserDict):
         return {k: ext_dict[k] for k in nest_self.keys()}
 
     def get_values(self, *values, prefix=""):
-        """Get a dict with all values corresponding to the strings in *values."""
+        """Select values by complete trailing attribute paths.
+
+        Prefix and value are combined before matching. A leading dot requires
+        a nested path; an empty selector retains all values. Partial component
+        suffixes do not match, so x does not select xx or cost select totalcost.
+        """
         h = self.__class__()
         flatself = self.flatten()
         k_vs = []
         for v in values:
-            ks = [k for k in flatself.keys() if k.endswith(prefix+v)]
+            suffix = prefix + v
+            boundary_suffix = suffix if suffix.startswith('.') else '.' + suffix
+            ks = [k for k in flatself.keys()
+                  if not suffix or k == suffix or k.endswith(boundary_suffix)]
             if not ks:
                 raise Exception("Value "+v+" not in Result keys.")
             k_vs.extend(ks)
@@ -605,9 +614,20 @@ class Result(UserDict):
         return group_hist
 
     def get_faulty(self):
-        """Get just the results related to fault scenarios from the Result."""
+        """Get fault scenarios without interpreting their names as access aliases.
+
+        A single scenario loses its prefix, while multiple scenarios retain
+        theirs. A scenario named 'faulty' is selected without recursive lookup.
+        """
         faulty = self.get_default_comp_groups()['faulty']
-        return self.get(*faulty).flatten()
+        flat = self.flatten()
+        selected = self.__class__()
+        for scenario in faulty:
+            prefix = scenario + '.'
+            for key, value in flat.items():
+                if key.startswith(prefix):
+                    selected[key[len(prefix):] if len(faulty) == 1 else key] = value
+        return selected
 
     def get_default_comp_groups(self):
         """

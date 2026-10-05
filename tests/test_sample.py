@@ -30,6 +30,7 @@ from fmdtools.sim.sample import (
     FaultSample,
     JointFaultSample,
     sample_times_quad,
+    sample_times_even,
 )
 
 
@@ -283,6 +284,105 @@ class TestQuadratureSampleMass(unittest.TestCase):
                 for scenario in sample.scenarios():
                     hist = history.get(scenario.name)
                     self.assertEqual(hist.get_fault_time(), int(scenario.time))
+class TestEvenSamplingSupport(unittest.TestCase):
+    """Even samples stay on the supplied support, including disconnected modes."""
+
+    def test_gapped_shifted_and_sparse_supports_never_create_unavailable_times(self):
+        cases = (
+            ([0.0, 1.0, 2.0, 10.0, 11.0, 12.0], 3, 1.0),
+            ([0.0, 0.5, 1.0, 5.0, 5.5, 6.0], 3, 0.5),
+            ([0.25, 1.25, 2.25, 3.25, 4.25], 2, 1.0),
+            ([0.0, 1.0, 10.0, 11.0, 100.0, 101.0], 3, 1.0),
+            ([0.0, 0.1, 0.7, 0.8, 4.2, 4.3], 3, 0.1),
+        )
+        for values, count, dt in cases:
+            for wrap in (list, tuple, np.asarray):
+                with self.subTest(values=values, container=wrap.__name__, dt=dt):
+                    times = wrap(values)
+                    before = np.asarray(times).copy()
+                    sampled, weights = sample_times_even(times, count, dt=dt)
+                    self.assertEqual(len(sampled), count)
+                    self.assertTrue(set(sampled).issubset(values))
+                    self.assertEqual(len(set(sampled)), len(sampled))
+                    self.assertAlmostEqual(sum(weights), 1.0)
+                    np.testing.assert_array_equal(weights, np.full(count, 1.0 / count))
+                    np.testing.assert_array_equal(times, before)
+
+    def test_existing_uniform_grid_rounding_and_all_times_fallback_are_unchanged(self):
+        for count in (1, 2, 3, 4, 6):
+            for dt in (1.0, 0.5, 2.0):
+                with self.subTest(count=count, dt=dt):
+                    times = np.arange(7) * dt
+                    if count + 2 > len(times):
+                        expected = times
+                    else:
+                        expected = [
+                            round(np.quantile(times, p / (count + 1)) / dt) * dt
+                            for p in range(1, count + 1)
+                        ]
+                    actual, weights = sample_times_even(times, count, dt=dt)
+                    np.testing.assert_array_equal(actual, expected)
+                    self.assertAlmostEqual(sum(weights), 1.0)
+        integer_grid, _ = sample_times_even([0, 1, 2, 3, 4], 2)
+        self.assertEqual(integer_grid, [1.0, 3.0])
+        self.assertTrue(all(type(value) is float for value in integer_grid))
+        for times in ([], [3.0], [3.0, 4.0]):
+            with self.subTest(times=times):
+                actual, weights = sample_times_even(times, 3)
+                self.assertEqual(actual, times)
+                self.assertEqual(len(weights), len(times))
+
+    def test_modephase_sampling_keeps_total_probability_out_of_excluded_modes(self):
+        for include_gap in (False, True):
+            with self.subTest(include_gap=include_gap):
+                model = ExampleFunction(sp={"end_time": 12.0})
+                domain = FaultDomain(model)
+                domain.add_fault(model.name, "no_charge")
+                phases = {"standby": [0.0, 2.0], "standby1": [10.0, 12.0]}
+                modephases = {"standby": {"standby", "standby1"}}
+                if include_gap:
+                    phases["charge"] = [3.0, 9.0]
+                    modephases["charge"] = {"charge"}
+                phase_map = PhaseMap(phases, modephases)
+                sample = FaultSample(domain, phasemap=phase_map)
+                sample.add_fault_phases("standby", method="even", args=(3,))
+                for scenario in sample.scenarios():
+                    self.assertEqual(
+                        phase_map.find_base_phase(scenario.time), "standby"
+                    )
+                    self.assertGreater(scenario.rate, 0.0)
+                self.assertAlmostEqual(
+                    sum(s.rate for s in sample.scenarios()),
+                    model.m.get_fault("no_charge").prob,
+                    places=15,
+                )
+                self.assertEqual(sorted(sample.get_times()), [1.0, 2.0, 11.0])
+
+    def test_disconnected_phase_samples_run_staged_and_unstaged(self):
+        model = ExampleFunction(sp={"end_time": 12.0})
+        domain = FaultDomain(model)
+        domain.add_fault(model.name, "no_charge")
+        phase_map = PhaseMap(
+            {"standby": [0.0, 2.0], "standby1": [10.0, 12.0]},
+            {"standby": {"standby", "standby1"}},
+        )
+        sample = FaultSample(domain, phasemap=phase_map)
+        sample.add_fault_phases("standby", method="even", args=(3,))
+        reference = FaultSample(domain, phasemap=phase_map)
+        reference.add_fault_times([1.0, 2.0, 11.0], weights=[1.0 / 3] * 3)
+        for staged in (False, True):
+            with self.subTest(staged=staged):
+                actual_result, actual_history = propagate.fault_sample(
+                    model, sample, staged=staged, showprogress=False
+                )
+                expected_result, expected_history = propagate.fault_sample(
+                    model, reference, staged=staged, showprogress=False
+                )
+                self.assertEqual(actual_result, expected_result)
+                self.assertEqual(actual_history, expected_history)
+                for scenario in sample.scenarios():
+                    history = actual_history.get(scenario.name)
+                    self.assertEqual(history.get_fault_time(), int(scenario.time))
                 self.assertEqual(model.s.x, 0.0)
 
 
