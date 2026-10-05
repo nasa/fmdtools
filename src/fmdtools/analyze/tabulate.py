@@ -70,16 +70,16 @@ def result_summary_fmea(result, mdlhist, *attrs, metrics=()):
     >>> mdl = ExFxnArch()
     >>> res, hist = fault_sample(mdl, exfs)
     >>> result_summary_fmea(res, hist, *mdl.fxns, *mdl.flows) # doctest: +NORMALIZE_WHITESPACE
-                                                             degraded       faulty  flowval
-    nominal                                                        []           []  10100.0
-    exfxnarch_fxns_ex_fxn_no_charge_t1              ['ex_fxn', 'exf']   ['ex_fxn']   5050.0
-    exfxnarch_fxns_ex_fxn_no_charge_t2              ['ex_fxn', 'exf']   ['ex_fxn']   5150.0
-    exfxnarch_fxns_ex_fxn2_no_charge_t1  ['ex_fxn', 'ex_fxn2', 'exf']  ['ex_fxn2']   5050.0
-    exfxnarch_fxns_ex_fxn2_no_charge_t2  ['ex_fxn', 'ex_fxn2', 'exf']  ['ex_fxn2']   5150.0
-    exfxnarch_fxns_ex_fxn_short_t1                  ['ex_fxn', 'exf']   ['ex_fxn']   5050.0
-    exfxnarch_fxns_ex_fxn_short_t2                  ['ex_fxn', 'exf']   ['ex_fxn']   5150.0
-    exfxnarch_fxns_ex_fxn2_short_t1      ['ex_fxn', 'ex_fxn2', 'exf']  ['ex_fxn2']   5050.0
-    exfxnarch_fxns_ex_fxn2_short_t2      ['ex_fxn', 'ex_fxn2', 'exf']  ['ex_fxn2']   5150.0
+                                                   degraded       faulty  flowval
+    nominal                                              []           []  10100.0
+    exfxnarch_fxns_ex_fxn_no_charge_t1    ['ex_fxn', 'exf']   ['ex_fxn']   5050.0
+    exfxnarch_fxns_ex_fxn_no_charge_t2    ['ex_fxn', 'exf']   ['ex_fxn']   5150.0
+    exfxnarch_fxns_ex_fxn2_no_charge_t1  ['ex_fxn2', 'exf']  ['ex_fxn2']   5050.0
+    exfxnarch_fxns_ex_fxn2_no_charge_t2  ['ex_fxn2', 'exf']  ['ex_fxn2']   5150.0
+    exfxnarch_fxns_ex_fxn_short_t1        ['ex_fxn', 'exf']   ['ex_fxn']   5050.0
+    exfxnarch_fxns_ex_fxn_short_t2        ['ex_fxn', 'exf']   ['ex_fxn']   5150.0
+    exfxnarch_fxns_ex_fxn2_short_t1      ['ex_fxn2', 'exf']  ['ex_fxn2']   5050.0
+    exfxnarch_fxns_ex_fxn2_short_t2      ['ex_fxn2', 'exf']  ['ex_fxn2']   5150.0
     """
     from fmdtools.analyze.history import History
     deg_summaries = {}
