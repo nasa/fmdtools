@@ -1316,11 +1316,11 @@ class Coords(BaseCoords):
 
         p_rounded = self.to_gridpoint(x, y)
 
-        if p_rounded.tolist() in pts.tolist():
+        if include_pt and p_rounded.tolist() in pts.tolist():
             return p_rounded
         else:
             if not include_pt:
-                pts = np.array([p for p in pts if all(p != p_rounded)])
+                pts = pts[np.any(pts != p_rounded, axis=1)]
             dists = np.sqrt(np.sum((np.array([x, y])-pts)**2, 1))
             closest_ind = np.argmin(dists)
             xy = pts[closest_ind]
