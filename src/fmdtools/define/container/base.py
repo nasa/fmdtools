@@ -400,7 +400,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
 
     def to_default(self, *fieldnames):
         """
-        Reset given fields to their default values.
+        Reset given fields to their own defaults, independent of request order.
 
         Examples
         --------
@@ -416,7 +416,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         """
         if not fieldnames:
             fieldnames = tuple(self.__defaults__)
-        self.assign(self.__default_vals__, *fieldnames, as_copy=True)
+        self.assign(self.__defaults__, *fieldnames, as_copy=True)
 
     def copy(self, **kwargs):
         """
