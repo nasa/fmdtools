@@ -219,6 +219,9 @@ class BaseCoords(BaseObject):
         """
         Find the index of the array corresponding to the given x/y values.
 
+        Preserve nearest-even rounding inside the grid. Its inclusive upper
+        edges belong to the final cells, never to an out-of-range index.
+
         Parameters
         ----------
         x, y : float
@@ -239,7 +242,9 @@ class BaseCoords(BaseObject):
         """
         if not self.in_range(x, y):
             raise Exception("Outside bounds of grid: "+str(x)+','+str(y))
-        return round(x/self.p.blocksize), round(y/self.p.blocksize)
+        # The accepted upper cell edge can round one past the array.
+        return (min(round(x/self.p.blocksize), int(self.p.x_size) - 1),
+                min(round(y/self.p.blocksize), int(self.p.y_size) - 1))
 
     def to_gridpoint(self, *args):
         """
@@ -1316,11 +1321,11 @@ class Coords(BaseCoords):
 
         p_rounded = self.to_gridpoint(x, y)
 
-        if p_rounded.tolist() in pts.tolist():
+        if include_pt and p_rounded.tolist() in pts.tolist():
             return p_rounded
         else:
             if not include_pt:
-                pts = np.array([p for p in pts if all(p != p_rounded)])
+                pts = pts[np.any(pts != p_rounded, axis=1)]
             dists = np.sqrt(np.sum((np.array([x, y])-pts)**2, 1))
             closest_ind = np.argmin(dists)
             xy = pts[closest_ind]

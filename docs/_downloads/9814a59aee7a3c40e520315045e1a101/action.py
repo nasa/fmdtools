@@ -136,7 +136,7 @@ class ActionArchitectureGraph(ArchitectureGraph):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
     def draw_from(self, time, history=History(), **kwargs):
-        fault_act_hist = history._prep_faulty().get_values("a.active_actions")
+        fault_act_hist = history._prep_faulty().get_values("aa.active_actions")
         activities = fault_act_hist.get_slice(time)
         activity = {i for v in activities.values() for i in v}
         for n in self.g.nodes():

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.object &mdash; fmdtools 2.5.3 documentation</title>
+  <title>fmdtools.define.object &mdash; fmdtools 2.5.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=0bbe9fa5"></script>
+      <script src="../_static/documentation_options.js?v=c0370f68"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -1959,8 +1959,10 @@ Default is False.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.timer.Timer.inc">
-<span class="sig-name descname"><span class="pre">inc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tstep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.timer.Timer.inc" title="Link to this definition"></a></dt>
-<dd><p>Increment the time elapsed by tstep.</p>
+<span class="sig-name descname"><span class="pre">inc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tstep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.timer.Timer.inc" title="Link to this definition"></a></dt>
+<dd><p>Increment time by tstep, including zero, or use the configured step.</p>
+<p>None and the legacy empty-sequence sentinel use self.tstep. Explicit
+increments do not change that configured step or the completion policy.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -3318,6 +3320,8 @@ property provided.</p></li>
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.BaseCoords.to_index">
 <span class="sig-name descname"><span class="pre">to_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.BaseCoords.to_index" title="Link to this definition"></a></dt>
 <dd><p>Find the index of the array corresponding to the given x/y values.</p>
+<p>Preserve nearest-even rounding inside the grid. Its inclusive upper
+edges belong to the final cells, never to an out-of-range index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

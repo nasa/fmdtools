@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.container &mdash; fmdtools 2.5.3 documentation</title>
+  <title>fmdtools.define.container &mdash; fmdtools 2.5.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=0bbe9fa5"></script>
+      <script src="../_static/documentation_options.js?v=c0370f68"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -1296,7 +1296,7 @@ float in initialization.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.to_default">
 <span class="sig-name descname"><span class="pre">to_default</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">fieldnames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.to_default" title="Link to this definition"></a></dt>
-<dd><p>Reset given fields to their default values.</p>
+<dd><p>Reset given fields to their own defaults, independent of request order.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExContainer</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">to_default</span><span class="p">()</span>
@@ -2027,7 +2027,8 @@ instead preserves the data type)).</p>
 </pre></div>
 </div>
 <p>Can additionally be provided with a second value denoting a limit on the
-increments e.g.,:</p>
+increments. For arrays, increments and limits broadcast and the limit
+is applied separately in each element’s increment direction. For example:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
@@ -2048,7 +2049,8 @@ increments e.g.,:</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.state.State.limit">
 <span class="sig-name descname"><span class="pre">limit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.limit" title="Link to this definition"></a></dt>
-<dd><p>Enforce limits on the value of a given property.</p>
+<dd><p>Enforce limits elementwise on scalar or array-valued properties.</p>
+<p>Bounds broadcast against each state; state dimensions are not reduced.</p>
 <p>Mainly useful for reducing length/adding clarity to increment statements. e.g.,:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">200.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">200.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">100.0</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">))</span>
@@ -2112,7 +2114,8 @@ increments e.g.,:</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.state.State.same">
 <span class="sig-name descname"><span class="pre">same</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.same" title="Link to this definition"></a></dt>
-<dd><p>Test whether a given iterable values has the same value as each in the state.</p>
+<dd><p>Test whether the given values match the selected states.</p>
+<p>Array-valued comparisons are reduced across every dimension.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">same</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">)</span>
@@ -2286,6 +2289,12 @@ readonly=True should be set to ensure fields are not changed.</p>
 <dd class="field-odd"><p><strong>Exception</strong> – Raises exception if a field is not the same as its defined type.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.parameter.Parameter.get_set_const">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_set_const</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.parameter.Parameter.get_set_const" title="Link to this definition"></a></dt>
+<dd><p>Get limits or allowed values through nested Parameter annotations.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2710,14 +2719,18 @@ the empty-product density of one.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.calc_prob_for_choice">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_for_choice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_for_choice" title="Link to this definition"></a></dt>
-<dd><p>Get probability corresponding to a call to np.choice.</p>
+<dd><p>Get the ordered joint mass of choices from one-dimensional options.</p>
+<p>Scalars and arrays are evaluated using all supplied values. Sampling size
+does not change their mass. Uniform sampling without replacement is
+supported; weighted sampling without replacement remains unsupported.
+Retain floating-point precision so small, representable masses stay nonzero.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_choice</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 <span class="go">np.float64(0.5)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="go">np.float64(0.5)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
-<span class="go">np.float64(0.01)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">calc_prob_for_choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]),</span> <span class="mf">0.01</span><span class="p">))</span>
+<span class="go">True</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2742,27 +2755,38 @@ generation, not the mass of those values. Empty draws have joint mass one.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.calc_prob_for_permuted">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_for_permuted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_for_permuted" title="Link to this definition"></a></dt>
-<dd><p>Get probability corresponding to rng.permuted.</p>
+<dd><p>Get the joint mass of independently permuted slices, including repeats.</p>
+<p>With no axis, the entire flattened array is permuted. Otherwise each slice
+is shuffled independently. Repeated values contribute all indexed orders
+that produce the same observable result.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_permuted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]]))</span>
 <span class="go">np.float64(0.041666666666666664)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_permuted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]]),</span> <span class="mi">0</span><span class="p">)</span>
-<span class="go">np.float64(0.16666666666666666)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">calc_prob_for_permuted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]]),</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="mi">36</span><span class="p">))</span>
+<span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_permuted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]]),</span> <span class="mi">1</span><span class="p">)</span>
-<span class="go">np.float64(0.5)</span>
+<span class="go">np.float64(0.125)</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.calc_prob_for_shuffle_permutation">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_for_shuffle_permutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_valid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_for_shuffle_permutation" title="Link to this definition"></a></dt>
-<dd><p>Get probability corresponding to rng.shuffle and rng.permutation.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_for_shuffle_permutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_valid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_for_shuffle_permutation" title="Link to this definition"></a></dt>
+<dd><p>Get the mass of a shared-axis shuffle or permutation, including repeats.</p>
+<p>An explicit axis moves whole slices together. With no axis, preserve the
+helper’s flattened-array convention used by calc_prob_for_permuted.
+Repeated slices contribute every index ordering yielding the same output.
+When check_valid is False, infer the mass from options without checking x.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_shuffle_permutation</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 <span class="go">np.float64(0.5)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_shuffle_permutation</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
 <span class="go">np.float64(0.16666666666666666)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_shuffle_permutation</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">np.float64(0.3333333333333333)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_shuffle_permutation</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">np.float64(0.0)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2771,6 +2795,14 @@ generation, not the mass of those values. Empty draws have joint mass one.</p>
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.get_custom_pfunc">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_custom_pfunc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_handle</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_custom_pfunc" title="Link to this definition"></a></dt>
 <dd><p>Get callable for calc_func pdf/pmf function with provided arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_dirichlet_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_dirichlet_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_dirichlet_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get the joint density of complete Dirichlet vectors on the last axis.</p>
+<p>NumPy places components last; SciPy’s PDF expects them first. Leading axes
+represent independent draws, and size is only a generation argument.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2806,8 +2838,10 @@ density of the supplied samples.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.get_hypergeometric_pmf">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_hypergeometric_pmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_hypergeometric_pmf" title="Link to this definition"></a></dt>
-<dd><p>Get callable for scipy hypergeomeric pmf with numpy.random arguments.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_hypergeometric_pmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngood</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_hypergeometric_pmf" title="Link to this definition"></a></dt>
+<dd><p>Get a hypergeometric mass from NumPy’s scalar or array-like counts.</p>
+<p>Add population counts elementwise without narrow-integer overflow. NumPy’s
+optional size controls generation and does not change the supplied mass.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_hypergeometric_pmf</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">450</span><span class="p">,</span> <span class="mi">100</span><span class="p">)(</span><span class="mi">10</span><span class="p">)</span>
 <span class="go">np.float64(0.14736784420411747)</span>
@@ -2816,14 +2850,55 @@ density of the supplied samples.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_location_scale_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_location_scale_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_location_scale_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get a location-scale density without passing NumPy’s size to SciPy.</p>
+<p>The sample size controls generation, not the density of supplied values.
+Randname is the corresponding SciPy distribution name.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_location_scale_pdf</span><span class="p">(</span><span class="s2">&quot;laplace&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="go">np.float64(0.25)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.get_lognormal_pdf">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_lognormal_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_lognormal_pdf" title="Link to this definition"></a></dt>
-<dd><p>Get callable for scipy lognormal pdf with numpy.random arguments.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_lognormal_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_lognormal_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get a lognormal density using NumPy’s defaults for the underlying normal.</p>
+<p>Size controls sample generation and does not change the density.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_lognormal_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.25</span><span class="p">)(</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="go">np.float64(1.5957691216057308)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_lognormal_pdf</span><span class="p">()(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="go">np.float64(0.3989422804014327)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_multinomial_pmf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_multinomial_pmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pvals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_multinomial_pmf" title="Link to this definition"></a></dt>
+<dd><p>Get the joint mass of multinomial count vectors on the last axis.</p>
+<p>Removes NumPy’s optional size controls generation since it is not a PMF parameter.
+Leading axes are independent draws; n and pvals retain their broadcasting.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_multivariate_hypergeometric_pmf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_multivariate_hypergeometric_pmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'marginals'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_multivariate_hypergeometric_pmf" title="Link to this definition"></a></dt>
+<dd><p>Get joint finite-urn probabilities without forwarding sampling options.</p>
+<p>Size and method select NumPy’s sample layout and generation algorithm.
+SciPy’s PMF uses only the population counts and number of selected items.
+Empty batches of complete count vectors have the empty-product mass one.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_multivariate_normal_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_multivariate_normal_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_valid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'warn'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_multivariate_normal_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get Gaussian vector densities without forwarding generation-only options.</p>
+<p>Size, check_valid and tol configure NumPy sampling, not the density.
+Positive-semidefinite covariances use SciPy’s density on their support.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2842,11 +2917,22 @@ The optional draw size does not change the density of the supplied values.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_permuted_pfunc">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_permuted_pfunc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_permuted_pfunc" title="Link to this definition"></a></dt>
+<dd><p>Get a mass function using NumPy’s input/axis/output-buffer signature.</p>
+<p>Output buffers are used only during generation. Without options, retain the
+direct helper’s convention of inferring the population from supplied values.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.get_pfunc_for_dist">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_pfunc_for_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_pfunc_for_dist" title="Link to this definition"></a></dt>
 <dd><p>Get the probability mass/density function corresponding to a numpy random draw.</p>
 <p>Uses a call to scipy.stats when available (with the correct arguments), otherwise
 uses a custom function provided in this module.</p>
+<p>Univariate discrete and shape-family sampling sizes are accepted without
+shifting the support or changing distribution parameters.
+Poisson’s omitted rate uses NumPy’s default of one.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2892,6 +2978,8 @@ to calculate the probabilities/probability densities.</p>
 <span class="go">np.float64(0.15915494309189535)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">get_prob_for_rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;integers&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 <span class="go">np.float64(0.25)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">get_prob_for_rand</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;binomial&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mf">0.25</span><span class="p">))</span>
+<span class="go">True</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2909,6 +2997,18 @@ to calculate the probabilities/probability densities.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_shuffle_permutation_pfunc">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_shuffle_permutation_pfunc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_shuffle_permutation_pfunc" title="Link to this definition"></a></dt>
+<dd><p>Get shuffle/permutation mass using NumPy’s default shared axis.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_standard_cauchy_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_standard_cauchy_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_standard_cauchy_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get standard Cauchy density without using sample size as location.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.get_standard_gamma_pdf">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_standard_gamma_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_standard_gamma_pdf" title="Link to this definition"></a></dt>
 <dd><p>Get the joint density of NumPy standard Gamma draws (unit scale).</p>
@@ -2918,6 +3018,14 @@ to calculate the probabilities/probability densities.</p>
 <span class="go">np.float64(1.0)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_standard_normal_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_standard_normal_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_standard_normal_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get standard normal density, accepting generation-only size/dtype/out.</p>
+<p>The density has zero location and unit scale for every requested draw shape.
+The output buffer is not modified when evaluating the density.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2935,8 +3043,10 @@ The optional draw size does not change the density of the supplied values.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.get_triangular_pdf">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_triangular_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_triangular_pdf" title="Link to this definition"></a></dt>
-<dd><p>Get callable for scipy.triang corresponding to a numpy.random.triangular call.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_triangular_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_triangular_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get a triangular density from scalar or broadcastable array-like bounds.</p>
+<p>Convert parameters to floating point before subtraction, as NumPy’s generator
+does. The optional size controls generation and is not a density parameter.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_triangular_pdf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">)</span>
 <span class="go">np.float64(0.0)</span>
@@ -2973,6 +3083,19 @@ The optional draw size does not change the density of the supplied values.</p>
 The optional draw size does not change the density of the supplied values.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">get_vonmises_pdf</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)(</span><span class="mf">0.0</span><span class="p">),</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)))</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.container.rand.get_wald_pdf">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_wald_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_wald_pdf" title="Link to this definition"></a></dt>
+<dd><p>Get the inverse Gaussian density using NumPy’s Wald parameters.</p>
+<p>SciPy’s inverse Gaussian uses mean/scale as its shape and scale as its
+scale parameter, with zero location. Size only controls sample generation.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">get_wald_pdf</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)(</span><span class="mf">2.0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span> <span class="o">/</span> <span class="p">(</span><span class="mi">16</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))))</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -3194,7 +3317,7 @@ Otherwise gets the time at the next timestep.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.BaseTime.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.BaseTime.reset" title="Link to this definition"></a></dt>
-<dd><p>Reset time to the initial state.</p>
+<dd><p>Reset time and all execution flags while preserving timestep settings.</p>
 </dd></dl>
 
 <dl class="py method">

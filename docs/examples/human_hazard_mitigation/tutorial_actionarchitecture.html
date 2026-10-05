@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tutorial: ActionArchitecture &mdash; fmdtools 2.5.3 documentation</title>
+  <title>Tutorial: ActionArchitecture &mdash; fmdtools 2.5.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=0bbe9fa5"></script>
+      <script src="../../_static/documentation_options.js?v=c0370f68"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -1104,8 +1104,6 @@ add_act(self, name, actclass, *flownames, **fkwargs)
         Action class to instantiate
     *flownames : flow
         Flows (optional) which connect the actions
-    duration:
-        Duration of the action. Default is 0.0
     **kwargs : any
         kwargs to instantiate the Action with.
 </pre></div>
@@ -1157,7 +1155,7 @@ add_cond(self, start_action, end_action, name=&#39;auto&#39;, condition=&#39;pas
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on function build in module fmdtools.define.architecture.action:
 
-build(self, construct_graph=False, **kwargs)
+build(self, construct_graph=False, active_actions=(), **kwargs)
     Build the action graph.
 </pre></div>
 </div>
@@ -1219,7 +1217,7 @@ CONDS:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/eb452de3b3082babb42d77ec7365031e365c54b058b474b3bbba450386d36f74.png" src="../../_images/eb452de3b3082babb42d77ec7365031e365c54b058b474b3bbba450386d36f74.png" />
+<img alt="../../_images/15142105f6a59e092f8966d47ee8474089c46abc891a9fc6aa19cdaaf68f7980.png" src="../../_images/15142105f6a59e092f8966d47ee8474089c46abc891a9fc6aa19cdaaf68f7980.png" />
 </div>
 </div>
 <p>As shown, the “Percieve” action is active (green), while the inactive actions are shown in blue. This action is active because it was defined as initial_action in the ASG definition.</p>
@@ -1299,7 +1297,7 @@ CONDS:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
 </pre></div>
 </div>
-<img alt="../../_images/78da933e8ccdf268df41ef5da0550ccce651bde21d231c0d1c8e14fa8477a8ba.png" src="../../_images/78da933e8ccdf268df41ef5da0550ccce651bde21d231c0d1c8e14fa8477a8ba.png" />
+<img alt="../../_images/65747aa62a98c3398304c5d9fd12233cd0ab7e1daf8b2944bef63a0d27f7c5f6.png" src="../../_images/65747aa62a98c3398304c5d9fd12233cd0ab7e1daf8b2944bef63a0d27f7c5f6.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1366,7 +1364,7 @@ CONDS:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/eb452de3b3082babb42d77ec7365031e365c54b058b474b3bbba450386d36f74.png" src="../../_images/eb452de3b3082babb42d77ec7365031e365c54b058b474b3bbba450386d36f74.png" />
+<img alt="../../_images/15142105f6a59e092f8966d47ee8474089c46abc891a9fc6aa19cdaaf68f7980.png" src="../../_images/15142105f6a59e092f8966d47ee8474089c46abc891a9fc6aa19cdaaf68f7980.png" />
 </div>
 </div>
 <p>As shown, now that the hazard is no longer present, the “Ready” Condition is triggered and the ASG goes back to the percieve state.</p>
@@ -1442,7 +1440,7 @@ CONDS:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/1ca299177e3d1c6a2b9e15c32ca5b6aad2b52172da9be9f347335933d5d2a5d7.png" src="../../_images/1ca299177e3d1c6a2b9e15c32ca5b6aad2b52172da9be9f347335933d5d2a5d7.png" />
+<img alt="../../_images/caceada96157872c4949e598bf72cbfbd035cb9d6dcd38d0b1f4ec1c5c1600b1.png" src="../../_images/caceada96157872c4949e598bf72cbfbd035cb9d6dcd38d0b1f4ec1c5c1600b1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1728,7 +1726,7 @@ fxns.pass_hazard.s.hazards_propagated: array(61)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/5395bb43266f60d67e8b94beeaf0505a6ab95691e80fbbafa6ad1ed2164c49d6.png" src="../../_images/5395bb43266f60d67e8b94beeaf0505a6ab95691e80fbbafa6ad1ed2164c49d6.png" />
+<img alt="../../_images/b5d5526ec49a376efca15c75e47f262818d925c48c4604ffc2da3134addbb7e8.png" src="../../_images/b5d5526ec49a376efca15c75e47f262818d925c48c4604ffc2da3134addbb7e8.png" />
 </div>
 </div>
 <p>As shown, perceptions and actions track the hazards mitigated.</p>
@@ -1778,7 +1776,7 @@ fxns.pass_hazard.s.hazards_propagated: array(61)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/82f59184947ac28d9f0d2e91accfdd508aaeaed131bb64d2d42dc26f5dd94934.png" src="../../_images/82f59184947ac28d9f0d2e91accfdd508aaeaed131bb64d2d42dc26f5dd94934.png" />
+<img alt="../../_images/d960d776fdfaf74ec622be39987b970d1a89821c47cdc1e81f9a553427befbe6.png" src="../../_images/d960d776fdfaf74ec622be39987b970d1a89821c47cdc1e81f9a553427befbe6.png" />
 </div>
 </div>
 <p>As shown, this only shows up in the PassHazard function (since the fault is removed in one timestep).</p>
@@ -1790,7 +1788,7 @@ fxns.pass_hazard.s.hazards_propagated: array(61)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/24f779deabba3d0a3f9a6a824ff67bc6fd8dfa977470eb35a4e6cd06b3ac781e.png" src="../../_images/24f779deabba3d0a3f9a6a824ff67bc6fd8dfa977470eb35a4e6cd06b3ac781e.png" />
+<img alt="../../_images/d4bd9e030b04f1ee27cabb84c86e23301e8f393c9865226f3a6b0c52a4d212df.png" src="../../_images/d4bd9e030b04f1ee27cabb84c86e23301e8f393c9865226f3a6b0c52a4d212df.png" />
 </div>
 </div>
 <hr class="docutils" />
@@ -1882,40 +1880,40 @@ fxns.pass_hazard.s.hazards_propagated: array(61)
       <th>56</th>
       <td>True</td>
       <td>True</td>
-      <td>True</td>
-      <td>3</td>
+      <td>False</td>
+      <td>2</td>
       <td>56.0</td>
     </tr>
     <tr>
       <th>57</th>
       <td>True</td>
       <td>True</td>
-      <td>True</td>
-      <td>3</td>
+      <td>False</td>
+      <td>2</td>
       <td>57.0</td>
     </tr>
     <tr>
       <th>58</th>
       <td>True</td>
       <td>True</td>
-      <td>True</td>
-      <td>3</td>
+      <td>False</td>
+      <td>2</td>
       <td>58.0</td>
     </tr>
     <tr>
       <th>59</th>
       <td>True</td>
       <td>True</td>
-      <td>True</td>
-      <td>3</td>
+      <td>False</td>
+      <td>2</td>
       <td>59.0</td>
     </tr>
     <tr>
       <th>60</th>
       <td>True</td>
       <td>True</td>
-      <td>True</td>
-      <td>3</td>
+      <td>False</td>
+      <td>2</td>
       <td>60.0</td>
     </tr>
   </tbody>
@@ -2094,7 +2092,7 @@ m.sub_faults:                  array(61)
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: title={&#39;center&#39;: &#39; t=4&#39;}&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/7ad536db7447e4626dc3c1be68a24993ab44e58a950ed308f8ffdbcb7e76b824.png" src="../../_images/7ad536db7447e4626dc3c1be68a24993ab44e58a950ed308f8ffdbcb7e76b824.png" />
+<img alt="../../_images/ec445985f6532f6900cccf6bee13bad32fae4f287cd83294cf85a53c8fea61b3.png" src="../../_images/ec445985f6532f6900cccf6bee13bad32fae4f287cd83294cf85a53c8fea61b3.png" />
 </div>
 </div>
 <hr class="docutils" />
@@ -2118,7 +2116,7 @@ m.sub_faults:                  array(61)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c9bd46cbc75159bad197abf737c2b21176fbd1da83213d01bdfb4893a3424d1f.png" src="../../_images/c9bd46cbc75159bad197abf737c2b21176fbd1da83213d01bdfb4893a3424d1f.png" />
+<img alt="../../_images/db84291ea8d02c5b5c0b2a60ad1b8e7a383d618e676a092c889188d427002b12.png" src="../../_images/db84291ea8d02c5b5c0b2a60ad1b8e7a383d618e676a092c889188d427002b12.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2264,7 +2262,7 @@ act.m.sub_faults:              array(61)
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: title={&#39;center&#39;: &#39; t=4&#39;}&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/5ff50705c007b3d037b8df6f950fab89866358bdc4e9f181d37adf6a9d33a489.png" src="../../_images/5ff50705c007b3d037b8df6f950fab89866358bdc4e9f181d37adf6a9d33a489.png" />
+<img alt="../../_images/94c3ee4a4a89f21c8bb236a1f4f3e0e0daf366890b45401127fbc889c4b39575.png" src="../../_images/94c3ee4a4a89f21c8bb236a1f4f3e0e0daf366890b45401127fbc889c4b39575.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2275,7 +2273,7 @@ act.m.sub_faults:              array(61)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/0af11a649c463441b37f4b345158fef0c7a80bc659ac840d28383e6c57e59af3.png" src="../../_images/0af11a649c463441b37f4b345158fef0c7a80bc659ac840d28383e6c57e59af3.png" />
+<img alt="../../_images/536230a1bd1eb746de8584d0feebe0cf6fe4f99e7f4e7fa418c80dbe87aa7fdc.png" src="../../_images/536230a1bd1eb746de8584d0feebe0cf6fe4f99e7f4e7fa418c80dbe87aa7fdc.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2286,7 +2284,7 @@ act.m.sub_faults:              array(61)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/25cf42c7ff158fd7fe9efd6caa87570d6d1a877d944a3d2d94627c3ead8e9935.png" src="../../_images/25cf42c7ff158fd7fe9efd6caa87570d6d1a877d944a3d2d94627c3ead8e9935.png" />
+<img alt="../../_images/e68fe131c9cd77d2a27164d80f0d769315020f0d05e9d6da91dc01ae1aee332e.png" src="../../_images/e68fe131c9cd77d2a27164d80f0d769315020f0d05e9d6da91dc01ae1aee332e.png" />
 </div>
 </div>
 </section>

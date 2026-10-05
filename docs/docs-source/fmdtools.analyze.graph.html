@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.analyze.graph &mdash; fmdtools 2.5.3 documentation</title>
+  <title>fmdtools.analyze.graph &mdash; fmdtools 2.5.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=0bbe9fa5"></script>
+      <script src="../_static/documentation_options.js?v=c0370f68"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -2582,6 +2582,8 @@ with red nodes</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.base.Graph.calc_robustness_coefficient">
 <span class="sig-name descname"><span class="pre">calc_robustness_coefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.base.Graph.calc_robustness_coefficient" title="Link to this definition"></a></dt>
 <dd><p>Compute robustness coefficient of graph representation of model mdl.</p>
+<p>Each trial removes nodes from the entire graph, including disconnected
+components, to integrate the complete largest-component curve.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2611,6 +2613,8 @@ with red nodes</p>
 <dd><p>Compare this graph with another graph to identify structural differences.</p>
 <p>Useful for comparing different model variants, design alternatives, or
 tracking how model structure evolves across versions.</p>
+<p>When both graphs are undirected, edge endpoint order is ignored.
+Added and removed edges retain the endpoint tuples from their source graph.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>other_graph</strong> (<a class="reference internal" href="#fmdtools.analyze.graph.base.Graph" title="fmdtools.analyze.graph.base.Graph"><em>Graph</em></a>) – Another Graph object to compare with.</p>

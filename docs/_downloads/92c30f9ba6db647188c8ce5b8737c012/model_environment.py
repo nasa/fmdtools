@@ -165,7 +165,7 @@ class Threat(GeomPoint):
 
     def update_position(self):
         """Update position given known speed."""
-        self.s.update_position(self.s.buffer_speed)
+        self.s.update_position(maxvel=self.s.buffer_speed)
 
     def get_shapely_args(self):
         return (self.s.x, self.s.y)

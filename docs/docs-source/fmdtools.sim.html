@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.sim &mdash; fmdtools 2.5.3 documentation</title>
+  <title>fmdtools.sim &mdash; fmdtools 2.5.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=0bbe9fa5"></script>
+      <script src="../_static/documentation_options.js?v=c0370f68"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -1871,6 +1871,7 @@ for nominal simulations.</p></li>
 <li><p><strong>faultdomains</strong> (<em>dict</em><em>, </em><em>optional</em>) – dict of arguments to add_faultdomains. The default is {}.</p></li>
 <li><p><strong>faultsamples</strong> (<em>dict</em><em>, </em><em>optional</em>) – dict of arguments to add_faultsamples. The default is {}.</p></li>
 <li><p><strong>get_phasemap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to use the history to generate the phasemap used by SampleApproach.
+Generated history maps retain the configured model timestep.
 The default is False.</p></li>
 </ul>
 </dd>
@@ -2368,7 +2369,8 @@ or {‘fxnname’: {‘faultname’: Fault()}}</p>
 <dd><p>Update the injection with the given faults/disturbances.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>inj</strong> (<em>dict</em>) – Dict with structure {‘faults’: faults, ‘disturbances’: disturbances}</p>
+<dd class="field-odd"><p><strong>inj</strong> (<em>dict</em><em> or </em><a class="reference internal" href="#fmdtools.sim.scenario.Injection" title="fmdtools.sim.scenario.Injection"><em>Injection</em></a>) – Updates with structure {‘faults’: faults, ‘disturbances’: disturbances}.
+Omitted fields are unchanged; entries replace matching scopes or paths.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2385,15 +2387,16 @@ or {‘fxnname’: {‘faultname’: Fault()}}</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>joint_faults</strong> (<em>int</em>) – Joint Faults in the scenario</p></li>
-<li><p><strong>objects</strong> (<em>tuple</em>) – Objects in the model where the faults are to occur</p></li>
-<li><p><strong>modes</strong> (<em>tuple</em>) – Names of the fault modes</p></li>
+<li><p><strong>objects</strong> (<em>tuple</em>) – Unique object names in sorted order, independent of hash randomization.</p></li>
+<li><p><strong>modes</strong> (<em>tuple</em>) – Unique fault mode names in sorted order. Injection order is unchanged.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.scenario.JointFaultScenario.from_faults">
 <span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baserate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ind'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_cond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.JointFaultScenario.from_faults" title="Link to this definition"></a></dt>
-<dd><p>Generate JointFaultScenario given fault names, time.</p>
+<dd><p>Generate JointFaultScenario given fault names and injection time.</p>
+<p>None starts at injection; an explicit starttime of zero is retained.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2465,6 +2468,8 @@ or {‘fxnname’: {‘faultname’: Fault()}}</p>
 <dt class="sig sig-object py" id="fmdtools.sim.scenario.ParameterScenario.get_param">
 <span class="sig-name descname"><span class="pre">get_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NA'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.ParameterScenario.get_param" title="Link to this definition"></a></dt>
 <dd><p>Get a parameter from the scenario.</p>
+<p>Nested mappings are traversed when no literal dotted key matches.
+Missing paths or non-mapping intermediates return the given default.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2654,6 +2659,8 @@ or {‘fxnname’: {‘faultname’: Fault()}}</p>
 <dt class="sig sig-object py" id="fmdtools.sim.scenario.SingleFaultScenario.from_fault">
 <span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.SingleFaultScenario.from_fault" title="Link to this definition"></a></dt>
 <dd><p>Generate the fault scenario for faulttup at time.</p>
+<p>Simulation starts at <cite>time</cite> (the provided injection time) unless an alternative
+<cite>starttime</cite> argument is provided.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SingleFaultScenario</span><span class="o">.</span><span class="n">from_fault</span><span class="p">((</span><span class="s1">&#39;fxn&#39;</span><span class="p">,</span> <span class="s1">&#39;fault&#39;</span><span class="p">),</span> <span class="mi">10</span><span class="p">)</span>
 <span class="go">SingleFaultScenario(sequence={10.0: Injection(faults={&#39;fxn&#39;: [&#39;fault&#39;]}, disturbances={})}, times=(10,), obj=&#39;fxn&#39;, fault=&#39;fault&#39;, rate=1.0, name=&#39;fxn_fault_t10&#39;, time=10, phase=&#39;&#39;)</span>
@@ -3015,7 +3022,8 @@ must have been defined as a field in the Mode class.</p></li>
 <li><p><strong>dist_ranges</strong> (<em>dict</em>) – Ranges for the mode disturbances, e.g. {‘s.x’: (0, 5)} to elicit ranges
 or {‘s.x’: {1,2,3}} for defined sets</p></li>
 <li><p><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – Max number of modes to generate. If more than this, the modes are sampled
-randomply. The default is ‘all’.</p></li>
+randomly. Limits at or above the number of combinations retain the full
+space. The default is ‘all’.</p></li>
 <li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Seed for sampling the modes (if limited). The default is 42.</p></li>
 <li><p><strong>prefix</strong> (<em>str</em><em>, </em><em>optional</em>) – Prefix to differentiate different fault spaces. Default is ‘’.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to apply accross the faults.</p></li>
@@ -3103,7 +3111,8 @@ randomply. The default is ‘all’.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>faultdomain</strong> (<a class="reference internal" href="#fmdtools.sim.sample.FaultDomain" title="fmdtools.sim.sample.FaultDomain"><em>FaultDomain</em></a>) – Domain of faults to sample from</p></li>
-<li><p><strong>phasemap</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><em>PhaseMap</em></a><em>, </em><em>(</em><em>optional</em><em>)</em>) – Phases of operation to sample over.</p></li>
+<li><p><strong>phasemap</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><em>PhaseMap</em></a><em>, </em><em>(</em><em>optional</em><em>)</em>) – Phases of operation to sample over. The default model map uses both the
+model’s phases and its timestep. Explicit maps retain their own timestep.</p></li>
 </ul>
 </dd>
 </dl>
@@ -3186,7 +3195,9 @@ The default is {}.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>times</strong> (<em>list</em>) – List of times.</p></li>
-<li><p><strong>weights</strong> (<em>list</em><em>, </em><em>optional</em>) – Weight factors corresponding to the times The default is [].</p></li>
+<li><p><strong>weights</strong> (<em>list</em><em>, </em><em>optional</em>) – Weight factors corresponding to the times. Lists, tuples and arrays
+are supported, including explicit zero weights. An empty sequence
+or None selects implicit phase weights. The default is [].</p></li>
 <li><p><strong>n_joint</strong> (<em>int</em>) – Number of joint fault modes.</p></li>
 <li><p><strong>**joint_kwargs</strong> (<em>kwargs</em>) – baserate and p_cond arguments to add_joint_fault_scenario.</p></li>
 </ul>
@@ -3225,7 +3236,9 @@ The default is {}.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.FaultSample.add_joint_fault_scenario">
 <span class="sig-name descname"><span class="pre">add_joint_fault_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baserate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ind'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_cond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultSample.add_joint_fault_scenario" title="Link to this definition"></a></dt>
-<dd><p>Add a single fault scenario to the list of scenarios.</p>
+<dd><p>Add a joint fault scenario using this sample’s phase map.</p>
+<p>Phase-dependent opportunities and exposure times follow the same map as
+single-fault scenarios.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -3509,10 +3522,13 @@ If False, the constraint is met. If True, the constraint is violated.</p>
 <dt class="sig sig-object py" id="fmdtools.sim.sample.ParameterDomain.get_var_iters">
 <span class="sig-name descname"><span class="pre">get_var_iters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.ParameterDomain.get_var_iters" title="Link to this definition"></a></dt>
 <dd><p>Get iterables for each variable (provided given resolution).</p>
+<p>Creates iterable based on the provided set constraints or domain limits. If
+a numerical resolution is provided that does not line up with the greater
+end point, that point will be cut off (see example).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>resolution</strong> (<em>float</em><em>, </em><em>optional</em>) – Default resolution for the ranges. The default is 1.</p></li>
+<li><p><strong>resolution</strong> (<em>float</em><em>, </em><em>optional</em>) – Default (finite, positive) resolution for the ranges. The default is 1.</p></li>
 <li><p><strong>resolutions</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dict of resolutions for each variable e.g. {‘var1’: 0.1}.
 The default is {}.</p></li>
 </ul>
@@ -3527,6 +3543,8 @@ The default is {}.</p></li>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">expd</span><span class="o">.</span><span class="n">get_var_iters</span><span class="p">()</span>
 <span class="go">{&#39;y&#39;: array([1., 2., 3., 4.]), &#39;x&#39;: array([ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10.])}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expd</span><span class="o">.</span><span class="n">get_var_iters</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
+<span class="go">{&#39;y&#39;: array([1., 2., 3., 4.]), &#39;x&#39;: array([0., 4., 8.])}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -3727,7 +3745,7 @@ replicate scenarios to sample. If ‘all’, all replicates in the group.</p></l
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.ParameterSample">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">ParameterSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paramdomain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ParameterDomain</span> <span class="pre">with:</span>&#160; <span class="pre">-</span> <span class="pre">variables:</span> <span class="pre">{}</span>&#160; <span class="pre">-</span> <span class="pre">constants:</span> <span class="pre">{}</span>&#160; <span class="pre">-</span> <span class="pre">parameter_initializer:</span> <span class="pre">Parameter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.ParameterSample" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">ParameterSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paramdomain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.ParameterSample" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSample</span></code></a></p>
 <p>Class for sampling parameters and other immutable model attributes.</p>
 <p>…</p>
@@ -3975,7 +3993,7 @@ samples). The default is 1.0.</p></li>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_ps</span> <span class="o">=</span> <span class="n">ParameterSample</span><span class="p">(</span><span class="n">expd</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_ps</span><span class="o">.</span><span class="n">combine_random</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="go">[[np.float64(2.0), 9.504636963259353]]</span>
+<span class="go">[[2.0, 9.504636963259353]]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -3990,7 +4008,7 @@ samples). The default is 1.0.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.SampleApproach">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">SampleApproach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemaps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">def_mdl_phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.SampleApproach" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">SampleApproach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemaps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">def_mdl_phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.SampleApproach" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSample</span></code></a></p>
 <p>Class for defining an agglomeration of fault samples accross an entire model.</p>
 <dl class="py attribute">
@@ -4103,7 +4121,8 @@ where args and kwargs are arguments/kwargs to SampleApproach.add_faultdomain
 <li><p><strong>name</strong> (<em>str</em>) – Name for the faultsample.</p></li>
 <li><p><strong>add_method</strong> (<em>str</em>) – Method to add scenarios to the FaultSample with.
 (e.g., to call Faultdomain.add_fault_times, use “fault_times”)</p></li>
-<li><p><strong>faultdomain</strong> (<em>str</em><em> or </em><em>list</em>) – Name of faultdomain to sample from (must be in SampleApproach already).</p></li>
+<li><p><strong>faultdomains</strong> (<em>str</em><em> or </em><em>list</em>) – Registered domain name or list of names. Multiple names construct a
+JointFaultSample from those domains and the selected phase maps.</p></li>
 <li><p><strong>*args</strong> (<em>args</em>) – args to add_method.</p></li>
 <li><p><strong>phasemap</strong> (<em>str/PhaseMap/dict/tuple</em><em>, </em><em>optional</em>) – Phasemap to instantiate the FaultSample with. If a dict/tuple is provided,
 uses a PhaseMap with the dict/tuple as phases. The default is {}.
@@ -4211,6 +4230,7 @@ where args and kwargs are arguments/kwargs to SampleApproach.add_faultsample
 <dt class="sig sig-object py" id="fmdtools.sim.sample.combine_random">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">combine_random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ranges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_combos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.combine_random" title="Link to this definition"></a></dt>
 <dd><p>Create random lists from the given ranges.</p>
+<p>Discrete choices retain their original values and types, including tuples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -4250,7 +4270,10 @@ where args and kwargs are arguments/kwargs to SampleApproach.add_faultsample
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.sample_times_even">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">sample_times_even</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numpts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.sample_times_even" title="Link to this definition"></a></dt>
-<dd><p>Get sample time for the number of points from sampling evenly.</p>
+<dd><p>Get sample times by rounding evenly spaced quantiles to the timestep.</p>
+<p>Rounded values outside the supplied support are snapped to its nearest
+available time. This keeps disconnected mode phases and offset grids valid
+while preserving existing rounding when its result is already available.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -4277,6 +4300,9 @@ where args and kwargs are arguments/kwargs to SampleApproach.add_faultsample
 <dt class="sig sig-object py" id="fmdtools.sim.sample.sample_times_quad">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">sample_times_quad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.sample_times_quad" title="Link to this definition"></a></dt>
 <dd><p>Get the sample times for the given quadrature defined by nodes and weights.</p>
+<p>Nodes snapping to the same discrete time have their normalized weights
+combined. Each time is returned once, in first-occurrence order, so named
+fault scenarios do not discard duplicate nodes’ probability mass.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -4760,7 +4786,8 @@ than the full set of potential timesteps.</p>
 </dd>
 <dt>comparator<span class="classifier">str</span></dt><dd><p>Whether the constraint is ‘greater’, ‘less’, ‘equal’, or ‘notequal’.</p>
 </dd>
-<dt>or_equal<span class="classifier">bool</span></dt><dd><p>Whether comparator includes equality (e.g., greater or equalto) or not.</p>
+<dt>or_equal<span class="classifier">bool</span></dt><dd><p>Whether comparator includes equality (e.g., greater or equalto) or not.
+The ‘notequal’ comparator always excludes equality.</p>
 </dd>
 <dt>satisfied<span class="classifier">bool</span></dt><dd><p>Whether the constraint is satisfied.</p>
 </dd>
@@ -5911,7 +5938,8 @@ The default is ‘’.</p></li>
 </dd>
 <dt>comparator<span class="classifier">str</span></dt><dd><p>Whether the constraint is ‘greater’, ‘less’, ‘equal’, or ‘notequal’.</p>
 </dd>
-<dt>or_equal<span class="classifier">bool</span></dt><dd><p>Whether comparator includes equality (e.g., greater or equalto) or not.</p>
+<dt>or_equal<span class="classifier">bool</span></dt><dd><p>Whether comparator includes equality (e.g., greater or equalto) or not.
+The ‘notequal’ comparator always excludes equality.</p>
 </dd>
 <dt>satisfied<span class="classifier">bool</span></dt><dd><p>Whether the constraint is satisfied.</p>
 </dd>
@@ -5995,7 +6023,8 @@ The default is ‘’.</p></li>
 <section id="id30">
 <h3>Fields<a class="headerlink" href="#id30" title="Link to this heading"></a></h3>
 <dl class="simple">
-<dt>time<span class="classifier">float</span></dt><dd><p>Time the objective is called at. If None, time will be the end of the sim.</p>
+<dt>time<span class="classifier">float</span></dt><dd><p>Time the objective is called at. If None, time will be the end of the sim.
+An explicit zero selects the initial simulation time.</p>
 </dd>
 <dt>method<span class="classifier">callable</span></dt><dd><p>Method to tabulate for the objective. Default is np.sum.</p>
 </dd>
@@ -6168,7 +6197,7 @@ The default is ‘’.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.SimpleProblem.update_objectives">
 <span class="sig-name descname"><span class="pre">update_objectives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.SimpleProblem.update_objectives" title="Link to this definition"></a></dt>
-<dd><p>Update objectives/constraints by calling callables.</p>
+<dd><p>Evaluate callables from scalar arguments or a packed variable vector.</p>
 </dd></dl>
 
 </dd></dl>
