@@ -256,7 +256,7 @@ class BaseProblem(object):
 
     def new_x(self, *x):
         """Check if a given x is the same as the current value of x."""
-        return not self.current_x() == list(x)
+        return not self.current_x() == list(unpack_x(*x))
 
     def get_objectives(self):
         """Get all current objective values."""
@@ -450,7 +450,8 @@ class SimpleProblem(BaseProblem):
         super().__init__(**kwargs)
 
     def update_objectives(self, *x):
-        """Update objectives/constraints by calling callables."""
+        """Evaluate callables from scalar arguments or a packed variable vector."""
+        x = unpack_x(*x)
         self.update_variables(*x)
         for objname, obj in {**self.objectives, **self.constraints}.items():
             obj.update(np.float64(self.callables[objname](*x)))
