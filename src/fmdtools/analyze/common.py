@@ -35,6 +35,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import math
 import numpy as np
 import os
 import matplotlib.pyplot as plt
@@ -357,9 +358,25 @@ def calc_metric_ci(data, method=np.average, return_anyway=False, interval=None,
         raise Exception("All data are the same!")
 
 
+def _uniform_rate(data, axis=None):
+    """Assign uniform mass over reduced axes, preserving unreduced dimensions."""
+    shape = np.shape(data)
+    if axis is None:
+        count = np.size(data)
+    elif not shape:
+        count = 1  # NumPy's subsequent reduction validates scalar axes.
+    else:
+        axes = axis if isinstance(axis, tuple) else (axis,)
+        count = math.prod(shape[a] for a in axes)
+    return 1 / count
+
+
 def calc_rate(data, rates=None, weights=None, **kwargs):
     """
     Calculate a rate of a non-zero value in data using calc_metric.
+
+    With no explicit rates, use equal probability over the selected axis/axes.
+    Other dimensions, such as history time, do not dilute each reduced rate.
 
     Examples
     --------
@@ -369,21 +386,24 @@ def calc_rate(data, rates=None, weights=None, **kwargs):
     np.float64(0.2)
     """
     if rates is None:
-        rates = 1/np.size(data)
+        rates = _uniform_rate(data, kwargs.get('axis'))
     kwar = {**kwargs, 'method': np.sum, 'dtype': bool, 'rates': rates}
     return calc_metric(data, **kwar)
 
 
 def calc_percent(data, weights=None, rates=None, **kwargs):
     """
-    Calculate a percent of a non-zero value in data using calc_metric.
+    Calculate a weighted fraction of non-zero values using calc_metric.
+
+    Weights are passed to the averaging method; omitted weights give each value
+    equal influence. Rates remain separate from percentage weights.
 
     Examples
     --------
     >>> calc_percent([0, 10, 0])
     np.float64(0.333333)
     """
-    return calc_metric(data, **{**kwargs, 'dtype': bool})
+    return calc_metric(data, **{**kwargs, 'dtype': bool, 'weights': weights})
 
 
 def calc_total(data, weights=None, **kwargs):
@@ -404,6 +424,9 @@ def calc_expected(data, rates=None, weights=None, **kwargs):
     """
     Calculate the expected value of given data using calc_metric.
 
+    With no explicit rates, use equal probability over the selected axis/axes.
+    Explicit rates retain their existing weighted-sum interpretation.
+
     Examples
     --------
     >>> calc_expected([0, 5, 10]) # defaults to average
@@ -412,7 +435,7 @@ def calc_expected(data, rates=None, weights=None, **kwargs):
     np.float64(3.5)
     """
     if rates is None:
-        rates = 1/np.size(data)
+        rates = _uniform_rate(data, kwargs.get('axis'))
     return calc_metric(data, **{**kwargs, 'method': np.sum, 'rates': rates})
 
 

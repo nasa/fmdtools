@@ -346,7 +346,11 @@ def same_mode(modename1, modename2, exact=True):
 
 def sample_times_even(times, numpts, dt=1.0):
     """
-    Get sample time for the number of points from sampling evenly.
+    Get sample times by rounding evenly spaced quantiles to the timestep.
+
+    Rounded values outside the supplied support are snapped to its nearest
+    available time. This keeps disconnected mode phases and offset grids valid
+    while preserving existing rounding when its result is already available.
 
     Parameters
     ----------
@@ -372,6 +376,10 @@ def sample_times_even(times, numpts, dt=1.0):
     else:
         pts = [np.quantile(times, p/(numpts+1)) for p in range(numpts+2)][1:-1]
         sampletimes = [round(pt/dt)*dt for pt in pts]
+        available = np.asarray(times)
+        sampletimes = [time if np.any(available == time)
+                       else times[np.argmin(np.abs(available - time))]
+                       for time in sampletimes]
     weights = [1/len(sampletimes) for i in sampletimes]
     return sampletimes, weights
 
@@ -379,6 +387,10 @@ def sample_times_even(times, numpts, dt=1.0):
 def sample_times_quad(times, nodes, weights):
     """
     Get the sample times for the given quadrature defined by nodes and weights.
+
+    Nodes snapping to the same discrete time have their normalized weights
+    combined. Each time is returned once, in first-occurrence order, so named
+    fault scenarios do not discard duplicate nodes' probability mass.
 
     Parameters
     ----------
@@ -409,7 +421,10 @@ def sample_times_quad(times, nodes, weights):
         exac_times = [np.quantile(times, q) for q in quantiles]
         sampletimes = [times[np.argmin(np.abs(np.array(times)-t))] for t in exac_times]
         weights = np.array(weights)/sum(weights)
-    return sampletimes, list(weights)
+    combined = {}
+    for i, time in enumerate(sampletimes):
+        combined[time] = combined.get(time, 0.0) + weights[i]
+    return list(combined), list(combined.values())
 
 
 class FaultDomain(object):
@@ -487,7 +502,8 @@ class FaultDomain(object):
             or {'s.x': {1,2,3}} for defined sets
         n : int, optional
             Max number of modes to generate. If more than this, the modes are sampled
-            randomply. The default is 'all'.
+            randomly. Limits at or above the number of combinations retain the full
+            space. The default is 'all'.
         seed : int, optional
             Seed for sampling the modes (if limited). The default is 42.
         prefix : str, optional
@@ -526,7 +542,7 @@ class FaultDomain(object):
         statecombos = [i for i in itertools.product(*dist_ranges.values())]
 
         # refine state combos given limited number to sample
-        if type(n) is int and len(statecombos) > 0:
+        if type(n) is int and len(statecombos) > n:
             rng = np.random.default_rng(seed)
             full_list = [i for i, _ in enumerate(statecombos)]
             sample = rng.choice(full_list, size=n, replace=False)
@@ -860,7 +876,8 @@ class FaultSample(BaseSample):
     faultdomain: FaultDomain
         Domain of faults to sample from
     phasemap: PhaseMap, (optional)
-        Phases of operation to sample over.
+        Phases of operation to sample over. The default model map uses both the
+        model's phases and its timestep. Explicit maps retain their own timestep.
 
     Attributes
     ----------
@@ -888,7 +905,8 @@ class FaultSample(BaseSample):
     def __init__(self, faultdomain, phasemap={}, def_mdl_phasemap=True):
         self.faultdomain = faultdomain
         if not phasemap and def_mdl_phasemap:
-            phasemap = PhaseMap(faultdomain.mdl.sp.phases)
+            phasemap = PhaseMap(faultdomain.mdl.sp.phases,
+                                dt=faultdomain.mdl.sp.dt)
         self.phasemap = phasemap
         self._scenarios = []
         self._times = set()
@@ -1167,11 +1185,12 @@ class SampleApproach(BaseSample):
         Dict of the FaultSamples making up the approach {'samplename': FaultSample}
     """
 
-    def __init__(self, mdl, phasemaps={}, def_mdl_phasemap=True):
+    def __init__(self, mdl, phasemaps=None, def_mdl_phasemap=True):
+        """Own the map registry while preserving supplied PhaseMap objects."""
         self.mdl = mdl
+        self.phasemaps = {} if phasemaps is None else dict(phasemaps)
         if def_mdl_phasemap:
-            phasemaps['mdl'] = PhaseMap(self.mdl.sp.phases)
-        self.phasemaps = phasemaps
+            self.phasemaps['mdl'] = PhaseMap(self.mdl.sp.phases)
         self.faultdomains = {}
         self.faultsamples = {}
 
@@ -1239,8 +1258,9 @@ class SampleApproach(BaseSample):
         add_method : str
             Method to add scenarios to the FaultSample with.
             (e.g., to call Faultdomain.add_fault_times, use "fault_times")
-        faultdomain : str or list
-            Name of faultdomain to sample from (must be in SampleApproach already).
+        faultdomains : str or list
+            Registered domain name or list of names. Multiple names construct a
+            JointFaultSample from those domains and the selected phase maps.
         *args : args
             args to add_method.
         phasemap : str/PhaseMap/dict/tuple, optional
@@ -1286,7 +1306,10 @@ class SampleApproach(BaseSample):
             raise Exception("Invalid arg for phasemap: "+str(phasemap))
         if type(faultdomains) is list:
             if len(faultdomains) > 1:
-                faultsample = JointFaultSample(faultdomains, phasemap)
+                domains = [self.faultdomains[name] for name in faultdomains]
+                maps = phasemap if isinstance(phasemap, list) else (
+                    [phasemap] if phasemap else [])
+                faultsample = JointFaultSample(*domains, phasemaps=maps)
             else:
                 faultsample = FaultSample(self.faultdomains[faultdomains[0]], phasemap)
         else:

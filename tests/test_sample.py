@@ -17,12 +17,23 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
+import copy
+import itertools
 import unittest
+
+import numpy as np
 
 from fmdtools.analyze.phases import PhaseMap, join_phasemaps
 from fmdtools.define.architecture.function import ExFxnArch
+from fmdtools.define.block.function import ExampleFunction
 from fmdtools.sim import propagate
-from fmdtools.sim.sample import FaultDomain, FaultSample, JointFaultSample
+from fmdtools.sim.sample import (
+    FaultDomain,
+    FaultSample,
+    JointFaultSample,
+    sample_times_quad,
+    sample_times_even,
+)
 
 
 def make_domains():
@@ -153,12 +164,337 @@ class TestJointFaultSample(unittest.TestCase):
         for use_model_phases in (False, True):
             with self.subTest(use_model_phases=use_model_phases):
                 domains = make_domains()
-                sample = FaultSample(
-                    domains[0], def_mdl_phasemap=use_model_phases
-                )
+                sample = FaultSample(domains[0], def_mdl_phasemap=use_model_phases)
                 self.assertEqual(sample.scenarios(), [])
                 self.assertEqual(sample.get_times(), [])
                 self.assertEqual(bool(sample.phasemap), use_model_phases)
+
+
+class TestFaultSpaceSampleLimit(unittest.TestCase):
+    """Treat the requested number of disturbance combinations as a maximum."""
+
+    def make_domain(self, ranges, n="all", seed=42, **kwargs):
+        domain = FaultDomain(ExFxnArch())
+        domain.add_fault_space(
+            "ex_fxn",
+            "low",
+            copy.deepcopy(ranges),
+            n=n,
+            seed=seed,
+            prefix="space",
+            **kwargs,
+        )
+        return domain
+
+    def test_large_and_equal_limits_keep_the_complete_fault_space(self):
+        for ranges, population in (
+            ({"s.x": {7.0, 11.0}}, 3),
+            ({"s.x": (1.0, 3.0, 3)}, 4),
+            ({"s.x": {7.0, 11.0}, "s.y": {-1.0, 2.0}}, 9),
+            ({}, 1),
+        ):
+            complete = self.make_domain(ranges)
+            for cap in (population, population + 1, 100, "all"):
+                with self.subTest(ranges=ranges, cap=cap):
+                    actual = self.make_domain(ranges, n=cap)
+                    self.assertEqual(
+                        {key: fault.asdict() for key, fault in actual.faults.items()},
+                        {key: fault.asdict() for key, fault in complete.faults.items()},
+                    )
+                    self.assertEqual(len(actual.faults), population - 1)
+                    for key, fault in actual.faults.items():
+                        self.assertTrue(key[2].startswith("space"))
+                        self.assertAlmostEqual(fault.prob, 1.0 / population)
+
+    def test_smaller_limits_preserve_seeded_selection_and_probabilities(self):
+        ranges = {"s.x": {7.0, 11.0}, "s.y": {-1.0, 2.0}}
+        possible = {
+            tuple(
+                (state, value)
+                for state, value in zip(ranges, values)
+                if value is not None
+            )
+            for values in itertools.product((7.0, 11.0, None), (-1.0, 2.0, None))
+        } - {()}
+        for cap in (1, 2, 5):
+            for seed in (0, 42):
+                for kwargs in ({}, {"prob": 0.2, "cost": 17.0}):
+                    with self.subTest(cap=cap, seed=seed, kwargs=kwargs):
+                        first = self.make_domain(ranges, cap, seed, **kwargs)
+                        repeated = self.make_domain(ranges, cap, seed, **kwargs)
+                        self.assertEqual(
+                            {
+                                key: fault.asdict()
+                                for key, fault in first.faults.items()
+                            },
+                            {
+                                key: fault.asdict()
+                                for key, fault in repeated.faults.items()
+                            },
+                        )
+                        # The sampled all-nominal combination creates no fault.
+                        self.assertIn(len(first.faults), (cap - 1, cap))
+                        self.assertEqual(
+                            len(
+                                {fault.disturbances for fault in first.faults.values()}
+                            ),
+                            len(first.faults),
+                        )
+                        for fault in first.faults.values():
+                            self.assertIn(fault.disturbances, possible)
+                            self.assertAlmostEqual(
+                                fault.prob, kwargs.get("prob", 1 / cap)
+                            )
+                            self.assertEqual(fault.cost, kwargs.get("cost", 0.0))
+
+    def test_larger_limit_propagates_every_available_disturbance(self):
+        for staged in (False, True):
+            with self.subTest(staged=staged):
+                model = ExampleFunction(sp={"end_time": 4.0})
+                domain = FaultDomain(model)
+                domain.add_fault_space(
+                    "examplefunction", "low", {"s.x": {7.0, 11.0}}, n=20
+                )
+                sample = FaultSample(domain)
+                sample.add_fault_times([1.0, 3.0])
+                self.assertEqual(len(sample.named_scenarios()), 4)
+                result, history = propagate.fault_sample(
+                    model, sample, staged=staged, showprogress=False
+                )
+                weighted_total = 0.0
+                for scenario in sample.scenarios():
+                    time = scenario.times[0]
+                    injection = scenario.sequence[time].faults["examplefunction"]["low"]
+                    value = dict(injection["disturbances"])["s.x"]
+                    self.assertIn(value, (7.0, 11.0))
+                    self.assertAlmostEqual(scenario.rate, 1.0 / 6)
+                    expected_x = [float(i) if i < time else value for i in range(5)]
+                    actual = history.get(scenario.name)
+                    np.testing.assert_array_equal(actual.get("s.x"), expected_x)
+                    outcome = value + 3.0 * (5.0 - time)
+                    self.assertEqual(
+                        result.get(scenario.name).get("tend.classify.xy"), outcome
+                    )
+                    weighted_total += scenario.rate * outcome
+                self.assertAlmostEqual(weighted_total, 12.0)
+                self.assertEqual(model.s.x, 0.0)
+                self.assertEqual(model.m.faults, set())
+class TestQuadratureSampleMass(unittest.TestCase):
+    """Nodes snapping to one injection time retain their combined probability."""
+
+    def test_coincident_nodes_combine_weights_in_first_occurrence_order(self):
+        times = [0.0, 1.0, 2.0, 3.0]
+        nodes = [0.9, -0.9, -0.8, 0.8]
+        weights = [1.0, 2.0, 3.0, 4.0]
+        for wrap in (list, tuple, np.asarray):
+            with self.subTest(container=wrap.__name__):
+                before = [np.array(x) for x in (times, nodes, weights)]
+                actual_times, actual_weights = sample_times_quad(
+                    wrap(times), wrap(nodes), wrap(weights)
+                )
+                np.testing.assert_array_equal(actual_times, [3.0, 0.0])
+                np.testing.assert_allclose(actual_weights, [0.5, 0.5], rtol=1e-14)
+                for previous, actual in zip(before, (times, nodes, weights)):
+                    np.testing.assert_array_equal(previous, actual)
+
+    def test_legendre_rules_preserve_discretized_integrals_and_probability_mass(self):
+        for count in (2, 3, 5, 10, 16):
+            for offset, spacing in ((0.0, 1.0), (0.25, 0.5)):
+                with self.subTest(count=count, offset=offset, spacing=spacing):
+                    times = offset + np.arange(count) * spacing
+                    nodes, weights = np.polynomial.legendre.leggauss(count)
+                    normalized = weights / weights.sum()
+                    raw = [
+                        times[
+                            np.argmin(
+                                np.abs(times - np.quantile(times, (node + 1) / 2))
+                            )
+                        ]
+                        for node in nodes
+                    ]
+                    selected, merged = sample_times_quad(times, nodes, weights)
+                    self.assertEqual(len(selected), len(set(selected)))
+                    self.assertEqual(set(selected), set(raw))
+                    self.assertAlmostEqual(sum(merged), 1.0, places=14)
+                    for t, weight in zip(selected, merged):
+                        self.assertAlmostEqual(
+                            weight,
+                            sum(w for raw_t, w in zip(raw, normalized) if raw_t == t),
+                            places=14,
+                        )
+                    for values in (
+                        lambda x: np.ones_like(x),
+                        lambda x: x,
+                        lambda x: x**2,
+                    ):
+                        self.assertAlmostEqual(
+                            np.dot(merged, values(np.asarray(selected))),
+                            np.dot(normalized, values(np.asarray(raw))),
+                            places=12,
+                        )
+
+    def test_distinct_nodes_and_existing_length_validation_are_preserved(self):
+        selected, weights = sample_times_quad([0, 1, 2, 3, 4], [-0.5, 0.5], [1, 3])
+        self.assertEqual(selected, [1, 3])
+        np.testing.assert_array_equal(weights, [0.25, 0.75])
+        selected, weights = sample_times_quad([2], [0.0], [2.0])
+        self.assertEqual(selected, [2])
+        self.assertEqual(weights, [1.0])
+        with self.assertRaisesRegex(Exception, "Nodes length"):
+            sample_times_quad([1, 2], [-1.0, 0.0, 1.0], [1.0, 1.0, 1.0])
+
+    def test_fault_sample_names_do_not_discard_quadrature_probability(self):
+        model = ExampleFunction(sp={"end_time": 9.0})
+        domain = FaultDomain(model)
+        domain.add_fault(model.name, "no_charge")
+        sample = FaultSample(domain, phasemap=PhaseMap({"standby": [0.0, 9.0]}))
+        nodes, weights = np.polynomial.legendre.leggauss(10)
+        sample.add_fault_phases("standby", method="quad", args=(nodes, weights))
+        self.assertEqual(sample.num_scenarios(), 8)
+        self.assertEqual(len(sample.named_scenarios()), sample.num_scenarios())
+        self.assertEqual(len(sample.get_times()), sample.num_scenarios())
+        probability = model.m.get_fault("no_charge").prob
+        self.assertAlmostEqual(
+            sum(s.rate for s in sample.named_scenarios().values()),
+            probability,
+            places=15,
+        )
+        expected_at_one = probability * (weights[1] + weights[2]) / weights.sum()
+        at_one = [s for s in sample.scenarios() if s.time == 1.0]
+        self.assertEqual(len(at_one), 1)
+        self.assertAlmostEqual(at_one[0].rate, expected_at_one, places=15)
+
+    def test_staged_and_unstaged_simulations_keep_the_weighted_quadrature_outcome(self):
+        model = ExampleFunction(sp={"end_time": 9.0})
+        domain = FaultDomain(model)
+        domain.add_fault(model.name, "no_charge")
+        sample = FaultSample(domain, phasemap=PhaseMap({"standby": [0.0, 9.0]}))
+        nodes, weights = np.polynomial.legendre.leggauss(10)
+        sample.add_fault_phases("standby", method="quad", args=(nodes, weights))
+        raw_times = np.array([0.0, 1.0, 1.0, 3.0, 4.0, 5.0, 6.0, 8.0, 8.0, 9.0])
+        nominal_steps = np.maximum(raw_times - 1.0, 0.0)
+        costs = nominal_steps * model.p.x + (9.0 - nominal_steps) * model.p.y
+        expected = model.m.get_fault("no_charge").prob * np.dot(
+            weights / weights.sum(), costs
+        )
+        reference_history = None
+        for staged in (False, True):
+            with self.subTest(staged=staged):
+                result, history = propagate.fault_sample(
+                    model, sample, staged=staged, showprogress=False
+                )
+                self.assertEqual(len(result.nest(levels=1)), sample.num_scenarios() + 1)
+                actual = sum(
+                    s.rate * result.get(s.name + ".tend.classify.xy")
+                    for s in sample.named_scenarios().values()
+                )
+                self.assertAlmostEqual(actual, expected, places=13)
+                if reference_history is not None:
+                    self.assertEqual(history, reference_history)
+                reference_history = history
+                for scenario in sample.scenarios():
+                    hist = history.get(scenario.name)
+                    self.assertEqual(hist.get_fault_time(), int(scenario.time))
+class TestEvenSamplingSupport(unittest.TestCase):
+    """Even samples stay on the supplied support, including disconnected modes."""
+
+    def test_gapped_shifted_and_sparse_supports_never_create_unavailable_times(self):
+        cases = (
+            ([0.0, 1.0, 2.0, 10.0, 11.0, 12.0], 3, 1.0),
+            ([0.0, 0.5, 1.0, 5.0, 5.5, 6.0], 3, 0.5),
+            ([0.25, 1.25, 2.25, 3.25, 4.25], 2, 1.0),
+            ([0.0, 1.0, 10.0, 11.0, 100.0, 101.0], 3, 1.0),
+            ([0.0, 0.1, 0.7, 0.8, 4.2, 4.3], 3, 0.1),
+        )
+        for values, count, dt in cases:
+            for wrap in (list, tuple, np.asarray):
+                with self.subTest(values=values, container=wrap.__name__, dt=dt):
+                    times = wrap(values)
+                    before = np.asarray(times).copy()
+                    sampled, weights = sample_times_even(times, count, dt=dt)
+                    self.assertEqual(len(sampled), count)
+                    self.assertTrue(set(sampled).issubset(values))
+                    self.assertEqual(len(set(sampled)), len(sampled))
+                    self.assertAlmostEqual(sum(weights), 1.0)
+                    np.testing.assert_array_equal(weights, np.full(count, 1.0 / count))
+                    np.testing.assert_array_equal(times, before)
+
+    def test_existing_uniform_grid_rounding_and_all_times_fallback_are_unchanged(self):
+        for count in (1, 2, 3, 4, 6):
+            for dt in (1.0, 0.5, 2.0):
+                with self.subTest(count=count, dt=dt):
+                    times = np.arange(7) * dt
+                    if count + 2 > len(times):
+                        expected = times
+                    else:
+                        expected = [
+                            round(np.quantile(times, p / (count + 1)) / dt) * dt
+                            for p in range(1, count + 1)
+                        ]
+                    actual, weights = sample_times_even(times, count, dt=dt)
+                    np.testing.assert_array_equal(actual, expected)
+                    self.assertAlmostEqual(sum(weights), 1.0)
+        integer_grid, _ = sample_times_even([0, 1, 2, 3, 4], 2)
+        self.assertEqual(integer_grid, [1.0, 3.0])
+        self.assertTrue(all(type(value) is float for value in integer_grid))
+        for times in ([], [3.0], [3.0, 4.0]):
+            with self.subTest(times=times):
+                actual, weights = sample_times_even(times, 3)
+                self.assertEqual(actual, times)
+                self.assertEqual(len(weights), len(times))
+
+    def test_modephase_sampling_keeps_total_probability_out_of_excluded_modes(self):
+        for include_gap in (False, True):
+            with self.subTest(include_gap=include_gap):
+                model = ExampleFunction(sp={"end_time": 12.0})
+                domain = FaultDomain(model)
+                domain.add_fault(model.name, "no_charge")
+                phases = {"standby": [0.0, 2.0], "standby1": [10.0, 12.0]}
+                modephases = {"standby": {"standby", "standby1"}}
+                if include_gap:
+                    phases["charge"] = [3.0, 9.0]
+                    modephases["charge"] = {"charge"}
+                phase_map = PhaseMap(phases, modephases)
+                sample = FaultSample(domain, phasemap=phase_map)
+                sample.add_fault_phases("standby", method="even", args=(3,))
+                for scenario in sample.scenarios():
+                    self.assertEqual(
+                        phase_map.find_base_phase(scenario.time), "standby"
+                    )
+                    self.assertGreater(scenario.rate, 0.0)
+                self.assertAlmostEqual(
+                    sum(s.rate for s in sample.scenarios()),
+                    model.m.get_fault("no_charge").prob,
+                    places=15,
+                )
+                self.assertEqual(sorted(sample.get_times()), [1.0, 2.0, 11.0])
+
+    def test_disconnected_phase_samples_run_staged_and_unstaged(self):
+        model = ExampleFunction(sp={"end_time": 12.0})
+        domain = FaultDomain(model)
+        domain.add_fault(model.name, "no_charge")
+        phase_map = PhaseMap(
+            {"standby": [0.0, 2.0], "standby1": [10.0, 12.0]},
+            {"standby": {"standby", "standby1"}},
+        )
+        sample = FaultSample(domain, phasemap=phase_map)
+        sample.add_fault_phases("standby", method="even", args=(3,))
+        reference = FaultSample(domain, phasemap=phase_map)
+        reference.add_fault_times([1.0, 2.0, 11.0], weights=[1.0 / 3] * 3)
+        for staged in (False, True):
+            with self.subTest(staged=staged):
+                actual_result, actual_history = propagate.fault_sample(
+                    model, sample, staged=staged, showprogress=False
+                )
+                expected_result, expected_history = propagate.fault_sample(
+                    model, reference, staged=staged, showprogress=False
+                )
+                self.assertEqual(actual_result, expected_result)
+                self.assertEqual(actual_history, expected_history)
+                for scenario in sample.scenarios():
+                    history = actual_history.get(scenario.name)
+                    self.assertEqual(history.get_fault_time(), int(scenario.time))
+                self.assertEqual(model.s.x, 0.0)
 
 
 if __name__ == "__main__":

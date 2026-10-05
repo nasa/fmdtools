@@ -34,7 +34,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.base import BaseContainer
 from fmdtools.define.container.state import State
-from fmdtools.define.base import round_float, array_x, unpack_x, is_iter
+from fmdtools.define.base import round_float, array_x, is_iter
 
 from scipy import stats
 from recordclass import astuple
@@ -391,9 +391,13 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
     return round_float(mass, res=1e-6)
 
 
-def calc_prob_for_shuffle_permutation(x, options, *args, check_valid=True):
-    """
-    Get probability corresponding to rng.shuffle and rng.permutation.
+def calc_prob_for_shuffle_permutation(x, options, axis=None, *, check_valid=True):
+    """Get the mass of a shared-axis shuffle or permutation, including repeats.
+
+    An explicit axis moves whole slices together. With no axis, preserve the
+    helper's flattened-array convention used by calc_prob_for_permuted.
+    Repeated slices contribute every index ordering yielding the same output.
+    When check_valid is False, infer the mass from options without checking x.
 
     Examples
     --------
@@ -401,33 +405,94 @@ def calc_prob_for_shuffle_permutation(x, options, *args, check_valid=True):
     np.float64(0.5)
     >>> calc_prob_for_shuffle_permutation([2,1,3], [1,2,3])
     np.float64(0.16666666666666666)
+    >>> calc_prob_for_shuffle_permutation([1,2,1], [1,1,2])
+    np.float64(0.3333333333333333)
+    >>> calc_prob_for_shuffle_permutation([1,1,1], [1,2,3])
+    np.float64(0.0)
     """
-    if is_iter(options):
-        options = np.array(options)
-    else:
-        options = np.arange(options)
-    if check_valid and not set(unpack_x(options)).issuperset(set(unpack_x(x))):
+    options = np.asarray(options) if is_iter(options) else np.arange(options)
+    slices = options.ravel() if axis is None else np.moveaxis(options, axis, 0)
+    values = np.asarray(x)
+    if check_valid and values.shape != options.shape:
         return np.float64(0.0)
-    return np.float64(1/math.factorial(options.size))
+    if not options.size:
+        return np.float64(1.0)
+
+    num_slices = len(slices)
+    rows = slices.reshape(num_slices, -1)
+    rows = rows[np.lexsort(rows.T[::-1])]
+    equal_nan = np.issubdtype(options.dtype, np.inexact)
+    if check_valid:
+        value_slices = values.ravel() if axis is None else np.moveaxis(values, axis, 0)
+        value_rows = value_slices.reshape(num_slices, -1)
+        value_rows = value_rows[np.lexsort(value_rows.T[::-1])]
+        if not np.array_equal(rows, value_rows, equal_nan=equal_nan):
+            return np.float64(0.0)
+
+    equal_elements = rows[1:] == rows[:-1]
+    if equal_nan:
+        equal_elements |= np.isnan(rows[1:]) & np.isnan(rows[:-1])
+    boundaries = np.r_[0, np.flatnonzero(~np.all(equal_elements, axis=1)) + 1,
+                       num_slices]
+    repeats = math.prod(math.factorial(int(count))
+                        for count in np.diff(boundaries))
+    return np.float64(repeats / math.factorial(num_slices))
+
+
+def get_shuffle_permutation_pfunc(options, axis=0):
+    """Get shuffle/permutation mass using NumPy's default shared axis."""
+    return get_custom_pfunc(calc_prob_for_shuffle_permutation, options, axis)
 
 
 def calc_prob_for_permuted(x, axis=None):
-    """
-    Get probability corresponding to rng.permuted.
+    """Get the joint mass of independently permuted slices, including repeats.
+
+    With no axis, the entire flattened array is permuted. Otherwise each slice
+    is shuffled independently. Repeated values contribute all indexed orders
+    that produce the same observable result.
 
     Examples
     --------
     >>> calc_prob_for_permuted(np.array([[1,2], [3,4]]))
     np.float64(0.041666666666666664)
-    >>> calc_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 0)
-    np.float64(0.16666666666666666)
+    >>> bool(np.isclose(calc_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 0), 1/36))
+    True
     >>> calc_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 1)
-    np.float64(0.5)
+    np.float64(0.125)
     """
-    if axis is not None:
-        return calc_prob_for_shuffle_permutation(x, x.shape[axis], check_valid=False)
+    x = np.asarray(x)
+    if axis is None:
+        rows = x.reshape(1, -1)
     else:
-        return calc_prob_for_shuffle_permutation(x, x)
+        slices = np.moveaxis(x, axis, -1)
+        if not slices.size:
+            return np.float64(1.0)
+        rows = slices.reshape(-1, slices.shape[-1])
+    mass = 1.0
+    for row in rows:
+        _, counts = np.unique(row, return_counts=True)
+        repeats = math.prod(math.factorial(int(count)) for count in counts)
+        mass *= repeats / math.factorial(row.size)
+    return np.float64(mass)
+
+
+def get_permuted_pfunc(options=None, axis=None, out=None):
+    """Get a mass function using NumPy's input/axis/output-buffer signature.
+
+    Output buffers are used only during generation. Without options, retain the
+    direct helper's convention of inferring the population from supplied values.
+    """
+    def permuted_pfunc(*x):
+        values = array_x(*x)
+        if options is not None:
+            original = np.asarray(options)
+            if values.shape != original.shape:
+                return np.float64(0.0)
+            if not np.array_equal(np.sort(values, axis=axis),
+                                  np.sort(original, axis=axis)):
+                return np.float64(0.0)
+        return calc_prob_for_permuted(values, axis)
+    return permuted_pfunc
 
 
 def as_prob(pd):
@@ -455,7 +520,7 @@ def get_scipy_pmf(randname, *args, **kwargs):
 def get_custom_pfunc(func_handle, *args, **kwargs):
     """Get callable for calc_func pdf/pmf function with provided arguments."""
     def custom_pfunc(*x):
-        return as_prob(func_handle(array_x(x), *args, **kwargs))
+        return as_prob(func_handle(array_x(*x), *args, **kwargs))
     return custom_pfunc
 
 
@@ -497,19 +562,22 @@ def get_exp_ray_pdf(randname, scale=1.0, size=None):
     return get_scipy_pdf(randname, scale=scale)
 
 
-def get_hypergeometric_pmf(*args):
+def get_hypergeometric_pmf(ngood, nbad, nsample, size=None):
     """
-    Get callable for scipy hypergeomeric pmf with numpy.random arguments.
+    Get a hypergeometric mass from NumPy's scalar or array-like counts.
+
+    Add population counts elementwise without narrow-integer overflow. NumPy's
+    optional size controls generation and does not change the supplied mass.
 
     Examples
     --------
     >>> get_hypergeometric_pmf(50, 450, 100)(10)
     np.float64(0.14736784420411747)
     """
-    n_pop = args[0]+args[1]
-    n_good = args[0]
-    n_sample = args[2]
-    return get_scipy_pmf("hypergeom", n_pop, n_good, n_sample)
+    # Valid generator counts are exactly represented in float64.
+    ngood = np.asarray(ngood, dtype=float)
+    nbad = np.asarray(nbad, dtype=float)
+    return get_scipy_pmf("hypergeom", ngood + nbad, ngood, nsample)
 
 
 def get_uniform_pdf(low=0.0, high=1.0, size=None):
@@ -619,9 +687,12 @@ def get_standard_t_pdf(df, size=None):
     return get_scipy_pdf("t", df=df)
 
 
-def get_triangular_pdf(*args):
+def get_triangular_pdf(left, mode, right, size=None):
     """
-    Get callable for scipy.triang corresponding to a numpy.random.triangular call.
+    Get a triangular density from scalar or broadcastable array-like bounds.
+
+    Convert parameters to floating point before subtraction, as NumPy's generator
+    does. The optional size controls generation and is not a density parameter.
 
     Examples
     --------
@@ -634,7 +705,8 @@ def get_triangular_pdf(*args):
     >>> get_triangular_pdf(0,1,2)(0.5, 0.5)
     np.float64(0.25)
     """
-    left, mode, right = args[:3]
+    left, mode, right = (np.asarray(arg, dtype=float)
+                         for arg in (left, mode, right))
     loc = left
     scale = right-loc
     c = (mode-loc)/scale
@@ -671,6 +743,32 @@ def get_wald_pdf(mean, scale, size=None):
                          scale=scale)
 
 
+def get_multivariate_hypergeometric_pmf(colors, nsample, size=None,
+                                      method='marginals'):
+    """Get joint finite-urn probabilities without forwarding sampling options.
+
+    Size and method select NumPy's sample layout and generation algorithm.
+    SciPy's PMF uses only the population counts and number of selected items.
+    Empty batches of complete count vectors have the empty-product mass one.
+    """
+    def multivariate_hypergeometric_pmf(*x):
+        values = array_x(x)
+        if not values.size and values.shape[-1] == len(colors):
+            return np.float64(1.0)
+        return as_prob(stats.multivariate_hypergeom.pmf(values, colors, nsample))
+
+    return multivariate_hypergeometric_pmf
+
+  
+def get_multivariate_normal_pdf(mean, cov, size=None, check_valid='warn', tol=1e-8):
+    """Get Gaussian vector densities without forwarding generation-only options.
+
+    Size, check_valid and tol configure NumPy sampling, not the density.
+    Positive-semidefinite covariances use SciPy's density on their support.
+    """
+    return get_scipy_pdf("multivariate_normal", mean, cov, allow_singular=True)
+
+  
 def get_multinomial_pmf(n, pvals, size=None):
     """Get the joint mass of multinomial count vectors on the last axis.
 
@@ -729,19 +827,17 @@ def get_pfunc_for_dist(randname, *args):
                    'noncentral_chisquare': ('ncx2', 2),
                    'noncentral_f': ('ncf', 3),
                    'power': ('powerlaw', 1), 'weibull': ('weibull_min', 1)}
-    same_funcs = ['multivariate_normal']
     discrete_funcs = {'poisson': ('poisson', 1), 'zipf': ('zipf', 1),
                       'binomial': ('binom', 2), 'geometric': ('geom', 1),
                       'logseries': ('logser', 1), 'negative_binomial': ('nbinom', 2)}
     location_scale_funcs = {'normal': 'norm', 'laplace': 'laplace',
                             'logistic': 'logistic', 'gumbel': 'gumbel_r'}
-    different_funcs_pmf = {'multivariate_hypergeometric': 'multivariate_hypergeom'}
 
     match randname:
         case str if randname in location_scale_funcs:
             return get_location_scale_pdf(location_scale_funcs[randname], *args)
-        case str if randname in same_funcs:
-            return get_scipy_pdf(randname, *args)
+        case 'multivariate_normal':
+            return get_multivariate_normal_pdf(*args)
         case 'multinomial':
             return get_multinomial_pmf(*args)
         case str if randname in discrete_funcs:
@@ -759,8 +855,8 @@ def get_pfunc_for_dist(randname, *args):
                 raise TypeError(randname + " requires " + str(num_params) +
                                 " shape parameter(s) and an optional size.")
             return get_scipy_pdf(scipy_name, *args[:num_params])
-        case str if randname in different_funcs_pmf:
-            return get_scipy_pmf(different_funcs_pmf[randname], *args)
+        case 'multivariate_hypergeometric':
+            return get_multivariate_hypergeometric_pmf(*args)
         case str if randname in ['exponential', 'rayleigh']:
             return get_exp_ray_pdf(randname, *args)
         case 'hypergeometric':
@@ -798,9 +894,9 @@ def get_pfunc_for_dist(randname, *args):
         case 'choice':
             return get_custom_pfunc(calc_prob_for_choice, *args)
         case str if randname in ['shuffle', 'permutation']:
-            return get_custom_pfunc(calc_prob_for_shuffle_permutation, *args)
+            return get_shuffle_permutation_pfunc(*args)
         case 'permuted':
-            return get_custom_pfunc(calc_prob_for_permuted, *args)
+            return get_permuted_pfunc(*args)
         case _:
             raise Exception("Invalid randname distribution: " + randname +
                             ". Ensure that it is a part of numpy.random/scipy.stats")

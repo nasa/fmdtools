@@ -103,6 +103,7 @@ class Constraint(Objective):
         Whether the constraint is 'greater', 'less', 'equal', or 'notequal'.
     or_equal : bool
         Whether comparator includes equality (e.g., greater or equalto) or not.
+        The 'notequal' comparator always excludes equality.
     satisfied : bool
         Whether the constraint is satisfied.
     """
@@ -137,8 +138,9 @@ class Constraint(Objective):
         elif self.comparator == 'equal':
             value = abs(value - self.threshold)
         elif self.comparator == 'notequal':
-            # 1 if true, else zero
-            value = 1*(value != self.threshold)
+            # Unequal values are feasible; equality is infeasible under either
+            # strict or inclusive residual comparisons.
+            value = 2 * (value == self.threshold) - 1
         else:
             raise Exception("Invalid comparator: "+self.comparator)
         return self.obj_from_value(value)
@@ -505,6 +507,7 @@ class ResultObjective(Objective):
     ------
     time : float
         Time the objective is called at. If None, time will be the end of the sim.
+        An explicit zero selects the initial simulation time.
     method : callable
         Method to tabulate for the objective. Default is np.sum.
 
@@ -540,7 +543,7 @@ class ResultObjective(Objective):
         >>> obj.get_result_value(res)
         np.float64(22.0)
         """
-        if not self.time:
+        if self.time is None:
             val = res.get_metric(self.name, method=self.method, round_value=False)
         else:
             t = t_key(float(self.time))
@@ -565,6 +568,7 @@ class ResultConstraint(ResultObjective):
         Whether the constraint is 'greater', 'less', 'equal', or 'notequal'.
     or_equal : bool
         Whether comparator includes equality (e.g., greater or equalto) or not.
+        The 'notequal' comparator always excludes equality.
     satisfied : bool
         Whether the constraint is satisfied.
     """
@@ -725,7 +729,7 @@ class BaseSimProblem(BaseProblem):
             Simulation time to simulate to.
         """
         last_time = self.mdl.sp.end_time
-        all_times = [a.time if a.time else last_time
+        all_times = [a.time if a.time is not None else last_time
                      for a in {**self.objectives, **self.constraints}.values()]
         end_time = max(all_times)
         return end_time
@@ -744,7 +748,7 @@ class BaseSimProblem(BaseProblem):
         else:
             des_res = {}
         for n in {**self.objectives, **self.constraints}.values():
-            if n.time:
+            if n.time is not None:
                 t = n.time
             else:
                 t = 'end'

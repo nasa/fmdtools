@@ -667,6 +667,7 @@ class Simulation(BaseSimulation):
             dict of arguments to add_faultsamples. The default is {}.
         get_phasemap : bool, optional
             Whether to use the history to generate the phasemap used by SampleApproach.
+            Generated history maps retain the configured model timestep.
             The default is False.
 
         Returns
@@ -675,7 +676,7 @@ class Simulation(BaseSimulation):
             Appropriate SampleApproach corresponding to this scenario model/hist
         """
         if get_phasemap:
-            pm = from_hist(self.history)
+            pm = from_hist(self.history, dt=self.mdl.sp.dt)
             app = SampleApproach(self.mdl, phasemaps=pm)
         else:
             app = SampleApproach(self.mdl)
