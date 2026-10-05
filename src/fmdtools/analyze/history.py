@@ -28,7 +28,7 @@ specific language governing permissions and limitations under the License.
 from fmdtools.define.base import get_var, is_known_mutable
 
 from fmdtools.analyze.result import Result, load_folder, load, fromdict
-from fmdtools.analyze.common import calc_metric_ci, get_sub_include
+from fmdtools.analyze.common import calc_metric, calc_metric_ci, get_sub_include
 from fmdtools.analyze.common import unpack_plot_values, phase_overlay
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import plot_err_hist, setup_plot, set_empty_multiplots
@@ -879,7 +879,9 @@ class History(Result):
             Fraction for confidence interval. Default is 0.95.
         max_ind : str/int
             Exclusive slice endpoint for both timestamps and values. Default is
-            'max', which uses the shortest history length.
+            'max', which uses the shortest history length. Explicit endpoints
+            follow Python slicing within the shared available prefix of the
+            selected values and timestamps. Each trace is clipped before stacking.
 
         Returns
         -------
@@ -899,11 +901,17 @@ class History(Result):
         array([2. , 2.5, 3. ])
         """
         hist = History()
-        hist[time] = self.get_metric(time, axis=0)
+        flat = self.flatten()
+        values = list(flat.get_values(value).values())
+        times = list(flat.get_values(time).values())
         if max_ind == 'max':
-            max_ind = min([len(h) for h in self.values()])
-        hist[time] = hist[time][:max_ind]
-        vals = np.array([*self.get_values(value).values()])[:, :max_ind]
+            max_ind = min(len(h) for h in flat.values())
+        else:
+            available = min(len(h) for h in values + times)
+            max_ind = slice(None, max_ind).indices(available)[1]
+        # Slice individual traces before NumPy stacks or averages unequal lengths.
+        hist[time] = calc_metric([h[:max_ind] for h in times], axis=0)
+        vals = np.array([h[:max_ind] for h in values])
         boot_stats = calc_metric_ci(vals, confidence_level=ci, axis=0, **kwargs)
         hist['stat'] = boot_stats[0]
         hist['low'] = boot_stats[1]
