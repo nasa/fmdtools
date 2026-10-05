@@ -1191,7 +1191,7 @@ class SampleApproach(BaseSample):
         self.mdl = mdl
         self.phasemaps = {} if phasemaps is None else dict(phasemaps)
         if def_mdl_phasemap:
-            self.phasemaps['mdl'] = PhaseMap(self.mdl.sp.phases)
+            self.phasemaps['mdl'] = PhaseMap(self.mdl.sp.phases, dt=self.mdl.sp.dt)
         self.faultdomains = {}
         self.faultsamples = {}
 
