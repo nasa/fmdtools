@@ -34,7 +34,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.base import BaseContainer
 from fmdtools.define.container.state import State
-from fmdtools.define.base import round_float, array_x, is_iter
+from fmdtools.define.base import array_x, is_iter
 
 from scipy import stats
 from recordclass import astuple
@@ -343,7 +343,7 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
     Scalars and arrays are evaluated using all supplied values. Sampling size
     does not change their mass. Uniform sampling without replacement is
     supported; weighted sampling without replacement remains unsupported.
-    The existing six-decimal probability rounding is retained.
+    Retain floating-point precision so small, representable masses stay nonzero.
 
     Examples
     --------
@@ -351,8 +351,8 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
     np.float64(0.5)
     >>> calc_prob_for_choice([1,2], [1,2], replace=False)
     np.float64(0.5)
-    >>> calc_prob_for_choice([1,2], [1,2,3], p=[0.1, 0.1, 0.8])
-    np.float64(0.01)
+    >>> bool(np.isclose(calc_prob_for_choice([1,2], [1,2,3], p=[0.1, 0.1, 0.8]), 0.01))
+    True
     """
     if isinstance(options, (int, np.integer)):
         options = np.arange(options)
@@ -388,7 +388,7 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
                 return np.float64(0.0)
             mass *= available.size / (options.size - i)
             remaining[available[0]] = False
-    return round_float(mass, res=1e-6)
+    return np.float64(mass)
 
 
 def calc_prob_for_shuffle_permutation(x, options, axis=None, *, check_valid=True):
