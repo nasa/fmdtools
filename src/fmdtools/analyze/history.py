@@ -608,7 +608,9 @@ class History(Result):
 
     def get_summary(self, *attrs, operator=np.max):
         """
-        Create summary of the history based on a given metric.
+        Create summary of history leaves based on a given metric.
+
+        Nested and flat histories use the same dot-separated leaf paths.
 
         Parameters
         ----------
@@ -626,10 +628,10 @@ class History(Result):
         flathist = self.flatten()
         summary = Result()
         if not attrs:
-            attrs = self.keys()
+            attrs = flathist.keys()
         for att in attrs:
-            if att in self:
-                summary[att] = operator(self[att])
+            if att in flathist:
+                summary[att] = operator(flathist[att])
         return summary
 
     def get_fault_degradation_summary(self, *attrs):

@@ -33,6 +33,7 @@ from fmdtools.define.base import t_key
 
 from recordclass import dataobject, asdict
 from collections import UserDict
+from collections.abc import Mapping
 from typing import ClassVar
 import numpy as np
 
@@ -392,6 +393,9 @@ class ParameterScenario(BaseScenario, readonly=True):
         """
         Get a parameter from the scenario.
 
+        Nested mappings are traversed when no literal dotted key matches.
+        Missing paths or non-mapping intermediates return the given default.
+
         Parameters
         ----------
         param : str
@@ -405,10 +409,17 @@ class ParameterScenario(BaseScenario, readonly=True):
             Value of the parameter.
         """
         if "." in param:
-            p_index = param.split(".")
-            p_field = p_index[0]
-            p_entry = ".".join(p_index[1:])
-            pval = self.get(p_field, default).get(p_entry, default)
+            p_field, p_entry = param.split(".", 1)
+            values = self.get(p_field, {})
+            while isinstance(values, Mapping):
+                # Preserve literal dotted keys before traversing nested mappings.
+                if p_entry in values:
+                    return values[p_entry]
+                component, separator, p_entry = p_entry.partition(".")
+                if not separator:
+                    break
+                values = values.get(component)
+            pval = default
         elif param == 'prob':
             pval = self.prob
         else:
