@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for src/fmdtools/define/object/base.py: 92%</title>
+    <title>Coverage for src/fmdtools/define/object/base.py: 93%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
     <link rel="stylesheet" href="style_cb_4667309f.css" type="text/css">
     <script src="coverage_html_cb_15cffcd0.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>src<span class="sep">/</span>fmdtools<span class="sep">/</span>define<span class="sep">/</span>object<span class="sep">/</span>base.py</b>:
-            <span class="pc_cov">92%</span>
+            <span class="pc_cov">93%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">506 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">466<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">40<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">469<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">37<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">80<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_be7675ccd86fb3c0_coords_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
-            created at 2026-09-30 10:04 -0700
+            created at 2026-10-05 12:08 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -577,8 +577,8 @@
     <p class="run"><span class="n"><a id="t495" href="#t495">495</a></span><span class="t">            <span class="nam">setattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">role</span><span class="op">,</span> <span class="nam">other_role_copy</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t496" href="#t496">496</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t497" href="#t497">497</a></span><span class="t">    <span class="key">def</span> <span class="nam">reset</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t498" href="#t498">498</a></span><span class="t">        <span class="key">for</span> <span class="nam">role</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">get_all_roles</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t499" href="#t499">499</a></span><span class="t">            <span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">role</span><span class="op">)</span><span class="op">.</span><span class="nam">reset</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t498" href="#t498">498</a></span><span class="t">        <span class="key">for</span> <span class="nam">role</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">get_all_roles</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t499" href="#t499">499</a></span><span class="t">            <span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">role</span><span class="op">)</span><span class="op">.</span><span class="nam">reset</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t500" href="#t500">500</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t501" href="#t501">501</a></span><span class="t">    <span class="key">def</span> <span class="nam">init_indicators</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t502" href="#t502">502</a></span><span class="t">        <span class="str">&quot;&quot;&quot;Find all indicator methods and initialize in .indicator tuple.&quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
@@ -805,7 +805,7 @@
     <p class="run"><span class="n"><a id="t723" href="#t723">723</a></span><span class="t">        <span class="key">for</span> <span class="nam">roletype</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">roletypes</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t724" href="#t724">724</a></span><span class="t">            <span class="nam">rolenames</span><span class="op">.</span><span class="nam">extend</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">find_roletype_initiators</span><span class="op">(</span><span class="nam">roletype</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t725" href="#t725">725</a></span><span class="t">        <span class="key">if</span> <span class="nam">with_immutable</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t726" href="#t726">726</a></span><span class="t">            <span class="key">return</span> <span class="nam">rolenames</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t726" href="#t726">726</a></span><span class="t">            <span class="key">return</span> <span class="nam">rolenames</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t727" href="#t727">727</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t728" href="#t728">728</a></span><span class="t">            <span class="key">return</span> <span class="op">[</span><span class="nam">r</span> <span class="key">for</span> <span class="nam">r</span> <span class="key">in</span> <span class="nam">rolenames</span> <span class="key">if</span> <span class="nam">r</span> <span class="key">not</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">immutable_roles</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t729" href="#t729">729</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -1519,7 +1519,7 @@
             <a class="nav" href="z_be7675ccd86fb3c0_coords_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
-            created at 2026-09-30 10:04 -0700
+            created at 2026-10-05 12:08 -0700
         </p>
     </div>
 </footer>
