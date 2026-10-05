@@ -476,7 +476,9 @@ class History(Result):
             Nominal history to compare against
             (otherwise uses internal nomhist, if available)
         operator : function
-            Method of combining multiple degraded values. The default is np.prod
+            Method of combining multiple degraded values. The default is np.any.
+            For unlike state shapes, reduce each state at each timestamp before
+            combining states, preserving the time axis.
         difftype : 'bool'/'diff'/float
             Way to calculate the difference:
 
@@ -516,7 +518,10 @@ class History(Result):
                     try:
                         deghist[att] = operator(att_diff, 0)
                     except ValueError:
-                        deghist[att] = operator([operator(arr) for arr in att_diff], 0)
+                        # Reduce unlike state shapes within each time, not across time.
+                        deghist[att] = np.array([
+                            operator([operator(arr[t]) for arr in att_diff], 0)
+                            for t in range(len(nomhist.time))])
             except Exception as e:
                 raise Exception("Unable to diff att " + att) from e
 
