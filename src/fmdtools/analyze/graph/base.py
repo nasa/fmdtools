@@ -841,6 +841,9 @@ class Graph(object):
         """
         Compute robustness coefficient of graph representation of model mdl.
 
+        Each trial removes nodes from the entire graph, including disconnected
+        components, to integrate the complete largest-component curve.
+
         Parameters
         ----------
         trials : int
@@ -865,9 +868,9 @@ class Graph(object):
             N = float(len(tmp))
             largestCC = max(nx.connected_components(tmp), key=len)
             s = [float(len(largestCC))]
-            rs = rng.choice(range(int(s[0])), int(s[0]), replace=False)
+            rs = rng.choice(range(int(N)), int(N), replace=False)
             nodes = list(g)
-            for i in range(int(s[0])-1):
+            for i in range(int(N)-1):
                 tmp.remove_node(nodes[rs[i]])
                 largestCC = max(nx.connected_components(tmp), key=len)
                 s.append(float(len(largestCC)))
