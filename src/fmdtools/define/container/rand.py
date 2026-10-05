@@ -412,22 +412,54 @@ def calc_prob_for_shuffle_permutation(x, options, *args, check_valid=True):
 
 
 def calc_prob_for_permuted(x, axis=None):
-    """
-    Get probability corresponding to rng.permuted.
+    """Get the joint mass of independently permuted slices, including repeats.
+
+    With no axis, the entire flattened array is permuted. Otherwise each slice
+    is shuffled independently. Repeated values contribute all indexed orders
+    that produce the same observable result.
 
     Examples
     --------
     >>> calc_prob_for_permuted(np.array([[1,2], [3,4]]))
     np.float64(0.041666666666666664)
-    >>> calc_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 0)
-    np.float64(0.16666666666666666)
+    >>> bool(np.isclose(calc_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 0), 1/36))
+    True
     >>> calc_prob_for_permuted(np.array([[1,2], [3,4], [5,6]]), 1)
-    np.float64(0.5)
+    np.float64(0.125)
     """
-    if axis is not None:
-        return calc_prob_for_shuffle_permutation(x, x.shape[axis], check_valid=False)
+    x = np.asarray(x)
+    if axis is None:
+        rows = x.reshape(1, -1)
     else:
-        return calc_prob_for_shuffle_permutation(x, x)
+        slices = np.moveaxis(x, axis, -1)
+        if not slices.size:
+            return np.float64(1.0)
+        rows = slices.reshape(-1, slices.shape[-1])
+    mass = 1.0
+    for row in rows:
+        _, counts = np.unique(row, return_counts=True)
+        repeats = math.prod(math.factorial(int(count)) for count in counts)
+        mass *= repeats / math.factorial(row.size)
+    return np.float64(mass)
+
+
+def get_permuted_pfunc(options=None, axis=None, out=None):
+    """Get a mass function using NumPy's input/axis/output-buffer signature.
+
+    Output buffers are used only during generation. Without options, retain the
+    direct helper's convention of inferring the population from supplied values.
+    """
+    def permuted_pfunc(*x):
+        values = array_x(*x)
+        if options is not None:
+            original = np.asarray(options)
+            if values.shape != original.shape:
+                return np.float64(0.0)
+            if not np.array_equal(np.sort(values, axis=axis),
+                                  np.sort(original, axis=axis)):
+                return np.float64(0.0)
+        return calc_prob_for_permuted(values, axis)
+    return permuted_pfunc
 
 
 def as_prob(pd):
@@ -687,7 +719,16 @@ def get_multivariate_hypergeometric_pmf(colors, nsample, size=None,
 
     return multivariate_hypergeometric_pmf
 
+  
+def get_multivariate_normal_pdf(mean, cov, size=None, check_valid='warn', tol=1e-8):
+    """Get Gaussian vector densities without forwarding generation-only options.
 
+    Size, check_valid and tol configure NumPy sampling, not the density.
+    Positive-semidefinite covariances use SciPy's density on their support.
+    """
+    return get_scipy_pdf("multivariate_normal", mean, cov, allow_singular=True)
+
+  
 def get_multinomial_pmf(n, pvals, size=None):
     """Get the joint mass of multinomial count vectors on the last axis.
 
@@ -746,7 +787,6 @@ def get_pfunc_for_dist(randname, *args):
                    'noncentral_chisquare': ('ncx2', 2),
                    'noncentral_f': ('ncf', 3),
                    'power': ('powerlaw', 1), 'weibull': ('weibull_min', 1)}
-    same_funcs = ['multivariate_normal']
     discrete_funcs = {'poisson': ('poisson', 1), 'zipf': ('zipf', 1),
                       'binomial': ('binom', 2), 'geometric': ('geom', 1),
                       'logseries': ('logser', 1), 'negative_binomial': ('nbinom', 2)}
@@ -756,8 +796,8 @@ def get_pfunc_for_dist(randname, *args):
     match randname:
         case str if randname in location_scale_funcs:
             return get_location_scale_pdf(location_scale_funcs[randname], *args)
-        case str if randname in same_funcs:
-            return get_scipy_pdf(randname, *args)
+        case 'multivariate_normal':
+            return get_multivariate_normal_pdf(*args)
         case 'multinomial':
             return get_multinomial_pmf(*args)
         case str if randname in discrete_funcs:
@@ -816,7 +856,7 @@ def get_pfunc_for_dist(randname, *args):
         case str if randname in ['shuffle', 'permutation']:
             return get_custom_pfunc(calc_prob_for_shuffle_permutation, *args)
         case 'permuted':
-            return get_custom_pfunc(calc_prob_for_permuted, *args)
+            return get_permuted_pfunc(*args)
         case _:
             raise Exception("Invalid randname distribution: " + randname +
                             ". Ensure that it is a part of numpy.random/scipy.stats")
