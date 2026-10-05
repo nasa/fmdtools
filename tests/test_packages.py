@@ -70,7 +70,7 @@ class define_Tests(unittest.TestCase):
         x = 1
         expected_values = {'integers': 0.25,
                            'random': 0.0,
-                           'shuffle': 0.5,
+                           'shuffle': 0.0, # note - x is invalid input for shuffle which requires a vector
                            'permuted': 1.0,
                            'choice': 1/3,
                            'normal': 0.398942,

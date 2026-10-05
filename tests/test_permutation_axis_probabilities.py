@@ -143,7 +143,7 @@ class TestPermutationAxisProbabilities(unittest.TestCase):
             calc_prob_for_permuted(np.arange(4).reshape(2, 2)), 1 / 24
         )
         self.assertAlmostEqual(
-            calc_prob_for_permuted(np.arange(6).reshape(3, 2), 0), 1 / 6
+            calc_prob_for_permuted(np.arange(6).reshape(3, 2), 0), 1 / 36
         )
 
     def test_tracked_draws_preserve_generator_copy_and_reset(self):
