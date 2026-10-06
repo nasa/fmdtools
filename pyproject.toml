@@ -173,11 +173,6 @@ search = "version = {{{current_version}}}"
 replace = "version = {{{new_version}}}"
 
 [[tool.bumpversion.files]]
-filename = "README.md"
-search = "date = {{\\d{4}-\\d{2}-\\d{2}}}}"
-replace = "date = {{now:%Y-%m-%d}}"
-
-[[tool.bumpversion.files]]
 filename = "docs-source/Intro_to_fmdtools.md"
 search = "fmdtools v{current_version}"
 replace = "fmdtools v{new_version}"
