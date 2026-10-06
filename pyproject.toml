@@ -143,9 +143,9 @@ values = ["dev", "test", "final"]
 optional_value = "final"
 
 [[tool.bumpversion.files]]
-filename = "src/__init__.py"
-search = "__version__ = \"{current_version}\""
-replace = "__version__ = \"{new_version}\""
+filename = "src/fmdtools/__init__.py"
+search = "__version__ = '{current_version}'"
+replace = "__version__ = '{new_version}'"
 
 [[tool.bumpversion.files]]
 filename = "LICENSE"
