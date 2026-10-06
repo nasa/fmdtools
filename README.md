@@ -278,7 +278,7 @@ To cite a particular version of the fmdtools, you may use:
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
   version = {2.5.4},
-  date = {2026-10-5},
+  date = "2026-10-5",
 }
 ```
 
