@@ -4,15 +4,20 @@
 
 See: @README.md and @docs-source/Intro_to_fmdtools.md
 
-## Best Practices
+## Development
 
-See: @docs-source/best-practices.md
+- Refer to @docs-source/Contributions.rst for overall guidance on developing fmdtools (e.g., adding new files to the repo, etc.)
+- Refer to @docs-source/release_checklist.csv for specific development/release process.
 
 ## Library Usage
 
 ### General
 
 - Refer to code directly in `src/fmdtools/` before going off of the examples provided in `examples`.
+
+## Best Practices
+
+- See: @docs-source/best-practices.md
 
 ### Model Development
 
