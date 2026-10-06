@@ -97,10 +97,9 @@ To assist with this, the custom git alias below can be helpful::
 
 	[alias]
 		up = "!git merge dev main"
-		tl = "!f() { git tag -s -a \"$1\" -m \"$2\"; }; f"
-		pp = "!f() { git push public tag \"$1\"; }; f"
-		po = "!f() { git push origin tag \"$1\"; }; f"
-		release = "!f() { git checkout main && git up && git tl \"$1\" \"$2\" && git pp \"$1\" && git po \"$1\"; }; f"
+		pp = "!f() { git push public tag main; }; f"
+		po = "!f() { git push origin tag main; }; f"
+		release = "!f() { git checkout main && git up && git pp && git po; }; f"
 		fb = "!f() { git fetch origin && git fetch public; }; f"
 		mm = "!git merge main dev"
 		sync-into-dev = "!f() { git checkout dev && git fb && git pull origin dev && git merge main dev; }; f"
@@ -108,11 +107,9 @@ To assist with this, the custom git alias below can be helpful::
 Adding this block to your repository's git config file (e.g., ``.git/config``) adds custom git commands which can be used to simplify the release process. Specifically:
 
 - ``git sync-into-dev`` will merge all main and dev branches (local and remote) into your local dev branch
-- ``git release "vX.X.X" "Version X.X.X"`` will merge ``dev`` into ``main``, tag it with the given version, and upload it to ``public`` and ``origin``.
+- ``git release`` will merge ``dev`` into ``main`` and upload it to ``public`` and ``origin``.
 
-Note that the ``-s`` option above `signs` the tag, attributing it to your credentials. For this to work, you should `set up commit signing <https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits>`_ and configure git to sign commits by default.
-
-
+Git Tags for versions (as well as other indicators of version) are controlled with `bump-my-version` and applies the format `Major.Minor.Patch-StageNum` where Stage is the stage of development (dev, test, or docs) and num is the iteration (e.g., a second round of testing would be test2).
 
 Git Development Workflow
 ------------------------
