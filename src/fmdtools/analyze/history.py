@@ -535,6 +535,9 @@ class History(Result):
         """
         Get fault names associated with the given attributes.
 
+        Match complete fault-container paths in flat or nested histories, including
+        root-level sub-fault flags.
+
         Parameters
         ----------
         *attrs : strs
@@ -545,15 +548,14 @@ class History(Result):
         faults_hist : History
             History of the attrs and their corresponding faults
         """
-        faulthist = self._prep_faulty()
+        faulthist = self._prep_faulty().flatten()
         faults_hist = History()
         if not attrs:
             attrs = self.keys()
         for att in attrs:
             faults_hist[att] = History({k.split('.')[-1]: v for k, v in faulthist.items()
-                                        if ('.'+att+'.m.faults' in k) or
-                                        ('.'+att+'.m.sub_faults' in k) or
-                                        (att+'.m.faults' in k and k.startswith(att))})
+                                        if ('.'+att+'.m.faults.' in '.'+k+'.') or
+                                        ('.'+k).endswith('.'+att+'.m.sub_faults')})
         return faults_hist
 
     def get_faulty_hist(self, *attrs, withtime=True, withtotal=True, operator=np.any):
