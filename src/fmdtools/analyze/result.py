@@ -584,29 +584,31 @@ class Result(UserDict):
         **groups : list
             Sets of scenarios to group (e.g. set_1=['scen1', 'scen2'...]).
             Scenario names match at dot-separated path boundaries; selecting a
-            parent scenario also includes its nested scenarios.
+            parent scenario also includes its nested scenarios. Flattened, nested
+            and mixed result storage produce the same groups of leaf paths.
 
         Returns
         -------
         group_hist : History
             Single-level history with structure {group:{scenname.valuename}}
         """
+        flat = self.flatten()
         if not groups:
-            groups = self.get_default_comp_groups()
+            groups = flat.get_default_comp_groups()
         if time not in values:
             values = values + (time, )
         group_hist = self.__class__()
         for group, scens in groups.items():
             if scens == 'default':
-                scens = {k.split('.')[0] for k in self.keys()}
+                scens = {k.split('.')[0] for k in flat.keys()}
             elif isinstance(scens, str):
                 scens = [scens]
-            k_vs = [k for k in self.keys() for scen in scens for v in values
+            k_vs = [k for k in flat.keys() for scen in scens for v in values
                     if k.startswith(scen+'.') and k.endswith(v) and '.t.' not in k]
             if len(k_vs) > 0 and (group not in group_hist):
                 group_hist[group] = self.__class__()
             for k in k_vs:
-                group_hist[group][k] = self[k]
+                group_hist[group][k] = flat[k]
         # Sort into comparison groups
         if not group_hist:
             raise Exception("Invalid comp_groups: " + str(groups) +
