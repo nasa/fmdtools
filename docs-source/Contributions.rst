@@ -102,7 +102,7 @@ To assist with this, the custom git alias below can be helpful::
 		release = "!f() { git checkout main && git up && git pp && git po; }; f"
 		fb = "!f() { git fetch origin && git fetch public; }; f"
 		mm = "!git merge main dev"
-		sync-into-dev = "!f() { git checkout dev && git fb && git pull origin dev && git merge main dev; }; f"
+		sync-into-dev = "!f() { git checkout dev && git fb && git pull origin dev && git merge main dev && git merge test dev; }; f"
 
 Adding this block to your repository's git config file (e.g., ``.git/config``) adds custom git commands which can be used to simplify the release process. Specifically:
 
