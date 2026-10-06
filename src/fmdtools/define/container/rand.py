@@ -584,6 +584,7 @@ def get_uniform_pdf(low=0.0, high=1.0, size=None):
     """Get a uniform density using NumPy's lower and upper bounds.
 
     NumPy specifies endpoints; SciPy specifies location and interval width.
+    Promote bounds before subtraction so fixed-width inputs cannot overflow.
     The optional draw size does not change the density of the supplied values.
 
     Examples
@@ -593,8 +594,8 @@ def get_uniform_pdf(low=0.0, high=1.0, size=None):
     >>> get_uniform_pdf(5.0, 6.0)(7.0)
     np.float64(0.0)
     """
-    return get_scipy_pdf("uniform", loc=low,
-                         scale=np.asarray(high) - np.asarray(low))
+    low, high = np.asarray(low, dtype=float), np.asarray(high, dtype=float)
+    return get_scipy_pdf("uniform", loc=low, scale=high-low)
 
 
 def get_pareto_pdf(a, size=None):
