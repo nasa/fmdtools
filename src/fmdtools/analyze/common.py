@@ -102,6 +102,10 @@ def diff(val1, val2, difftype='bool'):
     The difftype option ('diff' (takes the difference), 'bool' (checks if the same),
                          and float (checks if under the provided tolerance))
 
+    Integer arithmetic is widened before subtraction and absolute value. Numeric
+    differences use int64 where possible, or exact Python integers for values
+    outside its range. Boolean comparisons and floating arithmetic are unchanged.
+
     Examples
     --------
     >>> diff([1, 2, 3], [2, 2, 3])
@@ -114,12 +118,22 @@ def diff(val1, val2, difftype='bool'):
             val1 = np.array(val1)
         if isinstance(val2, list):
             val2 = np.array(val2)
-        if difftype == 'diff':
-            return val1-val2
-        elif difftype == 'bool':
+        if difftype == 'bool':
             return val1 != val2
-        elif isinstance(difftype, float):
-            return abs(val1-val2) > difftype
+        elif difftype == 'diff' or isinstance(difftype, float):
+            left, right = np.asarray(val1), np.asarray(val2)
+            if left.dtype.kind in 'iu' and right.dtype.kind in 'iu':
+                # A difference of full-width integers may need 65 signed bits.
+                dtype = object if max(left.dtype.itemsize, right.dtype.itemsize) >= 8 else np.int64
+                delta = np.subtract(left, right, dtype=dtype)
+                if isinstance(difftype, float):
+                    return np.abs(delta) > difftype
+                limits = np.iinfo(np.int64)
+                if np.all((delta >= limits.min) & (delta <= limits.max)):
+                    delta = np.asarray(delta, dtype=np.int64)[()]
+                return delta
+            delta = val1-val2
+            return delta if difftype == 'diff' else abs(delta) > difftype
     except ValueError as e:
         raise Exception("Unable to diff "+str(val1)+" and "+str(val2)) from e
 
