@@ -424,12 +424,12 @@ class History(Result):
             return self
 
     def _prep_nom_faulty(self, nomhist={}, align=True):
-        """Create a nominal history of states from the current history."""
+        """Prepare local flattened histories so alignment leaves inputs unchanged."""
         if not nomhist:
             nomhist = self.nominal.flatten()
         else:
             nomhist = nomhist.flatten()
-        faulthist = self._prep_faulty()
+        faulthist = self._prep_faulty().flatten()
         if align:
             faulthist._align(nomhist)
         return nomhist, faulthist
@@ -465,6 +465,9 @@ class History(Result):
                           withtime=True, withtotal=True):
         """
         Get history of times when the attributes *attrs deviate from nominal values.
+
+        Align the comparison on local flattened views without truncating either
+        source history. Returned values use the common time range.
 
         Parameters
         ----------
