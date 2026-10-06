@@ -237,6 +237,10 @@ class Mode(BaseContainer, readonly=False):
         """
         Get the Fault object associated with the given faultname.
 
+        Explicit keyword overrides also apply to preconstructed Fault objects,
+        returning a new object without modifying the stored definition. With no
+        overrides, a preconstructed Fault is returned unchanged.
+
         Parameters
         ----------
         faultname : str
@@ -261,6 +265,8 @@ class Mode(BaseContainer, readonly=False):
         else:
             fault = faultname
         if isinstance(fault, Fault):
+            if kwargs:
+                return fault.__class__(**{**fault.asdict(), **kwargs})
             return fault
         else:
             defaults = self.get_pref_attrs("default")
