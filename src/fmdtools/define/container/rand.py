@@ -481,6 +481,8 @@ def get_permuted_pfunc(options=None, axis=None, out=None):
 
     Output buffers are used only during generation. Without options, retain the
     direct helper's convention of inferring the population from supplied values.
+    NaNs in floating or complex populations are retained values, so matching
+    NaNs do not make a generated permutation impossible.
     """
     def permuted_pfunc(*x):
         values = array_x(*x)
@@ -488,8 +490,11 @@ def get_permuted_pfunc(options=None, axis=None, out=None):
             original = np.asarray(options)
             if values.shape != original.shape:
                 return np.float64(0.0)
+            equal_nan = (np.issubdtype(values.dtype, np.inexact)
+                         and np.issubdtype(original.dtype, np.inexact))
             if not np.array_equal(np.sort(values, axis=axis),
-                                  np.sort(original, axis=axis)):
+                                  np.sort(original, axis=axis),
+                                  equal_nan=equal_nan):
                 return np.float64(0.0)
         return calc_prob_for_permuted(values, axis)
     return permuted_pfunc
