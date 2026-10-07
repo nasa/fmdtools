@@ -202,12 +202,17 @@ class State(BaseContainer):
             else:
                 setattr(self, name, getattr(self, name) + value)
 
-    def roundto(self, **kwargs):
+    def roundto(self, min_r=7, **kwargs):
         """
         Round the given arguments to a given resolution.
 
         Array-valued states are rounded elementwise. Their resolutions may be
         scalars or arrays broadcastable to the state.
+
+        Parameters
+        ----------
+        min_r : int, optional
+            Minimum precision from np.round. Default is 7, for 7 decimal places.
 
         Examples
         --------
@@ -217,7 +222,7 @@ class State(BaseContainer):
         np.float64(1.8)
         """
         for name, value in kwargs.items():
-            setattr(self, name, round_float(getattr(self, name), res=value))
+            setattr(self, name, round_float(getattr(self, name), res=value, min_r=min_r))
 
     def limit(self, **kwargs):
         """
