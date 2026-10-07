@@ -1,0 +1,11 @@
+[MAIN]
+load-plugins=fmdtools_pylint
+
+[MESSAGES CONTROL]
+# Optional model-member profile; the repository's regular lint policy is unchanged.
+disable=all
+enable=no-member,fmdtools-unknown-field
+
+[REPORTS]
+reports=no
+score=no
