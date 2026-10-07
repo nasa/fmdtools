@@ -755,9 +755,10 @@ class BaseSample():
         Parameters
         ----------
         value : str
-            Value to get from the scenarios.
+            Value or dot-separated path to get from the scenarios, using the
+            same lookup as scenario filtering and grouping (e.g., 'p.gain').
         """
-        return {scenname: getattr(scen, value)
+        return {scenname: get_var(scen, value)
                 for scenname, scen in self.get_scens().items()}
 
     def get_metric(self, value, ids="all", **kwargs):
