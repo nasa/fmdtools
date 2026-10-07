@@ -1112,6 +1112,9 @@ class FaultSample(BaseSample):
         """
         Sample scenarios in the given phases using a set sampling method.
 
+        Without a phase map, sample the configured model start-to-end interval
+        at its timestep rather than assuming the simulation starts at zero.
+
         Parameters
         ----------
         *phases_to_sample : str
@@ -1147,7 +1150,8 @@ class FaultSample(BaseSample):
         if self.phasemap:
             phasetimes = self.phasemap.get_sample_times(*phases_to_sample)
         else:
-            interval = [0, self.faultdomain.mdl.sp.end_time]
+            interval = [self.faultdomain.mdl.sp.start_time,
+                        self.faultdomain.mdl.sp.end_time]
             tstep = self.faultdomain.mdl.sp.dt
             phasetimes = {'phase': gen_timerange(interval[0], interval[-1], tstep)}
 
