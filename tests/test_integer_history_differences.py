@@ -138,6 +138,19 @@ class TestIntegerHistoryDifferences(unittest.TestCase):
             self.assertEqual(diff(first, second, "diff"), int(first) - int(second))
             self.assertEqual(np.ndim(diff(first, second, "diff")), 0)
 
+    def test_float_tolerance_uses_absolute_difference_only(self):
+        left = np.array([1.0e9 + 0.5, np.nan, np.inf])
+        right = np.array([1.0e9, 0.0, np.inf])
+
+        np.testing.assert_array_equal(
+            diff(left, right, 0.1),
+            np.array([True, False, False]),
+        )
+        np.testing.assert_array_equal(
+            diff(left, right, 1.0),
+            np.array([False, False, False]),
+        )
+
     def test_float_boolean_and_error_behavior_is_unchanged(self):
         for dtype in (np.float32, np.float64):
             left = np.array([1.0, np.nan, np.inf], dtype=dtype)
