@@ -1878,10 +1878,11 @@ class ParameterResultSample(ParameterSample):
         """
         if t is None:
             return self.res_to_sample[comp_group].get(rep).get(var)
-        elif is_numeric(t):
+        elif (isinstance(t, (int, np.integer))
+              and not isinstance(t, (bool, np.bool_))):
             return self.res_to_sample[comp_group].get(rep).get(var)[t]
         else:
-            return Exception("Invalid option for t: "+str(t))
+            raise TypeError("History index t must be an integer or None.")
 
     def _get_reps(self, comp_group, reps):
         """
