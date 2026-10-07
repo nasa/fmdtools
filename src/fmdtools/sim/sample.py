@@ -542,6 +542,14 @@ class FaultDomain(object):
          >>> [f.disturbances[0][1] for f in exfd2.faults.values()]
          [np.float64(0.0), np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(4.0), np.float64(5.0), np.float64(6.0), np.float64(7.0), np.float64(8.0), np.float64(9.0), np.float64(10.0)]
         """
+        if not (isinstance(n, str) and n == 'all'):
+            if (isinstance(n, (bool, np.bool_))
+                    or not isinstance(n, (int, np.integer)) or n < 0):
+                raise ValueError("n must be 'all' or a non-negative integer.")
+            n = int(n)
+            if n == 0:
+                return
+
         # determine overall state combinations to sample from
         for state, vals in dist_ranges.items():
             if isinstance(vals, tuple):
