@@ -96,14 +96,36 @@ class TestDefaultFaultSampleTimestep(unittest.TestCase):
                     self.assertEqual(sample.num_scenarios(), 6 if n_joint == 1 else 3)
                     for scenario in sample.scenarios():
                         self.assertEqual(scenario.phase, "late")
+                        # Each phase spans three model steps. Form each
+                        # component's full phase exposure before allocating
+                        # one third of the joint rate to this sampled time.
+                        phase_exposure = 3 * dt
                         expected = (
-                            (0.2 * 0.75 * dt) * (0.3 * 0.4 * dt)
+                            (0.2 * 0.75 * phase_exposure)
+                            * (0.3 * 0.4 * phase_exposure) / 3
                             if n_joint == 2
                             else 0.2 * 0.75 * dt
                             if scenario.fault == "first"
                             else 0.3 * 0.4 * dt
                         )
                         self.assertAlmostEqual(scenario.rate, expected, places=14)
+
+    def test_joint_phase_mass_is_independent_of_time_quadrature(self):
+        for dt in (0.25, 0.5, 1.0, 2.0):
+            # The late phase includes 2*dt, 3*dt and 4*dt, so its exposure is
+            # 3*dt. This analytical reference does not call the rate helper.
+            exposure = 3 * dt
+            expected = (0.2 * 0.75 * exposure) * (0.3 * 0.4 * exposure)
+            for method, args in (("even", (1,)), ("even", (2,)), ("all", ())):
+                with self.subTest(dt=dt, method=method, args=args):
+                    sample = FaultSample(make_domain(dt))
+                    sample.add_fault_phases(
+                        "late", method=method, args=args, n_joint=2
+                    )
+                    self.assertAlmostEqual(
+                        sum(s.rate for s in sample.scenarios()), expected,
+                        places=14,
+                    )
 
     def test_explicit_and_disabled_phase_maps_keep_their_existing_semantics(self):
         domain = make_domain(0.25)
