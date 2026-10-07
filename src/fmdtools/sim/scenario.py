@@ -315,6 +315,8 @@ class JointFaultScenario(BaseScenario):
         """Generate JointFaultScenario given fault names and injection time.
 
         None starts at injection; an explicit starttime of zero is retained.
+        Combine unweighted fault rates first, then apply the scenario's sampling
+        weight once. Independent faults do not exponentiate quadrature weights.
         """
         if phasemap:
             phase = phasemap.find_base_phase(time)
@@ -325,9 +327,9 @@ class JointFaultScenario(BaseScenario):
         for i, faulttup in enumerate(faulttups):
             if mdl:
                 rate = mdl.get_scen_rate(*faulttup, time,
-                                         phasemap=phasemap, weight=weight, **kwargs)
+                                         phasemap=phasemap, weight=1.0, **kwargs)
             else:
-                rate = weight
+                rate = 1.0
             rates[faulttup] = rate
         if baserate == 'ind':
             rate = np.prod([*rates.values()])
@@ -335,7 +337,7 @@ class JointFaultScenario(BaseScenario):
             rate = np.max([*rates.values()])
         else:
             rate = rates[baserate]
-        rate *= p_cond
+        rate *= weight * p_cond
         # create sequence
         faults = {}
         for faulttup in faulttups:

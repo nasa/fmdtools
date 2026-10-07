@@ -237,6 +237,10 @@ class Mode(BaseContainer, readonly=False):
         """
         Get the Fault object associated with the given faultname.
 
+        Explicit keyword overrides also apply to preconstructed Fault objects,
+        returning a new object without modifying the stored definition. With no
+        overrides, a preconstructed Fault is returned unchanged.
+
         Parameters
         ----------
         faultname : str
@@ -261,6 +265,8 @@ class Mode(BaseContainer, readonly=False):
         else:
             fault = faultname
         if isinstance(fault, Fault):
+            if kwargs:
+                return fault.__class__(**{**fault.asdict(), **kwargs})
             return fault
         else:
             defaults = self.get_pref_attrs("default")
@@ -370,6 +376,9 @@ class Mode(BaseContainer, readonly=False):
         """
         Add fault (a str) to the block.
 
+        Dictionary updates to stored Fault objects create new definitions rather
+        than assigning into their read-only fields. Omitted fields are retained.
+
         Parameters
         ----------
         *fault : str(s)
@@ -392,7 +401,16 @@ class Mode(BaseContainer, readonly=False):
         self.faults.update(faults)
         if isinstance(faults, dict):
             for faultname, fault in faults.items():
-                setattr(self, 'fault_'+faultname, fault)
+                fieldname = 'fault_'+faultname
+                current = getattr(self, fieldname)
+                if isinstance(current, Fault):
+                    # Fault fields are read-only; replace the definition itself.
+                    values = current.get_field_dict(fault)
+                    replacement = current.__class__(
+                        **copy.deepcopy({**current.asdict(), **values}))
+                    super(BaseContainer, self).__setattr__(fieldname, replacement)
+                else:
+                    setattr(self, fieldname, fault)
         if self.exclusive:
             if len(faults) > 1:
                 raise Exception("Multiple fault modes added to function with" +

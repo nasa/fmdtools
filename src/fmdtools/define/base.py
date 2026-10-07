@@ -441,9 +441,14 @@ def nan_to_x(metric, x=0.0):
 
 
 def gen_timerange(start_time, end_time, dt=1.0, min_r=7):
-    """Generate the times in a given interval given the timestep dt."""
-    return round_float(np.arange(start_time, end_time + np.power(10.0, -min_r), dt),
-                       res=dt, min_r=min_r)
+    """Generate a timestep grid anchored at start_time, not at zero.
+
+    Round elapsed steps before restoring the origin so non-grid-aligned starts
+    do not shift or duplicate the generated times. Decimal cleanup and the
+    inclusive endpoint tolerance retain their min_r precision.
+    """
+    elapsed = np.arange(0.0, end_time - start_time + np.power(10.0, -min_r), dt)
+    return np.round(start_time + round_float(elapsed, res=dt, min_r=min_r), min_r)
 
 
 def get_code_attrs(obj):
