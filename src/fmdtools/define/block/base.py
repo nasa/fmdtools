@@ -141,7 +141,8 @@ class SimParam(Parameter, readonly=True):
         elif self.track_times[0] == 'interval':
             histrange = timerange[0:len(timerange):self.track_times[1]]
         elif self.track_times[0] == 'times':
-            histrange = self.track_times[1]
+            # Logging writes into this vector; keep it independent of the config.
+            histrange = np.array(self.track_times[1], copy=True)
         return histrange
 
     def get_hist_ind(self, t_ind, t, local_dt=None):
@@ -150,6 +151,8 @@ class SimParam(Parameter, readonly=True):
 
         Returns log as true if the index of the history and simulation line up, otherwise
         the simulation is not to be logged.
+        Explicit recording times skip unrequested steps and support lists,
+        tuples and NumPy arrays. The index is only used when log is true.
 
         Examples
         --------
@@ -175,7 +178,9 @@ class SimParam(Parameter, readonly=True):
             log = t_ind % self.track_times[1] == 0
             t_ind_rec = t_ind//self.track_times[1]
         elif self.track_times[0] == 'times':
-            t_ind_rec = self.track_times[1].index(t)
+            matches = np.flatnonzero(np.asarray(self.track_times[1]) == t)
+            log = log and bool(matches.size)
+            t_ind_rec = int(matches[0]) if matches.size else 0
         else:
             raise Exception("Invalid argument, track_times=" + str(self.track_times))
         return bool(log), t_ind_rec
