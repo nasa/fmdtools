@@ -38,6 +38,7 @@ import numpy as np
 import itertools
 import inspect
 import copy
+from collections.abc import Mapping
 
 
 def pass_var(*x):
@@ -782,7 +783,9 @@ class BaseSample():
         ids : list, optional
             List of scenarios to get the metric over. The default is "all".
         **kwargs : kwargs
-            kwargs to calc_metric.
+            kwargs to calc_metric. Rate and weight mappings are aligned by
+            selected scenario name; a missing selected key raises KeyError.
+            Explicit arrays retain their supplied order.
 
         Returns
         -------
@@ -800,11 +803,14 @@ class BaseSample():
         >>> exfs2.get_metric("rate", method="average")
         np.float64(0.25)
         """
-        if ids == "all":
-            data = np.array([*self.get_scen_values(value).values()])
-        else:
-            data = np.array([j for i, j in self.get_scen_values(value).items()
-                             if i in ids])
+        values = self.get_scen_values(value)
+        if ids != "all":
+            values = {name: val for name, val in values.items() if name in ids}
+        for option in ("rates", "weights"):
+            factors = kwargs.get(option)
+            if isinstance(factors, Mapping):
+                kwargs[option] = [factors[name] for name in values]
+        data = np.array(list(values.values()))
         return calc_metric(data, **kwargs)
 
     def get_groups_scens(self, groupnames, groups):
