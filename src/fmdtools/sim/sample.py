@@ -371,6 +371,8 @@ def sample_times_even(times, numpts, dt=1.0):
     Rounded values outside the supplied support are snapped to its nearest
     available time. This keeps disconnected mode phases and offset grids valid
     while preserving existing rounding when its result is already available.
+    Coincident sample times are returned once with their weights combined,
+    preventing named scenarios from discarding repeated nodes' probability mass.
 
     Parameters
     ----------
@@ -400,8 +402,10 @@ def sample_times_even(times, numpts, dt=1.0):
         sampletimes = [time if np.any(available == time)
                        else times[np.argmin(np.abs(available - time))]
                        for time in sampletimes]
-    weights = [1/len(sampletimes) for i in sampletimes]
-    return sampletimes, weights
+    combined = {}
+    for time in sampletimes:
+        combined[time] = combined.get(time, 0.0) + 1/len(sampletimes)
+    return list(combined), list(combined.values())
 
 
 def sample_times_quad(times, nodes, weights):
