@@ -248,10 +248,18 @@ def load_folder(folder, filetype):
 
 
 def metric_preamble(data, dtype=None, rates=None, r_dtype=None, r_norm=False):
-    """Process data for weighted metrics used by calc_metric and calc_metric_ci."""
+    """Process data for weighted metrics used by calc_metric and calc_metric_ci.
+
+    Integer and boolean rate factors are promoted to float64 before normalization
+    or multiplication, avoiding fixed-width overflow in risk calculations.
+    Unweighted data and floating/object rate arithmetic are unchanged.
+    """
     vals = np.array(data, dtype=dtype)
     if rates is not None:
         rates = np.array(rates, dtype=r_dtype)
+        if rates.dtype.kind in 'biu':
+            # Weight in floating arithmetic before summing or multiplying counts.
+            rates = rates.astype(np.float64)
         if r_norm:
             rates = rates/np.sum(rates)
         if np.size(rates) > 1 and np.size(vals) > 1:
