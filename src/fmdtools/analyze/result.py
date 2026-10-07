@@ -839,6 +839,10 @@ class Result(UserDict):
         """
         Take the expectation of numeric metrics in the result over given scenarios.
 
+        Without a nominal scenario, use the first scenario's numeric fields.
+        A nominal reference is required only for differences from nominal.
+        An empty result returns an empty result of the same type.
+
         Parameters
         ----------
         app : SampleApproach, optional
@@ -861,7 +865,12 @@ class Result(UserDict):
         """
         mh = self.nest(levels=1)
 
-        nomhist = {k: v for k, v in mh.nominal.items() if is_numeric(v)}
+        if difference_from_nominal and 'nominal' not in mh:
+            raise ValueError("A nominal scenario is required for nominal differences.")
+        if not mh:
+            return self.__class__()
+        reference = mh['nominal'] if 'nominal' in mh else next(iter(mh.values()))
+        nomhist = {k: v for k, v in reference.items() if is_numeric(v)}
         newhists = {k: hist for k, hist in mh.items()
                     if with_nominal or k != 'nominal'}
         if app:
