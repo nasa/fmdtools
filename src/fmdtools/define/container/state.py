@@ -17,7 +17,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import is_iter
+from fmdtools.define.base import is_iter, round_float
 from fmdtools.define.container.base import BaseContainer
 
 import numpy as np
@@ -206,6 +206,9 @@ class State(BaseContainer):
         """
         Round the given arguments to a given resolution.
 
+        Array-valued states are rounded elementwise. Their resolutions may be
+        scalars or arrays broadcastable to the state.
+
         Examples
         --------
         >>> p = ExampleState(x=1.75850)
@@ -214,9 +217,7 @@ class State(BaseContainer):
         np.float64(1.8)
         """
         for name, value in kwargs.items():
-            current = getattr(self, name)
-            # np round used to avoid final rounding errors
-            setattr(self, name, np.round(round(current/value)*value, 7))
+            setattr(self, name, round_float(getattr(self, name), res=value))
 
     def limit(self, **kwargs):
         """
