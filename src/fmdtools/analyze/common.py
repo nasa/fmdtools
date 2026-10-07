@@ -95,12 +95,33 @@ def to_include_keys(to_include):
         return tuple(keys)
 
 
+def _integer_difference(val1, val2, compact=False):
+    """Subtract integer values without overflowing their storage dtype."""
+    left, right = np.asarray(val1), np.asarray(val2)
+    dtype = (
+        object
+        if max(left.dtype.itemsize, right.dtype.itemsize) >= 8
+        else np.int64
+    )
+    delta = np.subtract(left, right, dtype=dtype)
+
+    if compact and np.asarray(delta).dtype == object:
+        limits = np.iinfo(np.int64)
+        if np.all((delta >= limits.min) & (delta <= limits.max)):
+            return np.asarray(delta, dtype=np.int64)[()]
+    return delta
+
+
 def diff(val1, val2, difftype='bool'):
     """
     Find inconsistent states between val1, val2.
 
     The difftype option ('diff' (takes the difference), 'bool' (checks if the same),
                          and float (checks if under the provided tolerance))
+
+    Integer arithmetic is widened before subtraction and absolute value. Numeric
+    differences use int64 where possible, or exact Python integers for values
+    outside its range. Boolean comparisons and floating arithmetic are unchanged.
 
     Examples
     --------
@@ -114,12 +135,25 @@ def diff(val1, val2, difftype='bool'):
             val1 = np.array(val1)
         if isinstance(val2, list):
             val2 = np.array(val2)
-        if difftype == 'diff':
-            return val1-val2
-        elif difftype == 'bool':
+
+        if difftype == 'bool':
             return val1 != val2
-        elif isinstance(difftype, float):
-            return abs(val1-val2) > difftype
+
+        left, right = np.asarray(val1), np.asarray(val2)
+        integer_values = left.dtype.kind in 'iu' and right.dtype.kind in 'iu'
+
+        if difftype == 'diff':
+            if integer_values:
+                return _integer_difference(left, right, compact=True)
+            return val1-val2
+
+        if isinstance(difftype, float):
+            if integer_values:
+                return np.abs(_integer_difference(left, right)) > difftype
+            close = np.isclose(
+                left, right, atol=difftype, rtol=0.0, equal_nan=True
+            )
+            return ~close & ~np.isnan(left) & ~np.isnan(right)
     except ValueError as e:
         raise Exception("Unable to diff "+str(val1)+" and "+str(val2)) from e
 
