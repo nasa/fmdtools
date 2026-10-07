@@ -38,6 +38,7 @@ import numpy as np
 import itertools
 import inspect
 import copy
+from collections.abc import Mapping
 
 
 def pass_var(*x):
@@ -224,14 +225,22 @@ class ParameterDomain(object):
         return tuple(set_constraints)
 
     def get_map_vars(self, *x):
-        """Get the mapped variables for x."""
-        x_mapped = []
-        i = 0
-        for var_group in self.var_maps:
-            x_map = self.var_maps[var_group](*x[i:i+len(var_group)])
-            x_mapped.extend(x_map)
-            i += len(var_group)
-        return x_mapped
+        """Map inputs by variable name and return them in domain order.
+
+        Groups receive the original values of their named inputs. Later groups
+        may replace earlier mappings of the same variable. Unmapped supplied
+        values pass through unchanged; each map returns one value per input.
+        """
+        inputs = dict(zip(self.variables, x))
+        mapped = dict(inputs)
+        for var_group, mapper in self.var_maps.items():
+            names = [name for name in var_group if name in inputs]
+            values = list(mapper(*(inputs[name] for name in names)))
+            if len(values) != len(names):
+                raise ValueError("Each parameter map must return one mapped value "
+                                 "per supplied variable.")
+            mapped.update(zip(names, values))
+        return [mapped[name] for name in inputs]
 
     def get_param_kwargs(self, *x):
         """Get kwargs for the parameter at the given value of x."""
@@ -362,6 +371,8 @@ def sample_times_even(times, numpts, dt=1.0):
     Rounded values outside the supplied support are snapped to its nearest
     available time. This keeps disconnected mode phases and offset grids valid
     while preserving existing rounding when its result is already available.
+    Coincident sample times are returned once with their weights combined,
+    preventing named scenarios from discarding repeated nodes' probability mass.
 
     Parameters
     ----------
@@ -391,8 +402,10 @@ def sample_times_even(times, numpts, dt=1.0):
         sampletimes = [time if np.any(available == time)
                        else times[np.argmin(np.abs(available - time))]
                        for time in sampletimes]
-    weights = [1/len(sampletimes) for i in sampletimes]
-    return sampletimes, weights
+    combined = {}
+    for time in sampletimes:
+        combined[time] = combined.get(time, 0.0) + 1/len(sampletimes)
+    return list(combined), list(combined.values())
 
 
 def sample_times_quad(times, nodes, weights):
@@ -543,9 +556,19 @@ class FaultDomain(object):
          >>> [f.disturbances[0][1] for f in exfd2.faults.values()]
          [np.float64(0.0), np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(4.0), np.float64(5.0), np.float64(6.0), np.float64(7.0), np.float64(8.0), np.float64(9.0), np.float64(10.0)]
         """
+        # Check if n is one of the required types.
+        if not (isinstance(n, str) and n == 'all'):
+            if (isinstance(n, (bool, np.bool_))
+                    or not isinstance(n, (int, np.integer)) or n < 0):
+                raise ValueError("n must be 'all' or a non-negative integer.")
+            n = int(n)
+            if n == 0:
+                return
+        
         # Work on owned sets before inserting the nominal-state sentinel.
         dist_ranges = {state: vals.copy() if isinstance(vals, set) else vals
                        for state, vals in dist_ranges.items()}
+        
         # determine overall state combinations to sample from
         for state, vals in dist_ranges.items():
             if isinstance(vals, tuple):
@@ -786,7 +809,9 @@ class BaseSample():
         ids : list, optional
             List of scenarios to get the metric over. The default is "all".
         **kwargs : kwargs
-            kwargs to calc_metric.
+            kwargs to calc_metric. Rate and weight mappings are aligned by
+            selected scenario name; a missing selected key raises KeyError.
+            Explicit arrays retain their supplied order.
 
         Returns
         -------
@@ -804,11 +829,14 @@ class BaseSample():
         >>> exfs2.get_metric("rate", method="average")
         np.float64(0.25)
         """
-        if ids == "all":
-            data = np.array([*self.get_scen_values(value).values()])
-        else:
-            data = np.array([j for i, j in self.get_scen_values(value).items()
-                             if i in ids])
+        values = self.get_scen_values(value)
+        if ids != "all":
+            values = {name: val for name, val in values.items() if name in ids}
+        for option in ("rates", "weights"):
+            factors = kwargs.get(option)
+            if isinstance(factors, Mapping):
+                kwargs[option] = [factors[name] for name in values]
+        data = np.array(list(values.values()))
         return calc_metric(data, **kwargs)
 
     def get_groups_scens(self, groupnames, groups):
@@ -1116,6 +1144,9 @@ class FaultSample(BaseSample):
         """
         Sample scenarios in the given phases using a set sampling method.
 
+        Without a phase map, sample the configured model start-to-end interval
+        at its timestep rather than assuming the simulation starts at zero.
+
         Parameters
         ----------
         *phases_to_sample : str
@@ -1151,7 +1182,8 @@ class FaultSample(BaseSample):
         if self.phasemap:
             phasetimes = self.phasemap.get_sample_times(*phases_to_sample)
         else:
-            interval = [0, self.faultdomain.mdl.sp.end_time]
+            interval = [self.faultdomain.mdl.sp.start_time,
+                        self.faultdomain.mdl.sp.end_time]
             tstep = self.faultdomain.mdl.sp.dt
             phasetimes = {'phase': gen_timerange(interval[0], interval[-1], tstep)}
 
@@ -1860,10 +1892,11 @@ class ParameterResultSample(ParameterSample):
         """
         if t is None:
             return self.res_to_sample[comp_group].get(rep).get(var)
-        elif is_numeric(t):
+        elif (isinstance(t, (int, np.integer))
+              and not isinstance(t, (bool, np.bool_))):
             return self.res_to_sample[comp_group].get(rep).get(var)[t]
         else:
-            return Exception("Invalid option for t: "+str(t))
+            raise TypeError("History index t must be an integer or None.")
 
     def _get_reps(self, comp_group, reps):
         """

@@ -543,6 +543,8 @@ class BaseComparison(BaseTab):
         e.g. {'cost': 'average'}. Default is {}
     ci_metrics : list
         Metrics to calculate a confidence interval for (using bootstrap_ci).
+        Each has a point estimate and lower/upper bounds, whether or not it is
+        also listed in metrics. Each distinct metric is calculated once.
         Default is [].
     ci_kwargs : dict
         kwargs to bootstrap_ci
@@ -551,13 +553,14 @@ class BaseComparison(BaseTab):
     def __init__(self, res, scen_groups, metrics=['cost'],
                  default_stat="expected", stats={}, ci_metrics=[], ci_kwargs={}):
 
-        met_dict = {met: {} for met in metrics}
+        all_metrics = list(dict.fromkeys([*metrics, *ci_metrics]))
+        met_dict = {met: {} for met in all_metrics}
         met_dict.update({met+"_lb": {} for met in ci_metrics})
         met_dict.update({met+"_ub": {} for met in ci_metrics})
 
         for fact_tup, scens in scen_groups.items():
             sub_res = res.get_scens(*scens)
-            for met in metrics+ci_metrics:
+            for met in all_metrics:
                 if met in stats:
                     stat = stats[met]
                 else:

@@ -70,14 +70,14 @@ class TestJointFaultPhaseMap(unittest.TestCase):
                             faults, time, weight=weight, baserate=baserate, p_cond=0.5
                         )
                         actual = sample.scenarios()[0]
-                        values = np.array(component_rates) * weight
+                        values = np.array(component_rates)
                         expected = (
                             np.prod(values)
                             if baserate == "ind"
                             else np.max(values)
                             if baserate == "max"
                             else values[0]
-                        ) * 0.5
+                        ) * weight * 0.5
                         self.assertEqual(actual.phase, phase)
                         self.assertAlmostEqual(actual.rate, expected, places=14)
                         direct = JointFaultScenario.from_faults(

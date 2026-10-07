@@ -109,7 +109,12 @@ class TestApproachJointDomains(unittest.TestCase):
                     self.assertEqual(names, before_names)
                     np.testing.assert_allclose(
                         [s.rate for s in actual.scenarios()],
-                        [0.25**2 * 0.5, 0.75**2 * 0.5],
+                        [0.25 * 0.5, 0.75 * 0.5],
+                    )
+                    # Sampling weights partition the one joint rate; they are
+                    # not independent probabilities for each component fault.
+                    self.assertAlmostEqual(
+                        sum(s.rate for s in actual.scenarios()), 0.5
                     )
 
     def test_single_domain_paths_and_overlapping_domain_entries_remain_consistent(self):

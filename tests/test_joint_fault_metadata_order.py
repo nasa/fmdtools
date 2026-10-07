@@ -56,7 +56,7 @@ class TestJointFaultMetadataOrder(unittest.TestCase):
                         expected_faults.setdefault(obj, []).append(mode)
                     self.assertEqual(scenario.sequence[3.0].faults, expected_faults)
                     self.assertAlmostEqual(
-                        scenario.rate, 0.5 * (0.4**3 if base == "ind" else 0.4)
+                        scenario.rate, 0.5 * 0.4
                     )
 
     def test_duplicate_components_and_modes_are_deduplicated_without_reordering_injections(

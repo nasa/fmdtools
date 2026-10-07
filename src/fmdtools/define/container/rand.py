@@ -481,6 +481,8 @@ def get_permuted_pfunc(options=None, axis=None, out=None):
 
     Output buffers are used only during generation. Without options, retain the
     direct helper's convention of inferring the population from supplied values.
+    NaNs in floating or complex populations are retained values, so matching
+    NaNs do not make a generated permutation impossible.
     """
     def permuted_pfunc(*x):
         values = array_x(*x)
@@ -488,8 +490,11 @@ def get_permuted_pfunc(options=None, axis=None, out=None):
             original = np.asarray(options)
             if values.shape != original.shape:
                 return np.float64(0.0)
+            equal_nan = (np.issubdtype(values.dtype, np.inexact)
+                         and np.issubdtype(original.dtype, np.inexact))
             if not np.array_equal(np.sort(values, axis=axis),
-                                  np.sort(original, axis=axis)):
+                                  np.sort(original, axis=axis),
+                                  equal_nan=equal_nan):
                 return np.float64(0.0)
         return calc_prob_for_permuted(values, axis)
     return permuted_pfunc
@@ -566,17 +571,19 @@ def get_hypergeometric_pmf(ngood, nbad, nsample, size=None):
     """
     Get a hypergeometric mass from NumPy's scalar or array-like counts.
 
-    Add population counts elementwise without narrow-integer overflow. NumPy's
-    optional size controls generation and does not change the supplied mass.
+    Truncate accepted fractional counts as NumPy does, then add populations
+    without narrow-integer overflow. The optional size controls generation and
+    does not change the supplied mass.
 
     Examples
     --------
     >>> get_hypergeometric_pmf(50, 450, 100)(10)
     np.float64(0.14736784420411747)
     """
-    # Valid generator counts are exactly represented in float64.
-    ngood = np.asarray(ngood, dtype=float)
-    nbad = np.asarray(nbad, dtype=float)
+    # Match accepted count conversion before adding populations or evaluating PMF.
+    # Valid generator populations are below 10**9, so int64 addition is safe.
+    ngood, nbad, nsample = (np.asarray(count, dtype=np.int64)
+                           for count in (ngood, nbad, nsample))
     return get_scipy_pmf("hypergeom", ngood + nbad, ngood, nsample)
 
 

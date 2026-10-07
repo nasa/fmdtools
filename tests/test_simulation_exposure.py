@@ -85,7 +85,7 @@ class TestSimulationExposure(unittest.TestCase):
         faults = (("risk", "first"), ("risk", "second"))
         for weight in (0.25, 1.0):
             for baserate, expected in (
-                ("ind", 0.4 * 0.8 * weight**2),
+                ("ind", 0.4 * 0.8 * weight),
                 ("max", 0.8 * weight),
                 (faults[0], 0.4 * weight),
             ):
