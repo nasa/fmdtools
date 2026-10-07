@@ -287,6 +287,7 @@ def calc_prob_for_integers(x, low, high=None, size=None, dtype=np.int64,
 
     Bounds broadcast against the supplied values. Size and dtype describe
     generation, not the mass of those values. Empty draws have joint mass one.
+    Accepted fractional bounds are truncated before support and width checks.
 
     Examples
     --------
@@ -300,9 +301,10 @@ def calc_prob_for_integers(x, low, high=None, size=None, dtype=np.int64,
     del size, dtype
     if high is None:
         low, high = 0, low
-    # Python integer arithmetic preserves uint64 endpoints and interval widths.
-    low = np.asarray(low).astype(object)
-    high = np.asarray(high).astype(object) + int(endpoint)
+    # Match NumPy's accepted bound conversion without losing uint64 endpoints.
+    to_integer = np.frompyfunc(int, 1, 1)
+    low = to_integer(np.asarray(low, dtype=object))
+    high = to_integer(np.asarray(high, dtype=object)) + int(endpoint)
     if np.any(high <= low):
         raise ValueError("Integer bounds must define a nonempty interval.")
     x = np.asarray(x)
