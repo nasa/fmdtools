@@ -300,7 +300,7 @@ class ParameterDomain(object):
         >>> expd.get_var_iters()
         {'y': array([1.0, 2.0, 3.0, 4.0], dtype=object), 'x': array([ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10.])}
         >>> expd.get_var_iters(resolution=4.0)
-        {'y': array([1., 2., 3., 4.]), 'x': array([0., 4., 8.])}
+        {'y': array([1.0, 2.0, 3.0, 4.0], dtype=object), 'x': array([0., 4., 8.])}
 
         """
         var_iters = dict.fromkeys(self.variables)
@@ -524,6 +524,7 @@ class FaultDomain(object):
         dist_ranges : dict
             Ranges for the mode disturbances, e.g. {'s.x': (0, 5)} to elicit ranges
             or {'s.x': {1,2,3}} for defined sets
+            The input mapping and its sets are not modified.
         n : int, optional
             Max number of modes to generate. If more than this, the modes are sampled
             randomly. Limits at or above the number of combinations retain the full
@@ -555,6 +556,7 @@ class FaultDomain(object):
          >>> [f.disturbances[0][1] for f in exfd2.faults.values()]
          [np.float64(0.0), np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(4.0), np.float64(5.0), np.float64(6.0), np.float64(7.0), np.float64(8.0), np.float64(9.0), np.float64(10.0)]
         """
+        # Check if n is one of the required types.
         if not (isinstance(n, str) and n == 'all'):
             if (isinstance(n, (bool, np.bool_))
                     or not isinstance(n, (int, np.integer)) or n < 0):
@@ -562,7 +564,11 @@ class FaultDomain(object):
             n = int(n)
             if n == 0:
                 return
-
+        
+        # Work on owned sets before inserting the nominal-state sentinel.
+        dist_ranges = {state: vals.copy() if isinstance(vals, set) else vals
+                       for state, vals in dist_ranges.items()}
+        
         # determine overall state combinations to sample from
         for state, vals in dist_ranges.items():
             if isinstance(vals, tuple):
