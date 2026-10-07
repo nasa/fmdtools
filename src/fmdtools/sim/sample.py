@@ -261,9 +261,17 @@ class ParameterDomain(object):
         """
         Get iterables for each variable (provided given resolution).
 
-        Creates iterable based on the provided set constraints or domain limits. If
-        a numerical resolution is provided that does not line up with the greater
-        end point, that point will be cut off (see example).
+        Creates iterable based on the provided set constraints or domain limits
+        (inclusive). If a numerical resolution is provided that does not line
+        up with the greater end point, that point will be cut off (see example).
+
+        For continuous domains, the upper endpoint is included only when it is
+        on the requested grid, allowing for roundoff. Numerical resolutions
+        must be finite and positive. 
+        
+        Discrete options use one-dimensional object arrays to preserve their
+        exact values and types.
+
 
         Parameters
         ----------
@@ -281,9 +289,10 @@ class ParameterDomain(object):
         Examples
         --------
         >>> expd.get_var_iters()
-        {'y': array([1., 2., 3., 4.]), 'x': array([ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10.])}
+        {'y': array([1.0, 2.0, 3.0, 4.0], dtype=object), 'x': array([ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10.])}
         >>> expd.get_var_iters(resolution=4.0)
         {'y': array([1., 2., 3., 4.]), 'x': array([0., 4., 8.])}
+
         """
         var_iters = dict.fromkeys(self.variables)
         for variable in var_iters:
@@ -304,7 +313,8 @@ class ParameterDomain(object):
                 values = values[values <= ran[1] + tolerance]
                 var_iters[variable] = np.minimum(values, ran[1])
             elif isinstance(self.variables[variable], set):
-                var_iters[variable] = np.array([*self.variables[variable]])
+                var_iters[variable] = np.fromiter(self.variables[variable],
+                                                  dtype=object)
             else:
                 raise Exception("Invalid set constraint for variable " + variable)
         return var_iters
@@ -755,9 +765,10 @@ class BaseSample():
         Parameters
         ----------
         value : str
-            Value to get from the scenarios.
+            Value or dot-separated path to get from the scenarios, using the
+            same lookup as scenario filtering and grouping (e.g., 'p.gain').
         """
-        return {scenname: getattr(scen, value)
+        return {scenname: get_var(scen, value)
                 for scenname, scen in self.get_scens().items()}
 
     def get_metric(self, value, ids="all", **kwargs):
@@ -1638,7 +1649,7 @@ class ParameterSample(BaseSample):
         --------
         >>> ex_ps = ParameterSample(expd, seed=1)
         >>> ex_ps.combine_product()
-        [(np.float64(1.0), np.int64(0)), (np.float64(1.0), np.int64(1)), (np.float64(1.0), np.int64(2)), (np.float64(1.0), np.int64(3)), (np.float64(1.0), np.int64(4)), (np.float64(1.0), np.int64(5)), (np.float64(1.0), np.int64(6)), (np.float64(1.0), np.int64(7)), (np.float64(1.0), np.int64(8)), (np.float64(1.0), np.int64(9)), (np.float64(1.0), np.int64(10)), (np.float64(2.0), np.int64(0)), (np.float64(2.0), np.int64(1)), (np.float64(2.0), np.int64(2)), (np.float64(2.0), np.int64(3)), (np.float64(2.0), np.int64(4)), (np.float64(2.0), np.int64(5)), (np.float64(2.0), np.int64(6)), (np.float64(2.0), np.int64(7)), (np.float64(2.0), np.int64(8)), (np.float64(2.0), np.int64(9)), (np.float64(2.0), np.int64(10)), (np.float64(3.0), np.int64(0)), (np.float64(3.0), np.int64(1)), (np.float64(3.0), np.int64(2)), (np.float64(3.0), np.int64(3)), (np.float64(3.0), np.int64(4)), (np.float64(3.0), np.int64(5)), (np.float64(3.0), np.int64(6)), (np.float64(3.0), np.int64(7)), (np.float64(3.0), np.int64(8)), (np.float64(3.0), np.int64(9)), (np.float64(3.0), np.int64(10)), (np.float64(4.0), np.int64(0)), (np.float64(4.0), np.int64(1)), (np.float64(4.0), np.int64(2)), (np.float64(4.0), np.int64(3)), (np.float64(4.0), np.int64(4)), (np.float64(4.0), np.int64(5)), (np.float64(4.0), np.int64(6)), (np.float64(4.0), np.int64(7)), (np.float64(4.0), np.int64(8)), (np.float64(4.0), np.int64(9)), (np.float64(4.0), np.int64(10))]
+        [(1.0, np.int64(0)), (1.0, np.int64(1)), (1.0, np.int64(2)), (1.0, np.int64(3)), (1.0, np.int64(4)), (1.0, np.int64(5)), (1.0, np.int64(6)), (1.0, np.int64(7)), (1.0, np.int64(8)), (1.0, np.int64(9)), (1.0, np.int64(10)), (2.0, np.int64(0)), (2.0, np.int64(1)), (2.0, np.int64(2)), (2.0, np.int64(3)), (2.0, np.int64(4)), (2.0, np.int64(5)), (2.0, np.int64(6)), (2.0, np.int64(7)), (2.0, np.int64(8)), (2.0, np.int64(9)), (2.0, np.int64(10)), (3.0, np.int64(0)), (3.0, np.int64(1)), (3.0, np.int64(2)), (3.0, np.int64(3)), (3.0, np.int64(4)), (3.0, np.int64(5)), (3.0, np.int64(6)), (3.0, np.int64(7)), (3.0, np.int64(8)), (3.0, np.int64(9)), (3.0, np.int64(10)), (4.0, np.int64(0)), (4.0, np.int64(1)), (4.0, np.int64(2)), (4.0, np.int64(3)), (4.0, np.int64(4)), (4.0, np.int64(5)), (4.0, np.int64(6)), (4.0, np.int64(7)), (4.0, np.int64(8)), (4.0, np.int64(9)), (4.0, np.int64(10))]
         """
         var_iters = self.paramdomain.get_var_iters(resolution, resolutions=resolutions)
         x_combos = [*itertools.product(*var_iters.values())]
@@ -1664,7 +1675,7 @@ class ParameterSample(BaseSample):
         --------
         >>> ex_ps = ParameterSample(expd, seed=1)
         >>> ex_ps.combine_orthogonal()
-        [[np.float64(1.0), 1.0], [np.float64(2.0), 1.0], [np.float64(3.0), 1.0], [np.float64(4.0), 1.0], [3.0, np.int64(0)], [3.0, np.int64(1)], [3.0, np.int64(2)], [3.0, np.int64(3)], [3.0, np.int64(4)], [3.0, np.int64(5)], [3.0, np.int64(6)], [3.0, np.int64(7)], [3.0, np.int64(8)], [3.0, np.int64(9)], [3.0, np.int64(10)]]
+        [[1.0, 1.0], [2.0, 1.0], [3.0, 1.0], [4.0, 1.0], [3.0, np.int64(0)], [3.0, np.int64(1)], [3.0, np.int64(2)], [3.0, np.int64(3)], [3.0, np.int64(4)], [3.0, np.int64(5)], [3.0, np.int64(6)], [3.0, np.int64(7)], [3.0, np.int64(8)], [3.0, np.int64(9)], [3.0, np.int64(10)]]
         """
         var_iters = self.paramdomain.get_var_iters(resolution, resolutions=resolutions)
         x_def = self.paramdomain.get_x_defaults()

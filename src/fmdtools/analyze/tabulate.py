@@ -702,7 +702,9 @@ class NestedComparison(BaseComparison):
         Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take
         statistic over. Default is ['time']
     samps : dict
-        Sample objects used to generate the scenarios. {'name': samp}
+        Sample objects keyed by their parent scenario name, {'name': samp}.
+        Each inner sample contributes only to that parent's factor group;
+        matching factor groups accumulate scenarios across parents.
     samps_factors : list
         Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take
         statistic over in the apps. Default is ['time']
@@ -713,13 +715,15 @@ class NestedComparison(BaseComparison):
     def __init__(self, res, samp, samp_factors, samps, samps_factors, **kwargs):
         overall_scen_groups = {}
         scen_groups = samp.get_scen_groups(*samp_factors)
-        for n_samp in samps.values():
+        for parent, n_samp in samps.items():
             n_scen_groups = n_samp.get_scen_groups(*samps_factors)
             for scen_group, scens in scen_groups.items():
+                if parent not in scens:
+                    continue
                 for n_scen_group, n_scens in n_scen_groups.items():
                     k = tuple(list(scen_group)+list(n_scen_group))
-                    v = [s+"."+ns for s in scens for ns in n_scens]
-                    overall_scen_groups[k] = v
+                    v = [parent+"."+ns for ns in n_scens]
+                    overall_scen_groups.setdefault(k, []).extend(v)
 
         self.factors = samp_factors + samps_factors
         super().__init__(res, overall_scen_groups, **kwargs)

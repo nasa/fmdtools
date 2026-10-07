@@ -424,12 +424,12 @@ class History(Result):
             return self
 
     def _prep_nom_faulty(self, nomhist={}, align=True):
-        """Create a nominal history of states from the current history."""
+        """Prepare local flattened histories so alignment leaves inputs unchanged."""
         if not nomhist:
             nomhist = self.nominal.flatten()
         else:
             nomhist = nomhist.flatten()
-        faulthist = self._prep_faulty()
+        faulthist = self._prep_faulty().flatten()
         if align:
             faulthist._align(nomhist)
         return nomhist, faulthist
@@ -465,6 +465,9 @@ class History(Result):
                           withtime=True, withtotal=True):
         """
         Get history of times when the attributes *attrs deviate from nominal values.
+
+        Align the comparison on local flattened views without truncating either
+        source history. Returned values use the common time range.
 
         Parameters
         ----------
@@ -535,6 +538,9 @@ class History(Result):
         """
         Get fault names associated with the given attributes.
 
+        Match complete fault-container paths in flat or nested histories, including
+        root-level sub-fault flags.
+
         Parameters
         ----------
         *attrs : strs
@@ -545,15 +551,14 @@ class History(Result):
         faults_hist : History
             History of the attrs and their corresponding faults
         """
-        faulthist = self._prep_faulty()
+        faulthist = self._prep_faulty().flatten()
         faults_hist = History()
         if not attrs:
             attrs = self.keys()
         for att in attrs:
             faults_hist[att] = History({k.split('.')[-1]: v for k, v in faulthist.items()
-                                        if ('.'+att+'.m.faults' in k) or
-                                        ('.'+att+'.m.sub_faults' in k) or
-                                        (att+'.m.faults' in k and k.startswith(att))})
+                                        if ('.'+att+'.m.faults.' in '.'+k+'.') or
+                                        ('.'+k).endswith('.'+att+'.m.sub_faults')})
         return faults_hist
 
     def get_faulty_hist(self, *attrs, withtime=True, withtotal=True, operator=np.any):

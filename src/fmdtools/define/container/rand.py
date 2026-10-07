@@ -584,6 +584,7 @@ def get_uniform_pdf(low=0.0, high=1.0, size=None):
     """Get a uniform density using NumPy's lower and upper bounds.
 
     NumPy specifies endpoints; SciPy specifies location and interval width.
+    Promote bounds before subtraction so fixed-width inputs cannot overflow.
     The optional draw size does not change the density of the supplied values.
 
     Examples
@@ -593,8 +594,8 @@ def get_uniform_pdf(low=0.0, high=1.0, size=None):
     >>> get_uniform_pdf(5.0, 6.0)(7.0)
     np.float64(0.0)
     """
-    return get_scipy_pdf("uniform", loc=low,
-                         scale=np.asarray(high) - np.asarray(low))
+    low, high = np.asarray(low, dtype=float), np.asarray(high, dtype=float)
+    return get_scipy_pdf("uniform", loc=low, scale=high-low)
 
 
 def get_pareto_pdf(a, size=None):
@@ -808,7 +809,8 @@ def get_pfunc_for_dist(randname, *args):
 
     Univariate discrete and shape-family sampling sizes are accepted without
     shifting the support or changing distribution parameters.
-    Poisson's omitted rate uses NumPy's default of one.
+    Poisson's omitted rate uses NumPy's default of one. Binomial trial counts
+    follow NumPy's integer conversion before evaluating their probability mass.
 
     Parameters
     ----------
@@ -847,6 +849,9 @@ def get_pfunc_for_dist(randname, *args):
             if len(args) not in (num_params, num_params + 1):
                 raise TypeError(randname + " requires " + str(num_params) +
                                 " distribution parameter(s) and an optional size.")
+            if randname == 'binomial':
+                # NumPy truncates accepted trial counts before drawing successes.
+                args = (np.asarray(args[0], dtype=np.int64), *args[1:])
             # NumPy's optional size must not become SciPy's location parameter.
             return get_scipy_pmf(scipy_name, *args[:num_params])
         case str if randname in shape_funcs:
