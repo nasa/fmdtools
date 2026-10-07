@@ -224,14 +224,22 @@ class ParameterDomain(object):
         return tuple(set_constraints)
 
     def get_map_vars(self, *x):
-        """Get the mapped variables for x."""
-        x_mapped = []
-        i = 0
-        for var_group in self.var_maps:
-            x_map = self.var_maps[var_group](*x[i:i+len(var_group)])
-            x_mapped.extend(x_map)
-            i += len(var_group)
-        return x_mapped
+        """Map inputs by variable name and return them in domain order.
+
+        Groups receive the original values of their named inputs. Later groups
+        may replace earlier mappings of the same variable. Unmapped supplied
+        values pass through unchanged; each map returns one value per input.
+        """
+        inputs = dict(zip(self.variables, x))
+        mapped = dict(inputs)
+        for var_group, mapper in self.var_maps.items():
+            names = [name for name in var_group if name in inputs]
+            values = list(mapper(*(inputs[name] for name in names)))
+            if len(values) != len(names):
+                raise ValueError("Each parameter map must return one mapped value "
+                                 "per supplied variable.")
+            mapped.update(zip(names, values))
+        return [mapped[name] for name in inputs]
 
     def get_param_kwargs(self, *x):
         """Get kwargs for the parameter at the given value of x."""
