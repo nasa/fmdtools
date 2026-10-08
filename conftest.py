@@ -93,7 +93,7 @@ doctest_modules = ["src/fmdtools/define/container/base.py",
 # list of fast-running notebooks:
 fast_notebooks = ["examples/human_hazard_mitigation/tutorial_actionarchitecture.ipynb",
                   "examples/electric_power_system/demo_static_models.ipynb",
-                  "examples/state_communication/tutorial_MultiFlow_and_CommsFlow.ipynb"
+                  "examples/state_communication/tutorial_MultiFlow_and_CommsFlow.ipynb",
                   "examples/multirotor_drone/demo_overview.ipynb",
                   "examples/multirotor_drone/paper_ijphm_fmdtools.ipynb",
                   "examples/multirotor_drone/tutorial_fmdtools_basics.ipynb",
@@ -102,7 +102,7 @@ fast_notebooks = ["examples/human_hazard_mitigation/tutorial_actionarchitecture.
                   "examples/navigating_rover/demo_overview.ipynb",
                   "examples/navigating_rover/tutorial_model_structure_visualization.ipynb",
                   "examples/navigating_rover/tutorial_FaultSample.ipynb",
-                  "examples/navigating_rover/navigating_demo_rover_model.ipynb",
+                  "examples/navigating_rover/demo_rover_model.ipynb",
                   "examples/cooling_tank/demo_tank_model.ipynb",
                   "examples/airport_taxiway/paper_jcise_dsa.ipynb"
                   ]
@@ -212,8 +212,7 @@ if __name__ == "__main__":
     # some test usages of pytest with local options
     import pytest
     # pytest.main(["--testtype=fast-notebooks"])
-    pytest.main(["--doctest-modules",
-                 "tests/test_geom.py",
+    pytest.main(["tests/unit/define/object/geom/test_geom.py",
                 "--testtype=custom"])
     # pytest.main([*fast_notebooks,
     #              "--testtype=custom",
