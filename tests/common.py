@@ -28,7 +28,7 @@ import numpy as np
 
 
 class CommonTests():
-    """Some basic tests which can be run accross different models."""
+    """Some basic tests which can be run across different models."""
 
     def check_var_setting(self, mdl, statenames, newvalues):
         """Test to see that given variable values are set to new values."""
