@@ -97,8 +97,8 @@ To assist with this, the custom git alias below can be helpful::
 
 	[alias]
 		up = "!git merge dev main"
-		pp = "!f() { git push public tag main; }; f"
-		po = "!f() { git push origin tag main; }; f"
+		pp = "!f() { git push public tag main --follow-tags; }; f"
+		po = "!f() { git push origin tag main --follow-tags; }; f"
 		release = "!f() { git checkout main && git up && git pp && git po; }; f"
 		fb = "!f() { git fetch origin && git fetch public; }; f"
 		mm = "!git merge main dev"
@@ -109,7 +109,7 @@ Adding this block to your repository's git config file (e.g., ``.git/config``) a
 - ``git sync-into-dev`` will merge all main and dev branches (local and remote) into your local dev branch
 - ``git release`` will merge ``dev`` into ``main`` and upload it to ``public`` and ``origin``.
 
-Git Tags for versions (as well as other indicators of version) are controlled with `bump-my-version` and applies the format `Major.Minor.Patch-StageNum` where Stage is the stage of development (dev, test, or docs) and num is the iteration (e.g., a second round of testing would be test2).
+Git Tags for versions (as well as other indicators of version) are controlled with `bump-my-version` and applies the format `Major.Minor.Patch.StageNum` where Stage is the stage of development (dev, test, or docs) and num is the iteration (e.g., a second round of testing would be test2).
 
 Git Development Workflow
 ------------------------

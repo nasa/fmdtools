@@ -116,13 +116,13 @@ parse = """(?x)
     (?P<minor>0|[1-9]\\d*)\\.
     (?P<patch>0|[1-9]\\d*)
     (?:
-        -                             # dash separator for pre-release section
+        .                             # dot for pre-release section
         (?P<stage>[a-zA-Z-]+)         # pre-release label
         (?P<num>0|[1-9]\\d*)        # pre-release version number
     )?                                # pre-release section is optional
 """
 serialize = [
-    "{major}.{minor}.{patch}-{stage}{num}",
+    "{major}.{minor}.{patch}.{stage}{num}",
     "{major}.{minor}.{patch}",
 ]
 search = "{current_version}"
