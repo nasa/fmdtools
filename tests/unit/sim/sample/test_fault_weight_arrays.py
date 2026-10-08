@@ -30,7 +30,7 @@ from fmdtools.sim.sample import (
     JointFaultSample,
     SampleApproach,
 )
-from tests.test_default_fault_sample_timestep import make_domain
+from fmdtools_tests.common import make_domain
 
 
 class TestFaultWeightArrays(unittest.TestCase):

@@ -26,7 +26,7 @@ from fmdtools.analyze.phases import PhaseMap
 from fmdtools.analyze.tabulate import FMEA
 from fmdtools.sim import propagate
 from fmdtools.sim.sample import FaultSample, JointFaultSample, SampleApproach
-from tests.test_default_fault_sample_timestep import make_domain
+from fmdtools_tests.common import make_domain
 
 
 def make_approach(dt):

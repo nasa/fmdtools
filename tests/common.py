@@ -22,6 +22,11 @@ from fmdtools.analyze import tabulate as tabulate
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 
+
+from fmdtools.define.block.function import ExampleFunction
+from fmdtools.define.container.mode import Fault, Mode
+from fmdtools.sim.sample import FaultDomain
+
 import os
 import shutil
 import numpy as np
@@ -494,3 +499,31 @@ def gen_save_kwargs(resfolder, histfolder, ext, **kwargs):
             'showprogress': False,
             'overwrite': True,
             **kwargs}
+
+
+class RateMode(Mode):
+    fault_first = Fault(prob=0.2, units="sec", phases=(("early", 0.25), ("late", 0.75)))
+    fault_second = Fault(prob=0.3, units="sec", phases=(("early", 0.6), ("late", 0.4)))
+    opermodes = ("early", "late")
+    mode: str = "early"
+
+
+class RateFunction(ExampleFunction):
+    container_m = RateMode
+
+
+def make_domain(dt):
+    """Test domain used in a few different tests."""
+    model = RateFunction(
+        "risk",
+        sp={
+            "end_time": 4 * dt,
+            "dt": dt,
+            "use_local": False,
+            "units": "sec",
+            "phases": (("early", 0.0, dt), ("late", 2 * dt, 4 * dt)),
+        },
+    )
+    domain = FaultDomain(model)
+    domain.add_faults(("risk", "first"), ("risk", "second"))
+    return domain
