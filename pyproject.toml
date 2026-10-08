@@ -18,7 +18,7 @@ classifiers = [
 description = "System resilience modelling, simulation, and assessment in Python"
 license = {file="LICENSE"}
 name = "fmdtools"
-version="2.5.5.test4"
+version="2.5.5.dev4"
 readme = "README.md"
 requires-python = ">=3.12"
 
@@ -110,7 +110,7 @@ omit = [
     ]
 
 [tool.bumpversion]
-current_version = "2.5.5.test4"
+current_version = "2.5.5.dev4"
 parse = """(?x)
     (?P<major>0|[1-9]\\d*)\\.
     (?P<minor>0|[1-9]\\d*)\\.
@@ -139,7 +139,7 @@ message = "Bump version: {current_version} → {new_version}"
 commit_args = ""
 
 [tool.bumpversion.parts.stage]
-values = ["dev", "test", "docs", "final"]
+values = ["dev", "rc", "final"]
 optional_value = "final"
 
 [[tool.bumpversion.files]]

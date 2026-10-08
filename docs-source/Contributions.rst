@@ -109,7 +109,7 @@ Adding this block to your repository's git config file (e.g., ``.git/config``) a
 - ``git sync-into-dev`` will merge all main and dev branches (local and remote) into your local dev branch
 - ``git release`` will merge ``dev`` into ``main`` and upload it to ``public`` and ``origin``.
 
-Git Tags for versions (as well as other indicators of version) are controlled with `bump-my-version` and applies the format `Major.Minor.Patch.StageNum` where Stage is the stage of development (dev, test, or docs) and num is the iteration (e.g., a second round of testing would be test2).
+Git Tags for versions (as well as other indicators of version) are controlled with `bump-my-version` and applies the format `Major.Minor.Patch.StageNum` where Stage is the stage of development (dev or rc) and num is the iteration (e.g., a second round of testing would be test2).
 
 To ensure that tags make it to the servers, make sure to set `git config --global push.followTags true`.
 
