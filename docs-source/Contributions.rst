@@ -111,6 +111,9 @@ Adding this block to your repository's git config file (e.g., ``.git/config``) a
 
 Git Tags for versions (as well as other indicators of version) are controlled with `bump-my-version` and applies the format `Major.Minor.Patch.StageNum` where Stage is the stage of development (dev, test, or docs) and num is the iteration (e.g., a second round of testing would be test2).
 
+To ensure that tags make it to the servers, make sure to set `git config --global push.followTags true`.
+
+
 Git Development Workflow
 ------------------------
 
