@@ -475,10 +475,10 @@ class FMEA(BaseTab):
 
     >>> FMEA(res, exfs, average_metric=["rate"], sum_metric=["cost"], expected_metric=["cost"], rates="rate").as_table()
                                       average_rate  sum_cost  expected_cost
-    exfxnarch.fxns.ex_fxn2 short               1.5        13             20
-    exfxnarch.fxns.ex_fxn  short               1.5         9             14
-    exfxnarch.fxns.ex_fxn2 no_charge           1.5         5              8
-    exfxnarch.fxns.ex_fxn  no_charge           1.5         1              2
+    exfxnarch.fxns.ex_fxn2 short               1.5        13           20.0
+    exfxnarch.fxns.ex_fxn  short               1.5         9           14.0
+    exfxnarch.fxns.ex_fxn2 no_charge           1.5         5            8.0
+    exfxnarch.fxns.ex_fxn  no_charge           1.5         1            2.0
     >>> FMEA(res, exfs, sum_metric=["rate"], average_metric=["cost"]).as_table()
                                       sum_rate  average_cost
     exfxnarch.fxns.ex_fxn2 short             3           6.5
