@@ -123,7 +123,7 @@ More guidance on development installations is provided in [How to Contribute](ht
 Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` in the context of a development install you can checkout the tag corresponding to the version you want, e.g.:
 
 ```
-   git checkout v2.5.5.test3
+   git checkout v2.5.5.test4
 ```
 
 
@@ -229,9 +229,9 @@ Decent (but **very imperfect**) results can be achieved using LLMs for model dev
 
 ```prompt
 You are an experienced software engineer learning a new Python library for the first time.
-Make an fmdtools simulation of a <enter your system here> using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.5.test3` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes.
+Make an fmdtools simulation of a <enter your system here> using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.5.test4` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes.
 The output should be a bare bones but well-commented .py file with simple behaviors for each class and a small script at the bottom leveraging the built-in capabilities in the `fmdtools.analyze` package instead of directly using external libraries like matplotlib.
-As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.5.test3 syntax.
+As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.5.test4 syntax.
 ```
 
 The important aspects of this prompt are specifying the URL and version--otherwise the LLM is likely to hallucinate usage or recall an earlier version of fmdtools. Do not expect perfect output from this--you may have to spend some time identifying the problems so they can be fixed!
@@ -277,7 +277,7 @@ To cite a particular version of the fmdtools, you may use:
   author = {{NASA}},
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
-  version = {2.5.5.test3},
+  version = {2.5.5.test4},
   date = {2026-10-07},
 }
 ```
