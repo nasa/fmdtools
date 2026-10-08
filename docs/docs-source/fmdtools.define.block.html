@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.block &mdash; fmdtools 2.5.4 documentation</title>
+  <title>fmdtools.define.block &mdash; fmdtools 2.5.5.rc0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c0370f68"></script>
+      <script src="../_static/documentation_options.js?v=7a01ae65"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -1235,7 +1235,9 @@ densities of random states over time.</p></li>
 <span class="sig-name descname"><span class="pre">get_hist_ind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_ind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.SimParam.get_hist_ind" title="Link to this definition"></a></dt>
 <dd><p>Get the index of the history given the simulation time/index and shift.</p>
 <p>Returns log as true if the index of the history and simulation line up, otherwise
-the simulation is not to be logged.</p>
+the simulation is not to be logged.
+Explicit recording times skip unrequested steps and support lists,
+tuples and NumPy arrays. The index is only used when log is true.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SimParam</span><span class="p">()</span><span class="o">.</span><span class="n">get_hist_ind</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
 <span class="go">(True, 2)</span>

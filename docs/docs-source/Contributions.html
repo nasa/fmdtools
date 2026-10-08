@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contributions &mdash; fmdtools 2.5.4 documentation</title>
+  <title>Contributions &mdash; fmdtools 2.5.5.rc0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c0370f68"></script>
+      <script src="../_static/documentation_options.js?v=7a01ae65"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -1011,21 +1011,21 @@
 <p>To assist with this, the custom git alias below can be helpful:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">alias</span><span class="p">]</span>
         <span class="n">up</span> <span class="o">=</span> <span class="s2">&quot;!git merge dev main&quot;</span>
-        <span class="n">tl</span> <span class="o">=</span> <span class="s2">&quot;!f() { git tag -s -a </span><span class="se">\&quot;</span><span class="s2">$1</span><span class="se">\&quot;</span><span class="s2"> -m </span><span class="se">\&quot;</span><span class="s2">$2</span><span class="se">\&quot;</span><span class="s2">; }; f&quot;</span>
-        <span class="n">pp</span> <span class="o">=</span> <span class="s2">&quot;!f() { git push public tag </span><span class="se">\&quot;</span><span class="s2">$1</span><span class="se">\&quot;</span><span class="s2">; }; f&quot;</span>
-        <span class="n">po</span> <span class="o">=</span> <span class="s2">&quot;!f() { git push origin tag </span><span class="se">\&quot;</span><span class="s2">$1</span><span class="se">\&quot;</span><span class="s2">; }; f&quot;</span>
-        <span class="n">release</span> <span class="o">=</span> <span class="s2">&quot;!f() { git checkout main &amp;&amp; git up &amp;&amp; git tl </span><span class="se">\&quot;</span><span class="s2">$1</span><span class="se">\&quot;</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2">$2</span><span class="se">\&quot;</span><span class="s2"> &amp;&amp; git pp </span><span class="se">\&quot;</span><span class="s2">$1</span><span class="se">\&quot;</span><span class="s2"> &amp;&amp; git po </span><span class="se">\&quot;</span><span class="s2">$1</span><span class="se">\&quot;</span><span class="s2">; }; f&quot;</span>
+        <span class="n">pp</span> <span class="o">=</span> <span class="s2">&quot;!f() { git push public tag main --follow-tags; }; f&quot;</span>
+        <span class="n">po</span> <span class="o">=</span> <span class="s2">&quot;!f() { git push origin tag main --follow-tags; }; f&quot;</span>
+        <span class="n">release</span> <span class="o">=</span> <span class="s2">&quot;!f() { git checkout main &amp;&amp; git up &amp;&amp; git pp &amp;&amp; git po; }; f&quot;</span>
         <span class="n">fb</span> <span class="o">=</span> <span class="s2">&quot;!f() { git fetch origin &amp;&amp; git fetch public; }; f&quot;</span>
         <span class="n">mm</span> <span class="o">=</span> <span class="s2">&quot;!git merge main dev&quot;</span>
-        <span class="n">sync</span><span class="o">-</span><span class="n">into</span><span class="o">-</span><span class="n">dev</span> <span class="o">=</span> <span class="s2">&quot;!f() { git checkout dev &amp;&amp; git fb &amp;&amp; git pull origin dev &amp;&amp; git merge main dev; }; f&quot;</span>
+        <span class="n">sync</span><span class="o">-</span><span class="n">into</span><span class="o">-</span><span class="n">dev</span> <span class="o">=</span> <span class="s2">&quot;!f() { git checkout dev &amp;&amp; git fb &amp;&amp; git pull public dev &amp;&amp; git pull origin dev &amp;&amp; git merge main dev &amp;&amp; git merge test dev; }; f&quot;</span>
 </pre></div>
 </div>
 <p>Adding this block to your repository’s git config file (e.g., <code class="docutils literal notranslate"><span class="pre">.git/config</span></code>) adds custom git commands which can be used to simplify the release process. Specifically:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">sync-into-dev</span></code> will merge all main and dev branches (local and remote) into your local dev branch</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">release</span> <span class="pre">&quot;vX.X.X&quot;</span> <span class="pre">&quot;Version</span> <span class="pre">X.X.X&quot;</span></code> will merge <code class="docutils literal notranslate"><span class="pre">dev</span></code> into <code class="docutils literal notranslate"><span class="pre">main</span></code>, tag it with the given version, and upload it to <code class="docutils literal notranslate"><span class="pre">public</span></code> and <code class="docutils literal notranslate"><span class="pre">origin</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">release</span></code> will merge <code class="docutils literal notranslate"><span class="pre">dev</span></code> into <code class="docutils literal notranslate"><span class="pre">main</span></code> and upload it to <code class="docutils literal notranslate"><span class="pre">public</span></code> and <code class="docutils literal notranslate"><span class="pre">origin</span></code>.</p></li>
 </ul>
-<p>Note that the <code class="docutils literal notranslate"><span class="pre">-s</span></code> option above <cite>signs</cite> the tag, attributing it to your credentials. For this to work, you should <a class="reference external" href="https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits">set up commit signing</a> and configure git to sign commits by default.</p>
+<p>Git Tags for versions (as well as other indicators of version) are controlled with <cite>bump-my-version</cite> and applies the format <cite>Major.Minor.Patch.StageNum</cite> where Stage is the stage of development (dev or rc) and num is the iteration (e.g., a second round of testing would be test2).</p>
+<p>To ensure that tags make it to the servers, make sure to set <cite>git config –global push.followTags true</cite>.</p>
 </section>
 <section id="git-development-workflow">
 <h3>Git Development Workflow<a class="headerlink" href="#git-development-workflow" title="Link to this heading"></a></h3>
@@ -1057,8 +1057,8 @@
 <li><p>Releases are made to the fmdtools GitHub repository using the <code class="docutils literal notranslate"><span class="pre">Draft</span> <span class="pre">a</span> <span class="pre">new</span> <span class="pre">release</span></code> button on the <a class="reference external" href="https://github.com/nasa/fmdtools/releases">Releases</a> page. Once this release is generated, GitHub Actions uploads it to the <a class="reference external" href="https://pypi.org/project/fmdtools">fmdtools PyPi repo</a> automatically.</p></li>
 </ul>
 <p>To ensure all of the steps of the release process are performed, follow the <a class="reference download internal" download="" href="../_downloads/be1eae82cbc9abc48f350604374e7603/release_checklist.csv"><code class="xref download docutils literal notranslate"><span class="pre">Release</span> <span class="pre">Checklist</span></code></a>, see below:</p>
-<table class="docutils align-default" id="id3">
-<caption><span class="caption-text">Release Checklist</span><a class="headerlink" href="#id3" title="Link to this table"></a></caption>
+<table class="docutils align-default" id="id5">
+<caption><span class="caption-text">Release Checklist</span><a class="headerlink" href="#id5" title="Link to this table"></a></caption>
 <colgroup>
 <col style="width: 12.5%" />
 <col style="width: 37.5%" />
@@ -1079,77 +1079,57 @@
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>2</p></td>
-<td><p>Update version numbers in appropriate files</p></td>
+<td><p>Test</p></td>
 <td></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>2a</p></td>
-<td><p>“Check files conf.py LICENSE.py README.py Intro_to_fmdtools.md pyproject.toml __init__.py”</p></td>
+<td><p>Bump version: if version not initialized: “run bump-my-version stage” else “run bump-my-version patch” or “rum bump-my-bersion num” so version is V2.X.X.testnum</p></td>
 <td></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>2b</p></td>
-<td><p>“Run a repository-wide search for the version number”</p></td>
+<td><p>Sync to bamboo to run tests  (<cite>git push origin dev</cite>). If tests fail, fix tests and go to 2.</p></td>
 <td></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>3</p></td>
-<td><p>Allow (or force) Bamboo CI to build tests and docs</p></td>
+<td><p>Docs</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>4</p></td>
-<td><p>“Release to GitHub/remotes using <a href="#id1"><span class="problematic" id="id2">``</span></a>git release v2.x.x ‘’Version 2.x.x’’ `` “</p></td>
+<tr class="row-odd"><td><p>3a</p></td>
+<td><p>Update project plan and docs with changed dependencies, version, new activities, contributors, etc.</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>5</p></td>
-<td><p>Create a release in GitHub</p></td>
+<tr class="row-even"><td><p>3b</p></td>
+<td><p>Bump version: if version not initialized: “run bump-my-version stage” else “run bump-my-version patch” so version is V2.X.X.docs (or V2.X.X)</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>5a</p></td>
-<td><p>“incorporate a narrative summary of features and changes”</p></td>
+<tr class="row-odd"><td><p>3c</p></td>
+<td><p>Sync to bamboo to build docs (<cite>git push origin dev</cite>).</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>5b</p></td>
-<td><p>“incorporate the auto-generated bitbucket release notes.”</p></td>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>Release</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>6</p></td>
-<td><p>“Update project plan”</p></td>
+<tr class="row-odd"><td><p>4a</p></td>
+<td><p>Release to GitHub/remotes using <a href="#id1"><span class="problematic" id="id2">``</span></a>bump-my-version stage’ ‘ (so version is V2.X.X) and <a href="#id3"><span class="problematic" id="id4">``</span></a>git release’’ ``</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>6a</p></td>
-<td><p>“Include any changed dependencies”</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>6b</p></td>
-<td><p>“Include version in schedule”</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>6c</p></td>
-<td><p>“Identify and include additional changes/activities”</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>7</p></td>
-<td><p>Update/check external CI resources as needed</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>7a</p></td>
+<tr class="row-even"><td><p>4b</p></td>
 <td><p>“Toggle CodeFactor so it updates”</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>7b</p></td>
-<td><p>“Check upload to PyPi”</p></td>
+<tr class="row-odd"><td><p>4c</p></td>
+<td><p>Create a release in GitHub with narrative summary of features and changes and auto-generated bitbucket and github release notes (and this checklist!)</p></td>
 <td></td>
 <td></td>
 </tr>
@@ -1238,11 +1218,11 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <section id="why-was-fmdtools-developed">
 <h2>Why was fmdtools developed?<a class="headerlink" href="#why-was-fmdtools-developed" title="Link to this heading"></a></h2>
 <p>The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. Resilience is the ability of a system to mitigate hazardous scenarios as they arise. As shown below, the key defining aspect of resilience is the <strong>dynamics of failure events</strong>, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome).</p>
-<figure class="align-default" id="id4">
+<figure class="align-default" id="id6">
 <a class="reference internal image-reference" href="../_images/resilience_importance.svg"><img alt="importance of considering resilience" src="../_images/resilience_importance.svg" width="800" />
 </a>
 <figcaption>
-<p><span class="caption-text">Resilience is important to consider when dynamics of system behavior can lead to hazardous or unsafe outcomes.</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+<p><span class="caption-text">Resilience is important to consider when dynamics of system behavior can lead to hazardous or unsafe outcomes.</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>The impetus for developing fmdtools was a lack of existing open-source tools to model these dynamics at a high level (i.e., functions and flows) in the design process. Thus, researchers in this area had to re-implement modeling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools package resolved this problem by separating resilience modeling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. The goals of the fmdtools project have since shifted to the more general goal of <strong>improving the hazard assessment process</strong> by better representing systems resilience. Towards this end, fmdtools provides the following capabilities:</p>

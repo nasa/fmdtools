@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.container &mdash; fmdtools 2.5.4 documentation</title>
+  <title>fmdtools.define.container &mdash; fmdtools 2.5.5.rc0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c0370f68"></script>
+      <script src="../_static/documentation_options.js?v=7a01ae65"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -1660,6 +1660,8 @@ their properties</p>
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.add_fault">
 <span class="sig-name descname"><span class="pre">add_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.add_fault" title="Link to this definition"></a></dt>
 <dd><p>Add fault (a str) to the block.</p>
+<p>Dictionary updates to stored Fault objects create new definitions rather
+than assigning into their read-only fields. Omitted fields are retained.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>*fault</strong> (<em>str</em><em>(</em><a class="reference internal" href="fmdtools.define.block.html#id5" title="fmdtools.define.block.base.Block.s"><em>s</em></a><em>)</em>) – name(s) of the fault to add to the black</p>
@@ -1732,6 +1734,9 @@ their properties</p>
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.get_fault">
 <span class="sig-name descname"><span class="pre">get_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faultname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.get_fault" title="Link to this definition"></a></dt>
 <dd><p>Get the Fault object associated with the given faultname.</p>
+<p>Explicit keyword overrides also apply to preconstructed Fault objects,
+returning a new object without modifying the stored definition. With no
+overrides, a preconstructed Fault is returned unchanged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>faultname</strong> (<em>str</em>) – Name of the fault (if defined as a part of the mode at value fault_name).
@@ -2100,8 +2105,15 @@ is applied separately in each element’s increment direction. For example:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.state.State.roundto">
-<span class="sig-name descname"><span class="pre">roundto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.roundto" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">roundto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.roundto" title="Link to this definition"></a></dt>
 <dd><p>Round the given arguments to a given resolution.</p>
+<p>Array-valued states are rounded elementwise. Their resolutions may be
+scalars or arrays broadcastable to the state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>min_r</strong> (<em>int</em><em>, </em><em>optional</em>) – Minimum precision from np.round. Default is 7, for 7 decimal places.</p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.75850</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">roundto</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
@@ -2740,7 +2752,8 @@ Retain floating-point precision so small, representable masses stay nonzero.</p>
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">calc_prob_for_integers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'numpy.int64'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.calc_prob_for_integers" title="Link to this definition"></a></dt>
 <dd><p>Get the joint mass of independent np.default_rng.integers draws.</p>
 <p>Bounds broadcast against the supplied values. Size and dtype describe
-generation, not the mass of those values. Empty draws have joint mass one.</p>
+generation, not the mass of those values. Empty draws have joint mass one.
+Accepted fractional bounds are truncated before support and width checks.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_prob_for_integers</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">np.float64(0.5)</span>
@@ -2840,8 +2853,9 @@ density of the supplied samples.</p>
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.get_hypergeometric_pmf">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_hypergeometric_pmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngood</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_hypergeometric_pmf" title="Link to this definition"></a></dt>
 <dd><p>Get a hypergeometric mass from NumPy’s scalar or array-like counts.</p>
-<p>Add population counts elementwise without narrow-integer overflow. NumPy’s
-optional size controls generation and does not change the supplied mass.</p>
+<p>Truncate accepted fractional counts as NumPy does, then add populations
+without narrow-integer overflow. The optional size controls generation and
+does not change the supplied mass.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_hypergeometric_pmf</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">450</span><span class="p">,</span> <span class="mi">100</span><span class="p">)(</span><span class="mi">10</span><span class="p">)</span>
 <span class="go">np.float64(0.14736784420411747)</span>
@@ -2921,7 +2935,9 @@ The optional draw size does not change the density of the supplied values.</p>
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_permuted_pfunc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_permuted_pfunc" title="Link to this definition"></a></dt>
 <dd><p>Get a mass function using NumPy’s input/axis/output-buffer signature.</p>
 <p>Output buffers are used only during generation. Without options, retain the
-direct helper’s convention of inferring the population from supplied values.</p>
+direct helper’s convention of inferring the population from supplied values.
+NaNs in floating or complex populations are retained values, so matching
+NaNs do not make a generated permutation impossible.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2932,7 +2948,8 @@ direct helper’s convention of inferring the population from supplied values.</
 uses a custom function provided in this module.</p>
 <p>Univariate discrete and shape-family sampling sizes are accepted without
 shifting the support or changing distribution parameters.
-Poisson’s omitted rate uses NumPy’s default of one.</p>
+Poisson’s omitted rate uses NumPy’s default of one. Binomial trial counts
+follow NumPy’s integer conversion before evaluating their probability mass.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -3065,6 +3082,7 @@ does. The optional size controls generation and is not a density parameter.</p>
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.rand.</span></span><span class="sig-name descname"><span class="pre">get_uniform_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">low</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.get_uniform_pdf" title="Link to this definition"></a></dt>
 <dd><p>Get a uniform density using NumPy’s lower and upper bounds.</p>
 <p>NumPy specifies endpoints; SciPy specifies location and interval width.
+Promote bounds before subtraction so fixed-width inputs cannot overflow.
 The optional draw size does not change the density of the supplied values.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_uniform_pdf</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">)(</span><span class="mf">5.5</span><span class="p">)</span>

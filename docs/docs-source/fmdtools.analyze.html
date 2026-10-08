@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.analyze &mdash; fmdtools 2.5.4 documentation</title>
+  <title>fmdtools.analyze &mdash; fmdtools 2.5.5.rc0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c0370f68"></script>
+      <script src="../_static/documentation_options.js?v=7a01ae65"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -1158,6 +1158,9 @@ legend. Default is False.</p></li>
 <dt>The difftype option (‘diff’ (takes the difference), ‘bool’ (checks if the same),</dt><dd><p>and float (checks if under the provided tolerance))</p>
 </dd>
 </dl>
+<p>Integer arithmetic is widened before subtraction and absolute value. Numeric
+differences use int64 where possible, or exact Python integers for values
+outside its range. Boolean comparisons and floating arithmetic are unchanged.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
 <span class="go">array([ True, False, False])</span>
@@ -1235,6 +1238,9 @@ and subdirectories are ignored; matching files are not searched recursively.</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.common.metric_preamble">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">metric_preamble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.metric_preamble" title="Link to this definition"></a></dt>
 <dd><p>Process data for weighted metrics used by calc_metric and calc_metric_ci.</p>
+<p>Integer and boolean rate factors are promoted to float64 before normalization
+or multiplication, avoiding fixed-width overflow in risk calculations.
+Unweighted data and floating/object rate arithmetic are unchanged.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1564,7 +1570,8 @@ default for all values to get. Default is {}.</p></li>
 <li><p><strong>*values</strong> (<em>str</em>) – Values to get (e.g. <cite>fxns.fxnname.s.val</cite>)</p></li>
 <li><p><strong>**groups</strong> (<em>list</em>) – Sets of scenarios to group (e.g. set_1=[‘scen1’, ‘scen2’…]).
 Scenario names match at dot-separated path boundaries; selecting a
-parent scenario also includes its nested scenarios.</p></li>
+parent scenario also includes its nested scenarios. Flattened, nested
+and mixed result storage produce the same groups of leaf paths.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1617,6 +1624,9 @@ Results.</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.get_expected">
 <span class="sig-name descname"><span class="pre">get_expected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_nominal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difference_from_nominal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.get_expected" title="Link to this definition"></a></dt>
 <dd><p>Take the expectation of numeric metrics in the result over given scenarios.</p>
+<p>Without a nominal scenario, use the first scenario’s numeric fields.
+A nominal reference is required only for differences from nominal.
+An empty result returns an empty result of the same type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2156,6 +2166,8 @@ which does not reshape the array.</p></li>
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.get_degraded_hist">
 <span class="sig-name descname"><span class="pre">get_degraded_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*attrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">any&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difftype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bool'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withtotal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_degraded_hist" title="Link to this definition"></a></dt>
 <dd><p>Get history of times when the attributes <a href="#id17"><span class="problematic" id="id18">*</span></a>attrs deviate from nominal values.</p>
+<p>Align the comparison on local flattened views without truncating either
+source history. Returned values use the common time range.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2274,6 +2286,8 @@ The default is “earliest”.</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.get_faults_hist">
 <span class="sig-name descname"><span class="pre">get_faults_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.get_faults_hist" title="Link to this definition"></a></dt>
 <dd><p>Get fault names associated with the given attributes.</p>
+<p>Match complete fault-container paths in flat or nested histories, including
+root-level sub-fault flags.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>*attrs</strong> (<em>strs</em>) – Names to find in the history.</p>
@@ -2866,6 +2880,8 @@ The default is False.</p></li>
 <li><p><strong>stats</strong> (<em>dict</em>) – Non-default statistics to take for each individual metric.
 e.g. {‘cost’: ‘average’}. Default is {}</p></li>
 <li><p><strong>ci_metrics</strong> (<em>list</em>) – Metrics to calculate a confidence interval for (using bootstrap_ci).
+Each has a point estimate and lower/upper bounds, whether or not it is
+also listed in metrics. Each distinct metric is calculated once.
 Default is [].</p></li>
 <li><p><strong>ci_kwargs</strong> (<em>dict</em>) – kwargs to bootstrap_ci</p></li>
 </ul>
@@ -3170,10 +3186,10 @@ All other kwargs will be kwargs to Result.get_metric
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exfs</span><span class="p">,</span> <span class="n">average_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">],</span> <span class="n">sum_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">],</span> <span class="n">expected_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">],</span> <span class="n">rates</span><span class="o">=</span><span class="s2">&quot;rate&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
 <span class="go">                                  average_rate  sum_cost  expected_cost</span>
-<span class="go">exfxnarch.fxns.ex_fxn2 short               1.5        13             20</span>
-<span class="go">exfxnarch.fxns.ex_fxn  short               1.5         9             14</span>
-<span class="go">exfxnarch.fxns.ex_fxn2 no_charge           1.5         5              8</span>
-<span class="go">exfxnarch.fxns.ex_fxn  no_charge           1.5         1              2</span>
+<span class="go">exfxnarch.fxns.ex_fxn2 short               1.5        13           20.0</span>
+<span class="go">exfxnarch.fxns.ex_fxn  short               1.5         9           14.0</span>
+<span class="go">exfxnarch.fxns.ex_fxn2 no_charge           1.5         5            8.0</span>
+<span class="go">exfxnarch.fxns.ex_fxn  no_charge           1.5         1            2.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exfs</span><span class="p">,</span> <span class="n">sum_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">],</span> <span class="n">average_metric</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
 <span class="go">                                  sum_rate  average_cost</span>
 <span class="go">exfxnarch.fxns.ex_fxn2 short             3           6.5</span>
@@ -3196,7 +3212,9 @@ All other kwargs will be kwargs to Result.get_metric
 <li><p><strong>samp</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><em>BaseSample</em></a>) – Sample object used to generate the scenarios</p></li>
 <li><p><strong>samp_factors</strong> (<em>list</em>) – Factors (Scenario properties e.g., ‘name’, ‘time’, ‘var’) in samp to take
 statistic over. Default is [‘time’]</p></li>
-<li><p><strong>samps</strong> (<em>dict</em>) – Sample objects used to generate the scenarios. {‘name’: samp}</p></li>
+<li><p><strong>samps</strong> (<em>dict</em>) – Sample objects keyed by their parent scenario name, {‘name’: samp}.
+Each inner sample contributes only to that parent’s factor group;
+matching factor groups accumulate scenarios across parents.</p></li>
 <li><p><strong>samps_factors</strong> (<em>list</em>) – Factors (Scenario properties e.g., ‘name’, ‘time’, ‘var’) in samp to take
 statistic over in the apps. Default is [‘time’]</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – keyword arguments to BaseComparison</p></li>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define &mdash; fmdtools 2.5.4 documentation</title>
+  <title>fmdtools.define &mdash; fmdtools 2.5.5.rc0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c0370f68"></script>
+      <script src="../_static/documentation_options.js?v=7a01ae65"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -978,7 +978,10 @@ otherwise returns the number</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.base.gen_timerange">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">gen_timerange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.gen_timerange" title="Link to this definition"></a></dt>
-<dd><p>Generate the times in a given interval given the timestep dt.</p>
+<dd><p>Generate a timestep grid anchored at start_time, not at zero.</p>
+<p>Round elapsed steps before restoring the origin so non-grid-aligned starts
+do not shift or duplicate the generated times. Decimal cleanup and the
+inclusive endpoint tolerance retain their min_r precision.</p>
 </dd></dl>
 
 <dl class="py function">
