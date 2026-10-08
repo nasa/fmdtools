@@ -1,6 +1,6 @@
 ---
 title: Intro to fmdtools
-subtitle: Intro to resilience modeling, simulation, and visualization in Python with fmdtools v2.5.5.dev6.
+subtitle: Intro to resilience modeling, simulation, and visualization in Python with fmdtools v2.5.5.rc0.
 format: revealjs
 theme: default
 author: Daniel Hulse
