@@ -7,6 +7,7 @@ Adds options to pytest:
         Defines type of tests to run. May be
             "full" if all tests
             "doctests" for just doctests
+            "fasttests" for doctests and regression tests in /tests/unit
             "notebooks-fast"/"notebooks-slow"/"notebooks" for different lists of notebooks
             or any string for a custom test type
     - auto_build_reports : bool
@@ -46,7 +47,7 @@ import sys
 import pytest
 from pathlib import Path
 
-# listing of modules with doctests
+# list of modules with doctests
 doctest_modules = ["src/fmdtools/define/container/base.py",
                    "src/fmdtools/define/container/state.py",
                    "src/fmdtools/define/container/parameter.py",
@@ -89,6 +90,7 @@ doctest_modules = ["src/fmdtools/define/container/base.py",
                    "examples/airspacelib/base/arch/perceiveenvironment.py",
                    "examples/airspacelib/base/arch/controlflight.py",
                    "examples/airspacelib/base/arch/aviate.py"]
+
 
 # list of fast-running notebooks:
 fast_notebooks = ["examples/human_hazard_mitigation/tutorial_actionarchitecture.ipynb",
@@ -144,8 +146,8 @@ def pytest_addoption(parser):
     """
     parser.addoption("--skiplist", action="store_true",
                  default=too_slow_notebooks, help="skip listed tests")
-    parser.addoption("--testtype", action="store", default="doctests",
-                     help="test type: full, doctests, or any other name",
+    parser.addoption("--testtype", action="store", default="fasttests",
+                     help="test type: full, doctests, fasttests or any other name",
                      type=str)
     parser.addoption("--auto_build_reports", action="store", default=False,
                      help="build_report: whether to build a report",
@@ -155,14 +157,12 @@ def pytest_addoption(parser):
 def pytest_collection_modifyitems(config, items):
     """Skip listed (too slow notebooks) by default."""
     tests_to_skip = config.getoption("--skiplist")
-    if not tests_to_skip:
-        # --skiplist not given in cli, therefore move on
-        return
-    skip_listed = pytest.mark.skip(reason="included in --skiplist")
-    for item in items:
-        for testpath in tests_to_skip:
-            if Path(testpath).samefile(item.path):
-                item.add_marker(skip_listed)
+    if tests_to_skip:
+        skip_listed = pytest.mark.skip(reason="included in --skiplist")
+        for item in items:
+            for testpath in tests_to_skip:
+                if Path(testpath).samefile(item.path):
+                    item.add_marker(skip_listed)
 
 
 def pytest_configure(config):
@@ -187,11 +187,14 @@ def pytest_configure(config):
         config.option.xmlpath = reportdir+"/junit/junit.xml"
     if "full" not in testtype and "custom" not in testtype:
         config.args = []
-    if "doctests" in testtype:
+
+    if "fasttests" in testtype:
+        config.args.extend(["tests/unit/"])
+
+    if "doctests" in testtype or "fasttests" in testtype:
         config.doctestmodules=True
-        if "custom" not in testtype:
-            config.option.file_or_dir = str(doctest_modules)
-            config.args.extend(doctest_modules)
+        config.option.file_or_dir = str(doctest_modules)
+        config.args.extend(doctest_modules)
 
     if "notebooks" in testtype:
         if "slow" in testtype:
@@ -212,8 +215,11 @@ if __name__ == "__main__":
     # some test usages of pytest with local options
     import pytest
     # pytest.main(["--testtype=fast-notebooks"])
-    pytest.main(["tests/unit/define/object/geom/test_geom.py",
-                "--testtype=custom"])
+    pytest.main(["--import-mode=importlib",
+                "--testtype=fasttests",
+                "--auto_build_reports=True",
+                "--cov-report",
+                "html:auto"])
     # pytest.main([*fast_notebooks,
     #              "--testtype=custom",
     #              "--auto_build_reports=True",

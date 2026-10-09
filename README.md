@@ -55,16 +55,15 @@ The fmdtools documentation repository is also home to the Functional Reasoning D
 
 ### Python version compatibility
 
-The fmdtools library is developed in Python 3.14 but is tested to maintain compatibility over three versions of Python. See current doctest reports below:
+The fmdtools library is developed in Python 3.14 but is tested to maintain compatibility over three versions of Python. See current test reports below:
 
-| Python Version    | Doctests |
-| -------- | ------- |
-| 3.12 | [![Python 3.12 Tests](./tests/reports/doctests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/doctests-py312/junit/report.html)   |
-| 3.13 | [![Python 3.13 Tests](./tests/reports/doctests-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/doctests-py313/junit/report.html)    |
-| 3.14 | [![Python 3.14 Tests](./tests/reports/doctests-py314/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/doctests-py314/junit/report.html)   |
+| Python Version    | Test Report | Coverage |
+| -------- | ------- | ------- |
+| 3.12 | [![Python 3.12 Tests](./tests/reports/fasttests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py312/junit/report.html)   | [![Python 3.12 Coverage](./tests/reports/fasttests-py312/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/coverage-py312/coverage_html/index.html) |
+| 3.13 | [![Python 3.13 Tests](./tests/reports/fasttests-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py313/junit/report.html)    | [![Python 3.13 Coverage](./tests/reports/fasttests-py313/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/coverage-py313/coverage_html/index.html) |
+| 3.14 | [![Python 3.14 Tests](./tests/reports/fasttests-py314/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py314/junit/report.html)   | [![Python 3.14 Coverage](./tests/reports/fasttests-py314/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/coverage-py314/coverage_html/index.html) |
 
-Further (functional and integration) tests are performed in the Python 3.14 to ensure that examples run as desired. Thus, it is generally recommended to use Python 3.14
- with this version to keep pace with development, especially when running examples.
+Further tests of our examples are performed in the Python 3.14. Thus, it is generally recommended to use Python 3.14 with this version to keep pace with development, especially when running examples.
 
 ### Set up python tooling environment
 
