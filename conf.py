@@ -30,7 +30,7 @@ copyright = '2024, United States Government as represented by the Administrator 
 author = 'fmdtools developers'
 
 # The full version, including alpha/beta/rc tags
-release = '2.5.6.dev0'
+release = '2.5.6.dev1'
 version = release
 
 
