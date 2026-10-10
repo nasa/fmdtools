@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">265 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">241<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">24<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">240<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">25<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">20<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_21b4c020541f6e76_action_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
-            created at 2026-10-07 19:30 -0700
+            created at 2026-10-08 18:49 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -280,7 +280,7 @@
     <p class="run"><span class="n"><a id="t198" href="#t198">198</a></span><span class="t">        <span class="nam">factor_values</span> <span class="op">=</span> <span class="op">[</span><span class="nam">k</span><span class="op">[</span><span class="nam">value</span><span class="op">]</span> <span class="key">for</span> <span class="nam">k</span> <span class="key">in</span> <span class="nam">keys</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t199" href="#t199">199</a></span><span class="t">        <span class="key">if</span> <span class="nam">any</span><span class="op">(</span><span class="nam">isinstance</span><span class="op">(</span><span class="nam">v</span><span class="op">,</span> <span class="nam">tuple</span><span class="op">)</span> <span class="key">for</span> <span class="nam">v</span> <span class="key">in</span> <span class="nam">factor_values</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t200" href="#t200">200</a></span><span class="t">            <span class="com"># A tuple-valued factor is one key, not a set of array axes.</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t201" href="#t201">201</a></span><span class="t">            <span class="nam">order</span> <span class="op">=</span> <span class="nam">sorted</span><span class="op">(</span><span class="nam">range</span><span class="op">(</span><span class="nam">len</span><span class="op">(</span><span class="nam">keys</span><span class="op">)</span><span class="op">)</span><span class="op">,</span> <span class="nam">key</span><span class="op">=</span><span class="key">lambda</span> <span class="nam">i</span><span class="op">:</span> <span class="nam">factor_values</span><span class="op">[</span><span class="nam">i</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t201" href="#t201">201</a></span><span class="t">            <span class="nam">order</span> <span class="op">=</span> <span class="nam">sorted</span><span class="op">(</span><span class="nam">range</span><span class="op">(</span><span class="nam">len</span><span class="op">(</span><span class="nam">keys</span><span class="op">)</span><span class="op">)</span><span class="op">,</span> <span class="nam">key</span><span class="op">=</span><span class="key">lambda</span> <span class="nam">i</span><span class="op">:</span> <span class="nam">factor_values</span><span class="op">[</span><span class="nam">i</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t202" href="#t202">202</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t203" href="#t203">203</a></span><span class="t">            <span class="nam">order</span> <span class="op">=</span> <span class="nam">np</span><span class="op">.</span><span class="nam">argsort</span><span class="op">(</span><span class="nam">factor_values</span><span class="op">,</span> <span class="nam">axis</span><span class="op">=</span><span class="num">0</span><span class="op">,</span> <span class="nam">kind</span><span class="op">=</span><span class="str">&#x27;stable&#x27;</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t204" href="#t204">204</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -1037,7 +1037,7 @@
             <a class="nav" href="z_21b4c020541f6e76_action_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.16.2">coverage.py v7.16.2</a>,
-            created at 2026-10-07 19:30 -0700
+            created at 2026-10-08 18:49 -0700
         </p>
     </div>
 </footer>
