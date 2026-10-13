@@ -35,8 +35,8 @@ The fmdtools library provides the computational support needed to perform a simu
 
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/flexible.svg">
 
-### Flexible, AI-Ready Modelling Paradigm
-Models in fmdtools use a straightforward and composable code-based representation of system structure and behavior. Since fmdtools models are based on open-source Python, models can be readily generated from your AI of choice with the right prompting. Whether you want to model a simple component, a complex system-of-systems, or both, fmdtools can help.
+### Flexible, LLM-Ready Modelling Paradigm
+Models in fmdtools use a straightforward and composable code-based representation of system structure and behavior. Since fmdtools models are based on open-source Python, models can be readily generated from your LLM of choice with the right prompting. Whether you want to model a simple component, a complex system-of-systems, or both, fmdtools can help.
 
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/powerful.svg">
 
@@ -222,7 +222,7 @@ Once fmdtools is installed, use the following to get acquainted with how to use 
 
 - Explore the searchable [module reference](https://nasa.github.io/fmdtools/docs-source/fmdtools.html) for syntax and usage documentation.
 
-### AI/LLM Tips
+### Coding Agent/LLM Tips
 
 Decent (but **very imperfect**) results can be achieved using LLMs for model development using the prompt:
 
