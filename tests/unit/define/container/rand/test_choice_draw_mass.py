@@ -18,6 +18,7 @@ specific language governing permissions and limitations under the License.
 """
 
 import copy
+import math
 from collections import Counter
 from itertools import permutations, product
 import unittest
@@ -123,9 +124,156 @@ class TestChoiceDrawMass(unittest.TestCase):
                 ]
                 self.assertAlmostEqual(sum(masses), 1.0)
 
+    def test_weighted_without_replacement_matches_exact_index_enumeration(self):
+        # The observable labels need not be unique: sum all distinct-index
+        # draws that produce the same ordered label sequence.
+        for options, weights in (
+            ([0, 0, 1, 2], [0.05, 0.35, 0.4, 0.2]),
+            (["a", "a", "b", "c"], [0.3, 0.1, 0.25, 0.35]),
+            ([0, 0, 1, 2], [0.0, 0.35, 0.45, 0.2]),
+        ):
+            positive = sum(weight > 0 for weight in weights)
+            for count in range(positive + 1):
+                expected = {}
+                for indices in permutations(range(len(options)), count):
+                    if any(weights[i] == 0 for i in indices):
+                        continue
+                    probability = 1.0
+                    selected = set()
+                    for index in indices:
+                        remaining = math.fsum(
+                            weights[i] for i in range(len(options)) if i not in selected
+                        )
+                        probability *= weights[index] / remaining
+                        selected.add(index)
+                    outcome = tuple(options[i] for i in indices)
+                    expected[outcome] = expected.get(outcome, 0.0) + probability
+                with self.subTest(options=options, count=count):
+                    self.assertAlmostEqual(math.fsum(expected.values()), 1.0, 13)
+                    for outcome, mass in expected.items():
+                        values = np.asarray(outcome)
+                        if count == 4:
+                            values = values.reshape(2, 2)
+                        for actual in (
+                            calc_prob_for_choice(
+                                values, options, count, False, weights
+                            ),
+                            get_prob_for_rand(
+                                values, "choice", options, count, False, weights
+                            ),
+                        ):
+                            np.testing.assert_allclose(actual, mass, rtol=2e-14)
+
+    def test_weighted_without_replacement_keeps_rare_remaining_mass(self):
+        probabilities = [1e-15, 1 - 1e-15]
+        for outcome, expected in (
+            ([0, 1], probabilities[0]),
+            ([1, 0], probabilities[1]),
+        ):
+            with self.subTest(outcome=outcome):
+                np.testing.assert_allclose(
+                    get_prob_for_rand(outcome, "choice", 2, 2, False, probabilities),
+                    expected,
+                    rtol=2e-14,
+                )
+        self.assertEqual(
+            get_prob_for_rand([1, 1], "choice", [0, 1], 2, False, [0.2, 0.8]),
+            0.0,
+        )
+        with self.assertRaises(ValueError):
+            calc_prob_for_choice([0, 1], [0, 1], replace=False, p=[1.0, 0.0])
+
+    def test_weighted_without_replacement_is_tracked_in_rand_states(self):
+        weights = [0.1, 0.2, 0.3, 0.4]
+        state = ChoiceRand(seed=31, run_stochastic=True, track_pdf=True)
+        reference = np.random.default_rng(31)
+        for _ in range(3):
+            expected = reference.choice(4, (2, 2), False, weights)
+            state.set_rand_state("noise", "choice", 4, (2, 2), False, weights)
+            np.testing.assert_array_equal(state.s.noise, expected)
+            remaining = set(range(4))
+            expected_mass = 1.0
+            for index in expected.ravel():
+                total = math.fsum(weights[j] for j in remaining)
+                expected_mass *= weights[index] / total
+                remaining.remove(index)
+            np.testing.assert_allclose(state.probs[-1], expected_mass, rtol=2e-14)
+            self.assertEqual(
+                state.rng.bit_generator.state,
+                reference.bit_generator.state,
+            )
+        state.reset()
+        state.set_rand_state("noise", "choice", 4, (2, 2), False, weights)
+        np.testing.assert_array_equal(
+            state.s.noise,
+            np.random.default_rng(31).choice(4, (2, 2), False, weights),
+        )
+
+    def test_weighted_nan_labels_and_large_duplicate_groups(self):
+        options = np.array([np.nan, np.nan, 1.0])
+        weights = np.array([0.2, 0.3, 0.5])
+        weights.setflags(write=False)
+        # Either original NaN index can yield the observed first label.
+        expected = 0.2 * (0.5 / 0.8) + 0.3 * (0.5 / 0.7)
+        np.testing.assert_allclose(
+            get_prob_for_rand([np.nan, 1.0], "choice", options, 2, False, weights),
+            expected,
+            rtol=2e-14,
+        )
+        np.testing.assert_allclose(
+            get_prob_for_rand(
+                [np.nan, np.nan, 1.0], "choice", options, 3, False, weights
+            ),
+            0.2 * (0.3 / 0.8) + 0.3 * (0.2 / 0.7),
+            rtol=2e-14,
+        )
+        np.testing.assert_array_equal(weights, [0.2, 0.3, 0.5])
+        self.assertAlmostEqual(
+            get_prob_for_rand(
+                ["same"] * 20,
+                "choice",
+                ["same"] * 30,
+                20,
+                False,
+                (np.arange(1.0, 31.0) / 465.0),
+            ),
+            1.0,
+        )
+        self.assertAlmostEqual(
+            get_prob_for_rand(
+                ["same"] * 20,
+                "choice",
+                ["same"] * 30,
+                20,
+                False,
+                [1 / 30] * 30,
+            ),
+            1.0,
+        )
+
+    def test_weighted_choice_accepts_numpy_float32_probability_tolerance(self):
+        weights = np.array([0.4, 0.6], dtype=np.float32)
+        sample = np.random.default_rng(7).choice(2, size=2, replace=False, p=weights)
+        reference = float(weights[int(sample[0])]) / float(weights.sum(dtype=float))
+        np.testing.assert_allclose(
+            get_prob_for_rand(sample, "choice", 2, 2, False, weights),
+            reference,
+            rtol=2e-14,
+        )
+        for invalid in (
+            [0.2, 0.6],
+            [-0.2, 1.2],
+            [np.nan, 1.0],
+        ):
+            with self.subTest(invalid=invalid):
+                with self.assertRaises(ValueError):
+                    get_prob_for_rand([0], "choice", 2, 1, False, invalid)
+
     def test_unsupported_inputs_and_empty_draws_have_explicit_results(self):
-        with self.assertRaises(Exception):
-            calc_prob_for_choice([0], [0, 1], replace=False, p=[0.5, 0.5])
+        self.assertEqual(
+            calc_prob_for_choice([0], [0, 1], replace=False, p=[0.5, 0.5]),
+            0.5,
+        )
         with self.assertRaises(ValueError):
             calc_prob_for_choice([0, 1, 2], [0, 1], replace=False)
         with self.assertRaises(ValueError):

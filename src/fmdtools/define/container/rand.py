@@ -343,9 +343,10 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
     Get the ordered joint mass of choices from one-dimensional options.
 
     Scalars and arrays are evaluated using all supplied values. Sampling size
-    does not change their mass. Uniform sampling without replacement is
-    supported; weighted sampling without replacement remains unsupported.
-    Retain floating-point precision so small, representable masses stay nonzero.
+    does not change their mass. Uniform and weighted sampling without replacement
+    are supported. Repeated
+    values can represent several distinct selectable indices; their ordered
+    mass sums over all valid index sequences. Retain floating-point precision.
 
     Examples
     --------
@@ -362,8 +363,6 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
     if options.ndim != 1:
         raise ValueError("Choice probability requires one-dimensional options.")
     draws = np.asarray(x).ravel()
-    if not replace and p is not None:
-        raise Exception("Cannot calculate weighted probabilities without replacement.")
     if not replace and draws.size > options.size:
         raise ValueError("Too many draws from sample without replacement.")
     if not draws.size:
@@ -376,6 +375,58 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
         probabilities = np.asarray(p)
         if probabilities.shape != options.shape:
             raise ValueError("Choice probabilities must match the options.")
+
+    if not replace and p is not None:
+        # NumPy accepts rounding error according to the precision of p.
+        # Convert to float64 for evaluating the subsequent conditional masses.
+        tolerance = 1e-8
+        if np.issubdtype(probabilities.dtype, np.floating):
+            tolerance = max(tolerance, np.sqrt(np.finfo(probabilities.dtype).eps))
+        probabilities = np.asarray(probabilities, dtype=float)
+        if (not np.all(np.isfinite(probabilities))
+                or np.any(probabilities < 0)
+                or not np.isclose(math.fsum(probabilities), 1.0,
+                                  rtol=0.0, atol=tolerance)):
+            raise ValueError("Choice probabilities must be nonnegative and sum to one.")
+        if draws.size > np.count_nonzero(probabilities):
+            raise ValueError("Fewer nonzero probabilities than requested draws.")
+        has_nan = np.issubdtype(options.dtype, np.inexact) and np.any(np.isnan(options))
+        if not has_nan and np.all(probabilities == probabilities[0]):
+            # Avoid exponentially many equivalent selections of uniform labels.
+            return calc_prob_for_choice(draws, options, replace=False)
+
+        def matching_indices(draw):
+            equal = options == draw
+            if has_nan and np.issubdtype(np.asarray(draw).dtype, np.inexact):
+                equal |= np.isnan(options) & np.isnan(draw)
+            return np.flatnonzero(equal)
+
+        matches = [matching_indices(draw) for draw in draws]
+        if all(len(match) == options.size for match in matches):
+            return np.float64(1.0)
+
+        # Each bitmask identifies an unordered set of selected indices.
+        # Sum the probabilities of all index orders that yield the labels.
+        states = {0: 1.0}
+        for matching in matches:
+            next_states = {}
+            for selected, mass in states.items():
+                remaining_mass = math.fsum(
+                    probability for index, probability in enumerate(probabilities)
+                    if not selected & (1 << index)
+                )
+                for index in matching:
+                    bit = 1 << int(index)
+                    probability = probabilities[index]
+                    if selected & bit or probability <= 0:
+                        continue
+                    new_mask = selected | bit
+                    branch_mass = mass * (probability / remaining_mass)
+                    next_states[new_mask] = next_states.get(new_mask, 0.0) + branch_mass
+            if not next_states:
+                return np.float64(0.0)
+            states = next_states
+        return np.float64(math.fsum(states.values()))
 
     remaining = np.ones(options.size, dtype=bool)
     mass = 1.0
