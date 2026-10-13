@@ -249,12 +249,13 @@ class SingleFaultScenario(BaseScenario):
 
     @classmethod
     def from_fault(cls, faulttup, time, mdl=None, weight=1.0, phasemap=None,
-                   starttime=None, **kwargs):
+                   starttime=None, rate_phasemap=None, **kwargs):
         """
         Generate the fault scenario for faulttup at time.
 
         Simulation starts at `time` (the provided injection time) unless an alternative
-        `starttime` argument is provided.
+        `starttime` argument is provided. A separate rate_phasemap can resolve
+        opportunity labels without changing the recorded scenario phase.
 
         Examples
         --------
@@ -271,7 +272,9 @@ class SingleFaultScenario(BaseScenario):
             phase = ''
         if mdl:
             rate = mdl.get_scen_rate(faulttup[0], faulttup[1], time,
-                                     phasemap=phasemap, weight=weight, **kwargs)
+                                     phasemap=(rate_phasemap if rate_phasemap
+                                               is not None else phasemap),
+                                     weight=weight, **kwargs)
         else:
             rate = weight
         if starttime is None:
@@ -311,12 +314,14 @@ class JointFaultScenario(BaseScenario):
 
     @classmethod
     def from_faults(cls, faulttups, time, mdl=None, phasemap=None, weight=1.0,
-                    baserate='ind', p_cond=1.0, starttime=None, **kwargs):
+                    baserate='ind', p_cond=1.0, starttime=None,
+                    rate_phasemaps=None, **kwargs):
         """Generate JointFaultScenario given fault names and injection time.
 
         None starts at injection; an explicit starttime of zero is retained.
         Combine unweighted fault rates first, then apply the scenario's sampling
         weight once. Independent faults do not exponentiate quadrature weights.
+        Per-fault rate_phasemaps affect rate lookup, not joint phase metadata.
         """
         if phasemap:
             phase = phasemap.find_base_phase(time)
@@ -326,8 +331,10 @@ class JointFaultScenario(BaseScenario):
         rates = {}
         for i, faulttup in enumerate(faulttups):
             if mdl:
+                rate_map = (rate_phasemaps.get(faulttup, phasemap)
+                            if rate_phasemaps is not None else phasemap)
                 rate = mdl.get_scen_rate(*faulttup, time,
-                                         phasemap=phasemap, weight=1.0, **kwargs)
+                                         phasemap=rate_map, weight=1.0, **kwargs)
             else:
                 rate = 1.0
             rates[faulttup] = rate
