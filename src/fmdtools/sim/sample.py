@@ -1212,14 +1212,18 @@ exfs.add_fault_times([1, 2])
 
 
 class _ProjectedRatePhaseMap(PhaseMap):
-    """Use a joint interval's exposure with the source fault's opportunity phase."""
+    """
+    Project a phasemap from a joint PhaseMap over a given source phasemap.
+
+    Uses a joint interval's exposure with the source fault's opportunity phase.
+    """
 
     def __init__(self, joint, source):
         super().__init__(joint.phases, dt=joint.dt)
         self._source = source
 
     def find_base_phase(self, time):
-        """Return the source opportunity label, not the joined tuple label."""
+        """Return the source label to get the corresponding phase in the source."""
         return self._source.find_base_phase(time)
 
 
