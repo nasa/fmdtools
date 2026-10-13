@@ -395,13 +395,7 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
             # Avoid exponentially many equivalent selections of uniform labels.
             return calc_prob_for_choice(draws, options, replace=False)
 
-        def matching_indices(draw):
-            equal = options == draw
-            if has_nan and np.issubdtype(np.asarray(draw).dtype, np.inexact):
-                equal |= np.isnan(options) & np.isnan(draw)
-            return np.flatnonzero(equal)
-
-        matches = [matching_indices(draw) for draw in draws]
+        matches = [matching_indices(draw, options, has_nan) for draw in draws]
         if all(len(match) == options.size for match in matches):
             return np.float64(1.0)
 
@@ -442,6 +436,14 @@ def calc_prob_for_choice(x, options=[], size=1, replace=True, p=None):
             mass *= available.size / (options.size - i)
             remaining[available[0]] = False
     return np.float64(mass)
+
+
+def matching_indices(draw, options, has_nan):
+    """Determine if choice indices match."""
+    equal = options == draw
+    if has_nan and np.issubdtype(np.asarray(draw).dtype, np.inexact):
+        equal |= np.isnan(options) & np.isnan(draw)
+    return np.flatnonzero(equal)
 
 
 def calc_prob_for_shuffle_permutation(x, options, axis=None, *, check_valid=True):
