@@ -1022,8 +1022,10 @@ class FaultSample(BaseSample):
         self._times.add(time)
         if len(faulttup) > 2:
             kwargs = {**self.faultdomain.faults[faulttup].asdict(), **kwargs}
+        rate_maps = getattr(self, '_rate_phasemaps', {})
         scen = SingleFaultScenario.from_fault(faulttup, time, mdl=self.faultdomain.mdl,
                                               weight=weight, phasemap=self.phasemap,
+                                              rate_phasemap=rate_maps.get(faulttup[:2]),
                                               **kwargs)
         self._scenarios.append(scen)
 
@@ -1072,7 +1074,9 @@ class FaultSample(BaseSample):
         self._times.add(time)
         scen = JointFaultScenario.from_faults(faulttups, time, mdl=self.faultdomain.mdl,
                                               weight=weight, baserate=baserate,
-                                              p_cond=p_cond, phasemap=self.phasemap)
+                                              p_cond=p_cond, phasemap=self.phasemap,
+                                              rate_phasemaps=getattr(
+                                                  self, '_rate_phasemaps', None))
         self._scenarios.append(scen)
 
     def add_fault_times(self, times, weights=[], n_joint=1, **joint_kwargs):
@@ -1207,6 +1211,18 @@ exfs = FaultSample(exfd)
 exfs.add_fault_times([1, 2])
 
 
+class _ProjectedRatePhaseMap(PhaseMap):
+    """Use a joint interval's exposure with the source fault's opportunity phase."""
+
+    def __init__(self, joint, source):
+        super().__init__(joint.phases, dt=joint.dt)
+        self._source = source
+
+    def find_base_phase(self, time):
+        """Return the source opportunity label, not the joined tuple label."""
+        return self._source.find_base_phase(time)
+
+
 class JointFaultSample(FaultSample):
     """FaultSample for faults in multiple faultdomains and phasemaps."""
 
@@ -1217,6 +1233,20 @@ class JointFaultSample(FaultSample):
         phasemap = join_phasemaps(*phasemaps) if phasemaps else {}
         super().__init__(joint_domain, phasemap=phasemap,
                          def_mdl_phasemap=def_mdl_phasemap)
+        # Joint phase tuples describe intersections, but each fault's opportunity
+        # vector names phases in its own source map. Keep the intersection length.
+        self._rate_phasemaps = {}
+        if phasemaps and len(phasemaps) in (1, len(faultdomains)):
+            for index, domain in enumerate(faultdomains):
+                source = phasemaps[min(index, len(phasemaps)-1)]
+                projected = _ProjectedRatePhaseMap(self.phasemap, source)
+                for faulttup, fault in domain.faults.items():
+                    # Preserve explicit opportunity factors keyed by joined phases.
+                    uses_joint_labels = any(phase in self.phasemap.phases
+                                            for phase, _ in fault.phases)
+                    self._rate_phasemaps[faulttup] = (
+                        self.phasemap if uses_joint_labels else projected
+                    )
 
 
 class SampleApproach(BaseSample):
