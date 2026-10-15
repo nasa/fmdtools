@@ -275,6 +275,8 @@ class Architecture(Simulable):
         # pass simparam from arch
         if hasattr(objclass, "container_sp"):
             kwar['sp'] = self.sp.get_sub_kwargs()
+        if hasattr(objclass, "container_t"):
+            kwar['t'] = self.t.get_sub_kwargs()
         kwar['track'] = get_sub_include(name, get_sub_include(flex_role, self.track))
         kwar['root'] = self.get_full_name()+"."+flex_role
         return {**kwar, **kwargs}

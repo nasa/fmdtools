@@ -91,7 +91,8 @@ class TestOffsetTimeGrids(unittest.TestCase):
         self.assertEqual([first.phases, second.phases], before)
 
     def test_fault_sample_times_stay_inside_the_declared_offset_phase(self):
-        model = ExampleFunction(sp={"start_time": 0.25, "end_time": 1.75, "dt": 0.5})
+        model = ExampleFunction(sp={"start_time": 0.25, "end_time": 1.75, "dt": 0.5},
+                                t={"dt": 0.5})
         domain = FaultDomain(model)
         domain.add_fault(model.name, "low")
         phases = PhaseMap({"run": [0.25, 1.75]}, dt=0.5)

@@ -153,7 +153,8 @@ class TestJointScenarioQuadrature(unittest.TestCase):
                     )
 
     def test_phase_opportunities_and_exposure_are_combined_before_quadrature(self):
-        model = PhaseRiskFunction(sp={"end_time": 2.5, "dt": 0.5, "units": "hr"})
+        model = PhaseRiskFunction(sp={"end_time": 2.5, "dt": 0.5, "units": "hr"},
+                                  t={"dt": 0.5})
         phase_map = PhaseMap({"early": [0.0, 1.0], "late": [1.5, 2.5]}, dt=0.5)
         # Each inclusive phase represents 1.5 hours of exposure.
         expected = (0.2 * 1.5 * 0.75) * (0.3 * 1.5 * 0.8) + (0.2 * 1.5 * 0.25) * (

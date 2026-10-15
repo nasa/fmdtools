@@ -23,7 +23,7 @@ import unittest
 import numpy as np
 
 from fmdtools.define.block.function import ExampleFunction
-from fmdtools.define.container.time import BaseTime
+from fmdtools.define.container.time import Time
 
 
 class TestTime(unittest.TestCase):
@@ -46,17 +46,17 @@ class TestTime(unittest.TestCase):
                     self.assertEqual(larger % smaller, 0)
                     step = cast(local_dt)
 
-                    class LocalTime(BaseTime):
-                        local_dt = step
+                    class LocalTime(Time):
                         timernames = ("sample",)
 
-                    clock = LocalTime(dt=cast(global_dt))
+                    clock = LocalTime(dt=step, global_dt=cast(global_dt))
+
                     self.assertEqual(clock.dt, local_dt)
                     self.assertEqual(clock.timers["sample"].tstep, -local_dt)
-                    clock.set_timestep(dt=global_dt, use_local=False)
+                    clock.set_timestep(dt=step, global_dt=global_dt, use_global=True)
                     self.assertEqual(clock.dt, global_dt)
                     self.assertEqual(clock.timers["sample"].tstep, -global_dt)
-                    clock.set_timestep(dt=global_dt, use_local=True)
+                    clock.set_timestep(dt=step, global_dt=global_dt, use_global=False)
                     self.assertEqual(clock.dt, local_dt)
                     self.assertEqual(clock.timers["sample"].tstep, -local_dt)
 
@@ -66,28 +66,18 @@ class TestTime(unittest.TestCase):
             with self.subTest(global_dt=global_dt, local_dt=local_dt):
                 step = local_dt
 
-                class LocalTime(BaseTime):
-                    local_dt = step
-
                 with self.assertRaisesRegex(Exception, "doesn't line up"):
-                    LocalTime(dt=global_dt)
+                    Time(dt=step, global_dt=global_dt)
 
     def test_function_simulation_with_decimal_local_step(self):
         for local_dt in (0.1, 0.2, 0.01):
             with self.subTest(local_dt=local_dt):
-                step = local_dt
-
-                class LocalTime(BaseTime):
-                    local_dt = step
 
                 class LocalFunction(ExampleFunction):
-                    container_t = LocalTime
-                local = LocalFunction(
-                    "local", sp={"dt": local_dt, "end_time": 1.0, "use_local": True}
-                )
-                control = ExampleFunction(
-                    "control", sp={"dt": local_dt, "end_time": 1.0, "use_local": False}
-                )
+                    default_t = {'dt': local_dt}
+
+                local = LocalFunction("local", t={"dt": local_dt, "use_global": False})
+                control = ExampleFunction("control", t={"dt": local_dt, "use_global": False})
                 local(time=1.0, proptype="dynamic")
                 control(time=1.0, proptype="dynamic")
                 self.assertEqual(local.t.dt, local_dt)

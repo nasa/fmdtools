@@ -59,15 +59,12 @@ class SimParam(Parameter, readonly=True):
         - ('times', [t1, ... tn])--only includes times defined in the
           vector [t1 ... tn]
     dt : float
-        time-step used in the simulation. default is 1.0
+        Tracking timestep (interval for logging the simulation). default is 1.0
     units : str
         time-units. default is hours`
     end_condition : str
         Name of indicator method to use to end the simulation. If not provided (''),
         the simulation ends at the final time. Default is ''
-    use_local : bool
-        Whether to use locally-defined time-steps in functions (if any).
-        Default is True.
     with_loadings : bool
         Whether to execute simulable with defined loading methods. Default is False.
     run_stochastic : bool
@@ -86,7 +83,6 @@ class SimParam(Parameter, readonly=True):
     units: str = "hr"
     units_set = ('sec', 'min', 'hr', 'day', 'wk', 'month', 'year')
     end_condition: str = ''
-    use_local: bool = True
     with_loadings: bool = False
     run_stochastic: bool = False
     track_pdf: bool = False
@@ -228,8 +224,16 @@ class Simulable(BaseObject):
             Keyword arguments to BaseObject
         """
         BaseObject.__init__(self, **kwargs)
-        self.set_time()
+        self.check_timestep()
         self._sims = {}
+
+    def check_timestep(self):
+        if self.sp.dt < self.t.dt:
+            raise Exception("History timestep (sp.dt) "+str(self.sp.dt),
+                            "less than simulation timestep (t.dt): "+str(self.t.dt))
+        elif Decimal(str(self.sp.dt)) % Decimal(str(self.t.dt)):
+            raise Exception("History timestep (sp.dt) "+str(self.sp.dt),
+                            "incompatible with sim timestep (t.dt): "+str(self.t.dt))
 
     def is_static(self):
         """Check if Block has static execution step."""
@@ -241,10 +245,6 @@ class Simulable(BaseObject):
         """Check if Block has dynamic execution step."""
         return (hasattr(self, 'dynamic_behavior') or
                 any([r.is_dynamic() for r in self.get_sims().values()]))
-
-    def set_time(self):
-        """Set time from SimParam."""
-        self.t.set_timestep(dt=self.sp.dt, use_local=self.sp.use_local)
 
     def init_hist(self, h={}):
         """Initialize the history of the sim using SimParam parameters and track."""
@@ -898,14 +898,15 @@ class Block(Simulable):
         archs = self.find_roletype_initiators("arch")
         b_flows = {f: getattr(self, f) for f in self.flows}
         spk = self.sp.get_sub_kwargs()
+        tk = self.t.get_sub_kwargs()
         arch_kw = {}
         for k in archs:
             if k in kwargs and isinstance(kwargs[k], dict):
-                arch_kw[k] = {**kwargs[k], **{'flows': b_flows}, 'name': k, 'sp': spk}
+                arch_kw[k] = {**kwargs[k], **{'flows': b_flows}, 'name': k, 'sp': spk, 't': tk}
             elif k in kwargs and isinstance(kwargs[k], BaseObject):
-                arch_kw[k] = kwargs[k].copy(flows=b_flows, name=k, sp=spk)
+                arch_kw[k] = kwargs[k].copy(flows=b_flows, name=k, sp=spk, t=tk)
             else:
-                arch_kw[k] = {'flows': b_flows, 'name': k, 'sp': spk}
+                arch_kw[k] = {'flows': b_flows, 'name': k, 'sp': spk, 't': tk}
 
         return {'flows': b_flows, **arch_kw}
 

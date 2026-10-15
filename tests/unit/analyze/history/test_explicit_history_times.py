@@ -82,7 +82,7 @@ class TestExplicitHistoryTimes(unittest.TestCase):
                 with self.subTest(dt=dt, wrap=wrap.__name__, indices=indices):
                     times = np.asarray(indices, dtype=float) * dt
                     reference = ExampleFunction(
-                        sp={"end_time": 4 * dt, "dt": dt, "use_local": False}
+                        sp={"end_time": 4 * dt, "dt": dt}
                     )
                     expected_result, expected_history = Simulation(mdl=reference)()
                     supplied = wrap(times)
@@ -91,7 +91,6 @@ class TestExplicitHistoryTimes(unittest.TestCase):
                         sp={
                             "end_time": 4 * dt,
                             "dt": dt,
-                            "use_local": False,
                             "track_times": ("times", supplied),
                         }
                     )

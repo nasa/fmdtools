@@ -50,7 +50,8 @@ class WindowFunction(Function):
 
 def make_sample(start, end, dt, kind="fault"):
     model = WindowFunction(
-        sp={"start_time": start, "end_time": end, "dt": dt, "units": "hr"}
+        sp={"start_time": start, "end_time": end, "dt": dt, "units": "hr"},
+        t={"dt": dt}
     )
     domain = FaultDomain(model)
     domain.add_fault(model.name, "a")

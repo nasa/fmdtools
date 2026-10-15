@@ -107,8 +107,8 @@ class Environment(CommsFlow):
     default_track = ('s', 'i', 'c', 'ga')
     all_possible = ('s', 'i', 'c', 'r', 'ga')
 
-    def __init__(self, name='', root='', glob=[], p={}, s={}, r={}, sp={}, c={}, ga={},
-                 track='default', **kwargs):
+    def __init__(self, name='', root='', glob=[], p={}, s={}, r={}, sp={}, t={}, c={},
+                 ga={}, track='default', **kwargs):
         r = self.create_role("r", "container", obj_args=r)
         sp = self.create_role("sp", "container", obj_args=sp)
         r_kwargs = {'run_stochastic': r.run_stochastic, 'seed': r.seed}

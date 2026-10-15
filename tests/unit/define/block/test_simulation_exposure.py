@@ -49,8 +49,8 @@ class TestSimulationExposure(unittest.TestCase):
                 "end_time": end,
                 "dt": dt,
                 "units": units,
-                "use_local": False,
             },
+            t = {"dt": dt}
         )
 
     def test_positive_exposure_includes_the_final_timestep(self):

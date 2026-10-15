@@ -25,7 +25,7 @@ from decimal import Decimal
 import numpy as np
 
 
-class BaseTime(BaseContainer):
+class Time(BaseContainer):
     """
     Class for defining all time-based aspects of a Block (e.g., time, timestep, timers).
 
@@ -46,8 +46,12 @@ class BaseTime(BaseContainer):
         Gets set as true when time is updated and false when the timestep is incremented
     timers : dict
         dictionary of instantiated timers
-    use_local : bool
-        Whether to use the local timetep (vs global timestep)
+    global_dt : float
+        The timestep of the containing object.
+    force_locals : bool
+        Whether to force contained objects to use this timestep. Default is True.
+    use_global : bool
+        Whether the local timetep should be overrriden by the global timestep
     timernames: tuple
         Names of timers to instantiate.
 
@@ -90,12 +94,13 @@ class BaseTime(BaseContainer):
     time: np.float64 = np.float64(-0.1)
     t_ind: np.int32 = np.int32(0)
     timers: dict = {}
-    use_local: np.bool_ = True
+    use_global: np.bool_ = False
     dt: np.float64 = np.float64(1.0)
+    global_dt: np.float64 = np.float64(1.0)
+    force_locals: np.bool_ = True
     executed_static: np.bool_ = False
     executed_dynamic: np.bool_ = False
     executing: np.bool_ = False
-    local_dt = np.float64(1.0)
     timernames = ()
     default_track = ('timers')
 
@@ -149,13 +154,20 @@ class BaseTime(BaseContainer):
         """
         Set the timestep of the function given.
 
-        If using the option use_local, local_timestep is used instead of
-        global_timestep.
+        The *default* timestep follows the following order of precedence:
+            - local dt argument (e.g., set in default_t)
+            - global dt argument (e.g., from a containing Architecture)
+
+        If use_global = True (set in default_t), the global dt argument takes precedence
+        over the local timestep.
+
+        If force_locals = True, the dt of the current object takes precedence over the
+        objects it contains.
         """
         self.assign(kwargs)
-        global_tstep = Decimal(str(self.dt))
-        local_tstep = Decimal(str(self.local_dt))
-        if self.use_local:
+        global_tstep = Decimal(str(self.global_dt))
+        local_tstep = Decimal(str(self.dt))
+        if not self.use_global:
             dt = local_tstep
             if ((dt < global_tstep and global_tstep % dt)
                 or (dt > global_tstep and dt % global_tstep)):
@@ -210,11 +222,11 @@ class BaseTime(BaseContainer):
             end_time = time
         return start_time, end_time
 
-
-class Time(BaseTime):
-    """Time with a defined local_dt field that can be overwritten by defaults."""
-
-    local_dt: np.float64 = np.float64(1.0)
+    def get_sub_kwargs(self):
+        """Get keyword arguments to send to contained objects."""
+        return {'global_dt': self.dt,
+                'force_locals': self.force_locals,
+                'use_global': self.force_locals}
 
 
 class ExtendedTime(Time):

@@ -17,7 +17,7 @@ class TestGeneratedHistoryPhaseTimestep(unittest.TestCase):
     def test_generated_maps_preserve_grid_exposure_and_inputs(self):
         for dt in (0.25, 0.5, 1.0, 2.0):
             with self.subTest(dt=dt):
-                model = ExFxnArch(sp={"dt": dt, "end_time": 4 * dt, "use_local": False})
+                model = ExFxnArch(sp={"dt": dt, "end_time": 4 * dt}, t={'dt': dt})
                 sim = propagate.Simulation(mdl=model)
                 _, hist = sim()
                 before = hist.copy()
@@ -45,7 +45,7 @@ class TestGeneratedHistoryPhaseTimestep(unittest.TestCase):
     def test_call_returned_approach_drives_fractional_fault_samples(self):
         dt = 0.5
         sim = propagate.Simulation(
-            mdl=ExFxnArch(sp={"dt": dt, "end_time": 2.0, "use_local": False})
+            mdl=ExFxnArch(sp={"dt": dt, "end_time": 2.0}, t={'dt': dt})
         )
         _, _, app = sim(gen_samp=True, get_phasemap=True)
         domain = FaultDomain(sim.mdl)
@@ -61,7 +61,7 @@ class TestGeneratedHistoryPhaseTimestep(unittest.TestCase):
 
     def test_history_changes_of_mode_keep_fractional_exposure(self):
         sim = propagate.Simulation(
-            mdl=ExFxnArch(sp={"dt": 0.5, "end_time": 2.0, "use_local": False})
+            mdl=ExFxnArch(sp={"dt": 0.5, "end_time": 2.0}, t={'dt': 0.5})
         )
         sim()
         # An existing history can include repeated operating modes.
@@ -80,7 +80,7 @@ class TestGeneratedHistoryPhaseTimestep(unittest.TestCase):
 
     def test_opt_out_and_standalone_extractor_defaults_are_unchanged(self):
         sim = propagate.Simulation(
-            mdl=ExFxnArch(sp={"dt": 0.5, "end_time": 2.0, "use_local": False})
+            mdl=ExFxnArch(sp={"dt": 0.5, "end_time": 2.0}, t={"dt": 0.5})
         )
         sim()
         self.assertEqual(set(sim.gen_sampleapproach().phasemaps), {"mdl"})

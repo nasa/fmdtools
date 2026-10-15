@@ -519,7 +519,6 @@ def make_domain(dt):
         sp={
             "end_time": 4 * dt,
             "dt": dt,
-            "use_local": False,
             "units": "sec",
             "phases": (("early", 0.0, dt), ("late", 2 * dt, 4 * dt)),
         },

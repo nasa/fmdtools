@@ -53,7 +53,7 @@ class TestTimeReset(unittest.TestCase):
                     self.assertEqual(clock.return_mutables(), cls().return_mutables())
 
     def test_timer_state_resets_while_configuration_and_copies_remain_independent(self):
-        clock = ExtendedTime(dt=0.25, use_local=False)
+        clock = ExtendedTime(dt=0.25, use_global=False)
         clock.t1.set_timer(2.0, tstep=-0.125)
         clock.t1.inc()
         clock.t2.set_timer(3.0)
@@ -63,7 +63,7 @@ class TestTimeReset(unittest.TestCase):
         clock.reset()
         self.assertFalse(clock.executing)
         self.assertEqual(clock.dt, 0.25)
-        self.assertFalse(clock.use_local)
+        self.assertFalse(clock.use_global)
         self.assertEqual(clock.t1.tstep, -0.125)
         self.assertEqual(clock.t2.tstep, -0.25)
         for name, timer in clock.timers.items():

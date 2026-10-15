@@ -114,7 +114,8 @@ class TankTests(unittest.TestCase, CommonTests):
         mdl_global = Tank(sp={'phases': (('na', 0, 0),
                                          ('operation', 1, 20)),
                               'end_time': 20.0, 'dt': 1.0,
-                              'units': 'min', 'use_local': False})
+                              'units': 'min'},
+                          t={'dt': 1.0, 'force_locals': True})
         _, hist_global = prop.one_fault(mdl_global, 'store_water', 'leak', time=2,
                                         showprogress=False)
         hist_global = hist_global.flatten()

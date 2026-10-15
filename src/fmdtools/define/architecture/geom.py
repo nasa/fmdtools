@@ -138,6 +138,10 @@ class GeomArchitecture(Architecture):
         """Use this placeholder method to define custom architectures."""
         pass
 
+    def check_timestep(self):
+        """Override default timestep checking since t is not used (but inherited)."""
+        pass
+
     def check_geom_class(self, gclass, baseclass):
         """Check that geom class/object inherits from given base class."""
         try:

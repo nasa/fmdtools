@@ -121,7 +121,7 @@ class TestEvenSamplingMass(unittest.TestCase):
                 )
 
     def test_named_sample_and_simulated_fmea_keep_all_probability_mass(self):
-        model = LossFunction(sp={"end_time": 2.0, "dt": 0.25, "use_local": False})
+        model = LossFunction(sp={"end_time": 2.0, "dt": 0.25}, t={'dt': 0.25})
         domain = FaultDomain(model)
         domain.add_fault(model.name, "failed")
         support = [0.25, 0.75, 1.25, 1.75]
