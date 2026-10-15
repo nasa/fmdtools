@@ -398,29 +398,41 @@ class Mode(BaseContainer, readonly=False):
         if len(faults) == 1 and (isinstance(faults[0], list) or isinstance(faults[0], dict)):
             faults = faults[0]
         self.check_faults_possible(*faults)
-        self.faults.update(faults)
+        if self.exclusive:
+            if len(faults) > 1:
+                raise Exception("Multiple fault modes added to function with" +
+                                " exclusive fault representation")
+            if not faults and self.mode in self.get_all_faultnames():
+                raise Exception("In " + str(self.__class__)
+                                + "--no faults but mode is still in faultmode "
+                                + self.mode)
+            if len(self.faults.union(faults)) > 1:
+                raise Exception("Cannot add another fault to exclusive mode; "
+                                "use to_fault to replace the active fault")
+
+        # Construct replacements before mutating either active faults or mode
+        # definitions: an invalid probability must not leave a ghost fault.
+        replacements = {}
         if isinstance(faults, dict):
             for faultname, fault in faults.items():
                 fieldname = 'fault_'+faultname
                 current = getattr(self, fieldname)
                 if isinstance(current, Fault):
-                    # Fault fields are read-only; replace the definition itself.
                     values = current.get_field_dict(fault)
-                    replacement = current.__class__(
+                    replacements[fieldname] = current.__class__(
                         **copy.deepcopy({**current.asdict(), **values}))
+                else:
+                    replacements[fieldname] = fault
+            for fieldname, replacement in replacements.items():
+                current = getattr(self, fieldname)
+                if isinstance(current, Fault):
+                    # Bypass read-only instance fields when replacing the object.
                     super(BaseContainer, self).__setattr__(fieldname, replacement)
                 else:
-                    setattr(self, fieldname, fault)
-        if self.exclusive:
-            if len(faults) > 1:
-                raise Exception("Multiple fault modes added to function with" +
-                                " exclusive fault representation")
-            elif len(faults) == 0 and self.mode in self.get_all_faultnames():
-                raise Exception("In " + str(self.__class__)
-                                + "--no faults but mode is still in faultmode "
-                                + self.mode)
-            elif faults:
-                self._assign_mode(*faults)
+                    setattr(self, fieldname, replacement)
+        self.faults.update(faults)
+        if self.exclusive and faults:
+            self._assign_mode(*faults)
 
     def replace_fault(self, fault_to_replace, fault_to_add):
         """
@@ -434,8 +446,12 @@ class Mode(BaseContainer, readonly=False):
             name of the fault to add in its place
         """
         self.check_faults_possible(fault_to_add)
-        self.faults.add(fault_to_add)
+        if fault_to_replace not in self.faults:
+            raise KeyError(fault_to_replace)
+        if fault_to_replace == fault_to_add:
+            return
         self.faults.remove(fault_to_replace)
+        self.faults.add(fault_to_add)
         if self.exclusive:
             self._assign_mode(fault_to_add)
 
@@ -452,11 +468,11 @@ class Mode(BaseContainer, readonly=False):
         warnmessage : str/False
             Warning to give when performing operation. Default is False (no warning)
         """
+        if self.exclusive and not opermode:
+            raise Exception("Unclear which operational mode to enter w- fault removed")
         self.faults.discard(fault_to_remove)
         if opermode:
             self._assign_mode(opermode)
-        if self.exclusive and not (opermode):
-            raise Exception("Unclear which operational mode to enter w- fault removed")
         if warnmessage:
             self.warn(warnmessage, "Fault mode `" +
                       fault_to_remove + "' removed.", stacklevel=3)
