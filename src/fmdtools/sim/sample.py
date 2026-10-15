@@ -1475,12 +1475,14 @@ class ParameterSample(BaseSample):
     seedsequence : np.ramdom.SeedSequence
         Corresponding seed sequence
     sp : dict
-        Non-default simparam arguments
+        Non-default SimParam arguments
+    t : dict
+        Non-default Time arguments.
     paramdomain: ParamDomain
         Parameter domain object to sample
     """
 
-    def __init__(self, paramdomain=None, seed=None, sp=None):
+    def __init__(self, paramdomain=None, seed=None, sp=None, t=None):
         """Initialize a sample with independent defaults.
 
         Omitted domains and simulation settings are created for this instance.
@@ -1489,6 +1491,7 @@ class ParameterSample(BaseSample):
         self.seed = seed
         self.seedsequence = np.random.SeedSequence(seed)
         self.sp = {} if sp is None else sp
+        self.t = {} if t is None else t
         self.paramdomain = (ParameterDomain(Parameter) if paramdomain is None
                             else paramdomain)
         self._scenarios = []
@@ -1505,7 +1508,7 @@ class ParameterSample(BaseSample):
         """Return list of scenarios that make up the ParameterSample."""
         return [*self._scenarios]
 
-    def add_variable_scenario(self, *x, seed=False, sp={}, weight=1.0, name='var',
+    def add_variable_scenario(self, *x, seed=False, sp={}, t={}, weight=1.0, name='var',
                               inputparams={}):
         """
         Add a scenario to the ParamSample.
@@ -1519,6 +1522,8 @@ class ParameterSample(BaseSample):
             (the default) or None uses the sample seed when one is configured.
         sp : dict, optional
             SimParam arguments to the ParameterScenario. The default is {}.
+        t : dict, optional
+            Time arguments to the ParameterScenario. The default is {}
         weight : float, optional
             Weight (probability) allocated to the scenario. The default is 1.0.
         name : str, optional
@@ -1549,6 +1554,8 @@ class ParameterSample(BaseSample):
             r = {}
         if not sp:
             sp = self.sp
+        if not t:
+            t = self.t
         name = name+"_"+str(len(self.scenarios()))
         if not inputparams:
             inputparams = {i: x[i] for i in range(len(x))}
@@ -1556,6 +1563,7 @@ class ParameterSample(BaseSample):
         scen = ParameterScenario(p=param_args,
                                  r=r,
                                  sp=sp,
+                                 t=t,
                                  prob=weight,
                                  name=name,
                                  inputparams=inputparams)
@@ -1849,7 +1857,7 @@ class ParameterResultSample(ParameterSample):
     # prs.add_res_scenario can be used to add a given scenario from the result.
     >>> prs.add_res_scenario(rep=0)
     >>> prs.scenarios()
-    [ParameterScenario(sequence={}, times=(), p={'y': 1.0}, r={}, sp={}, prob=1.0, inputparams={'comp_group': 'default', 'rep': 0}, rangeid='', name='res_0')]
+    [ParameterScenario(sequence={}, times=(), p={'y': 1.0}, r={}, sp={}, t={}, prob=1.0, inputparams={'comp_group': 'default', 'rep': 0}, rangeid='', name='res_0')]
 
     # prs.add_res_reps can be used to add replicate scenarios from the results.
     >>> prs.add_res_reps(reps='all')

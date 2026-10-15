@@ -67,7 +67,10 @@ def get_sim_call_kwargs(sim, **kwargs):
 
 def get_mdl_kwargs(scen):
     """Get keyword arguments from a scenario corresponding to model parameters."""
-    return {'p':  scen.get("p", {}), 'sp': scen.get("sp", {}), 'r': scen.get("r", {})}
+    return {'p':  scen.get("p", {}),
+            'sp': scen.get("sp", {}),
+            'r': scen.get("r", {}),
+            't': scen.get("t", {})}
 
 
 def nominal(mdl, **kwargs):

@@ -380,6 +380,8 @@ class ParameterScenario(BaseScenario, readonly=True):
         non-default Rand fields
     sp : dict
         non-default SimParam fields
+    t : dict
+        non-default Time fileds
     prob : float
         probability
     inputparams : dict
@@ -393,6 +395,7 @@ class ParameterScenario(BaseScenario, readonly=True):
     p: dict = {}
     r: dict = {}
     sp: dict = {}
+    t: dict = {}
     prob: float = 1.0
     inputparams: dict = {}
     rangeid: str = ''
