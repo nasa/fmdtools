@@ -27,14 +27,14 @@ import numpy as np
 
 class Time(BaseContainer):
     """
-    Class for defining all time-based aspects of a Block (e.g., time, timestep, timers).
+    Class for defining time/execution aspects of a Block (e.g., time, timestep, timers).
 
     Attributes
     ----------
     time : float
         real time for the model
     dt : float
-        timestep size
+        Timestep for simulation execution.
     t_ind : int
         index of the given time in the history.
     executed_static: bool

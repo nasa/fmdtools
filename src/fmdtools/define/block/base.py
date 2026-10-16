@@ -59,7 +59,10 @@ class SimParam(Parameter, readonly=True):
         - ('times', [t1, ... tn])--only includes times defined in the
           vector [t1 ... tn]
     dt : float
-        Tracking timestep (interval for logging the simulation). default is 1.0
+        Tracking timestep (interval for logging the simulation). This is different than
+        the execution timestep that lives in Time.dt in that it controls how often
+        the history is recorded instead of how often the simulation executes.
+        Default is 1.0.
     units : str
         time-units. default is hours`
     end_condition : str
@@ -197,9 +200,9 @@ class Simulable(BaseObject):
     Parameters
     ----------
     t : Time
-        Time tracker and options.
+        Defines current timestep and timers.
     sp : SimParam
-        Parameters defining the simulation.
+        Parameters defining simulation configuration and logging.
     mut_kwargs : dict
         Non-default kwargs for mutable containers/roles (to use for reset)
     """
