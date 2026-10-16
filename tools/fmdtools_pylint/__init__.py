@@ -16,6 +16,7 @@ from pylint.checkers.utils import only_required_for_messages
 
 _BASE_OBJECT = "fmdtools.define.object.base.BaseObject"
 _BASE_CONTAINER = "fmdtools.define.container.base.BaseContainer"
+_ARCHITECTURE = "fmdtools.define.architecture.base.Architecture"
 _REGISTERED = False
 
 
@@ -35,7 +36,8 @@ def _infer_role(target, context=None, *, owner, declaration):
 
 
 def _transform_roles(node):
-    """Expose generated roles as instance-valued attributes in Astroid only."""
+    """Expose generated roles and architecture dictionaries in Astroid only."""
+    _transform_flexible_roles(node)
     try:
         hierarchy = node.mro()
         if not any(cls.qname() == _BASE_OBJECT for cls in hierarchy):
@@ -78,6 +80,41 @@ def _transform_roles(node):
             node.locals[name] = [target]
     except AstroidError:
         # Unresolvable bases or role declarations retain ordinary Pylint inference.
+        return
+
+
+def _transform_flexible_roles(node):
+    """Infer architecture dictionaries initialized via dynamic setattr.
+
+    Architecture.init_flexible_roles creates one dictionary for each static
+    flexible_roles declaration (e.g. flows, fxns, comps). Astroid cannot see
+    those writes because the names are constructed at runtime. Model files are
+    inspected as syntax only; their constructors are never executed.
+    """
+    try:
+        if not any(cls.qname() == _ARCHITECTURE for cls in node.mro()):
+            return
+        values = list(node.igetattr("flexible_roles"))
+        if len(values) != 1 or not isinstance(values[0], (nodes.List, nodes.Tuple)):
+            return
+        for role in values[0].elts:
+            if not isinstance(role, nodes.Const) or not isinstance(role.value, str):
+                return
+            if not role.value.isidentifier():
+                return
+        for role in values[0].elts:
+            name = role.value + "s"
+            # Honor explicitly declared attributes and properties; this
+            # applies only to dictionary roles made by init_flexible_roles.
+            if name in node.instance_attrs or name in node.locals:
+                continue
+            method = astroid.parse(
+                f"def _fmdtools_virtual_init(self):\n    self.{name} = {{}}",
+                apply_transforms=False,
+            ).body[0]
+            method.parent = node
+            node.instance_attrs[name] = [method.body[0].targets[0]]
+    except AstroidError:
         return
 
 

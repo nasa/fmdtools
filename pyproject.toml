@@ -68,7 +68,7 @@ norecursedirs = ["docs", "_build", "build", "tmp*", "jupyter_execute", "venv", "
 
 [tool.setuptools.package-dir]
 fmdtools = "src/fmdtools"
-fmdtools_pylint = "src/fmdtools_pylint"
+fmdtools_pylint = "tools/fmdtools_pylint"
 fmdtools_examples = "examples"
 fmdtools_tests = "tests"
 

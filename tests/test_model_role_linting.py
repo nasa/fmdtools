@@ -20,13 +20,12 @@ specific language governing permissions and limitations under the License.
 import importlib.util
 import json
 import os
-from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import textwrap
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PRELUDE = """
@@ -82,7 +81,12 @@ class TestModelRoleLinting(unittest.TestCase):
             command += [str(path)]
             env = dict(os.environ, PYLINTHOME=str(directory / "pylint-cache"))
             env["PYTHONPATH"] = os.pathsep.join(
-                [str(ROOT / "src"), str(directory), env.get("PYTHONPATH", "")]
+                [
+                    str(ROOT / "src"),
+                    str(ROOT / "tools"),
+                    str(directory),
+                    env.get("PYTHONPATH", ""),
+                ]
             )
             result = subprocess.run(
                 command,
@@ -111,6 +115,95 @@ class TestModelRoleLinting(unittest.TestCase):
                 (directory / "executed").exists(), "Linting executed the model"
             )
             return messages
+
+    def test_inherited_architecture_dictionaries_and_typos(self):
+        """Statically known flexible roles exist on derived architectures."""
+        code = (
+            PRELUDE
+            + """
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.architecture.base import Architecture
+from fmdtools.define.architecture.component import ComponentArchitecture
+from fmdtools.define.architecture.action import ActionArchitecture
+
+class BasePump(FunctionArchitecture):
+    def status(self):
+        return self.flows.items(), self.fxns.items()
+
+class DerivedPump(BasePump):
+    def status(self):
+        return self.flows, self.fxns, self.flwos
+
+class Circuit(ComponentArchitecture):
+    def status(self):
+        return self.flows, self.comps, self.fxns
+
+class Actions(ActionArchitecture):
+    def status(self):
+        return self.flows, self.acts, self.conds, self.flwo
+
+class BaseArchitecture(Architecture):
+    def status(self):
+        return self.flows, self.fxns
+
+class Plain:
+    def status(self):
+        return self.flows, self.fxns
+"""
+        )
+        messages = self.lint(code)
+        details = [m["message"] for m in messages]
+        self.assertEqual(len(messages), 6, details)
+        for name in ("flwos", "fxns", "flwo"):
+            self.assertTrue(any(f"'{name}'" in line for line in details), details)
+        self.assertEqual(sum("'flows'" in line for line in details), 1)
+        self.assertEqual(sum("'fxns'" in line for line in details), 3)
+
+    def test_project_pylintrc_autoloads_plugin_in_same_environment(self):
+        """Run with Pylint's root config rather than relying on editor flags."""
+        source = (
+            PRELUDE
+            + """
+class Pump(Function):
+    container_s = ModelState
+    def status(self):
+        return self.s.invalid_field
+"""
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "pump.py"
+            path.write_text(textwrap.dedent(source), encoding="utf-8")
+            command = [
+                sys.executable,
+                "-m",
+                "pylint",
+                "--output-format=json",
+                "--persistent=n",
+                "--score=n",
+                "--reports=n",
+                "--disable=all",
+                "--enable=fmdtools-unknown-field",
+                str(path),
+            ]
+            env = dict(os.environ, PYLINTHOME=str(Path(directory) / "cache"))
+            env["PYTHONPATH"] = os.pathsep.join(
+                [str(ROOT / "tools"), str(ROOT / "src"), env.get("PYTHONPATH", "")]
+            )
+            result = subprocess.run(
+                command,
+                cwd=ROOT,
+                env=env,
+                capture_output=True,
+                text=True,
+                timeout=45,
+                check=False,
+            )
+            self.assertEqual(result.stderr, "")
+            self.assertEqual(result.returncode, 2, result.stdout)
+            messages = json.loads(result.stdout)
+            self.assertEqual(
+                [x["symbol"] for x in messages], ["fmdtools-unknown-field"]
+            )
 
     def test_valid_roles_resolve_without_the_baseline_false_positives(self):
         code = (
