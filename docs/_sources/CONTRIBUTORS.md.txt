@@ -27,7 +27,7 @@ Interns
 * [Cole Jetton](https://github.com/ColeJetton), contributed to examples library
 * [Zain Khatri](https://github.com/zainkhatri), contributed to fmdtools graph functionality
 * [Cody Wang](https://github.com/ydoccr), contributor to examples/airspacelib/contingency_management path planning
-* [Dhruv Kothari](https://github.com/kotharidhruv, contributor to examples/airspacelib/water_rescue models
+* [Dhruv Kothari](https://github.com/kotharidhruv), contributor to examples/airspacelib/water_rescue models
 * [Iris Chen](https://github.com/ir-s8), contributor to examples/airspacelib/water_rescue models
 * [Isabel Agostino](https://github.com/iagostino), contributor defone/pathplan path planning functionality (as well as associated tests and examples)
 

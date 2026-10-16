@@ -593,7 +593,7 @@ wheels = [
 
 [[package]]
 name = "fmdtools"
-version = "2.5.5rc0"
+version = "2.5.6rc0"
 source = { editable = "." }
 dependencies = [
     { name = "dill" },

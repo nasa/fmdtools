@@ -18,25 +18,16 @@
 
 [Click here to view the the full documentation website.](https://nasa.github.io/fmdtools)
 
-### Demo Portfolio
-
-See: [Examples](https://nasa.github.io/fmdtools/examples/Examples.html)
-
-<img src="https://nasa.github.io/fmdtools/_images/tutorial_fmdtools_basics.webp" width="15%"></img>
-<img src="https://nasa.github.io/fmdtools/_images/demo_proxthreat.webp" width="15%"></img>
-<img src="https://nasa.github.io/fmdtools/_images/demo_wildfire.webp" width="15%"></img>
-<img src="https://nasa.github.io/fmdtools/_images/paper_jcise_dsa.webp" width="15%"></img>
-<img src="https://nasa.github.io/fmdtools/_images/demo_urban_flight.webp" width="15%"></img> 
-<img src="https://nasa.github.io/fmdtools/_images/demo_degradation.webp" width="15%"></img>
-
 ## About
 
-The fmdtools library provides the computational support needed to perform a simulation-based (rather than document-based) hazard analysis process that [**enables the consideration of systems resilience**](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#why-fmdtools). This means that it can be used to extend the scope of hazard analysis from component faults to the dynamic interactions between the system, operators, and the environment. Some key features include:
+![fmdtools design/simulation/analysis process](./docs-source/figures/drawio/overall_functionality.svg)
+
+The fmdtools library provides the computational support needed to perform a simulation-based (rather than document-based) hazard analysis process that [**enables the consideration of systems resilience**](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#why-fmdtools), as shown above. This means that it can be used to extend the scope of hazard analysis from component faults to the dynamic interactions between the system, operators, and the environment. Some key features include:
 
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/flexible.svg">
 
-### Flexible, AI-Ready Modelling Paradigm
-Models in fmdtools use a straightforward and composable code-based representation of system structure and behavior. Since fmdtools models are based on open-source Python, models can be readily generated from your AI of choice with the right prompting. Whether you want to model a simple component, a complex system-of-systems, or both, fmdtools can help.
+### Flexible, LLM-Ready Modelling Paradigm
+Models in fmdtools use a straightforward and composable code-based representation of system structure and behavior. Since fmdtools models are based on open-source Python, models can be readily generated from your LLM of choice with the right prompting. Whether you want to model a simple component, a complex system-of-systems, or both, fmdtools can help.
 
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/powerful.svg">
 
@@ -51,20 +42,31 @@ Readily-deployable analysis methods are built in to fmdtools to enable the rapid
 
 The fmdtools documentation repository is also home to the Functional Reasoning Design Language specification, a graphical language that may be used to represent the structure of behavioral interactions in a system to inform hazard analysis.
 
+### Demo Portfolio
+
+See [Examples](https://nasa.github.io/fmdtools/examples/Examples.html) for a wide range of applications fmdtools has been used for in the past.
+
+<img src="https://nasa.github.io/fmdtools/_images/tutorial_fmdtools_basics.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/demo_proxthreat.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/demo_wildfire.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/paper_jcise_dsa.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/demo_urban_flight.webp" width="15%"></img> 
+<img src="https://nasa.github.io/fmdtools/_images/demo_degradation.webp" width="15%"></img>
+
+
 ## Getting Started
 
 ### Python version compatibility
 
-The fmdtools library is developed in Python 3.14 but is tested to maintain compatibility over three versions of Python. See current doctest reports below:
+The fmdtools library is developed in Python 3.14 but is tested to maintain compatibility over three versions of Python. See current test reports below:
 
-| Python Version    | Doctests |
-| -------- | ------- |
-| 3.12 | [![Python 3.12 Tests](./tests/reports/doctests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/doctests-py312/junit/report.html)   |
-| 3.13 | [![Python 3.13 Tests](./tests/reports/doctests-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/doctests-py313/junit/report.html)    |
-| 3.14 | [![Python 3.14 Tests](./tests/reports/doctests-py314/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/doctests-py314/junit/report.html)   |
+| Python Version    | Test Report | Coverage |
+| -------- | ------- | ------- |
+| 3.12 | [![Python 3.12 Tests](./tests/reports/fasttests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py312/junit/report.html)   | [![Python 3.12 Coverage](./tests/reports/fasttests-py312/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/coverage-py312/coverage_html/index.html) |
+| 3.13 | [![Python 3.13 Tests](./tests/reports/fasttests-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py313/junit/report.html)    | [![Python 3.13 Coverage](./tests/reports/fasttests-py313/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/coverage-py313/coverage_html/index.html) |
+| 3.14 | [![Python 3.14 Tests](./tests/reports/fasttests-py314/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py314/junit/report.html)   | [![Python 3.14 Coverage](./tests/reports/fasttests-py314/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/coverage-py314/coverage_html/index.html) |
 
-Further (functional and integration) tests are performed in the Python 3.14 to ensure that examples run as desired. Thus, it is generally recommended to use Python 3.14
- with this version to keep pace with development, especially when running examples.
+Further tests of our examples are performed in the Python 3.14. Thus, it is generally recommended to use Python 3.14 with this version to keep pace with development, especially when running examples.
 
 ### Set up python tooling environment
 
@@ -123,7 +125,7 @@ More guidance on development installations is provided in [How to Contribute](ht
 Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` in the context of a development install you can checkout the tag corresponding to the version you want, e.g.:
 
 ```
-   git checkout v2.5.5.rc0
+   git checkout v2.5.6.rc0
 ```
 
 
@@ -223,15 +225,15 @@ Once fmdtools is installed, use the following to get acquainted with how to use 
 
 - Explore the searchable [module reference](https://nasa.github.io/fmdtools/docs-source/fmdtools.html) for syntax and usage documentation.
 
-### AI/LLM Tips
+### Coding Agent/LLM Tips
 
 Decent (but **very imperfect**) results can be achieved using LLMs for model development using the prompt:
 
 ```prompt
 You are an experienced software engineer learning a new Python library for the first time.
-Make an fmdtools simulation of a <enter your system here> using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.5.rc0` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes.
+Make an fmdtools simulation of a <enter your system here> using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.6.rc0` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes.
 The output should be a bare bones but well-commented .py file with simple behaviors for each class and a small script at the bottom leveraging the built-in capabilities in the `fmdtools.analyze` package instead of directly using external libraries like matplotlib.
-As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.5.rc0 syntax.
+As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.6.rc0 syntax.
 ```
 
 The important aspects of this prompt are specifying the URL and version--otherwise the LLM is likely to hallucinate usage or recall an earlier version of fmdtools. Do not expect perfect output from this--you may have to spend some time identifying the problems so they can be fixed!
@@ -277,8 +279,8 @@ To cite a particular version of the fmdtools, you may use:
   author = {{NASA}},
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
-  version = {2.5.5.rc0},
-  date = {2026-10-08},
+  version = {2.5.6.rc0},
+  date = {2026-10-16},
 }
 ```
 

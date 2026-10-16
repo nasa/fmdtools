@@ -31,6 +31,16 @@
   {
    "cell_type": "code",
    "execution_count": 1,
+   "id": "e6fd7997",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# sphinx_gallery_thumbnail_number = 6"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
    "id": "d918c668",
    "metadata": {
     "execution": {

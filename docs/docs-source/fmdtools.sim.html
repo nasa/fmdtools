@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.sim &mdash; fmdtools 2.5.5.rc0 documentation</title>
+  <title>fmdtools.sim &mdash; fmdtools 2.5.6.rc0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=7a01ae65"></script>
+      <script src="../_static/documentation_options.js?v=a6e0e9ee"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -50,11 +50,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../README.html#demo-portfolio">Demo Portfolio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#about">About</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-ai-ready-modelling-paradigm">Flexible, AI-Ready Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-llm-ready-modelling-paradigm">Flexible, LLM-Ready Modelling Paradigm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#demo-portfolio">Demo Portfolio</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#getting-started">Getting Started</a><ul>
@@ -66,7 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#ai-llm-tips">AI/LLM Tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#coding-agent-llm-tips">Coding Agent/LLM Tips</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
@@ -105,6 +105,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-pros-smaller">Why fmdtools? Pros: {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#what-is-fmdtools-package-structure">What is fmdtools? Package Structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#activity-download-and-install-fmdtools-smaller">Activity: Download and Install fmdtools {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
@@ -434,6 +435,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/state_communication/readme.html">State Communications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/state_communication/tutorial_MultiFlow_and_CommsFlow.html">Tutorial: MultiFlow and CommsFlow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/state_communication/tutorial_MultiFlow_and_CommsFlow.html#building-flows">Building Flows</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/state_communication/readme.html#package-structure">Package Structure:</a></li>
 </ul>
 </li>
@@ -2394,11 +2399,12 @@ Omitted fields are unchanged; entries replace matching scopes or paths.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.scenario.JointFaultScenario.from_faults">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baserate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ind'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_cond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.JointFaultScenario.from_faults" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baserate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ind'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_cond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_phasemaps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.JointFaultScenario.from_faults" title="Link to this definition"></a></dt>
 <dd><p>Generate JointFaultScenario given fault names and injection time.</p>
 <p>None starts at injection; an explicit starttime of zero is retained.
 Combine unweighted fault rates first, then apply the scenario’s sampling
-weight once. Independent faults do not exponentiate quadrature weights.</p>
+weight once. Independent faults do not exponentiate quadrature weights.
+Per-fault rate_phasemaps affect rate lookup, not joint phase metadata.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2459,6 +2465,7 @@ weight once. Independent faults do not exponentiate quadrature weights.</p>
 <li><p><strong>p</strong> (<em>dict</em>) – non-default Parameter fields</p></li>
 <li><p><strong>r</strong> (<em>dict</em>) – non-default Rand fields</p></li>
 <li><p><strong>sp</strong> (<em>dict</em>) – non-default SimParam fields</p></li>
+<li><p><strong>t</strong> (<em>dict</em>) – non-default Time fileds</p></li>
 <li><p><strong>prob</strong> (<em>float</em>) – probability</p></li>
 <li><p><strong>inputparams</strong> (<em>dict</em>) – inputs to parameter generator</p></li>
 <li><p><strong>rangeid</strong> (<em>str</em>) – name of containing range</p></li>
@@ -2553,6 +2560,11 @@ Missing paths or non-mapping intermediates return the given default.</p>
 <span class="sig-name descname"><span class="pre">start_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.ParameterScenario.start_time" title="Link to this definition"></a></dt>
 <dd><p>Return the start time for a parameter scenario–0.0.</p>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.sim.scenario.ParameterScenario.t">
+<span class="sig-name descname"><span class="pre">t</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#fmdtools.sim.scenario.ParameterScenario.t" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.scenario.ParameterScenario.times">
@@ -2659,10 +2671,11 @@ Missing paths or non-mapping intermediates return the given default.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.scenario.SingleFaultScenario.from_fault">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.SingleFaultScenario.from_fault" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.scenario.SingleFaultScenario.from_fault" title="Link to this definition"></a></dt>
 <dd><p>Generate the fault scenario for faulttup at time.</p>
 <p>Simulation starts at <cite>time</cite> (the provided injection time) unless an alternative
-<cite>starttime</cite> argument is provided.</p>
+<cite>starttime</cite> argument is provided. A separate rate_phasemap can resolve
+opportunity labels without changing the recorded scenario phase.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SingleFaultScenario</span><span class="o">.</span><span class="n">from_fault</span><span class="p">((</span><span class="s1">&#39;fxn&#39;</span><span class="p">,</span> <span class="s1">&#39;fault&#39;</span><span class="p">),</span> <span class="mi">10</span><span class="p">)</span>
 <span class="go">SingleFaultScenario(sequence={10.0: Injection(faults={&#39;fxn&#39;: [&#39;fault&#39;]}, disturbances={})}, times=(10,), obj=&#39;fxn&#39;, fault=&#39;fault&#39;, rate=1.0, name=&#39;fxn_fault_t10&#39;, time=10, phase=&#39;&#39;)</span>
@@ -3689,7 +3702,7 @@ a range with the given input arguments.</p></li>
 <p># prs.add_res_scenario can be used to add a given scenario from the result.
 &gt;&gt;&gt; prs.add_res_scenario(rep=0)
 &gt;&gt;&gt; prs.scenarios()
-[ParameterScenario(sequence={}, times=(), p={‘y’: 1.0}, r={}, sp={}, prob=1.0, inputparams={‘comp_group’: ‘default’, ‘rep’: 0}, rangeid=’’, name=’res_0’)]</p>
+[ParameterScenario(sequence={}, times=(), p={‘y’: 1.0}, r={}, sp={}, t={}, prob=1.0, inputparams={‘comp_group’: ‘default’, ‘rep’: 0}, rangeid=’’, name=’res_0’)]</p>
 <p># prs.add_res_reps can be used to add replicate scenarios from the results.
 &gt;&gt;&gt; prs.add_res_reps(reps=’all’)
 &gt;&gt;&gt; prs
@@ -3761,7 +3774,7 @@ replicate scenarios to sample. If ‘all’, all replicates in the group.</p></l
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.ParameterSample">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">ParameterSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paramdomain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.ParameterSample" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">ParameterSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paramdomain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.ParameterSample" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSample</span></code></a></p>
 <p>Class for sampling parameters and other immutable model attributes.</p>
 <p>…</p>
@@ -3790,7 +3803,18 @@ replicate scenarios to sample. If ‘all’, all replicates in the group.</p></l
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.ParameterSample.sp">
 <span class="sig-name descname"><span class="pre">sp</span></span><a class="headerlink" href="#fmdtools.sim.sample.ParameterSample.sp" title="Link to this definition"></a></dt>
-<dd><p>Non-default simparam arguments</p>
+<dd><p>Non-default SimParam arguments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.sim.sample.ParameterSample.t">
+<span class="sig-name descname"><span class="pre">t</span></span><a class="headerlink" href="#fmdtools.sim.sample.ParameterSample.t" title="Link to this definition"></a></dt>
+<dd><p>Non-default Time arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
@@ -3908,7 +3932,7 @@ samples). The default is 1.0.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.ParameterSample.add_variable_scenario">
-<span class="sig-name descname"><span class="pre">add_variable_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'var'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputparams</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.ParameterSample.add_variable_scenario" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_variable_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'var'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputparams</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.ParameterSample.add_variable_scenario" title="Link to this definition"></a></dt>
 <dd><p>Add a scenario to the ParamSample.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -3917,6 +3941,7 @@ samples). The default is 1.0.</p></li>
 <li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Seed to include in the ParameterScenario, including zero. False
 (the default) or None uses the sample seed when one is configured.</p></li>
 <li><p><strong>sp</strong> (<em>dict</em><em>, </em><em>optional</em>) – SimParam arguments to the ParameterScenario. The default is {}.</p></li>
+<li><p><strong>t</strong> (<em>dict</em><em>, </em><em>optional</em>) – Time arguments to the ParameterScenario. The default is {}</p></li>
 <li><p><strong>weight</strong> (<em>float</em><em>, </em><em>optional</em>) – Weight (probability) allocated to the scenario. The default is 1.0.</p></li>
 <li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name to assign the scenario. The default is ‘param’.</p></li>
 <li><p><strong>inputparams</strong> (<em>dict</em><em>, </em><em>optional</em>) – Input parameters (if different from Parameter input).</p></li>

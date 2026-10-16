@@ -322,8 +322,8 @@ class Drone(DroneRural):
                               ('taxi', 12, 20)),
                       end_time=30,
                       units='min',
-                      use_local=False,
                       dt=0.1)
+    default_t = {'force_locals': True, 'dt': 0.1}
 
     def init_architecture(self, **kwargs):
         self.add_flow('force_st', Force)
@@ -500,7 +500,7 @@ if __name__ == "__main__":
     # UrbanDroneEnvironment("a")
     # PlanPath._init_environment("a")
     # p = PlanPath("test", {})
-    mdl = Drone(sp={'end_condition': 'scenario_finished', 'dt': 0.1}, t={'local_dt': 0.1})
+    mdl = Drone(sp={'end_condition': 'scenario_finished', 'dt': 0.1}, t={'dt': 0.1})
     results_fault, hist_fault = propagate.one_fault(mdl, "affect_dof.ca.comps.lr", "mechbreak", time=1.4)
     fig, ax = plot_env_with_traj_z(hist_fault, mdl, title = "Urban Drone Trajectory")
 
@@ -511,7 +511,7 @@ if __name__ == "__main__":
     e.c.show_collection('all_safe', z='height')
 
     mdl = Drone(p={'respolicy': ResPolicy(bat="to_nearest", line="to_nearest")},
-                sp={'dt': 1.0})
+                sp={'dt': 1.0}, t={'dt': 1.0})
     # ec, mdlhist_fault = propagate.one_fault(mdl, "plan_path", "vision_lack_of_detection", time=4.5)
 
     ec, mdlhist = propagate.nominal(mdl)
@@ -536,7 +536,7 @@ if __name__ == "__main__":
     app.faultsamples['move_scens'].get_scen_groups('phase')
 
     endresults, hists = propagate.fault_sample(mdl, app, staged=False,
-                                               mdl_kwargs = {'sp':{'dt':1.0}})
+                                               mdl_kwargs = {'sp':{'dt':1.0}, 't': {'dt': 1.0}})
     plot_env_with_traj_z(hists, mdl)
     plot_env_with_traj(hists, mdl)
     statsfmea = an.tabulate.FMEA(endresults, app, group_by=('obj', 'fault'),
