@@ -54,8 +54,8 @@ class SimParam(Parameter, readonly=True):
     track_times : tuple
         Defines what times to include in the history.
         Options are:
-        - ('all',)--all simulated times
-        - ('interval', n)--includes every nth time in the history
+        - ('all',)--all times every tracking timestep dt
+        - ('interval', n)--includes every nth timestep dt in the history
         - ('times', [t1, ... tn])--only includes times defined in the
           vector [t1 ... tn]
     dt : float

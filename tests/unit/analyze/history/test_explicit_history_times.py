@@ -81,19 +81,14 @@ class TestExplicitHistoryTimes(unittest.TestCase):
             for indices in ([0, 2, 4], [1, 3], [4]):
                 with self.subTest(dt=dt, wrap=wrap.__name__, indices=indices):
                     times = np.asarray(indices, dtype=float) * dt
-                    reference = ExampleFunction(
-                        sp={"end_time": 4 * dt, "dt": dt}
-                    )
+                    reference = ExampleFunction(sp={"end_time": 4 * dt, "dt": dt},
+                                                t={"dt": dt})
                     expected_result, expected_history = Simulation(mdl=reference)()
                     supplied = wrap(times)
                     before = copy.deepcopy(supplied)
-                    model = ExampleFunction(
-                        sp={
-                            "end_time": 4 * dt,
-                            "dt": dt,
-                            "track_times": ("times", supplied),
-                        }
-                    )
+                    model = ExampleFunction(sp={"end_time": 4 * dt,"dt": dt,
+                                                "track_times": ("times", supplied)},
+                                            t={"dt": dt})
                     result, history = Simulation(mdl=model)()
                     self.assertEqual(result, expected_result)
                     self.assertIsInstance(history.time, np.ndarray)

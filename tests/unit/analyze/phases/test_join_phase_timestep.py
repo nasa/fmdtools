@@ -94,7 +94,7 @@ class TestJoinedPhaseTimestep(unittest.TestCase):
                     join_phasemaps(*order)
 
     def test_joint_sample_uses_fractional_times_and_rates(self):
-        model = ExFxnArch(sp={"end_time": 2.0, "dt": 0.5})
+        model = ExFxnArch(sp={"end_time": 2.0, "dt": 0.5}, t={"dt": 0.5})
         first, second = FaultDomain(model), FaultDomain(model)
         first.add_fault("ex_fxn", "low")
         second.add_fault("ex_fxn2", "no_charge")

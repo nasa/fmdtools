@@ -514,14 +514,14 @@ class RateFunction(ExampleFunction):
 
 def make_domain(dt):
     """Test domain used in a few different tests."""
-    model = RateFunction(
-        "risk",
+    model = RateFunction("risk",
         sp={
             "end_time": 4 * dt,
             "dt": dt,
             "units": "sec",
             "phases": (("early", 0.0, dt), ("late", 2 * dt, 4 * dt)),
         },
+        t= {"dt": dt},
     )
     domain = FaultDomain(model)
     domain.add_faults(("risk", "first"), ("risk", "second"))
