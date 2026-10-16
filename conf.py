@@ -91,7 +91,7 @@ html_static_path = ['_static']
 
 myst_sphinx_gallery_config = GalleryConfig()
 myst_sphinx_gallery_files_config = FilesConfig(
-    named_config={"last_nb_thumbnail": GalleryThumbnailConfig(thumbnail_strategy="last")}
+    named_config={"last_nb_thumbnail": GalleryThumbnailConfig(thumbnail_strategy="last")},
     files_config={"last_nb_thumbnail": ["examples/airport_taxiway/paper_jcise_dsa.ipynb",
                                         "examples/airspacelib/wildfire_response/demo_wildfire.ipynb",
                                         "examples/multirotor_drone/tutorial_fmdtools_basics.ipynb",
