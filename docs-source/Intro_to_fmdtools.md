@@ -83,6 +83,10 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 ## What is fmdtools? A Python package for **design**, **simulation**, and **analysis** of resilience.
 
+![](./figures/drawio/overall_functionality.svg)
+
+## What is fmdtools? Package Structure
+
 ![](./figures/uml/module_organization.svg)
 
 ## What is fmdtools? Repo Structure

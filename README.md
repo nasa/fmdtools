@@ -18,20 +18,11 @@
 
 [Click here to view the the full documentation website.](https://nasa.github.io/fmdtools)
 
-### Demo Portfolio
-
-See: [Examples](https://nasa.github.io/fmdtools/examples/Examples.html)
-
-<img src="https://nasa.github.io/fmdtools/_images/tutorial_fmdtools_basics.webp" width="15%"></img>
-<img src="https://nasa.github.io/fmdtools/_images/demo_proxthreat.webp" width="15%"></img>
-<img src="https://nasa.github.io/fmdtools/_images/demo_wildfire.webp" width="15%"></img>
-<img src="https://nasa.github.io/fmdtools/_images/paper_jcise_dsa.webp" width="15%"></img>
-<img src="https://nasa.github.io/fmdtools/_images/demo_urban_flight.webp" width="15%"></img> 
-<img src="https://nasa.github.io/fmdtools/_images/demo_degradation.webp" width="15%"></img>
-
 ## About
 
-The fmdtools library provides the computational support needed to perform a simulation-based (rather than document-based) hazard analysis process that [**enables the consideration of systems resilience**](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#why-fmdtools). This means that it can be used to extend the scope of hazard analysis from component faults to the dynamic interactions between the system, operators, and the environment. Some key features include:
+![fmdtools design/simulation/analysis process](./docs-source/figures/drawio/overall_functionality.svg)
+
+The fmdtools library provides the computational support needed to perform a simulation-based (rather than document-based) hazard analysis process that [**enables the consideration of systems resilience**](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#why-fmdtools), as shown above. This means that it can be used to extend the scope of hazard analysis from component faults to the dynamic interactions between the system, operators, and the environment. Some key features include:
 
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/flexible.svg">
 
@@ -50,6 +41,18 @@ Readily-deployable analysis methods are built in to fmdtools to enable the rapid
 
 
 The fmdtools documentation repository is also home to the Functional Reasoning Design Language specification, a graphical language that may be used to represent the structure of behavioral interactions in a system to inform hazard analysis.
+
+### Demo Portfolio
+
+See [Examples](https://nasa.github.io/fmdtools/examples/Examples.html) for a wide range of applications fmdtools has been used for in the past.
+
+<img src="https://nasa.github.io/fmdtools/_images/tutorial_fmdtools_basics.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/demo_proxthreat.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/demo_wildfire.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/paper_jcise_dsa.webp" width="15%"></img>
+<img src="https://nasa.github.io/fmdtools/_images/demo_urban_flight.webp" width="15%"></img> 
+<img src="https://nasa.github.io/fmdtools/_images/demo_degradation.webp" width="15%"></img>
+
 
 ## Getting Started
 
