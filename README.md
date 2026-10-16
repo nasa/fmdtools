@@ -22,7 +22,9 @@
 
 ![fmdtools design/simulation/analysis process](./docs-source/figures/drawio/overall_functionality.svg)
 
-The fmdtools library provides the computational support needed to perform a simulation-based (rather than document-based) hazard analysis process that [**enables the consideration of systems resilience**](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#why-fmdtools), as shown above. This means that it can be used to extend the scope of hazard analysis from component faults to the dynamic interactions between the system, operators, and the environment. Some key features include:
+The fmdtools library provides the computational support needed to perform a simulation-based analysis of systems resilience, as shown above. This analysis of resilience can enable the quantification of risk and safety of given hazards in complex systems where there are dynamic interactions between the system, operators, and the environment.
+
+Key features include:
 
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/flexible.svg">
 
