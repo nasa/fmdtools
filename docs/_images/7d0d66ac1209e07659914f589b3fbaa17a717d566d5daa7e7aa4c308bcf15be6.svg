@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="288pt" height="249pt" viewBox="0.00 0.00 288.00 249.37">
+<g id="graph0" class="graph" transform="scale(0.827543 0.827543) rotate(0) translate(4 297.33)">
+<polygon fill="white" stroke="none" points="-4,4 -4,-297.33 344.02,-297.33 344.02,4 -4,4"/>
+<!-- beach.flows.environment -->
+<g id="node1" class="node">
+<title>beach.flows.environment</title>
+<polygon fill="lightgrey" stroke="grey" points="249.35,-165.81 216.99,-183.81 152.26,-183.81 119.9,-165.81 152.26,-147.81 216.99,-147.81 249.35,-165.81"/>
+<text text-anchor="middle" x="184.62" y="-160.38" font-family="Times New Roman,serif" font-size="14.00">environment</text>
+</g>
+<!-- beach.fxns.responder -->
+<g id="node2" class="node">
+<title>beach.fxns.responder</title>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="72.25,-222.82 0,-222.82 0,-186.82 72.25,-186.82 72.25,-222.82"/>
+<text text-anchor="middle" x="36.12" y="-199.39" font-family="Times New Roman,serif" font-size="14.00">responder</text>
+</g>
+<!-- beach.fxns.responder&#45;&gt;beach.flows.environment -->
+<g id="edge1" class="edge">
+<title>beach.fxns.responder-&gt;beach.flows.environment</title>
+<path fill="none" stroke="black" d="M85.6,-191.82C103.2,-187.2 122.91,-182.02 140.08,-177.51"/>
+<polygon fill="none" stroke="black" points="85.69,-191.8 80.91,-197.19 74.09,-194.85 78.87,-189.45 85.69,-191.8"/>
+<text text-anchor="middle" x="92.21" y="-171.36" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- beach.fxns.swimmers -->
+<g id="node3" class="node">
+<title>beach.fxns.swimmers</title>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="262.3,-36 190.05,-36 190.05,0 262.3,0 262.3,-36"/>
+<text text-anchor="middle" x="226.17" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">swimmers</text>
+</g>
+<!-- beach.fxns.swimmers&#45;&gt;beach.flows.environment -->
+<g id="edge2" class="edge">
+<title>beach.fxns.swimmers-&gt;beach.flows.environment</title>
+<path fill="none" stroke="black" d="M217.48,-48.94C209.07,-78.84 196.62,-123.12 189.71,-147.7"/>
+<polygon fill="none" stroke="black" points="217.42,-49.14 215.19,-42.28 220.67,-37.59 222.89,-44.45 217.42,-49.14"/>
+<text text-anchor="middle" x="182.97" y="-100.77" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- beach.fxns.beach_aircraft -->
+<g id="node4" class="node">
+<title>beach.fxns.beach_aircraft</title>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="340.02,-293.33 244.52,-293.33 244.52,-257.33 340.02,-257.33 340.02,-293.33"/>
+<text text-anchor="middle" x="292.27" y="-269.91" font-family="Times New Roman,serif" font-size="14.00">beach_aircraft</text>
+</g>
+<!-- beach.fxns.beach_aircraft&#45;&gt;beach.flows.environment -->
+<g id="edge3" class="edge">
+<title>beach.fxns.beach_aircraft-&gt;beach.flows.environment</title>
+<path fill="none" stroke="black" d="M264.97,-247.56C245.42,-227.67 219.64,-201.43 202.61,-184.11"/>
+<polygon fill="none" stroke="black" points="264.96,-247.55 272.02,-249.03 273.38,-256.11 266.32,-254.63 264.96,-247.55"/>
+<text text-anchor="middle" x="213.17" y="-218.29" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+</g>
+</svg>
