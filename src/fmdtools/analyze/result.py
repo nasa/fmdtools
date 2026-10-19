@@ -842,6 +842,8 @@ class Result(UserDict):
         Without a nominal scenario, use the first scenario's numeric fields.
         A nominal reference is required only for differences from nominal.
         An empty result returns an empty result of the same type.
+        Nested metrics are flattened before weighting so their numeric fields
+        are retained regardless of the input storage layout.
 
         Parameters
         ----------
@@ -863,7 +865,7 @@ class Result(UserDict):
             Result/History with values corresponding to the expectation of
             its quantities over the contained scenarios.
         """
-        mh = self.nest(levels=1)
+        mh = self.flatten().nest(levels=1)
 
         if difference_from_nominal and 'nominal' not in mh:
             raise ValueError("A nominal scenario is required for nominal differences.")
