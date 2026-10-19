@@ -254,7 +254,12 @@ class BaseTab(UserDict):
             else:
                 sort_by = self.all_metrics()[-1]
 
-        table = pd.DataFrame(self.data)
+        index = None
+        if any(() in column for column in self.values()):
+            # Preserve the ungrouped () row instead of inferring a MultiIndex.
+            rows = dict.fromkeys(row for column in self.values() for row in column)
+            index = pd.Index(list(rows), tupleize_cols=False)
+        table = pd.DataFrame(self.data, index=index)
         if sort_by not in self.all_metrics():
             sort_by = self.all_metrics()[0]
         if sort:
@@ -452,7 +457,9 @@ class FMEA(BaseTab):
     rates/weights : str(s)
         Weighting or rate factor to use for weighted averages and expectations.
         Can be any value from the result (e,g. rates='rate') or the FaultSample
-        (e.g., rates='scenario.rate').
+        (e.g., rates='scenario_rate'). The default cost-based table retains
+        scenario rates when other metric options are supplied. An explicit
+        rates value, including None, overrides this default.
     **kwargs: str/list
         Metrics to calculate, (e.g., rate_metric='rate', expected_metric='cost')
         Note that rate and rate metrics become inputs to average and expected.
@@ -498,8 +505,7 @@ class FMEA(BaseTab):
             # default fmea is a cost-based table
             all_metrics = {'average': ['scenario_rate'],
                            'sum': ['cost'], "expected": ["cost"]}
-            if not met_kwar:
-                met_kwar = {'rates': 'scenario_rate'}
+            met_kwar.setdefault('rates', 'scenario_rate')
         for met, met_value in met_kwar.items():
             if isinstance(met_value, str) and met_value.startswith("scenario_"):
                 met_kwar[met] = fs.get_scen_values(met_value[9:])
