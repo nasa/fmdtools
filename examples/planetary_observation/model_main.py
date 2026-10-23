@@ -45,42 +45,53 @@ class MissionParam(Parameter, readonly=True):
     buffer_capacity: int = 4
     downlink_capacity: int = 1
 
-    def __init__(self, *args, **kwargs):
-        raw = dict(
-            zip(
-                self.__fields__,
-                self.get_true_fields(*args, force_kwargs=True, **kwargs),
-            )
-        )
+    def get_true_fields(self, *args, force_kwargs=False, **kwargs):
+        """Reject unsafe capacity coercions before BaseContainer types fields.
+
+        The normal type conversion turns ``True`` or ``1.5`` into integer 1.
+        This documented field-resolution hook retains strict integer packet
+        capacities without replacing Parameter's constructor.
+        """
+        values = super().get_true_fields(*args, force_kwargs=force_kwargs, **kwargs)
         for name in ("buffer_capacity", "downlink_capacity"):
-            value = raw[name]
+            value = values[self.__fields__.index(name)]
             if isinstance(value, bool) or not isinstance(value, Integral) or value < 0:
                 raise ValueError(name + " must be a nonnegative integer")
-        super().__init__(*args, **kwargs)
-        for name in ("observation_times", "contact_times"):
-            times = getattr(self, name)
-            if any(
-                isinstance(t, bool) or not isinstance(t, Integral) or t <= 0
-                for t in times
-            ):
-                raise ValueError(name + " must contain positive integer minutes")
-            if any(a >= b for a, b in zip(times, times[1:])):
-                raise ValueError(name + " must be strictly increasing")
-        if len(self.signals) != len(self.observation_times):
-            raise ValueError("signals must contain one value per observation time")
-        for value in (*self.signals, self.threshold):
-            if (
-                not isinstance(value, Real)
-                or not math.isfinite(value)
-                or not 0.0 <= value <= 1.0
-            ):
-                raise ValueError(
-                    "signals and threshold must be finite values in [0, 1]"
-                )
+        return values
+
+    def check_lim(self, k, v):
+        """Validate a mission field through Parameter's supported validation hook.
+
+        Base ``Parameter.__init__`` calls ``check_lim`` after setting every
+        field. This avoids reimplementing the framework's constructor and
+        preserves its normal copying, type checks and pickling behavior.
+        """
+        super().check_lim(k, v)
+        if k in ("buffer_capacity", "downlink_capacity"):
+            if isinstance(v, bool) or not isinstance(v, Integral) or v < 0:
+                raise ValueError(k + " must be a nonnegative integer")
+        elif k in ("observation_times", "contact_times"):
+            if any(isinstance(t, bool) or not isinstance(t, Integral) or t <= 0 for t in v):
+                raise ValueError(k + " must contain positive integer minutes")
+            if any(a >= b for a, b in zip(v, v[1:])):
+                raise ValueError(k + " must be strictly increasing")
+        elif k == "signals":
+            if len(v) != len(self.observation_times):
+                raise ValueError("signals must contain one value per observation time")
+            if any(not isinstance(value, Real) or not math.isfinite(value) or not 0.0 <= value <= 1.0 for value in v):
+                raise ValueError("signals and threshold must be finite values in [0, 1]")
+        elif k == "threshold":
+            if not isinstance(v, Real) or not math.isfinite(v) or not 0.0 <= v <= 1.0:
+                raise ValueError("signals and threshold must be finite values in [0, 1]")
 
 
 class SceneState(State):
-    """Prescribed observation opportunity and ground contact for the current step."""
+    """Scene opportunity during the current one-minute step.
+
+    ``visible`` is a scheduled acquisition opportunity; ``contact`` marks
+    a scheduled ground link. ``scene_id`` is the zero-based observation index
+    (or -1 when absent); ``signal`` is its dimensionless [0, 1] score.
+    """
 
     visible: bool = False
     contact: bool = False
@@ -95,7 +106,11 @@ class Scene(Flow):
 
 
 class ObservationState(State):
-    """One current scalar observation; invalid steps carry no observation."""
+    """Current captured observation, cleared on steps without an opportunity.
+
+    ``valid`` indicates a capture this step; ``scene_id`` is its schedule
+    index (-1 if invalid); ``signal`` is the captured dimensionless score.
+    """
 
     valid: bool = False
     scene_id: int = -1
@@ -109,7 +124,11 @@ class Observation(Flow):
 
 
 class BufferState(State):
-    """Number of selected packets waiting for downlink."""
+    """Pending selected-packet count.
+
+    ``queued`` is the number of whole packets awaiting contact; the scaffold
+    stores no packet content, identity or bytes.
+    """
 
     queued: int = 0
 
@@ -121,19 +140,31 @@ class DataBuffer(Flow):
 
 
 class ScheduleState(State):
-    """Cumulative opportunities encountered so far."""
+    """Cumulative schedule counts.
+
+    ``opportunities`` counts elapsed scheduled visibility steps, not
+    completed acquisitions or downlinks.
+    """
 
     opportunities: int = 0
 
 
 class CaptureState(State):
-    """Cumulative captured observations."""
+    """Cumulative payload captures.
+
+    ``acquired`` counts valid one-packet acquisitions since mission start.
+    """
 
     acquired: int = 0
 
 
 class ProcessingState(State):
-    """Cumulative processing, selection and overflow counts."""
+    """Cumulative processing counters for the current mission.
+
+    ``processed`` counts valid signals checked by the selector; ``selected``
+    counts scores meeting the threshold. ``dropped`` counts selected packets
+    rejected because the count-only buffer was full at arrival.
+    """
 
     processed: int = 0
     selected: int = 0
@@ -141,7 +172,10 @@ class ProcessingState(State):
 
 
 class DownlinkState(State):
-    """Cumulative delivered packets."""
+    """Cumulative contact-time transmissions.
+
+    ``downlinked`` counts whole packets drained from the shared buffer.
+    """
 
     downlinked: int = 0
 
@@ -238,7 +272,8 @@ class ObservationSatellite(FunctionArchitecture):
     container_p = MissionParam
     default_sp = dict(end_time=6.0, dt=1.0, units="min")
 
-    def init_architecture(self, **kwargs):
+    def check_values(self):
+        """Check the example-specific one-minute schedule requirements."""
         if (
             self.sp.start_time != 0.0
             or self.sp.dt != 1.0
@@ -252,6 +287,9 @@ class ObservationSatellite(FunctionArchitecture):
                 "The scaffold requires start_time=0, dt=1 minute and "
                 "a nonnegative integer end_time"
             )
+
+    def init_architecture(self, **kwargs):
+        self.check_values()
         self.add_flow("scene", Scene)
         self.add_flow("observation", Observation)
         self.add_flow("buffer", DataBuffer)

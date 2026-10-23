@@ -17,6 +17,10 @@ Each observation contains a dimensionless scalar signal in [0, 1], not an image.
 The onboard selector is an inclusive threshold rule, not a trained classifier;
 its selections do not measure detection accuracy.
 
+Parameters are validated through the existing ``Parameter.check_lim`` hook,
+while ``ObservationSatellite.check_values`` checks the example's timebase
+before adding functions. Neither framework constructor is overridden.
+
 Storage and transmission are counted in whole packets. The buffer stores a
 count, not payload contents or packet identities. All numerical defaults are
 illustrative choices for a hand-checkable reference. They are not mission data
@@ -140,10 +144,11 @@ operational cases, not sampled faults.
 Tests
 -----
 
-The reference and boundary tests are in the normal unit-test tree so they run
-with the existing unit suite. To run only this example's checks::
+The reference and boundary tests live alongside this example, as do the
+introductory ``example.ipynb`` and its executable nominal-run cells. To run
+the example tests::
 
-    python -m pytest --noconftest -o addopts= --import-mode=importlib tests/unit/sim/propagate/test_satellite_scaffold.py
+    python -m pytest --noconftest -o addopts= --import-mode=importlib examples/planetary_observation/test_model_main.py
 
 The tests cover complete reference histories, packet conservation, zero and
 limited capacities, absent/overlapping contacts, threshold boundaries, partial
@@ -169,3 +174,6 @@ Files
   and a nominal-run entry point.
 * ``readme.rst`` describes the assumptions, reference outputs and extension
   boundaries.
+* ``test_model_main.py`` checks reference trajectories, invariants and invalid
+  model inputs without moving example-specific tests into the library suite.
+* ``example.ipynb`` steps through the nominal model and two capacity scenarios.
