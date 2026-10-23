@@ -30,5 +30,6 @@ This repository provides several examples models in the `/examples` directory, w
    human_hazard_mitigation/readme
    multirotor_drone/readme
    navigating_rover/readme
+   planetary_observation/readme
    state_communication/readme
    water_pump/readme
