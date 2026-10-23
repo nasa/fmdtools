@@ -64,9 +64,9 @@ The fmdtools library is developed in Python 3.14 but is tested to maintain compa
 
 | Python Version    | Test Report | Coverage |
 | -------- | ------- | ------- |
-| 3.12 | [![Python 3.12 Tests](./tests/reports/fasttests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py312/junit/report.html)   | [![Python 3.12 Coverage](./tests/reports/fasttests-py312/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/coverage-py312/coverage_html/index.html) |
-| 3.13 | [![Python 3.13 Tests](./tests/reports/fasttests-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py313/junit/report.html)    | [![Python 3.13 Coverage](./tests/reports/fasttests-py313/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/coverage-py313/coverage_html/index.html) |
-| 3.14 | [![Python 3.14 Tests](./tests/reports/fasttests-py314/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py314/junit/report.html)   | [![Python 3.14 Coverage](./tests/reports/fasttests-py314/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/coverage-py314/coverage_html/index.html) |
+| 3.12 | [![Python 3.12 Tests](./tests/reports/fasttests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py312/junit/report.html)   | [![Python 3.12 Coverage](./tests/reports/fasttests-py312/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py312/coverage_html/index.html) |
+| 3.13 | [![Python 3.13 Tests](./tests/reports/fasttests-py313/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py313/junit/report.html)    | [![Python 3.13 Coverage](./tests/reports/fasttests-py313/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py313/coverage_html/index.html) |
+| 3.14 | [![Python 3.14 Tests](./tests/reports/fasttests-py314/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py314/junit/report.html)   | [![Python 3.14 Coverage](./tests/reports/fasttests-py314/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/tests/reports/fasttests-py314/coverage_html/index.html) |
 
 Further tests of our examples are performed in the Python 3.14. Thus, it is generally recommended to use Python 3.14 with this version to keep pace with development, especially when running examples.
 
@@ -127,7 +127,7 @@ More guidance on development installations is provided in [How to Contribute](ht
 Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` in the context of a development install you can checkout the tag corresponding to the version you want, e.g.:
 
 ```
-   git checkout v2.5.6.rc2
+   git checkout v2.5.7.rc0
 ```
 
 
@@ -233,9 +233,9 @@ Decent (but **very imperfect**) results can be achieved using LLMs for model dev
 
 ```prompt
 You are an experienced software engineer learning a new Python library for the first time.
-Make an fmdtools simulation of a <enter your system here> using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.6.rc2` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes.
+Make an fmdtools simulation of a <enter your system here> using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.7.rc0` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes.
 The output should be a bare bones but well-commented .py file with simple behaviors for each class and a small script at the bottom leveraging the built-in capabilities in the `fmdtools.analyze` package instead of directly using external libraries like matplotlib.
-As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.6.rc2 syntax.
+As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.7.rc0 syntax.
 ```
 
 The important aspects of this prompt are specifying the URL and version--otherwise the LLM is likely to hallucinate usage or recall an earlier version of fmdtools. Do not expect perfect output from this--you may have to spend some time identifying the problems so they can be fixed!
@@ -281,8 +281,8 @@ To cite a particular version of the fmdtools, you may use:
   author = {{NASA}},
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
-  version = {2.5.6.rc2},
-  date = {2026-10-16},
+  version = {2.5.7.rc0},
+  date = {2026-10-23},
 }
 ```
 

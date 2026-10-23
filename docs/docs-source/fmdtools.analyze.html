@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.analyze &mdash; fmdtools 2.5.6.rc2 documentation</title>
+  <title>fmdtools.analyze &mdash; fmdtools 2.5.7.rc0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3560e79d"></script>
+      <script src="../_static/documentation_options.js?v=5b90d6a8"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -1631,7 +1631,9 @@ Results.</p>
 <dd><p>Take the expectation of numeric metrics in the result over given scenarios.</p>
 <p>Without a nominal scenario, use the first scenario’s numeric fields.
 A nominal reference is required only for differences from nominal.
-An empty result returns an empty result of the same type.</p>
+An empty result returns an empty result of the same type.
+Nested metrics are flattened before weighting so their numeric fields
+are retained regardless of the input storage layout.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -3167,7 +3169,9 @@ The default is (‘function’, ‘fault’).</p></li>
 gets the metrics from the classify() at the final timestep only.</p></li>
 <li><p><strong>rates/weights</strong> (<em>str</em><em>(</em><a class="reference internal" href="fmdtools.define.block.html#id5" title="fmdtools.define.block.base.Block.s"><em>s</em></a><em>)</em>) – Weighting or rate factor to use for weighted averages and expectations.
 Can be any value from the result (e,g. rates=’rate’) or the FaultSample
-(e.g., rates=’scenario.rate’).</p></li>
+(e.g., rates=’scenario_rate’). The default cost-based table retains
+scenario rates when other metric options are supplied. An explicit
+rates value, including None, overrides this default.</p></li>
 <li><p><strong>**kwargs</strong> (<em>str/list</em>) – Metrics to calculate, (e.g., rate_metric=’rate’, expected_metric=’cost’)
 Note that rate and rate metrics become inputs to average and expected.
 rates=’<a href="#id29"><span class="problematic" id="id30">scenario_</span></a>’
