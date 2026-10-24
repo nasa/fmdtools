@@ -211,16 +211,25 @@ class TestSatelliteScaffold(unittest.TestCase):
             {"signals": (0.5,)},
             {"signals": (0.1, 0.2, float("nan"), 0.4)},
             {"signals": (0.1, 0.2, 0.3, 1.1)},
-            {"threshold": float("inf")},
-            {"threshold": -0.1},
-            {"buffer_capacity": -1},
             {"buffer_capacity": 1.5},
+            {"buffer_capacity": np.float64(1.5)},
             {"downlink_capacity": True},
-            {"downlink_capacity": -1},
+            {"downlink_capacity": np.bool_(True)},
         )
         for params in cases:
             with self.subTest(params=params), self.assertRaises(ValueError):
                 MissionParam(**params)
+        # Scalar bounds use Parameter's declarative limits and its own error.
+        for name, values in (
+            ("threshold", (-0.1, 1.1, float("nan"), float("inf"), -float("inf"))),
+            ("buffer_capacity", (-1,)),
+            ("downlink_capacity", (-1,)),
+        ):
+            for value in values:
+                with self.subTest(field=name, value=value):
+                    with self.assertRaisesRegex(Exception, "outside of limits"):
+                        MissionParam(**{name: value})
+        self.assertEqual(MissionParam(buffer_capacity=np.int64(2)).buffer_capacity, 2)
         for options in (
             {"sp": {"start_time": 1.0}},
             {"sp": {"units": "sec"}},

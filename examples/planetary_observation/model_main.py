@@ -45,44 +45,44 @@ class MissionParam(Parameter, readonly=True):
     buffer_capacity: int = 4
     downlink_capacity: int = 1
 
+    threshold_lim = (0.0, 1.0)
+    buffer_capacity_lim = (0, math.inf)
+    downlink_capacity_lim = (0, math.inf)
+
     def get_true_fields(self, *args, force_kwargs=False, **kwargs):
         """Reject unsafe capacity coercions before BaseContainer types fields.
 
-        The normal type conversion turns ``True`` or ``1.5`` into integer 1.
-        This documented field-resolution hook retains strict integer packet
-        capacities without replacing Parameter's constructor.
+        The normal type conversion turns ``True`` or ``1.5`` into integer 1
+        before check_lim runs. Keep only this type guard in field resolution;
+        declared limits handle ranges without duplicating their checks.
         """
         values = super().get_true_fields(*args, force_kwargs=force_kwargs, **kwargs)
         for name in ("buffer_capacity", "downlink_capacity"):
             value = values[self.__fields__.index(name)]
-            if isinstance(value, bool) or not isinstance(value, Integral) or value < 0:
-                raise ValueError(name + " must be a nonnegative integer")
+            if isinstance(value, bool) or not isinstance(value, Integral):
+                raise ValueError(name + " must be an integer packet count")
         return values
 
     def check_lim(self, k, v):
-        """Validate a mission field through Parameter's supported validation hook.
-
-        Base ``Parameter.__init__`` calls ``check_lim`` after setting every
-        field. This avoids reimplementing the framework's constructor and
-        preserves its normal copying, type checks and pickling behavior.
-        """
+        """Apply declared scalar limits, then check mission-specific sequences."""
         super().check_lim(k, v)
-        if k in ("buffer_capacity", "downlink_capacity"):
-            if isinstance(v, bool) or not isinstance(v, Integral) or v < 0:
-                raise ValueError(k + " must be a nonnegative integer")
-        elif k in ("observation_times", "contact_times"):
-            if any(isinstance(t, bool) or not isinstance(t, Integral) or t <= 0 for t in v):
+        if k in ("observation_times", "contact_times"):
+            if any(
+                isinstance(t, bool) or not isinstance(t, Integral) or t <= 0 for t in v
+            ):
                 raise ValueError(k + " must contain positive integer minutes")
             if any(a >= b for a, b in zip(v, v[1:])):
                 raise ValueError(k + " must be strictly increasing")
         elif k == "signals":
             if len(v) != len(self.observation_times):
                 raise ValueError("signals must contain one value per observation time")
-            if any(not isinstance(value, Real) or not math.isfinite(value) or not 0.0 <= value <= 1.0 for value in v):
-                raise ValueError("signals and threshold must be finite values in [0, 1]")
-        elif k == "threshold":
-            if not isinstance(v, Real) or not math.isfinite(v) or not 0.0 <= v <= 1.0:
-                raise ValueError("signals and threshold must be finite values in [0, 1]")
+            if any(
+                not isinstance(value, Real)
+                or not math.isfinite(value)
+                or not 0.0 <= value <= 1.0
+                for value in v
+            ):
+                raise ValueError("signals must be finite values in [0, 1]")
 
 
 class SceneState(State):

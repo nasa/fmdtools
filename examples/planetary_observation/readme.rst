@@ -17,9 +17,12 @@ Each observation contains a dimensionless scalar signal in [0, 1], not an image.
 The onboard selector is an inclusive threshold rule, not a trained classifier;
 its selections do not measure detection accuracy.
 
-Parameters are validated through the existing ``Parameter.check_lim`` hook,
-while ``ObservationSatellite.check_values`` checks the example's timebase
-before adding functions. Neither framework constructor is overridden.
+Scalar bounds use the existing ``threshold_lim``, ``buffer_capacity_lim`` and
+``downlink_capacity_lim`` declarations. Sequence and cross-field checks extend
+``Parameter.check_lim``. A small ``get_true_fields`` guard rejects fractional
+or boolean packet capacities before integer conversion; it does not repeat
+the range checks. ``ObservationSatellite.check_values`` checks the example's
+timebase before adding functions. Neither framework constructor is overridden.
 
 Storage and transmission are counted in whole packets. The buffer stores a
 count, not payload contents or packet identities. All numerical defaults are
