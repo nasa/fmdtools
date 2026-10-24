@@ -180,3 +180,16 @@ Files
 * ``test_model_main.py`` checks reference trajectories, invariants and invalid
   model inputs without moving example-specific tests into the library suite.
 * ``example.ipynb`` steps through the nominal model and two capacity scenarios.
+
+Disturbance and fault variant
+----------------------------
+
+The deterministic scaffold stays unchanged. The optional
+:doc:`disturbance and fault variant <disturbances>` adds seeded sensor noise,
+temporary observation/contact losses and explicit persistent fault modes.
+Its tests also live in this example folder.
+
+.. toctree::
+   :hidden:
+
+   disturbances
