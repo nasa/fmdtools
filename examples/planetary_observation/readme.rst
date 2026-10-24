@@ -167,8 +167,9 @@ functions after this deterministic baseline is agreed. The
 replacing the threshold rule with a pre-existing model. The reusable
 external-model approach remains separate work under
 `issue #277 <https://github.com/nasa/fmdtools/issues/277>`_. Image inputs,
-scikit-learn integration, probabilistic FMEA, cost definitions and visualisation
-are not implemented here. This scaffold does not complete either parent issue.
+scikit-learn integration and calibrated risk/cost definitions remain separate
+increments. The optional risk/FMEA workflow below uses the existing synthetic
+rates. This scaffold does not complete either parent issue.
 
 Files
 -----
@@ -193,3 +194,15 @@ Its tests also live in this example folder.
    :hidden:
 
    disturbances
+   risk_analysis
+   demo_risk_analysis
+
+Risk and FMEA workflow
+---------------------
+
+The :doc:`risk/FMEA workflow <risk_analysis>` samples the declared faults,
+compares paired seeded runs and separates conditional packet-loss severity
+from fault-weighted contributions. Run ``script_risk_analysis.py`` for a
+hand-checkable reference, or open ``demo_risk_analysis.ipynb`` for the seeded
+experiment, native FMEA plots and export checks. ``test_risk_analysis.py``
+contains the corresponding reference and workflow tests.
