@@ -30,7 +30,7 @@ copyright = '2024, United States Government as represented by the Administrator 
 author = 'fmdtools developers'
 
 # The full version, including alpha/beta/rc tags
-release = '2.5.6.dev4'
+release = '2.5.7.dev0'
 version = release
 
 
@@ -90,7 +90,13 @@ html_static_path = ['_static']
 # -- Options for MyST-Gallery
 
 myst_sphinx_gallery_config = GalleryConfig()
-myst_sphinx_gallery_failes_config = FilesConfig()
+myst_sphinx_gallery_files_config = FilesConfig(
+    named_config={"last_nb_thumbnail": GalleryThumbnailConfig(thumbnail_strategy="last")},
+    files_config={"last_nb_thumbnail": ["examples/airport_taxiway/paper_jcise_dsa.ipynb",
+                                        "examples/airspacelib/wildfire_response/demo_wildfire.ipynb",
+                                        "examples/multirotor_drone/tutorial_fmdtools_basics.ipynb",
+                                        "examples/navigating_rover/demo_degradation.ipynb"]}
+)
 
 
 # -- Latex Option ---------------

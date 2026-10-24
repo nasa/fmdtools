@@ -22,7 +22,9 @@
 
 ![fmdtools design/simulation/analysis process](./docs-source/figures/drawio/overall_functionality.svg)
 
-The fmdtools library provides the computational support needed to perform a simulation-based (rather than document-based) hazard analysis process that [**enables the consideration of systems resilience**](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#why-fmdtools), as shown above. This means that it can be used to extend the scope of hazard analysis from component faults to the dynamic interactions between the system, operators, and the environment. Some key features include:
+The fmdtools library provides the computational support needed to perform a simulation-based analysis of systems resilience, as shown above. This analysis of resilience can enable the quantification of risk and safety of given hazards in complex systems where there are dynamic interactions between the system, operators, and the environment.
+
+Key features include:
 
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/flexible.svg">
 
@@ -125,7 +127,7 @@ More guidance on development installations is provided in [How to Contribute](ht
 Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` in the context of a development install you can checkout the tag corresponding to the version you want, e.g.:
 
 ```
-   git checkout v2.5.6.dev4
+   git checkout v2.5.7.dev0
 ```
 
 
@@ -231,9 +233,9 @@ Decent (but **very imperfect**) results can be achieved using LLMs for model dev
 
 ```prompt
 You are an experienced software engineer learning a new Python library for the first time.
-Make an fmdtools simulation of a <enter your system here> using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.6.dev4` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes.
+Make an fmdtools simulation of a <enter your system here> using the latest syntax from `https://github.com/nasa/fmdtools/tree/v2.5.7.dev0` for all modeling (`fmdtools.define`), simulation (`fmdtools.sim`), and analysis (`fmdtools.analyze`) classes.
 The output should be a bare bones but well-commented .py file with simple behaviors for each class and a small script at the bottom leveraging the built-in capabilities in the `fmdtools.analyze` package instead of directly using external libraries like matplotlib.
-As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.6.dev4 syntax.
+As you are going, explain the structure of each class, the usage of each function call and how they each leverage the correct fmdtools v2.5.7.dev0 syntax.
 ```
 
 The important aspects of this prompt are specifying the URL and version--otherwise the LLM is likely to hallucinate usage or recall an earlier version of fmdtools. Do not expect perfect output from this--you may have to spend some time identifying the problems so they can be fixed!
@@ -279,8 +281,8 @@ To cite a particular version of the fmdtools, you may use:
   author = {{NASA}},
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
-  version = {2.5.6.dev4},
-  date = {2026-10-16},
+  version = {2.5.7.dev0},
+  date = {2026-10-23},
 }
 ```
 

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; fmdtools 2.5.5.rc0 documentation</title>
+  <title>Index &mdash; fmdtools 2.5.6.rc2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -16,7 +16,7 @@
     <link rel="shortcut icon" href="_static/fmdtools_ico.ico"/>
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=7a01ae65"></script>
+      <script src="_static/documentation_options.js?v=3560e79d"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/design-tabs.js?v=f930bc37"></script>
@@ -47,11 +47,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="README.html">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="README.html#demo-portfolio">Demo Portfolio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="README.html#about">About</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="README.html#flexible-ai-ready-modelling-paradigm">Flexible, AI-Ready Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README.html#flexible-llm-ready-modelling-paradigm">Flexible, LLM-Ready Modelling Paradigm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
 <li class="toctree-l3"><a class="reference internal" href="README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README.html#demo-portfolio">Demo Portfolio</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="README.html#getting-started">Getting Started</a><ul>
@@ -63,7 +63,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
-<li class="toctree-l3"><a class="reference internal" href="README.html#ai-llm-tips">AI/LLM Tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README.html#coding-agent-llm-tips">Coding Agent/LLM Tips</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="README.html#contributions">Contributions</a><ul>
@@ -102,6 +102,7 @@
 <li class="toctree-l4"><a class="reference internal" href="docs-source/Intro_to_fmdtools.html#why-fmdtools-pros-smaller">Why fmdtools? Pros: {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l4"><a class="reference internal" href="docs-source/Intro_to_fmdtools.html#what-is-fmdtools-package-structure">What is fmdtools? Package Structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/Intro_to_fmdtools.html#activity-download-and-install-fmdtools-smaller">Activity: Download and Install fmdtools {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs-source/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
@@ -431,6 +432,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="examples/state_communication/readme.html">State Communications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/state_communication/tutorial_MultiFlow_and_CommsFlow.html">Tutorial: MultiFlow and CommsFlow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples/state_communication/tutorial_MultiFlow_and_CommsFlow.html#building-flows">Building Flows</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="examples/state_communication/readme.html#package-structure">Package Structure:</a></li>
 </ul>
 </li>
@@ -1285,7 +1290,7 @@
 </li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.state.State.base_type">(fmdtools.define.container.state.State method)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.base_type">(fmdtools.define.container.time.BaseTime method)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.base_type">(fmdtools.define.container.time.Time method)</a>
 </li>
         <li><a href="docs-source/fmdtools.define.html#fmdtools.define.environment.Environment.base_type">(fmdtools.define.environment.Environment method)</a>
 </li>
@@ -1333,8 +1338,6 @@
       <li><a href="docs-source/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.BaseStyle">BaseStyle (class in fmdtools.analyze.graph.style)</a>
 </li>
       <li><a href="docs-source/fmdtools.analyze.html#fmdtools.analyze.tabulate.BaseTab">BaseTab (class in fmdtools.analyze.tabulate)</a>
-</li>
-      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime">BaseTime (class in fmdtools.define.container.time)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseType">BaseType (class in fmdtools.define.object.base)</a>
 </li>
@@ -1516,6 +1519,12 @@
 </li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.check_slots">check_slots() (fmdtools.define.object.base.BaseObject method)</a>
 </li>
+      <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.geom.GeomArchitecture.check_timestep">check_timestep() (fmdtools.define.architecture.geom.GeomArchitecture method)</a>
+
+      <ul>
+        <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.base.Simulable.check_timestep">(fmdtools.define.block.base.Simulable method)</a>
+</li>
+      </ul></li>
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter.check_type">check_type() (fmdtools.define.container.parameter.Parameter method)</a>
 </li>
       <li><a href="docs-source/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.Graph.check_type_info">check_type_info() (fmdtools.analyze.graph.base.Graph method)</a>
@@ -1630,10 +1639,10 @@
 </li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.BaseProblem.constraints">constraints (fmdtools.sim.search.BaseProblem attribute)</a>
 </li>
-      <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.base.Architecture.construct_graph">construct_graph() (fmdtools.define.architecture.base.Architecture method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.base.Architecture.construct_graph">construct_graph() (fmdtools.define.architecture.base.Architecture method)</a>
+</li>
       <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitecture.container_m">container_m (fmdtools.define.architecture.action.ActionArchitecture attribute)</a>
 
       <ul>
@@ -1847,7 +1856,7 @@
 </li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.Rand.create_repr">(fmdtools.define.container.rand.Rand method)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.create_repr">(fmdtools.define.container.time.BaseTime method)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.create_repr">(fmdtools.define.container.time.Time method)</a>
 </li>
         <li><a href="docs-source/fmdtools.define.html#fmdtools.define.environment.Environment.create_repr">(fmdtools.define.environment.Environment method)</a>
 </li>
@@ -1927,7 +1936,7 @@
 </li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.Rand.default_track">(fmdtools.define.container.rand.Rand attribute)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.default_track">(fmdtools.define.container.time.BaseTime attribute)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.default_track">(fmdtools.define.container.time.Time attribute)</a>
 </li>
         <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.default_track">(fmdtools.define.object.base.BaseObject attribute)</a>
 </li>
@@ -2087,11 +2096,9 @@
       <ul>
         <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.base.SimParam.dt">(fmdtools.define.block.base.SimParam attribute)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.dt">(fmdtools.define.container.time.BaseTime attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id30">[1]</a>
-</li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.dt">(fmdtools.define.container.time.ExtendedTime attribute)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.dt">(fmdtools.define.container.time.Time attribute)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.dt">(fmdtools.define.container.time.Time attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id30">[1]</a>
 </li>
       </ul></li>
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ActionTime.duration">duration (fmdtools.define.block.action.ActionTime attribute)</a>, <a href="docs-source/fmdtools.define.block.html#id7">[1]</a>
@@ -2200,12 +2207,12 @@
 </li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleParameterSimProblem">ExampleParameterSimProblem (class in fmdtools.sim.search)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleProblemArchitecture">ExampleProblemArchitecture (class in fmdtools.sim.search)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.ExampleRand">ExampleRand (class in fmdtools.define.container.rand)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.ExampleSimpleProblem">ExampleSimpleProblem (class in fmdtools.sim.search)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.mode.ExampleMode.exclusive">exclusive (fmdtools.define.container.mode.ExampleMode attribute)</a>
@@ -2225,31 +2232,25 @@
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ActionTime.executed_dynamic">executed_dynamic (fmdtools.define.block.action.ActionTime attribute)</a>
 
       <ul>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.executed_dynamic">(fmdtools.define.container.time.BaseTime attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id31">[1]</a>
-</li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.executed_dynamic">(fmdtools.define.container.time.ExtendedTime attribute)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.executed_dynamic">(fmdtools.define.container.time.Time attribute)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.executed_dynamic">(fmdtools.define.container.time.Time attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id31">[1]</a>
 </li>
       </ul></li>
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ActionTime.executed_static">executed_static (fmdtools.define.block.action.ActionTime attribute)</a>
 
       <ul>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.executed_static">(fmdtools.define.container.time.BaseTime attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id32">[1]</a>
-</li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.executed_static">(fmdtools.define.container.time.ExtendedTime attribute)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.executed_static">(fmdtools.define.container.time.Time attribute)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.executed_static">(fmdtools.define.container.time.Time attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id32">[1]</a>
 </li>
       </ul></li>
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ActionTime.executing">executing (fmdtools.define.block.action.ActionTime attribute)</a>
 
       <ul>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.executing">(fmdtools.define.container.time.BaseTime attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id33">[1]</a>
-</li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.executing">(fmdtools.define.container.time.ExtendedTime attribute)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.executing">(fmdtools.define.container.time.Time attribute)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.executing">(fmdtools.define.container.time.Time attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id33">[1]</a>
 </li>
       </ul></li>
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ExampleAction.exf">exf (fmdtools.define.block.action.ExampleAction attribute)</a>
@@ -2555,8 +2556,6 @@
         <li><a href="docs-source/fmdtools.define.architecture.html#module-fmdtools.define.architecture">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fmdtools.define.architecture.action
 
@@ -2564,6 +2563,8 @@
         <li><a href="docs-source/fmdtools.define.architecture.html#module-fmdtools.define.architecture.action">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fmdtools.define.architecture.base
 
@@ -2817,6 +2818,14 @@
 
       <ul>
         <li><a href="docs-source/fmdtools.analyze.graph.html#fmdtools.analyze.graph.label.LabelStyle.font_weight">(fmdtools.analyze.graph.label.LabelStyle attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ActionTime.force_locals">force_locals (fmdtools.define.block.action.ActionTime attribute)</a>
+
+      <ul>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.force_locals">(fmdtools.define.container.time.ExtendedTime attribute)</a>
+</li>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.force_locals">(fmdtools.define.container.time.Time attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id34">[1]</a>
 </li>
       </ul></li>
       <li><a href="docs-source/development-guide.html#term-FRDL"><strong>FRDL</strong></a>
@@ -3195,12 +3204,12 @@
 </li>
       <li><a href="docs-source/fmdtools.define.flow.html#fmdtools.define.flow.commsflow.CommsFlow.get_port">get_port() (fmdtools.define.flow.commsflow.CommsFlow method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.base.BaseContainer.get_pref_attrs">get_pref_attrs() (fmdtools.define.container.base.BaseContainer method)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.get_prob_for_rand">get_prob_for_rand() (in module fmdtools.define.container.rand)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.coords.BaseCoords.get_properties">get_properties() (fmdtools.define.object.coords.BaseCoords method)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.coords.Coords.get_property_dtype">get_property_dtype() (fmdtools.define.object.coords.Coords method)</a>
@@ -3271,7 +3280,7 @@
 </li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.propagate.get_sim_call_kwargs">get_sim_call_kwargs() (in module fmdtools.sim.propagate)</a>
 </li>
-      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.get_sim_times">get_sim_times() (fmdtools.define.container.time.BaseTime method)</a>
+      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.get_sim_times">get_sim_times() (fmdtools.define.container.time.Time method)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.base.Simulable.get_sims">get_sims() (fmdtools.define.block.base.Simulable method)</a>
 </li>
@@ -3296,7 +3305,11 @@
       <li><a href="docs-source/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include">get_sub_include() (in module fmdtools.analyze.common)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.base.SimParam.get_sub_kwargs">get_sub_kwargs() (fmdtools.define.block.base.SimParam method)</a>
+
+      <ul>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.get_sub_kwargs">(fmdtools.define.container.time.Time method)</a>
 </li>
+      </ul></li>
       <li><a href="docs-source/fmdtools.analyze.html#fmdtools.analyze.history.History.get_summary">get_summary() (fmdtools.analyze.history.History method)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.base.SimParam.get_timerange">get_timerange() (fmdtools.define.block.base.SimParam method)</a>
@@ -3355,6 +3368,14 @@
         <li><a href="docs-source/fmdtools.define.flow.html#fmdtools.define.flow.multiflow.ExampleMultiFlow.glob">(fmdtools.define.flow.multiflow.ExampleMultiFlow attribute)</a>
 </li>
         <li><a href="docs-source/fmdtools.define.flow.html#fmdtools.define.flow.multiflow.MultiFlow.glob">(fmdtools.define.flow.multiflow.MultiFlow attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ActionTime.global_dt">global_dt (fmdtools.define.block.action.ActionTime attribute)</a>
+
+      <ul>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.global_dt">(fmdtools.define.container.time.ExtendedTime attribute)</a>
+</li>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.global_dt">(fmdtools.define.container.time.Time attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id35">[1]</a>
 </li>
       </ul></li>
       <li><a href="docs-source/development-guide.html#term-Graph"><strong>Graph</strong></a>
@@ -3551,7 +3572,7 @@
       </ul></li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.has_changed">has_changed() (fmdtools.define.object.base.BaseObject method)</a>
 </li>
-      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.has_executed">has_executed() (fmdtools.define.container.time.BaseTime method)</a>
+      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.has_executed">has_executed() (fmdtools.define.container.time.Time method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -3758,7 +3779,7 @@
 </li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.state.State.init_hist_att">(fmdtools.define.container.state.State method)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.init_hist_att">(fmdtools.define.container.time.BaseTime method)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.init_hist_att">(fmdtools.define.container.time.Time method)</a>
 </li>
       </ul></li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.init_indicator_hist">init_indicator_hist() (fmdtools.define.object.base.BaseObject method)</a>
@@ -3949,16 +3970,6 @@
       </ul></li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.coords.Coords.load_property">load_property() (fmdtools.define.object.coords.Coords method)</a>
 </li>
-      <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ActionTime.local_dt">local_dt (fmdtools.define.block.action.ActionTime attribute)</a>
-
-      <ul>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.local_dt">(fmdtools.define.container.time.BaseTime attribute)</a>
-</li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.local_dt">(fmdtools.define.container.time.ExtendedTime attribute)</a>
-</li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.local_dt">(fmdtools.define.container.time.Time attribute)</a>
-</li>
-      </ul></li>
       <li><a href="docs-source/fmdtools.define.flow.html#fmdtools.define.flow.commsflow.CommsFlow.locals">locals (fmdtools.define.flow.commsflow.CommsFlow attribute)</a>
 
       <ul>
@@ -4018,6 +4029,8 @@
       <li><a href="docs-source/fmdtools.define.html#fmdtools.define.base.map_obj_fields">map_obj_fields() (in module fmdtools.define.base)</a>
 </li>
       <li><a href="docs-source/fmdtools.analyze.html#fmdtools.analyze.common.mark_times">mark_times() (in module fmdtools.analyze.common)</a>
+</li>
+      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.matching_indices">matching_indices() (in module fmdtools.define.container.rand)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitecture.max_action_prop">max_action_prop (fmdtools.define.architecture.action.ActionArchitecture attribute)</a>
 </li>
@@ -4983,7 +4996,7 @@
 </li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.Rand.reset">(fmdtools.define.container.rand.Rand method)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.reset">(fmdtools.define.container.time.BaseTime method)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.reset">(fmdtools.define.container.time.Time method)</a>
 </li>
         <li><a href="docs-source/fmdtools.define.html#fmdtools.define.environment.Environment.reset">(fmdtools.define.environment.Environment method)</a>
 </li>
@@ -5055,7 +5068,7 @@
 </li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.Rand.return_mutables">(fmdtools.define.container.rand.Rand method)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.return_mutables">(fmdtools.define.container.time.BaseTime method)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.return_mutables">(fmdtools.define.container.time.Time method)</a>
 </li>
         <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.return_mutables">(fmdtools.define.object.base.BaseObject method)</a>
 </li>
@@ -5097,7 +5110,7 @@
 </li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.Rand.rolename">(fmdtools.define.container.rand.Rand attribute)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.rolename">(fmdtools.define.container.time.BaseTime attribute)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.rolename">(fmdtools.define.container.time.Time attribute)</a>
 </li>
       </ul></li>
       <li><a href="docs-source/fmdtools.define.architecture.html#fmdtools.define.architecture.base.Architecture.roletype">roletype (fmdtools.define.architecture.base.Architecture attribute)</a>
@@ -5456,13 +5469,11 @@
 </li>
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.base.Simulable.set_sub_faults">set_sub_faults() (fmdtools.define.block.base.Simulable method)</a>
 </li>
-      <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.base.Simulable.set_time">set_time() (fmdtools.define.block.base.Simulable method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.timer.Timer.set_timer">set_timer() (fmdtools.define.object.timer.Timer method)</a>
 </li>
-      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.set_timestep">set_timestep() (fmdtools.define.container.time.BaseTime method)</a>
+      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.set_timestep">set_timestep() (fmdtools.define.container.time.Time method)</a>
 </li>
       <li><a href="docs-source/fmdtools.define.html#fmdtools.define.base.set_var">set_var() (in module fmdtools.define.base)</a>
 </li>
@@ -5749,6 +5760,10 @@
 </li>
         <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.function.Function.t">(fmdtools.define.block.function.Function attribute)</a>
 </li>
+        <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.sample.ParameterSample.t">(fmdtools.sim.sample.ParameterSample attribute)</a>
+</li>
+        <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.scenario.ParameterScenario.t">(fmdtools.sim.scenario.ParameterScenario attribute)</a>
+</li>
         <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface.t">(fmdtools.sim.search.DynamicInterface attribute)</a>
 </li>
       </ul></li>
@@ -5757,11 +5772,9 @@
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ActionTime.t_ind">t_ind (fmdtools.define.block.action.ActionTime attribute)</a>
 
       <ul>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.t_ind">(fmdtools.define.container.time.BaseTime attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id34">[1]</a>
-</li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.t_ind">(fmdtools.define.container.time.ExtendedTime attribute)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.t_ind">(fmdtools.define.container.time.Time attribute)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.t_ind">(fmdtools.define.container.time.Time attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id36">[1]</a>
 </li>
         <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface.t_ind">(fmdtools.sim.search.DynamicInterface attribute)</a>
 </li>
@@ -5787,11 +5800,9 @@
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ActionTime.time">time (fmdtools.define.block.action.ActionTime attribute)</a>
 
       <ul>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.time">(fmdtools.define.container.time.BaseTime attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id35">[1]</a>
-</li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.time">(fmdtools.define.container.time.ExtendedTime attribute)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.time">(fmdtools.define.container.time.Time attribute)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.time">(fmdtools.define.container.time.Time attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id37">[1]</a>
 </li>
         <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.timer.Timer.time">(fmdtools.define.object.timer.Timer attribute)</a>, <a href="docs-source/fmdtools.define.object.html#id6">[1]</a>
 </li>
@@ -5818,20 +5829,18 @@
 </li>
       <li><a href="docs-source/fmdtools.define.object.html#fmdtools.define.object.timer.Timer">Timer (class in fmdtools.define.object.timer)</a>
 </li>
-      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.timernames">timernames (fmdtools.define.container.time.BaseTime attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id36">[1]</a>
+      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.timernames">timernames (fmdtools.define.container.time.ExtendedTime attribute)</a>
 
       <ul>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.timernames">(fmdtools.define.container.time.ExtendedTime attribute)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.timernames">(fmdtools.define.container.time.Time attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id38">[1]</a>
 </li>
       </ul></li>
       <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ActionTime.timers">timers (fmdtools.define.block.action.ActionTime attribute)</a>
 
       <ul>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.timers">(fmdtools.define.container.time.BaseTime attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id37">[1]</a>
-</li>
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.timers">(fmdtools.define.container.time.ExtendedTime attribute)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.timers">(fmdtools.define.container.time.Time attribute)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.timers">(fmdtools.define.container.time.Time attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id39">[1]</a>
 </li>
       </ul></li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario.times">times (fmdtools.sim.scenario.BaseScenario attribute)</a>
@@ -6068,22 +6077,18 @@
         <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.rand.Rand.update_stochastic_states">(fmdtools.define.container.rand.Rand method)</a>
 </li>
       </ul></li>
-      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.update_time">update_time() (fmdtools.define.container.time.BaseTime method)</a>
+      <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.update_time">update_time() (fmdtools.define.container.time.Time method)</a>
 </li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.VariableConnector.update_values">update_values() (fmdtools.sim.search.VariableConnector method)</a>
 </li>
       <li><a href="docs-source/fmdtools.sim.html#fmdtools.sim.search.BaseProblem.update_variables">update_variables() (fmdtools.sim.search.BaseProblem method)</a>
 </li>
-      <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ActionTime.use_local">use_local (fmdtools.define.block.action.ActionTime attribute)</a>
+      <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.action.ActionTime.use_global">use_global (fmdtools.define.block.action.ActionTime attribute)</a>
 
       <ul>
-        <li><a href="docs-source/fmdtools.define.block.html#fmdtools.define.block.base.SimParam.use_local">(fmdtools.define.block.base.SimParam attribute)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.use_global">(fmdtools.define.container.time.ExtendedTime attribute)</a>
 </li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.BaseTime.use_local">(fmdtools.define.container.time.BaseTime attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id38">[1]</a>
-</li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.ExtendedTime.use_local">(fmdtools.define.container.time.ExtendedTime attribute)</a>
-</li>
-        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.use_local">(fmdtools.define.container.time.Time attribute)</a>
+        <li><a href="docs-source/fmdtools.define.container.html#fmdtools.define.container.time.Time.use_global">(fmdtools.define.container.time.Time attribute)</a>, <a href="docs-source/fmdtools.define.container.html#id40">[1]</a>
 </li>
       </ul></li>
   </ul></td>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tutorial: fmdtools basics &mdash; fmdtools 2.5.5.rc0 documentation</title>
+  <title>Tutorial: fmdtools basics &mdash; fmdtools 2.5.6.rc2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=7a01ae65"></script>
+      <script src="../../_static/documentation_options.js?v=3560e79d"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -50,11 +50,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../README.html">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../README.html#demo-portfolio">Demo Portfolio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#about">About</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../README.html#flexible-ai-ready-modelling-paradigm">Flexible, AI-Ready Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#flexible-llm-ready-modelling-paradigm">Flexible, LLM-Ready Modelling Paradigm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#demo-portfolio">Demo Portfolio</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#getting-started">Getting Started</a><ul>
@@ -66,7 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../README.html#ai-llm-tips">AI/LLM Tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#coding-agent-llm-tips">Coding Agent/LLM Tips</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
@@ -105,6 +105,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#why-fmdtools-pros-smaller">Why fmdtools? Pros: {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#what-is-fmdtools-package-structure">What is fmdtools? Package Structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#activity-download-and-install-fmdtools-smaller">Activity: Download and Install fmdtools {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
@@ -434,6 +435,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../state_communication/readme.html">State Communications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../state_communication/tutorial_MultiFlow_and_CommsFlow.html">Tutorial: MultiFlow and CommsFlow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../state_communication/tutorial_MultiFlow_and_CommsFlow.html#building-flows">Building Flows</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../state_communication/readme.html#package-structure">Package Structure:</a></li>
 </ul>
 </li>
@@ -871,6 +876,13 @@
              
   <section id="tutorial-fmdtools-basics">
 <h1>Tutorial: fmdtools basics<a class="headerlink" href="#tutorial-fmdtools-basics" title="Link to this heading"></a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># sphinx_gallery_thumbnail_number = 2</span>
+</pre></div>
+</div>
+</div>
+</div>
 <p>::: {.content-hidden}</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Copyright © 2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved.
 
@@ -1026,7 +1038,7 @@ FXNS:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SimParam(phases=((&#39;na&#39;, 0.0, 0),), start_time=0.0, end_time=0.0, track_times=(&#39;all&#39;,), dt=1.0, units=&#39;hr&#39;, end_condition=&#39;&#39;, use_local=True, with_loadings=False, run_stochastic=False, track_pdf=False)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SimParam(phases=((&#39;na&#39;, 0.0, 0),), start_time=0.0, end_time=0.0, track_times=(&#39;all&#39;,), dt=1.0, units=&#39;hr&#39;, end_condition=&#39;&#39;, with_loadings=False, run_stochastic=False, track_pdf=False)
 </pre></div>
 </div>
 </div>
@@ -1177,7 +1189,7 @@ FXNS:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/f5527c3186ceaab86c26795960ce32918fc592c459a143b53e20f90ce24842c9.png" src="../../_images/f5527c3186ceaab86c26795960ce32918fc592c459a143b53e20f90ce24842c9.png" />
+<img alt="../../_images/56fc029b37d304ef04433cda63934673d5e09f9ba7f9d5d3717d583e0278db74.png" src="../../_images/56fc029b37d304ef04433cda63934673d5e09f9ba7f9d5d3717d583e0278db74.png" />
 </div>
 </div>
 <p>This graph is often pretty ugly by default because the layout is auto-generated via an algorithm in the <code class="docutils literal notranslate"><span class="pre">networkx</span></code> package</p>
@@ -1204,7 +1216,7 @@ FXNS:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/8197c61f9a2844dca8357530f44af699c0ed35bc73290628751738d679dbffd0.png" src="../../_images/8197c61f9a2844dca8357530f44af699c0ed35bc73290628751738d679dbffd0.png" />
+<img alt="../../_images/7a09366d5a1cf58d54040ed119f67098b8f7dc4fbc7744b10fefa569041639c9.png" src="../../_images/7a09366d5a1cf58d54040ed119f67098b8f7dc4fbc7744b10fefa569041639c9.png" />
 </div>
 </div>
 <p>More info on working with graphs can be found in <a class="reference external" href="https://nasa.github.io/fmdtools/examples/navigating_rover/tutorial_model_structure_visualization.html">Tutorial: Model Structure Visualization</a></p>
@@ -1267,7 +1279,7 @@ FXNS:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SimParam(phases=((&#39;na&#39;, 0.0, 0),), start_time=0.0, end_time=0.0, track_times=(&#39;all&#39;,), dt=1.0, units=&#39;hr&#39;, end_condition=&#39;&#39;, use_local=True, with_loadings=False, run_stochastic=False, track_pdf=False)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SimParam(phases=((&#39;na&#39;, 0.0, 0),), start_time=0.0, end_time=0.0, track_times=(&#39;all&#39;,), dt=1.0, units=&#39;hr&#39;, end_condition=&#39;&#39;, with_loadings=False, run_stochastic=False, track_pdf=False)
 </pre></div>
 </div>
 </div>
@@ -1360,7 +1372,7 @@ fxns.view_env.m.sub_faults:     array(3)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SimParam(phases=((&#39;ascend&#39;, 0, 1), (&#39;forward&#39;, 2, 14), (&#39;descend&#39;, 15, 18), (&#39;taxi&#39;, 19, 20)), start_time=0.0, end_time=20.0, track_times=(&#39;all&#39;,), dt=1.0, units=&#39;sec&#39;, end_condition=&#39;&#39;, use_local=True, with_loadings=False, run_stochastic=False, track_pdf=False)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SimParam(phases=((&#39;ascend&#39;, 0, 1), (&#39;forward&#39;, 2, 14), (&#39;descend&#39;, 15, 18), (&#39;taxi&#39;, 19, 20)), start_time=0.0, end_time=20.0, track_times=(&#39;all&#39;,), dt=1.0, units=&#39;sec&#39;, end_condition=&#39;&#39;, with_loadings=False, run_stochastic=False, track_pdf=False)
 </pre></div>
 </div>
 </div>
@@ -1374,7 +1386,7 @@ fxns.view_env.m.sub_faults:     array(3)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Time(time=1.0, t_ind=1, timers={}, use_local=True, dt=1.0, executed_static=True, executed_dynamic=True, executing=False)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Time(time=1.0, t_ind=1, timers={}, use_global=False, dt=1.0, global_dt=1.0, force_locals=True, executed_static=True, executed_dynamic=True, executing=False)
 </pre></div>
 </div>
 </div>
@@ -1394,7 +1406,7 @@ fxns.view_env.m.sub_faults:     array(3)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Time(time=20.0, t_ind=20, timers={}, use_local=True, dt=1.0, executed_static=True, executed_dynamic=True, executing=False)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Time(time=20.0, t_ind=20, timers={}, use_global=False, dt=1.0, global_dt=1.0, force_locals=True, executed_static=True, executed_dynamic=True, executing=False)
 </pre></div>
 </div>
 </div>
@@ -1561,7 +1573,7 @@ fxns.hold_payload.m.sub_faults: array(21)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/64170fba4c8f429c51977635761c46f30be9ce3b51f21cb4fe9671f6df39cd4e.png" src="../../_images/64170fba4c8f429c51977635761c46f30be9ce3b51f21cb4fe9671f6df39cd4e.png" />
+<img alt="../../_images/65c9a9f821a3d8fd5abe7e51951462371b24605762db924d8e24ec53de42fad5.png" src="../../_images/65c9a9f821a3d8fd5abe7e51951462371b24605762db924d8e24ec53de42fad5.png" />
 </div>
 </div>
 </section>
@@ -1576,7 +1588,7 @@ fxns.hold_payload.m.sub_faults: array(21)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/20c1c16719b835769c6390da375f08b277153a5b6903ebdb866d576517689833.png" src="../../_images/20c1c16719b835769c6390da375f08b277153a5b6903ebdb866d576517689833.png" />
+<img alt="../../_images/34da9da5ec26a3627dc3c2682a70a12cd0da725f7147fd3ce906a447bec7c49c.png" src="../../_images/34da9da5ec26a3627dc3c2682a70a12cd0da725f7147fd3ce906a447bec7c49c.png" />
 </div>
 </div>
 </section>
@@ -1609,7 +1621,7 @@ tend.classify.crashcost:          100000
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/db8665e19f776c6b1f830d74338992afc54953155a5663f209acc2975ef557ef.png" src="../../_images/db8665e19f776c6b1f830d74338992afc54953155a5663f209acc2975ef557ef.png" />
+<img alt="../../_images/1254dfd41530c4ab227bfc6d2bbb6a6569a8d2fa788159e1a4260595a2928de1.png" src="../../_images/1254dfd41530c4ab227bfc6d2bbb6a6569a8d2fa788159e1a4260595a2928de1.png" />
 </div>
 </div>
 </section>
@@ -1672,8 +1684,8 @@ tend.classify.crashcost:          100000
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nominal.tend.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x000001530BE339D0&gt;
-store_ee_nocharge_t10p0.tend.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x000001530BE33ED0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nominal.tend.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x00000193A3ED9310&gt;
+store_ee_nocharge_t10p0.tend.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x00000193A3ED9950&gt;
 </pre></div>
 </div>
 </div>
@@ -1687,7 +1699,7 @@ store_ee_nocharge_t10p0.tend.graph: &lt;fmdtools.define.architecture.function.Fu
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/7d0a9652c880a75873cf938c966255f9ba67bef6c118a36f130b6eb3c2e19966.png" src="../../_images/7d0a9652c880a75873cf938c966255f9ba67bef6c118a36f130b6eb3c2e19966.png" />
+<img alt="../../_images/bfffccc6f0e7820f5754be8f4161ee6e74cf006abb8fddbee419f152ec43b1e2.png" src="../../_images/bfffccc6f0e7820f5754be8f4161ee6e74cf006abb8fddbee419f152ec43b1e2.png" />
 </div>
 </div>
 </section>
@@ -1707,25 +1719,25 @@ nominal.t10p0.classify.cost:      150000
 nominal.t10p0.classify.expected_cost: 15000000000.0
 nominal.t10p0.classify.lost_cost:  50000
 nominal.t10p0.classify.crashcost: 100000
-nominal.t10p0.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x000001530BAC69E0&gt;
+nominal.t10p0.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x00000193A441B360&gt;
 nominal.tend.classify.rate:          1.0
 nominal.tend.classify.cost:            0
 nominal.tend.classify.expected_cost: 0.0
 nominal.tend.classify.lost_cost:       0
 nominal.tend.classify.crashcost:       0
-nominal.tend.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x000001530BAC76F0&gt;
+nominal.tend.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x00000193A441BBB0&gt;
 store_ee_nocharge_t1               1e-05
 store_ee_nocharge_t1            150300.0
 store_ee_nocharge_t1            150300.0
 store_ee_nocharge_t1               50000
 store_ee_nocharge_t1              100000
-store_ee_nocharge_t10p0.t10p0.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x000001530C4F8710&gt;
+store_ee_nocharge_t10p0.t10p0.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x00000193A3EF5130&gt;
 store_ee_nocharge_t1               1e-05
 store_ee_nocharge_t1            183000.0
 store_ee_nocharge_t1            183000.0
 store_ee_nocharge_t1               50000
 store_ee_nocharge_t1              100000
-store_ee_nocharge_t10p0.tend.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x000001530BC05E10&gt;
+store_ee_nocharge_t10p0.tend.graph: &lt;fmdtools.define.architecture.function.FunctionArchitectureGraph object at 0x00000193A3C8A140&gt;
 </pre></div>
 </div>
 </div>
@@ -1739,7 +1751,7 @@ store_ee_nocharge_t10p0.tend.graph: &lt;fmdtools.define.architecture.function.Fu
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2014293fd19add07adc0197ecdc564f01a2a0b03923b09ecafcf3b68c8e311a0.png" src="../../_images/2014293fd19add07adc0197ecdc564f01a2a0b03923b09ecafcf3b68c8e311a0.png" />
+<img alt="../../_images/f546af74f817f886bef24b2ab04034b52e5055c501a0b2084cf832358916e6e0.png" src="../../_images/f546af74f817f886bef24b2ab04034b52e5055c501a0b2084cf832358916e6e0.png" />
 </div>
 </div>
 </section>
@@ -1883,6 +1895,7 @@ class Simulation(BaseSimulation)
  |          dict of arguments to add_faultsamples. The default is {}.
  |      get_phasemap : bool, optional
  |          Whether to use the history to generate the phasemap used by SampleApproach.
+ |          Generated history maps retain the configured model timestep.
  |          The default is False.
  |
  |      Returns
@@ -2224,7 +2237,7 @@ class Simulation(BaseSimulation)
  |      ExNestContainer(e1=ExContainer(x=3.0, y=4.0), z=20.0)
  |
  |  to_default(self, *fieldnames)
- |      Reset given fields to their default values.
+ |      Reset given fields to their own defaults, independent of request order.
  |
  |      Examples
  |      --------
@@ -2322,7 +2335,7 @@ class Simulation(BaseSimulation)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 20/20 [00:01&lt;00:00, 12.06it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 20/20 [00:01&lt;00:00, 11.64it/s]
 </pre></div>
 </div>
 </div>
@@ -2450,7 +2463,7 @@ drone_fxns_affect_dof_propstuck_t5:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/60fb01b02a9069a97f86292bcdce33bdd4d46c176a54a18520af5ff9220f0bff.png" src="../../_images/60fb01b02a9069a97f86292bcdce33bdd4d46c176a54a18520af5ff9220f0bff.png" />
+<img alt="../../_images/3ca96f4038afba9846d0e1fb98c446694a8f55020b5de1754507e99cbb44b4b6.png" src="../../_images/3ca96f4038afba9846d0e1fb98c446694a8f55020b5de1754507e99cbb44b4b6.png" />
 </div>
 </div>
 </section>
@@ -2464,7 +2477,7 @@ drone_fxns_affect_dof_propstuck_t5:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c8d06acd231400ab941627d30b0cee16d9c43ac7b5465fbf4980ec013543b54c.png" src="../../_images/c8d06acd231400ab941627d30b0cee16d9c43ac7b5465fbf4980ec013543b54c.png" />
+<img alt="../../_images/7a878aafc9891a1a26dc3f0bdd4fe7a4ff27e706511f10d4feb27bdd9fd93435.png" src="../../_images/7a878aafc9891a1a26dc3f0bdd4fe7a4ff27e706511f10d4feb27bdd9fd93435.png" />
 </div>
 </div>
 <p>As shown, there are three main trajectories–crashing immediately (in grey), flying erratically (the <code class="docutils literal notranslate"><span class="pre">ctlup</span></code> fault in pink), and continuing the mission (in teal). Given this visualization, it may not be clear what scenarios ended in what outcome</p>
@@ -2652,7 +2665,7 @@ drone_fxns_affect_dof_propstuck_t5:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 6/6 [00:00&lt;00:00,  6.31it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SCENARIOS COMPLETE: 100%|██████████| 6/6 [00:00&lt;00:00, 16.73it/s]
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;nominal&#39;,
@@ -2700,7 +2713,7 @@ drone_fxns_affect_dof_propstuck_t5:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2eb98012c51920d541164529f3e1dc3be9f799a22c711b6a34a08ad583fd5cde.png" src="../../_images/2eb98012c51920d541164529f3e1dc3be9f799a22c711b6a34a08ad583fd5cde.png" />
+<img alt="../../_images/fe569a09ffe5d00bc860e204cd4fcc0357e3b00f4cc31ee4d70a133507b19b5c.png" src="../../_images/fe569a09ffe5d00bc860e204cd4fcc0357e3b00f4cc31ee4d70a133507b19b5c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2711,7 +2724,19 @@ drone_fxns_affect_dof_propstuck_t5:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c496c113957cc8bf36af7b09abb22e55f5799c043a1443961b436c021f933b61.png" src="../../_images/c496c113957cc8bf36af7b09abb22e55f5799c043a1443961b436c021f933b61.png" />
+<img alt="../../_images/2c258dbc25830adb06890872ccd1e0806b556ebfe7da2d77fe2b74cf797792b6.png" src="../../_images/2c258dbc25830adb06890872ccd1e0806b556ebfe7da2d77fe2b74cf797792b6.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">hist_fs</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s2">&quot;fxns.store_ee.s.soc&quot;</span><span class="p">,</span> <span class="s2">&quot;fxns.plan_path.m.mode&quot;</span><span class="p">,</span> <span class="s2">&quot;fxns.plan_path.s.dist&quot;</span><span class="p">,</span><span class="s2">&quot;flows.dofs.s.z&quot;</span><span class="p">,</span>
+                             <span class="n">cols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">comp_groups</span><span class="o">=</span><span class="n">comp_groups</span><span class="p">,</span> <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">],</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Drone nominal and off-nominal behavior&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/ba494286d737756c61b41995303a0d5d5fc190e694b998f83062acecdd0d4df0.png" src="../../_images/ba494286d737756c61b41995303a0d5d5fc190e694b998f83062acecdd0d4df0.png" />
 </div>
 </div>
 </section>

@@ -364,6 +364,19 @@ def same_mode(modename1, modename2, exact=True):
         return modename1 in modename2
 
 
+def _combine_sample_weights(sampletimes, weights=None):
+    """Combine coincident times in first-occurrence order without renormalizing.
+
+    Omitted weights give each input occurrence equal mass. Accumulate in input
+    order, retaining the callers' scalar arithmetic and empty-sample behavior.
+    """
+    combined = {}
+    for i, time in enumerate(sampletimes):
+        weight = 1/len(sampletimes) if weights is None else weights[i]
+        combined[time] = combined.get(time, 0.0) + weight
+    return list(combined), list(combined.values())
+
+
 def sample_times_even(times, numpts, dt=1.0):
     """
     Get sample times by rounding evenly spaced quantiles to the timestep.
@@ -402,10 +415,7 @@ def sample_times_even(times, numpts, dt=1.0):
         sampletimes = [time if np.any(available == time)
                        else times[np.argmin(np.abs(available - time))]
                        for time in sampletimes]
-    combined = {}
-    for time in sampletimes:
-        combined[time] = combined.get(time, 0.0) + 1/len(sampletimes)
-    return list(combined), list(combined.values())
+    return _combine_sample_weights(sampletimes)
 
 
 def sample_times_quad(times, nodes, weights):
@@ -445,10 +455,7 @@ def sample_times_quad(times, nodes, weights):
         exac_times = [np.quantile(times, q) for q in quantiles]
         sampletimes = [times[np.argmin(np.abs(np.array(times)-t))] for t in exac_times]
         weights = np.array(weights)/sum(weights)
-    combined = {}
-    for i, time in enumerate(sampletimes):
-        combined[time] = combined.get(time, 0.0) + weights[i]
-    return list(combined), list(combined.values())
+    return _combine_sample_weights(sampletimes, weights)
 
 
 class FaultDomain(object):

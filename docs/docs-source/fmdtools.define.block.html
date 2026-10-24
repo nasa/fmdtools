@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.block &mdash; fmdtools 2.5.5.rc0 documentation</title>
+  <title>fmdtools.define.block &mdash; fmdtools 2.5.6.rc2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=7a01ae65"></script>
+      <script src="../_static/documentation_options.js?v=3560e79d"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -50,11 +50,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../README.html#demo-portfolio">Demo Portfolio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#about">About</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-ai-ready-modelling-paradigm">Flexible, AI-Ready Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-llm-ready-modelling-paradigm">Flexible, LLM-Ready Modelling Paradigm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#demo-portfolio">Demo Portfolio</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#getting-started">Getting Started</a><ul>
@@ -66,7 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#ai-llm-tips">AI/LLM Tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#coding-agent-llm-tips">Coding Agent/LLM Tips</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
@@ -105,6 +105,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-pros-smaller">Why fmdtools? Pros: {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#what-is-fmdtools-package-structure">What is fmdtools? Package Structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#activity-download-and-install-fmdtools-smaller">Activity: Download and Install fmdtools {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
@@ -434,6 +435,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/state_communication/readme.html">State Communications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/state_communication/tutorial_MultiFlow_and_CommsFlow.html">Tutorial: MultiFlow and CommsFlow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/state_communication/tutorial_MultiFlow_and_CommsFlow.html#building-flows">Building Flows</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/state_communication/readme.html#package-structure">Package Structure:</a></li>
 </ul>
 </li>
@@ -1183,19 +1188,20 @@ The default is 1, which just chooses single fault modes.</p></li>
 <li><p><strong>end_time</strong> (<em>float</em>) – End time of the simulation.</p></li>
 <li><p><strong>track_times</strong> (<em>tuple</em>) – <p>Defines what times to include in the history.
 Options are:
-- (‘all’,)–all simulated times
-- (‘interval’, n)–includes every nth time in the history
+- (‘all’,)–all times every tracking timestep dt
+- (‘interval’, n)–includes every nth timestep dt in the history
 - (‘times’, [t1, … tn])–only includes times defined in the</p>
 <blockquote>
 <div><p>vector [t1 … tn]</p>
 </div></blockquote>
 </p></li>
-<li><p><strong>dt</strong> (<em>float</em>) – time-step used in the simulation. default is 1.0</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) – Tracking timestep (interval for logging the simulation). This is different than
+the execution timestep that lives in Time.dt in that it controls how often
+the history is recorded instead of how often the simulation executes.
+Default is 1.0.</p></li>
 <li><p><strong>units</strong> (<em>str</em>) – time-units. default is hours`</p></li>
 <li><p><strong>end_condition</strong> (<em>str</em>) – Name of indicator method to use to end the simulation. If not provided (‘’),
 the simulation ends at the final time. Default is ‘’</p></li>
-<li><p><strong>use_local</strong> (<em>bool</em>) – Whether to use locally-defined time-steps in functions (if any).
-Default is True.</p></li>
 <li><p><strong>with_loadings</strong> (<em>bool</em>) – Whether to execute simulable with defined loading methods. Default is False.</p></li>
 <li><p><strong>run_stochastic</strong> (<em>bool</em>) – Whether to run stochastic behaviors or use default values. Default is False.</p></li>
 <li><p><strong>track_pdf</strong> (<em>bool</em>) – If run_stochastic=True, track_pdf is used to calculate/track the probability
@@ -1315,11 +1321,6 @@ tuples and NumPy arrays. The index is only used when log is true.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.base.SimParam.use_local">
-<span class="sig-name descname"><span class="pre">use_local</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.block.base.SimParam.use_local" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.SimParam.with_loadings">
 <span class="sig-name descname"><span class="pre">with_loadings</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.block.base.SimParam.with_loadings" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -1335,8 +1336,8 @@ tuples and NumPy arrays. The index is only used when log is true.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>t</strong> (<a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><em>Time</em></a>) – Time tracker and options.</p></li>
-<li><p><strong>sp</strong> (<a class="reference internal" href="#fmdtools.define.block.base.SimParam" title="fmdtools.define.block.base.SimParam"><em>SimParam</em></a>) – Parameters defining the simulation.</p></li>
+<li><p><strong>t</strong> (<a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><em>Time</em></a>) – Defines current timestep and timers.</p></li>
+<li><p><strong>sp</strong> (<a class="reference internal" href="#fmdtools.define.block.base.SimParam" title="fmdtools.define.block.base.SimParam"><em>SimParam</em></a>) – Parameters defining simulation configuration and logging.</p></li>
 <li><p><strong>mut_kwargs</strong> (<em>dict</em>) – Non-default kwargs for mutable containers/roles (to use for reset)</p></li>
 </ul>
 </dd>
@@ -1344,6 +1345,11 @@ tuples and NumPy arrays. The index is only used when log is true.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.attrs">
 <span class="sig-name descname"><span class="pre">attrs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('name',</span> <span class="pre">'root',</span> <span class="pre">'track',</span> <span class="pre">'h',</span> <span class="pre">'mut_kwargs')</span></span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.attrs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.check_timestep">
+<span class="sig-name descname"><span class="pre">check_timestep</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.check_timestep" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1707,12 +1713,6 @@ The default is 1.</p></li>
 <dd><p>Set the mode to have sub_faults if contained objs have faults.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.set_time">
-<span class="sig-name descname"><span class="pre">set_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.set_time" title="Link to this definition"></a></dt>
-<dd><p>Set time from SimParam.</p>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.sp">
 <span class="sig-name descname"><span class="pre">sp</span></span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.sp" title="Link to this definition"></a></dt>
@@ -2011,8 +2011,13 @@ used when executing in architectures. Default is “static”</p></li>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.action.ActionTime.local_dt">
-<span class="sig-name descname"><span class="pre">local_dt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.local_dt" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.block.action.ActionTime.force_locals">
+<span class="sig-name descname"><span class="pre">force_locals</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.force_locals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.block.action.ActionTime.global_dt">
+<span class="sig-name descname"><span class="pre">global_dt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float64</span></span><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.global_dt" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2053,8 +2058,8 @@ used when executing in architectures. Default is “static”</p></li>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.action.ActionTime.use_local">
-<span class="sig-name descname"><span class="pre">use_local</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.use_local" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.block.action.ActionTime.use_global">
+<span class="sig-name descname"><span class="pre">use_global</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#fmdtools.define.block.action.ActionTime.use_global" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

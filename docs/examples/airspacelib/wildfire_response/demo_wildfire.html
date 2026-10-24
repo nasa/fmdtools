@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Demo: Wildfire Response Simulation and Optimization &mdash; fmdtools 2.5.5.rc0 documentation</title>
+  <title>Demo: Wildfire Response Simulation and Optimization &mdash; fmdtools 2.5.6.rc2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../../../_static/fmdtools_ico.ico"/>
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=7a01ae65"></script>
+      <script src="../../../_static/documentation_options.js?v=3560e79d"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -50,11 +50,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../README.html">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../README.html#demo-portfolio">Demo Portfolio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../README.html#about">About</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../README.html#flexible-ai-ready-modelling-paradigm">Flexible, AI-Ready Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#flexible-llm-ready-modelling-paradigm">Flexible, LLM-Ready Modelling Paradigm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#demo-portfolio">Demo Portfolio</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../README.html#getting-started">Getting Started</a><ul>
@@ -66,7 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../README.html#ai-llm-tips">AI/LLM Tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#coding-agent-llm-tips">Coding Agent/LLM Tips</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../README.html#contributions">Contributions</a><ul>
@@ -105,6 +105,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#why-fmdtools-pros-smaller">Why fmdtools? Pros: {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#what-is-fmdtools-package-structure">What is fmdtools? Package Structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#activity-download-and-install-fmdtools-smaller">Activity: Download and Install fmdtools {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs-source/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
@@ -434,6 +435,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../state_communication/readme.html">State Communications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../state_communication/tutorial_MultiFlow_and_CommsFlow.html">Tutorial: MultiFlow and CommsFlow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../state_communication/tutorial_MultiFlow_and_CommsFlow.html#building-flows">Building Flows</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../../state_communication/readme.html#package-structure">Package Structure:</a></li>
 </ul>
 </li>
@@ -882,7 +887,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <h2>Model Overview<a class="headerlink" href="#model-overview" title="Link to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.sim</span><span class="w"> </span><span class="kn">import</span> <span class="n">propagate</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># sphinx_gallery_thumbnail_number = 11</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.sim</span><span class="w"> </span><span class="kn">import</span> <span class="n">propagate</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.define.architecture.function</span><span class="w"> </span><span class="kn">import</span> <span class="n">FunctionArchitectureGraph</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools_examples.airspacelib.wildfire_response.model_environment</span><span class="w"> </span><span class="kn">import</span> <span class="n">FireMap</span><span class="p">,</span> <span class="n">FireEnvironment</span><span class="p">,</span> <span class="n">FirePropagation</span><span class="p">,</span> <span class="n">sim_properties</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools_examples.airspacelib.wildfire_response.model_aircraft</span><span class="w"> </span><span class="kn">import</span> <span class="n">FireAircraft</span>
@@ -928,7 +934,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 500x500 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../../_images/72ea4b702334d28fa0fb4b4781f3789fa6f0355fdaa2fb660407e372f803af3f.png" src="../../../_images/72ea4b702334d28fa0fb4b4781f3789fa6f0355fdaa2fb660407e372f803af3f.png" />
+<img alt="../../../_images/a0d0921ba883ccf955e67d2a5a79f4a97c68e1faf3ccea15819ed097a181715d.png" src="../../../_images/a0d0921ba883ccf955e67d2a5a79f4a97c68e1faf3ccea15819ed097a181715d.png" />
 </div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">FireMap</span></code> has a number of parameters that can be modified to simulate different types of fires:</p>
@@ -1002,7 +1008,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 500x500 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../../_images/894830c34028370aa2337646e0cecba940d8ffd9f9f475525b97e47f205722a9.png" src="../../../_images/894830c34028370aa2337646e0cecba940d8ffd9f9f475525b97e47f205722a9.png" />
+<img alt="../../../_images/cea1c821e7853c231efd2aa015d3908c932a926cf1ef212b7f3637c600960b70.png" src="../../../_images/cea1c821e7853c231efd2aa015d3908c932a926cf1ef212b7f3637c600960b70.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1016,7 +1022,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 500x500 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../../_images/29db4d939b2fd4e7d7c9e866e4f58cb2e10f4f58c55cded35e9eead4777d0f27.png" src="../../../_images/29db4d939b2fd4e7d7c9e866e4f58cb2e10f4f58c55cded35e9eead4777d0f27.png" />
+<img alt="../../../_images/d701d614626a5011e78033acd244008c7afc697ecd3ca9fd75962dcf126eeb0b.png" src="../../../_images/d701d614626a5011e78033acd244008c7afc697ecd3ca9fd75962dcf126eeb0b.png" />
 </div>
 </div>
 <p>we can also add base locations:</p>
@@ -1031,7 +1037,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 500x500 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../../_images/c3a6d1b7e40ab3f823bec28faa029d32b1c127e697a74a562399174469eebf8f.png" src="../../../_images/c3a6d1b7e40ab3f823bec28faa029d32b1c127e697a74a562399174469eebf8f.png" />
+<img alt="../../../_images/ee3e9a32d9bc287ef737736c7581269b908c1a4f9277cf566b34ac7baf0d05b3.png" src="../../../_images/ee3e9a32d9bc287ef737736c7581269b908c1a4f9277cf566b34ac7baf0d05b3.png" />
 </div>
 </div>
 <p>and add more or less strike locations:</p>
@@ -1046,7 +1052,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 500x500 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../../_images/809b222bf4eb71c233519d1e99596f3da07131b6653289baafb7cd83bf74837b.png" src="../../../_images/809b222bf4eb71c233519d1e99596f3da07131b6653289baafb7cd83bf74837b.png" />
+<img alt="../../../_images/66e218311a6b7a6cbc4a8b422705ad992bf64110fdc810ebbd4c37c8ea5214da.png" src="../../../_images/66e218311a6b7a6cbc4a8b422705ad992bf64110fdc810ebbd4c37c8ea5214da.png" />
 </div>
 </div>
 <p>Different samples can further be drawn by changing the random seed:</p>
@@ -1061,7 +1067,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 500x500 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../../_images/604889b18c159779a81cda6704c23e2cdc986534c4af94f3236594de3aa951e1.png" src="../../../_images/604889b18c159779a81cda6704c23e2cdc986534c4af94f3236594de3aa951e1.png" />
+<img alt="../../../_images/9db8ad7d1d3966640d90ea98ca50a5534bfcbc0bf4e4d47c626f91a96d04298a.png" src="../../../_images/9db8ad7d1d3966640d90ea98ca50a5534bfcbc0bf4e4d47c626f91a96d04298a.png" />
 </div>
 </div>
 <p>Propagation of the fire is called from <code class="docutils literal notranslate"><span class="pre">FirePropagation</span></code>.</p>
@@ -1088,7 +1094,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/809b222bf4eb71c233519d1e99596f3da07131b6653289baafb7cd83bf74837b.png" src="../../../_images/809b222bf4eb71c233519d1e99596f3da07131b6653289baafb7cd83bf74837b.png" />
+<img alt="../../../_images/66e218311a6b7a6cbc4a8b422705ad992bf64110fdc810ebbd4c37c8ea5214da.png" src="../../../_images/66e218311a6b7a6cbc4a8b422705ad992bf64110fdc810ebbd4c37c8ea5214da.png" />
 </div>
 </div>
 <p>Below we simulate and visualize the propagation of the fire over time:</p>
@@ -1107,7 +1113,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/14cb863159f311b10a957276283b30ad0a38d37b59672c973808ded8e4b1b39e.png" src="../../../_images/14cb863159f311b10a957276283b30ad0a38d37b59672c973808ded8e4b1b39e.png" />
+<img alt="../../../_images/8c220334f48074f0a3d2e469a6be82327000a53a9b15b0bf84680aa1f962f907.png" src="../../../_images/8c220334f48074f0a3d2e469a6be82327000a53a9b15b0bf84680aa1f962f907.png" />
 </div>
 </div>
 </section>
@@ -1132,7 +1138,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/f202edb1c8baaaee4155c26dffa494a956f2ca4a7e44e408741c2c14ff1f205d.png" src="../../../_images/f202edb1c8baaaee4155c26dffa494a956f2ca4a7e44e408741c2c14ff1f205d.png" />
+<img alt="../../../_images/6545bc447efb1caac120297726014960e9c61914f46e98b43edf1c150fafae8b.png" src="../../../_images/6545bc447efb1caac120297726014960e9c61914f46e98b43edf1c150fafae8b.png" />
 </div>
 </div>
 <p>As shown above, the aircraft alternates between flying, mitigating, and resupplying, and resupply can take some time.</p>
@@ -1145,7 +1151,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/cca26dbb4d836a27c3271ec143f6c8993ccf5230336cddd57783651902bfbb01.png" src="../../../_images/cca26dbb4d836a27c3271ec143f6c8993ccf5230336cddd57783651902bfbb01.png" />
+<img alt="../../../_images/22402a653e6bded07f25ecf8c38a396538f7d83b5d18182628ae61e8e8cf6fe9.png" src="../../../_images/22402a653e6bded07f25ecf8c38a396538f7d83b5d18182628ae61e8e8cf6fe9.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1157,7 +1163,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/2c09c1a9e1047f89f5751a1c845286d260ee38b893fe1a1c7e159a7fa8f07f14.png" src="../../../_images/2c09c1a9e1047f89f5751a1c845286d260ee38b893fe1a1c7e159a7fa8f07f14.png" />
+<img alt="../../../_images/1d4d38230d2df110319a47e5f505a6fcee2ac6ca5ae53f8bebb7de362b92936f.png" src="../../../_images/1d4d38230d2df110319a47e5f505a6fcee2ac6ca5ae53f8bebb7de362b92936f.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1169,7 +1175,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/205547d611843a2b424f0715202eceaa7e337d5fc7fd988db3ebda6fc0fbcf04.png" src="../../../_images/205547d611843a2b424f0715202eceaa7e337d5fc7fd988db3ebda6fc0fbcf04.png" />
+<img alt="../../../_images/d5f2a23dab6eee5055d4022aac2faba46c424543e175da8df06a14220d24920f.png" src="../../../_images/d5f2a23dab6eee5055d4022aac2faba46c424543e175da8df06a14220d24920f.png" />
 </div>
 </div>
 </section>
@@ -1194,7 +1200,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
 </pre></div>
 </div>
-<img alt="../../../_images/99387afb3d2348a2ad94dc63369a974f9c33254141c5b34ff930afb191f21bcb.png" src="../../../_images/99387afb3d2348a2ad94dc63369a974f9c33254141c5b34ff930afb191f21bcb.png" />
+<img alt="../../../_images/d26f732e63ecbc2dfb462af6d067b5cdb3556eab75031202d3ec4639b322debb.png" src="../../../_images/d26f732e63ecbc2dfb462af6d067b5cdb3556eab75031202d3ec4639b322debb.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1209,7 +1215,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/59746faf4cee636272ac9d14e13bbc21b405c8ca337c43cca3542e924278085a.png" src="../../../_images/59746faf4cee636272ac9d14e13bbc21b405c8ca337c43cca3542e924278085a.png" />
+<img alt="../../../_images/a8b0be95ffa4684f75d17162ed6273d43ccbef9859c6c2824a75b36123d12b67.png" src="../../../_images/a8b0be95ffa4684f75d17162ed6273d43ccbef9859c6c2824a75b36123d12b67.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1238,7 +1244,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/db005b67005c333144deb7cc124abd1542b9424fe58deca69ceffaf0d165c00e.png" src="../../../_images/db005b67005c333144deb7cc124abd1542b9424fe58deca69ceffaf0d165c00e.png" />
+<img alt="../../../_images/a2a3b42a37e72efddc9b3942fb933f1c45d6e9b488e153b4663019d6e61b1ab3.png" src="../../../_images/a2a3b42a37e72efddc9b3942fb933f1c45d6e9b488e153b4663019d6e61b1ab3.png" />
 </div>
 </div>
 <div class="cell tag_skip-execution docutils container">
@@ -1249,7 +1255,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/8e44768a46a6a8258297368361b494235db2288cbb6f8ccffffa4ba112b5413c.png" src="../../../_images/8e44768a46a6a8258297368361b494235db2288cbb6f8ccffffa4ba112b5413c.png" />
+<img alt="../../../_images/ec96116e34f00877f4b7b14a9ec30bb1d155db271c32b18f801917d0ec13b2ab.png" src="../../../_images/ec96116e34f00877f4b7b14a9ec30bb1d155db271c32b18f801917d0ec13b2ab.png" />
 </div>
 </div>
 <div class="cell tag_skip-execution docutils container">
@@ -1274,7 +1280,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/bcf4284b7f3165e1bdf73372193d123dfd1fdb86a62168baa04224b33dad6176.png" src="../../../_images/bcf4284b7f3165e1bdf73372193d123dfd1fdb86a62168baa04224b33dad6176.png" />
+<img alt="../../../_images/dcbe2c49f0d90895b5a240425728b73416a752b2fd9f29ab2256067bfc9bad33.png" src="../../../_images/dcbe2c49f0d90895b5a240425728b73416a752b2fd9f29ab2256067bfc9bad33.png" />
 </div>
 </div>
 <div class="cell tag_skip-execution docutils container">
@@ -1312,9 +1318,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/8a284e76736c3af3578f9039eee1c5da0f256287e966ef423c2b99f676fddebd.png" src="../../../_images/8a284e76736c3af3578f9039eee1c5da0f256287e966ef423c2b99f676fddebd.png" />
-<img alt="../../../_images/193ad268895ea6082d82dacad5bdbc2b5a3620632fd755b6f2eb4437f1f25d82.png" src="../../../_images/193ad268895ea6082d82dacad5bdbc2b5a3620632fd755b6f2eb4437f1f25d82.png" />
-<img alt="../../../_images/d3d0b93e667c4e6d6b69509eaa2ccaf4ed3970c18ad7b8871cbf1ff2580ca313.png" src="../../../_images/d3d0b93e667c4e6d6b69509eaa2ccaf4ed3970c18ad7b8871cbf1ff2580ca313.png" />
+<img alt="../../../_images/23f9569b60ce92a420348fae89090be2d37c7dae9571540248229141504d29ce.png" src="../../../_images/23f9569b60ce92a420348fae89090be2d37c7dae9571540248229141504d29ce.png" />
+<img alt="../../../_images/6f60d7a1bf6b8d3148c8d38a269f4efc4b885515f76d1f324922e936365b3293.png" src="../../../_images/6f60d7a1bf6b8d3148c8d38a269f4efc4b885515f76d1f324922e936365b3293.png" />
+<img alt="../../../_images/01eee5a0fb2a75ff59157c7f9cbec61e91c874c5de742aac00cbc4b9157744a0.png" src="../../../_images/01eee5a0fb2a75ff59157c7f9cbec61e91c874c5de742aac00cbc4b9157744a0.png" />
 </div>
 </div>
 <p>With two aircraft bases, the fire is put out more quickly:</p>
@@ -1335,7 +1341,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/f8f3413b5c7430c4e491cdc9b5ca43dd3eb686fc1c5ba648d30016cb72b7cacb.png" src="../../../_images/f8f3413b5c7430c4e491cdc9b5ca43dd3eb686fc1c5ba648d30016cb72b7cacb.png" />
+<img alt="../../../_images/eaca87c158871741c11b453d7a3fecce25e1a22dc009d6f9db3c4ffd1da5e0f3.png" src="../../../_images/eaca87c158871741c11b453d7a3fecce25e1a22dc009d6f9db3c4ffd1da5e0f3.png" />
 </div>
 </div>
 <div class="cell tag_skip-execution docutils container">
@@ -1365,8 +1371,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/3f46308ef8efdb6bf15317a8d2ece4bc2a53be8dbcffbf4ddcc47430cfeff460.png" src="../../../_images/3f46308ef8efdb6bf15317a8d2ece4bc2a53be8dbcffbf4ddcc47430cfeff460.png" />
-<img alt="../../../_images/48cdb7a5515910ccc987c552b78bcc20195710ac1e60e0697225a6b1390f0e69.png" src="../../../_images/48cdb7a5515910ccc987c552b78bcc20195710ac1e60e0697225a6b1390f0e69.png" />
+<img alt="../../../_images/e528663821b27d5ed9f9b233bd394687a957b7313795760ad4264c6ee213b466.png" src="../../../_images/e528663821b27d5ed9f9b233bd394687a957b7313795760ad4264c6ee213b466.png" />
+<img alt="../../../_images/e49e99528646326cd1134e4d9ed8f9193214574323ab24a2355b302a65c068c2.png" src="../../../_images/e49e99528646326cd1134e4d9ed8f9193214574323ab24a2355b302a65c068c2.png" />
 </div>
 </div>
 </section>
@@ -1389,7 +1395,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/a91cd2a368e42dc20563acc8fb4e371cc17e2f567ce8c76a244cd0acff64bb0a.png" src="../../../_images/a91cd2a368e42dc20563acc8fb4e371cc17e2f567ce8c76a244cd0acff64bb0a.png" />
+<img alt="../../../_images/104022f554b7983ffcc55212545e05f85f29e189f2065fda3db5a5a9fd34c92b.png" src="../../../_images/104022f554b7983ffcc55212545e05f85f29e189f2065fda3db5a5a9fd34c92b.png" />
 </div>
 </div>
 <div class="cell tag_skip-execution docutils container">
@@ -1421,7 +1427,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/a6701da385a5e7a30a4b36ae5ffbc584241b72fe40fee3b4fa093c7f71294193.png" src="../../../_images/a6701da385a5e7a30a4b36ae5ffbc584241b72fe40fee3b4fa093c7f71294193.png" />
+<img alt="../../../_images/2ea34f6812f3939afd081bfc887291f85c2dafdfb5ed0fd558854bd83dde8489.png" src="../../../_images/2ea34f6812f3939afd081bfc887291f85c2dafdfb5ed0fd558854bd83dde8489.png" />
 </div>
 </div>
 <div class="cell tag_skip-execution docutils container">
@@ -1630,7 +1636,7 @@ OBJECTIVES
  &lt;Axes: title={&#39;center&#39;: &#39; t=10&#39;}, xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
 </pre></div>
 </div>
-<img alt="../../../_images/9521d9407d2c7db7c89f0e12a4203d879ab8c844d5488e520eac0cc1524211c8.png" src="../../../_images/9521d9407d2c7db7c89f0e12a4203d879ab8c844d5488e520eac0cc1524211c8.png" />
+<img alt="../../../_images/b0affbdb7366ce974bf5954af3d964767e657fbfe187afb662d545e6ad1eff1e.png" src="../../../_images/b0affbdb7366ce974bf5954af3d964767e657fbfe187afb662d545e6ad1eff1e.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1647,16 +1653,36 @@ OBJECTIVES
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">psp</span><span class="o">.</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;fireenvironment&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">show_from</span><span class="p">(</span><span class="mi">35</span><span class="p">,</span> <span class="n">psp</span><span class="o">.</span><span class="n">hist</span><span class="o">.</span><span class="n">rep0_var_0</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">fireenvironment</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">show_properties</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">psp</span><span class="o">.</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;fireenvironment&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">show_from</span><span class="p">(</span><span class="mi">35</span><span class="p">,</span> <span class="n">psp</span><span class="o">.</span><span class="n">hist</span><span class="o">.</span><span class="n">rep4_var_4</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">fireenvironment</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">show_properties</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 500x500 with 1 Axes&gt;,
- &lt;Axes: title={&#39;center&#39;: &#39; t=35&#39;}, xlabel=&#39;x&#39;, ylabel=&#39;y&#39;&gt;)
+<img alt="../../../_images/685cbba6a7173547097c7fd2949cd3ad6c3bba28608a3f6824671ab0349476d9.png" src="../../../_images/685cbba6a7173547097c7fd2949cd3ad6c3bba28608a3f6824671ab0349476d9.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">psp</span><span class="o">.</span><span class="n">hist</span><span class="o">.</span><span class="n">rep4_var_4</span><span class="o">.</span><span class="n">plot_trajectories_from</span><span class="p">(</span><span class="mi">35</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;fxns.aircraft_0.s.x&quot;</span><span class="p">,</span> <span class="s2">&quot;fxns.aircraft_0.s.y&quot;</span><span class="p">],</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                                                     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Aerial Wildfire Response at&quot;</span><span class="p">)</span>
+<span class="n">fig</span>
 </pre></div>
 </div>
-<img alt="../../../_images/e8b2a6fae8e99a006da22ae2dab16b6f78df099220e16bfd67e49ba0e946deb5.png" src="../../../_images/e8b2a6fae8e99a006da22ae2dab16b6f78df099220e16bfd67e49ba0e946deb5.png" />
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/0091d4e4bebf23fa1de48c3ef580ee069efb772f8b94c4bbd73c5d665b384325.png" src="../../../_images/0091d4e4bebf23fa1de48c3ef580ee069efb772f8b94c4bbd73c5d665b384325.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">psp</span><span class="o">.</span><span class="n">hist</span><span class="o">.</span><span class="n">nest</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;rep0_var_0&#39;, &#39;rep1_var_1&#39;, &#39;rep2_var_2&#39;, &#39;rep3_var_3&#39;, &#39;rep4_var_4&#39;, &#39;rep5_var_5&#39;, &#39;rep6_var_6&#39;, &#39;rep7_var_7&#39;, &#39;rep8_var_8&#39;, &#39;rep9_var_9&#39;])
+</pre></div>
+</div>
 </div>
 </div>
 </section>

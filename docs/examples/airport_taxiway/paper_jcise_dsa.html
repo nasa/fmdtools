@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paper[jcise]: Modeling Distributed Situation Awareness &mdash; fmdtools 2.5.5.rc0 documentation</title>
+  <title>Paper[jcise]: Modeling Distributed Situation Awareness &mdash; fmdtools 2.5.6.rc2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=7a01ae65"></script>
+      <script src="../../_static/documentation_options.js?v=3560e79d"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -50,11 +50,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../README.html">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../README.html#demo-portfolio">Demo Portfolio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#about">About</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../README.html#flexible-ai-ready-modelling-paradigm">Flexible, AI-Ready Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#flexible-llm-ready-modelling-paradigm">Flexible, LLM-Ready Modelling Paradigm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#demo-portfolio">Demo Portfolio</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#getting-started">Getting Started</a><ul>
@@ -66,7 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../README.html#ai-llm-tips">AI/LLM Tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#coding-agent-llm-tips">Coding Agent/LLM Tips</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
@@ -105,6 +105,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#why-fmdtools-pros-smaller">Why fmdtools? Pros: {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#what-is-fmdtools-package-structure">What is fmdtools? Package Structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#activity-download-and-install-fmdtools-smaller">Activity: Download and Install fmdtools {.smaller}</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs-source/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
@@ -434,6 +435,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../state_communication/readme.html">State Communications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../state_communication/tutorial_MultiFlow_and_CommsFlow.html">Tutorial: MultiFlow and CommsFlow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../state_communication/tutorial_MultiFlow_and_CommsFlow.html#building-flows">Building Flows</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../state_communication/readme.html#package-structure">Package Structure:</a></li>
 </ul>
 </li>
@@ -893,6 +898,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># sphinx_gallery_thumbnail_number = 6</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">model_main</span><span class="w"> </span><span class="kn">import</span> <span class="n">taxiway_model</span><span class="p">,</span> <span class="n">create_fault_scen_metrics</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmdtools.sim</span><span class="w"> </span><span class="kn">import</span> <span class="n">propagate</span> <span class="k">as</span> <span class="n">prop</span>
@@ -944,7 +956,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2ea71d0459b8d2e31689a74413333365c597ee6b5a0081dde5682b7069a74bb1.png" src="../../_images/2ea71d0459b8d2e31689a74413333365c597ee6b5a0081dde5682b7069a74bb1.png" />
+<img alt="../../_images/a0aba16fc45da6142920940cfeda6090dd6c3bd01b5ffa1d8ad319403749d981.png" src="../../_images/a0aba16fc45da6142920940cfeda6090dd6c3bd01b5ffa1d8ad319403749d981.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1029,7 +1041,7 @@ LOCALS:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/fc2c85993fcd1d62557a28c6a841fa8aa124245b2c272ec1dbaae2fd35237c14.png" src="../../_images/fc2c85993fcd1d62557a28c6a841fa8aa124245b2c272ec1dbaae2fd35237c14.png" />
+<img alt="../../_images/af4c0a54b7816ce27ced857923380a2d5d9e5323696deaebcfc6eda77f426fae.png" src="../../_images/af4c0a54b7816ce27ced857923380a2d5d9e5323696deaebcfc6eda77f426fae.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1054,7 +1066,7 @@ LOCALS:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/7cffbde525adde9cc9d0ce3ca9cc78dc82a43e09a1e6e5431b1ac195a8e5b9d1.png" src="../../_images/7cffbde525adde9cc9d0ce3ca9cc78dc82a43e09a1e6e5431b1ac195a8e5b9d1.png" />
+<img alt="../../_images/17fb5c86855542b39f209c86d97324adcb28ff216bf9389f030f6523839afb21.png" src="../../_images/17fb5c86855542b39f209c86d97324adcb28ff216bf9389f030f6523839afb21.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1071,7 +1083,7 @@ LOCALS:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/fd8630adc306eb363bdcfcaf5c70dc3c725412df123fe3cc476c2212f8308a7e.png" src="../../_images/fd8630adc306eb363bdcfcaf5c70dc3c725412df123fe3cc476c2212f8308a7e.png" />
+<img alt="../../_images/8ea917df2adb86e3adb57256d7ca3286457406261215cd92bc4130d934bf30ba.png" src="../../_images/8ea917df2adb86e3adb57256d7ca3286457406261215cd92bc4130d934bf30ba.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1091,7 +1103,7 @@ LOCALS:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2ca41c4dc175aa03994f1d240b2e6a1495bd75d3a3635769272df77a2423806f.png" src="../../_images/2ca41c4dc175aa03994f1d240b2e6a1495bd75d3a3635769272df77a2423806f.png" />
+<img alt="../../_images/d387a7369cabc7a9e8cc3d56ee10e34e23d3ee655da50910889aec2a666a7245.png" src="../../_images/d387a7369cabc7a9e8cc3d56ee10e34e23d3ee655da50910889aec2a666a7245.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1124,11 +1136,7 @@ LOCALS:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 [-0.98444988  0.33883264]
-1 [0.07221305 0.80765705]
-</pre></div>
-</div>
-<img alt="../../_images/29212725d7246127990a30d9fd03f1c85db27678350f2ab976e14a59834f34d6.png" src="../../_images/29212725d7246127990a30d9fd03f1c85db27678350f2ab976e14a59834f34d6.png" />
+<img alt="../../_images/18352f7e1b28266bc7c6c70fd1346472821638d1e23d037b66f66799fc2e7103.png" src="../../_images/18352f7e1b28266bc7c6c70fd1346472821638d1e23d037b66f66799fc2e7103.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1201,7 +1209,7 @@ num_crashed:                           2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/1a7e0f688fa2c9a927b870115c8852f9a903d626c65c718d5906ce91af36bfae.png" src="../../_images/1a7e0f688fa2c9a927b870115c8852f9a903d626c65c718d5906ce91af36bfae.png" />
+<img alt="../../_images/69bed93afae16257dc54dad1af399d0c0caf2e128b7981a601ff7c70f83ed709.png" src="../../_images/69bed93afae16257dc54dad1af399d0c0caf2e128b7981a601ff7c70f83ed709.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1255,7 +1263,7 @@ num_crashed:                           2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/09b0d14dd64cdf1c5a5b4175bdcc0fa7c5f984e1845cd4e17d710ea7c911b0e4.png" src="../../_images/09b0d14dd64cdf1c5a5b4175bdcc0fa7c5f984e1845cd4e17d710ea7c911b0e4.png" />
+<img alt="../../_images/5e394855ea5dde6b3885e38e97d7652dad728bbb91225a6d59fc5a5d8aeb0bd0.png" src="../../_images/5e394855ea5dde6b3885e38e97d7652dad728bbb91225a6d59fc5a5d8aeb0bd0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1286,7 +1294,7 @@ num_crashed:                           2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/4c7e656a5f0e5c51b12a4dba044818bcaf5f8d9af856440b39df19cbec2831ce.png" src="../../_images/4c7e656a5f0e5c51b12a4dba044818bcaf5f8d9af856440b39df19cbec2831ce.png" />
+<img alt="../../_images/ed6d40d5e84371777dbdb0343526f658000f8af0ef715bb5f37b510c3833d4fb.png" src="../../_images/ed6d40d5e84371777dbdb0343526f658000f8af0ef715bb5f37b510c3833d4fb.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1448,7 +1456,7 @@ time &amp; 120.000000 \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/95aba86cb31eb2a6333ddafb16ab1056953ae5a377ce1f79f5d6567007ad3102.png" src="../../_images/95aba86cb31eb2a6333ddafb16ab1056953ae5a377ce1f79f5d6567007ad3102.png" />
+<img alt="../../_images/6531212990a8d401580c93e7c09150e3eb00eb7b3732943cf6e8c9e430e3dffd.png" src="../../_images/6531212990a8d401580c93e7c09150e3eb00eb7b3732943cf6e8c9e430e3dffd.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1480,7 +1488,7 @@ num_crashed:                           2
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;fmdtools.define.flow.multiflow.MultiFlowGraph at 0x214a6130a70&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;fmdtools.define.flow.multiflow.MultiFlowGraph at 0x23f32f117f0&gt;
 </pre></div>
 </div>
 </div>
@@ -1512,7 +1520,7 @@ num_crashed:                           2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a524a0e532ca30544af79e59d25f24d0861bf4086e256b8f4414901f83e370a7.png" src="../../_images/a524a0e532ca30544af79e59d25f24d0861bf4086e256b8f4414901f83e370a7.png" />
+<img alt="../../_images/922fab28590f8120e2cdc943a0cb898edbd85112e5dfb1f6d359db4ba5a69fae.png" src="../../_images/922fab28590f8120e2cdc943a0cb898edbd85112e5dfb1f6d359db4ba5a69fae.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1552,13 +1560,49 @@ num_crashed:                           2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/fbef7e713a9599e5eb5eeaf16b60282a519b2cab1d574b1596b5e76482b86c74.png" src="../../_images/fbef7e713a9599e5eb5eeaf16b60282a519b2cab1d574b1596b5e76482b86c74.png" />
+<img alt="../../_images/d3ed664910acdee13b53d328a938e7dd7bdb610ca91eb8090a7f3077521b5013.png" src="../../_images/d3ed664910acdee13b53d328a938e7dd7bdb610ca91eb8090a7f3077521b5013.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;outputs_paper_jcise_dsa/atc_comms_requests_10.eps&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;outputs_paper_jcise_dsa/atc_comms_requests_10.svg&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ind_hist</span> <span class="o">=</span> <span class="n">create_fault_scen_metrics</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ind_hist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s2">&quot;degraded_fields&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;cycled_assets&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;unsafe_distances&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;assets_without_sight&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;faulty_functions&quot;</span><span class="p">,</span>
+                            <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+                            <span class="n">time_slice_label</span> <span class="o">=</span> <span class="s2">&quot;fault injection/occurence&quot;</span><span class="p">,</span>
+                            <span class="n">ylabels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;off-nominal fields&#39;</span><span class="p">:</span><span class="s1">&#39;%&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/b295ec6769e60e78d681ee3e912ea0c677b0d0d1eea039b22b70017973129a3b.png" src="../../_images/b295ec6769e60e78d681ee3e912ea0c677b0d0d1eea039b22b70017973129a3b.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;outputs_paper_jcise_dsa/fault_history_atc_comms.eps&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1601,49 +1645,13 @@ num_crashed:                           2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/fc7384dc040c838ecb9e599c101edf569470b401090e6c1439d23e188d3a146c.png" src="../../_images/fc7384dc040c838ecb9e599c101edf569470b401090e6c1439d23e188d3a146c.png" />
+<img alt="../../_images/568fd80eff0c57b658ba8d58401866aa74a4bfd0c9296620c0c50c0cde97d058.png" src="../../_images/568fd80eff0c57b658ba8d58401866aa74a4bfd0c9296620c0c50c0cde97d058.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;outputs_paper_jcise_dsa/atc_comms_resgraph.eps&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;outputs_paper_jcise_dsa/atc_comms_resgraph.svg&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ind_hist</span> <span class="o">=</span> <span class="n">create_fault_scen_metrics</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ind_hist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s2">&quot;degraded_fields&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;cycled_assets&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;unsafe_distances&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;assets_without_sight&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;faulty_functions&quot;</span><span class="p">,</span>
-                            <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
-                            <span class="n">time_slice_label</span> <span class="o">=</span> <span class="s2">&quot;fault injection/occurence&quot;</span><span class="p">,</span>
-                            <span class="n">ylabels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;off-nominal fields&#39;</span><span class="p">:</span><span class="s1">&#39;%&#39;</span><span class="p">})</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../../_images/ae949d7231d94c16243dbd389c36a674d4630de95c5d03da3ec281d055bda435.png" src="../../_images/ae949d7231d94c16243dbd389c36a674d4630de95c5d03da3ec281d055bda435.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;outputs_paper_jcise_dsa/fault_history_atc_comms.eps&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
 </pre></div>
 </div>
 </div>
