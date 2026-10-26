@@ -158,18 +158,16 @@ limited capacities, absent/overlapping contacts, threshold boundaries, partial
 and extended runs, repeatability, copied/pickled model continuation, reset,
 shared-flow identity and rejected invalid configurations.
 
-Later increments
-----------------
+Extension boundaries
+--------------------
 
-Random disturbances and explicit fault modes can be added to the relevant
-functions after this deterministic baseline is agreed. The
-``ProcessObservation.select_observation`` method is the local boundary for
-replacing the threshold rule with a pre-existing model. The reusable
-external-model approach remains separate work under
-`issue #277 <https://github.com/nasa/fmdtools/issues/277>`_. Image inputs,
-scikit-learn integration and calibrated risk/cost definitions remain separate
-increments. The optional risk/FMEA workflow below uses the existing synthetic
-rates. This scaffold does not complete either parent issue.
+The variants below add seeded disturbances, faults, risk/FMEA analysis and an
+offline image classifier without changing this deterministic baseline.
+``ProcessObservation.select_observation`` remains the local selection boundary.
+A reusable external-model interface remains separate work under
+`issue #277 <https://github.com/nasa/fmdtools/issues/277>`_. Real planetary imagery,
+calibrated sensor behaviour and mission risk/cost definitions remain outside
+these synthetic examples; neither parent issue is closed by this scaffold.
 
 Files
 -----
@@ -196,6 +194,7 @@ Its tests also live in this example folder.
    disturbances
    risk_analysis
    demo_risk_analysis
+   classification
 
 Risk and FMEA workflow
 ---------------------
@@ -206,3 +205,11 @@ from fault-weighted contributions. Run ``script_risk_analysis.py`` for a
 hand-checkable reference, or open ``demo_risk_analysis.ipynb`` for the seeded
 experiment, native FMEA plots and export checks. ``test_risk_analysis.py``
 contains the corresponding reference and workflow tests.
+
+Image-classification variant
+----------------------------
+
+The optional :doc:`image-classification workflow <classification>` embeds a
+scikit-learn estimator using bundled digit images as an offline proxy. It
+records detection errors separately from unavailable observations and delivery
+counts, with an example-local FMEA script and tests.
