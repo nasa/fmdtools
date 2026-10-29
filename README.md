@@ -166,6 +166,9 @@ Since these are direct dependencies, they will be installed automatically along 
 
 Some additional indirect dependencies (listed below) may be needed for development/testing of the code, or for specific notebooks. Thus, to develop/contribute to fmdtools, it can be helpful to install these up-front using `pip install packagename`. Note that the use of these dependencies is governed by their respective licenses, which may be obtained at the provided links.
 ```
+pylint
+# used for fmdtools_pylint plugin when user installs fmdtools[lint]
+# license: (GPL-2.0) https://github.com/pylint-dev/pylint/blob/main/LICENSE
 deap
 # used for optimization of rover faults
 # license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt
