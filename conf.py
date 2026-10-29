@@ -15,6 +15,7 @@
 #
 import os
 import sys
+import re
 sys.path.insert(0, os.path.abspath('/src'))
 try:
     import fmdtools
@@ -33,6 +34,7 @@ author = 'fmdtools developers'
 release = '2.6.0.dev0'
 version = release
 
+docs_versions = ["dev", "2.5.7", "2.4.0", "2.3.3", "2.2.3", "2.1.3"]
 
 # -- General configuration ---------------------------------------------------
 
@@ -82,7 +84,7 @@ html_context = {"display_github": True,  # Integrate GitHub
                 "github_version": "main",  # Version
                 "conf_py_path": "/",  # Path in the checkout to the docs root
                 "custom_versions": True,
-                "versions": [["dev", "link to latest"], ["2.4.0", "link to 2.4.0"], ["2.3.3", "link to 2.3.3"], ["2.2.3", "link to 2.2.3"], ["2.1.3", "link to 2.1.3"]]
+                "versions": [[v, "link to "+v] for v in docs_versions]
                 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -93,8 +95,9 @@ html_static_path = ['_static']
 
 # -- Sphinx-Multiversion Options----------------------------------------------
 
-# ONLY build specific releases (e.g., v1.0.0, v2.1.3)
-smv_tag_whitelist = r'^(v2\.4\.0|v2\.3\.3|v2\.2\.3|v2\.1\.3)$'
+# ONLY build specific supported releases
+escaped_versions = "|".join(re.escape(v) for v in docs_versions if v!="dev")
+smv_tag_whitelist = f"^({escaped_versions})$"
 
 # ONLY build dev branch
 smv_branch_whitelist = r'^(dev)$'
