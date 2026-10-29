@@ -22,5 +22,12 @@
         "timestep",
         "toctree",
         "unipartite"
+    ],
+    "pylint.cwd": "${workspaceFolder}",
+    "pylint.importStrategy": "fromEnvironment",
+    "pylint.path": [
+        "${interpreter}",
+        "-m",
+        "pylint"
     ]
 }
