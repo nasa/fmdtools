@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="321pt" height="367pt" viewBox="0.00 0.00 320.50 367.17">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 363.17)">
+<polygon fill="white" stroke="none" points="-4,4 -4,-363.17 316.5,-363.17 316.5,4 -4,4"/>
+<!-- rover.flows.ground -->
+<g id="node1" class="node">
+<title>rover.flows.ground</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="38.86" cy="-80.94" rx="37.09" ry="18"/>
+<text text-anchor="middle" x="38.86" y="-75.51" font-family="Times New Roman,serif" font-size="14.00">ground</text>
+</g>
+<!-- rover.flows.force -->
+<g id="node2" class="node">
+<title>rover.flows.force</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="30.11" cy="-198.36" rx="30.11" ry="18"/>
+<text text-anchor="middle" x="30.11" y="-192.94" font-family="Times New Roman,serif" font-size="14.00">force</text>
+</g>
+<!-- rover.flows.ee -->
+<g id="node3" class="node">
+<title>rover.flows.ee</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="172.13" cy="-223.22" rx="27" ry="18"/>
+<text text-anchor="middle" x="172.13" y="-217.79" font-family="Times New Roman,serif" font-size="14.00">ee</text>
+</g>
+<!-- rover.flows.video -->
+<g id="node4" class="node">
+<title>rover.flows.video</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="37.89" cy="-304.21" rx="31.1" ry="18"/>
+<text text-anchor="middle" x="37.89" y="-298.79" font-family="Times New Roman,serif" font-size="14.00">video</text>
+</g>
+<!-- rover.flows.control -->
+<g id="node5" class="node">
+<title>rover.flows.control</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="184.01" cy="-91.61" rx="37.09" ry="18"/>
+<text text-anchor="middle" x="184.01" y="-86.18" font-family="Times New Roman,serif" font-size="14.00">control</text>
+</g>
+<!-- rover.flows.comms -->
+<g id="node6" class="node">
+<title>rover.flows.comms</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="274.41" cy="-341.17" rx="38.09" ry="18"/>
+<text text-anchor="middle" x="274.41" y="-335.75" font-family="Times New Roman,serif" font-size="14.00">comms</text>
+</g>
+<!-- rover.fxns.control_rover -->
+<g id="node7" class="node">
+<title>rover.fxns.control_rover</title>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="251.94,-36 159.44,-36 159.44,0 251.94,0 251.94,-36"/>
+<text text-anchor="middle" x="205.69" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">control_rover</text>
+</g>
+<!-- rover.fxns.control_rover&#45;&gt;rover.flows.control -->
+<g id="edge1" class="edge">
+<title>rover.fxns.control_rover-&gt;rover.flows.control</title>
+<path fill="none" stroke="black" d="M196.48,-49.24C193.99,-57.7 191.38,-66.56 189.2,-73.98"/>
+<polygon fill="none" stroke="black" points="196.46,-49.33 194.32,-42.45 199.85,-37.82 201.99,-44.71 196.46,-49.33"/>
+<text text-anchor="middle" x="172.22" y="-48.31" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- rover.fxns.store_energy -->
+<g id="node8" class="node">
+<title>rover.fxns.store_energy</title>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="272.44,-177.09 184.44,-177.09 184.44,-141.09 272.44,-141.09 272.44,-177.09"/>
+<text text-anchor="middle" x="228.44" y="-153.66" font-family="Times New Roman,serif" font-size="14.00">store_energy</text>
+</g>
+<!-- rover.fxns.store_energy&#45;&gt;rover.flows.ee -->
+<g id="edge2" class="edge">
+<title>rover.fxns.store_energy-&gt;rover.flows.ee</title>
+<path fill="none" stroke="black" d="M203.28,-187.74C197.25,-194.61 191.04,-201.68 185.76,-207.69"/>
+<polygon fill="none" stroke="black" points="203.33,-187.68 204.29,-180.53 211.25,-178.66 210.3,-185.81 203.33,-187.68"/>
+<text text-anchor="middle" x="215.14" y="-184.42" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- rover.fxns.store_energy&#45;&gt;rover.flows.control -->
+<g id="edge3" class="edge">
+<title>rover.fxns.store_energy-&gt;rover.flows.control</title>
+<path fill="none" stroke="black" d="M208.9,-129.41C204.17,-122.23 199.28,-114.81 195.1,-108.46"/>
+<polygon fill="none" stroke="black" points="208.97,-129.51 215.61,-132.33 215.56,-139.54 208.92,-136.72 208.97,-129.51"/>
+<text text-anchor="middle" x="222.63" y="-121.38" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- rover.fxns.move_rover -->
+<g id="node9" class="node">
+<title>rover.fxns.move_rover</title>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="170.84,-162.51 87.34,-162.51 87.34,-126.51 170.84,-126.51 170.84,-162.51"/>
+<text text-anchor="middle" x="129.09" y="-139.09" font-family="Times New Roman,serif" font-size="14.00">move_rover</text>
+</g>
+<!-- rover.fxns.move_rover&#45;&gt;rover.flows.ground -->
+<g id="edge6" class="edge">
+<title>rover.fxns.move_rover-&gt;rover.flows.ground</title>
+<path fill="none" stroke="black" d="M91.88,-118.3C80.94,-110.59 69.36,-102.43 59.82,-95.71"/>
+<polygon fill="none" stroke="black" points="91.96,-118.35 99.17,-118.54 101.77,-125.26 94.56,-125.08 91.96,-118.35"/>
+<text text-anchor="middle" x="55.23" y="-109.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- rover.fxns.move_rover&#45;&gt;rover.flows.force -->
+<g id="edge7" class="edge">
+<title>rover.fxns.move_rover-&gt;rover.flows.force</title>
+<path fill="none" stroke="black" d="M82.84,-169.68C72.22,-175.45 61.4,-181.34 52.34,-186.27"/>
+<polygon fill="none" stroke="black" points="82.86,-169.66 86.22,-163.28 93.4,-163.93 90.04,-170.31 82.86,-169.66"/>
+<text text-anchor="middle" x="46.97" y="-164.67" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- rover.fxns.move_rover&#45;&gt;rover.flows.ee -->
+<g id="edge4" class="edge">
+<title>rover.fxns.move_rover-&gt;rover.flows.ee</title>
+<path fill="none" stroke="black" d="M145.4,-174.33C151.31,-185.15 157.79,-196.99 162.88,-206.31"/>
+<polygon fill="none" stroke="black" points="145.48,-174.48 139.09,-171.14 139.72,-163.96 146.11,-167.3 145.48,-174.48"/>
+<text text-anchor="middle" x="133.51" y="-177.02" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- rover.fxns.move_rover&#45;&gt;rover.flows.control -->
+<g id="edge5" class="edge">
+<title>rover.fxns.move_rover-&gt;rover.flows.control</title>
+<path fill="none" stroke="black" d="M157.82,-116.84C161.12,-113.65 164.4,-110.5 167.46,-107.55"/>
+<polygon fill="none" stroke="black" points="157.9,-116.76 156.35,-123.8 149.25,-125.09 150.8,-118.04 157.9,-116.76"/>
+<text text-anchor="middle" x="183.26" y="-114.64" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- rover.fxns.view_ground -->
+<g id="node10" class="node">
+<title>rover.fxns.view_ground</title>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="132.67,-259.21 43.92,-259.21 43.92,-223.21 132.67,-223.21 132.67,-259.21"/>
+<text text-anchor="middle" x="88.3" y="-235.78" font-family="Times New Roman,serif" font-size="14.00">view_ground</text>
+</g>
+<!-- rover.fxns.view_ground&#45;&gt;rover.flows.ground -->
+<g id="edge8" class="edge">
+<title>rover.fxns.view_ground-&gt;rover.flows.ground</title>
+<path fill="none" stroke="black" d="M78.78,-210.36C68.53,-177.13 52.59,-125.44 44.29,-98.54"/>
+<polygon fill="none" stroke="black" points="78.73,-210.18 84.32,-214.74 82.26,-221.65 76.67,-217.09 78.73,-210.18"/>
+<text text-anchor="middle" x="40.91" y="-141.15" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- rover.fxns.view_ground&#45;&gt;rover.flows.force -->
+<g id="edge11" class="edge">
+<title>rover.fxns.view_ground-&gt;rover.flows.force</title>
+<path fill="none" stroke="black" d="M52.2,-214.63C51.06,-213.79 49.94,-212.97 48.85,-212.16"/>
+<polygon fill="none" stroke="black" points="52.21,-214.64 59.42,-214.98 61.88,-221.76 54.67,-221.42 52.21,-214.64"/>
+<text text-anchor="middle" x="71.15" y="-200.09" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- rover.fxns.view_ground&#45;&gt;rover.flows.ee -->
+<g id="edge9" class="edge">
+<title>rover.fxns.view_ground-&gt;rover.flows.ee</title>
+<path fill="none" stroke="black" d="M146.32,-228.76C146.45,-228.73 146.58,-228.7 146.71,-228.67"/>
+<polygon fill="none" stroke="black" points="146.26,-228.77 141.23,-233.94 134.53,-231.29 139.56,-226.12 146.26,-228.77"/>
+<text text-anchor="middle" x="125.89" y="-215.41" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- rover.fxns.view_ground&#45;&gt;rover.flows.video -->
+<g id="edge10" class="edge">
+<title>rover.fxns.view_ground-&gt;rover.flows.video</title>
+<path fill="none" stroke="black" d="M65.18,-270.1C60.3,-276.2 55.31,-282.44 50.95,-287.88"/>
+<polygon fill="none" stroke="black" points="65.11,-270.19 65.74,-263 72.61,-260.82 71.98,-268 65.11,-270.19"/>
+<text text-anchor="middle" x="37.44" y="-265.69" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- rover.fxns.communicate -->
+<g id="node11" class="node">
+<title>rover.fxns.communicate</title>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="268.49,-303.67 178.24,-303.67 178.24,-267.67 268.49,-267.67 268.49,-303.67"/>
+<text text-anchor="middle" x="223.37" y="-280.25" font-family="Times New Roman,serif" font-size="14.00">communicate</text>
+</g>
+<!-- rover.fxns.communicate&#45;&gt;rover.flows.ee -->
+<g id="edge13" class="edge">
+<title>rover.fxns.communicate-&gt;rover.flows.ee</title>
+<path fill="none" stroke="black" d="M199.74,-256.87C194.69,-250.71 189.54,-244.43 185.07,-238.99"/>
+<polygon fill="none" stroke="black" points="199.81,-256.96 206.71,-259.06 207.42,-266.24 200.52,-264.14 199.81,-256.96"/>
+<text text-anchor="middle" x="171.78" y="-250.38" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- rover.fxns.communicate&#45;&gt;rover.flows.comms -->
+<g id="edge12" class="edge">
+<title>rover.fxns.communicate-&gt;rover.flows.comms</title>
+<path fill="none" stroke="black" d="M249.27,-313.84C252.79,-317.66 256.3,-321.48 259.54,-325"/>
+<polygon fill="none" stroke="black" points="249.38,-313.96 242.38,-312.25 241.26,-305.13 248.26,-306.84 249.38,-313.96"/>
+<text text-anchor="middle" x="233.78" y="-306.12" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+</g>
+</svg>

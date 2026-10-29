@@ -1,0 +1,19 @@
+/* Strip floating styles and lock it to the sidebar */
+.rst-sidebar-footer-versions .rst-versions {
+    position: relative;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    background: #1f1f1f; /* Matches dark sidebar background */
+    border-top: 1px solid #272727;
+}
+
+/* Ensure the layout expands correctly when clicked open */
+.rst-sidebar-footer-versions .rst-other-versions {
+    display: none;
+    padding: 10px;
+}
+
+.rst-sidebar-footer-versions .rst-versions.shift-up .rst-other-versions {
+    display: block;
+}
