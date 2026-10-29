@@ -1,13 +1,3 @@
-const DOCUMENTATION_OPTIONS = {
-    VERSION: '2.5.7.rc0',
-    LANGUAGE: 'en',
-    COLLAPSE_INDEX: false,
-    BUILDER: 'html',
-    FILE_SUFFIX: '.html',
-    LINK_SUFFIX: '.html',
-    HAS_SOURCE: true,
-    SOURCELINK_SUFFIX: '.txt',
-    NAVIGATION_WITH_KEYS: false,
-    SHOW_SEARCH_SUMMARY: true,
-    ENABLE_SEARCH_SHORTCUTS: true,
-};
+version https://git-lfs.github.com/spec/v1
+oid sha256:a77e9850395bc458bf304745c5338c4c8e9b32ff15c2547da55b5469ccc766ed
+size 344
