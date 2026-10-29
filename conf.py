@@ -41,7 +41,8 @@ version = release
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.intersphinx',
               'sphinx.ext.autosummary', 'sphinx.ext.intersphinx', 'sphinx.ext.autosectionlabel',
-              "myst_nb", "sphinx.ext.githubpages", "myst_sphinx_gallery"]
+              "myst_nb", "sphinx.ext.githubpages", "myst_sphinx_gallery",
+              "sphinx_multiversion"]
 
 # "gaphor.extensions.sphinx"
 # gaphor_models = "/docs-source/figures/uml/module-reference-diagrams.gaphor"
@@ -80,12 +81,30 @@ html_context = {"display_github": True,  # Integrate GitHub
                 "github_repo": "fmdtools",  # Repo name
                 "github_version": "main",  # Version
                 "conf_py_path": "/",  # Path in the checkout to the docs root
+                "custom_versions": True,
+                "versions": [["dev", "link to latest"], ["2.4.0", "link to 2.4.0"], ["2.3.3", "link to 2.3.3"], ["2.2.3", "link to 2.2.3"], ["2.1.3", "link to 2.1.3"]]
                 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+
+# -- Sphinx-Multiversion Options----------------------------------------------
+
+# ONLY build specific releases (e.g., v1.0.0, v2.1.3)
+smv_tag_whitelist = r'^(v2\.4\.0|v2\.3\.3|v2\.2\.3|v2\.1\.3)$'
+
+# ONLY build dev branch
+smv_branch_whitelist = r'^(dev)$'
+
+# Do not build remote tracking branches if you don't need them
+smv_remote_whitelist = None 
+
+# Do not fetch updates from remotes during the build
+smv_released_pattern = r'^tags/.*$'
+
 
 # -- Options for MyST-Gallery
 

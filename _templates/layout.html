@@ -1,0 +1,24 @@
+{% extends "!layout.html" %}
+
+{% block sidebartitle %}
+  {{ super() }}
+  
+  {# This places the version block at the very bottom of the sidebar panel #}
+  <div class="rst-sidebar-footer-versions">
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions">
+      <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book">Current Version:</span>
+        {{ current_version.version }}
+        <span class="fa fa-caret-down"></span>
+      </span>
+      <div class="rst-other-versions">
+        <dl>
+          <dt>Versions</dt>
+          {% for version in versions %}
+          <dd><a href="{{ version.url }}">{{ version.name }}</a></dd>
+          {% endfor %}
+        </dl>
+      </div>
+    </div>
+  </div>
+{% endblock %}
