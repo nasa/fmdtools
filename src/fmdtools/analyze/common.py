@@ -36,14 +36,15 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import math
-import numpy as np
 import os
+from functools import partial
+
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
-import inspect
 from scipy.stats import bootstrap
+
 from fmdtools.define.base import filter_kwargs, round_float
-from functools import partial
 
 
 plt.rcParams['pdf.fonttype'] = 42

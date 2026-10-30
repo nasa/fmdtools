@@ -729,7 +729,7 @@ class History(Result):
             title for the legend. Default is None
         **kwargs : kwargs
             Keyword arguments to aggregation plotting functions (plot_xx_line) as well
-            ass multiplot_legend_title.
+            as multiplot_legend_title.
 
         Returns
         -------
