@@ -26,20 +26,12 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.container.parameter import Parameter
-from fmdtools.define.container.rand import Rand
-from fmdtools.define.base import is_iter, load_json, value_to_jsonable
-from fmdtools.define.object.base import BaseObject
-from fmdtools.analyze.common import setup_plot, consolidate_legend, clear_prev_figure
-from fmdtools.analyze.common import prep_animation_title, add_title_xylabs, calc_metric
-from fmdtools.analyze.common import multiplot_helper, multiplot_legend_title
-
-import numpy as np
 import os
 import json
 import pandas as pd
 from typing import ClassVar
 
+import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib import colormaps, cm
 from matplotlib.colors import to_rgba, ListedColormap, TABLEAU_COLORS
@@ -48,6 +40,13 @@ import matplotlib.patches as mpatches
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.mplot3d import art3d
 
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.rand import Rand
+from fmdtools.define.base import is_iter, load_json, value_to_jsonable
+from fmdtools.define.object.base import BaseObject
+from fmdtools.analyze.common import setup_plot, handle_legend, clear_prev_figure
+from fmdtools.analyze.common import prep_animation_title, add_title_xylabs, calc_metric
+from fmdtools.analyze.common import multiplot_helper, multiplot_legend_title
 
 class CoordsParam(Parameter):
     """
@@ -651,7 +650,7 @@ class BaseCoords(BaseObject):
 
     def show_property(self, prop, xlabel="x", ylabel="y", title='', proplab="prop",
                       as_bool=False, color='green', cmap='Greens', ec='black',
-                      text=False, text_kwargs={}, hatch=False, legend_kwargs={},
+                      text=False, text_kwargs={}, hatch=False, legend=True,
                       fig=None, ax=None, figsize=(5, 5), **kwargs):
         """
         Plot a given property 'prop' as a colormesh on an x-y grid.
@@ -684,7 +683,10 @@ class BaseCoords(BaseObject):
             Whether to overlay text on the property. Default is False.
         text_kwargs : dict
             kwargs to Coords.show_property_text (if text=True). Default is {}.
-        text: dict, optional
+        hatch : bool/dict
+            If provided as dict, hatch arguments. Default is False (no hatch).
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is True.
         **kwargs : kwargs
             Keyword arguments to matplotlib.pyplot.pcolormesh (e.g., cmap, edgecolors)
 
@@ -734,11 +736,7 @@ class BaseCoords(BaseObject):
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
 
         if p.dtype == 'bool':
-            if legend_kwargs is not False:
-                if legend_kwargs is True:
-                    legend_kwargs = {}
-                consolidate_legend(ax, add_handles=[patch], **legend_kwargs,
-                                   title="Properties")
+            handle_legend(ax, legend=legend, add_handles=[patch], title="Properties")
         else:
             # if float, create a colorbar
             divider = make_axes_locatable(ax)
@@ -872,7 +870,8 @@ class BaseCoords(BaseObject):
         return fig, ax
 
     def show_from(self, t, history={}, properties={}, clear_fig=False,
-                  traj_hist={}, traj_args=(), traj_kwargs={}, cut_traj=True, **kwargs):
+                  traj_hist={}, traj_args=(), traj_kwargs={}, cut_traj=True,
+                  legend=True, **kwargs):
         """
         Run Coords.show() at a particular time in the history.
 
@@ -889,6 +888,8 @@ class BaseCoords(BaseObject):
             using hist.plot_trajectories.
         cut_traj: bool
             Whether to cut traj_hist to the current state of Coords. Default is True.
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is True.
         **kwargs : kwargs
             kwargs for self.show
 
@@ -910,16 +911,12 @@ class BaseCoords(BaseObject):
                 th = traj_hist.cut(t, newcopy=True)
             else:
                 th = traj_hist
-            if kwargs.get('legend_kwargs', True):
-                legend = True
-            else:
-                legend = False
             th.plot_trajectories(*traj_args, **traj_kwargs, fig=fig, ax=ax,
                                  legend=legend)
         return fig, ax
 
     def show_over_time(self, times, cols=2, figsize=(6, 6), titles={}, legend_loc=-1,
-                       legend_kwargs={}, subplot_kwargs={}, xlabel='x', ylabel='y',
+                       legend=True, subplot_kwargs={}, xlabel='x', ylabel='y',
                        title='', **kwargs):
         """
         Show multiple frames of the Coords history over given times.
@@ -936,8 +933,8 @@ class BaseCoords(BaseObject):
             Individual titles for the plots. The default is {}.
         legend_loc : int, optional
             Subplot to overlay the legend on. The default is -1.
-        legend_kwargs : dict, optional
-            Legend keyword arguments. The default is {}.
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is True.
         subplot_kwargs : dict, optional
             . The default is {}.
         xlabel : str, optional
@@ -973,10 +970,10 @@ class BaseCoords(BaseObject):
             else:
                 ylab = ' '
             if i == legend_loc or (legend_loc == -1 and i==len(times)-1):
-                leg_kw = legend_kwargs
+                leg = legend
             else:
-                leg_kw = False
-            self.show_from(time, fig=fig, ax=ax, legend_kwargs=leg_kw,
+                leg = False
+            self.show_from(time, fig=fig, ax=ax, legend=leg,
                            xlabel=xlab, ylabel=ylab, **kwargs)
 
         multiplot_legend_title([1, 2], axs, ax, title=title,
@@ -1482,7 +1479,7 @@ class Coords(BaseCoords):
 
     def show_collection(self, prop, fig=None, ax=None, label='prop', text=False, z="",
                         xlabel='x', ylabel='y', title='',
-                        legend_kwargs=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
+                        legend=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
         """
         Show a collection on the grid as square patches.
 
@@ -1511,8 +1508,8 @@ class Coords(BaseCoords):
         zlabel : str, optional
             Label for the z-axis. The default is "prop", which uses the name of the
             property.
-        legend_kwargs : dict/False
-            Specifies arguments to legend. Default is False, which shows no legend.
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is True.
         text_z_offset : float
             Offset for text. Default is 0.0
         figsize : tuple
@@ -1560,10 +1557,7 @@ class Coords(BaseCoords):
                     textloc = pt
                 ax.text(*textloc, text,
                         horizontalalignment="center", verticalalignment="center")
-        if legend_kwargs is not False:
-            if legend_kwargs is True:
-                legend_kwargs = {}
-            consolidate_legend(ax, **legend_kwargs)
+        handle_legend(ax, legend=legend)
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
@@ -1572,7 +1566,7 @@ class Coords(BaseCoords):
         for i, (coll, coll_kwargs) in enumerate(collections.items()):
             kwar = {'color': pallette[i+c_offset],
                     'xlabel': '', 'ylabel': '', 'title': '',
-                    'legend_kwargs': kwargs.get('legend_kwargs', True),
+                    'legend': kwargs.get('legend', True),
                     **coll_kwargs}
             fig, ax = self.show_collection(coll, fig=fig, ax=ax, **kwar)
 
@@ -1624,7 +1618,7 @@ class Coords(BaseCoords):
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
-    def show_z(self, prop, z="prop", collections={}, legend_kwargs=False, voxels=True,
+    def show_z(self, prop, z="prop", collections={}, legend=False, voxels=True,
                **kwargs):
         """
         Plot a property and set of collections in a discretized version of the grid.
@@ -1638,8 +1632,8 @@ class Coords(BaseCoords):
         collections : dict, optional
             Collections to plot and their respective kwargs for show_collection.
             The default is {}.
-        legend_kwargs : dict/False
-            Specifies arguments to legend. Default is False, which shows no legend.
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is False.
         voxels : bool
             Whether or not to plot the grid as voxels. Default is True.
         **kwargs : kwargs
@@ -1660,10 +1654,10 @@ class Coords(BaseCoords):
             fig, ax = self.show_property_z(
                 prop, z=z, collections=collections, **kwargs)
         else:
-            fig, ax = self.show_collection("pts", z=z, legend_kwargs=legend_kwargs,
+            fig, ax = self.show_collection("pts", z=z, legend=legend,
                                            label=False, **kwargs)
         for coll in collections:
-            self.show_collection(coll, fig=fig, ax=ax, legend_kwargs=legend_kwargs,
+            self.show_collection(coll, fig=fig, ax=ax, legend=legend,
                                  **collections[coll], z=z)
         return fig, ax
 
@@ -1877,7 +1871,7 @@ if __name__ == "__main__":
     ex.show_z("st", z="v",
               collections={"pts": {"color": "blue", 'text_z_offset': 2.0},
                            "high_v": {"alpha": 0.5, "color": "red", "text": "hi"}},
-              legend_kwargs=True)
+              legend=True)
 
     ex.st[1]=1
     ex.show({"st": {'hatch': 'xx', 'color': 'red'}},

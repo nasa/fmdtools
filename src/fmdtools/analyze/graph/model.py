@@ -30,6 +30,11 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+
+import inspect
+
+import networkx as nx
+
 from fmdtools.define.base import get_code_attrs, get_obj_name, get_inheritance
 from fmdtools.analyze.graph.base import Graph
 from fmdtools.analyze.graph.label import shorten_name
@@ -37,9 +42,6 @@ from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import prep_animation_title
 from fmdtools.analyze.common import clear_prev_figure
-
-import networkx as nx
-import inspect
 
 
 def add_node(obj, g=None, name='', classname='', nodetype='', get_attrs=False,
@@ -321,7 +323,7 @@ class ModelGraph(Graph):
             Animation object with the given frames
         """
         return history.animate(self.draw_from, times=times, figsize=figsize,
-                               withlegend=False, **kwargs)
+                               legend=False, **kwargs)
 
     def set_resgraph(self, other=False):
         """

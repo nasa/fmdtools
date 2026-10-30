@@ -23,7 +23,7 @@ from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.environment import Environment
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.state import State
-from fmdtools.analyze.common import setup_plot, consolidate_legend
+from fmdtools.analyze.common import setup_plot, handle_legend
 
 import numpy as np
 
@@ -260,14 +260,14 @@ class FireMap(Coords):
         return len(self.get_leading_edge()) <= 0
 
     def show_base_placement(self, fig=None, ax=None, figsize=(6.0, 4.0), color="blue",
-                            linewidths=3.0, **leg_kwargs):
+                            linewidths=3.0, legend=True, **kwargs):
         """Show the placement of bases on a plot."""
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         xs = [p[0] for p in self.p.base_locations]
         ys = [p[1] for p in self.p.base_locations]
         ax.scatter(xs, ys, marker="*", label="bases", color=color,
                    linewidths=linewidths)
-        consolidate_legend(ax, **leg_kwargs)
+        handle_legend(ax, legend=legend)
         return fig, ax
 
 

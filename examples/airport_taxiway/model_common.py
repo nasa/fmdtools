@@ -23,19 +23,19 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.flow.multiflow import MultiFlow
-from fmdtools.define.flow.commsflow import CommsFlow
-from fmdtools.define.container.parameter import Parameter
-from fmdtools.define.container.state import State
-from fmdtools.define.base import filter_kwargs
-from fmdtools.analyze.common import consolidate_legend, setup_plot, add_title_xylabs
-from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
-
 import matplotlib.pyplot as plt
 import numpy as np
 from adjustText import adjust_text
 from shapely.geometry import LineString
 from shapely.geometry import Point
+
+from fmdtools.define.flow.multiflow import MultiFlow
+from fmdtools.define.flow.commsflow import CommsFlow
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.base import filter_kwargs
+from fmdtools.analyze.common import handle_legend, setup_plot, add_title_xylabs
+from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
 
 
 """
@@ -458,8 +458,7 @@ class Environment(MultiFlow):
                 color = "gray"
             ax.plot(*lineobj.xy, label=label, color=color)
 
-        if legend:
-            consolidate_legend(ax)
+        handle_legend(ax, legend=legend)
         ax.axis('off')
         return fig, ax
 
@@ -487,8 +486,7 @@ class Environment(MultiFlow):
         for segname in self.p.routes[routename]:
             lineobj = self.airfield[segname]
             ax.plot(*lineobj.xy, color=color, label=routename)
-        if legend:
-            consolidate_legend(ax)
+        handle_legend(ax, legend=legend)
 
     def show_all_routes(self, color="red", legend=True, **kwargs):
         """

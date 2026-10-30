@@ -1096,8 +1096,6 @@ class Result(UserDict):
             horizontal padding between subplots as a fraction of axis width.
         title_padding : float
             padding for title as a fraction of figure height.
-        legend_title : str, optional
-            title for the legend. Default is None.
         fig : matplotib figure
             Pre-existing figure (if any).
         axs : matplotlib axes
@@ -1134,7 +1132,7 @@ class Result(UserDict):
 
         set_empty_multiplots(axs, len(plot_values), cols, xlab_ang=0, set_above=False)
         multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,
-                               v_padding, h_padding, title_padding, legend_title)
+                               v_padding, h_padding, title_padding)
         return fig, axs
 
 
