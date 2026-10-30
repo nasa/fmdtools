@@ -21,7 +21,6 @@ Find a list of packages below
 |✔|cffi|
 |✔|cloudpickle|
 |✔|cma|
-|✔|colorama|
 |✔|contourpy|
 |✔|cycler|
 |✔|deap|
@@ -122,14 +121,6 @@ Find a list of packages below
 - License: BSD-3-Clause
 - Compatible: True
 - Size: 335637
-
-### colorama-0.4.6
-
-- HomePage: 
-- Author: Jonathan Hartley
-- License: BSD License
-- Compatible: True
-- Size: 76299
 
 ### contourpy-1.4.0
 
@@ -369,7 +360,7 @@ Find a list of packages below
 - Author: Georg Brandl
 - License: BSD-2-Clause
 - Compatible: True
-- Size: 4638337
+- Size: 4592597
 
 ### pymoo-0.6.2
 
