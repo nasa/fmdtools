@@ -706,27 +706,27 @@ class BaseCoords(BaseObject):
             p = p > 0.0
         if p.dtype == 'bool':
             cmap = ListedColormap([color])
-            default_kwargs = dict(ec=ec, cmap=cmap)
+            colormesh_kwargs = dict(ec=ec, cmap=cmap)
             p = np.ma.array(p, mask=~p).swapaxes(0, 1)
             vmin, vmax = 0, 1
         else:
-            default_kwargs = dict(ec=ec, cmap=cmap)
+            colormesh_kwargs = dict(ec=ec, cmap=cmap)
             p = p.swapaxes(0, 1)
             vmin = p.min()
             vmax = p.max()
             if vmin == vmax:
                 vmax = vmin + 1.0
-        kwargs = {**kwargs, **default_kwargs}
         if proplab == "prop":
             proplab = prop
         if not hatch:
-            im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **kwargs)
+            colormesh_kwargs = {**kwargs, **colormesh_kwargs}
+            im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **colormesh_kwargs)
             patch = mpatches.Patch(color=color, label=proplab)
         else:
-            kwar = {**kwargs, 'cmap': ListedColormap(['none']),
-                    'linewidth': 0, 'ec': color}
-            im = ax.pcolor(X, Y, p, vmin=vmin, vmax=vmax, hatch=hatch, **kwar)
-            patch = mpatches.Patch(hatch=hatch, ec=kwar.get('ec'), label=proplab,
+            color_kwargs = {**kwargs, 'cmap': ListedColormap(['none']),
+                            'linewidth': 0, 'ec': color}
+            im = ax.pcolor(X, Y, p, vmin=vmin, vmax=vmax, hatch=hatch, **color_kwargs)
+            patch = mpatches.Patch(hatch=hatch, ec=color_kwargs.get('ec'), label=proplab,
                                    color='none')
         if text:
             self.show_property_text(prop, fig=fig, ax=ax, **text_kwargs)
@@ -796,8 +796,7 @@ class BaseCoords(BaseObject):
         ax : mpl.axis
             Ploted axis object.
         """
-        default_kwargs = dict(edgecolor='k')
-        kwargs = {**kwargs, **default_kwargs}
+        kwargs.setdefault("edgecolor", "k")
 
         fig, ax = setup_plot(fig=fig, ax=ax, z=True, figsize=figsize)
 
