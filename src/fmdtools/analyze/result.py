@@ -1037,7 +1037,7 @@ class Result(UserDict):
     def plot_metric_dist(self, *values, cols=2, comp_groups={}, bins=10, metric_bins={},
                          legend_loc=-1, xlabels={}, ylabel='count', title='', titles={},
                          figsize='default', v_padding=0.4, h_padding=0.05,
-                         title_padding=0.1, legend_title=None, indiv_kwargs={},
+                         title_padding=0.1, legend=True, indiv_kwargs={},
                          fig=None, axs=None, **kwargs):
         """
         Plot histogram of given metric(s) over comparison groups of scenarios.
@@ -1096,8 +1096,8 @@ class Result(UserDict):
             horizontal padding between subplots as a fraction of axis width.
         title_padding : float
             padding for title as a fraction of figure height.
-        legend_title : str, optional
-            title for the legend. Default is None.
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is True.
         fig : matplotib figure
             Pre-existing figure (if any).
         axs : matplotlib axes
@@ -1134,7 +1134,7 @@ class Result(UserDict):
 
         set_empty_multiplots(axs, len(plot_values), cols, xlab_ang=0, set_above=False)
         multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,
-                               v_padding, h_padding, title_padding, legend_title)
+                               v_padding, h_padding, title_padding, legend=legend)
         return fig, axs
 
 

@@ -15,6 +15,9 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+
+import numpy as np
+
 from fmdtools_examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
 from fmdtools_examples.airspacelib.base.arch.aviate import Aviate
 from fmdtools_examples.airspacelib.base.arch.controlflight import ControlFlight, ControlState
@@ -28,15 +31,13 @@ from fmdtools_examples.airspacelib.contingency_management.model_flightplanner im
 
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.architecture.function import FunctionArchitectureGraph
-from fmdtools.analyze.common import consolidate_legend, add_title_xylabs, setup_plot
+from fmdtools.analyze.common import handle_legend, add_title_xylabs, setup_plot
 from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.analyze.history import History
 from fmdtools.analyze.phases import from_hist
 from fmdtools.sim import propagate
 from fmdtools.sim.sample import FaultDomain, FaultSample
-
-import numpy as np
 
 
 class ContingencyControlState(ControlState):
@@ -323,7 +324,7 @@ pos = {'contingencyaircraftarchitecture.flows.force': [-0.61, -0.05],
        'contingencyaircraftarchitecture.fxns.hold_payload': [-0.55, 0.51]}
 
 def plot_environment(mdl, properties=properties, collections=collections,
-                     fig={}, ax={}, legend_kwargs={}, **kwargs):
+                     fig={}, ax={}, legend=True, **kwargs):
     """
     Plot the environment of the drone.
 
@@ -339,8 +340,8 @@ def plot_environment(mdl, properties=properties, collections=collections,
         Figure to show on. The default is {}.
     ax : mpl.axis, optional
         Axis to add to. The default is {}.
-    legend_kwargs : dict, optional
-        Keyword arguments to legend. The default is {}.
+    legend : bool, dict, optional
+        Whether to show a legend/dict of kwargs to legend. The default is True.
     **kwargs : kwargs
         Other kwargs (unused)
 
@@ -354,7 +355,7 @@ def plot_environment(mdl, properties=properties, collections=collections,
     fig, ax = mdl.flows['environment'].c.show(properties=properties,
                                               collections=collections,
                                               fig=fig, ax=ax,
-                                              legend_kwargs=legend_kwargs)
+                                              legend=legend)
     start = mdl.p.flightplan[0]
     end   = mdl.p.flightplan[-1]
     ax.scatter([start[0]], [start[1]], label="start", color="green", s=100, marker="X")
@@ -401,7 +402,7 @@ def plot_locations(ax, hists, text="", label="location", color="blue"):
 
 def plot_flightpath(mdl={}, history={}, fig={}, ax={}, with_plans=True, with_locations=True,
                     boundaries_at=False, ft_kwar={}, text="", title="",
-                    legend_kwargs={}, **kwargs):
+                    legend=True, **kwargs):
     """
     Plot the fligthpath of a drone over its environment, along with other information.
 
@@ -428,8 +429,8 @@ def plot_flightpath(mdl={}, history={}, fig={}, ax={}, with_plans=True, with_loc
         The default is "".
     title : str, optional
         Title for the plot. The default is "".
-    legend_kwargs : dict, optional
-        Keyword arguments to legend. The default is {}.
+    legend : bool, dict, optional
+        Whether to show a legend/dict of kwargs to legend. The default is True.
     **kwargs : kwargs
         kwargs to add_title_xylabs
 
@@ -440,17 +441,16 @@ def plot_flightpath(mdl={}, history={}, fig={}, ax={}, with_plans=True, with_loc
     ax : mpl.axis
         Corresponding figure axis.
     """
-    fig, ax = plot_environment(mdl, fig=fig, ax=ax, legend_kwargs=legend_kwargs,
-                               **kwargs)
+    fig, ax = plot_environment(mdl, fig=fig, ax=ax, legend=legend, **kwargs)
 
 
     if 'nominal' in history.nest(1) and not ft_kwar:
         ft_kwar={'faulty': dict(linewidth=1, alpha=0.5, color='red'),
                  'nominal': dict(linewidth=3, color='blue', linestyle="--")}
-        kw = {}
+        kw = {"legend": legend}
     else:
-        kw = dict(linewidth=3, color='blue', linestyle="--")
-    kw['legend'] = legend_kwargs is not False
+        kw = dict(linewidth=3, color='blue', linestyle="--", legend=legend)
+
     if 'time_ticks' in kwargs:
         kw['time_ticks'] = kwargs.pop("time_ticks")
     if 'time_groups' in kwargs:
@@ -487,12 +487,11 @@ def plot_flightpath(mdl={}, history={}, fig={}, ax={}, with_plans=True, with_loc
         fig, ax = mdl.flows['environment'].ga.show_from(bhist.flows.environment.ga,
                                                         boundaries_at,
                                                         fig=fig, ax=ax, geoms=geoms,
-                                                        legend = legend_kwargs is not False)
+                                                        legend=legend)
         
 
     add_title_xylabs(ax, title=title, aspect='equal', **kwargs)
-    if legend_kwargs is not False:
-        consolidate_legend(ax, **legend_kwargs)
+    handle_legend(ax, legend=legend)
     return fig, ax
 
 
@@ -531,7 +530,7 @@ def create_legend_plot(ax, **kwargs):
     """Plot the legend for an axis ax on its own."""
     fig, ax2 = setup_plot(**kwargs)
     ax2.axis("off")
-    consolidate_legend(ax2, loc='center', bbox_to_anchor=(0.5,0.5), add_handles=[ax],
+    handle_legend(ax2, legend=True, loc='center', bbox_to_anchor=(0.5,0.5), add_handles=[ax],
                        old_legend=ax.get_legend())
     return fig, ax2
 
@@ -561,7 +560,7 @@ if __name__ == "__main__":
     fg.draw()
     res, hist = propagate.nominal(ha)
     hist.plot_line_from(15, plot_values=('flows.trajectories.s.x', 'flows.trajectories.s.y','flows.trajectories.s.z', 'fxns.control_flight.m.mode', 'flows.electricity.s.charge'), t_line=True)
-    fig, ax = plot_flightpath(ha, hist, legend_kwargs=False, boundaries_at=10)
+    fig, ax = plot_flightpath(ha, hist, legend=False, boundaries_at=10)
     hist.plot_line('flows.trajectories.s.x', 'flows.trajectories.s.y','flows.trajectories.s.z', 'fxns.control_flight.m.mode', 'flows.electricity.s.charge')
     hist.fxns.control_flight.s.flightplan
 

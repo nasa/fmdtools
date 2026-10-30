@@ -744,21 +744,43 @@ def set_empty_multiplots(axs, num_plots, cols, xlab_ang=-90, grid=False,
                     ax_above.grid(axis='x')
 
 
-def multiplot_legend_title(groupmetrics, axs, ax,
-                           legend_loc=False, title='', v_padding=None, h_padding=None,
-                           title_padding=0.0, legend_title=None, **kwargs):
+def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False,
+                           title='', v_padding=None, h_padding=None,
+                           title_padding=0.0, legend=True):
     """Create multiplot legends and titles on shared axes."""
-    if len(groupmetrics) > 1 and legend_loc != False:
-        consolidate_legend(ax)
+    if len(groupmetrics) > 1 and legend_loc != False and not legend is False:
+        if not isinstance(legend, dict):
+            legend = {}
+        consolidate_legend(ax, **legend)
         ax_l = axs[legend_loc]
         if ax_l != ax and legend_loc in [-1, len(axs)]:
-            kwarg = {'loc': "center", "bbox_to_anchor": (0.5, 0.5), **kwargs}
-        else:
-            kwarg = kwargs
-        consolidate_legend(ax_l, old_legend=ax.get_legend(), **kwarg)
+            legend.setdefault("loc", "center")
+            legend.setdefault("bbox_to_anchor", (0.5, 0.5))
+        consolidate_legend(ax_l, old_legend=ax.get_legend(), **legend)
     plt.subplots_adjust(hspace=v_padding, wspace=h_padding)
     if title:
         plt.suptitle(title, y=1.0+title_padding)
+
+
+def handle_legend(ax, legend=None, **kwargs):
+    """
+    Create a legend if/as specified by the user.
+
+    Parameters
+    ----------
+    ax : matplotlib axis
+        Axis object to mark on
+    legend : bool/dict, optional
+        If False, legend is not created. Otherwise provide a dict of keyword values to
+        consolidate_legend (and, ultimately, ax.legend). The default is None.
+    **kwargs : kwargs
+        Default kwargs to consolidate_legend regardless of whether a legend is to be
+        created.
+    """
+    if legend is not False:
+        if not isinstance(legend, dict):
+            legend = {}
+        consolidate_legend(ax, **{**kwargs, **legend})
 
 
 def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
@@ -804,7 +826,7 @@ def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
     by_label = dict(zip(labels, handles))
 
     # generate legend with consolidated labels/handles
-    leg_k = [k.split('.')[1] for k in rcParams if 'legend' in k]
+    leg_k = [k.split('.')[1] for k in rcParams if 'legend' in k]+["title"]
     kw = {k: v for k, v in kwargs.items() if k in leg_k}
     ax.legend(by_label.values(), by_label.keys(),
               bbox_to_anchor=bbox_to_anchor, loc=loc, **kw)

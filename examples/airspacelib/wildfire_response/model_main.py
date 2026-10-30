@@ -27,7 +27,7 @@ from fmdtools.define.container.rand import Rand
 from fmdtools.sim.sample import ParameterSample
 from fmdtools.sim.search import ParameterSimProblem
 from fmdtools.sim.sample import ParameterDomain
-from fmdtools.analyze.common import consolidate_legend, add_title_xylabs
+from fmdtools.analyze.common import handle_legend, add_title_xylabs
 from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
 from fmdtools.define.architecture.function import FunctionArchitectureGraph
 import fmdtools.sim.propagate as prop
@@ -83,7 +83,7 @@ def_p = {'firemapparam': {**double_size_p,
 
 
 def plot_combined_response_from(time, history={}, mdl=None, fig=None, ax=None,
-                                legend_kwargs={}, title='', **kwargs):
+                                legend=True, title='', **kwargs):
     """
     Plot the overall progression of the simulation up to a given time.
 
@@ -99,8 +99,8 @@ def plot_combined_response_from(time, history={}, mdl=None, fig=None, ax=None,
         Figure to attach to. The default is None.
     ax : matplotlib axis, optional
         Axis to attach to. The default is None.
-    legend_kwargs : dict, optional
-        kwargs for legend (removes legend if False). The default is {}.
+    legend : bool, dict, optional
+        Whether to show a legend/dict of kwargs to legend. The default is True.
     title : str, optional
         Title for the plot. The default is ''.
     **kwargs : kwargs
@@ -122,10 +122,9 @@ def plot_combined_response_from(time, history={}, mdl=None, fig=None, ax=None,
     fig, ax = mdl.flows['fireenvironment'].c.show_from(time,
                                                        history.flows.fireenvironment.c,
                                                        properties = sim_properties,
-                                                       legend_kwargs=legend_kwargs,
+                                                       legend=legend,
                                                        fig=fig, ax=ax)
     nhist = history.cut(time, newcopy=True)
-    legend = legend_kwargs is not False
     for fxnname in nhist.fxns.nest(1):
         if 'aircraft_' in fxnname:
             fig, ax = nhist.plot_trajectories(fxnname+'.s.x', fxnname+'.s.y',
@@ -139,8 +138,7 @@ def plot_combined_response_from(time, history={}, mdl=None, fig=None, ax=None,
     add_title_xylabs(ax, title=title, aspect='equal',
                      xlabel = "x (km)", ylabel = "y (km)",
                      **kwargs)
-    if legend:
-        consolidate_legend(ax, **legend_kwargs)
+    handle_legend(ax, legend=legend)
     return fig, ax
 
 def create_scen_sample(seed=10, replicates=10):

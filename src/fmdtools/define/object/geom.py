@@ -33,20 +33,19 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
+from typing import ClassVar
+
+from recordclass import astuple
+import numpy as np
+from shapely import LineString, Point, Polygon, from_geojson, centroid
+from shapely.ops import nearest_points
+from shapely.plotting import plot_polygon
+
 from fmdtools.define.base import filter_kwargs, load_json
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
-from fmdtools.analyze.common import setup_plot, consolidate_legend, add_title_xylabs
-
-from shapely import LineString, Point, Polygon, from_geojson, centroid
-from shapely.ops import nearest_points
-from shapely.plotting import plot_polygon
-from typing import ClassVar
-from recordclass import astuple
-import numpy as np
-import os
-
+from fmdtools.analyze.common import setup_plot, handle_legend, add_title_xylabs
 
 
 class BaseGeom(BaseObject):
@@ -238,8 +237,10 @@ class BaseGeom(BaseObject):
             The default is False.
         geomlabel : str, optional
             Overall label for the geom (if desired). The default is ''.
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is True.
         **kwargs : kwargs
-            overall kwargs for plt.plot (and/or consolidate_legend and add_title_xylabs)
+            overall kwargs for plt.plot (and/or add_title_xylabs)
             for all shapes.
 
         Returns
@@ -253,9 +254,8 @@ class BaseGeom(BaseObject):
             fig, ax = setup_plot(z=z, figsize=figsize)
         if 'all' in shapes:
             shapes = {s: {} for s in self.shapes}
-        l_kw = filter_kwargs(consolidate_legend, **kwargs)
         t_kw = filter_kwargs(add_title_xylabs, **kwargs)
-        plot_kwargs = {k: v for k, v in kwargs.items() if k not in {**l_kw, **t_kw}}
+        plot_kwargs = {k: v for k, v in kwargs.items() if k not in t_kw}
         if type(z) in (int, float):
             plot_kwargs = {'zs': z, 'zdir': 'z', **plot_kwargs}
 
@@ -268,8 +268,7 @@ class BaseGeom(BaseObject):
             shape = self.get_shape(shapename)
             add_shapes_to_plot(ax, shape, **local_kwargs)
         ax.axis('equal')
-        if legend:
-            consolidate_legend(ax, **l_kw)
+        handle_legend(ax, legend=legend)
         add_title_xylabs(ax, **t_kw)
         return fig, ax
 
@@ -351,6 +350,7 @@ class GeomJSON(BaseGeom):
 
     Examples
     --------
+    >>> import os
     >>> gj = GeomJSON(p={'geojson': '{"type": "Point","coordinates": [1, 2]}'})
     >>> gj.at([1,2])
     True

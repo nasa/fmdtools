@@ -29,7 +29,7 @@ specific language governing permissions and limitations under the License.
 """
 from fmdtools.define.base import is_numeric, t_key
 from fmdtools.analyze.result import Result
-from fmdtools.analyze.common import multiplot_helper, consolidate_legend
+from fmdtools.analyze.common import multiplot_helper, handle_legend
 from fmdtools.analyze.common import set_empty_multiplots
 from fmdtools.analyze.common import multiplot_legend_title, setup_plot
 
@@ -268,7 +268,7 @@ class BaseTab(UserDict):
 
     def as_plot(self, metric, title="", fig=False, ax=False, figsize=(6, 4),
                 xlab='', xlab_ang=-90, ylab='', color_factor='',
-                pallette=[*mcolors.TABLEAU_COLORS.keys()], suppress_legend=False,
+                pallette=[*mcolors.TABLEAU_COLORS.keys()], legend=True,
                 suppress_ticklabels=False, **kwargs):
         """
         Return bar plot of a metric in the comparison.
@@ -295,8 +295,8 @@ class BaseTab(UserDict):
             Factor to label with a color (instead of the x-axis).
         pallette : list
             list of colors to . Defaults to matplotlib.colors.TABLEAU_COLORS.
-        suppress_legend : bool
-            Whether to suppress the generated legend (for multiplots).
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is True.
         suppress_ticklabels : bool
             Whether to suppress tick labels.
         **kwargs : kwargs
@@ -361,8 +361,8 @@ class BaseTab(UserDict):
             ax.set_xticks([])
         ax.tick_params(axis='x', rotation=xlab_ang)
         # legend, title, etc.
-        if color_factor and not suppress_legend:
-            consolidate_legend(ax, title=color_factor)
+        if color_factor:
+            handle_legend(ax, legend=legend, title=color_factor)
         if ylab:
             ax.set_ylab(ylab)
         if title:
@@ -418,7 +418,7 @@ class BaseTab(UserDict):
             else:
                 xlabel = ' '
             fig, ax = self.as_plot(metric, title=subplot_titles[metric], xlab=xlabel,
-                                   ax=axs[i], fig=fig, suppress_legend=True,
+                                   ax=axs[i], fig=fig, legend=False,
                                    **kwargs)
 
         set_empty_multiplots(axs, len(metrics), cols,
@@ -431,7 +431,7 @@ class BaseTab(UserDict):
                                v_padding=v_padding, h_padding=h_padding,
                                title_padding=title_padding,
                                legend_loc=legend_loc,
-                               legend_title=color_factor)
+                               legend=dict(title=color_factor))
         return fig, axs
 
 
@@ -829,7 +829,7 @@ class NominalEnvelope(object):
         else:
             raise Exception("Must have 1, 2, or 3 params to plot.")
 
-    def plot_event(self, n_kwargs={}, f_kwargs={}, figsize=(6, 4), legend_loc='best',
+    def plot_event(self, n_kwargs={}, f_kwargs={}, figsize=(6, 4), legend=True,
                    xlabel='', title=''):
         """
         Make an eventplot of the Nominal Envelope (for 1D).
@@ -842,8 +842,8 @@ class NominalEnvelope(object):
             Faulty kwargs to ax.scatter. The default is {}.
         figsize : tuple, optional
             Figure size. The default is (6, 4).
-        legend_loc : str, optional
-            Location for the legend. The default is 'best'.
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is True.
         xlabel : str, optional
             label for x-axis (defaults to parameter name for x_param)
         title : str, optional
@@ -874,7 +874,7 @@ class NominalEnvelope(object):
                     ax.eventplot(var, **n_kwargs)
                 else:
                     ax.eventplot(var, **f_kwargs)
-        consolidate_legend(ax, loc=legend_loc)
+        handle_legend(ax, legend=legend, loc="best")
         ax.yaxis.set_ticklabels([])
         if not xlabel:
             xlabel = self.params[0]
@@ -883,7 +883,7 @@ class NominalEnvelope(object):
         ax.grid(which='both', axis='x')
         return fig, ax
 
-    def plot_scatter(self, n_kwargs={}, f_kwargs={}, figsize=(6, 4), legend_loc='best',
+    def plot_scatter(self, n_kwargs={}, f_kwargs={}, figsize=(6, 4), legend=True,
                      xlabel='', ylabel='', zlabel='', title=''):
         """
         Make a scatter plot of the Nominal Envelope (for 2D/3D).
@@ -896,8 +896,8 @@ class NominalEnvelope(object):
             Faulty kwargs to ax.scatter. The default is {}.
         figsize : tuple, optional
             Figure size. The default is (6, 4).
-        legend_loc : str, optional
-            Location for the legend. The default is 'best'.
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is True.
         xlabel : str, optional
             label for x-axis (defaults to parameter name for x_param)
         ylabel : str, optional
@@ -933,7 +933,7 @@ class NominalEnvelope(object):
                 else:
                     ax.scatter(*x, **f_kwargs)
 
-        consolidate_legend(ax, loc=legend_loc)
+        handle_legend(ax, legend=legend, loc="best")
         if not xlabel:
             xlabel = self.params[0]
         if not ylabel:

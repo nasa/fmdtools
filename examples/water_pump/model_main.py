@@ -33,6 +33,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
+import numpy as np
+
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.flow.base import Flow
@@ -45,7 +47,6 @@ from fmdtools.define.container.time import Time
 import fmdtools.analyze as an
 import fmdtools.sim.propagate as propagate
 
-import numpy as np
 
 """
 DEFINING MODEL FLOWS
@@ -588,14 +589,17 @@ def script_try_faults(**kwargs):
     result, mdlhist = propagate.one_fault(
         mdl, 'import_water', 'no_wat', time=29, staged=True)
     result, mdlhist = propagate.nominal(mdl, mdl_kwargs=dict(track='all'))
-    fig, ax = mdlhist.plot_line('flows.wat_2.s.flowrate', 'i.on')
+
     mdl = Pump(**kwargs)
 
     result, mdlhist = propagate.one_fault(
         mdl, 'import_water', 'no_wat', time=29, staged=True)
+    fig, ax = mdlhist.plot_line('flows.wat_2.s.flowrate', 'i.on',
+                                legend=dict(title="Scenarios"))
 
     result, mdlhist = propagate.one_fault(
         mdl, 'move_water', 'mech_break', time=0, staged=False)
+    fig, ax = mdlhist.plot_line('flows.wat_2.s.flowrate', 'i.on')
 
 
 def script_fault_degradation_tables(**kwargs):
@@ -679,6 +683,7 @@ if __name__ == "__main__":
     mdl = Pump()
     res, hist = propagate.nominal(mdl, to_return = {'graph': FunctionArchitectureGraph})
 
+    script_try_faults()
     # script_sample_faults()
 
     """

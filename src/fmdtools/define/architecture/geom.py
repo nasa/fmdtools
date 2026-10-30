@@ -25,7 +25,7 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.architecture.base import Architecture
 from fmdtools.define.container.parameter import Parameter
-from fmdtools.analyze.common import setup_plot, consolidate_legend, filter_kwargs
+from fmdtools.analyze.common import setup_plot, handle_legend
 from fmdtools.define.object.geom import BaseGeom, GeomJSON
 from fmdtools.define.object.geom import ExPoint, ExLine, ExPoly
 from fmdtools.define.block.base import Block
@@ -202,7 +202,7 @@ class GeomArchitecture(Architecture):
         return all_at
 
     def show(self, geoms={'all': {}}, fig=None, ax=None, figsize=(4, 4), z=False,
-             **kwargs):
+             legend=True, **kwargs):
         """
         Show the shapes of a GeomArchitecture all on one plot.
 
@@ -220,6 +220,8 @@ class GeomArchitecture(Architecture):
         z : bool/number, optional
             If plotting on a 3d axis, set z to a number which will be the z-level.
             The default is False.
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is True.
         **kwargs : kwargs
             Overall kwargs to show.geom for all geoms.
 
@@ -238,9 +240,7 @@ class GeomArchitecture(Architecture):
         for geomname, geom_kwargs in geoms.items():
             local_kwargs = {**kwargs, 'geomlabel': geomname, **geom_kwargs}
             fig, ax = self.geoms[geomname].show(ax=ax, fig=fig, z=z, **local_kwargs)
-        if kwargs.get('legend', True):
-            l_kw = filter_kwargs(consolidate_legend, **kwargs)
-            consolidate_legend(ax, **l_kw)
+        handle_legend(ax, legend=legend)
         return fig, ax
 
     def show_from(self, hist, t, **kwargs):

@@ -514,19 +514,19 @@ def script_env_viewed(**kwargs):
     """Show the viewed properties of the environment in various configurations."""
     mdl = Drone(**kwargs)
     ec, mdlhist = fs.propagate.nominal(mdl)
-    l_k = dict(new_labs={'viewed': 'viewed_true', 'target': 'target_true'})
+    legend = dict(new_labs={'viewed': 'viewed_true', 'target': 'target_true'})
     mdl.flows['environment'].c.assign_from(mdlhist.flows.environment.c, 10)
     mdl.flows['environment'].c.show({'viewed': {}})
 
     mdl.flows['environment'].c.show({'viewed': {}, 'target': {}})
     mdl.flows['environment'].c.show({'target': {},
                                      'viewed': {'alpha': 0.5}},
-                                    legend_kwargs=l_k,
+                                    legend=legend,
                                     collections={'start': {}, 'safe': {}})
 
     mdl.flows['environment'].c.show_from(10, mdlhist.flows.environment.c,
                                          {'viewed': {}}, title='hi',
-                                         legend_kwargs=l_k)
+                                         legend=legend)
     properties={'target': {'alpha': 0.6}, 'viewed': {'alpha': 0.5}}
     mdl.flows['environment'].c.show_over_time([0, 10, 15],
                                               history=mdlhist.flows.environment.c,

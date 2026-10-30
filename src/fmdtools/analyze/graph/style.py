@@ -41,14 +41,14 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.analyze.common import setup_plot, consolidate_legend
-
-from dataclasses import dataclass, asdict
 from typing import Optional, ClassVar
 
+from dataclasses import dataclass, asdict
 import networkx as nx
 from IPython.display import display, SVG
 import matplotlib.lines as mlines
+
+from fmdtools.analyze.common import setup_plot, handle_legend
 
 
 def gv_import_check():
@@ -63,13 +63,12 @@ def gv_import_check():
     return Digraph, Graph
 
 
-def nx_plot_ending(fig, ax, title='', withlegend=True, saveas='', **leg_kwargs):
+def nx_plot_ending(fig, ax, title='', legend=True, saveas='', **kwargs):
     """Add additional options for nx plot."""
     if title:
         ax.set_title(title)
     ax.axis("off")
-    if withlegend:
-        consolidate_legend(ax, **leg_kwargs)
+    handle_legend(ax, legend=legend, **kwargs)
     if saveas:
         fig.savefig(saveas, bbox_inches='tight')
 
@@ -220,7 +219,7 @@ class EdgeStyle(BaseStyle):
         return mlines.Line2D([], [], color=self.nx_edge_color, linestyle=self.nx_style,
                              label=legend_label)
 
-    def show_nx(self, fig=None, ax=None, figsize=(1, 1), withlegend=False, saveas=''):
+    def show_nx(self, fig=None, ax=None, figsize=(1, 1), legend=False, saveas=''):
         """Show how the edge will look in networkx."""
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         d = nx.DiGraph()
@@ -229,7 +228,7 @@ class EdgeStyle(BaseStyle):
         pos = {1: (0, 0), 2: (1, 0)}
         nx.draw_networkx_edges(d, pos=pos, **self.nx_kwargs())
         lin = self.nx_legend_line(self.__class__.__name__)
-        nx_plot_ending(fig, ax, title=self.__class__.__name__, withlegend=withlegend,
+        nx_plot_ending(fig, ax, title=self.__class__.__name__, legend=legend,
                        add_handles=[lin], saveas=saveas)
         return fig, ax
 
@@ -484,7 +483,7 @@ class NodeStyle(BaseStyle):
         dynamic=dict(nx_edgecolors='teal', gv_color='teal')
     )
 
-    def show_nx(self, fig=None, ax=None, figsize=(1, 1), withlegend=False, saveas=''):
+    def show_nx(self, fig=None, ax=None, figsize=(1, 1), legend=False, saveas=''):
         """Show how the node will look in networkx."""
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         d = nx.DiGraph()
@@ -492,7 +491,7 @@ class NodeStyle(BaseStyle):
         nx.draw_networkx_nodes(d, pos={0: (0, 0)}, label=self.__class__.__name__,
                                **self.nx_kwargs())
         ax.set_title(self.__class__.__name__)
-        nx_plot_ending(fig, ax, title=self.__class__.__name__, withlegend=withlegend,
+        nx_plot_ending(fig, ax, title=self.__class__.__name__, legend=legend,
                        saveas=saveas)
         return fig, ax
 

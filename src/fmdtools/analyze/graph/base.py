@@ -306,7 +306,7 @@ class Graph(object):
                 set_func(**kwargs.pop(to_set, {}))
         return kwargs
 
-    def draw(self, figsize=(12, 10), title="", fig=False, ax=False, withlegend=True,
+    def draw(self, figsize=(12, 10), title="", fig=False, ax=False, legend=True,
              legend_bbox=(1, 0.5), legend_loc="center left", legend_labelspacing=2,
              legend_borderpad=1, saveas='', **kwargs):
         """
@@ -322,8 +322,8 @@ class Graph(object):
             matplotlib figure to project on (if provided). The default is False.
         ax : bool, optional
             matplotlib axis to plot on (if provided). The default is False.
-        withlegend : bool, optional
-            Whether to include a legend. The default is True.
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is True.
         legend_bbox : tuple, optional
             bbox to anchor the legend to. The default is (1,0.5), which places legend
             on the right.
@@ -366,7 +366,7 @@ class Graph(object):
                                             label=legend_label, ax=ax)
         # draw node labels
         self.node_labels.draw_nx_nodes(self.g, self.pos, ax=ax)
-        nx_plot_ending(fig, ax, title, withlegend, saveas=saveas,
+        nx_plot_ending(fig, ax, title, legend=legend, saveas=saveas,
                        labelspacing=legend_labelspacing,
                        borderpad=legend_borderpad, bbox_to_anchor=legend_bbox,
                        loc=legend_loc, add_handles=edge_handles)
@@ -1536,7 +1536,7 @@ class GraphInteractor:
     def refresh_plot(self):
         """Refresh the plot with the new positions."""
         self.g_obj.pos = {pt: np.round(loc, 2) for pt, loc in self.g_obj.pos.items()}
-        self.g_obj.draw(fig=self.fig, ax=self.ax, withlegend=False, **self.kwargs)
+        self.g_obj.draw(fig=self.fig, ax=self.ax, legend=False, **self.kwargs)
         self.ax.set_xlim(-1, 1)
         self.ax.set_ylim(-1, 1)
         self.ax.axis('on')

@@ -244,7 +244,7 @@ class Responder(Function):
 
 
 def plot_combined_response_from(time, history={}, mdl=None, fig=None, ax=None,
-                                legend_kwargs={}, title='', **kwargs):
+                                legend=True, title='', **kwargs):
     """Plot a single frame of the simulation at time `time`.
 
     Draws the beach map, the responder's vision zones (when on standby at
@@ -266,9 +266,7 @@ def plot_combined_response_from(time, history={}, mdl=None, fig=None, ax=None,
     # base layer: the beach/water map with victim status colors
     fig, ax = mdl.flows['environment'].c.show_from(
         time, history.flows.environment.c,
-        properties=sim_properties, legend_kwargs=legend_kwargs,
-        fig=fig, ax=ax
-    )
+        properties=sim_properties, legend=legend, fig=fig, ax=ax)
 
     # responder position/scan state at this frame
     cx = history.fxns.responder.s.x[time]
