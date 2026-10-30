@@ -746,15 +746,17 @@ def set_empty_multiplots(axs, num_plots, cols, xlab_ang=-90, grid=False,
 
 def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False,
                            title='', v_padding=None, h_padding=None,
-                           title_padding=0.0, **legend_kwargs):
+                           title_padding=0.0, legend=True):
     """Create multiplot legends and titles on shared axes."""
-    if len(groupmetrics) > 1 and legend_loc != False:
-        consolidate_legend(ax)
+    if len(groupmetrics) > 1 and legend_loc != False and not legend is False:
+        if not isinstance(legend, dict):
+            legend = {}
+        consolidate_legend(ax, **legend)
         ax_l = axs[legend_loc]
         if ax_l != ax and legend_loc in [-1, len(axs)]:
-            legend_kwargs.setdefault("loc", "center")
-            legend_kwargs.setdefault("bbox_to_anchor", (0.5, 0.5))
-        consolidate_legend(ax_l, old_legend=ax.get_legend(), **legend_kwargs)
+            legend.setdefault("loc", "center")
+            legend.setdefault("bbox_to_anchor", (0.5, 0.5))
+        consolidate_legend(ax_l, old_legend=ax.get_legend(), **legend)
     plt.subplots_adjust(hspace=v_padding, wspace=h_padding)
     if title:
         plt.suptitle(title, y=1.0+title_padding)
@@ -824,7 +826,7 @@ def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
     by_label = dict(zip(labels, handles))
 
     # generate legend with consolidated labels/handles
-    leg_k = [k.split('.')[1] for k in rcParams if 'legend' in k]
+    leg_k = [k.split('.')[1] for k in rcParams if 'legend' in k]+["title"]
     kw = {k: v for k, v in kwargs.items() if k in leg_k}
     ax.legend(by_label.values(), by_label.keys(),
               bbox_to_anchor=bbox_to_anchor, loc=loc, **kw)

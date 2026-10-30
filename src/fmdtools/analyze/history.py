@@ -665,7 +665,7 @@ class History(Result):
                   title='', indiv_kwargs={}, time_slice=[], time_slice_label=None,
                   figsize='default', comp_groups={}, fig=None, ax=None,
                   v_padding=None, h_padding=None, title_padding=0.0,
-                  phases={}, phase_kwargs={}, legend_title=None, **kwargs):
+                  phases={}, phase_kwargs={}, legend=True, **kwargs):
         """
         Plot history values over time aggregated over comp_groups.
 
@@ -725,9 +725,11 @@ class History(Result):
             is a dict of PhaseMaps from analyze.phases.from_hist. Default is {}.
         phase_kwargs : dict
             kwargs to plot.phase_overlay.
+        legend : bool, dict, optional
+            Whether to show a legend/dict of kwargs to legend. The default is True.
+
         **kwargs : kwargs
-            Keyword arguments to aggregation plotting functions (plot_xx_line) as well
-            as multiplot_legend_title.
+            Keyword arguments to aggregation plotting functions (plot_xx_line).
 
         Returns
         -------
@@ -783,7 +785,7 @@ class History(Result):
                     ax.axvline(x=ts, color='k', label=time_slice_label)
         set_empty_multiplots(axs, len(plot_values), cols, xlab_ang=0.0, grid=True)
         multiplot_legend_title(grouphists, axs, ax, legend_loc, title,
-                               v_padding, h_padding, title_padding)
+                               v_padding, h_padding, title_padding, legend=legend)
         return fig, axs
 
     def plot_line_from(self, t, plot_values=(), t_line=False, **kwargs):

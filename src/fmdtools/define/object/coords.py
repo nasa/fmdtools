@@ -916,7 +916,7 @@ class BaseCoords(BaseObject):
         return fig, ax
 
     def show_over_time(self, times, cols=2, figsize=(6, 6), titles={}, legend_loc=-1,
-                       legend=True, subplot_kwargs={}, xlabel='x', ylabel='y',
+                       legend=True, xlabel='x', ylabel='y',
                        title='', **kwargs):
         """
         Show multiple frames of the Coords history over given times.
@@ -935,8 +935,6 @@ class BaseCoords(BaseObject):
             Subplot to overlay the legend on. The default is -1.
         legend : bool, dict, optional
             Whether to show a legend/dict of kwargs to legend. The default is True.
-        subplot_kwargs : dict, optional
-            . The default is {}.
         xlabel : str, optional
             x-axis label. The default is 'x'.
         ylabel : str, optional
@@ -977,7 +975,7 @@ class BaseCoords(BaseObject):
                            xlabel=xlab, ylabel=ylab, **kwargs)
 
         multiplot_legend_title([1, 2], axs, ax, title=title,
-                               legend_loc=legend_loc, **subplot_kwargs)
+                               legend_loc=legend_loc, legend=legend)
         return fig, axs
 
     def animate(self, hist, times='all', clear_fig=True, **kwargs):

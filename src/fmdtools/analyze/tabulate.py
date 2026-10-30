@@ -431,7 +431,7 @@ class BaseTab(UserDict):
                                v_padding=v_padding, h_padding=h_padding,
                                title_padding=title_padding,
                                legend_loc=legend_loc,
-                               legend_title=color_factor)
+                               legend=dict(title=color_factor))
         return fig, axs
 
 
