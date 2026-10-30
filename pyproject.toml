@@ -109,6 +109,14 @@ omit = [
     "*/Temp/*"
     ]
 
+[tool.licensecheck]
+
+format = "markdown"
+extras = ["all"]
+fail_licenses = ["GPL"]
+file = "tests/reports/licensecheck.md"
+
+
 [tool.bumpversion]
 current_version = "2.6.0.dev0"
 parse = """(?x)
