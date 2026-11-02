@@ -37,7 +37,7 @@ dependencies = ["scipy",
 ]
 
 [project.urls]
-Documentation = "https://nasa.github.io/fmdtools/"
+Documentation = "https://fmdtools.readthedocs.io/en/latest//"
 source-code = "https://github.com/nasa/fmdtools"
 
 
