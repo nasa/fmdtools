@@ -7,6 +7,15 @@ This example provides a deterministic mission scaffold for
 planetary/Earth-observation studies using fmdtools, with four interacting
 functions and explicit mission-count outputs.
 
+Start here
+----------
+
+Open :doc:`demo_satellite` for an integrated visual walkthrough of delivery,
+seeded fault contributions and image classification. Its five figures are
+computed from the existing models, with tables and numerical checks alongside.
+See :doc:`visualisation` for installation, headless execution and export.
+The focused nominal and risk notebooks remain available separately.
+
 Scope and assumptions
 ---------------------
 
@@ -181,7 +190,7 @@ Files
 * ``example.ipynb`` steps through the nominal model and two capacity scenarios.
 
 Disturbance and fault variant
-----------------------------
+-----------------------------
 
 The deterministic scaffold stays unchanged. The optional
 :doc:`disturbance and fault variant <disturbances>` adds seeded sensor noise,
@@ -191,13 +200,16 @@ Its tests also live in this example folder.
 .. toctree::
    :hidden:
 
+   demo_satellite
+   visualisation
+   example
    disturbances
    risk_analysis
    demo_risk_analysis
    classification
 
 Risk and FMEA workflow
----------------------
+----------------------
 
 The :doc:`risk/FMEA workflow <risk_analysis>` samples the declared faults,
 compares paired seeded runs and separates conditional packet-loss severity
