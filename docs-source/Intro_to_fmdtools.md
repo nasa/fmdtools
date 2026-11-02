@@ -113,7 +113,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 [Repository](https://github.com/nasa/fmdtools/)
 - `/fmdtools`: installable package directory
 - `/examples`: example models with demonstrative notebooks and tests
-- `/docs`: [HTML Documentation](https://nasa.github.io/fmdtools/) (source files at `/docs-source`)
+- `/docs`: [HTML Documentation](https://fmdtools.readthedocs.io/en/latest//) (source files at `/docs-source`)
 - `/tests`: stand-alone tests (and testing rigs)
 - Basic information: `README.md`, `CONTRIBUTORS.md`, `PUBLICATIONS.md`, `LICENSE`, `fmdtools_Individual_CLA.pdf`, etc.
 - Config/test files: `requirements.txt`, `pyproject.toml`, `conf.py`, `index.rst`, etc.
@@ -308,9 +308,9 @@ Notice the definitions and structure:
 
 # More Resources for Model Definition
 
-- Note the docs for model definition are in [https://nasa.github.io/fmdtools/docs-source/fmdtools.define.html](https://nasa.github.io/fmdtools/docs-source/fmdtools.define.html)
+- Note the docs for model definition are in [https://fmdtools.readthedocs.io/en/latest//docs-source/fmdtools.define.html](https://fmdtools.readthedocs.io/en/latest//docs-source/fmdtools.define.html)
 
-- Other examples also can be helpful: [https://nasa.github.io/fmdtools/examples/Examples.html](https://nasa.github.io/fmdtools/examples/Examples.html)
+- Other examples also can be helpful: [https://fmdtools.readthedocs.io/en/latest//examples/Examples.html](https://fmdtools.readthedocs.io/en/latest//examples/Examples.html)
 
 -----------------
 
@@ -332,7 +332,7 @@ Open `/examples/pump/Tutorial_unfilled.ipynb`:
 
 ![Dynamic Propagation, width:1000px](./figures/powerpoint/simulation_types.svg)
 
-For more info on syntax/arguments, see documentation for [`fmdtools.sim.propagate`](https://nasa.github.io/fmdtools/docs-source/fmdtools.sim.html#fmdtools-sim-propagate).
+For more info on syntax/arguments, see documentation for [`fmdtools.sim.propagate`](https://fmdtools.readthedocs.io/en/latest//docs-source/fmdtools.sim.html#fmdtools-sim-propagate).
 
 -----------------
 
@@ -348,7 +348,7 @@ These classes define **multi-run simulations** which can be used to quantify unc
     - Can be simulated in `propagate.parameter_sample()`
     - Can be simulated in conjunction with faults using `propagate.nested_sample`
 
-See docs for: [`fmdtools.sim.fault_sample`](https://nasa.github.io/fmdtools/docs-source/fmdtools.sim.html#module-fmdtools.sim.fault_sample)
+See docs for: [`fmdtools.sim.fault_sample`](https://fmdtools.readthedocs.io/en/latest//docs-source/fmdtools.sim.html#module-fmdtools.sim.fault_sample)
 
 -----------------
 
@@ -380,7 +380,7 @@ Explore:
 
 -----------------
 
-# Analysis Modules - see docs for [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html)
+# Analysis Modules - see docs for [`fmdtools.analyze`](https://fmdtools.readthedocs.io/en/latest//docs-source/fmdtools.analyze.html)
 
 ![Analyze Modules width:1000px](./figures/powerpoint/analyze_module_structure.svg)
 
@@ -438,7 +438,7 @@ Explore:
 
 - More advanced topics ([see examples](../examples/Examples.rst)), including Search and optimization, Human, Systems-of-Systems modeling, and Modeling Stochastic Behavior
 
-- [Model Development Guide](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#model-development-best-practices): Has best practices for developing models in a strategic way (especially helpful for complex models)
+- [Model Development Guide](https://fmdtools.readthedocs.io/en/latest//docs-source/Development%20Guide.html#model-development-best-practices): Has best practices for developing models in a strategic way (especially helpful for complex models)
 - Overview Paper: 
     - [Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., & Goebel, K. (2021). fmdtools: A fault propagation toolkit for resilience assessment in early design. International Journal of Prognostics and Health Management, 12(3).](http://papers.phmsociety.org/index.php/ijphm/article/view/2954)
  
