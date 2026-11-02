@@ -118,6 +118,19 @@ Editing is the process of reviewing the code, recognizing potential (functional 
 
 This is an incomplete list. The point is to regularly review and improve code *after it is implemented to minimize future technical debt*. Waiting to edit will cause more hardship down the line.
 
+## Turn code-checking **on**
+
+Often, the best way to ensure your code is well-edited is to turn your editor/IDE's analysis tool **on** and fix the various issues these tools find.
+
+In Spyder, this would mean navigating to `Preferences > Linting` and turning on syntax highlighting and docstring style linting.
+
+In VSCode, this would mean installing the correct extensions (e.g., Ruff, Pylint, spelling, etc.) and then checking the `Problems` panel for problems in your code.
+
+For fmdtools-specific static model checks of model states, flows and architecture roles you can use the external
+`fmdtools-pylint <https://github.com/sylvesterkaczmarek/fmdtools-pylint>`_
+package, maintained by
+`Sylvester Kaczmarek <https://github.com/sylvesterkaczmarek>`_.
+
 ## Structuring a model
 
 fmdtools was originally developed around a very simple use-case of modeling physical behaviors using a Function/Flow ontology, where Functions (referred to as "technical functions") are supposed to be the high-level roles to be performed in the system, while flows are the data passed between these roles (energy, material, or signal).  Many of the models in the repository were developed to follow this form, or some variation of it, however, more complex modeling use-cases have led us to expand our conception of what can/should be modeled with a function or flow. More generally, 
@@ -218,8 +231,7 @@ Development of fmdtools models should follow the [PEP 8 Style Guide](https://pep
 * fmdtools lets you specify names for functions/flows. Keep these consistent with the class names but consider making them short to enable visualization on model graphs and throughout the code.
 * It's `fmdtools`. Not `Fmdtools` or `fmd tool`. Even when it starts the sentence.
 
-See also
---------
+## See also
 
 * [PEP 8 Style Guide](https://peps.python.org/pep-0008/#introduction)
 * [Technical debt](https://en.wikipedia.org/wiki/Technical_debt)

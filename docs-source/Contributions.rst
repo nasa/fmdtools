@@ -49,10 +49,10 @@ To edit certain markdown files as presentations, it may be helpful to download q
 
 If developing with VSCode, make sure to install the standard Python, Jupyter, and Quarto extensions.
 
-For optional checks of model states, flows and architecture roles in VS Code or
-Spyder, see :doc:`Model_linting`.
-
-
+For static model checks of model states, flows and architecture roles you can use the external
+`fmdtools-pylint <https://github.com/sylvesterkaczmarek/fmdtools-pylint>`_
+package, maintained by
+`Sylvester Kaczmarek <https://github.com/sylvesterkaczmarek>`_.
 
 
 Repository Structure
