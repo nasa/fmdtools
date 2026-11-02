@@ -1,0 +1,4 @@
+# Load the optional fmdtools inference plugin when running Pylint here.
+# Install this project and its lint extra in the Pylint interpreter first.
+[MAIN]
+load-plugins=fmdtools_pylint
