@@ -71,7 +71,7 @@ html_theme = 'sphinx_rtd_theme'
 
 html_theme_options = {"logo_only": True,
                       "collapse_navigation": False,
-                      'display_version': True,
+                      'version_selector': True,
                       'github_url': 'https://github.com/nasa/fmdtools'}
 
 html_favicon = 'docs-source/figures/logo/fmdtools_ico.ico'
