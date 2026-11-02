@@ -71,13 +71,13 @@ FRDL helps with hazard analysis by giving you a *model* of the system to base th
 
 ![](./figures/frdl/diagrams/frdl_fad_singleprop_explanation.svg)
 
-An FRDL diagram is often called an [Architecture](https://nasa.github.io/fmdtools/docs-source/frdl.html#architectures) and is composed of:
- - [Blocks](https://nasa.github.io/fmdtools/docs-source/frdl.html#blocks) (Functions, Actions, or Components), which represent the behavioral elements of the system
- - [Flows](https://nasa.github.io/fmdtools/docs-source/frdl.html#flows) (including MultiFlow and CommsFlow sub-types), which represent the shared variables (e.g., energy, material, and/or signal) that cause the behavioral elements to interact
- - [Relationships](https://nasa.github.io/fmdtools/docs-source/frdl.html#relationships) that connect the model elements. Propagation relatinoships are shown
- - [Annotations](https://nasa.github.io/fmdtools/docs-source/frdl.html#annotations) are the symbols and text that appears on blocks. These annotations are optionally used to clarify dynamic behavior (Dynamics tag in upper left corner), point to other potential potential diagrams (architecture tag in lower left corner) and define the scope and role of the object (ontology in the lower right corner).
+An FRDL diagram is often called an [Architecture](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#architectures) and is composed of:
+ - [Blocks](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#blocks) (Functions, Actions, or Components), which represent the behavioral elements of the system
+ - [Flows](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#flows) (including MultiFlow and CommsFlow sub-types), which represent the shared variables (e.g., energy, material, and/or signal) that cause the behavioral elements to interact
+ - [Relationships](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#relationships) that connect the model elements. Propagation relatinoships are shown
+ - [Annotations](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#annotations) are the symbols and text that appears on blocks. These annotations are optionally used to clarify dynamic behavior (Dynamics tag in upper left corner), point to other potential potential diagrams (architecture tag in lower left corner) and define the scope and role of the object (ontology in the lower right corner).
 
-The figure above is a [Functional Architecture](https://nasa.github.io/fmdtools/docs-source/frdl.html#functional-architectures) because it represents Functions interacting via flows.
+The figure above is a [Functional Architecture](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#functional-architectures) because it represents Functions interacting via flows.
 
 ## What does an FRDL diagram look like? - Rover Example {.smaller}
 
@@ -99,7 +99,7 @@ Note the use of CommsFlow for "Commands" (meaning the flow is to be communicated
 
 3.) Repeat Step 1-2 for each function affected by the altered flow states until you've exhaustively elicited effects
 
-For causes, run through this process in reverse. See [FRDL/Specification/Usage/Analysis](https://nasa.github.io/fmdtools/docs-source/frdl.html#analysis) for more details.
+For causes, run through this process in reverse. See [FRDL/Specification/Usage/Analysis](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#analysis) for more details.
 
 ## Example - Step 1
 
@@ -153,15 +153,15 @@ We expect hazard mitigating features like this in a real system, but getting the
 
 ## More Examples
 
-| [Baking Bread](https://nasa.github.io/fmdtools/docs-source/frdl.html#bread-making) | [Circuit](https://nasa.github.io/fmdtools/docs-source/frdl.html#circuit) |
+| [Baking Bread](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#bread-making) | [Circuit](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#circuit) |
 |:------------------:|:------------------:|
 | ![bread making model, width:550px](./figures/frdl/examples/bread/frdl_continuous.svg) | ![circuit model, width:550px](./figures/frdl/examples/circuit/frdl_circuit.svg)|
 
-- Some explanation of these examples is provided in [FRDL/Guide/Examples](https://nasa.github.io/fmdtools/docs-source/frdl.html#examples)
+- Some explanation of these examples is provided in [FRDL/Guide/Examples](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#examples)
 
 ## More Helpful Information {.smaller}
 
-- The [FRDL Specification and Guide](https://nasa.github.io/fmdtools/docs-source/frdl.html#) has a good overview of the details of developing FRDL models (as well as analyzing hazards)
+- The [FRDL Specification and Guide](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#) has a good overview of the details of developing FRDL models (as well as analyzing hazards)
 
 - ["Defining A Modelling Language to Support Functional Hazard Assessment"](https://ntrs.nasa.gov/citations/20240006675) is the conference paper that initially defined the FRDL and describes some of the rationale for its development
     - Conference presentation [here](https://ntrs.nasa.gov/citations/20240010880)

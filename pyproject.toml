@@ -41,7 +41,7 @@ examples = ["deap", "pymoo", "scikit-learn", "multiprocess", "pathos", "adjustTe
 all = ["fmdtools[examples]"]
 
 [project.urls]
-Documentation = "https://nasa.github.io/fmdtools/"
+Documentation = "https://fmdtools.readthedocs.io/en/latest//"
 source-code = "https://github.com/nasa/fmdtools"
 
 

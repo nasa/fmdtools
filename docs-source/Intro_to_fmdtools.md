@@ -95,7 +95,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 -   `/src/fmdtools`: installable package directory
 -   `/examples`: example models with demonstrative notebooks and tests
--   `/docs`: [HTML Documentation](https://nasa.github.io/fmdtools/) (source files at `/docs-source`)
+-   `/docs`: [HTML Documentation](https://fmdtools.readthedocs.io/en/latest//) (source files at `/docs-source`)
 -   `/tests`: stand-alone tests (and testing rigs)
 -   Basic information: `README.md`, `CONTRIBUTORS.md`, `PUBLICATIONS.md`, `LICENSE`, `fmdtools_Individual_CLA.pdf`, etc.
 -   Config/test files: `requirements.txt`, `pyproject.toml`, `index.rst`, etc.
@@ -390,9 +390,9 @@ Notice the definitions and structure:
 
 ## More Resources for Model Definition {.smaller}
 
--   Note the docs for model definition are in <https://nasa.github.io/fmdtools/docs-source/fmdtools.define.html>
+-   Note the docs for model definition are in <https://fmdtools.readthedocs.io/en/latest//docs-source/fmdtools.define.html>
 
--   Other examples also can be helpful: <https://nasa.github.io/fmdtools/examples/Examples.html>
+-   Other examples also can be helpful: <https://fmdtools.readthedocs.io/en/latest//examples/Examples.html>
 
 ## Notebook Activity: {.smaller}
 
@@ -410,7 +410,7 @@ Open `tutorial_fmdtools_basics.ipynb`:
 
 ![](./figures/powerpoint/simulation_types.svg)
 
-For more info on syntax/arguments, see documentation for [`fmdtools.sim.propagate`](https://nasa.github.io/fmdtools/docs-source/fmdtools.sim.html#fmdtools-sim-propagate).
+For more info on syntax/arguments, see documentation for [`fmdtools.sim.propagate`](https://fmdtools.readthedocs.io/en/latest//docs-source/fmdtools.sim.html#fmdtools-sim-propagate).
 
 ## Simulation Concepts: Sampling Approaches {.smaller}
 
@@ -423,7 +423,7 @@ These classes define **multi-run simulations** which can be used to quantify unc
     -   Can be simulated in `propagate.parameter_sample()`
     -   Can be simulated in conjunction with faults using `propagate.nested_sample`
 
-See docs for: [`fmdtools.sim.fault_sample`](https://nasa.github.io/fmdtools/docs-source/fmdtools.sim.html#module-fmdtools.sim.fault_sample)
+See docs for: [`fmdtools.sim.fault_sample`](https://fmdtools.readthedocs.io/en/latest//docs-source/fmdtools.sim.html#module-fmdtools.sim.fault_sample)
 
 ## Simulation Concepts: Things to Consider {.smaller}
 
@@ -441,7 +441,7 @@ What do the results look like? Explore data structures: - `analyze.result.Result
 
 Explore: - What happens when you change `FaultSample` parameters? - What happens when you change `Model` parameters? - How do these methods compare in terms of computational time?
 
-## Analysis Modules - see docs for [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html)
+## Analysis Modules - see docs for [`fmdtools.analyze`](https://fmdtools.readthedocs.io/en/latest//docs-source/fmdtools.analyze.html)
 
 ![](./figures/powerpoint/analyze_module_structure.svg)
 
