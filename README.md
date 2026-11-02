@@ -16,12 +16,12 @@
 
 **fmdtools** (Fault Model Design tools) is a Python library for modelling, simulating, and analyzing the resilience of complex systems. With fmdtools, you can (1) represent system structure and behavior in a model, (2) simulate the dynamic effects of hazardous scenarios on the system, and (3) analyze the results of simulations to understand and improve system resilience.
 
-[Click here to view the the full documentation website.](https://nasa.github.io/fmdtools)
+[Click here to view the the full documentation website.](https://fmdtools.readthedocs.io/en/latest/)
 
 
 ## About
 
-The fmdtools library provides the computational support needed to perform a simulation-based (rather than document-based) hazard analysis process that [**enables the consideration of systems resilience**](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#why-fmdtools). This means that it can be used to extend the scope of hazard analysis from component faults to the dynamic interactions between the system, operators, and the environment. Some key features include:
+The fmdtools library provides the computational support needed to perform a simulation-based (rather than document-based) hazard analysis process that [**enables the consideration of systems resilience**](https://fmdtools.readthedocs.io/en/latest//docs-source/Development%20Guide.html#why-fmdtools). This means that it can be used to extend the scope of hazard analysis from component faults to the dynamic interactions between the system, operators, and the environment. Some key features include:
 
 <img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/flexible.svg">
 
@@ -199,13 +199,13 @@ If a development install has been performed, you can further check aspects of yo
 
 Once fmdtools is installed, use the following to get acquainted with how to use the library:
 
-- Go through the [Intro to fmdtools workshop](https://nasa.github.io/fmdtools/docs-source/Intro_to_fmdtools.html) to learn about some of the basics of the fmdtools library and work with an existing model. 
+- Go through the [Intro to fmdtools workshop](https://fmdtools.readthedocs.io/en/latest//docs-source/Intro_to_fmdtools.html) to learn about some of the basics of the fmdtools library and work with an existing model. 
 
-- Explore more [examples](https://nasa.github.io/fmdtools/examples/Examples.html) of particular use-cases by going through the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples)
+- Explore more [examples](https://fmdtools.readthedocs.io/en/latest//examples/Examples.html) of particular use-cases by going through the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples)
 
-- Read about contributions and model development best practices by perusing the [Development Guide](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#).
+- Read about contributions and model development best practices by perusing the [Development Guide](https://fmdtools.readthedocs.io/en/latest//docs-source/Development%20Guide.html#).
 
-- Explore the searchable [module reference](https://nasa.github.io/fmdtools/docs-source/fmdtools.html) for syntax and usage documentation.
+- Explore the searchable [module reference](https://fmdtools.readthedocs.io/en/latest//docs-source/fmdtools.html) for syntax and usage documentation.
 
 ## Contributions
 fmdtools is developed primarily by researchers at NASA Ames Research Center. External contributions are welcome under a Contributor License Agreement:

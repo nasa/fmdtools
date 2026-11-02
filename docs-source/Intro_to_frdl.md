@@ -76,7 +76,7 @@ Based on this, one may prescribe **mitigations** to reduce hazard risks
 
 ![generic model, width:1150px](./figures/frdl/diagrams/frdl_fad_singleprop_explanation.svg)
 
- See [fmdtools specification.](https://nasa.github.io/fmdtools/docs-source/frdl.html#specification)
+ See [fmdtools specification.](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#specification)
 
 ---
 
@@ -90,7 +90,7 @@ Based on this, one may prescribe **mitigations** to reduce hazard risks
 
 3.) Repeat Step 1-2 for each function affected by the altered flow states until you've exhaustively elicited effects
 
-For causes, run through this process in reverse. See [FRDL/Specification/Usage/Analysis](https://nasa.github.io/fmdtools/docs-source/frdl.html#analysis) for more details.
+For causes, run through this process in reverse. See [FRDL/Specification/Usage/Analysis](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#analysis) for more details.
 
 --- 
 
@@ -135,17 +135,17 @@ For causes, run through this process in reverse. See [FRDL/Specification/Usage/A
 ---
 
 # More Examples
-| [Baking Bread](https://nasa.github.io/fmdtools/docs-source/frdl.html#bread-making) | [Circuit](https://nasa.github.io/fmdtools/docs-source/frdl.html#circuit) |
+| [Baking Bread](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#bread-making) | [Circuit](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#circuit) |
 |:------------------:|:------------------:|
 | ![bread making model, width:550px](./figures/frdl/examples/bread/frdl_continuous.svg) | ![circuit model, width:550px](./figures/frdl/examples/circuit/frdl_circuit.svg)|
 
-- Some explanation of these examples is provided in [FRDL/Guide/Examples](https://nasa.github.io/fmdtools/docs-source/frdl.html#examples)
+- Some explanation of these examples is provided in [FRDL/Guide/Examples](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#examples)
 
 ---
 
 # More Helpful Information
 
-- The [FRDL Specification and Guide](https://nasa.github.io/fmdtools/docs-source/frdl.html#) has a good overview of the details of developing FRDL models (as well as analyzing hazards)
+- The [FRDL Specification and Guide](https://fmdtools.readthedocs.io/en/latest//docs-source/frdl.html#) has a good overview of the details of developing FRDL models (as well as analyzing hazards)
 
 - ["Defining A Modelling Language to Support Functional Hazard Assessment"](https://ntrs.nasa.gov/citations/20240006675) is the conference paper that initially defined the FRDL and describes some of the rationale for its development
     - Conference presentation [here](https://ntrs.nasa.gov/citations/20240010880)
