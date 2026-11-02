@@ -59,7 +59,6 @@ Find a list of packages below
 |✔|scikit-learn|
 |✔|scipy|
 |✔|shapely|
-|✔|six|
 |✔|tabulate|
 |✔|threadpoolctl|
 |✔|tqdm|
@@ -146,13 +145,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 1053722
 
-### deprecated-3.0.0
+### deprecated-3.0.1
 
 - HomePage: 
 - Author: Laurent LAPORTE
 - License: MIT
 - Compatible: True
-- Size: 166912
+- Size: 1074378
 
 ### dill-0.4.1
 
@@ -314,13 +313,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 47058631
 
-### platformdirs-4.14.0
+### platformdirs-4.14.3
 
 - HomePage: 
 - Author: 
 - License: MIT
 - Compatible: True
-- Size: 161166
+- Size: 161227
 
 ### pluggy-1.7.0
 
@@ -386,13 +385,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 1797555
 
-### python-dateutil-3.0.0
+### python-dateutil-4.0.0
 
-- HomePage: https://github.com/dateutil/dateutil
+- HomePage: 
 - Author: Gustavo Niemeyer
-- License: Apache Software License;; BSD License
+- License: BSD-3-Clause
 - Compatible: True
-- Size: 271066
+- Size: 250419
 
 ### recordclass-0.24.1
 
@@ -425,14 +424,6 @@ Find a list of packages below
 - License: BSD-3-Clause
 - Compatible: True
 - Size: 380326
-
-### six-1.17.0
-
-- HomePage: https://github.com/benjaminp/six
-- Author: Benjamin Peterson
-- License: MIT License
-- Compatible: True
-- Size: 34031
 
 ### tabulate-0.10.0
 
