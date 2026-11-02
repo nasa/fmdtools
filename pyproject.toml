@@ -47,6 +47,11 @@ requires = [
   "setuptools>=61.0.0"
 ]
 
+[dependency-groups]
+docs = ["sphinx", "myst-nb", "sphinx_rtd_theme", "nbsphinx", "myst-sphinx-gallery"]
+test = ["nbmake", "pytest-html", "coverage", "pytest-cov", "genbadge[all]"]
+dev = [{include-group = "docs"}, {include-group = "test"}]
+
 [tool.setuptools.packages.find]
 include = ["fmdtools*", "examples*"]
 
