@@ -2,7 +2,7 @@
 
 # Overview
 
-![Python Version](https://img.shields.io/badge/Python-3.14-blue)
+![Python 3.12–3.14](https://img.shields.io/badge/Python-3.12%20%7C%203.13%20%7C%203.14-blue)
 [![PyPI](https://img.shields.io/pypi/v/fmdtools)](https://pypi.org/project/fmdtools/)
 [![Total Downloads](https://static.pepy.tech/badge/fmdtools)](https://pepy.tech/project/fmdtools)
 [![Downloads/Month](https://static.pepy.tech/badge/fmdtools/month)](https://pepy.tech/project/fmdtools)
@@ -14,9 +14,9 @@
 [![GitHub License](https://img.shields.io/badge/License-Apache%202.0-green)](https://github.com/nasa/fmdtools/blob/main/LICENSE)
 [![NASA Software Classification](https://img.shields.io/badge/Software_Class-E-blue)](https://nodis3.gsfc.nasa.gov/displayDir.cfm?Internal_ID=N_PR_7150_002D_&page_name=AppendixD)
 
-**fmdtools** (Fault Model Design tools) is a Python library for modelling, simulating, and analyzing the resilience of complex systems. With fmdtools, you can (1) represent system structure and behavior in a model, (2) simulate the dynamic effects of hazardous scenarios on the system, and (3) analyze the results of simulations to understand and improve system resilience.
+**fmdtools** (Fault Model Design tools) is a Python library for modelling, simulating and analysing the resilience of complex systems. Define system behaviour, simulate faults and disturbances, and quantify their effects on risk, safety and resilience.
 
-[Click here to view the the full documentation website.](https://fmdtools.readthedocs.io/en/latest/)
+[Documentation](https://fmdtools.readthedocs.io/en/latest/) · [Examples](examples/Examples.rst) · [Installation](#install-fmdtools) · [Contributing](#contributions)
 
 ## About
 
@@ -46,14 +46,20 @@ The fmdtools documentation repository is also home to the Functional Reasoning D
 
 ### Demo Portfolio
 
-See [Examples](https://fmdtools.readthedocs.io/en/latest//examples/Examples.html) for a wide range of applications fmdtools has been used for in the past.
+Browse the [example catalogue](examples/Examples.rst) for simulations, analyses and runnable demonstrations.
 
-<img src="https://fmdtools.readthedocs.io/en/latest//_images/tutorial_fmdtools_basics.webp" width="15%"></img>
-<img src="https://fmdtools.readthedocs.io/en/latest//_images/demo_proxthreat.webp" width="15%"></img>
-<img src="https://fmdtools.readthedocs.io/en/latest//_images/demo_wildfire.webp" width="15%"></img>
-<img src="https://fmdtools.readthedocs.io/en/latest//_images/paper_jcise_dsa.webp" width="15%"></img>
-<img src="https://fmdtools.readthedocs.io/en/latest//_images/demo_urban_flight.webp" width="15%"></img> 
-<img src="https://fmdtools.readthedocs.io/en/latest//_images/demo_degradation.webp" width="15%"></img>
+**Featured examples**
+
+- **[Planetary-observation satellite](examples/planetary_observation/readme.rst)**: simulate observations, disturbances and faults; inspect the [visual walkthrough](examples/planetary_observation/demo_satellite.ipynb), [risk/FMEA workflow](examples/planetary_observation/risk_analysis.rst) and [image-classification example](examples/planetary_observation/classification.rst).
+- **External-model integration**: the satellite classifier demonstrates a scikit-learn model inside a simulation function; a [reusable adapter-pattern example is under review](https://github.com/nasa/fmdtools/pull/343).
+
+
+<img src="https://fmdtools.readthedocs.io/en/latest/_images/tutorial_fmdtools_basics.webp" width="15%"></img>
+<img src="https://fmdtools.readthedocs.io/en/latest/_images/demo_proxthreat.webp" width="15%"></img>
+<img src="https://fmdtools.readthedocs.io/en/latest/_images/demo_wildfire.webp" width="15%"></img>
+<img src="https://fmdtools.readthedocs.io/en/latest/_images/paper_jcise_dsa.webp" width="15%"></img>
+<img src="https://fmdtools.readthedocs.io/en/latest/_images/demo_urban_flight.webp" width="15%"></img>
+<img src="https://fmdtools.readthedocs.io/en/latest/_images/demo_degradation.webp" width="15%"></img>
 
 
 ## Getting Started
@@ -70,162 +76,60 @@ The fmdtools library is developed in Python 3.14 but is tested to maintain compa
 
 Further tests of our examples are performed in the Python 3.14. Thus, it is generally recommended to use Python 3.14 with this version to keep pace with development, especially when running examples.
 
-### Set up python tooling environment
+### Set up a Python environment
 
-The fmdtools library was developed to run in a python development environments.
+fmdtools supports Python **3.12, 3.13 and 3.14**, with Python 3.14 recommended for running the latest examples. Use a dedicated environment with [uv](https://docs.astral.sh/uv/) or another Python environment manager. For editor support, see [VS Code](https://code.visualstudio.com/) or [Spyder](https://www.spyder-ide.org/); install the `spyder-kernels` version requested by Spyder if using a separate interpreter.
 
-If you do not have an existing python environment, first [download and install anaconda](https://docs.anaconda.com/free/anaconda/install/index.html) or [uv](https://docs.astral.sh/uv/).
-
-From there, it can be helpful to install an IDE like [VSCode](https://code.visualstudio.com/) or [Spyder](https://www.spyder-ide.org/).
-
-After the base installation, set up a new `Python 3.14` environment for fmdtools and install these external external packages in it, making sure to configure them correctly with your IDE of choice:
-
-```
-spyder-kernels
-# used for: working with external IDEs - make sure to use the version Spyder asks for 
-# license: ()
-# install from: (comes with anaconda) or `uv pip install spyder-kernels`
-jupyter notebook
-# used for: repository notebooks
-# license: (BSD-3) https://jupyter.org/governance/projectlicense.html
-# install from: (comes with anaconda) or `uv pip install jupyter`
-graphviz
-# used for: plotting graphs using graphviz
-# license: (CPL 1.0) https://graphviz.org/license/ 
-# install from: https://anaconda.org/anaconda/graphviz or https://graphviz.org/download/
-```
-
-
-Note: On Windows, some versions `fmdtools` dependencies may require a compiler such as that provided with [Microsoft Studio Build tools](https://visualstudio.microsoft.com/downloads/?q=build+tools) to build, so it (while not required) may be helpful to install it also.
-
+Some optional notebooks need Jupyter, and Graphviz visualisations may need the [Graphviz application](https://graphviz.org/download/) in addition to the Python package. On Windows, a compiler may be needed if a dependency has no compatible wheel.
 
 ### Install fmdtools
 
-For use of fmdtools as an external library, the toolkit can be installed directly from the [PyPI package repository](https://pypi.org/project/fmdtools/) using ``pip install fmdtools``.
+Install the released library from [PyPI](https://pypi.org/project/fmdtools/):
 
-#### Editable Development Install
-
-For development as well as interactive use of tutorials and models, we reccomend creating an editable development install.
-
-For this installation, fmdtools can be downloaded from the [fmdtools github repository](https://github.com/nasa/fmdtools/) using:
-
-```
-   cd /path/to/fmdtools
-   git clone https://github.com/nasa/fmdtools.git
+```bash
+python -m pip install fmdtools
 ```
 
-This may then be installed using:
+Check the installation:
 
-```
-   pip install -e .[all] --group dev
-```
-
-Which will install both fmdtools as well as examples (`[all]` option) as well as testing and development dependencies (`--group dev` option)
-
-More guidance on development installations is provided in [How to Contribute](https://fmdtools.readthedocs.io/en/latest//docs-source/Contributions.html#how-to-contribute)
-
-Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` in the context of a development install you can checkout the tag corresponding to the version you want, e.g.:
-
-```
-   git checkout v2.6.0.dev3
+```python
+import fmdtools
+print(fmdtools.__version__)
 ```
 
+#### Editable development install
+
+Clone the [repository](https://github.com/nasa/fmdtools) and install it in editable mode to work on source code and run examples:
+
+```bash
+git clone https://github.com/nasa/fmdtools.git
+cd fmdtools
+python -m pip install -e ".[all]"
+```
+
+The `[all]` extra installs the example dependencies. For development and test tooling, follow the [contribution guide](https://fmdtools.readthedocs.io/en/latest/docs-source/Contributions.html) and its dependency-group instructions. To work with a particular release, check out an existing [release tag](https://github.com/nasa/fmdtools/tags) before installing.
 
 #### Dependencies
 
-fmdtools requires `Python 3.14` and depends directly on the packages below (see pyproject.toml). Note that the use of these dependencies is governed by their respective licenses, which may be obtained at the provided links.
+The authoritative package requirements are in [pyproject.toml](pyproject.toml). Current notable constraints include:
 
-```
-scipy
-# license: (BSD-new) https://www.scipy.org/scipylib/license.html
-tqdm
-# license: (mixed MPL/MIT) https://github.com/tqdm/tqdm/blob/master/LICENCE
-networkx
-# license: (BSD-new) https://raw.githubusercontent.com/networkx/networkx/master/LICENSE.txt
-numpy < 2.0
-# license: (BSD) https://numpy.org/doc/stable/license.html
-matplotlib
-# license: (mixed) https://matplotlib.org/stable/users/license.html
-pandas[all]
-# license: (BSD 3-clause) https://pandas.pydata.org/pandas-docs/stable/getting_started/overview.html#license
-ordered-set
-# license: (MIT) https://github.com/rspeer/ordered-set/blob/master/MIT-LICENSE
-dill 
-# license: (MIT) https://github.com/uqfoundation/dill/blob/master/LICENSE
-recordclass == 0.22.1
-# license: (MIT) https://github.com/intellimath/recordclass/blob/main/LICENSE.txt
-pytest
-# license: (MIT) https://docs.pytest.org/en/7.3.x/license.html
-graphviz
-# license: (MIT) https://github.com/xflr6/graphviz/blob/master/LICENSE.txt
-shapely
-# license: (BSD 3-clause) https://github.com/shapely/shapely/blob/main/LICENSE.txt
-```
+- Python 3.12 or newer, with 3.12–3.14 tested;
+- `numpy >= 2.0`, `matplotlib >= 3.7.0` and `shapely >= 2.0`;
+- `pandas[plot,output-formatting] >= 2.2.0` and `recordclass == 0.24`.
 
-Since these are direct dependencies, they will be installed automatically along with fmdtools.
-
-Some additional indirect dependencies (listed below) may be needed for development/testing of the code, or for specific notebooks. Thus, to develop/contribute to fmdtools, it can be helpful to install these up-front using `pip install packagename`. Note that the use of these dependencies is governed by their respective licenses, which may be obtained at the provided links.
-```
-deap
-# used for optimization of rover faults
-# license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt
-# the LGPL license and installation instructions are provided in ~/examples/navigating_rover/readme.rst
-pymoo
-# used for optimization of tank and rover examples
-# license: (Apache 2.0) https://github.com/anyoptimization/pymoo/blob/main/LICENSE
-scikit-learn
-# used for rover mode notebook
-# license: (BSD-3 Clause) https://github.com/scikit-learn/scikit-learn?tab=BSD-3-Clause-1-ov-file#readme
-nbmake
-# used for notebook tests
-# license: (Apache 2.0) https://github.com/treebeardtech/nbmake/blob/main/LICENSE
-pytest-html  
-# used for development test report generation
-# license: (MPL-3) https://github.com/pytest-dev/pytest-html/blob/master/LICENSE
-coverage
-# used for measuring test coverage
-# license: (Apache 2.0) https://github.com/nedbat/coveragepy/blob/master/NOTICE.txt
-pytest-cov
-# used for measuring test coverage
-# license: (MIT) https://github.com/pytest-dev/pytest-cov/blob/master/LICENSE
-genbadge
-# used for generating test badges for the README
-# license: (BSD 3-Clause) https://github.com/smarie/python-genbadge/blob/main/LICENSE
-multiprocess
-# used for parallism tutorial profiling
-# license: (BSD-3 Clause) https://github.com/uqfoundation/multiprocess/blob/master/LICENSE
-pathos
-# used for parallelism tutorial profiling
-# license: (BSD-3 Clause) https://github.com/uqfoundation/pathos/blob/master/LICENSE
-adjustText
-# used for taxiway visualizations
-# license: (MIT) https://github.com/Phlya/adjustText?tab=MIT-1-ov-file#readme
-```
-
-One `fmdtools` is installed, you should be able to run:
-```
-import fmdtools
-```
-
-To check the version of fmdtools, you can check:
-```
-fmdtools.__version__
-```
-which should return the current version of fmdtools.
-
-If a development install has been performed, you can further check aspects of your installation by running `run_all_tests.py` and opening the corresponding test report in `tests/reports/junit/report.html` to see if all tests pass (or, are consistent with the [current test report](https://github.com/nasa/fmdtools/blob/main/tests/reports/junit/report.html)).
+The direct requirements also include SciPy, tqdm, NetworkX, ordered-set, dill, pytest and graphviz. The `[all]` extra includes example dependencies such as scikit-learn, DEAP and pymoo. Documentation and testing tooling is configured separately in `pyproject.toml`; relevant third-party licences remain those of their respective projects.
 
 ### Explore Tutorials and Resources
 
 Once fmdtools is installed, use the following to get acquainted with how to use the library:
 
-- Go through the [Intro to fmdtools workshop](https://fmdtools.readthedocs.io/en/latest//docs-source/Intro_to_fmdtools.html) to learn about some of the basics of the fmdtools library and work with an existing model. 
+- Go through the [Intro to fmdtools workshop](https://fmdtools.readthedocs.io/en/latest/docs-source/Intro_to_fmdtools.html) to learn about some of the basics of the fmdtools library and work with an existing model.
 
-- Explore more [examples](https://fmdtools.readthedocs.io/en/latest//examples/Examples.html) of particular use-cases by going through the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples)
+- Explore more [examples](https://fmdtools.readthedocs.io/en/latest/examples/Examples.html) of particular use-cases by going through the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples)
 
-- Read about contributions and model development best practices by perusing the [Development Guide](https://fmdtools.readthedocs.io/en/latest//docs-source/development-guide.html).
+- Read about contributions and model development best practices by perusing the [Development Guide](https://fmdtools.readthedocs.io/en/latest/docs-source/development-guide.html).
 
-- Explore the searchable [module reference](https://fmdtools.readthedocs.io/en/latest//docs-source/fmdtools.html) for syntax and usage documentation.
+- Explore the searchable [module reference](https://fmdtools.readthedocs.io/en/latest/docs-source/fmdtools.html) for syntax and usage documentation.
 
 ### Coding Agent/LLM Tips
 
@@ -253,11 +157,15 @@ fmdtools is developed primarily by researchers at NASA Ames Research Center. Ext
 
 ### Contributors
 
+Development is led by [Daniel Hulse](https://github.com/hulsed) and colleagues at NASA Ames Research Center, with contributions from the wider open-source community.
+
+- **[Sylvester Kaczmarek](https://github.com/sylvesterkaczmarek)**, **Active Project Contributor**, focusing on risk quantification, simulation reliability, satellite modelling and external-model integration. Maintains the independently developed [fmdtools-pylint](https://github.com/sylvesterkaczmarek/fmdtools-pylint) plugin.
+
 <a href="https://github.com/nasa/fmdtools/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=nasa/fmdtools" />
 </a>
 
-See: [CONTRIBUTORS.md](CONTRIBUTORS.md)
+See the full [contributors list](CONTRIBUTORS.md).
 
 ## Citing this repository
 

@@ -31,11 +31,11 @@ Interns
 * [Iris Chen](https://github.com/ir-s8), contributor to examples/airspacelib/water_rescue models
 * [Isabel Agostino](https://github.com/iagostino), contributor defone/pathplan path planning functionality (as well as associated tests and examples)
 
-External Contributors
----------------------
+Project Contributors
+--------------------
 
 * Johan Louwers
-* Sylvester Kaczmarek
+* [Sylvester Kaczmarek](https://github.com/sylvesterkaczmarek), **Active Project Contributor**, focusing on risk quantification, simulation reliability, satellite modelling and external-model integration; maintains the independent [fmdtools-pylint](https://github.com/sylvesterkaczmarek/fmdtools-pylint) plugin.
 
 fmdtools at OSU
 -------------------------
