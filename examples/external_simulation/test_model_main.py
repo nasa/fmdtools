@@ -17,22 +17,22 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from dataclasses import FrozenInstanceError, replace
 import pickle
 import unittest
+from dataclasses import FrozenInstanceError, replace
 from unittest.mock import Mock, patch
 
-from fmdtools_examples.external_simulation.model_main import (
-    CoupledFunction,
+import numpy as np
+from fmdtools_examples.external_simulation.adapter import call_step
+from fmdtools_examples.external_simulation.external_sim import (
     StepRequest,
     StepResult,
-    call_step,
     reference_step,
 )
+from fmdtools_examples.external_simulation.model_main import CoupledFunction
+
 from fmdtools.sim import propagate
 from fmdtools.sim.sample import FaultDomain, FaultSample
-
-import numpy as np
 
 
 def alternative_step(request):

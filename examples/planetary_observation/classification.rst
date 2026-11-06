@@ -140,11 +140,3 @@ Tests cover the fixed training/mission separation, direct scikit-learn
 predictions, deliberate errors, truth isolation, input rejection, brightness
 corruption, inference suppression, paired stochastic paths, staging, array
 ownership, copy/pickle/reset and independent FMEA reference values.
-
-External adapter pattern
-------------------------
-
-The :doc:`external model adapter pattern <../external_simulation/readme>`
-explains input/output ownership, failure semantics and native lifecycle
-requirements, with an independently testable scalar reference. It maps this
-classifier to that approach without changing its image-specific interface.

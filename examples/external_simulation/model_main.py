@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-An explicit-state external calculation wrapped by a native fmdtools Function.
-
-The reference calculation is analytical Python, not an external simulator.
-Request/response types and validation belong to this example, not the core API.
+Connect an independent calculation to a native fmdtools Function.
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -20,85 +17,14 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from collections.abc import Callable
-from dataclasses import dataclass
-import math
-from numbers import Real
-
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Fault, Mode
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.container.state import State
 
-
-@dataclass(frozen=True)
-class StepRequest:
-    """Owned scalar inputs for one update, with no live model references.
-
-    time is the update's end time in seconds, dt its positive duration in
-    seconds, value the preceding accumulated quantity, and rate its change
-    per second. The caller supplies any fault/noise effects in rate.
-    """
-
-    time: float
-    dt: float
-    value: float
-    rate: float
-
-
-@dataclass(frozen=True)
-class StepResult:
-    """The proposed accumulated value after one update."""
-
-    value: float
-
-
-def reference_step(request: StepRequest) -> StepResult:
-    """Return value + rate * dt without changing inputs or retaining state."""
-    return StepResult(request.value + request.rate * request.dt)
-
-
-def _finite_scalar(value, name):
-    """Reject ambiguous/nonfinite values before calling or committing outputs."""
-    if isinstance(value, bool) or not isinstance(value, Real):
-        raise ValueError(name + " must be a finite real scalar")
-    try:
-        number = float(value)
-    except (OverflowError, ValueError) as error:
-        raise ValueError(name + " must be a finite real scalar") from error
-    if not math.isfinite(number):
-        raise ValueError(name + " must be a finite real scalar")
-    return number
-
-
-def call_step(
-    request: StepRequest,
-    backend: Callable[[StepRequest], StepResult] = reference_step,
-) -> StepResult:
-    """Validate a snapshot, call once, and validate the complete response.
-
-    Backend exceptions propagate unchanged; there are no retries, implicit
-    fault injection or substitute outputs. A successful return contains only
-    validated scalar data. This is an example-specific contract, not a sandbox
-    or a generic runner for arbitrary input/output schemas.
-    """
-    if not isinstance(request, StepRequest):
-        raise TypeError("Expected StepRequest")
-    request = StepRequest(
-        **{
-            name: _finite_scalar(getattr(request, name), "request." + name)
-            for name in ("time", "dt", "value", "rate")
-        }
-    )
-    if request.dt <= 0 or request.time < request.dt:
-        raise ValueError(
-            "Require time >= dt > 0 for an update starting at or after zero"
-        )
-    response = backend(request)
-    if not isinstance(response, StepResult):
-        raise TypeError("External calculation must return StepResult")
-    return StepResult(_finite_scalar(response.value, "response.value"))
+from .adapter import _finite_scalar, call_step
+from .external_sim import StepRequest, reference_step
 
 
 class RateParam(Parameter, readonly=True):
