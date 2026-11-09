@@ -289,13 +289,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 496842
 
-### pandas-3.1.0
+### pandas-3.1.1
 
 - HomePage: 
 - Author: The Pandas Development Team
 - License: BSD-3-Clause
 - Compatible: True
-- Size: 5933421
+- Size: 5936163
 
 ### pathos-0.3.5
 
@@ -313,13 +313,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 47058631
 
-### platformdirs-4.14.3
+### platformdirs-4.14.5
 
 - HomePage: 
 - Author: 
 - License: MIT
 - Compatible: True
-- Size: 161227
+- Size: 161714
 
 ### pluggy-1.7.0
 
@@ -433,13 +433,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 91754
 
-### threadpoolctl-3.7.0
+### threadpoolctl-3.8.0
 
 - HomePage: 
 - Author: Thomas Moreau
 - License: BSD-3-Clause
 - Compatible: True
-- Size: 31961
+- Size: 39424
 
 ### tqdm-4.70.1
 
