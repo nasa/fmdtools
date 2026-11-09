@@ -16,7 +16,7 @@
 
 **fmdtools** (Fault Model Design tools) is a Python library for modelling, simulating, and analyzing the resilience of complex systems. With fmdtools, you can (1) represent system structure and behavior in a model, (2) simulate the dynamic effects of hazardous scenarios on the system, and (3) analyze the results of simulations to understand and improve system resilience.
 
-[Click here to view the the full documentation website.](https://fmdtools.readthedocs.io/en/latest/)
+[Documentation](https://fmdtools.readthedocs.io/en/latest/) · [Examples](https://fmdtools.readthedocs.io/en/latest/examples/Examples.html) · [Installation](#install-fmdtools) · [Contributing](https://fmdtools.readthedocs.io/en/latest/docs-source/Contributions.html)
 
 ## About
 
@@ -46,14 +46,14 @@ The fmdtools documentation repository is also home to the Functional Reasoning D
 
 ### Demo Portfolio
 
-See [Examples](https://fmdtools.readthedocs.io/en/latest//examples/Examples.html) for a wide range of applications fmdtools has been used for in the past.
+See [Examples](https://fmdtools.readthedocs.io/en/latest/examples/Examples.html) for a wide range of applications fmdtools has been used for in the past.
 
-<img src="https://fmdtools.readthedocs.io/en/latest//_images/tutorial_fmdtools_basics.webp" width="15%"></img>
-<img src="https://fmdtools.readthedocs.io/en/latest//_images/demo_proxthreat.webp" width="15%"></img>
-<img src="https://fmdtools.readthedocs.io/en/latest//_images/demo_wildfire.webp" width="15%"></img>
-<img src="https://fmdtools.readthedocs.io/en/latest//_images/paper_jcise_dsa.webp" width="15%"></img>
-<img src="https://fmdtools.readthedocs.io/en/latest//_images/demo_urban_flight.webp" width="15%"></img> 
-<img src="https://fmdtools.readthedocs.io/en/latest//_images/demo_degradation.webp" width="15%"></img>
+<img src="https://fmdtools.readthedocs.io/en/latest/_images/tutorial_fmdtools_basics.webp" width="15%"></img>
+<img src="https://fmdtools.readthedocs.io/en/latest/_images/demo_proxthreat.webp" width="15%"></img>
+<img src="https://fmdtools.readthedocs.io/en/latest/_images/demo_wildfire.webp" width="15%"></img>
+<img src="https://fmdtools.readthedocs.io/en/latest/_images/paper_jcise_dsa.webp" width="15%"></img>
+<img src="https://fmdtools.readthedocs.io/en/latest/_images/demo_urban_flight.webp" width="15%"></img>
+<img src="https://fmdtools.readthedocs.io/en/latest/_images/demo_degradation.webp" width="15%"></img>
 
 
 ## Getting Started
@@ -72,13 +72,13 @@ Further tests of our examples are performed in the Python 3.14. Thus, it is gene
 
 ### Set up python tooling environment
 
-The fmdtools library was developed to run in a python development environments.
+The fmdtools library is designed to run in a Python development environment.
 
 If you do not have an existing python environment, first [download and install anaconda](https://docs.anaconda.com/free/anaconda/install/index.html) or [uv](https://docs.astral.sh/uv/).
 
 From there, it can be helpful to install an IDE like [VSCode](https://code.visualstudio.com/) or [Spyder](https://www.spyder-ide.org/).
 
-After the base installation, set up a new `Python 3.14` environment for fmdtools and install these external external packages in it, making sure to configure them correctly with your IDE of choice:
+After the base installation, set up a new `Python 3.14` environment for fmdtools and install these external packages in it, making sure to configure them correctly with your IDE of choice:
 
 ```
 spyder-kernels
@@ -105,13 +105,13 @@ For use of fmdtools as an external library, the toolkit can be installed directl
 
 #### Editable Development Install
 
-For development as well as interactive use of tutorials and models, we reccomend creating an editable development install.
+For development as well as interactive use of tutorials and models, we recommend creating an editable development install.
 
 For this installation, fmdtools can be downloaded from the [fmdtools github repository](https://github.com/nasa/fmdtools/) using:
 
 ```
-   cd /path/to/fmdtools
    git clone https://github.com/nasa/fmdtools.git
+   cd fmdtools
 ```
 
 This may then be installed using:
@@ -122,7 +122,7 @@ This may then be installed using:
 
 Which will install both fmdtools as well as examples (`[all]` option) as well as testing and development dependencies (`--group dev` option)
 
-More guidance on development installations is provided in [How to Contribute](https://fmdtools.readthedocs.io/en/latest//docs-source/Contributions.html#how-to-contribute)
+More guidance on development installations is provided in [How to Contribute](https://fmdtools.readthedocs.io/en/latest/docs-source/Contributions.html#how-to-contribute)
 
 Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` in the context of a development install you can checkout the tag corresponding to the version you want, e.g.:
 
@@ -219,13 +219,13 @@ If a development install has been performed, you can further check aspects of yo
 
 Once fmdtools is installed, use the following to get acquainted with how to use the library:
 
-- Go through the [Intro to fmdtools workshop](https://fmdtools.readthedocs.io/en/latest//docs-source/Intro_to_fmdtools.html) to learn about some of the basics of the fmdtools library and work with an existing model. 
+- Go through the [Intro to fmdtools workshop](https://fmdtools.readthedocs.io/en/latest/docs-source/Intro_to_fmdtools.html) to learn about some of the basics of the fmdtools library and work with an existing model.
 
-- Explore more [examples](https://fmdtools.readthedocs.io/en/latest//examples/Examples.html) of particular use-cases by going through the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples)
+- Explore more [examples](https://fmdtools.readthedocs.io/en/latest/examples/Examples.html) of particular use-cases by going through the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples)
 
-- Read about contributions and model development best practices by perusing the [Development Guide](https://fmdtools.readthedocs.io/en/latest//docs-source/development-guide.html).
+- Read about contributions and model development best practices by perusing the [Development Guide](https://fmdtools.readthedocs.io/en/latest/docs-source/development-guide.html).
 
-- Explore the searchable [module reference](https://fmdtools.readthedocs.io/en/latest//docs-source/fmdtools.html) for syntax and usage documentation.
+- Explore the searchable [module reference](https://fmdtools.readthedocs.io/en/latest/docs-source/fmdtools.html) for syntax and usage documentation.
 
 ### Coding Agent/LLM Tips
 
