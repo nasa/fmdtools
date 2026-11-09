@@ -27,6 +27,7 @@ This repository provides several examples models in the `/examples` directory, w
    airspacelib/readme
    cooling_tank/readme
    electric_power_system/readme
+   external_simulation/readme
    human_hazard_mitigation/readme
    multirotor_drone/readme
    navigating_rover/readme
