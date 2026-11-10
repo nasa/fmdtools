@@ -60,9 +60,8 @@ class DisturbanceParam(MissionParam, readonly=True):
     contact_loss_prob_lim = (0.0, 1.0)
     bias_lim = (-1.0, 1.0)
 
-    def check_lim(self, k, v):
+    def check_value(self, k, v):
         """Retain native bounds and reject an infinite noise scale."""
-        super().check_lim(k, v)
         if k == "noise_std" and not math.isfinite(v):
             raise ValueError("noise_std must be finite")
 

@@ -67,7 +67,7 @@ class Fault(BaseContainer, readonly=True):
             args[2] = tuple([a for a in args[2].items()])
         if isinstance(args[3], dict):
             args[3] = tuple([a for a in args[3].items()])
-        super().__init__(*args, get_fields=False)
+        super().__init__(*args, get_fields=False, check_inputs=False)
 
     @classmethod
     def valid_fault(cls, fault):

@@ -261,6 +261,11 @@ class BaseObject(metaclass=BaseType):
         self.check_slots()
         self._mutobjs = []
         self.mutables = ()
+        self.check_object()
+
+    def check_object(self):
+        """Check properties of the object (placeholder for user method)."""
+        pass
 
     def create_repr(self, rolenames=[], with_classname=True, with_name=True,
                     one_line=False):

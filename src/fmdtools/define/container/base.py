@@ -17,20 +17,20 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import set_arg_as_type, remove_para, get_repr, map_obj_fields
-from fmdtools.define.base import is_iter, dict_to_json, auto_filename, load_json
-from fmdtools.define.base import copy_dict_objs
-from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History
-
-from recordclass import dataobject, astuple, asdict
-from ordered_set import OrderedSet
-
 import copy
 import pickle
 import numpy as np
 import sys
 import json
+
+from recordclass import dataobject, astuple, asdict
+from ordered_set import OrderedSet
+
+from fmdtools.define.base import set_arg_as_type, remove_para, get_repr, map_obj_fields
+from fmdtools.define.base import is_iter, dict_to_json, auto_filename, load_json
+from fmdtools.define.base import copy_dict_objs
+from fmdtools.analyze.common import get_sub_include
+from fmdtools.analyze.history import History
 
 
 class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
@@ -78,20 +78,104 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     default_track = 'all'
     rolename = 'x'
 
-    def __init__(self, *args, check_docs=False, get_fields=True, set_type=True, **kwargs):
+    def __init__(self, *args, check_docs=False, get_fields=True, set_type=True,
+                 check_values=True, check_inputs=True, **kwargs):
         if check_docs and not self.__doc__:
             raise Exception("Please provide docstring")
         if get_fields:
             args = self.get_true_fields(*args, **kwargs)
+        if check_inputs:
+            if not get_fields:
+                raise Exception("Must use check_inputs with get_fields option.")
+            self.check_inputs(*args)
         if set_type:
             args, kwargs = self.set_arg_type(*args, **kwargs)
         if args and isinstance(args[0], self.__class__):
             args = astuple(args[0])
         try:
             super().__init__(*args, **kwargs)
+            if check_values:
+                self.check_values()
         except TypeError as e:
             raise Exception("Invalid args/kwargs: "+str(args)+" , " +
                             str(kwargs)+" in "+str(self.__class__)) from e
+
+    def check_inputs(self, *values, fields=[]):
+        """
+        Check all field inputs with a corresponding test in check_input.
+
+        To use check_inputs at initialization, the user must have defined a check_input
+        method of the form::
+
+            def check_input(self, field, value):
+                if field == "field":
+                    if value == bad_value:
+                        raise ValueError("Bad Value")
+
+        Parameters
+        ----------
+        *values : args
+            Values of inputs to check, in order (from get_true_fields).
+        *fields : iterable
+            Fields to check. Default is [], which defaults to all fields.
+
+        Raises
+        ------
+        ValueError
+            ValueError for field if error returned by check_input for field.
+
+        Examples
+        --------
+        >>> ExContainer(y=-8)
+        Traceback (most recent call last):
+        ValueError: Invalid input for field y: -8
+        """
+        if hasattr(self, "check_input"):
+            fields = self.get_fields(*fields, default="all")
+            for field in fields:
+                try:
+                    input_val = values[self.__fields__.index(field)]
+                    self.check_input(field, input_val)
+                except Exception as e:
+                    raise ValueError("Invalid input for field "+field
+                                     +": "+str(input_val)) from e
+
+    def check_values(self, *fields):
+        """
+        Check all field values of fields with a test in check_value.
+
+        To use check_values at initialization, the user must have defined a check_value
+        method of the form::
+
+            def check_value(self, field, value):
+                if field == "field":
+                    if value == bad_value:
+                        raise ValueError("Bad Value")
+
+        Parameters
+        ----------
+        *fields : args
+            Fields to check. If blank, defaults to all fields.
+
+        Raises
+        ------
+        ValueError
+            ValueError for field if error returned by check_value for field.
+
+        Examples
+        --------
+        >>> ExContainer(x=-101)
+        Traceback (most recent call last):
+        ValueError: Invalid value for field x: -101.0
+        """
+        if hasattr(self, "check_value"):
+            fields = self.get_fields(default="all")
+            for field in fields:
+                try:
+                    self.check_value(field, self[field])
+                except Exception as e:
+                    raise ValueError("Invalid value for field "+field
+                                     +": "+str(self[field])) from e
 
     def __repr__(self):
         return self.create_repr(with_classname=True, fields=["all"])
@@ -589,6 +673,18 @@ def check_container_pick(container, *args, **kwargs):
 class ExContainer(BaseContainer):
     x: float = 1.0
     y: float = 2.0
+
+    def check_input(self, field, value):
+        """Check disallowed value of y."""
+        if field == "y":
+            if value == -8:
+                raise ValueError("Invalid value of -8")
+
+    def check_value(self, field, value):
+        """Check disallowed values of x and y (example method)."""
+        if field == "x":
+            if value < -100.0:
+                raise ValueError("Value below lower limit -100.0.")
 
 
 class ExNestContainer(BaseContainer):

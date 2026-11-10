@@ -104,8 +104,8 @@ class Time(BaseContainer):
     timernames = ()
     default_track = ('timers')
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, *args, check_values=True, **kwargs):
+        super().__init__(*args, check_values=False, **kwargs)
         if not self.timers:
             self.timers = {}
         for timername in self.timernames:
@@ -115,6 +115,8 @@ class Time(BaseContainer):
             else:
                 self.timers[timername] = Timer(timername)
         self.set_timestep()
+        if check_values:
+            self.check_values()
 
     def create_repr(self, fields=['time', "timers"], **kwargs):
         """Limit model repr to relevant time/timers fields."""
@@ -129,7 +131,7 @@ class Time(BaseContainer):
         return self.executed_static or self.executed_dynamic
 
     def __getattr__(self, item):
-        if item in self.timers:
+        if self.timers and item in self.timers:
             return self.timers[item]
         else:
             return super().__getattribute__(item)

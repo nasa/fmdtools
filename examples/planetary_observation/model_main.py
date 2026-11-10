@@ -49,23 +49,19 @@ class MissionParam(Parameter, readonly=True):
     buffer_capacity_lim = (0, math.inf)
     downlink_capacity_lim = (0, math.inf)
 
-    def get_true_fields(self, *args, force_kwargs=False, **kwargs):
+    def check_input(self, field, value):
         """Reject unsafe capacity coercions before BaseContainer types fields.
 
         The normal type conversion turns ``True`` or ``1.5`` into integer 1
         before check_lim runs. Keep only this type guard in field resolution;
         declared limits handle ranges without duplicating their checks.
         """
-        values = super().get_true_fields(*args, force_kwargs=force_kwargs, **kwargs)
-        for name in ("buffer_capacity", "downlink_capacity"):
-            value = values[self.__fields__.index(name)]
+        if field in ("buffer_capacity", "downlink_capacity"):
             if isinstance(value, bool) or not isinstance(value, Integral):
-                raise ValueError(name + " must be an integer packet count")
-        return values
+                raise ValueError(field + " must be an integer packet count")
 
-    def check_lim(self, k, v):
+    def check_value(self, k, v):
         """Apply declared scalar limits, then check mission-specific sequences."""
-        super().check_lim(k, v)
         if k in ("observation_times", "contact_times"):
             if any(
                 isinstance(t, bool) or not isinstance(t, Integral) or t <= 0 for t in v
@@ -272,7 +268,7 @@ class ObservationSatellite(FunctionArchitecture):
     container_p = MissionParam
     default_sp = dict(end_time=6.0, dt=1.0, units="min")
 
-    def check_values(self):
+    def check_object(self):
         """Check the example-specific one-minute schedule requirements."""
         if (
             self.sp.start_time != 0.0
@@ -289,7 +285,6 @@ class ObservationSatellite(FunctionArchitecture):
             )
 
     def init_architecture(self, **kwargs):
-        self.check_values()
         self.add_flow("scene", Scene)
         self.add_flow("observation", Observation)
         self.add_flow("buffer", DataBuffer)
