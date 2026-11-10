@@ -37,7 +37,16 @@ dependencies = ["scipy",
 ]
 
 [project.optional-dependencies]
-examples = ["deap", "pymoo", "scikit-learn", "multiprocess", "pathos", "adjustText", "jinja2"]
+examples = [
+    "deap",
+    "pymoo",
+    "scikit-learn",
+    "multiprocess",
+    "pathos",
+    "adjustText",
+    "jinja2",
+    "pyproj>=3.8.0",
+]
 all = ["fmdtools[examples]"]
 
 [project.urls]

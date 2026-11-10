@@ -200,6 +200,9 @@ pathos
 adjustText
 # used for taxiway visualizations
 # license: (MIT) https://github.com/Phlya/adjustText?tab=MIT-1-ov-file#readme
+pyproj
+# used for projecting world coordinate systems
+# license: (MIT) https://github.com/pyproj4/pyproj?tab=MIT-1-ov-file
 ```
 
 One `fmdtools` is installed, you should be able to run:

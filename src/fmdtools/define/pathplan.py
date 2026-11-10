@@ -17,20 +17,20 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.container.state import State
-from fmdtools.define.container.parameter import Parameter
-from fmdtools.define.object.coords import Coords, CoordsParam
-from fmdtools.define.object.geom import GeomPoint, GeomParameter, GeomLine, GeomPoly
-from fmdtools.define.architecture.geom import GeomArchitecture
-from fmdtools.analyze.common import calc_metric
-from fmdtools.define.object.base import BaseObject
-
 import math
 import traceback
 from shapely.geometry import Point as ShapelyPoint              ## NOTE: maybe use GeomPoint instead
 from shapely.geometry import LineString as ShapelyLineString    ## NOTE: maybe use GeomLine instead
 from shapely.geometry import box as shapely_box
 from shapely.affinity import translate
+
+from fmdtools.define.container.state import State
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.object.coords import Coords, CoordsParam
+from fmdtools.define.object.geom import GeomPoint, GeomParameter
+from fmdtools.define.architecture.geom import GeomArchitecture
+from fmdtools.define.object.base import BaseObject
+
 
 class PathPlannerState(State):
     """
@@ -1420,6 +1420,7 @@ class ExampleHybrid:
         self.geom_arch = ExampleGeomArch()
         self.geoms = self.geom_arch.geoms
 
+
 if __name__ == "__main__":
     import doctest
-    doctest.testmod()
+    doctest.testmod(verbose=True)
