@@ -20,7 +20,7 @@ from fmdtools_examples.airspacelib.base.state import AircraftPosition3
 from fmdtools_examples.airspacelib.base.aircraft import BaseAircraft
 
 
-from model_environment import AirportEnvironment
+from fmdtools_examples.airspacelib.aircraft_landing.model_environment import AirportEnvironment
 
 
 class Aircraft(BaseAircraft):

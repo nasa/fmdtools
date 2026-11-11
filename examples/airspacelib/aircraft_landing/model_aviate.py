@@ -20,8 +20,8 @@ import numpy as np
 
 from fmdtools.define.block.function import Function
 
-from model_common import ControlsFlow, AircraftDOFs, AircraftParameter, AircraftTrajectory
-from model_environment import Environment
+from fmdtools_examples.airspacelib.aircraft_landing.model_common import ControlsFlow, AircraftDOFs, AircraftParameter, AircraftTrajectory
+from fmdtools_examples.airspacelib.aircraft_landing.model_environment import Environment
 
 
 class Aviate(Function):

@@ -23,8 +23,8 @@ from fmdtools.define.block.function import Function
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.mode import Mode
 
-from model_common import ControlsFlow, AircraftDOFs, AircraftTrajectory
-from model_environment import AirportEnvironment
+from fmdtools_examples.airspacelib.aircraft_landing.model_common import ControlsFlow, AircraftDOFs, AircraftTrajectory
+from fmdtools_examples.airspacelib.aircraft_landing.model_environment import AirportEnvironment
 
 
 class ControlParameter(Parameter):
