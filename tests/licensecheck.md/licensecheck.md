@@ -18,6 +18,7 @@ Find a list of packages below
 |✔|adjusttext|
 |✔|alive-progress|
 |✔|autograd|
+|✔|certifi|
 |✔|cffi|
 |✔|cloudpickle|
 |✔|cma|
@@ -53,6 +54,7 @@ Find a list of packages below
 |✔|pygments|
 |✔|pymoo|
 |✔|pyparsing|
+|✔|pyproj|
 |✔|pytest|
 |✔|python-dateutil|
 |✔|recordclass|
@@ -96,6 +98,14 @@ Find a list of packages below
 - License: MIT
 - Compatible: True
 - Size: 2566975
+
+### certifi-2026.10.23
+
+- HomePage: https://github.com/certifi/python-certifi
+- Author: Kenneth Reitz
+- License: Mozilla Public License 2.0 _MPL 2.0_
+- Compatible: True
+- Size: 243677
 
 ### cffi-2.1.1
 
@@ -145,13 +155,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 1053722
 
-### deprecated-3.0.1
+### deprecated-3.0.0
 
 - HomePage: 
 - Author: Laurent LAPORTE
 - License: MIT
 - Compatible: True
-- Size: 1074378
+- Size: 166912
 
 ### dill-0.4.1
 
@@ -289,13 +299,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 496842
 
-### pandas-3.1.1
+### pandas-3.1.0
 
 - HomePage: 
 - Author: The Pandas Development Team
 - License: BSD-3-Clause
 - Compatible: True
-- Size: 5936163
+- Size: 5933421
 
 ### pathos-0.3.5
 
@@ -313,13 +323,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 47058631
 
-### platformdirs-4.14.5
+### platformdirs-4.14.0
 
 - HomePage: 
 - Author: 
 - License: MIT
 - Compatible: True
-- Size: 161714
+- Size: 161166
 
 ### pluggy-1.7.0
 
@@ -377,6 +387,14 @@ Find a list of packages below
 - Compatible: True
 - Size: 1050487
 
+### pyproj-3.8.0
+
+- HomePage: https://github.com/pyproj4/pyproj
+- Author: Jeff Whitaker
+- License: MIT
+- Compatible: True
+- Size: 242018
+
 ### pytest-9.2.0
 
 - HomePage: 
@@ -385,13 +403,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 1797555
 
-### python-dateutil-4.0.0
+### python-dateutil-3.0.0
 
-- HomePage: 
+- HomePage: https://github.com/dateutil/dateutil
 - Author: Gustavo Niemeyer
-- License: BSD-3-Clause
+- License: Apache Software License;; BSD License
 - Compatible: True
-- Size: 250419
+- Size: 271066
 
 ### recordclass-0.24.1
 
@@ -433,13 +451,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 91754
 
-### threadpoolctl-3.8.0
+### threadpoolctl-3.7.0
 
 - HomePage: 
 - Author: Thomas Moreau
 - License: BSD-3-Clause
 - Compatible: True
-- Size: 39424
+- Size: 31961
 
 ### tqdm-4.70.1
 
