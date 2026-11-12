@@ -19,7 +19,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from fmdtools_examples.airspacelib.base.aircraft import BaseAircraft
+from fmdtools_examples.airspacelib.base.aircraft import BaseDrone
 from fmdtools_examples.airspacelib.base.state import AircraftState
 from fmdtools_examples.airspacelib.water_rescue.model_environment import BeachEnvironment
 from fmdtools.define.container.mode import Mode
@@ -64,7 +64,7 @@ class BeachAircraftState(AircraftState):
     location: tuple = (0, 0)       # current (x, y) position
 
 
-class BeachAircraft(BaseAircraft):
+class BeachAircraft(BaseDrone):
     """Aircraft that spots struggling swimmers and notifies responders."""
     container_m = BeachAircraftModes
     container_s = BeachAircraftState

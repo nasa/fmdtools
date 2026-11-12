@@ -16,9 +16,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-import fmdtools_examples.airspacelib.base.aircraft as aircraft
-import fmdtools_examples.airspacelib.base.parameter as parameter
-import fmdtools_examples.airspacelib.base.state as state
-import fmdtools_examples.airspacelib.base.arch as arch
+import fmdtools_examples.airspacelib.base.common as common
+import fmdtools_examples.airspacelib.base.drone as drone
+import fmdtools_examples.airspacelib.base.plane as plane
 
-__all__ = ['aircraft', 'parameter', 'state', 'arch']
+__all__ = ['common', 'drone', 'plane']

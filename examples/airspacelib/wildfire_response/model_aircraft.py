@@ -16,7 +16,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 from fmdtools_examples.airspacelib.wildfire_response.model_environment import FireEnvironment, double_size_p
-from fmdtools_examples.airspacelib.base.aircraft import BaseAircraft
+from fmdtools_examples.airspacelib.base.aircraft import BaseDrone
 from fmdtools_examples.airspacelib.base.state import AircraftState
 
 from fmdtools.define.container.mode import Mode
@@ -56,7 +56,7 @@ class FireAircraftState(AircraftState):
     retardant_status: float = 100  # starting retardant at 100%
 
 
-class FireAircraft(BaseAircraft):
+class FireAircraft(BaseDrone):
     """Aircraft that mitigates fire propagation and resupplies from bases."""
 
     container_m = AircraftModes

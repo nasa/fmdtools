@@ -17,7 +17,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools_examples.airspacelib.base.arch.flows import AircraftEnvironment
-from fmdtools_examples.airspacelib.base.state import AircraftPosition3
+from fmdtools_examples.airspacelib.base.state import Position3
 
 from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.architecture.geom import GeomArchitecture
@@ -122,11 +122,11 @@ properties = {'disallowed': {'color': 'blue', 'proplab': 'disallowed', 'alpha': 
 collections = {'suitable': {"label": "suitable", 'color': 'lightgreen'}}
 
 
-class ThreatState(AircraftPosition3):
+class ThreatState(Position3):
     """
     State of an external threat (e.g., intruder).
 
-    Extends AircraftPosition3 with the following:
+    Extends Position3 with the following:
 
     Parameters
     ----------

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Base architecture components for the Airspace library.
+Common constructs for Airplanes
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -16,12 +16,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-import fmdtools_examples.airspacelib.base.arch.aviate as aviate
-import fmdtools_examples.airspacelib.base.arch.controlflight as controlflight
-import fmdtools_examples.airspacelib.base.arch.flows as flows
-import fmdtools_examples.airspacelib.base.arch.holdpayload as holdpayload
-import fmdtools_examples.airspacelib.base.arch.perceiveenvironment as perceiveenvironment
-import fmdtools_examples.airspacelib.base.arch.storeee as storeee
+import fmdtools_examples.airspacelib.base.plane.aero as aero
+import fmdtools_examples.airspacelib.base.plane.aero as control
 
-__all__ = ['aviate', 'controlflight', 'flows', 'holdpayload', 'perceiveenvironment',
-           'storeee']
+__all__ = ['aero', 'control']

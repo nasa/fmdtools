@@ -16,15 +16,15 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools_examples.airspacelib.base.state import AircraftPosition3
-from fmdtools_examples.airspacelib.base.aircraft import BaseAircraft
+from fmdtools_examples.airspacelib.base.state import Position3
+from fmdtools_examples.airspacelib.base.aircraft import BaseDrone
 
 
 from fmdtools_examples.airspacelib.aircraft_landing.model_environment import AirportEnvironment
 
 
-class Aircraft(BaseAircraft):
-    container_s = AircraftPosition3
+class Aircraft(BaseDrone):
+    container_s = Position3
     default_s = {'x': 1865527.46, 'y': 596499.47, 'goal_x': 1863436.83, 'goal_y': 601624.24}
     flow_environment = AirportEnvironment
 

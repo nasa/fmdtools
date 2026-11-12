@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Base Aircraft Parameter.
+Base Drone Parameter.
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -19,7 +19,7 @@ specific language governing permissions and limitations under the License.
 from fmdtools.define.container.parameter import Parameter
 
 
-class AircraftParameter(Parameter, readonly=True):
+class DroneParameter(Parameter, readonly=True):
     number: int = 1
     max_range: float = 1287.0  # in km
     max_speed: float = 6.6  # in km/min
@@ -29,4 +29,4 @@ class AircraftParameter(Parameter, readonly=True):
 
 if __name__ == "__main__":
 
-    p = AircraftParameter()
+    p = DroneParameter()

@@ -18,7 +18,7 @@ specific language governing permissions and limitations under the License.
 from fmdtools.define.block.function import Function
 
 from fmdtools_examples.airspacelib.base.state import AircraftState
-from fmdtools_examples.airspacelib.base.parameter import AircraftParameter
+from fmdtools_examples.airspacelib.base.parameter import DroneParameter
 
 
 class BaseAircraft(Function):
@@ -26,7 +26,7 @@ class BaseAircraft(Function):
 
     __slots__ = ()
     container_s = AircraftState
-    container_p = AircraftParameter
+    container_p = DroneParameter
 
     def indicate_at_goal(self):
         """Indicate whether the aircraft is at its goal location."""
@@ -45,4 +45,4 @@ class BaseAircraft(Function):
 
 
 if __name__ == "__main__":
-    ba = BaseAircraft()
+    ba = BaseDrone()

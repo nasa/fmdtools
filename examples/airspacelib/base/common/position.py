@@ -19,7 +19,7 @@ import numpy as np
 from fmdtools.define.container.state import State
 
 
-class AircraftPosition(State):
+class Position(State):
     """
     State of an aircraft's position (modelled in 2d).
 
@@ -49,15 +49,15 @@ class AircraftPosition(State):
             return dims
 
     def get_goal(self, *dims):
-        """Get the goal attributes (goal_x, goal_y) of the AircraftPosition."""
+        """Get the goal attributes (goal_x, goal_y) of the Position."""
         return self.get(*['goal_'+d for d in self.get_dims(*dims)])
 
     def get_loc(self, *dims):
-        """Get the location (x, y) attributes of the AircraftPosition."""
+        """Get the location (x, y) attributes of the Position."""
         return self.get(*self.get_dims(*dims))
 
     def get_vel(self, *dims):
-        """Get the velocity attributes (dx, dy) of the AircraftPosition."""
+        """Get the velocity attributes (dx, dy) of the Position."""
         return self.get(*['d'+d for d in self.get_dims(*dims)])
 
     def find_direction(self, *dims):
@@ -71,7 +71,7 @@ class AircraftPosition(State):
 
         Examples
         --------
-        >>> ap = AircraftPosition()
+        >>> ap = Position()
         >>> ap.find_direction()
         array([0.70710678, 0.70710678])
         >>> ap.goal_x = 0.0
@@ -99,7 +99,7 @@ class AircraftPosition(State):
 
         Examples
         --------
-        >>> ap = AircraftPosition()
+        >>> ap = Position()
         >>> ap.at_goal()
         False
         >>> ap.assign(ap.get_goal(), 'x', 'y')
@@ -127,13 +127,13 @@ class AircraftPosition(State):
 
         Examples
         --------
-        >>> ap = AircraftPosition(goal_x=10.0, goal_y=0.0)
+        >>> ap = Position(goal_x=10.0, goal_y=0.0)
         >>> ap.update_dist_to_travel(maxvel=8.0)
         >>> ap
-        AircraftPosition(x=0.0, goal_x=10.0, dx=8.0, y=0.0, goal_y=0.0, dy=0.0)
+        Position(x=0.0, goal_x=10.0, dx=8.0, y=0.0, goal_y=0.0, dy=0.0)
         >>> ap.update_dist_to_travel(maxvel=15.0)
         >>> ap
-        AircraftPosition(x=0.0, goal_x=10.0, dx=10.0, y=0.0, goal_y=0.0, dy=0.0)
+        Position(x=0.0, goal_x=10.0, dx=10.0, y=0.0, goal_y=0.0, dy=0.0)
         """
         if self.in_range(*dims, dist_range=maxvel):
             vel = self.calc_dist(*dims)
@@ -153,16 +153,16 @@ class AircraftPosition(State):
 
         Examples
         --------
-        >>> ap = AircraftPosition()
+        >>> ap = Position()
         >>> ap.update_position(maxvel=10.0)
         >>> ap
-        AircraftPosition(x=7.071067811865475, goal_x=10.0, dx=7.071067811865475, y=7.071067811865475, goal_y=10.0, dy=7.071067811865475)
+        Position(x=7.071067811865475, goal_x=10.0, dx=7.071067811865475, y=7.071067811865475, goal_y=10.0, dy=7.071067811865475)
         >>> ap.update_position(maxvel=10.0)
         >>> ap
-        AircraftPosition(x=10.0, goal_x=10.0, dx=2.9289321881345254, y=10.0, goal_y=10.0, dy=2.9289321881345254)
+        Position(x=10.0, goal_x=10.0, dx=2.9289321881345254, y=10.0, goal_y=10.0, dy=2.9289321881345254)
         >>> ap.update_position()
         >>> ap
-        AircraftPosition(x=10.0, goal_x=10.0, dx=0.0, y=10.0, goal_y=10.0, dy=0.0)
+        Position(x=10.0, goal_x=10.0, dx=0.0, y=10.0, goal_y=10.0, dy=0.0)
         """
         self.update_dist_to_travel(*dims, maxvel=maxvel)
         self.increment_position(*dims)
@@ -172,24 +172,40 @@ class AircraftPosition(State):
         self.inc(**{dim: getattr(self, 'd'+dim) for dim in self.get_dims(*dims)})
 
 
-class AircraftPosition3(AircraftPosition):
+class Position3(Position):
     """3d State of Trajectories flow."""
 
     z: float = 0.0
     goal_z: float = 0.0
     dz: float = 0.0  # dist in y/z
+    distance: float = 0.0
     dims = ('x', 'y', 'z')
 
 
-class AircraftState(AircraftPosition):
+class DroneState(Position):
     fuel_status: float = 100  # starting fuel at 100%
+
+class Trajectory3(Flow):
+    container_s = Position3
+
+class TrajectoryParameter(Parameter):
+    """Parameter determining aircraft control."""
+
+    max_vel: float = 10.0
+
+
+class Trajectories(MultiFlow):
+    """Degrees of freedom of the aircraft."""
+
+    container_s = Position3
+    container_p = TrajectoryParameter
 
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
 
-    ap = AircraftPosition()
+    ap = Position()
 
-    s = AircraftState()
+    s = DroneState()
     s.find_direction()
