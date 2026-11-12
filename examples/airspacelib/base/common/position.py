@@ -15,9 +15,13 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-import numpy as np
-from fmdtools.define.container.state import State
 
+import numpy as np
+
+from fmdtools.define.container.state import State
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.flow.base import Flow
+from fmdtools.define.flow.multiflow import MultiFlow
 
 class Position(State):
     """

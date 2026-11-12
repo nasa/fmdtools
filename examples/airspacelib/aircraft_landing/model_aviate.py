@@ -20,15 +20,18 @@ import numpy as np
 
 from fmdtools.define.block.function import Function
 
-from fmdtools_examples.airspacelib.aircraft_landing.model_common import ControlsFlow, AircraftDOFs, AircraftParameter, AircraftTrajectory
+from fmdtools_examples.airspacelib.base.plane.control import ControlsFlow
+from fmdtools_examples.airspacelib.base.common.position import Trajectory3
+from fmdtools_examples.airspacelib.base.plane.aero import AircraftDOFs, AeroParameter
+
 from fmdtools_examples.airspacelib.aircraft_landing.model_environment import Environment
 
 
 class Aviate(Function):
-    container_p = AircraftParameter
+    container_p = AeroParameter
     flow_controls = ControlsFlow
     flow_aircraft_dofs = AircraftDOFs
-    flow_aircraft_trajectory = AircraftTrajectory
+    flow_aircraft_trajectory = Trajectory3
     flow_environment = Environment
     default_sp = {'with_loadings': True, 'end_time': 100, 'dt': 1}
     default_t = {'dt': 0.01}

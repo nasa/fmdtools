@@ -22,15 +22,18 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.sim import propagate
 
 
+from fmdtools_examples.airspacelib.base.plane.control import ControlsFlow
+from fmdtools_examples.airspacelib.base.common.position import Trajectory3
+from fmdtools_examples.airspacelib.base.plane.aero import AircraftDOFs, AeroParameter
+
 from fmdtools_examples.airspacelib.aircraft_landing.model_controlflight import ControlFlight, ControlParameter
-from fmdtools_examples.airspacelib.aircraft_landing.model_common import ControlsFlow, AircraftDOFs, AircraftTrajectory, AircraftParameter
 from fmdtools_examples.airspacelib.aircraft_landing.model_aviate import Aviate
 from fmdtools_examples.airspacelib.aircraft_landing.model_environment import AirportEnvironment
 
 
 class AirportParameter(Parameter):
     controls: ControlParameter = ControlParameter()
-    aircraft: AircraftParameter = AircraftParameter()
+    aircraft: AeroParameter = AeroParameter()
     
 
 
@@ -43,7 +46,7 @@ class Airport(FunctionArchitecture):
         self.add_flow('environment', AirportEnvironment)
         self.add_flow('controls', ControlsFlow)
         self.add_flow('aircraft_dofs', AircraftDOFs)
-        self.add_flow('aircraft_trajectory', AircraftTrajectory)
+        self.add_flow('aircraft_trajectory', Trajectory3)
 
         self.add_fxn('aviate', Aviate, 'controls', 'aircraft_dofs', 'aircraft_trajectory', p=self.p.aircraft)
         self.add_fxn('control_flight', ControlFlight, 'controls', 'aircraft_dofs', 'aircraft_trajectory', 'environment', p=self.p.controls)

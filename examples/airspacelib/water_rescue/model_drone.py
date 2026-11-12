@@ -19,8 +19,8 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from fmdtools_examples.airspacelib.base.aircraft import BaseDrone
-from fmdtools_examples.airspacelib.base.state import AircraftState
+from fmdtools_examples.airspacelib.base.common.aircraft import BaseDrone
+from fmdtools_examples.airspacelib.base.common.position import DroneState
 from fmdtools_examples.airspacelib.water_rescue.model_environment import BeachEnvironment
 from fmdtools.define.container.mode import Mode
 import numpy as np
@@ -54,7 +54,7 @@ class BeachAircraftModes(Mode):
     mode: str = "patrol"
 
 
-class BeachAircraftState(AircraftState):
+class BeachAircraftState(DroneState):
     """State of the drone: position, path progress, and rescue bookkeeping."""
     victim_spotted: bool = False   # whether a victim has been detected
     flight_path: list = zigzag_path  # patrol waypoints to cycle through

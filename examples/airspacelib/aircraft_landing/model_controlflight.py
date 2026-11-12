@@ -23,7 +23,9 @@ from fmdtools.define.block.function import Function
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.mode import Mode
 
-from fmdtools_examples.airspacelib.aircraft_landing.model_common import ControlsFlow, AircraftDOFs, AircraftTrajectory
+from fmdtools_examples.airspacelib.base.plane.control import ControlsFlow
+from fmdtools_examples.airspacelib.base.common.position import Trajectory3
+from fmdtools_examples.airspacelib.base.plane.aero import AircraftDOFs
 from fmdtools_examples.airspacelib.aircraft_landing.model_environment import AirportEnvironment
 
 
@@ -47,7 +49,7 @@ class ControlFlight(Function):
     container_m = ControlMode
     flow_controls = ControlsFlow
     flow_aircraft_dofs = AircraftDOFs
-    flow_aircraft_trajectory = AircraftTrajectory
+    flow_aircraft_trajectory = Trajectory3
     flow_environment = AirportEnvironment
     default_t = {'local_dt': 0.01}
 

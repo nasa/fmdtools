@@ -16,16 +16,17 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools_examples.airspacelib.base.arch.flows import AircraftEnvironment
-from fmdtools_examples.airspacelib.base.state import Position3
+from shapely import distance
+import numpy as np
 
 from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.define.object.geom import GeomPoint, GeomParameter
 from fmdtools.define.block.function import Function
+from fmdtools.define.environment import Environment
 
-from shapely import distance
-import numpy as np
+from fmdtools_examples.airspacelib.base.common.position import Position3
+
 
 class ContingencyEnvironmentParam(CoordsParam):
     """
@@ -218,7 +219,7 @@ class ContingencyThreats(GeomArchitecture):
         return dists
 
 
-class ContingencyEnvironment(AircraftEnvironment):
+class ContingencyEnvironment(Environment):
     """Overall environment of drone with threats and grid."""
 
     container_p = ContingencyEnvironmentParam

@@ -18,12 +18,15 @@ specific language governing permissions and limitations under the License.
 
 import numpy as np
 
-from fmdtools_examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
-from fmdtools_examples.airspacelib.base.arch.aviate import Aviate
-from fmdtools_examples.airspacelib.base.arch.controlflight import ControlFlight, ControlState
-from fmdtools_examples.airspacelib.base.arch.storeee import StoreAndSupplyElectricity
-from fmdtools_examples.airspacelib.base.arch.perceiveenvironment import PerceiveEnvironment
-from fmdtools_examples.airspacelib.base.arch.holdpayload import HoldPayload
+from fmdtools_examples.airspacelib.base.common.position import Trajectories
+from fmdtools_examples.airspacelib.base.common.force import Force
+from fmdtools_examples.airspacelib.base.common.electricity import Electricity
+
+from fmdtools_examples.airspacelib.base.drone.aviate import Aviate
+from fmdtools_examples.airspacelib.base.drone.controlflight import ControlFlight, ControlState
+from fmdtools_examples.airspacelib.base.drone.storeee import StoreAndSupplyElectricity
+from fmdtools_examples.airspacelib.base.drone.perceiveenvironment import PerceiveEnvironment
+from fmdtools_examples.airspacelib.base.drone.holdpayload import HoldPayload
 
 from fmdtools_examples.airspacelib.contingency_management.model_environment import ContingencyEnvironment, properties, collections
 from fmdtools_examples.airspacelib.contingency_management.model_environment import ContingencyConditions
@@ -194,7 +197,8 @@ class ContingencyControlFlight(ControlFlight):
         
 
 class ContingencyAviate(Aviate):
-    """Movement of the drone. Updates encironment point."""
+    """Movement of the drone. Updates environment point."""
+    flow_environment = ContingencyEnvironment
 
     def static_behavior(self):
         dists = self.environment.ga.calc_dist_to_threats("envelope", "envelope")
@@ -276,7 +280,7 @@ class ContingencyAircraftArchitecture(FunctionArchitecture):
         self.add_fxn('store_and_supply_ee', StoreAndSupplyElectricity,
                      'force', 'electricity', m=m)
         self.add_fxn('perceive_environment', PerceiveEnvironment,
-                     'environment', 'force', 'electricity', 'trajectories')
+                     'force', 'electricity', 'trajectories')
         self.add_fxn('hold_payload', HoldPayload, 'trajectories', 'force')
 
     def indicate_unsuitable_landing(self):

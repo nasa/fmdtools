@@ -18,6 +18,8 @@ specific language governing permissions and limitations under the License.
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
+from fmdtools.define.flow.base import Flow
+
 
 class AeroParameter(Parameter):
     # Aircraft physical constants (generic small commercial aviation example)

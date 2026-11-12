@@ -21,8 +21,10 @@ from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.pathplan import PathPlannerBase
 
-from fmdtools_examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
-from fmdtools_examples.airspacelib.base.arch.flows import AircraftEnvironment
+from fmdtools_examples.airspacelib.base.common.position import Trajectories
+from fmdtools_examples.airspacelib.base.common.force import Force
+from fmdtools_examples.airspacelib.base.common.electricity import Electricity
+from fmdtools_examples.airspacelib.base.common.control import ControlState
 
 
 
@@ -69,12 +71,10 @@ class ControlFlight(Function):
     'idle'
     """
 
-    __slots__ = ('trajectories', 'perc_traj', 'des_traj', 'force', 'electricity',
-                 'environment')
+    __slots__ = ('perc_traj', 'des_traj')
     flow_trajectories = Trajectories
     flow_force = Force
     flow_electricity = Electricity
-    flow_environment = AircraftEnvironment
     container_s = ControlState
     container_m = ControlMode
 
@@ -83,7 +83,6 @@ class ControlFlight(Function):
         self.perc_traj = self.trajectories.create_local("perc_traj")
         self.des_traj = self.trajectories.create_local("des_traj")
         # self.planner = PathPlannerBase()
-        # self.planner.init_environment(self.environment)
 
     def static_behavior(self):
         """

@@ -20,8 +20,7 @@ import fmdtools_examples.airspacelib.base.drone.aviate as aviate
 import fmdtools_examples.airspacelib.base.drone.controlflight as controlflight
 import fmdtools_examples.airspacelib.base.drone.drone_arch as drone_arch
 import fmdtools_examples.airspacelib.base.drone.holdpayload as holdpayload
-import fmdtools_examples.airspacelib.base.drone.parameter as parameter
 import fmdtools_examples.airspacelib.base.drone.perceiveenvironment as perceiveenvironment
 import fmdtools_examples.airspacelib.base.drone.storeee as storeee
 
-__all__ = ['aviate', 'controlflight', 'drone_arch', 'holdpayload', 'parameter', 'perceiveenvironment', 'storeee']
+__all__ = ['aviate', 'controlflight', 'drone_arch', 'holdpayload', 'perceiveenvironment', 'storeee']

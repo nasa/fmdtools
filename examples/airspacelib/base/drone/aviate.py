@@ -15,12 +15,15 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import numpy as np
+
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.function import Function
 
-from fmdtools_examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
-from fmdtools_examples.airspacelib.base.arch.flows import AircraftEnvironment
-import numpy as np
+from fmdtools_examples.airspacelib.base.common.position import Trajectories
+from fmdtools_examples.airspacelib.base.common.force import Force
+from fmdtools_examples.airspacelib.base.common.electricity import Electricity
+
 
 class AviateMode(Mode):
     """Aviate function modes."""
@@ -51,12 +54,9 @@ class Aviate(Function):
     10.0
     """
 
-    __slots__ = ('trajectories', 'force', 'electricity', 'environment')
-
     flow_trajectories = Trajectories
     flow_force = Force
     flow_electricity = Electricity
-    flow_environment = AircraftEnvironment
     container_m = AviateMode
 
     def static_behavior(self):

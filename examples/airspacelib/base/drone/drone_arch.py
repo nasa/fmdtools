@@ -21,13 +21,15 @@ from fmdtools.define.container.parameter import Parameter
 import fmdtools.sim.propagate as prop
 
 
-from fmdtools_examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity
-from fmdtools_examples.airspacelib.base.arch.flows import AircraftEnvironment
-from fmdtools_examples.airspacelib.base.arch.aviate import Aviate
-from fmdtools_examples.airspacelib.base.arch.controlflight import ControlFlight
-from fmdtools_examples.airspacelib.base.arch.storeee import StoreAndSupplyElectricity
-from fmdtools_examples.airspacelib.base.arch.perceiveenvironment import PerceiveEnvironment
-from fmdtools_examples.airspacelib.base.arch.holdpayload import HoldPayload
+from fmdtools_examples.airspacelib.base.common.position import Trajectories
+from fmdtools_examples.airspacelib.base.common.force import Force
+from fmdtools_examples.airspacelib.base.common.electricity import Electricity
+
+from fmdtools_examples.airspacelib.base.drone.aviate import Aviate
+from fmdtools_examples.airspacelib.base.drone.controlflight import ControlFlight
+from fmdtools_examples.airspacelib.base.drone.storeee import StoreAndSupplyElectricity
+from fmdtools_examples.airspacelib.base.drone.perceiveenvironment import PerceiveEnvironment
+from fmdtools_examples.airspacelib.base.drone.holdpayload import HoldPayload
 
 
 class AircraftArchParameter(Parameter):
@@ -63,17 +65,16 @@ class AircraftArchitecture(FunctionArchitecture):
         self.add_flow('force', Force)
         self.add_flow('electricity', Electricity)
         self.add_flow('trajectories', Trajectories)
-        self.add_flow('environment', AircraftEnvironment)
 
         self.add_fxn('control_flight', ControlFlight,
-                     'trajectories', 'force', 'electricity', 'environment',
+                     'trajectories', 'force', 'electricity',
                      s={'flightplan': self.p.flightplan, 'height': self.p.height})
         self.add_fxn('aviate', Aviate,
-                     'trajectories', 'force', 'electricity', 'environment')
+                     'trajectories', 'force', 'electricity',)
         self.add_fxn('store_and_supply_ee', StoreAndSupplyElectricity,
                      'force', 'electricity')
         self.add_fxn('perceive_environment', PerceiveEnvironment,
-                     'environment', 'force', 'electricity', 'trajectories')
+                     'force', 'electricity', 'trajectories')
         self.add_fxn('hold_payload', HoldPayload, 'trajectories', 'force')
 
     def classify(self, **kwargs):

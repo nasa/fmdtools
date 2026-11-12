@@ -15,13 +15,14 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from fmdtools_examples.airspacelib.wildfire_response.model_environment import FireEnvironment, double_size_p
-from fmdtools_examples.airspacelib.base.aircraft import BaseDrone
-from fmdtools_examples.airspacelib.base.state import AircraftState
 
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.container.time import Time
 import fmdtools.sim.propagate as prop
+
+from fmdtools_examples.airspacelib.wildfire_response.model_environment import FireEnvironment, double_size_p
+from fmdtools_examples.airspacelib.base.common.aircraft import BaseDrone
+from fmdtools_examples.airspacelib.base.common.position import DroneState
 
 
 class  AircraftModes(Mode):
@@ -50,7 +51,7 @@ class AircraftTime(Time):
     timernames = ('resupply', )
 
 
-class FireAircraftState(AircraftState):
+class FireAircraftState(DroneState):
     """State of aircraft. Retardant set at 100%."""
 
     retardant_status: float = 100  # starting retardant at 100%

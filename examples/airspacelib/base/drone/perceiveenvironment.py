@@ -19,7 +19,10 @@ specific language governing permissions and limitations under the License.
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode
 
-from fmdtools_examples.airspacelib.base.arch.flows import Trajectories, Force, Electricity, AircraftEnvironment
+
+from fmdtools_examples.airspacelib.base.common.position import Trajectories
+from fmdtools_examples.airspacelib.base.common.force import Force
+from fmdtools_examples.airspacelib.base.common.electricity import Electricity
 
 
 class PerceiveEnvironmentMode(Mode):
@@ -35,9 +38,8 @@ class PerceiveEnvironmentMode(Mode):
 class PerceiveEnvironment(Function):
     """Function that perceives the environment."""
 
-    __slots__ = ('environment', 'force', 'electricity', 'trajectories', 'perc_traj')
+    __slots__ = ('perc_traj',)
     container_m = PerceiveEnvironmentMode
-    flow_environment = AircraftEnvironment
     flow_force = Force
     flow_electricity = Electricity
     flow_trajectories = Trajectories
