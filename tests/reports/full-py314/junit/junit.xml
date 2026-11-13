@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="5" failures="0" skipped="0" tests="5" time="19.054" timestamp="2026-11-10T17:54:44.129457-08:00" hostname="bamboo-r1.ndc.nasa.gov"><testcase classname="" name="examples.airspacelib.aircraft_landing.model_aircraft" time="0.000"><error message="collection failure">examples/airspacelib/aircraft_landing/model_aircraft.py:23: in &lt;module&gt;
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="5" failures="0" skipped="0" tests="5" time="18.654" timestamp="2026-11-13T13:21:00.006466-08:00" hostname="bamboo-r4.ndc.nasa.gov"><testcase classname="" name="examples.airspacelib.aircraft_landing.model_aircraft" time="0.000"><error message="collection failure">examples/airspacelib/aircraft_landing/model_aircraft.py:23: in &lt;module&gt;
     from fmdtools_examples.airspacelib.aircraft_landing.model_environment import AirportEnvironment
 .venv/lib/python3.14/site-packages/fmdtools_examples/airspacelib/aircraft_landing/model_environment.py:33: in &lt;module&gt;
     js = load_json('moffett_overpass_aeroway_data.geojson', load_dict=False)
@@ -6,9 +6,9 @@
 src/fmdtools/define/base.py:264: in load_json
     with open(filename, 'r') as f:
          ^^^^^^^^^^^^^^^^^^^
-E   FileNotFoundError: [Errno 2] No such file or directory: 'moffett_overpass_aeroway_data.geojson'</error></testcase><testcase classname="" name="examples.airspacelib.aircraft_landing.model_airport" time="0.000"><error message="collection failure">examples/airspacelib/aircraft_landing/model_airport.py:25: in &lt;module&gt;
+E   FileNotFoundError: [Errno 2] No such file or directory: 'moffett_overpass_aeroway_data.geojson'</error></testcase><testcase classname="" name="examples.airspacelib.aircraft_landing.model_airport" time="0.000"><error message="collection failure">examples/airspacelib/aircraft_landing/model_airport.py:29: in &lt;module&gt;
     from fmdtools_examples.airspacelib.aircraft_landing.model_controlflight import ControlFlight, ControlParameter
-.venv/lib/python3.14/site-packages/fmdtools_examples/airspacelib/aircraft_landing/model_controlflight.py:27: in &lt;module&gt;
+.venv/lib/python3.14/site-packages/fmdtools_examples/airspacelib/aircraft_landing/model_controlflight.py:29: in &lt;module&gt;
     from fmdtools_examples.airspacelib.aircraft_landing.model_environment import AirportEnvironment
 .venv/lib/python3.14/site-packages/fmdtools_examples/airspacelib/aircraft_landing/model_environment.py:33: in &lt;module&gt;
     js = load_json('moffett_overpass_aeroway_data.geojson', load_dict=False)
@@ -16,7 +16,7 @@ E   FileNotFoundError: [Errno 2] No such file or directory: 'moffett_overpass_ae
 src/fmdtools/define/base.py:264: in load_json
     with open(filename, 'r') as f:
          ^^^^^^^^^^^^^^^^^^^
-E   FileNotFoundError: [Errno 2] No such file or directory: 'moffett_overpass_aeroway_data.geojson'</error></testcase><testcase classname="" name="examples.airspacelib.aircraft_landing.model_aviate" time="0.000"><error message="collection failure">examples/airspacelib/aircraft_landing/model_aviate.py:24: in &lt;module&gt;
+E   FileNotFoundError: [Errno 2] No such file or directory: 'moffett_overpass_aeroway_data.geojson'</error></testcase><testcase classname="" name="examples.airspacelib.aircraft_landing.model_aviate" time="0.000"><error message="collection failure">examples/airspacelib/aircraft_landing/model_aviate.py:27: in &lt;module&gt;
     from fmdtools_examples.airspacelib.aircraft_landing.model_environment import Environment
 .venv/lib/python3.14/site-packages/fmdtools_examples/airspacelib/aircraft_landing/model_environment.py:33: in &lt;module&gt;
     js = load_json('moffett_overpass_aeroway_data.geojson', load_dict=False)
@@ -24,7 +24,7 @@ E   FileNotFoundError: [Errno 2] No such file or directory: 'moffett_overpass_ae
 src/fmdtools/define/base.py:264: in load_json
     with open(filename, 'r') as f:
          ^^^^^^^^^^^^^^^^^^^
-E   FileNotFoundError: [Errno 2] No such file or directory: 'moffett_overpass_aeroway_data.geojson'</error></testcase><testcase classname="" name="examples.airspacelib.aircraft_landing.model_controlflight" time="0.000"><error message="collection failure">examples/airspacelib/aircraft_landing/model_controlflight.py:27: in &lt;module&gt;
+E   FileNotFoundError: [Errno 2] No such file or directory: 'moffett_overpass_aeroway_data.geojson'</error></testcase><testcase classname="" name="examples.airspacelib.aircraft_landing.model_controlflight" time="0.000"><error message="collection failure">examples/airspacelib/aircraft_landing/model_controlflight.py:29: in &lt;module&gt;
     from fmdtools_examples.airspacelib.aircraft_landing.model_environment import AirportEnvironment
 .venv/lib/python3.14/site-packages/fmdtools_examples/airspacelib/aircraft_landing/model_environment.py:33: in &lt;module&gt;
     js = load_json('moffett_overpass_aeroway_data.geojson', load_dict=False)
