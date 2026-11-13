@@ -30,12 +30,16 @@ from fmdtools_examples.airspacelib.aircraft_landing.model_environment import Air
 
 
 class ControlParameter(Parameter):
-    x: float = 1865527.46
-    y: float = 596499.47
+    x: float = 1860331.44
+    y: float = 609384.67
     z: float = 1000.0*0.3048
-    goal_x: float= 1863436.83
-    goal_y: float = 601624.24
+    goal_x: float= 1862416.96
+    goal_y: float = 604235.29
     goal_z: float = 0.0
+
+# Runway 32R approach from southeast: 'x': 1865527.46, 'y': 596499.47, 'goal_x': 1863436.83, 'goal_y': 601624.24
+# Runway 14L from northwest: 'x': 1862416.96 'y': 604235.29 'goal_x': 1860331.44 'goal_y': 609384.67 (3 NM out)
+
 
 
 class ControlMode(Mode):
@@ -61,7 +65,7 @@ class ControlFlight(Function):
 
     def convert_dofs_to_traj(self):
         """Convert local NED frame of reference to global frame."""
-        init_angle = np.atan((self.p.goal_x-self.p.x)/(self.p.goal_y-self.p.y)) 
+        init_angle = np.atan2((self.p.goal_x-self.p.x), (self.p.goal_y-self.p.y))
         xe, ye, ze = self.aircraft_dofs.s.get("xe", "ye", "ze")
         x = ye*np.cos(init_angle) + xe*np.sin(init_angle) + self.p.x
         y = - ye*np.sin(init_angle) + xe*np.cos(init_angle) + self.p.y
@@ -133,7 +137,7 @@ class ControlFlight(Function):
 
 
 if __name__ == "__main__":
-    cf = ControlFlight(track='all', sp={'with_loadings': True})
+    cf = ControlFlight(track='all', sp={'with_loadings': True}) #, p={'x': 1865527.46, 'y': 596499.47, 'goal_x': 1863436.83, 'goal_y': 601624.24})
     cf.h.plot_line('aircraft_trajectory.s.x', 'aircraft_trajectory.s.y')
     cf(time='end')
     fig, ax = cf.environment.ga.show_infrastructure()
