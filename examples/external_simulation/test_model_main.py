@@ -30,9 +30,9 @@ from fmdtools_examples.external_simulation.external_sim import (
     reference_step,
 )
 from fmdtools_examples.external_simulation.model_main import CoupledFunction
+from fmdtools_examples.external_simulation.pump_scenarios import sample_pump_stops
 
 from fmdtools.sim import propagate
-from fmdtools.sim.sample import FaultDomain, FaultSample
 
 
 def alternative_step(request):
@@ -186,16 +186,8 @@ class TestExternalAdapterPattern(unittest.TestCase):
                 model = CoupledFunction(
                     r={"seed": 31}, sp={"run_stochastic": stochastic}
                 )
-                domain = FaultDomain(model)
-                domain.add_fault(model.name, "stopped")
-                sample = FaultSample(domain, def_mdl_phasemap=False)
-                sample.add_fault_times([1.0, 2.0], weights=[0.25, 0.75])
-                result, history = propagate.fault_sample(
-                    model, sample, staged=False, showprogress=False
-                )
-                staged, staged_history = propagate.fault_sample(
-                    model, sample, staged=True, showprogress=False
-                )
+                sample, result, history = sample_pump_stops(model)
+                _, staged, staged_history = sample_pump_stops(model, staged=True)
                 self.assertEqual(dict(result), dict(staged))
                 self.assert_history_equal(history, staged_history)
                 nominal = history.get("nominal")
@@ -210,7 +202,13 @@ class TestExternalAdapterPattern(unittest.TestCase):
                     ] = 0.0
                     np.testing.assert_allclose(faulty["s.value"], np.cumsum(rates))
                     self.assertEqual(result[scenario.name + ".tend.classify.calls"], 3)
-                self.assertAlmostEqual(sum(s.rate for s in sample.scenarios()), 0.01)
+                rates_by_time = {s.time: s.rate for s in sample.scenarios()}
+                self.assertEqual(rates_by_time, {1.0: 0.0025, 2.0: 0.0075})
+
+    def test_stop_times_must_fall_on_the_simulation_grid(self):
+        for sp in ({"end_time": 1.0}, {"dt": 2.0}):
+            with self.subTest(sp=sp), self.assertRaisesRegex(ValueError, "1 and 2"):
+                sample_pump_stops(CoupledFunction(sp=sp))
 
     def test_substitution_copy_pickle_reset_and_new_keep_the_contract(self):
         for cls in (CoupledFunction, AlternativeFunction):
