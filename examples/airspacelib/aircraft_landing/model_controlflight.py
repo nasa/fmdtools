@@ -18,7 +18,6 @@ specific language governing permissions and limitations under the License.
 
 import numpy as np
 
-
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.mode import Mode
@@ -39,7 +38,6 @@ class ControlParameter(Parameter):
 
 # Runway 32R approach from southeast: 'x': 1865527.46, 'y': 596499.47, 'goal_x': 1863436.83, 'goal_y': 601624.24
 # Runway 14L from northwest: 'x': 1862416.96 'y': 604235.29 'goal_x': 1860331.44 'goal_y': 609384.67 (3 NM out)
-
 
 
 class ControlMode(Mode):
@@ -88,7 +86,7 @@ class ControlFlight(Function):
             self.abort_descent()
 
     def descend_to_runway(self):
-        """Controls descent profile toward runway threshold (goal_x, goal_y)."""
+        """Control descent profile toward runway threshold (goal_x, goal_y)."""
         controls = self.controls.s
         # Compute horizontal distance to runway threshold
         self.aircraft_trajectory.s.distance = self.aircraft_trajectory.s.calc_dist("x", "y")
@@ -107,11 +105,14 @@ class ControlFlight(Function):
 
         if self.aircraft_trajectory.s.distance > 50:
             if self.aircraft_trajectory.s.dz < - 5.0:
-                controls.set_descent(angle=self.aircraft_dofs.s.theta, throttle=0.3)
+                controls.set_descent(angle=self.aircraft_dofs.s.theta,
+                                     throttle=0.3, flaps=0.3)
             elif self.aircraft_trajectory.s.dz > -2.0:
-                controls.set_ascent(angle=self.aircraft_dofs.s.theta, throttle=0.3)
+                controls.set_ascent(angle=self.aircraft_dofs.s.theta,
+                                    throttle=0.3, flaps=0.1)
             else:
-                controls.set_steady_flight(angle=self.aircraft_dofs.s.theta, throttle=0.3)
+                controls.set_steady_flight(angle=self.aircraft_dofs.s.theta,
+                                           throttle=0.3, flaps=0.4)
             # Optionally steer toward runway centerline
             # Heading control omitted for brevity
         else:

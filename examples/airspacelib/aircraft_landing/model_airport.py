@@ -72,7 +72,7 @@ if __name__ == "__main__":
     fig, ax = ap.h.plot_trajectories('flows.aircraft_trajectory.s.x', 'flows.aircraft_trajectory.s.y', 'flows.aircraft_trajectory.s.z', fig=fig, ax=ax, time_groups=['nominal'], time_ticks=20.0, legend=False)
     """
     ap = Airport()
-    result, hist = propagate.one_fault(ap, 'control_flight', "false_abort", time=40)
+    result, hist = propagate.one_fault(ap, 'control_flight', "false_abort", time=48)
 
     fig, ax = ap.flows['environment'].ga.show_infrastructure(overlay_labels=False,
                                                              title="Moffett Field Landing/Approach",
@@ -90,8 +90,13 @@ if __name__ == "__main__":
                    'fxns.control_flight.m.mode',
                    'flows.controls.s.elevator',
                    'flows.controls.s.throttle',
+                   'flows.controls.s.brakes',
                    'flows.aircraft_trajectory.s.dz',
-                   'flows.aircraft_trajectory.s.goal_z')
+                   'flows.aircraft_trajectory.s.goal_z',
+                   'flows.aircraft_dofs.s.u',
+                   'flows.aircraft_dofs.s.theta',
+                   'flows.controls.s.elevator',
+                   'flows.controls.s.flaps')
 
     # result, hist = propagate.nominal(ap)
     fig, ax = ap.flows['environment'].ga.show_as_one_color(figsize=(5,5), z=True, legend=True,)

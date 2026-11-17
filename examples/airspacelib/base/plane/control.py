@@ -27,13 +27,13 @@ class ControlsState(State):
     flaps: float = 0.0
     brakes: float = 0.0
 
-    def set_steady_flight(self, angle=0.0, throttle=0.6):
-        """Set controls for steady, level flight (trimmed)"""
+    def set_steady_flight(self, angle=0.0, throttle=0.6, flaps=0.0):
+        """Set controls for steady, level flight (trimmed)."""
         self.aileron = 0.0
         self.elevator = 0.029 + 1.5*angle
         self.rudder = 0.0
         self.throttle = throttle  # Typical cruise throttle
-        self.flaps = 0.0
+        self.flaps = flaps
 
     def set_turn(self, direction: str, amount: float = 1.0):
         """Set controls for turning left or right at a specified intensity (amount)."""
@@ -49,23 +49,23 @@ class ControlsState(State):
         self.flaps = 0.0
         # Keep elevator/throttle unchanged (or optionally decrease elevator for coordinated turn)
 
-    def set_descent(self, angle = 0.0, throttle=0.4, flaps=0.0):
+    def set_descent(self, angle = 0.0, throttle=0.4, flaps=0.5):
         self.elevator = 0.01 + angle
         self.throttle = throttle
         self.put(aileron=0.0, rudder=0.0)
         self.flaps = self.flaps
 
-    def set_ascent(self, angle=0.0, throttle=0.6):
+    def set_ascent(self, angle=0.0, throttle=0.6, flaps=0.0):
         """
         Set controls to achieve an ascent (climb) at the specified rate (m/s).
 
         Elevator and throttle are increased for climb.
         """
         # self.elevator = 0.029-0.1
-        self.elevator = -0.1 + angle
+        self.elevator = -0.15 + angle
         self.throttle = throttle
         self.put(aileron=0.0, rudder=0.0)
-        self.flaps = 0.0
+        self.flaps = flaps
 
 
 class ControlsFlow(Flow):
