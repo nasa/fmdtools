@@ -32,13 +32,13 @@ class ControlParameter(Parameter):
     x: float = 1860331.44
     y: float = 609384.67
     z: float = 1000.0*0.3048
-    goal_x: float= 1862416.96
-    goal_y: float = 604235.29
+    goal_x: float= 1862453.34
+    goal_y: float = 604142.14
     goal_z: float = 0.0
 
 # Runway 32R approach from southeast: 'x': 1865527.46, 'y': 596499.47, 'goal_x': 1863436.83, 'goal_y': 601624.24
 # Runway 14L from northwest: 'x': 1862416.96 'y': 604235.29 'goal_x': 1860331.44 'goal_y': 609384.67 (3 NM out)
-
+# 100 meters down the runway: 1862453.34, 604142.14
 
 class ControlMode(Mode):
     opermodes = ('decend', 'land', 'taxi', 'abort')

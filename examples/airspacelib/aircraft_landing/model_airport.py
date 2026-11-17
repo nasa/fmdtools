@@ -28,12 +28,13 @@ from fmdtools_examples.airspacelib.base.plane.aero import AircraftDOFs, AeroPara
 
 from fmdtools_examples.airspacelib.aircraft_landing.model_controlflight import ControlFlight, ControlParameter
 from fmdtools_examples.airspacelib.aircraft_landing.model_aviate import Aviate
-from fmdtools_examples.airspacelib.aircraft_landing.model_environment import AirportEnvironment
+from fmdtools_examples.airspacelib.aircraft_landing.model_environment import AirportEnvironment, MoffettFieldParameter
 
 
 class AirportParameter(Parameter):
     controls: ControlParameter = ControlParameter()
     aircraft: AeroParameter = AeroParameter()
+    environment: MoffettFieldParameter = MoffettFieldParameter()
     
 
 
