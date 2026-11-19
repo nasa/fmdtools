@@ -33,8 +33,6 @@ from shapely.ops import transform
 
 bay_area_transformer = Transformer.from_crs("EPSG:4326", "EPSG:26943", always_xy=True)
 
-js = load_json('moffett_overpass_aeroway_data.geojson', load_dict=False)
-
 
 class LocalJSONParameter(GeomJSONParameter):
 
@@ -163,6 +161,7 @@ class ModifyEnvironment(Function):
 
 
 if __name__ == "__main__":
+    js = load_json('moffett_overpass_aeroway_data.geojson', load_dict=False)
     r = GeomJSON(p='moffett_overpass_aeroway_data.geojson')
     # fig, ax = r.show(shapes={'shape': {'color': 'red', 'label': 'airport'}})
 
