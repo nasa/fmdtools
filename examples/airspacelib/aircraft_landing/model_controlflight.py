@@ -18,7 +18,6 @@ specific language governing permissions and limitations under the License.
 
 import numpy as np
 
-
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.mode import Mode
@@ -30,21 +29,30 @@ from fmdtools_examples.airspacelib.aircraft_landing.model_environment import Air
 
 
 class ControlParameter(Parameter):
-    x: float = 1865527.46
-    y: float = 596499.47
+    """Initial location/goals of the control system."""
+
+    x: float = 1860331.44
+    y: float = 609384.67
     z: float = 1000.0*0.3048
-    goal_x: float= 1863436.83
-    goal_y: float = 601624.24
+    goal_x: float= 1862453.34
+    goal_y: float = 604142.14
     goal_z: float = 0.0
 
+# Runway 32R approach from southeast: 'x': 1865527.46, 'y': 596499.47, 'goal_x': 1863436.83, 'goal_y': 601624.24
+# Runway 14L from northwest: 'x': 1862416.96 'y': 604235.29 'goal_x': 1860331.44 'goal_y': 609384.67 (3 NM out)
+# 100 meters down the runway: 1862453.34, 604142.14
 
 class ControlMode(Mode):
+    """Modes of the control system."""
+
     opermodes = ('decend', 'land', 'taxi', 'abort')
     fault_false_abort = ()
     mode: str = 'descend'
 
 
 class ControlFlight(Function):
+    """Control of the aircraft (e.g., pilot, software, etc.)."""
+
     container_p = ControlParameter
     container_m = ControlMode
     flow_controls = ControlsFlow
@@ -54,14 +62,16 @@ class ControlFlight(Function):
     default_t = {'local_dt': 0.01}
 
     def init_block(self, **kwargs):
+        """Initialize trajectory to parameter values."""
         self.aircraft_trajectory.s.put(**self.p)
 
     def dynamic_loading_before(self):
+        """Test response for basic movement."""
         self.aircraft_dofs.s.inc(xe=-10, ye=10)
 
     def convert_dofs_to_traj(self):
         """Convert local NED frame of reference to global frame."""
-        init_angle = np.atan((self.p.goal_x-self.p.x)/(self.p.goal_y-self.p.y)) 
+        init_angle = np.atan2((self.p.goal_x-self.p.x), (self.p.goal_y-self.p.y))
         xe, ye, ze = self.aircraft_dofs.s.get("xe", "ye", "ze")
         x = ye*np.cos(init_angle) + xe*np.sin(init_angle) + self.p.x
         y = - ye*np.sin(init_angle) + xe*np.cos(init_angle) + self.p.y
@@ -70,6 +80,7 @@ class ControlFlight(Function):
         self.aircraft_trajectory.s.update_dist_to_travel(maxvel=self.aircraft_dofs.s.u)
 
     def dynamic_behavior(self):
+        """Overall behavior of the controoler."""
         # convert NED to x=E, y=N, z=Up
         self.convert_dofs_to_traj()
         if self.m.has_fault("false_abort"):
@@ -84,7 +95,7 @@ class ControlFlight(Function):
             self.abort_descent()
 
     def descend_to_runway(self):
-        """Controls descent profile toward runway threshold (goal_x, goal_y)."""
+        """Control descent profile toward runway threshold (goal_x, goal_y)."""
         controls = self.controls.s
         # Compute horizontal distance to runway threshold
         self.aircraft_trajectory.s.distance = self.aircraft_trajectory.s.calc_dist("x", "y")
@@ -103,11 +114,14 @@ class ControlFlight(Function):
 
         if self.aircraft_trajectory.s.distance > 50:
             if self.aircraft_trajectory.s.dz < - 5.0:
-                controls.set_descent(angle=self.aircraft_dofs.s.theta, throttle=0.3)
+                controls.set_descent(angle=self.aircraft_dofs.s.theta,
+                                     throttle=0.3, flaps=0.3)
             elif self.aircraft_trajectory.s.dz > -2.0:
-                controls.set_ascent(angle=self.aircraft_dofs.s.theta, throttle=0.3)
+                controls.set_ascent(angle=self.aircraft_dofs.s.theta,
+                                    throttle=0.3, flaps=0.1)
             else:
-                controls.set_steady_flight(angle=self.aircraft_dofs.s.theta, throttle=0.3)
+                controls.set_steady_flight(angle=self.aircraft_dofs.s.theta,
+                                           throttle=0.3, flaps=0.4)
             # Optionally steer toward runway centerline
             # Heading control omitted for brevity
         else:
@@ -125,6 +139,7 @@ class ControlFlight(Function):
         # Optionally, add braking logic or switch to 'taxi' after stop
 
     def abort_descent(self):
+        """Go-around maneuver: Increase throttle + elevator if too low."""
         controls = self.controls.s
         if self.aircraft_trajectory.s.dz < 100.0:
             controls.set_ascent(angle=self.aircraft_dofs.s.theta, throttle=0.8)
@@ -133,7 +148,7 @@ class ControlFlight(Function):
 
 
 if __name__ == "__main__":
-    cf = ControlFlight(track='all', sp={'with_loadings': True})
+    cf = ControlFlight(track='all', sp={'with_loadings': True}) #, p={'x': 1865527.46, 'y': 596499.47, 'goal_x': 1863436.83, 'goal_y': 601624.24})
     cf.h.plot_line('aircraft_trajectory.s.x', 'aircraft_trajectory.s.y')
     cf(time='end')
     fig, ax = cf.environment.ga.show_infrastructure()

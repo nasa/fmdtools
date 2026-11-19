@@ -339,7 +339,8 @@ class GeomJSONParameter(Parameter):
     def load(cls, filename, delete=False, **kwargs):
         """Load from geojson."""
         if filename.endswith(".geojson"):
-            return cls(geojson=load_json(filename, delete=delete, load_dict=False))
+            return cls(geojson=load_json(filename, delete=delete, load_dict=False),
+                       **kwargs)
         else:
             return super().load(filename, delete=delete, **kwargs)
 

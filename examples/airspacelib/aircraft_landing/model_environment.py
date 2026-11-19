@@ -18,10 +18,13 @@ specific language governing permissions and limitations under the License.
 
 import json, re
 
-from fmdtools.define.object.geom import GeomJSON, GeomJSONParameter
+from fmdtools.define.object.geom import GeomJSON, GeomJSONParameter, GeomParameter, GeomPoint
 from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.define.base import load_json
 from fmdtools.define.environment import Environment
+from fmdtools.define.block.function import Function
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.container.parameter import Parameter
 
 from pyproj import Transformer
 
@@ -59,7 +62,6 @@ class TaxiwayGeom(GeomJSON):
     container_p = TaxiwayParameter
 
 
-
 def get_name(jsondict):
     if 'name' in jsondict['properties']:
         name = jsondict['properties']['name']
@@ -72,11 +74,28 @@ def get_name(jsondict):
 
 
 
+class ObstacleParameter(GeomParameter):
+    exists: float = False
+    coordinates: tuple = (1862526.11, 603955.85)
+    buffer_envelope: float = 2.0
+    buffer_close: float = 15.0
+
+# 100 ft down runway: 1862428.05, 604206.90
+# 100 m down runway: 1862453.34, 604142.14
+
+class Obstacle(GeomPoint):
+    container_p = ObstacleParameter
+
+
+class MoffettFieldParameter(Parameter):
+    obstacle: ObstacleParameter = ObstacleParameter()
+    json: str = 'moffett_overpass_aeroway_data.geojson'
+
 class MoffettField(GeomArchitecture):
-    container_p = GeomJSONParameter
+    container_p = MoffettFieldParameter
 
     def init_architecture(self, **kwargs):
-        all_feats = json.loads(self.p.geojson)
+        all_feats = load_json(self.p.json)
         for feat in all_feats['features']:
             p={'geojson': json.dumps(feat)}
             if feat['properties']['aeroway'] == 'runway':
@@ -95,6 +114,7 @@ class MoffettField(GeomArchitecture):
                 self.add_geom("hp_"+get_name(feat), LocalGeomJSON, p=p)
             elif 'name' in feat['properties']:
                 self.add_geom(get_name(feat), LocalGeomJSON, p=p)
+        self.add_geom("obstacle", gclass=Obstacle)
 
     def show_infrastructure(self, overlay_labels=True, title = "Moffett Field", **kwargs):
         taxiways = {name: {'shapes': {'shape': {'label': 'taxiway', 'color': 'red'}, 'edge': {'fill': True, 'color': 'gray', 'label': ''}}}
@@ -111,7 +131,8 @@ class MoffettField(GeomArchitecture):
                    for name in self.geoms if name.startswith('hp_')}
         taxilanes = {name: {'shapes': {'shape': {'label': 'taxilane', 'color': 'red', 'linestyle': '--'}}}
                    for name in self.geoms if name.startswith('taxilane_')}
-        geoms={**taxiways, **runways, **aprons, **helipads, **buildings, **hps, **taxilanes}
+        obstacles = {'obstacle': {'shapes': {'shape': {'label': 'obstacle', 'color': 'orange', 'marker': "*"}}}}
+        geoms={**taxiways, **runways, **aprons, **helipads, **buildings, **hps, **taxilanes, **obstacles}
         if not overlay_labels:
             for geom in geoms:
                 geoms[geom]['shapes']['shape'].pop("overlay_label", "")
@@ -125,7 +146,19 @@ class MoffettField(GeomArchitecture):
 
 class AirportEnvironment(Environment):
     arch_ga = MoffettField
-    default_ga = {'p': 'moffett_overpass_aeroway_data.geojson'}
+
+
+
+class RunwayMode(Mode):
+    fault_object = ()
+
+class ModifyEnvironment(Function):
+    flow_environment = Environment
+    container_m = RunwayMode
+
+    #def dynamic_behavior(self):
+    #    if self.m.has_fault("object"):
+            
 
 
 
@@ -140,7 +173,7 @@ if __name__ == "__main__":
     wg = RunwayGeom(p={"geojson": json.dumps(all_feats['features'][11])})
     wg.show()
 
-    mf = MoffettField(p = 'moffett_overpass_aeroway_data.geojson')
+    mf = MoffettField()
     
     # mf.show(figsize=(10,10))
     

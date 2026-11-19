@@ -34,7 +34,7 @@ class Aircraft(BaseAircraft):
 
 
 
-# Runway 32R approach from southeast: 6,119,798.14, 1,959,233.13
+# Runway 32R approach from southeast: 6,119,798.14, 1,959,233.13; 'x': 1865527.46, 'y': 596499.47,
 
 # Runway 14L approach from northwest: 6,104,090.56 1,996,976.09
 

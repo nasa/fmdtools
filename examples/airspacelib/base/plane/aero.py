@@ -22,7 +22,8 @@ from fmdtools.define.flow.base import Flow
 
 
 class AeroParameter(Parameter):
-    # Aircraft physical constants (generic small commercial aviation example)
+    """Aircraft physical constants (generic small commercial aviation example)."""
+
     mass: float = 65000.0         # kg (varies; 737 typical)
     g: float = 9.81    # m/s^2
     Ixx: float = 500000.0         # kg*m^2 (approximate)
@@ -45,6 +46,8 @@ class AeroParameter(Parameter):
 
 
 class AeroState(State):
+    """Aircraft state variables in NED Coordinate reference."""
+
     u: float = 70.0 #x - airspeed m/s
     u_dot: float = 0.0
     v: float = 0.0 # y - left/right
@@ -71,12 +74,15 @@ class AeroState(State):
     ze_dot: float = 0.0
 
     def state_fields(self):
+        """Get non-derivative states."""
         return [s for s in self.__fields__ if "_dot" not in s]
 
     def dot_fields(self):
+        """Get derivative states."""
         return [s for s in self.__fields__ if "_dot" in s]
 
     def inc_state(self, dt):
+        """Increment state variables by their corresponding derivatives."""
         state_dot = {k: self[k+'_dot']*dt for k in self.state_fields()}
         self.inc(**state_dot)
 
