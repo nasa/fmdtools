@@ -28,34 +28,35 @@ from fmdtools_examples.airspacelib.base.plane.aero import AircraftDOFs, AeroPara
 
 from fmdtools_examples.airspacelib.aircraft_landing.model_controlflight import ControlFlight, ControlParameter
 from fmdtools_examples.airspacelib.aircraft_landing.model_aviate import Aviate
-from fmdtools_examples.airspacelib.aircraft_landing.model_environment import AirportEnvironment, MoffettFieldParameter
+from fmdtools_examples.airspacelib.aircraft_landing.model_environment import AirportEnvironment, MoffettFieldParameter, ModifyEnvironment
 
 
-class AirportParameter(Parameter):
+class AircraftLandingParameter(Parameter):
     controls: ControlParameter = ControlParameter()
     aircraft: AeroParameter = AeroParameter()
     environment: MoffettFieldParameter = MoffettFieldParameter()
     
 
 
-class Airport(FunctionArchitecture):
-    container_p = AirportParameter
+class AircraftLanding(FunctionArchitecture):
+    container_p = AircraftLandingParameter
     default_sp = {'end_time': 100}
     default_t = {'force_locals': False}
 
     def init_architecture(self, **kwargs):
-        self.add_flow('environment', AirportEnvironment)
+        self.add_flow('environment', AirportEnvironment, p=self.p.environment)
         self.add_flow('controls', ControlsFlow)
         self.add_flow('aircraft_dofs', AircraftDOFs)
         self.add_flow('aircraft_trajectory', Trajectory3)
 
         self.add_fxn('aviate', Aviate, 'controls', 'aircraft_dofs', 'aircraft_trajectory', p=self.p.aircraft)
         self.add_fxn('control_flight', ControlFlight, 'controls', 'aircraft_dofs', 'aircraft_trajectory', 'environment', p=self.p.controls)
+        self.add_fxn('modify_environment', ModifyEnvironment, 'environment')
 
 
 if __name__ == "__main__":
     """
-    ap = Airport()
+    ap = AircraftLanding()
     ap(time='end')
 
     fig, ax = ap.flows['environment'].ga.show_infrastructure()
@@ -72,7 +73,7 @@ if __name__ == "__main__":
 
     fig, ax = ap.h.plot_trajectories('flows.aircraft_trajectory.s.x', 'flows.aircraft_trajectory.s.y', 'flows.aircraft_trajectory.s.z', fig=fig, ax=ax, time_groups=['nominal'], time_ticks=20.0, legend=False)
     """
-    ap = Airport()
+    ap = AircraftLanding()
     result, hist = propagate.one_fault(ap, 'control_flight', "false_abort", time=48)
 
     fig, ax = ap.flows['environment'].ga.show_infrastructure(overlay_labels=False,

@@ -20,6 +20,8 @@ from fmdtools.define.container.state import State
 from fmdtools.define.flow.base import Flow
 
 class ControlsState(State):
+    """Simple control inputs for an aircraft."""
+
     aileron: float = 0.0
     elevator: float = 0.0
     rudder: float = 0.0

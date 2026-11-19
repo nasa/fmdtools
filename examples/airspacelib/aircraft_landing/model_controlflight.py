@@ -29,6 +29,8 @@ from fmdtools_examples.airspacelib.aircraft_landing.model_environment import Air
 
 
 class ControlParameter(Parameter):
+    """Initial location/goals of the control system."""
+
     x: float = 1860331.44
     y: float = 609384.67
     z: float = 1000.0*0.3048
@@ -41,12 +43,16 @@ class ControlParameter(Parameter):
 # 100 meters down the runway: 1862453.34, 604142.14
 
 class ControlMode(Mode):
+    """Modes of the control system."""
+
     opermodes = ('decend', 'land', 'taxi', 'abort')
     fault_false_abort = ()
     mode: str = 'descend'
 
 
 class ControlFlight(Function):
+    """Control of the aircraft (e.g., pilot, software, etc.)."""
+
     container_p = ControlParameter
     container_m = ControlMode
     flow_controls = ControlsFlow
@@ -56,9 +62,11 @@ class ControlFlight(Function):
     default_t = {'local_dt': 0.01}
 
     def init_block(self, **kwargs):
+        """Initialize trajectory to parameter values."""
         self.aircraft_trajectory.s.put(**self.p)
 
     def dynamic_loading_before(self):
+        """Test response for basic movement."""
         self.aircraft_dofs.s.inc(xe=-10, ye=10)
 
     def convert_dofs_to_traj(self):
@@ -72,6 +80,7 @@ class ControlFlight(Function):
         self.aircraft_trajectory.s.update_dist_to_travel(maxvel=self.aircraft_dofs.s.u)
 
     def dynamic_behavior(self):
+        """Overall behavior of the controoler."""
         # convert NED to x=E, y=N, z=Up
         self.convert_dofs_to_traj()
         if self.m.has_fault("false_abort"):
@@ -130,6 +139,7 @@ class ControlFlight(Function):
         # Optionally, add braking logic or switch to 'taxi' after stop
 
     def abort_descent(self):
+        """Go-around maneuver: Increase throttle + elevator if too low."""
         controls = self.controls.s
         if self.aircraft_trajectory.s.dz < 100.0:
             controls.set_ascent(angle=self.aircraft_dofs.s.theta, throttle=0.8)
