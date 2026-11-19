@@ -36,8 +36,10 @@ The airspacelib package has the following structure:
 
 - airspacelib.base: base classes that can be adapted to new case studies
 
-- airspacelib.contingency_management: case study modelling a drone that must perform in-flight contingency management to respond to battery depletion and airspace intrusion scenarios.
+- airspacelib.contingency_management: model of a drone that must perform in-flight contingency management to respond to battery depletion and airspace intrusion scenarios.
 
-- airspacelib.wildfire_response: case study modeling a set of drones in a wildfire response situation. 
+- airspacelib.wildfire_response: model of a set of drones in a wildfire response situation. 
 
-- airspacelib.water_rescue: case study of modeling water rescue supported by drones.
+- airspacelib.water_rescue: model of water rescue supported by drones.
+
+- airspacelib.aircraft_landing: model of an airplane landing at an airport.
