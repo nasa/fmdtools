@@ -224,7 +224,7 @@ class ClassifyingSatellite(DisturbedObservationSatellite):
     default_track = (*DisturbedObservationSatellite.default_track, "s")
 
     def init_architecture(self, **kwargs):
-        self.check_values()
+        self.check_object()
         self.add_flow("scene", DisturbedScene)
         self.add_flow("observation", ImageObservation)
         self.add_flow("buffer", DataBuffer)

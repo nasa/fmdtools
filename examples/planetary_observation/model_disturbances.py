@@ -234,7 +234,7 @@ class DisturbedObservationSatellite(ObservationSatellite):
     container_r = Rand
 
     def init_architecture(self, **kwargs):
-        self.check_values()
+        self.check_object()
         self.add_flow("scene", DisturbedScene)
         self.add_flow("observation", Observation)
         self.add_flow("buffer", DataBuffer)
