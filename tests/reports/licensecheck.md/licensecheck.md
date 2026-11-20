@@ -155,13 +155,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 1053722
 
-### deprecated-3.0.1
+### deprecated-3.0.0
 
 - HomePage: 
 - Author: Laurent LAPORTE
 - License: MIT
 - Compatible: True
-- Size: 1074378
+- Size: 166912
 
 ### dill-0.4.1
 
@@ -323,13 +323,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 47058631
 
-### platformdirs-4.14.3
+### platformdirs-4.14.0
 
 - HomePage: 
 - Author: 
 - License: MIT
 - Compatible: True
-- Size: 161227
+- Size: 161166
 
 ### pluggy-1.7.0
 
@@ -403,13 +403,13 @@ Find a list of packages below
 - Compatible: True
 - Size: 1797555
 
-### python-dateutil-4.0.0
+### python-dateutil-3.0.0
 
-- HomePage: 
+- HomePage: https://github.com/dateutil/dateutil
 - Author: Gustavo Niemeyer
-- License: BSD-3-Clause
+- License: Apache Software License;; BSD License
 - Compatible: True
-- Size: 250419
+- Size: 271066
 
 ### recordclass-0.24.1
 
