@@ -28,6 +28,7 @@ This repository provides several examples models in the `/examples` directory, w
    cooling_tank/readme
    electric_power_system/readme
    external_simulation/readme
+   external_simulation/calibrated_pump
    human_hazard_mitigation/readme
    multirotor_drone/readme
    navigating_rover/readme
