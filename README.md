@@ -200,8 +200,11 @@ pathos
 adjustText
 # used for taxiway visualizations
 # license: (MIT) https://github.com/Phlya/adjustText?tab=MIT-1-ov-file#readme
+jinja2
+# used for formatting certain tables
+# license: (BSD-3 Clause) https://github.com/pallets/jinja/blob/main/LICENSE.txt 
 pyproj
-# used for projecting world coordinate systems
+# used for projecting world coordinate systems in the airspacelib aircraft landing model
 # license: (MIT) https://github.com/pyproj4/pyproj?tab=MIT-1-ov-file
 ```
 

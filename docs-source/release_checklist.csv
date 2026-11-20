@@ -11,3 +11,4 @@ Step,Description,Complete?,Comment
 4a,Release to GitHub/remotes using ``bump-my-version stage' ' (so version is V2.X.X) and ``git release'' ``,,
 4b,"""Toggle CodeFactor so it updates""",,
 4c,Create a release in GitHub with narrative summary of features and changes and auto-generated bitbucket and github release notes (and this checklist!),,
+4d,"If a 2.x.0 release, add a branch for the previous version and add it to ReadTheDocs",,
