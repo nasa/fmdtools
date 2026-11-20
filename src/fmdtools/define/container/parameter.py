@@ -108,36 +108,36 @@ class Parameter(BaseContainer, readonly=True):
 
         Raises
         ------
-        Exception
+        ValueError
             Notification that the field is outside limits/set constraints.
         """
         var_lims = getattr(self, k+"_lim", False)
         if var_lims:
             if not (var_lims[0] <= v <= var_lims[1]):
-                raise Exception("Variable "+k+" ("+str(v) +
+                raise ValueError("Variable "+k+" ("+str(v) +
                                 ") outside of limits: "+str(var_lims))
         var_set = getattr(self, k+"_set", False)
         if var_set:
             if not (v in var_set):
-                raise Exception("Variable "+k+" ("+str(v) +
+                raise ValueError("Variable "+k+" ("+str(v) +
                                 ") outside of set constraints: "+str(var_set))
 
     def check_immutable(self):
         """
         Check if a known/common mutable or a known/common immutable.
 
-        If known immutable, raise exception. If not known mutable, give a warning.
+        If known immutable, raise ValueError. If not known mutable, give a warning.
 
         Raises
         ------
-        Exception
-            Throws exception if a known mutable (e.g., dict, set, list, etc)
+        ValueError
+            Throws ValueError if a known mutable (e.g., dict, set, list, etc)
         """
         for f in self.__fields__:
             attr = getattr(self, f)
             attr_type = type(attr)
             if isinstance(attr, (list, set, dict)):
-                raise Exception("Parameter "+f+" type "+str(attr_type)+" is mutable")
+                raise ValueError("Parameter "+f+" type "+str(attr_type)+" is mutable")
             elif isinstance(attr, np.ndarray):
                 attr.flags.writeable = False
             elif not isinstance(attr, (int, float, tuple, str, Parameter, np.number)):
@@ -149,8 +149,8 @@ class Parameter(BaseContainer, readonly=True):
 
         Raises
         ------
-        Exception
-            Raises exception if a field is not the same as its defined type.
+        TypeError
+            Raises TypeError if a field is not the same as its defined type.
         """
         for typed_field in self.__annotations__:
             attr_type = type(getattr(self, typed_field))
@@ -158,7 +158,7 @@ class Parameter(BaseContainer, readonly=True):
             if ((true_type and not attr_type == true_type) and
                     str(true_type).split("'")[1] not in str(attr_type)):
                 # weaker, but enables use of np.str, np.float, etc
-                raise Exception(typed_field+" in "+str(self.__class__) +
+                raise TypeError(typed_field+" in "+str(self.__class__) +
                                 " assigned incorrect type: " + str(attr_type) +
                                 " (should be "+str(true_type)+")")
 

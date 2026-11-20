@@ -342,7 +342,7 @@ class TestSatelliteDisturbances(unittest.TestCase):
         ):
             for value in invalid:
                 with self.subTest(name=name, value=value):
-                    with self.assertRaisesRegex(Exception, "outside of limits|finite"):
+                    with self.assertRaises(ValueError):
                         DisturbanceParam(**{name: value})
 
 
